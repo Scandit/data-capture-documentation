@@ -15,111 +15,114 @@ const sidebars: SidebarsConfig = {
 
   // But you can create a sidebar manually
 
-	sdcSidebar: [
-		{
-			type: 'category',
-			label: 'Scandit Smart Data Capture',
-			items: [
-        'barcode-scanning',
-        'id-scanning',
-				'core-concepts',
-				'features-by-framework',
-        'system-requirements',
-				{
-					type: 'category',
-					label: 'Supported Symbologies and IDs',
-          collapsed: false,
-					items: [
-            'barcode-symbologies',
-            'symbology-properties',
-            'extension-codes',
-            'scanning-composite-codes',
-            'id-documents',
-          ]
-				},
+  sdcSidebar: [
+    {
+      type: "category",
+      label: "Scandit Smart Data Capture",
+      items: [
+        "barcode-scanning",
+        "id-scanning",
+        "core-concepts",
+        "features-by-framework",
+        "system-requirements",
         {
-					type: 'category',
+          type: "category",
+          label: "Supported Symbologies and IDs",
+          collapsed: false,
+          items: [
+            "barcode-symbologies",
+            "symbology-properties",
+            "extension-codes",
+            "scanning-composite-codes",
+            "id-documents",
+          ],
+        },
+      {
+    type: 'category',
 					label: 'Migration Guides',
           collapsed: true,
 					items: [
             'migrate-5-to-6',
           ]
 				},
-			],
-		},
-	],
+			],},
+  ],
 
-	expressSidebar: [
-		{
-			type: 'category',
-			label: 'Scandit Express',
-			items: [
-				'hosted/express/overview',
+  expressSidebar: [
+    {
+      type: "category",
+      label: "Scandit Express",
+      items: [
+        "hosted/express/overview",
         {
-          type: 'category',
-          label: 'Getting Started',
-          items: ['hosted/express/getting-started/installation', 'hosted/express/getting-started/rollout'],
+          type: "category",
+          label: "Getting Started",
+          items: [
+            "hosted/express/getting-started/installation",
+            "hosted/express/getting-started/rollout",
+          ],
         },
         {
-          type: 'category',
-          label: 'Configuring Express',
-          items: ['hosted/express/configuration/index', 'hosted/express/configuration/express-find', 'hosted/express/configuration/inventory-count'],
+          type: "category",
+          label: "Configuring Express",
+          items: [
+            "hosted/express/configuration/index",
+            "hosted/express/configuration/express-find",
+            "hosted/express/configuration/inventory-count",
+          ],
         },
       ],
-		},
-	],
+    },
+  ],
 
   boltSidebar: [
-		{
-			type: 'category',
-			label: 'ID Bolt',
-			items: [
-				'hosted/id-bolt/overview',
-				'hosted/id-bolt/getting-started',
-        'hosted/id-bolt/api',
-				{
-					type: 'link',
-					label: 'Try the Demo',
-					href: 'https://id-travel.demos.scandit.com/',
-				},
-			],
-		},
-	],
+    {
+      type: "category",
+      label: "ID Bolt",
+      items: [
+        "hosted/id-bolt/overview",
+        "hosted/id-bolt/getting-started",
+        "hosted/id-bolt/api",
+        {
+          type: "link",
+          label: "Try the Demo",
+          href: "https://id-travel.demos.scandit.com/",
+        },
+      ],
+    },
+  ],
 
   iosSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for iOS',
+      type: "category",
+      label: "Data Capture SDK for iOS",
       collapsed: false,
-      items: [
-        'sdks/ios/add-sdk',
-        'sdks/ios/samples',
-      ],
+      items: ["sdks/ios/add-sdk", "sdks/ios/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/ios/barcode-capture/get-started",
                 "sdks/ios/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'SparkScan',
+                  type: "category",
+                  label: "SparkScan",
                   items: [
                     "sdks/ios/sparkscan/intro",
                     "sdks/ios/sparkscan/get-started",
@@ -139,8 +142,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'category',
-          label: 'Multi-scanning',
+          type: "category",
+          label: "Multi-scanning",
           items: [
             {
               type: "category",
@@ -152,8 +155,8 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
                   type: "category",
@@ -176,7 +179,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
-        }, 
+        },
       ],
     },
     {
@@ -211,16 +214,12 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: [
-            "sdks/ios/parser/get-started",
-          ],
+          items: ["sdks/ios/parser/get-started"],
         },
         {
           type: "category",
           label: "Label Capture",
-          items: [
-            "sdks/ios/label-capture/get-started",
-          ],
+          items: ["sdks/ios/label-capture/get-started"],
         },
         {
           type: "doc",
@@ -266,46 +265,43 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/ios/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/ios/release-notes",
     },
   ],
 
   androidSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for Android',
+      type: "category",
+      label: "Data Capture SDK for Android",
       collapsed: false,
-      items: [
-        'sdks/android/add-sdk',
-        'sdks/android/samples',
-      ],
+      items: ["sdks/android/add-sdk", "sdks/android/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/android/barcode-capture/get-started",
                 "sdks/android/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'SparkScan',
+                  type: "category",
+                  label: "SparkScan",
                   items: [
                     "sdks/android/sparkscan/intro",
                     "sdks/android/sparkscan/get-started",
@@ -325,8 +321,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'category',
-          label: 'Multi-scanning',
+          type: "category",
+          label: "Multi-scanning",
           items: [
             {
               type: "category",
@@ -338,8 +334,8 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
                   type: "category",
@@ -362,7 +358,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
-        }, 
+        },
       ],
     },
     {
@@ -397,16 +393,12 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: [
-            "sdks/android/parser/get-started",
-          ],
+          items: ["sdks/android/parser/get-started"],
         },
         {
           type: "category",
           label: "Label Capture",
-          items: [
-            "sdks/android/label-capture/get-started",
-          ],
+          items: ["sdks/android/label-capture/get-started"],
         },
         {
           type: "doc",
@@ -452,46 +444,43 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/android/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/android/release-notes",
     },
   ],
 
   webSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for Web',
+      type: "category",
+      label: "Data Capture SDK for Web",
       collapsed: false,
-      items: [
-        'sdks/web/add-sdk',
-        'sdks/web/samples',
-      ],
+      items: ["sdks/web/add-sdk", "sdks/web/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/web/barcode-capture/get-started",
                 "sdks/web/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'SparkScan',
+                  type: "category",
+                  label: "SparkScan",
                   items: [
                     "sdks/web/sparkscan/intro",
                     "sdks/web/sparkscan/get-started",
@@ -503,8 +492,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'category',
-          label: 'Multi-scanning',
+          type: "category",
+          label: "Multi-scanning",
           items: [
             {
               type: "category",
@@ -515,8 +504,23 @@ const sidebars: SidebarsConfig = {
                 "sdks/web/matrixscan/advanced",
               ],
             },
+            {
+              type: "category",
+              label: "Pre-built Workflows",
+              items: [
+                {
+                  type: "category",
+                  label: "MatrixScan Find",
+                  items: [
+                    "sdks/web/matrixscan-find/intro",
+                    "sdks/web/matrixscan-find/get-started",
+                    "sdks/web/matrixscan-find/advanced",
+                  ],
+                },
+              ],
+            },
           ],
-        }, 
+        },
       ],
     },
     {
@@ -551,9 +555,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: [
-            "sdks/web/parser/get-started",
-          ],
+          items: ["sdks/web/parser/get-started"],
         },
       ],
     },
@@ -589,46 +591,43 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/web/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/web/release-notes",
     },
   ],
 
   cordovaSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for Cordova',
+      type: "category",
+      label: "Data Capture SDK for Cordova",
       collapsed: false,
-      items: [
-        'sdks/cordova/add-sdk',
-        'sdks/cordova/samples',
-      ],
+      items: ["sdks/cordova/add-sdk", "sdks/cordova/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/cordova/barcode-capture/get-started",
                 "sdks/cordova/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'SparkScan',
+                  type: "category",
+                  label: "SparkScan",
                   items: [
                     "sdks/cordova/sparkscan/intro",
                     "sdks/cordova/sparkscan/get-started",
@@ -636,8 +635,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'Barcode Selection',
+                  type: "category",
+                  label: "Barcode Selection",
                   items: [
                     "sdks/cordova/barcode-selection/intro",
                     "sdks/cordova/barcode-selection/get-started",
@@ -648,8 +647,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'category',
-          label: 'Multi-scanning',
+          type: "category",
+          label: "Multi-scanning",
           items: [
             {
               type: "category",
@@ -661,7 +660,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
-        }, 
+        },
       ],
     },
     {
@@ -695,9 +694,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: [
-            "sdks/cordova/parser/get-started",
-          ],
+          items: ["sdks/cordova/parser/get-started"],
         },
       ],
     },
@@ -733,46 +730,43 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/cordova/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/cordova/release-notes",
     },
   ],
 
   reactnativeSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for React Native',
+      type: "category",
+      label: "Data Capture SDK for React Native",
       collapsed: false,
-      items: [
-        'sdks/react-native/add-sdk',
-        'sdks/react-native/samples',
-      ],
+      items: ["sdks/react-native/add-sdk", "sdks/react-native/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/react-native/barcode-capture/get-started",
                 "sdks/react-native/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'SparkScan',
+                  type: "category",
+                  label: "SparkScan",
                   items: [
                     "sdks/react-native/sparkscan/intro",
                     "sdks/react-native/sparkscan/get-started",
@@ -780,8 +774,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'Barcode Selection',
+                  type: "category",
+                  label: "Barcode Selection",
                   items: [
                     "sdks/react-native/barcode-selection/intro",
                     "sdks/react-native/barcode-selection/get-started",
@@ -792,8 +786,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'category',
-          label: 'Multi-scanning',
+          type: "category",
+          label: "Multi-scanning",
           items: [
             {
               type: "category",
@@ -805,12 +799,12 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'MatrixScan Count',
+                  type: "category",
+                  label: "MatrixScan Count",
                   items: [
                     "sdks/react-native/matrixscan-count/intro",
                     "sdks/react-native/matrixscan-count/get-started",
@@ -818,8 +812,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'MatrixScan Find',
+                  type: "category",
+                  label: "MatrixScan Find",
                   items: [
                     "sdks/react-native/matrixscan-find/intro",
                     "sdks/react-native/matrixscan-find/get-started",
@@ -829,7 +823,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
-        }, 
+        },
       ],
     },
     {
@@ -864,16 +858,12 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: [
-            "sdks/react-native/parser/get-started",
-          ],
+          items: ["sdks/react-native/parser/get-started"],
         },
         {
           type: "category",
           label: "Label Capture",
-          items: [
-            "sdks/react-native/label-capture/get-started",
-          ],
+          items: ["sdks/react-native/label-capture/get-started"],
         },
       ],
     },
@@ -914,46 +904,43 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/react-native/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/react-native/release-notes",
     },
   ],
 
   flutterSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for Flutter',
+      type: "category",
+      label: "Data Capture SDK for Flutter",
       collapsed: false,
-      items: [
-        'sdks/flutter/add-sdk',
-        'sdks/flutter/samples',
-      ],
+      items: ["sdks/flutter/add-sdk", "sdks/flutter/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/flutter/barcode-capture/get-started",
                 "sdks/flutter/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'SparkScan',
+                  type: "category",
+                  label: "SparkScan",
                   items: [
                     "sdks/flutter/sparkscan/intro",
                     "sdks/flutter/sparkscan/get-started",
@@ -961,8 +948,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'Barcode Selection',
+                  type: "category",
+                  label: "Barcode Selection",
                   items: [
                     "sdks/flutter/barcode-selection/intro",
                     "sdks/flutter/barcode-selection/get-started",
@@ -973,8 +960,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'category',
-          label: 'Multi-scanning',
+          type: "category",
+          label: "Multi-scanning",
           items: [
             {
               type: "category",
@@ -986,12 +973,12 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'MatrixScan Count',
+                  type: "category",
+                  label: "MatrixScan Count",
                   items: [
                     "sdks/flutter/matrixscan-count/intro",
                     "sdks/flutter/matrixscan-count/get-started",
@@ -999,8 +986,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'MatrixScan Find',
+                  type: "category",
+                  label: "MatrixScan Find",
                   items: [
                     "sdks/flutter/matrixscan-find/intro",
                     "sdks/flutter/matrixscan-find/get-started",
@@ -1010,7 +997,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
-        }, 
+        },
       ],
     },
     {
@@ -1045,9 +1032,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: [
-            "sdks/flutter/parser/get-started",
-          ],
+          items: ["sdks/flutter/parser/get-started"],
         },
       ],
     },
@@ -1083,46 +1068,43 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/flutter/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/flutter/release-notes",
     },
   ],
 
   capacitorSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for Capacitor',
+      type: "category",
+      label: "Data Capture SDK for Capacitor",
       collapsed: false,
-      items: [
-        'sdks/capacitor/add-sdk',
-        'sdks/capacitor/samples',
-      ],
+      items: ["sdks/capacitor/add-sdk", "sdks/capacitor/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/capacitor/barcode-capture/get-started",
                 "sdks/capacitor/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'SparkScan',
+                  type: "category",
+                  label: "SparkScan",
                   items: [
                     "sdks/capacitor/sparkscan/intro",
                     "sdks/capacitor/sparkscan/get-started",
@@ -1130,8 +1112,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'Barcode Selection',
+                  type: "category",
+                  label: "Barcode Selection",
                   items: [
                     "sdks/capacitor/barcode-selection/intro",
                     "sdks/capacitor/barcode-selection/get-started",
@@ -1142,8 +1124,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'category',
-          label: 'Multi-scanning',
+          type: "category",
+          label: "Multi-scanning",
           items: [
             {
               type: "category",
@@ -1155,12 +1137,12 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'MatrixScan Count',
+                  type: "category",
+                  label: "MatrixScan Count",
                   items: [
                     "sdks/capacitor/matrixscan-count/intro",
                     "sdks/capacitor/matrixscan-count/get-started",
@@ -1168,8 +1150,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'MatrixScan Find',
+                  type: "category",
+                  label: "MatrixScan Find",
                   items: [
                     "sdks/capacitor/matrixscan-find/intro",
                     "sdks/capacitor/matrixscan-find/get-started",
@@ -1179,7 +1161,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
-        }, 
+        },
       ],
     },
     {
@@ -1214,9 +1196,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: [
-            "sdks/capacitor/parser/get-started",
-          ],
+          items: ["sdks/capacitor/parser/get-started"],
         },
       ],
     },
@@ -1252,34 +1232,31 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/capacitor/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/capacitor/release-notes",
     },
   ],
 
   titaniumSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for Titanium',
+      type: "category",
+      label: "Data Capture SDK for Titanium",
       collapsed: false,
-      items: [
-        'sdks/titanium/add-sdk',
-        'sdks/titanium/samples',
-      ],
+      items: ["sdks/titanium/add-sdk", "sdks/titanium/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/titanium/barcode-capture/get-started",
                 "sdks/titanium/barcode-capture/configure-barcode-symbologies",
@@ -1311,46 +1288,43 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/titanium/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/titanium/release-notes",
     },
   ],
 
   xamarinIosSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for Xamarin iOS',
+      type: "category",
+      label: "Data Capture SDK for Xamarin iOS",
       collapsed: false,
-      items: [
-        'sdks/xamarin/ios/add-sdk',
-        'sdks/xamarin/ios/samples',
-      ],
+      items: ["sdks/xamarin/ios/add-sdk", "sdks/xamarin/ios/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/xamarin/ios/barcode-capture/get-started",
                 "sdks/xamarin/ios/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'SparkScan',
+                  type: "category",
+                  label: "SparkScan",
                   items: [
                     "sdks/xamarin/ios/sparkscan/intro",
                     "sdks/xamarin/ios/sparkscan/get-started",
@@ -1358,8 +1332,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'Barcode Selection',
+                  type: "category",
+                  label: "Barcode Selection",
                   items: [
                     "sdks/xamarin/ios/barcode-selection/intro",
                     "sdks/xamarin/ios/barcode-selection/get-started",
@@ -1370,8 +1344,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'category',
-          label: 'Multi-scanning',
+          type: "category",
+          label: "Multi-scanning",
           items: [
             {
               type: "category",
@@ -1383,12 +1357,12 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'MatrixScan Count',
+                  type: "category",
+                  label: "MatrixScan Count",
                   items: [
                     "sdks/xamarin/ios/matrixscan-count/intro",
                     "sdks/xamarin/ios/matrixscan-count/get-started",
@@ -1398,7 +1372,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
-        }, 
+        },
       ],
     },
     {
@@ -1433,9 +1407,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: [
-            "sdks/xamarin/ios/parser/get-started",
-          ],
+          items: ["sdks/xamarin/ios/parser/get-started"],
         },
       ],
     },
@@ -1471,46 +1443,43 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/xamarin/ios/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/xamarin/ios/release-notes",
     },
   ],
 
   xamarinAndroidSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for Xamarin Android',
+      type: "category",
+      label: "Data Capture SDK for Xamarin Android",
       collapsed: false,
-      items: [
-        'sdks/xamarin/android/add-sdk',
-        'sdks/xamarin/android/samples',
-      ],
+      items: ["sdks/xamarin/android/add-sdk", "sdks/xamarin/android/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/xamarin/android/barcode-capture/get-started",
                 "sdks/xamarin/android/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'SparkScan',
+                  type: "category",
+                  label: "SparkScan",
                   items: [
                     "sdks/xamarin/android/sparkscan/intro",
                     "sdks/xamarin/android/sparkscan/get-started",
@@ -1518,8 +1487,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'Barcode Selection',
+                  type: "category",
+                  label: "Barcode Selection",
                   items: [
                     "sdks/xamarin/android/barcode-selection/intro",
                     "sdks/xamarin/android/barcode-selection/get-started",
@@ -1530,8 +1499,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'category',
-          label: 'Multi-scanning',
+          type: "category",
+          label: "Multi-scanning",
           items: [
             {
               type: "category",
@@ -1543,12 +1512,12 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'MatrixScan Count',
+                  type: "category",
+                  label: "MatrixScan Count",
                   items: [
                     "sdks/xamarin/android/matrixscan-count/intro",
                     "sdks/xamarin/android/matrixscan-count/get-started",
@@ -1558,7 +1527,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
-        }, 
+        },
       ],
     },
     {
@@ -1593,9 +1562,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: [
-            "sdks/xamarin/android/parser/get-started",
-          ],
+          items: ["sdks/xamarin/android/parser/get-started"],
         },
       ],
     },
@@ -1631,46 +1598,43 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/xamarin/android/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/xamarin/android/release-notes",
     },
   ],
 
   xamarinFormsSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for Xamarin Forms',
+      type: "category",
+      label: "Data Capture SDK for Xamarin Forms",
       collapsed: false,
-      items: [
-        'sdks/xamarin/forms/add-sdk',
-        'sdks/xamarin/forms/samples',
-      ],
+      items: ["sdks/xamarin/forms/add-sdk", "sdks/xamarin/forms/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/xamarin/forms/barcode-capture/get-started",
                 "sdks/xamarin/forms/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'SparkScan',
+                  type: "category",
+                  label: "SparkScan",
                   items: [
                     "sdks/xamarin/forms/sparkscan/intro",
                     "sdks/xamarin/forms/sparkscan/get-started",
@@ -1678,8 +1642,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'Barcode Selection',
+                  type: "category",
+                  label: "Barcode Selection",
                   items: [
                     "sdks/xamarin/forms/barcode-selection/intro",
                     "sdks/xamarin/forms/barcode-selection/get-started",
@@ -1690,8 +1654,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'category',
-          label: 'Multi-scanning',
+          type: "category",
+          label: "Multi-scanning",
           items: [
             {
               type: "category",
@@ -1703,12 +1667,12 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'MatrixScan Count',
+                  type: "category",
+                  label: "MatrixScan Count",
                   items: [
                     "sdks/xamarin/forms/matrixscan-count/intro",
                     "sdks/xamarin/forms/matrixscan-count/get-started",
@@ -1718,7 +1682,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
-        }, 
+        },
       ],
     },
     {
@@ -1753,9 +1717,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: [
-            "sdks/xamarin/forms/parser/get-started",
-          ],
+          items: ["sdks/xamarin/forms/parser/get-started"],
         },
       ],
     },
@@ -1791,46 +1753,43 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/xamarin/forms/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/xamarin/forms/release-notes",
     },
   ],
 
   netIosSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for .NET iOS',
+      type: "category",
+      label: "Data Capture SDK for .NET iOS",
       collapsed: false,
-      items: [
-        'sdks/net/ios/add-sdk',
-        'sdks/net/ios/samples',
-      ],
+      items: ["sdks/net/ios/add-sdk", "sdks/net/ios/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/net/ios/barcode-capture/get-started",
                 "sdks/net/ios/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'SparkScan',
+                  type: "category",
+                  label: "SparkScan",
                   items: [
                     "sdks/net/ios/sparkscan/intro",
                     "sdks/net/ios/sparkscan/get-started",
@@ -1838,8 +1797,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'Barcode Selection',
+                  type: "category",
+                  label: "Barcode Selection",
                   items: [
                     "sdks/net/ios/barcode-selection/intro",
                     "sdks/net/ios/barcode-selection/get-started",
@@ -1850,8 +1809,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'category',
-          label: 'Multi-scanning',
+          type: "category",
+          label: "Multi-scanning",
           items: [
             {
               type: "category",
@@ -1863,12 +1822,12 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'MatrixScan Count',
+                  type: "category",
+                  label: "MatrixScan Count",
                   items: [
                     "sdks/net/ios/matrixscan-count/intro",
                     "sdks/net/ios/matrixscan-count/get-started",
@@ -1876,8 +1835,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'MatrixScan Find',
+                  type: "category",
+                  label: "MatrixScan Find",
                   items: [
                     "sdks/net/ios/matrixscan-find/intro",
                     "sdks/net/ios/matrixscan-find/get-started",
@@ -1887,7 +1846,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
-        }, 
+        },
       ],
     },
     {
@@ -1922,9 +1881,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: [
-            "sdks/net/ios/parser/get-started",
-          ],
+          items: ["sdks/net/ios/parser/get-started"],
         },
       ],
     },
@@ -1960,46 +1917,43 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/net/ios/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/net/ios/release-notes",
     },
   ],
 
   netAndroidSidebar: [
     {
-      type: 'category',
-      label: 'Data Capture SDK for .NET Android',
+      type: "category",
+      label: "Data Capture SDK for .NET Android",
       collapsed: false,
-      items: [
-        'sdks/net/android/add-sdk',
-        'sdks/net/android/samples',
-      ],
+      items: ["sdks/net/android/add-sdk", "sdks/net/android/samples"],
     },
     {
-      type: 'category',
-      label: 'Barcode Scanning',
+      type: "category",
+      label: "Barcode Scanning",
       collapsed: false,
       items: [
         {
-          type: 'category',
-          label: 'Single Scanning',
+          type: "category",
+          label: "Single Scanning",
           items: [
             {
-              type: 'category',
-              label: 'Barcode Capture API',
+              type: "category",
+              label: "Barcode Capture API",
               items: [
                 "sdks/net/android/barcode-capture/get-started",
                 "sdks/net/android/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'SparkScan',
+                  type: "category",
+                  label: "SparkScan",
                   items: [
                     "sdks/net/android/sparkscan/intro",
                     "sdks/net/android/sparkscan/get-started",
@@ -2007,8 +1961,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'Barcode Selection',
+                  type: "category",
+                  label: "Barcode Selection",
                   items: [
                     "sdks/net/android/barcode-selection/intro",
                     "sdks/net/android/barcode-selection/get-started",
@@ -2019,8 +1973,8 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: 'category',
-          label: 'Multi-scanning',
+          type: "category",
+          label: "Multi-scanning",
           items: [
             {
               type: "category",
@@ -2032,12 +1986,12 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Pre-built Workflows",
               items: [
                 {
-                  type: 'category',
-                  label: 'MatrixScan Count',
+                  type: "category",
+                  label: "MatrixScan Count",
                   items: [
                     "sdks/net/android/matrixscan-count/intro",
                     "sdks/net/android/matrixscan-count/get-started",
@@ -2045,8 +1999,8 @@ const sidebars: SidebarsConfig = {
                   ],
                 },
                 {
-                  type: 'category',
-                  label: 'MatrixScan Find',
+                  type: "category",
+                  label: "MatrixScan Find",
                   items: [
                     "sdks/net/android/matrixscan-find/intro",
                     "sdks/net/android/matrixscan-find/get-started",
@@ -2056,7 +2010,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
-        }, 
+        },
       ],
     },
     {
@@ -2091,9 +2045,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: [
-            "sdks/net/android/parser/get-started",
-          ],
+          items: ["sdks/net/android/parser/get-started"],
         },
       ],
     },
@@ -2129,9 +2081,9 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: 'doc',
-      label: 'Release Notes',
-      id: 'sdks/net/android/release-notes',
+      type: "doc",
+      label: "Release Notes",
+      id: "sdks/net/android/release-notes",
     },
   ],
 };
