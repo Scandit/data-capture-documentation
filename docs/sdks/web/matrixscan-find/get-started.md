@@ -54,7 +54,7 @@ Here we configure it for tracking EAN13 codes, but you should change this to the
 Next, create the list of items that will be actively searched for. We will also attach some optional information to the first item that can be used by the `BarcodeFindView` to display extra information:
 
 ```typescript
-    const items: BarcodeFindItem = []
+    const items: BarcodeFindItem[] = []
     items.push(
         new BarcodeFindItem(
                 new BarcodeFindItemSearchOptions("9783598215438"),
@@ -87,11 +87,11 @@ const viewSettings = new BarcodeFindViewSettings(inListItemColorGreen, notInList
 Next, create a `BarcodeFindView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeFindView` is automatically added to the provided parent view.
 
 ```typescript
-const barcodeFindView = await BarcodeFindView.createWithSettings(dataCaptureView, context, barcodeFind, viewSettings);
+let barcodeFindView = await BarcodeFindView.createWithSettings(dataCaptureView, context, barcodeFind, viewSettings);
 
 // OR just create to use the default view settings and camera settings
 
-const barcodeFindView = await BarcodeFindView.create(dataCaptureView, context, barcodeFind);
+let barcodeFindView = await BarcodeFindView.create(dataCaptureView, context, barcodeFind);
 
 // finally set the item list to be searched
 await barcodeFind.setItemList(items);

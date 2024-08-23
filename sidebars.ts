@@ -29,44 +29,23 @@ const sidebars: SidebarsConfig = {
           type: "category",
           label: "Supported Symbologies and IDs",
           collapsed: false,
-					items: [
-            'barcode-symbologies',
-            'symbology-properties',
-            'extension-codes',
-            'scanning-composite-codes',
-            'id-documents',
-          ]
-				},
-        {
-					type: 'category',
+          items: [
+            "barcode-symbologies",
+            "symbology-properties",
+            "extension-codes",
+            "scanning-composite-codes",
+            "id-documents",
+          ],
+        },
+      {
+    type: 'category',
 					label: 'Migration Guides',
           collapsed: true,
 					items: [
             'migrate-5-to-6',
           ]
 				},
-			],
-		},
-	],
-
-	expressSidebar: [
-		{
-			type: 'category',
-			label: 'Scandit Express',
-			items: [
-				'hosted/express/overview',
-        {
-          type: 'category',
-          label: 'Getting Started',
-          items: ['hosted/express/getting-started/installation', 'hosted/express/getting-started/rollout'],
-        },
-        {
-          type: 'category',
-          label: 'Configuring Express',
-          items: ['hosted/express/configuration/index', 'hosted/express/configuration/express-find', 'hosted/express/configuration/inventory-count'],
-        },
-      ],
-    },
+			],},
   ],
 
   boltSidebar: [
@@ -478,17 +457,11 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: "category",
-              label: "Pre-built Workflows",
+              label: "MatrixScan Find",
               items: [
-                {
-                  type: "category",
-                  label: "MatrixScan Find",
-                  items: [
-                    "sdks/web/matrixscan-find/intro",
-                    "sdks/web/matrixscan-find/get-started",
-                    "sdks/web/matrixscan-find/advanced",
-                  ],
-                },
+                "sdks/web/matrixscan-find/intro",
+                "sdks/web/matrixscan-find/get-started",
+                "sdks/web/matrixscan-find/advanced",
               ],
             },
             {
