@@ -6,6 +6,18 @@ title: Release Notes
 pagination_prev: null
 ---
 
+## 6.27.0
+
+**Released**: September 19, 2024
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed result data encoding classification for raw byte data in 2d barcodes, in particular for Shift-JIS encoding.
+* Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when when the camera was quickly changing direction with a single barcode in the scene.
+* Fixed an issue where it was not possible to scan non-fluorescent French-Post barcodes without the extension `fluorescent_orange_ink`.
+
 ## 6.26.0
 
 **Released**: August 15, 2024
