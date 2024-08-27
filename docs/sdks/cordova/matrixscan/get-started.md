@@ -63,9 +63,9 @@ Next, create a [BarcodeTracking](https://docs.scandit.com/data-capture-sdk/cordo
 
 ```js
 const barcodeTracking = Scandit.BarcodeTracking.forContext(context, settings);
-````
+```
 
-### Use the Built-in Camera
+## Use the Built-in Camera
 
 The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
@@ -179,10 +179,3 @@ To disable barcode tracking set [BarcodeTracking.isEnabled](https://docs.scandit
 
 Note that disabling the capture mode does not stop the camera, the camera continues to stream frames until it is turned off or put it in standby calling [SwitchToDesiredState](https://docs.scandit.com/data-capture-sdk/cordova/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [StandBy](https://docs.scandit.com/data-capture-sdk/cordova/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.Standby).
 
-### Limitations
-
-MatrixScan does not support the following symbologies:
-
-- DotCode
-- MaxiCode
-- All postal codes (KIX, RM4SCC)

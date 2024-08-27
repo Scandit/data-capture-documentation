@@ -114,7 +114,7 @@ this.SparkScanView.OnDisappearing();
 }
 ```
 
-## Register the Listener to Be Informed When a New Barcode Is Scanned
+## Register the Listener
 
 To keep track of the barcodes that have been scanned, implement the [ISparkScanListener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface and register the listener to the SparkScan mode.
 

@@ -44,6 +44,7 @@ import JavascriptFramework from './JavascriptFramework';
 import XamarinIosFramework from './XamarinIosFramework';
 import XamarinAndroidFramework from './XamarinAndroidFramework';
 import TitaniumFramework from './TitaniumFramework';
+import MatrixScanPick from './MatrixScanPick';
 
 export {
   Sparkscan,
@@ -92,4 +93,5 @@ export {
   XamarinIosFramework,
   XamarinAndroidFramework,
   TitaniumFramework,
+  MatrixScanPick,
 };

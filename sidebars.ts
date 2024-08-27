@@ -37,7 +37,15 @@ const sidebars: SidebarsConfig = {
             "id-documents",
           ],
         },
-      ],
+        {
+          type: 'category',
+					label: 'Migration Guides',
+          collapsed: true,
+					items: [
+            'migrate-5-to-6',
+          ],
+				},
+			],
     },
   ],
 

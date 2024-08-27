@@ -18,6 +18,14 @@ The general steps are:
 - Display the camera preview by creating a [data capture view](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 - If displaying a preview, optionally create a new [overlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) and add it to [data capture view](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) for a better visual feedback.
 
+## Prerequisites
+
+Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out this [guide](/sdks/react-native/add-sdk).
+
+:::note
+You can retrieve your Scandit Data Capture SDK license key, by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
+:::
+
 ## Create the Data Capture Context
 
 The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
@@ -28,7 +36,7 @@ const context = DataCaptureContext.forLicenseKey(
 );
 ```
 
-### Configure the Barcode Scanning Behavior
+## Configure the Barcode Scanning Behavior
 
 Barcode scanning is orchestrated by the [BarcodeCapture](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) [data capture mode](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-mode.html#interface-scandit.datacapture.core.IDataCaptureMode). This class is the main entry point for scanning barcodes. It is configured through [BarcodeCaptureSettings](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-settings.html#class-scandit.datacapture.barcode.BarcodeCaptureSettings) and allows to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) that will get informed whenever new codes have been recognized.
 
@@ -54,7 +62,7 @@ Next, create a [BarcodeCapture](https://docs.scandit.com/data-capture-sdk/react-
 const barcodeCapture = BarcodeCapture.forContext(context, settings);
 ```
 
-### Register the Barcode Capture Listener
+## Register the Barcode Capture Listener
 
 To get informed whenever a new code has been recognized, add a [BarcodeCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) through
 [BarcodeCapture.addListener()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture.html#method-scandit.datacapture.barcode.BarcodeCapture.AddListener) and implement the listener methods to suit your application’s needs.
@@ -76,7 +84,7 @@ Then add the listener:
 barcodeCapture.addListener(listener);
 ```
 
-### Use the Built-in Camera
+## Use the Built-in Camera
 
 The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 

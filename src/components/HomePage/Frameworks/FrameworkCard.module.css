@@ -70,6 +70,7 @@
 
 .iconWrapper:hover .titleLabelHover {
   display: block;
+  z-index: 2;
 }
 
 .input:checked ~ .iconWrapper .iconDropDown {

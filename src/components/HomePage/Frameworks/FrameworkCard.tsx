@@ -20,6 +20,8 @@ export function FrameworkCard({
     !hasAdditional && handleFrameworkClick();
   }
 
+  const isSelected = framework.framework === selectedFramework.frameworkParent;  
+
   return (
     <>
       <input
@@ -40,11 +42,13 @@ export function FrameworkCard({
         }`}
       >
         {framework.icon}
-        {!hasAdditional ? (
+        {(!isSelected || !hasAdditional) && (
           <span className={style.titleLabelHover}>
             {FrameworksName[framework.framework as keyof typeof FrameworksName]}
           </span>
-        ) : (
+        )}
+
+        {hasAdditional && (
           <span className={style.iconDropDown}>
             <ArrowDropDown iconClass={style.icon} />
           </span>

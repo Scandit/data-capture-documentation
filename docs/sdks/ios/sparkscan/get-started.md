@@ -101,7 +101,7 @@ override func viewWillDisappear(animated: Bool) {
 }
 ```
 
-## Register The Listener
+## Register the Listener
 
 To keep track of the barcodes that have been scanned, implement the [`SDCSparkScanListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) protocol and register the listener to the SparkScan mode.
 

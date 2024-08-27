@@ -109,7 +109,7 @@ override func viewWillDisappear(_ animated: Bool) {
 }
 ```
 
-## Register The Listener
+## Register the Listener
 
 The [`BarcodeFindView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) displays a **Finish** button next to its shutter button button. 
 

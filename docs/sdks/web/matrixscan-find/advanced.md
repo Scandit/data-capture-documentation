@@ -17,10 +17,10 @@ To do this, you can directly register a [`BarcodeFindListener`](https://docs.sca
 barcodeFindMode.addListener({
     didStartSearch: () => {
         // The mode was started
-    }
+    },
     didPauseSearch: (foundItems: BarcodeFindItem[]) => {
         // The mode was paused
-    }
+    },
     didStopSearch: (foundItems: BarcodeFindItem[]) => {
         // The mode was stopped after the finish button was clicked
     }

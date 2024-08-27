@@ -1,6 +1,7 @@
 export enum BarcodeScanning {
   BarcodeCapture = "Barcode Capture",
   MatrixScan = "MatrixScan",
+  MatrixScanPick = "MatrixScanPick",
   Parser = "Parser",
   LabelCapture = "Label Capture",
   BarcodeGenerator = "Barcode Generator",

@@ -61,7 +61,7 @@ Because the frame source is configurable, the data capture context must be told 
 dataCaptureContext.SetFrameSourceAsync(camera);
 ```
 
-## Register The Listener To Be Informed When Scanned Phase Is Over
+## Register the Listener
 
 To keep track of the barcodes that have been scanned, implement the [IBarcodeCountListener](https://docs.scandit.com/data-capture-sdk/xamarin.ios/barcode-capture/api/barcode-count-listener.html#interface-scandit.datacapture.barcode.count.IBarcodeCountListener) interface and register the listener.
 

@@ -171,24 +171,24 @@ const config: Config = {
             },
           ],
         },
-        {
-          type: "dropdown",
-          sidebarId: "hostedSidebar",
-          position: "left",
-          label: "Hosted Solutions",
-          items: [
-            {
-              type: "doc",
-              label: "ID Bolt",
-              docId: "hosted/id-bolt/overview",
-            },
-            {
-              type: "doc",
-              label: "Scandit Express",
-              docId: "hosted/express/overview",
-            },
-          ],
-        },
+//        {
+//          type: "dropdown",
+//          sidebarId: "hostedSidebar",
+//          position: "left",
+//          label: "Hosted Solutions",
+//          items: [
+//            {
+//              type: "doc",
+//              label: "ID Bolt",
+//              docId: "hosted/id-bolt/overview",
+//            },
+//            {
+//              type: "doc",
+//              label: "Scandit Express",
+//              docId: "hosted/express/overview",
+//            },
+//          ],
+//        },
         {
           href: "https://ssl.scandit.com/dashboard/sign-in?p=test",
           label: "Log In",

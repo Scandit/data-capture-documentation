@@ -34,6 +34,7 @@ export default function HomePage() {
     }
   }, []);
 
+  // Simulates a fake page reload by briefly flashing the content
   const handleFrameworkClick = () => {
     setIsFlashing(true);
     setTimeout(() => {

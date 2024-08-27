@@ -83,7 +83,7 @@ camera.switchToDesiredState(Scandit.FrameSourceState.On);
 
 There is a separate guide for [more advanced camera functionality](advanced.md).
 
-### Use a Capture View to Visualize the Scan Process
+## Use a Capture View to Visualize the Scan Process
 
 When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 

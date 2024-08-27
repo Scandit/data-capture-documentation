@@ -83,7 +83,7 @@ protected void onResume() {
 }
 ```
 
-## Register The Listener
+## Register the Listener
 
 To keep track of the barcodes that have been scanned, implement the [SparkScanListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface and register the listener to the SparkScan mode.
 

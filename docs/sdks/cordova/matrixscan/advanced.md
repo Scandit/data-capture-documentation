@@ -3,7 +3,7 @@ sidebar_position: 3
 pagination_next: null
 ---
 
-# Add AR Overlays
+# Adding AR Overlays
 
 ## Prerequisites
 
