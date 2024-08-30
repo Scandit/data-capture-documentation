@@ -71,7 +71,7 @@ function DropdownNavbarItemDesktop({
         continue;
       }
 
-      setLink(trimmedPath);
+      setLink(trimmedPath || '/add-sdk');
     }
   }, [currentPath]);
 
