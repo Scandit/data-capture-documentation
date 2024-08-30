@@ -7,7 +7,7 @@ pagination_next: null
 
 MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
-## BarcodeFind Listener
+## Set up a listener on the BarcodeFind mode
 
 You may want more fine-grained knowledge over the different events happening during the life of the BarcodeFind mode, such as when the search starts, pauses and stops. To do this, you can directly register a [BarcodeFindListener](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-find-listener.html#interface-scandit.datacapture.barcode.find.IBarcodeFindListener) on the mode itself.
 

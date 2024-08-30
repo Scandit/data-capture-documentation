@@ -99,7 +99,7 @@ export function createBarcodeScanningArr(framework: string, allCards: boolean) {
           link:
             framework === "linux"
               ? "https://docs.scandit.com/stable/c_api/generator-settings-json.html"
-              : `/sdks/${getFrameworkPath(frameworkData)}/barcode-generator`,
+              : `/sdks/${getFrameworkPath(frameworkData)}/barcode-generator/`,
         },
       ],
     },

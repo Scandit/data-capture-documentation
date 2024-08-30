@@ -5,7 +5,7 @@ pagination_prev: null
 
 # About MatrixScan
 
-MatrixScan enables you to build applications and workflows involving highlighting and/or interacting with multiple barcodes within the same frame. It can be used to build augmented-reality (AR) experiences by adding overlays to the application UI.
+MatrixScan enables you to build applications and workflows involving highlighting and/or interacting with multiple barcodes within the same frame.
 
 MatrixScan is powered by the `SDCBarcodeTracking` functionality of the Scandit Smart Data Capture SDK.
 

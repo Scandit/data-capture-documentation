@@ -110,7 +110,6 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/ios/barcode-capture/get-started",
-                "sdks/ios/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
@@ -148,7 +147,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/ios/matrixscan/intro",
                 "sdks/ios/matrixscan/get-started",
-                "sdks/ios/matrixscan/advanced",
+//                "sdks/ios/matrixscan/advanced",
               ],
             },
             {
@@ -176,6 +175,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/ios/barcode-capture/configure-barcode-symbologies",
+          label: "Configure Barcode Symbologies",
         }, 
       ],
     },
@@ -224,7 +228,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "sdks/ios/barcode-generator",
+          id: "sdks/ios/barcode-generator/index",
           label: "Barcode Generator",
         },
       ],
@@ -296,7 +300,6 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/android/barcode-capture/get-started",
-                "sdks/android/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
@@ -334,7 +337,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/android/matrixscan/intro",
                 "sdks/android/matrixscan/get-started",
-                "sdks/android/matrixscan/advanced",
+//                "sdks/android/matrixscan/advanced",
               ],
             },
             {
@@ -362,6 +365,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/android/barcode-capture/configure-barcode-symbologies",
+          label: "Configure Barcode Symbologies",
         }, 
       ],
     },
@@ -410,7 +418,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "doc",
-          id: "sdks/android/barcode-generator",
+          id: "sdks/android/barcode-generator/index",
           label: "Barcode Generator",
         },
       ],
@@ -482,7 +490,6 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/web/barcode-capture/get-started",
-                "sdks/web/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
@@ -512,10 +519,15 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/web/matrixscan/intro",
                 "sdks/web/matrixscan/get-started",
-                "sdks/web/matrixscan/advanced",
+//               "sdks/web/matrixscan/advanced",
               ],
             },
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/web/barcode-capture/configure-barcode-symbologies",
+          label: "Configure Barcode Symbologies",
         }, 
       ],
     },
@@ -619,7 +631,6 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/cordova/barcode-capture/get-started",
-                "sdks/cordova/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
@@ -657,10 +668,15 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/cordova/matrixscan/intro",
                 "sdks/cordova/matrixscan/get-started",
-                "sdks/cordova/matrixscan/advanced",
+//                "sdks/cordova/matrixscan/advanced",
               ],
             },
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/cordova/barcode-capture/configure-barcode-symbologies",
+          label: "Configure Barcode Symbologies",
         }, 
       ],
     },
@@ -763,7 +779,6 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/react-native/barcode-capture/get-started",
-                "sdks/react-native/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
@@ -801,7 +816,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/react-native/matrixscan/intro",
                 "sdks/react-native/matrixscan/get-started",
-                "sdks/react-native/matrixscan/advanced",
+   //             "sdks/react-native/matrixscan/advanced",
               ],
             },
             {
@@ -829,6 +844,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/react-native/barcode-capture/configure-barcode-symbologies",
+          label: "Configure Barcode Symbologies",
         }, 
       ],
     },
@@ -944,7 +964,6 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/flutter/barcode-capture/get-started",
-                "sdks/flutter/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
@@ -982,7 +1001,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/flutter/matrixscan/intro",
                 "sdks/flutter/matrixscan/get-started",
-                "sdks/flutter/matrixscan/advanced",
+   //             "sdks/flutter/matrixscan/advanced",
               ],
             },
             {
@@ -1010,6 +1029,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/flutter/barcode-capture/configure-barcode-symbologies",
+          label: "Configure Barcode Symbologies",
         }, 
       ],
     },
@@ -1113,7 +1137,6 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/capacitor/barcode-capture/get-started",
-                "sdks/capacitor/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
@@ -1151,7 +1174,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/capacitor/matrixscan/intro",
                 "sdks/capacitor/matrixscan/get-started",
-                "sdks/capacitor/matrixscan/advanced",
+  //              "sdks/capacitor/matrixscan/advanced",
               ],
             },
             {
@@ -1179,6 +1202,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/capacitor/barcode-capture/configure-barcode-symbologies",
+          label: "Configure Barcode Symbologies",
         }, 
       ],
     },
@@ -1341,7 +1369,6 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/xamarin/ios/barcode-capture/get-started",
-                "sdks/xamarin/ios/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
@@ -1379,7 +1406,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/xamarin/ios/matrixscan/intro",
                 "sdks/xamarin/ios/matrixscan/get-started",
-                "sdks/xamarin/ios/matrixscan/advanced",
+  //             "sdks/xamarin/ios/matrixscan/advanced",
               ],
             },
             {
@@ -1398,6 +1425,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/xamarin/ios/barcode-capture/configure-barcode-symbologies",
+          label: "Configure Barcode Symbologies",
         }, 
       ],
     },
@@ -1501,7 +1533,6 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/xamarin/android/barcode-capture/get-started",
-                "sdks/xamarin/android/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
@@ -1539,7 +1570,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/xamarin/android/matrixscan/intro",
                 "sdks/xamarin/android/matrixscan/get-started",
-                "sdks/xamarin/android/matrixscan/advanced",
+  //              "sdks/xamarin/android/matrixscan/advanced",
               ],
             },
             {
@@ -1558,6 +1589,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/xamarin/android/barcode-capture/configure-barcode-symbologies",
+          label: "Configure Barcode Symbologies",
         }, 
       ],
     },
@@ -1661,7 +1697,6 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/xamarin/forms/barcode-capture/get-started",
-                "sdks/xamarin/forms/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
@@ -1699,7 +1734,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/xamarin/forms/matrixscan/intro",
                 "sdks/xamarin/forms/matrixscan/get-started",
-                "sdks/xamarin/forms/matrixscan/advanced",
+  //              "sdks/xamarin/forms/matrixscan/advanced",
               ],
             },
             {
@@ -1718,6 +1753,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/xamarin/forms/barcode-capture/configure-barcode-symbologies",
+          label: "Configure Barcode Symbologies",
         }, 
       ],
     },
@@ -1821,7 +1861,6 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/net/ios/barcode-capture/get-started",
-                "sdks/net/ios/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
@@ -1859,7 +1898,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/net/ios/matrixscan/intro",
                 "sdks/net/ios/matrixscan/get-started",
-                "sdks/net/ios/matrixscan/advanced",
+  //              "sdks/net/ios/matrixscan/advanced",
               ],
             },
             {
@@ -1887,6 +1926,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/net/ios/barcode-capture/configure-barcode-symbologies",
+          label: "Configure Barcode Symbologies",
         }, 
       ],
     },
@@ -1990,7 +2034,6 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/net/android/barcode-capture/get-started",
-                "sdks/net/android/barcode-capture/configure-barcode-symbologies",
               ],
             },
             {
@@ -2028,7 +2071,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/net/android/matrixscan/intro",
                 "sdks/net/android/matrixscan/get-started",
-                "sdks/net/android/matrixscan/advanced",
+   //             "sdks/net/android/matrixscan/advanced",
               ],
             },
             {
@@ -2056,6 +2099,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/net/android/barcode-capture/configure-barcode-symbologies",
+          label: "Configure Barcode Symbologies",
         }, 
       ],
     },
