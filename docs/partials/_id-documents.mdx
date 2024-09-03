@@ -1,8 +1,8 @@
-# ID Documents
+## Supported Documents 
 
-ID Capture supports scanning and verifying ID documents based on their Machine Readable Zone (MRZ), Barcodes, and human-readable text. The following ID types are supported:
+The following ID types are supported:
 
-## Machine Readable Zone (MRZ) Documents
+### Machine Readable Zone (MRZ) Documents
 
 Scandit ID Capture supports all versions of Machine Readable Travel Documents (MRTD) specified by the International Civil Aviation Organization (ICAO). This includes all documents of the types TD1 (ID cards), TD2 (other official travel documents), TD3/MRP (passports) and MRV (visas).
 
@@ -23,23 +23,24 @@ In addition, ID Capture supports some non-ICAO standards. A non-exhaustive list 
 |             | APEC (Asia-Pacific Economic Cooperation) Business Travel Card (non-ICAO)                        |
 
 
-## Barcode ID Formats
+### Barcode ID Formats
 
 ID Capture supports the following documents with PDF417 barcodes:
 
-| Country     | Supported Document Types                                                                                                                                                                                                                                                                                                                                                                         |
-|-------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| USA         | AAMVA-compliant documents: ID Capture supports all versions of the Driver License and Identification Standard published by AAMVA. Some pre-Standard barcodes (documents issued before 2000) may also be successfully parsed, if their format doesn’t differ much from version 1 of the Standard. **Encrypted barcodes issued in the US State of Georgia before 2012 are currently not supported**. More information can be found in the API documentation of `SDCCapturedId` and `SDCAAMVABarcodeResult`. |
-|             | US Uniformed Services Identification Card with PDF417 barcodes: both Sponsor and Dependant documents are supported (versions 1, 2 and 3). More information can be found in the API Documentation of `SDCCapturedId` and `SDCUsUniformedServicesBarcodeResult`.                                                                                                                                                             |
-|             | Common Access Card: the PDF417 on the front side of the document.                                                                                                                                                                                                                                                                                                                        |
-| Argentina   | ID Card (Documento Nacional de Identidad): the PDF417 on the front side of the document. More information can be found in the API Documentation of `SDCCapturedId` and `SDCArgentinaIdBarcodeResult`.                                                                                                                                                                                        |
-| Colombia    | ID Card (Cédula de Ciudadanía): the PDF417 on the back side of the document. More information can be found in the API Documentation of `SDCCapturedId` and `SDCColombiaIdBarcodeResult`.                                                                                                                                                                                                    |
-|             | Driver’s License (Licencia de Conducción): The PDF417 on the back side of the document. More information can be found in the API Documentation of `SDCCapturedId` and `SDCColombiaDlBarcodeResult`.                                                                                                                                                                                         |
-| South Africa| Driver’s License - version 2: the PDF417 on the back side of the document. More information can be found in the API Documentation of `SDCCapturedId` and `SDCSouthAfricaDLBarcodeResult`.                                                                                                                                                                                                    |
-|             | Smart ID Card: the PDF417 on the back side of the document. More information can be found in the API Documentation of `SDCCapturedId` and `SDCSouthAfricaIdBarcodeResult`.                                                                                                                                                                                                                  |
-## Human-Readable Text
+| Country     | Supported Document Types    |
+|-------------|---------------------|
+| USA         | AAMVA-compliant documents: ID Capture supports all versions of the Driver License and Identification Standard published by AAMVA. Some pre-Standard barcodes (documents issued before 2000) may also be successfully parsed, if their format doesn’t differ much from version 1 of the Standard. **Encrypted barcodes issued in the US State of Georgia before 2012 are currently not supported**. More information can be found in the API documentation of `CapturedId` and `AAMVABarcodeResult`. |
+|             | US Uniformed Services Identification Card with PDF417 barcodes: both Sponsor and Dependant documents are supported (versions 1, 2 and 3). More information can be found in the API Documentation of `CapturedId` and `UsUniformedServicesBarcodeResult`.  |
+|             | Common Access Card: the PDF417 on the front side of the document.  |
+| Argentina   | ID Card (Documento Nacional de Identidad): the PDF417 on the front side of the document. More information can be found in the API Documentation of `CapturedId` and `ArgentinaIdBarcodeResult`. |
+| Colombia    | ID Card (Cédula de Ciudadanía): the PDF417 on the back side of the document. More information can be found in the API Documentation of `CapturedId` and `ColombiaIdBarcodeResult`.   |
+|             | Driver’s License (Licencia de Conducción): The PDF417 on the back side of the document. More information can be found in the API Documentation of `CapturedId` and `ColombiaDlBarcodeResult`.  |
+| South Africa| Driver’s License - version 2: the PDF417 on the back side of the document. More information can be found in the API Documentation of `CapturedId` and `SouthAfricaDLBarcodeResult`.   |
+|             | Smart ID Card: the PDF417 on the back side of the document. More information can be found in the API Documentation of `CapturedId` and `SouthAfricaIdBarcodeResult`.   |
 
-### Asia
+### Human-Readable Text
+
+#### Asia
 
 | Country        | Supported Document Types                                                                                                                                                                                                 |
 |----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -70,7 +71,7 @@ ID Capture supports the following documents with PDF417 barcodes:
 | Uzbekistan     | Passport                                                                                                                                                                                                                |
 
 
-### Europe
+#### Europe
 
 | Country               | Supported Document Types                                                                                      |
 |-----------------------|---------------------------------------------------------------------------------------------------------------|
@@ -116,7 +117,7 @@ ID Capture supports the following documents with PDF417 barcodes:
 | UK                    | Driver’s License, Residence Permit, Proof of Age Card, Passport                                               |
 | Ukraine               | Temporary Residence Permit, Driver’s License, Residence Permit, Passport, ID Card                            |
 
-### Central and South America
+#### Central and South America
 
 | Country                       | Supported Document Types                                                                                           |
 |-------------------------------|--------------------------------------------------------------------------------------------------------------------|
@@ -170,7 +171,7 @@ ID Capture supports the following documents with PDF417 barcodes:
 | Venezuela                     | Driver’s License, ID Card, Passport                                                                                |
 
 
-### Middle East and Africa
+#### Middle East and Africa
 
 | Country         | Supported Document Types                                                                                              |
 |-----------------|----------------------------------------------------------------------------------------------------------------------|
@@ -211,7 +212,7 @@ ID Capture supports the following documents with PDF417 barcodes:
 | Zimbabwe        | ID Card, Passport                                                                                                    |
 
 
-### North America
+#### North America
 
 | Country                  | Supported Document Types                                                                                              |
 |--------------------------|-----------------------------------------------------------------------------------------------------------------------|
@@ -282,7 +283,7 @@ ID Capture supports the following documents with PDF417 barcodes:
 
 \* Vertical IDs are supported
 
-### Oceania
+#### Oceania
 
 | Country                              | Supported Document Types                 |
 |--------------------------------------|------------------------------------------|
@@ -298,9 +299,9 @@ ID Capture supports the following documents with PDF417 barcodes:
 | New Zealand                          | Driver’s License, Passport               |
 
 
-## Anonymized Documents
+### Anonymized Documents
 
-If `SDCIdAnonymizationMode` is enabled, certain sensitive fields are not extracted from documents (their values are returned as nil) and/or are blacked out on the returned document images. This currently affects human-readable text (VIZ) & Machine Readable Zones (MRZ).
+If `IdAnonymizationMode` is enabled, certain sensitive fields are not extracted from documents (their values are returned as nil) and/or are blacked out on the returned document images. This currently affects human-readable text (VIZ) & Machine Readable Zones (MRZ).
 
 Here is the list of the affected documents and their respective fields:
 

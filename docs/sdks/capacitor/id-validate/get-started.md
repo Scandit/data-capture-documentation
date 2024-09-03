@@ -8,6 +8,7 @@ pagination_next: null
 This guide will help you get started with Scandit ID Validate. The following verifier is available:
 
 * [`AAMVAVizBarcodeComparisonVerifier`](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/aamva-viz-barcode-comparison-verifier.html#class-scandit.datacapture.id.AamvaVizBarcodeComparisonVerifier): Validates the authenticity of the document by comparing the data from the VIZ and from the barcode on the back.
+* [`AAMVABarcodeVerifier`](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by analyzing the barcode on the back.
 
 Integrating ID Validate into your app follows the same general steps as [integrating ID Capture](../id-capture/get-started.md), with some minor differences based on the verifier you choose, as detailed in the following sections.
 
@@ -57,7 +58,7 @@ const idCaptureListener = {
 
 The return value allows you to query both the overall result of the verification and the results of individual checks. See [`AAMVAVizBarcodeComparisonResult`](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/aamva-viz-barcode-comparison-verifier.html#class-scandit.datacapture.id.AamvaVizBarcodeComparisonResult) for details.
 
-<!--
+
 ## Barcode Verifier
 
 This verifier analyzes the barcode on the back of the document and works with either single-sided or front and back scanning modes.
@@ -72,15 +73,15 @@ Then initialize the desired scanning mode:
 
 ```javascript
 // Single-sided scanning mode
-const settings = new IdCaptureSettings();
-settings.supportedDocuments = [IdDocumentType.AAMVABarcode];
+const settings = new Scandit.IdCaptureSettings()
+settings.supportedDocuments = [Scandit.IdDocumentType.AAMVABarcode]
 
 const idCapture = await IdCapture.forContext(context, settings);
 
 // Front and back scanning mode
-const settings = new IdCaptureSettings();
-settings.supportedDocuments = [IdDocumentType.DLVIZ]
-settings.supportedSides = SupportedSides.FrontAndBack;
+const settings = new Scandit.IdCaptureSettings()
+settings.supportedDocuments = [Scandit.IdDocumentType.DLVIZ]
+settings.supportedSides = Scandit.SupportedSides.FrontAndBack
 
 const idCapture = await IdCapture.forContext(dataCaptureContext, settings)
 ```
@@ -88,18 +89,27 @@ const idCapture = await IdCapture.forContext(dataCaptureContext, settings)
 Once the capture is complete, trigger the verification process. This process is asynchronous and the result will be delivered once the verification has been completed:
 
 ```javascript
-didCaptureId: async (idCaptureInstance, session) => {
-  const capturedId = session.newlyCapturedId;
+const idCaptureListener = {
+    didCaptureId: (_, session) => {
+        const capturedId = session.newlyCapturedId
+        const barcode = capturedId.aamvaBarcodeResult
 
-  const barcodeVerifier = await SDCId.AamvaBarcodeVerifier.create(dataCaptureContext);
-  const result = await barcodeVerifier.verify(capturedId);
-  if (result.error) {
-    // May happen if the license key does not permit barcode verification.
-  } else if (result.allChecksPassed) {
-    // Nothing suspicious was detected.
-  } else {
-    // Document may be fraudulent or tampered with - proceed with caution.
-  }
-}
+        if (barcode) {
+            barcodeVerifier
+                .then(verifierInstance => {
+                    verifierInstance
+                        .verify(session.newlyCapturedId)
+                        .then(result => {
+                                if (result.allChecksPassed) {
+                                    // Nothing suspicious was detected.
+                                } else {
+                                    // Document may be fraudulent or tampered with - proceed with caution.
+                                }
+                            }, (error) => {
+                                // Error occurred during verification
+                            }
+                        })
+                })
+        }
+    }
 ```
--->

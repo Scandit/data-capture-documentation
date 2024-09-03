@@ -72,4 +72,4 @@ Each of the capture modes has one or more overlays that visualize the ongoing da
 
 These overlays are added to the data capture view.
 
-Relevant classes: `SDCDataCaptureOverlay`, `SDCBarcodeCaptureOverlay`, `SDCBarcodeTrackingBasicOverlay`, `SDCBarcodeTrackingAdvancedOverlay`
+Relevant classes: `SDCDataCaptureOverlay`, `SDCBarcodeCaptureOverlay`, `SDCBarcodeTrackingBasicOverlay`

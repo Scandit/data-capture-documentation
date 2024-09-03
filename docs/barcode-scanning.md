@@ -255,35 +255,35 @@ Barcode Capture is a mode that enables you to quickly and easily scan and captur
 
 </CustomDocCardsWrapper>
 
-### MatrixScan + AR
+### MatrixScan
 
-MatrixScan + Augmented Reality is a mode that enables you to quickly and easily scan multiple barcodes at the same time and overlay augmented reality (AR) elements on top of the camera view.
+MatrixScanis a mode that enables you to quickly and easily scan multiple barcodes at the same time and overlay scan feedback on top of the camera view.
 
 <CustomDocCardsWrapper>
 
-<CustomDocCard title="iOS" description="Integrate MatrixScan + AR in iOS" link="../sdks/ios/matrixscan/intro" smallIcon ><Ios/></CustomDocCard>
+<CustomDocCard title="iOS" description="Integrate MatrixScan in iOS" link="../sdks/ios/matrixscan/intro" smallIcon ><Ios/></CustomDocCard>
 
-<CustomDocCard title="Android" description="Integrate MatrixScan + AR in Android" link="../sdks/android/matrixscan/intro" Icon ><Android/></CustomDocCard>
+<CustomDocCard title="Android" description="Integrate MatrixScan in Android" link="../sdks/android/matrixscan/intro" Icon ><Android/></CustomDocCard>
 
-<CustomDocCard title="Web" description="Integrate MatrixScan + AR for Web" link="../sdks/web/matrixscan/intro" smallIcon ><Javascript/> </CustomDocCard>
+<CustomDocCard title="Web" description="Integrate MatrixScan for Web" link="../sdks/web/matrixscan/intro" smallIcon ><Javascript/> </CustomDocCard>
 
-<CustomDocCard title="Cordova" description="Integrate MatrixScan + AR in Cordova" link="../sdks/cordova/matrixscan/intro" smallIcon ><Cordova/> </CustomDocCard>
+<CustomDocCard title="Cordova" description="Integrate MatrixScan in Cordova" link="../sdks/cordova/matrixscan/intro" smallIcon ><Cordova/> </CustomDocCard>
 
-<CustomDocCard title="React Native" description="Integrate MatrixScan + AR in React Native" link="../sdks/react-native/matrixscan/intro" smallIcon ><ReactIcon/> </CustomDocCard>
+<CustomDocCard title="React Native" description="Integrate MatrixScan in React Native" link="../sdks/react-native/matrixscan/intro" smallIcon ><ReactIcon/> </CustomDocCard>
 
-<CustomDocCard title="Flutter" description="Integrate MatrixScan + AR in Flutter" link="../sdks/flutter/matrixscan/intro" smallIcon ><Flutter/> </CustomDocCard>
+<CustomDocCard title="Flutter" description="Integrate MatrixScan in Flutter" link="../sdks/flutter/matrixscan/intro" smallIcon ><Flutter/> </CustomDocCard>
 
-<CustomDocCard title="Capacitor" description="Integrate MatrixScan + AR in Capacitor" link="../sdks/capacitor/matrixscan/intro" smallIcon ><Capacitor/></CustomDocCard>
+<CustomDocCard title="Capacitor" description="Integrate MatrixScan in Capacitor" link="../sdks/capacitor/matrixscan/intro" smallIcon ><Capacitor/></CustomDocCard>
 
-<CustomDocCard title="Xamarin iOS" description="Integrate MatrixScan + AR in Xamarin iOS" link="../sdks/xamarin/ios/matrixscan/intro" smallIcon ><XamarinIos/></CustomDocCard>
+<CustomDocCard title="Xamarin iOS" description="Integrate MatrixScan in Xamarin iOS" link="../sdks/xamarin/ios/matrixscan/intro" smallIcon ><XamarinIos/></CustomDocCard>
 
-<CustomDocCard title="Xamarin Android" description="Integrate MatrixScan + AR for Xamarin Android" link="../sdks/xamarin/android/matrixscan/intro" smallIcon ><XamarinAndroid/></CustomDocCard>
+<CustomDocCard title="Xamarin Android" description="Integrate MatrixScan for Xamarin Android" link="../sdks/xamarin/android/matrixscan/intro" smallIcon ><XamarinAndroid/></CustomDocCard>
 
-<CustomDocCard title="Xamarin Forms" description="Integrate MatrixScan + AR in Xamarin Forms" link="../sdks/xamarin/forms/matrixscan/intro" smallIcon ><XamarinForms/></CustomDocCard>
+<CustomDocCard title="Xamarin Forms" description="Integrate MatrixScan in Xamarin Forms" link="../sdks/xamarin/forms/matrixscan/intro" smallIcon ><XamarinForms/></CustomDocCard>
 
-<CustomDocCard title=".NET iOS" description="Integrate MatrixScan + AR in .NET iOS" link="../sdks/net/ios/matrixscan/intro" smallIcon ><NetIos/></CustomDocCard>
+<CustomDocCard title=".NET iOS" description="Integrate MatrixScan in .NET iOS" link="../sdks/net/ios/matrixscan/intro" smallIcon ><NetIos/></CustomDocCard>
 
-<CustomDocCard title=".NET Android" description="Integrate MatrixScan + AR in .NET Android" link="../sdks/net/android/matrixscan/intro" smallIcon ><NetAndroid/></CustomDocCard>
+<CustomDocCard title=".NET Android" description="Integrate MatrixScan in .NET Android" link="../sdks/net/android/matrixscan/intro" smallIcon ><NetAndroid/></CustomDocCard>
 
 </CustomDocCardsWrapper>
 

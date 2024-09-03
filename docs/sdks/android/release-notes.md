@@ -216,21 +216,21 @@ Scanning is only possible when in resumed state. `BarcodePickView.start()` will 
 
 #### Barcode
 
-SparkScan has received a number of updates and improvements:
+- SparkScan has received a number of updates and improvements:
+  - The target mode has been improved with better performances (faster selection of barcodes), a more consistent workflow (the target mode will only show the aimer, without changing the preview size or the way barcodes are scanned), and a better UI (new aimer and new icon).
+  - The preview size is now independent from scanning mode or scanning precision (deprecated) parameters. Instead, it is controlled by a dedicated control added to the preview. Use `SparkScanView.previewSizeControlVisible` to define if the preview size control should be displayed.
+  - The "accuracy" workflow has been revisited and streamlined into a more consistent and performant workflow.
+  - Developers can set `SparkScanPreviewBehavior` to specify the preview behavior type of the `SparkScanView`. When `previewBehavior` is `SparkScanPreviewBehavior.PERSISTENT`, after the scan the preview does not disappear, but stays obscured and running (but not scanning) for easier aiming.
+  - Added `Target.previewBehavior` and `Default.previewBehavior` to specify preview behavior for scanning modes.
+  - Added initializers for Target and Default that accept `SparkScanPreviewBehavior` instead of `SparkScanScanningPrecision`.
+  - Toast messages are now displayed on top of the preview rather than the scan button. Additional toast messages have been added for better guidance.
+  - Added `barcode.spark.ui.SparkScanToastSettings.TorchEnabledMessage` and `barcode.spark.ui.SparkScanToastSettings.TorchDisabledMessage` to specify toast messages when the torch is enabled or disabled.
+  - The zoom functionality is now independent of scanning mode and is available in both default and target modes.
+  - Added `SparkScanViewSettings.zoomFactorOut` and `SparkScanViewSettings.zoomFactorIn` to specify the default zoom factor in zoomed out and zoomed in states for both scanning modes, default and target.
+  - The feedback emission system has been improved: for new implementation, there is no need to explicitly emit a success feedback on scan, as it became implicit.
+  - Added `SparkScanBarcodeFeedback`, `SparkScanFeedbackDelegate`, and `SparkScanView.feedbackDelegate` to define and emit feedback that can be customized for every scanned barcode.
+  - Added `SparkScanViewSettings.inactiveStateTimeout` to specify the timeout to automatically stop scanning across all modes.
 
-- The target mode has been improved with better performances (faster selection of barcodes), a more consistent workflow (the target mode will only show the aimer, without changing the preview size or the way barcodes are scanned), and a better UI (new aimer and new icon).
-- The preview size is now independent from scanning mode or scanning precision (deprecated) parameters. Instead, it is controlled by a dedicated control added to the preview. Use `SparkScanView.previewSizeControlVisible` to define if the preview size control should be displayed.
-- The "accuracy" workflow has been revisited and streamlined into a more consistent and performant workflow.
-- Developers can set `SparkScanPreviewBehavior` to specify the preview behavior type of the `SparkScanView`. When `previewBehavior` is `SparkScanPreviewBehavior.PERSISTENT`, after the scan the preview does not disappear, but stays obscured and running (but not scanning) for easier aiming.
-- Added `Target.previewBehavior` and `Default.previewBehavior` to specify preview behavior for scanning modes.
-- Added initializers for Target and Default that accept `SparkScanPreviewBehavior` instead of `SparkScanScanningPrecision`.
-- Toast messages are now displayed on top of the preview rather than the scan button. Additional toast messages have been added for better guidance.
-- Added `barcode.spark.ui.SparkScanToastSettings.TorchEnabledMessage` and `barcode.spark.ui.SparkScanToastSettings.TorchDisabledMessage` to specify toast messages when the torch is enabled or disabled.
-- The zoom functionality is now independent of scanning mode and is available in both default and target modes.
-- Added `SparkScanViewSettings.zoomFactorOut` and `SparkScanViewSettings.zoomFactorIn` to specify the default zoom factor in zoomed out and zoomed in states for both scanning modes, default and target.
-- The feedback emission system has been improved: for new implementation, there is no need to explicitly emit a success feedback on scan, as it became implicit.
-- Added `SparkScanBarcodeFeedback`, `SparkScanFeedbackDelegate`, and `SparkScanView.feedbackDelegate` to define and emit feedback that can be customized for every scanned barcode.
-- Added `SparkScanViewSettings.inactiveStateTimeout` to specify the timeout to automatically stop scanning across all modes.
 - Barcode Pick is an API that implements MatrixScan Pick. MatrixScan Pick is an out-of-the-box scan solution; it uses real-time inventory data and augmented reality to assign precise, item-specific tasks, guaranteeing pinpoint accuracy in restocking, inventory audits, and parcel delivery. Barcode Pick is no longer in beta and a new feature has been added in 6.23:
   - Added `BarcodePickStatusIconStyle` to display additional information on top of the regular highlight.
   - Added `BarcodePickViewHighlightStyle` to visualize a custom view on top of the tracked barcodes.
@@ -389,7 +389,8 @@ SparkScan received a number of updates and improvements:
 
 #### Barcode
 
-- Fixed a rare crash during the destruction of tracking-based capture modes.
+- Fixed an issue with decoding Code39 barcodes that are misprinted or have a large and/or variable wide:narrow bar width ratio.
+- Fix a rare crash during destruction of tracking-based capture modes.
 
 #### ID
 
@@ -409,11 +410,15 @@ SparkScan received a number of updates and improvements:
 
 **Released**: December 14, 2023
 
+### Bug Fixes
+
 * Fixed a crash (SIGILL) on Samsung Galaxy S9 (Exynos 9810 based) with Android version 8.
 
 ## 6.20.1
 
 **Released**: November 28, 2023
+
+### Bug Fixes
 
 * Fixed a crash that happens after scanning ID documents without expiry date present in SupportedSides.FRONT_AND_BACK mode.
 * Fixed an issue preventing DataCaptureContext from being mocked in local tests.

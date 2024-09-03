@@ -14,9 +14,10 @@ There is a function to set a list of expected barcodes if you are scanning again
 When scanning against a list, the UI will also show red icons to mark scanned barcodes that aren’t present on the list. To set the list of expected barcodes, use the following code:
 
 ```java
-let targetBarcodes = Set(arrayLiteral: TargetBarcode(data: "data", quantity: 1))
-let captureList = BarcodeCountCaptureList(listener: self, targetBarcodes: targetBarcodes)
-barcodeCount.setCaptureList(captureList)
+List<TargetBarcode> targetBarcodes = new ArrayList<>();
+targetBarcodes.add(TargetBarcode.create("data", 1));
+BarcodeCountCaptureList captureList = BarcodeCountCaptureList.create(this, targetBarcodes);
+barcodeCount.setBarcodeCountCaptureList(captureList);
 ```
 
 ## Barcode Count Status
@@ -34,7 +35,7 @@ It can be difficult to reach the shutter button if the smart device is attached 
 You can enable a floating shutter button that can be positioned by the end user in a more ergonomically suitable position:
 
 ```java
-barcodeCountView.shouldShowFloatingShutterButton = true
+barcodeCountView.setShouldShowFloatingShutterButton(true);
 ```
 
 ## Filtering
@@ -44,23 +45,22 @@ If there several types of barcodes on your label you may want to scan only one o
 For example, you might want to scan only Code 128 barcodes and no PDF417 barcodes. You can do this by setting the following:
 
 ```java
-let filterSettings = BarcodeFilterSettings()
-filterSettings.excludedSymbologies = Set<Symbology>(.pdf417).map { NSNumber(value: $0.rawValue) }
+BarcodeCountSettings settings = new BarcodeCountSettings();
+barcodeCountSettings.enableSymbologies(enabledSymbologies);
 
-let barcodeCountSettings = BarcodeCountSettings()
-barcodeCountSettings.set(symbology: .code128, enabled: true))
-barcodeCountSettings.set(symbology: .pdf417, enabled: true))
-barcodeCountSettings.filterSettings = filterSettings
+Set<Symbology> excludedSymbologies = new HashSet<>();
+excludedSymbologies.add(Symbology.PDF417);
+BarcodeFilterSettings filterSettings = settings.getFilterSettings();
+filterSettings.setExcludedSymbologies(excludedSymbologies);
 ```
 
 Or to exclude all the barcodes starting with 4 numbers:
 
 ```java
-let filterSettings = BarcodeFilterSettings()
-settings.excludedCodesRegex = "^1234.*"
+BarcodeCountSettings settings = new BarcodeCountSettings();
 
-let barcodeCountSettings = BarcodeCountSettings()
-barcodeCountSettings.filterSettings = filterSettings
+BarcodeFilterSettings filterSettings = settings.getFilterSettings();
+filterSettings.setExcludedCodesRegex("^1234.*");
 ```
 
 ## Clear Screen Button
@@ -70,7 +70,7 @@ There are situations in which the user may find it helpful to clean up their scr
 For this you can enable the “Clear screen” button:
 
 ```java
-barcodeCountView.shouldShowClearHighlightsButton = true
+barcodeCountView.setShouldShowClearHighlightsButton(true);
 ```
 
 ## Customizing the AR Overlays
@@ -120,14 +120,14 @@ The UI is an integral part of MatrixScan Count and we do not recommend that you 
 To disable buttons:
 
 ```java
-barcodeCountView.shouldShowListButton = false
-barcodeCountView.shouldShowExitButton = false
-barcodeCountView.shouldShowShutterButton = false
+barcodeCountView.setShouldShowListButton(false);
+barcodeCountView.setShouldShowExitButton(false);
+barcodeCountView.setShouldShowShutterButton(false);
 ```
 
 To disable feedback and hints:
 
 ```java
-barcodeCountView.shouldShowHints = false
-barcodeCountView.shouldShowUserGuidanceView = false
+barcodeCountView.setShouldShowUserGuidanceView(false);
+barcodeCountView.setShouldShowHints(false);
 ```
