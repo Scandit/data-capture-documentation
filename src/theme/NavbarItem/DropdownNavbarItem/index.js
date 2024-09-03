@@ -75,7 +75,7 @@ function DropdownNavbarItemDesktop({
     }
   }, [currentPath]);
 
-  const newItems = [
+  const newItems  = [
     {
       type: "doc",
       label: "iOS",
