@@ -1,5 +1,5 @@
 ---
-displayed_sidebar: androidSidebar
+displayed_sidebar: xamarinAndroidSidebar
 ---
 
 # Page Unavailable
