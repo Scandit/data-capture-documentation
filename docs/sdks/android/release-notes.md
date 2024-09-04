@@ -260,6 +260,26 @@ pagination_prev: null
 Scanning is only possible when in resumed state. `BarcodePickView.start()` will not start scanning if `BarcodePickView.onResume()` is not called before or after.
 :::
 
+## 6.23.4
+
+**Released**: July 23, 2024
+
+### Bug Fixes
+
+#### Core
+
+- Fixed a crash using camera API 2 where an IllegalStateException could be thrown in some edge cases.
+
+## 6.23.3
+
+**Released**: May 10, 2024
+
+### Bug Fixes
+
+#### Core
+
+- Fix an additional issue that prevented the SIGILL fix introduced on 6.23.2 to work on certain Samsung Galaxy S9 devices.
+
 ## 6.23.2
 
 **Released**: April 30, 2024

@@ -316,7 +316,7 @@ No updates for this framework in this release.
   - Added `SparkScanViewSettings.inactiveStateTimeout` to specify the timeout to automatically stop scanning across all modes.
 - Barcode Pick is an API that implements MatrixScan Pick. MatrixScan Pick is an out-of-the-box scan solution that uses real-time inventory data and augmented reality to assign precise, item-specific tasks, guaranteeing pinpoint accuracy in restocking, inventory audits, and parcel delivery. Barcode Pick is no longer in beta and several new features have been added in 6.23:
   - Added the possibility to customize icons in `scandit.datacapture.barcode.pick.ui.RectangularWithIcons`. See `scandit.datacapture.barcode.pick.ui.RectangularWithIcons.SetIconForState`.
-Added support for `Symbology.AUSTRALIANPOST`. By default, customer information is decoded with Table N, and Table C is used as a fallback. To set a specific decoding table for the customer information, use the symbology extensions: `force_table_c` or `force_table_n` to enforce decoding with either C or N tables respectively. The symbology extension `decode_bar_states` returns the error-corrected customer information bars as a string of the bar states: A for ascending, D for descending, T for tracker, and F for full.
+- Added support for `Symbology.AUSTRALIANPOST`. By default, customer information is decoded with Table N, and Table C is used as a fallback. To set a specific decoding table for the customer information, use the symbology extensions: `force_table_c` or `force_table_n` to enforce decoding with either C or N tables respectively. The symbology extension `decode_bar_states` returns the error-corrected customer information bars as a string of the bar states: A for ascending, D for descending, T for tracker, and F for full.
 - Added support for `Symbology.Upu4State`.
 
 #### ID
@@ -351,7 +351,7 @@ Added support for `Symbology.AUSTRALIANPOST`. By default, customer information i
 
 #### Barcode
 
-* * Deprecated `barcode.spark.ui.SparkScanView.ShouldShowTargetModeHint` and `barcode.spark.ui.SparkScanView.TargetModeHintText`. This hint is not displayed anymore due to changes in `barcode.spark.ui.SparkScanScanningModeTarget` scanning mode.
+* Deprecated `barcode.spark.ui.SparkScanView.ShouldShowTargetModeHint` and `barcode.spark.ui.SparkScanView.TargetModeHintText`. This hint is not displayed anymore due to changes in `barcode.spark.ui.SparkScanScanningModeTarget` scanning mode.
 * Deprecated `barcode.spark.ui.SparkScanToastSettings.CameraTimeoutMessage` because toast with this message is not displayed anymore due to changes in the SparkScan toast system.
 * Deprecated `barcode.spark.ui.SparkScanViewSettings.TargetZoomFactorOut` and `barcode.spark.ui.SparkScanViewSettings.TargetZoomFactorIn`. Replaced by `barcode.spark.ui.SparkScanViewSettings.ZoomFactorOut` and `barcode.spark.ui.SparkScanViewSettings.ZoomFactorIn`.
 * Deprecated `barcode.spark.ui.SparkScanViewSettings.ContinuousCaptureTimeout`. Replaced by `barcode.spark.ui.SparkScanViewSettings.InactiveStateTimeout`.

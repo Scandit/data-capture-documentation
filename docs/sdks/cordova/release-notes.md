@@ -225,3 +225,103 @@ No updates for this framework in this release.
   - **Start/Stop Scanning**:
     - `BarcodePickView.start()`: Starts the scanning flow and can be manually stopped by calling `BarcodePickView.stop()`.
     - `BarcodePickView.stop()`: Stops the scanning flow and can be manually started by calling `BarcodePickView.start()`.
+
+## 6.23.4
+
+**Released**: July 23, 2024
+
+No updates for this framework in this release.
+
+## 6.23.3
+
+**Released**: May 10, 2024
+
+### Bug Fixes
+
+#### Core
+
+- Fix an additional issue that prevented the SIGILL fix introduced on 6.23.2 to work on certain Samsung Galaxy S9 devices.
+
+## 6.23.2
+
+**Released**: April 30, 2024
+
+- Fixed crash (SIGILL) on Exynos 9810-based Galaxy S9 and Galaxy S9+ devices that advertise support for FP16 arithmetics. A previous fix in 6.21.0 only partially resolved the issue.
+- Removed unused code and updated the privacy manifest to conform to the [new privacy requirements](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files).
+
+## 6.23.1
+
+**Released**: April 24, 2024
+
+* Added support for Mexican Matrícula Consular MRZ codes.
+* Improved ID scanning performance in low-light conditions.
+* Fixed truncated surnames in US driver’s licenses using magnetic stripe format.
+
+## 6.23.0
+
+**Released**: March 22, 2024
+
+### New Features
+
+#### Core
+
+* Added support to set control images through a resource name.
+
+#### Barcode
+
+- SparkScan has received a number of updates and improvements:
+  - The target mode has been improved with better performances (faster selection of barcodes), a more consistent workflow (the target mode will only show the aimer, without changing the preview size or the way barcodes are scanned), and a better UI (new aimer and new icon).
+  - The preview size is now independent from scanning mode or scanning precision (deprecated) parameters. Instead, it is controlled by a dedicated control added to the preview. Use `SparkScanView.previewSizeControlVisible` to define if the preview size control should be displayed.
+  - The "accuracy" workflow has been revisited and streamlined into a more consistent and performant workflow.
+  - Developers can set `SparkScanPreviewBehavior` to specify the preview behavior type of the `SparkScanView`. When `previewBehavior` is `SparkScanPreviewBehavior.PERSISTENT`, after the scan the preview does not disappear, but stays obscured and running (but not scanning) for easier aiming.
+  - Added `Target.previewBehavior` and `Default.previewBehavior` to specify preview behavior for scanning modes.
+  - Added initializers for Target and Default that accept `SparkScanPreviewBehavior` instead of `SparkScanScanningPrecision`.
+  - Toast messages are now displayed on top of the preview rather than the scan button. Additional toast messages have been added for better guidance.
+  - Added `barcode.spark.ui.SparkScanToastSettings.TorchEnabledMessage` and `barcode.spark.ui.SparkScanToastSettings.TorchDisabledMessage` to specify toast messages when the torch is enabled or disabled.
+  - The zoom functionality is now independent of scanning mode and is available in both default and target modes.
+  - Added `SparkScanViewSettings.zoomFactorOut` and `SparkScanViewSettings.zoomFactorIn` to specify the default zoom factor in zoomed out and zoomed in states for both scanning modes, default and target.
+  - The feedback emission system has been improved: for new implementation, there is no need to explicitly emit a success feedback on scan, as it became implicit.
+  - Added `SparkScanBarcodeFeedback`, `SparkScanFeedbackDelegate`, and `SparkScanView.feedbackDelegate` to define and emit feedback that can be customized for every scanned barcode.
+  - Added `SparkScanViewSettings.inactiveStateTimeout` to specify the timeout to automatically stop scanning across all modes.
+- Barcode Pick is an API that implements MatrixScan Pick. MatrixScan Pick is an out-of-the-box scan solution that uses real-time inventory data and augmented reality to assign precise, item-specific tasks, guaranteeing pinpoint accuracy in restocking, inventory audits, and parcel delivery. Barcode Pick is no longer in beta and several new features have been added in 6.23:
+  - Added the possibility to customize icons in `scandit.datacapture.barcode.pick.ui.RectangularWithIcons`. See `scandit.datacapture.barcode.pick.ui.RectangularWithIcons.SetIconForState`.
+- Added support for `Symbology.AUSTRALIANPOST`. By default, customer information is decoded with Table N, and Table C is used as a fallback. To set a specific decoding table for the customer information, use the symbology extensions: `force_table_c` or `force_table_n` to enforce decoding with either C or N tables respectively. The symbology extension `decode_bar_states` returns the error-corrected customer information bars as a string of the bar states: A for ascending, D for descending, T for tracker, and F for full.
+- Added support for `Symbology.Upu4State`.
+
+#### ID
+
+* Added `id.ui.IdCaptureOverlay.TextHintPosition` that allows setting of text hints position.
+* Added `id.ui.IdCaptureOverlay.ShowTextHints` for showing/hiding text hints.
+* It is now possible to run basic authenticity checks on VIZ & MRZ documents by comparing the data from the VIZ with the data decoded from the MRZ. Check `id.VizMrzComparisonVerifier` for details. This feature is currently in beta, and may still change significantly in the next releases.
+
+### Performance Improvements
+
+#### ID
+
+- Improved ID scanning performance in low-light conditions.
+
+### Bug Fixes
+
+#### Barcode
+
+- Fixed flickering of guidances in `BarcodeSelection`.
+
+#### ID
+
+- Fixed issues with scanning AAMVA documents (barcode part) that contain characters from non-English alphabets.
+- Fixed a licensing issue where a Barcode Scanner license was wrongly required when scanning the back side of a UK driver’s license.
+- Fixed a crash when scanning a passport MRZ then a non-passport VIZ.
+
+#### Core
+
+- Fixed the radius of the radius location selection for cases where the `DataCaptureView`'s aspect ratio is considerably different from the aspect ratio of the camera frames.
+
+### Deprecations
+
+#### Barcode
+
+* Deprecated `barcode.spark.ui.SparkScanView.ShouldShowTargetModeHint` and `barcode.spark.ui.SparkScanView.TargetModeHintText`. This hint is not displayed anymore due to changes in `barcode.spark.ui.SparkScanScanningModeTarget` scanning mode.
+* Deprecated `barcode.spark.ui.SparkScanToastSettings.CameraTimeoutMessage` because toast with this message is not displayed anymore due to changes in the SparkScan toast system.
+* Deprecated `barcode.spark.ui.SparkScanViewSettings.TargetZoomFactorOut` and `barcode.spark.ui.SparkScanViewSettings.TargetZoomFactorIn`. Replaced by `barcode.spark.ui.SparkScanViewSettings.ZoomFactorOut` and `barcode.spark.ui.SparkScanViewSettings.ZoomFactorIn`.
+* Deprecated `barcode.spark.ui.SparkScanViewSettings.ContinuousCaptureTimeout`. Replaced by `barcode.spark.ui.SparkScanViewSettings.InactiveStateTimeout`.
+* Deprecated `barcode.spark.ui.SparkScanViewFeedback`, `barcode.spark.SparkScanFeedback`, `barcode.spark.ui.SparkScanView.Brush` and `barcode.spark.ui.SparkScanView.emitFeedback`. These classes and methods are not used anymore. Use `barcode.spark.feedback.SparkScanBarcodeFeedback` and `barcode.spark.ui.SparkScanView.FeedbackDelegate`.

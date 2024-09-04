@@ -184,6 +184,22 @@ No updates for this framework in this release.
 - Fixed an issue causing the century of birth dates, issue dates, and expiry dates to be returned incorrectly when scanning the VIZ of European IDs, Swiss driver’s licenses, and UAE IDs.
 - Fixed instances where information was incorrectly extracted from British Columbia PDF417.
 
+## 6.23.4
+
+**Released**: July 23, 2024
+
+No updates for this framework in this release.
+
+## 6.23.3
+
+**Released**: May 10, 2024
+
+### Bug Fixes
+
+#### Core
+
+- Fix an additional issue that prevented the SIGILL fix introduced on 6.23.2 to work on certain Samsung Galaxy S9 devices.
+
 ## 6.23.2
 
 **Released**: April 30, 2024
