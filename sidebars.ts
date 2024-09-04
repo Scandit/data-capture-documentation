@@ -48,6 +48,26 @@ const sidebars: SidebarsConfig = {
 			],},
   ],
 
+  expressSidebar: [
+		{
+			type: 'category',
+			label: 'Scandit Express',
+			items: [
+				'hosted/express/overview',
+        {
+          type: 'category',
+          label: 'Getting Started',
+          items: ['hosted/express/getting-started/installation', 'hosted/express/getting-started/rollout'],
+        },
+        {
+          type: 'category',
+          label: 'Configuring Express',
+          items: ['hosted/express/configuration/index', 'hosted/express/configuration/express-find', 'hosted/express/configuration/inventory-count'],
+        },
+      ],
+		},
+	],
+
   boltSidebar: [
     {
       type: "category",
