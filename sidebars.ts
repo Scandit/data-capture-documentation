@@ -104,7 +104,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                "sdks/ios/sparkscan/intro",
+                "sdks/ios/sparkscan/get-started",
+                "sdks/ios/sparkscan/advanced",
+              ],
+            },
             {
               type: 'category',
               label: 'Barcode Capture API',
@@ -113,26 +123,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Barcode Selection",
               items: [
-                {
-                  type: 'category',
-                  label: 'SparkScan',
-                  items: [
-                    "sdks/ios/sparkscan/intro",
-                    "sdks/ios/sparkscan/get-started",
-                    "sdks/ios/sparkscan/advanced",
-                  ],
-                },
-                {
-                  type: "category",
-                  label: "Barcode Selection",
-                  items: [
-                    "sdks/ios/barcode-selection/intro",
-                    "sdks/ios/barcode-selection/get-started",
-                  ],
-                },
+                "sdks/ios/barcode-selection/intro",
+                "sdks/ios/barcode-selection/get-started",
               ],
             },
           ],
@@ -140,7 +135,33 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Multi-scanning',
+          collapsed: false,
           items: [
+            {
+              type: "category",
+              label: "MatrixScan Count",
+              items: [
+                "sdks/ios/matrixscan-count/intro",
+                "sdks/ios/matrixscan-count/get-started",
+                "sdks/ios/matrixscan-count/advanced",
+              ],
+            },
+            {
+              type: "category",
+              label: "MatrixScan Find",
+              items: [
+                "sdks/ios/matrixscan-find/intro",
+                "sdks/ios/matrixscan-find/get-started",
+                "sdks/ios/matrixscan-find/advanced",
+              ],
+            },
+            {
+              type: "category",
+              label: "Label Capture",
+              items: [
+                "sdks/ios/label-capture/get-started",
+              ],
+            },
             {
               type: "category",
               label: "MatrixScan API",
@@ -148,30 +169,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/ios/matrixscan/intro",
                 "sdks/ios/matrixscan/get-started",
 //                "sdks/ios/matrixscan/advanced",
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Pre-built Workflows',
-              items: [
-                {
-                  type: "category",
-                  label: "MatrixScan Count",
-                  items: [
-                    "sdks/ios/matrixscan-count/intro",
-                    "sdks/ios/matrixscan-count/get-started",
-                    "sdks/ios/matrixscan-count/advanced",
-                  ],
-                },
-                {
-                  type: "category",
-                  label: "MatrixScan Find",
-                  items: [
-                    "sdks/ios/matrixscan-find/intro",
-                    "sdks/ios/matrixscan-find/get-started",
-                    "sdks/ios/matrixscan-find/advanced",
-                  ],
-                },
               ],
             },
           ],
@@ -217,13 +214,6 @@ const sidebars: SidebarsConfig = {
           label: "Parser",
           items: [
             "sdks/ios/parser/get-started",
-          ],
-        },
-        {
-          type: "category",
-          label: "Label Capture",
-          items: [
-            "sdks/ios/label-capture/get-started",
           ],
         },
         {
@@ -294,7 +284,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                "sdks/android/sparkscan/intro",
+                "sdks/android/sparkscan/get-started",
+                "sdks/android/sparkscan/advanced",
+              ],
+            },
             {
               type: 'category',
               label: 'Barcode Capture API',
@@ -303,26 +303,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'Pre-built Workflows',
+              type: "category",
+              label: "Barcode Selection",
               items: [
-                {
-                  type: 'category',
-                  label: 'SparkScan',
-                  items: [
-                    "sdks/android/sparkscan/intro",
-                    "sdks/android/sparkscan/get-started",
-                    "sdks/android/sparkscan/advanced",
-                  ],
-                },
-                {
-                  type: "category",
-                  label: "Barcode Selection",
-                  items: [
-                    "sdks/android/barcode-selection/intro",
-                    "sdks/android/barcode-selection/get-started",
-                  ],
-                },
+                "sdks/android/barcode-selection/intro",
+                "sdks/android/barcode-selection/get-started",
               ],
             },
           ],
@@ -330,7 +315,33 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Multi-scanning',
+          collapsed: false,
           items: [
+            {
+              type: "category",
+              label: "MatrixScan Count",
+              items: [
+                "sdks/android/matrixscan-count/intro",
+                "sdks/android/matrixscan-count/get-started",
+                "sdks/android/matrixscan-count/advanced",
+              ],
+            },
+            {
+              type: "category",
+              label: "MatrixScan Find",
+              items: [
+                "sdks/android/matrixscan-find/intro",
+                "sdks/android/matrixscan-find/get-started",
+                "sdks/android/matrixscan-find/advanced",
+              ],
+            },
+            {
+              type: "category",
+              label: "Label Capture",
+              items: [
+                "sdks/android/label-capture/get-started",
+              ],
+            },
             {
               type: "category",
               label: "MatrixScan API",
@@ -338,30 +349,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/android/matrixscan/intro",
                 "sdks/android/matrixscan/get-started",
 //                "sdks/android/matrixscan/advanced",
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Pre-built Workflows',
-              items: [
-                {
-                  type: "category",
-                  label: "MatrixScan Count",
-                  items: [
-                    "sdks/android/matrixscan-count/intro",
-                    "sdks/android/matrixscan-count/get-started",
-                    "sdks/android/matrixscan-count/advanced",
-                  ],
-                },
-                {
-                  type: "category",
-                  label: "MatrixScan Find",
-                  items: [
-                    "sdks/android/matrixscan-find/intro",
-                    "sdks/android/matrixscan-find/get-started",
-                    "sdks/android/matrixscan-find/advanced",
-                  ],
-                },
               ],
             },
           ],
@@ -407,13 +394,6 @@ const sidebars: SidebarsConfig = {
           label: "Parser",
           items: [
             "sdks/android/parser/get-started",
-          ],
-        },
-        {
-          type: "category",
-          label: "Label Capture",
-          items: [
-            "sdks/android/label-capture/get-started",
           ],
         },
         {
@@ -484,7 +464,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                "sdks/web/sparkscan/intro",
+                "sdks/web/sparkscan/get-started",
+                "sdks/web/sparkscan/advanced",
+              ],
+            },
             {
               type: 'category',
               label: 'Barcode Capture API',
@@ -492,26 +482,12 @@ const sidebars: SidebarsConfig = {
                 "sdks/web/barcode-capture/get-started",
               ],
             },
-            {
-              type: 'category',
-              label: 'Pre-built Workflows',
-              items: [
-                {
-                  type: 'category',
-                  label: 'SparkScan',
-                  items: [
-                    "sdks/web/sparkscan/intro",
-                    "sdks/web/sparkscan/get-started",
-                    "sdks/web/sparkscan/advanced",
-                  ],
-                },
-              ],
-            },
           ],
         },
         {
           type: 'category',
           label: 'Multi-scanning',
+          collapsed: false,
           items: [
             {
               type: "category",
@@ -625,7 +601,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                "sdks/cordova/sparkscan/intro",
+                "sdks/cordova/sparkscan/get-started",
+                "sdks/cordova/sparkscan/advanced",
+              ],
+            },
             {
               type: 'category',
               label: 'Barcode Capture API',
@@ -635,25 +621,10 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'Pre-built Workflows',
+              label: 'Barcode Selection',
               items: [
-                {
-                  type: 'category',
-                  label: 'SparkScan',
-                  items: [
-                    "sdks/cordova/sparkscan/intro",
-                    "sdks/cordova/sparkscan/get-started",
-                    "sdks/cordova/sparkscan/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Barcode Selection',
-                  items: [
-                    "sdks/cordova/barcode-selection/intro",
-                    "sdks/cordova/barcode-selection/get-started",
-                  ],
-                },
+                "sdks/cordova/barcode-selection/intro",
+                "sdks/cordova/barcode-selection/get-started",
               ],
             },
           ],
@@ -661,6 +632,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Multi-scanning',
+          collapsed: false,
           items: [
             {
               type: "category",
@@ -773,7 +745,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                "sdks/react-native/sparkscan/intro",
+                "sdks/react-native/sparkscan/get-started",
+                "sdks/react-native/sparkscan/advanced",
+              ],
+            },
             {
               type: 'category',
               label: 'Barcode Capture API',
@@ -783,25 +765,10 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'Pre-built Workflows',
+              label: 'Barcode Selection',
               items: [
-                {
-                  type: 'category',
-                  label: 'SparkScan',
-                  items: [
-                    "sdks/react-native/sparkscan/intro",
-                    "sdks/react-native/sparkscan/get-started",
-                    "sdks/react-native/sparkscan/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Barcode Selection',
-                  items: [
-                    "sdks/react-native/barcode-selection/intro",
-                    "sdks/react-native/barcode-selection/get-started",
-                  ],
-                },
+                "sdks/react-native/barcode-selection/intro",
+                "sdks/react-native/barcode-selection/get-started",
               ],
             },
           ],
@@ -809,7 +776,33 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Multi-scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'MatrixScan Count',
+              items: [
+                "sdks/react-native/matrixscan-count/intro",
+                "sdks/react-native/matrixscan-count/get-started",
+                "sdks/react-native/matrixscan-count/advanced",
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Find',
+              items: [
+                "sdks/react-native/matrixscan-find/intro",
+                "sdks/react-native/matrixscan-find/get-started",
+                "sdks/react-native/matrixscan-find/advanced",
+              ],
+            },
+            {
+              type: "category",
+              label: "Label Capture",
+              items: [
+                "sdks/react-native/label-capture/get-started",
+              ],
+            },
             {
               type: "category",
               label: "MatrixScan API",
@@ -817,30 +810,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/react-native/matrixscan/intro",
                 "sdks/react-native/matrixscan/get-started",
    //             "sdks/react-native/matrixscan/advanced",
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Pre-built Workflows',
-              items: [
-                {
-                  type: 'category',
-                  label: 'MatrixScan Count',
-                  items: [
-                    "sdks/react-native/matrixscan-count/intro",
-                    "sdks/react-native/matrixscan-count/get-started",
-                    "sdks/react-native/matrixscan-count/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'MatrixScan Find',
-                  items: [
-                    "sdks/react-native/matrixscan-find/intro",
-                    "sdks/react-native/matrixscan-find/get-started",
-                    "sdks/react-native/matrixscan-find/advanced",
-                  ],
-                },
               ],
             },
           ],
@@ -886,13 +855,6 @@ const sidebars: SidebarsConfig = {
           label: "Parser",
           items: [
             "sdks/react-native/parser/get-started",
-          ],
-        },
-        {
-          type: "category",
-          label: "Label Capture",
-          items: [
-            "sdks/react-native/label-capture/get-started",
           ],
         },
       ],
@@ -958,7 +920,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                "sdks/flutter/sparkscan/intro",
+                "sdks/flutter/sparkscan/get-started",
+                "sdks/flutter/sparkscan/advanced",
+              ],
+            },
             {
               type: 'category',
               label: 'Barcode Capture API',
@@ -968,25 +940,10 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'Pre-built Workflows',
+              label: 'Barcode Selection',
               items: [
-                {
-                  type: 'category',
-                  label: 'SparkScan',
-                  items: [
-                    "sdks/flutter/sparkscan/intro",
-                    "sdks/flutter/sparkscan/get-started",
-                    "sdks/flutter/sparkscan/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Barcode Selection',
-                  items: [
-                    "sdks/flutter/barcode-selection/intro",
-                    "sdks/flutter/barcode-selection/get-started",
-                  ],
-                },
+                "sdks/flutter/barcode-selection/intro",
+                "sdks/flutter/barcode-selection/get-started",
               ],
             },
           ],
@@ -994,7 +951,26 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Multi-scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'MatrixScan Count',
+              items: [
+                "sdks/flutter/matrixscan-count/intro",
+                "sdks/flutter/matrixscan-count/get-started",
+                "sdks/flutter/matrixscan-count/advanced",
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Find',
+              items: [
+                "sdks/flutter/matrixscan-find/intro",
+                "sdks/flutter/matrixscan-find/get-started",
+                "sdks/flutter/matrixscan-find/advanced",
+              ],
+            },
             {
               type: "category",
               label: "MatrixScan API",
@@ -1002,30 +978,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/flutter/matrixscan/intro",
                 "sdks/flutter/matrixscan/get-started",
    //             "sdks/flutter/matrixscan/advanced",
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Pre-built Workflows',
-              items: [
-                {
-                  type: 'category',
-                  label: 'MatrixScan Count',
-                  items: [
-                    "sdks/flutter/matrixscan-count/intro",
-                    "sdks/flutter/matrixscan-count/get-started",
-                    "sdks/flutter/matrixscan-count/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'MatrixScan Find',
-                  items: [
-                    "sdks/flutter/matrixscan-find/intro",
-                    "sdks/flutter/matrixscan-find/get-started",
-                    "sdks/flutter/matrixscan-find/advanced",
-                  ],
-                },
               ],
             },
           ],
@@ -1131,7 +1083,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                "sdks/capacitor/sparkscan/intro",
+                "sdks/capacitor/sparkscan/get-started",
+                "sdks/capacitor/sparkscan/advanced",
+              ],
+            },
             {
               type: 'category',
               label: 'Barcode Capture API',
@@ -1141,25 +1103,10 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'Pre-built Workflows',
+              label: 'Barcode Selection',
               items: [
-                {
-                  type: 'category',
-                  label: 'SparkScan',
-                  items: [
-                    "sdks/capacitor/sparkscan/intro",
-                    "sdks/capacitor/sparkscan/get-started",
-                    "sdks/capacitor/sparkscan/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Barcode Selection',
-                  items: [
-                    "sdks/capacitor/barcode-selection/intro",
-                    "sdks/capacitor/barcode-selection/get-started",
-                  ],
-                },
+                "sdks/capacitor/barcode-selection/intro",
+                "sdks/capacitor/barcode-selection/get-started",
               ],
             },
           ],
@@ -1167,7 +1114,26 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Multi-scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'MatrixScan Count',
+              items: [
+                "sdks/capacitor/matrixscan-count/intro",
+                "sdks/capacitor/matrixscan-count/get-started",
+                "sdks/capacitor/matrixscan-count/advanced",
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Find',
+              items: [
+                "sdks/capacitor/matrixscan-find/intro",
+                "sdks/capacitor/matrixscan-find/get-started",
+                "sdks/capacitor/matrixscan-find/advanced",
+              ],
+            },
             {
               type: "category",
               label: "MatrixScan API",
@@ -1175,30 +1141,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/capacitor/matrixscan/intro",
                 "sdks/capacitor/matrixscan/get-started",
   //              "sdks/capacitor/matrixscan/advanced",
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Pre-built Workflows',
-              items: [
-                {
-                  type: 'category',
-                  label: 'MatrixScan Count',
-                  items: [
-                    "sdks/capacitor/matrixscan-count/intro",
-                    "sdks/capacitor/matrixscan-count/get-started",
-                    "sdks/capacitor/matrixscan-count/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'MatrixScan Find',
-                  items: [
-                    "sdks/capacitor/matrixscan-find/intro",
-                    "sdks/capacitor/matrixscan-find/get-started",
-                    "sdks/capacitor/matrixscan-find/advanced",
-                  ],
-                },
               ],
             },
           ],
@@ -1304,6 +1246,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
             {
               type: 'category',
@@ -1363,7 +1306,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                "sdks/xamarin/ios/sparkscan/intro",
+                "sdks/xamarin/ios/sparkscan/get-started",
+                "sdks/xamarin/ios/sparkscan/advanced",
+              ],
+            },
             {
               type: 'category',
               label: 'Barcode Capture API',
@@ -1373,25 +1326,10 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'Pre-built Workflows',
+              label: 'Barcode Selection',
               items: [
-                {
-                  type: 'category',
-                  label: 'SparkScan',
-                  items: [
-                    "sdks/xamarin/ios/sparkscan/intro",
-                    "sdks/xamarin/ios/sparkscan/get-started",
-                    "sdks/xamarin/ios/sparkscan/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Barcode Selection',
-                  items: [
-                    "sdks/xamarin/ios/barcode-selection/intro",
-                    "sdks/xamarin/ios/barcode-selection/get-started",
-                  ],
-                },
+                "sdks/xamarin/ios/barcode-selection/intro",
+                "sdks/xamarin/ios/barcode-selection/get-started",
               ],
             },
           ],
@@ -1399,7 +1337,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Multi-scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'MatrixScan Count',
+              items: [
+                "sdks/xamarin/ios/matrixscan-count/intro",
+                "sdks/xamarin/ios/matrixscan-count/get-started",
+                "sdks/xamarin/ios/matrixscan-count/advanced",
+              ],
+            },
             {
               type: "category",
               label: "MatrixScan API",
@@ -1407,21 +1355,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/xamarin/ios/matrixscan/intro",
                 "sdks/xamarin/ios/matrixscan/get-started",
   //             "sdks/xamarin/ios/matrixscan/advanced",
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Pre-built Workflows',
-              items: [
-                {
-                  type: 'category',
-                  label: 'MatrixScan Count',
-                  items: [
-                    "sdks/xamarin/ios/matrixscan-count/intro",
-                    "sdks/xamarin/ios/matrixscan-count/get-started",
-                    "sdks/xamarin/ios/matrixscan-count/advanced",
-                  ],
-                },
               ],
             },
           ],
@@ -1527,7 +1460,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                "sdks/xamarin/android/sparkscan/intro",
+                "sdks/xamarin/android/sparkscan/get-started",
+                "sdks/xamarin/android/sparkscan/advanced",
+              ],
+            },
             {
               type: 'category',
               label: 'Barcode Capture API',
@@ -1537,25 +1480,10 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'Pre-built Workflows',
+              label: 'Barcode Selection',
               items: [
-                {
-                  type: 'category',
-                  label: 'SparkScan',
-                  items: [
-                    "sdks/xamarin/android/sparkscan/intro",
-                    "sdks/xamarin/android/sparkscan/get-started",
-                    "sdks/xamarin/android/sparkscan/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Barcode Selection',
-                  items: [
-                    "sdks/xamarin/android/barcode-selection/intro",
-                    "sdks/xamarin/android/barcode-selection/get-started",
-                  ],
-                },
+                "sdks/xamarin/android/barcode-selection/intro",
+                "sdks/xamarin/android/barcode-selection/get-started",
               ],
             },
           ],
@@ -1563,7 +1491,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Multi-scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'MatrixScan Count',
+              items: [
+                "sdks/xamarin/android/matrixscan-count/intro",
+                "sdks/xamarin/android/matrixscan-count/get-started",
+                "sdks/xamarin/android/matrixscan-count/advanced",
+              ],
+            },
             {
               type: "category",
               label: "MatrixScan API",
@@ -1571,21 +1509,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/xamarin/android/matrixscan/intro",
                 "sdks/xamarin/android/matrixscan/get-started",
   //              "sdks/xamarin/android/matrixscan/advanced",
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Pre-built Workflows',
-              items: [
-                {
-                  type: 'category',
-                  label: 'MatrixScan Count',
-                  items: [
-                    "sdks/xamarin/android/matrixscan-count/intro",
-                    "sdks/xamarin/android/matrixscan-count/get-started",
-                    "sdks/xamarin/android/matrixscan-count/advanced",
-                  ],
-                },
               ],
             },
           ],
@@ -1691,7 +1614,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                "sdks/xamarin/forms/sparkscan/intro",
+                "sdks/xamarin/forms/sparkscan/get-started",
+                "sdks/xamarin/forms/sparkscan/advanced",
+              ],
+            },
             {
               type: 'category',
               label: 'Barcode Capture API',
@@ -1701,25 +1634,10 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'Pre-built Workflows',
+              label: 'Barcode Selection',
               items: [
-                {
-                  type: 'category',
-                  label: 'SparkScan',
-                  items: [
-                    "sdks/xamarin/forms/sparkscan/intro",
-                    "sdks/xamarin/forms/sparkscan/get-started",
-                    "sdks/xamarin/forms/sparkscan/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Barcode Selection',
-                  items: [
-                    "sdks/xamarin/forms/barcode-selection/intro",
-                    "sdks/xamarin/forms/barcode-selection/get-started",
-                  ],
-                },
+                "sdks/xamarin/forms/barcode-selection/intro",
+                "sdks/xamarin/forms/barcode-selection/get-started",
               ],
             },
           ],
@@ -1727,7 +1645,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Multi-scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'MatrixScan Count',
+              items: [
+                "sdks/xamarin/forms/matrixscan-count/intro",
+                "sdks/xamarin/forms/matrixscan-count/get-started",
+                "sdks/xamarin/forms/matrixscan-count/advanced",
+              ],
+            },
             {
               type: "category",
               label: "MatrixScan API",
@@ -1735,21 +1663,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/xamarin/forms/matrixscan/intro",
                 "sdks/xamarin/forms/matrixscan/get-started",
   //              "sdks/xamarin/forms/matrixscan/advanced",
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Pre-built Workflows',
-              items: [
-                {
-                  type: 'category',
-                  label: 'MatrixScan Count',
-                  items: [
-                    "sdks/xamarin/forms/matrixscan-count/intro",
-                    "sdks/xamarin/forms/matrixscan-count/get-started",
-                    "sdks/xamarin/forms/matrixscan-count/advanced",
-                  ],
-                },
               ],
             },
           ],
@@ -1855,7 +1768,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                "sdks/net/ios/sparkscan/intro",
+                "sdks/net/ios/sparkscan/get-started",
+                "sdks/net/ios/sparkscan/advanced",
+              ],
+            },
             {
               type: 'category',
               label: 'Barcode Capture API',
@@ -1865,25 +1788,10 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'Pre-built Workflows',
+              label: 'Barcode Selection',
               items: [
-                {
-                  type: 'category',
-                  label: 'SparkScan',
-                  items: [
-                    "sdks/net/ios/sparkscan/intro",
-                    "sdks/net/ios/sparkscan/get-started",
-                    "sdks/net/ios/sparkscan/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Barcode Selection',
-                  items: [
-                    "sdks/net/ios/barcode-selection/intro",
-                    "sdks/net/ios/barcode-selection/get-started",
-                  ],
-                },
+                "sdks/net/ios/barcode-selection/intro",
+                "sdks/net/ios/barcode-selection/get-started",
               ],
             },
           ],
@@ -1891,7 +1799,26 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Multi-scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'MatrixScan Count',
+              items: [
+                "sdks/net/ios/matrixscan-count/intro",
+                "sdks/net/ios/matrixscan-count/get-started",
+                "sdks/net/ios/matrixscan-count/advanced",
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Find',
+              items: [
+                "sdks/net/ios/matrixscan-find/intro",
+                "sdks/net/ios/matrixscan-find/get-started",
+                "sdks/net/ios/matrixscan-find/advanced",
+              ],
+            },
             {
               type: "category",
               label: "MatrixScan API",
@@ -1899,30 +1826,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/net/ios/matrixscan/intro",
                 "sdks/net/ios/matrixscan/get-started",
   //              "sdks/net/ios/matrixscan/advanced",
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Pre-built Workflows',
-              items: [
-                {
-                  type: 'category',
-                  label: 'MatrixScan Count',
-                  items: [
-                    "sdks/net/ios/matrixscan-count/intro",
-                    "sdks/net/ios/matrixscan-count/get-started",
-                    "sdks/net/ios/matrixscan-count/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'MatrixScan Find',
-                  items: [
-                    "sdks/net/ios/matrixscan-find/intro",
-                    "sdks/net/ios/matrixscan-find/get-started",
-                    "sdks/net/ios/matrixscan-find/advanced",
-                  ],
-                },
               ],
             },
           ],
@@ -2028,7 +1931,17 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                "sdks/net/android/sparkscan/intro",
+                "sdks/net/android/sparkscan/get-started",
+                "sdks/net/android/sparkscan/advanced",
+              ],
+            },
             {
               type: 'category',
               label: 'Barcode Capture API',
@@ -2038,25 +1951,10 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'Pre-built Workflows',
+              label: 'Barcode Selection',
               items: [
-                {
-                  type: 'category',
-                  label: 'SparkScan',
-                  items: [
-                    "sdks/net/android/sparkscan/intro",
-                    "sdks/net/android/sparkscan/get-started",
-                    "sdks/net/android/sparkscan/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'Barcode Selection',
-                  items: [
-                    "sdks/net/android/barcode-selection/intro",
-                    "sdks/net/android/barcode-selection/get-started",
-                  ],
-                },
+                "sdks/net/android/barcode-selection/intro",
+                "sdks/net/android/barcode-selection/get-started",
               ],
             },
           ],
@@ -2064,7 +1962,26 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Multi-scanning',
+          collapsed: false,
           items: [
+            {
+              type: 'category',
+              label: 'MatrixScan Count',
+              items: [
+                "sdks/net/android/matrixscan-count/intro",
+                "sdks/net/android/matrixscan-count/get-started",
+                "sdks/net/android/matrixscan-count/advanced",
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Find',
+              items: [
+                "sdks/net/android/matrixscan-find/intro",
+                "sdks/net/android/matrixscan-find/get-started",
+                "sdks/net/android/matrixscan-find/advanced",
+              ],
+            },
             {
               type: "category",
               label: "MatrixScan API",
@@ -2072,30 +1989,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/net/android/matrixscan/intro",
                 "sdks/net/android/matrixscan/get-started",
    //             "sdks/net/android/matrixscan/advanced",
-              ],
-            },
-            {
-              type: 'category',
-              label: 'Pre-built Workflows',
-              items: [
-                {
-                  type: 'category',
-                  label: 'MatrixScan Count',
-                  items: [
-                    "sdks/net/android/matrixscan-count/intro",
-                    "sdks/net/android/matrixscan-count/get-started",
-                    "sdks/net/android/matrixscan-count/advanced",
-                  ],
-                },
-                {
-                  type: 'category',
-                  label: 'MatrixScan Find',
-                  items: [
-                    "sdks/net/android/matrixscan-find/intro",
-                    "sdks/net/android/matrixscan-find/get-started",
-                    "sdks/net/android/matrixscan-find/advanced",
-                  ],
-                },
               ],
             },
           ],

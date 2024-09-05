@@ -61,6 +61,36 @@ pagination_prev: null
 * Deprecated Legacy value of the [`BarcodeTrackingBasicOverlayStyle`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#enum-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlayStyle).
 * Deprecated [`AamvaBarcodeVerificationResult.allChecksPassed`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/aamva-barcode-verifier.html#property-scandit.datacapture.id.AamvaBarcodeVerificationResult.AllChecksPassed). [`AamvaBarcodeVerificationResult.status`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/aamva-barcode-verifier.html#property-scandit.datacapture.id.AamvaBarcodeVerificationResult.Status) should be used instead.
 
+## 6.25.3
+
+**Released**: September 2, 2024
+
+### Bug Fixes
+
+- Concatenated ArUco codes are now comma-separated.
+
+## 6.25.2
+
+**Released**: August 2, 2024
+
+No updates for this framework in this release.
+
+## 6.25.1
+
+**Released**: August 1, 2024
+
+### Bug Fixes
+
+#### Barcode
+
+- Fixed an issue in MatrixScan Count that was causing a reset after a rotation.
+
+#### ID
+
+- Fixed an error 255 that would prevent capturing MRZ for some licenses where this feature is supposed to be enabled.
+
+#### Core
+
 ## 6.25.0
 
 **Released**: July 5, 2024
@@ -181,6 +211,22 @@ pagination_prev: null
 - Fixed a crash when scanning a passport MRZ then a non-passport VIZ.
 - Fixed an issue where the century of birth dates, issue dates, and expiry dates was returned incorrectly when scanning the VIZ of European IDs, Swiss driver’s licenses, and UAE IDs.
 - Fixed incorrect information extraction from British Columbia PDF417.
+
+## 6.23.4
+
+**Released**: July 23, 2024
+
+No updates for this framework in this release.
+
+## 6.23.3
+
+**Released**: May 10, 2024
+
+### Bug Fixes
+
+#### Core
+
+- Fix an additional issue that prevented the SIGILL fix introduced on 6.23.2 to work on certain Samsung Galaxy S9 devices.
 
 ## 6.23.2
 

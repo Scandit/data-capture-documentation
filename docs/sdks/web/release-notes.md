@@ -50,6 +50,36 @@ pagination_prev: null
 * Deprecated [`LaserlineViewfinder`](https://docs.scandit.com/data-capture-sdk/web/core/api/laserline-viewfinder.html#class-scandit.datacapture.core.ui.LaserlineViewfinder).
 * Deprecated Legacy value of the [`BarcodeTrackingBasicOverlayStyle`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#enum-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlayStyle).
 
+## 6.25.3
+
+**Released**: September 2, 2024
+
+### Bug Fixes
+
+- Concatenated ArUco codes are now comma-separated.
+
+## 6.25.2
+
+**Released**: August 2, 2024
+
+No updates for this framework in this release.
+
+## 6.25.1
+
+**Released**: August 1, 2024
+
+### Bug Fixes
+
+#### Barcode
+
+- Fixed an issue in MatrixScan Count that was causing a reset after a rotation.
+
+#### ID
+
+- Fixed an error 255 that would prevent capturing MRZ for some licenses where this feature is supposed to be enabled.
+- Fixed an issue where ID Capture could get stuck when presented with the backside of a document while the front is expected.
+- Fixed an issue introduced in 6.25.0, where capturing MRZ was not possible in Safari on MacOS and on iOS in the landscape mode.
+
 ## 6.25.0
 
 **Released:** July 5, 2024
@@ -131,6 +161,22 @@ pagination_prev: null
 - Fixed a crash when scanning a passport MRZ followed by a non-passport VIZ.
 - Fixed an issue causing the century of birth dates, issue dates, and expiry dates to be returned incorrectly when scanning the VIZ of European IDs, Swiss driver’s licenses, and UAE IDs.
 - Fixed instances where information was incorrectly extracted from British Columbia PDF417.
+
+## 6.23.4
+
+**Released**: July 23, 2024
+
+No updates for this framework in this release.
+
+## 6.23.3
+
+**Released**: May 10, 2024
+
+### Bug Fixes
+
+#### Core
+
+- Fix an additional issue that prevented the SIGILL fix introduced on 6.23.2 to work on certain Samsung Galaxy S9 devices.
 
 ## 6.23.2
 

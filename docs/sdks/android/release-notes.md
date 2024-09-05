@@ -61,6 +61,44 @@ pagination_prev: null
 * Deprecated Legacy value of the [`BarcodeTrackingBasicOverlayStyle`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#enum-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlayStyle).
 * Deprecated [`AamvaBarcodeVerificationResult.allChecksPassed`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/aamva-barcode-verifier.html#property-scandit.datacapture.id.AamvaBarcodeVerificationResult.AllChecksPassed). [`AamvaBarcodeVerificationResult.status`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/aamva-barcode-verifier.html#property-scandit.datacapture.id.AamvaBarcodeVerificationResult.Status) should be used instead.
 
+## 6.25.3
+
+**Released**: September 2, 2024
+
+### Bug Fixes
+
+- Concatenated ArUco codes are now comma-separated.
+
+## 6.25.2
+
+**Released**: August 2, 2024
+
+### Bug Fixes
+
+#### Core
+
+- Fixed a rare reference table overflow by reducing the number of global refs created.
+
+## 6.25.1
+
+**Released**: August 1, 2024
+
+### Bug Fixes
+
+- Fixed crash (SIGILL) on Galaxy Note9 (SM-N960F & SM-N960X).
+
+#### Barcode
+
+- Fixed an issue in MatrixScan Count that was causing a reset after a rotation.
+
+#### ID
+
+- Fixed an error 255 that would prevent capturing MRZ for some licenses where this feature is supposed to be enabled.
+
+#### Core
+
+- Fixed a crash using camera API 2 where an `IllegalStateException` could be thrown in some edge cases.
+
 ## 6.25.0
 
 **Released**: July 5, 2024
@@ -193,6 +231,26 @@ pagination_prev: null
 :::note
 Scanning is only possible when in resumed state. `BarcodePickView.start()` will not start scanning if `BarcodePickView.onResume()` is not called before or after.
 :::
+
+## 6.23.4
+
+**Released**: July 23, 2024
+
+### Bug Fixes
+
+#### Core
+
+- Fixed a crash using camera API 2 where an IllegalStateException could be thrown in some edge cases.
+
+## 6.23.3
+
+**Released**: May 10, 2024
+
+### Bug Fixes
+
+#### Core
+
+- Fix an additional issue that prevented the SIGILL fix introduced on 6.23.2 to work on certain Samsung Galaxy S9 devices.
 
 ## 6.23.2
 
@@ -450,3 +508,138 @@ SparkScan has been expanded with a range of new features and improvements:
 #### Barcode
 
 - Changed the default value of `SparkScanToastSettings.toastEnabled` to true.
+
+## 6.19.8
+
+**Released**: November 23, 2023
+
+### Bug Fixes
+
+#### Core
+
+- Fixed an issue preventing DataCaptureContext from being mocked in local tests.
+
+## 6.19.7
+
+**Released**: November 15, 2023
+
+No updates for this framework in this release.
+
+## 6.19.6
+
+**Released**: November 10, 2023
+
+No updates for this framework in this release.
+
+## 6.19.5
+
+**Released**: November 3, 2023
+
+No updates for this framework in this release.
+
+## 6.19.4
+
+**Released**: November 1, 2023
+
+No updates for this framework in this release.
+
+## 6.19.3
+
+**Released**: October 20, 2023
+
+### Bug Fixes
+
+#### Barcode
+
+- Fixed barcode scanning at angles when the restricted scan area is very small and certain sets of symbologies are enabled.
+
+## 6.19.2
+
+**Released**: October 12, 2023
+
+### Bug Fixes
+
+#### Core
+
+- Fixed an error 18 that would appear for most license keys that are from 2018 or before.
+
+## 6.19.1
+
+**Released**: September 27, 2023
+
+No updates for this framework in this release.
+
+## 6.19.0
+
+**Released**: September 19, 2023
+
+### New Features
+
+#### Barcode
+
+- If you are not familiar with the symbologies that are relevant for your use case, you can now use our `capture presets <scandit.datacapture.barcode.CapturePreset>`, pre-defined groups of symbologies that are tailored for different verticals (e.g. retail, logistics, etc.). You can use them through the new constructors for `scandit.datacapture.barcode.spark.SparkScanSettings` and :type:`scandit.datacapture.barcode.BarcodeCaptureSettings`.
+- Added support for the `scandit.datacapture.barcode.Symbology.ArUco` symbology.
+- Added a new “accuracy” workflow in [SparkScan](./sparkscan/intro.md). This workflow is particularly useful when the use-cases implies lots of barcodes close together or in crowded scenarios, and requires the end-user the possibility to look through the preview at all times to better control the scan and aim precisely. See `SparkScanScanningPrecision`.
+- [BarcodeFind](./matrixscan-find/intro.md) has been expanded with a range of new features:
+  - Added `scandit.datacapture.barcode.find.ui.BarcodeFindView.ShouldShowTorchControl` and `scandit.datacapture.barcode.find.ui.BarcodeFindView.TorchControlPosition` to allow displaying and positioning a button to turn the device's torch on and off in BarcodeFind.
+  - Added a constructor for `scandit.datacapture.barcode.find.ui.BarcodeFindView` using a provided :type:`core.ui.DataCaptureView`.
+- Added `scandit.datacapture.barcode.BarcodeSpatialGrid.ToJson` that returns the JSON representation of the spatial grid.
+
+#### ID
+
+- Renamed `AamvaCloudVerifier` to `id.AamvaBarcodeVerifier`, which allows the verification of `id.CapturedId`.
+-Added `id.IdCaptureFeedback`. ID Capture allows to configure sound & vibration feedback to emit when a document is captured, rejected or the timeout occurs. By default the feedback is emitted when a document is captured.
+-- Added support for extracting information in Arabic script for several documents.
+
+#### Core
+
+- Added `datacapture.core.ui.IFocusGesture.ShowUIIndicator`, can be used to disable the default visual indicator that is shown when a focus gesture is triggered.
+
+### Performance Improvements
+
+#### Barcode
+
+- Improved performance when a lot of symbologies are enabled when using `barcode.BarcodeCapture` or `barcode.spark.SparkScan`.
+- Added support for Code128 with damaged end patterns (missing, fused or covered bars). This support is automatically disabled if “strict mode” is selected.
+- Improved QR code reader robustness for medium to large codes with small local deformations (e.g. crumpling, bending) or damage.
+- Improved responsiveness of AR overlays in MatrixScan and Barcode Selection.
+
+### Bug Fixes
+
+#### Core
+
+- Fixed a rare crash on Kyocera devices when the camera becomes temporarily unavailable.
+
+#### Barcode
+
+- Fixed the issue where the overlay for SparkScan stayed visible when it shouldn't have.
+
+#### ID
+
+- Fixed multiple issues where it was sometimes not possible to scan barcodes from AAMVA driver's licenses.
+- Fixed an issue where it was not possible to scan certain Vietnamese passports.
+- Fixed an issue where it was sometimes not possible to scan a barcode from a Pennsylvania driver’s license.
+- Fixed an issue where it was not possible to scan certain passports when the `id.IdDocumentType.PassportViz` option was selected.
+- Fixed an issue that caused a failure of the :type:`id.AamvaVizBarcodeComparisonVerifier` for valid IDs.
+- Fixed an issue where scanning MRZ documents in ID Capture incorrectly displayed dates for year 2000.
+
+### Deprecations
+
+#### Barcode
+
+- - Property `SparkScanSettings.LocationSelection` is deprecated and its functionality was removed. With the introduction of smart configurations based on the scanning mode enabled by the users, the locationSelection property is not needed anymore.
+
+### API Changes
+
+#### ID
+
+- The `ScanditTextCaptureBase` module has been removed. Use `ScanditIdCaptureBackend` if you need to capture the human readable part of ID documents, `ScanditTextCaptureBackend` if you use TextCapture, or both, if you need both capabilities.
+- Added `id.DateResult.LocalDate` and `id.DateResult.UtcDate` which convert the date result to java.util.Date using device’s local time zone or the UTC time zone respectively. They replace `id.DateResult.ToDate`, which is now deprecated.
+- Removed id.IdDocumentType.UsVisaViz, `id.IdDocumentType.VisaMrz` should be used instead.
+- Added `id.CapturedId.DocumentAdditionalNumber` which represents the additional number of the document.
+
+### Behavioral Changes
+
+#### Barcode
+
+- Changed the behavior of `barcode.spark.ui.SparkScanView` to always revert back to the `barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode` and `barcode.spark.ui.SparkScanViewSettings.DefaultTorchState` when `barcode.spark.ui.SparkScanView` is closed.

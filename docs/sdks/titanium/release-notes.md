@@ -21,6 +21,28 @@ pagination_prev: null
 * Improved recognition rate of linear codes which are partially affected by damage or covered in plastic wrap, with a particular focus on Codabar barcodes.
 * Improved localization of postal codes, up to 25% faster.
 
+## 6.25.3
+
+**Released**: September 2, 2024
+
+No updates for this framework in this release.
+
+## 6.25.2
+
+**Released**: August 2, 2024
+
+No updates for this framework in this release.
+
+## 6.25.1
+
+**Released**: August 1, 2024
+
+### New Features
+
+#### Core
+
+- Increased min Titanium SDK version to 12.2.1.GA.
+
 ## 6.25.0
 
 **Released:** July 5, 2024
