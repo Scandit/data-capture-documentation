@@ -58,11 +58,11 @@ Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 
 Demonstrates more advanced use of MatrixScan by showing AR bubbles above the barcodes with the barcode data.
 
-##### MatrixScan Find
+#### MatrixScan Find
 
 ![MatrixScan Find](/img/samples/ms_find_web.png)
 
-###### [Search and Find](https://github.com/Scandit/datacapture-web-samples/tree/master/SearchAndFindSample)
+##### [Search and Find](https://github.com/Scandit/datacapture-web-samples/tree/master/SearchAndFindSample)
 
 Use barcode capture to define search criteria by scanning items, and MatrixScan Find can then be launched to find the pre-defined item.
 
