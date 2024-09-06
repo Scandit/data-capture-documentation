@@ -4,6 +4,9 @@ displayed_sidebar: flutterSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: flutter
+keywords:
+  - flutter
 ---
 
 ## 6.27.0

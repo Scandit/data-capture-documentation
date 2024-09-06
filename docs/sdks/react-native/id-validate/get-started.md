@@ -1,6 +1,9 @@
 ---
 sidebar_position: 2
 pagination_next: null
+framework: react
+keywords:
+  - react
 ---
 
 # Get Started

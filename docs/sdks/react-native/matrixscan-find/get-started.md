@@ -1,5 +1,8 @@
 ---
 sidebar_position: 2
+framework: react
+keywords:
+  - react
 ---
 
 # Get Started

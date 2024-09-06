@@ -1,6 +1,9 @@
 ---
 sidebar_position: 3
 pagination_next: null
+framework: xamarinAndroid
+keywords:
+  - xamarinAndroid
 ---
 
 # Configure Barcode Symbologies

@@ -2,6 +2,9 @@
 sidebar_position: 1
 toc_max_heading_level: 4
 pagination_prev: null
+framework: android
+keywords:
+  - android
 ---
 
 import Tabs from '@theme/Tabs';
@@ -159,8 +162,6 @@ The Scandit Data Capture SDK modules depend on the following few standard librar
 | ScanditBarcodeCapture.aar | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]                                    |
 | ScanditParser.aar   | No dependencies      |
 | ScanditIdCapture.aar      | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]                                    |
-
----
 
 # Additional Information
 

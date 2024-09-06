@@ -4,6 +4,9 @@ displayed_sidebar: capacitorSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: capacitor
+keywords:
+  - capacitor
 ---
 
 ## 6.27.0

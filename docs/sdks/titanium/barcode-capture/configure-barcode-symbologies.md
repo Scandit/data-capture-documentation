@@ -1,6 +1,9 @@
 ---
 sidebar_position: 3
 pagination_next: null
+framework: titanium
+keywords:
+  - titanium
 ---
 
 # Configure Barcode Symbologies

@@ -4,6 +4,9 @@ displayed_sidebar: cordovaSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: cordova
+keywords:
+  - cordova
 ---
 
 ## 6.27.0

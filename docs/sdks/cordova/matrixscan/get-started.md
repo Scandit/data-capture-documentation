@@ -1,5 +1,8 @@
 ---
 sidebar_position: 2
+framework: cordova
+keywords:
+  - cordova
 ---
 
 # Get Started

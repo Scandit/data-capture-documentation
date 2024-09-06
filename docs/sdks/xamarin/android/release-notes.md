@@ -4,6 +4,9 @@ displayed_sidebar: xamarinAndroidSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: xamarinAndroid
+keywords:
+  - xamarinAndroid
 ---
 
 ## 6.27.0

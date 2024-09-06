@@ -1,5 +1,10 @@
 ---
-displayed_sidebar: iosSidebar
+sidebar_position: 1
+pagination_prev: null
+pagination_next: null
+framework: ios
+keywords:
+  - ios
 ---
 
 # Page Unavailable

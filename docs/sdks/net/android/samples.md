@@ -3,6 +3,9 @@ sidebar_position: 2
 toc_max_heading_level: 5
 sidebar_label: 'Samples'
 pagination_next: null
+framework: netAndroid
+keywords:
+  - netAndroid
 ---
 
 # .NET Android SDK Samples

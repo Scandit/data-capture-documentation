@@ -4,6 +4,9 @@ displayed_sidebar: titaniumSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: titanium
+keywords:
+  - titanium
 ---
 
 ## 6.27.0

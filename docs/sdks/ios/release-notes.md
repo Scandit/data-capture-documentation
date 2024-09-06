@@ -4,6 +4,9 @@ displayed_sidebar: iosSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: ios
+keywords:
+  - ios
 ---
 
 ## 6.27.0

@@ -4,6 +4,9 @@ displayed_sidebar: xamarinFormsSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: xamarinForms
+keywords:
+  - xamarinForms
 ---
 
 ## 6.27.0

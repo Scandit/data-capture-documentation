@@ -4,6 +4,9 @@ displayed_sidebar: webSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: web
+keywords:
+  - web
 ---
 
 ## 6.27.0

@@ -4,6 +4,9 @@ displayed_sidebar: netAndroidSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: netAndroid
+keywords:
+  - netAndroid
 ---
 
 ## 6.27.0

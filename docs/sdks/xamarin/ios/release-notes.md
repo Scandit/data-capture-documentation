@@ -4,6 +4,9 @@ displayed_sidebar: xamarinIosSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: xamarinIos
+keywords:
+  - xamarinIos
 ---
 
 ## 6.27.0

@@ -1,6 +1,9 @@
 ---
 sidebar_position: 2
 pagination_prev: null
+framework: capacitor
+keywords:
+  - capacitor
 ---
 
 # Get Started

@@ -4,6 +4,9 @@ displayed_sidebar: netIosSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: netIos
+keywords:
+  - netIos
 ---
 
 ## 6.27.0

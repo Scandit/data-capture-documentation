@@ -4,6 +4,9 @@ displayed_sidebar: androidSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: android
+keywords:
+  - android
 ---
 
 ## 6.27.0

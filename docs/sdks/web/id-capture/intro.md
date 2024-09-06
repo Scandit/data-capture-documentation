@@ -2,6 +2,9 @@
 sidebar_position: 1
 toc_max_heading_level: 4
 pagination_prev: null
+framework: web
+keywords:
+  - web
 ---
 
 # About ID Capture

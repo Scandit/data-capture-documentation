@@ -4,6 +4,9 @@ displayed_sidebar: reactnativeSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: react
+keywords:
+  - react
 ---
 
 ## 6.27.0
