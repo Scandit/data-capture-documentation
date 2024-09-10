@@ -65,10 +65,6 @@ Examples utilizing the low-level `BarcodeTracking` API.
 
 Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 
-##### [AR Bubbles](https://github.com/Scandit/datacapture-react-native-samples/tree/master/MatrixScanBubblesSample)
-
-Demonstrates more advanced use of MatrixScan by showing AR bubbles above the barcodes with the barcode data.
-
 ##### [Rejection](https://github.com/Scandit/datacapture-react-native-samples/tree/master/MatrixScanRejectSample)
 
 Use custom conditions to highlight and scan only the barcodes that meet the specified criteria.
