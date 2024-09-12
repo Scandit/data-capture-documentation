@@ -41,7 +41,6 @@ function DropdownNavbarItemDesktop({
   const [link, setLink] = useState("/add-sdk");
   const location = useLocation();
   const currentPath = location.pathname;
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!dropdownRef.current || dropdownRef.current.contains(event.target)) {

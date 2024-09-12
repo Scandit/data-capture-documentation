@@ -1,6 +1,9 @@
 ---
 sidebar_position: 1
 pagination_prev: null
+framework: netAndroid
+keywords:
+  - netAndroid
 ---
 
 # About MatrixScan Find

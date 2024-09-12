@@ -2,6 +2,9 @@
 sidebar_position: 1
 toc_max_heading_level: 4
 pagination_next: null
+framework: web
+keywords:
+  - web
 ---
 
 # Installation
@@ -10,7 +13,7 @@ This page describes how to integrate the Scandit Data Capture SDK into your web 
 
 Scandit Data Capture SDKs are distributed as [npm packages](https://www.npmjs.com/search?q=scandit-web-datacapture-*).
 
-You need to add the `scandit-web-datacapture-core` package, which contains the shared functionality used by the other data capture packages. 
+You need to add the `scandit-web-datacapture-core` package, which contains the shared functionality used by the other data capture packages.
 
 If you’re using `barcodecapture`-related functionalities, make sure to also add the `scandit-web-datacapture-barcode` package. In addition you need a add `scandit-web-datacapture-id` - the [ScanditIdCapture API](https://docs.scandit.com/data-capture-sdk/web/id-capture/overview.html) - if you want to scan personal identification documents, such as identity cards, passports or visas.
 
@@ -34,30 +37,29 @@ Devices running the Scandit Data Capture SDK need to have a GPU and run a browse
 You can use the [jsDelivr](https://jsdelivr.com/) or [UNPKG](https://unpkg.com/) CDN to specify a certain version (range) and include and import from our library as follows (example for barcode capture):
 
 ```html
-<!-- polyfill browsers not supporting import maps  -->
-<script async src="https://ga.jspm.io/npm:es-module-shims@1.7.3/dist/es-module-shims.js"></script>
+<!-- polyfill browsers not supporting import maps. use the latest version from here https://github.com/guybedford/es-module-shims -->
+<script async src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"></script>
 <script type="importmap">
-      {
-        "imports": {
-          "scandit-web-datacapture-core": "https://cdn.jsdelivr.net/npm/scandit-web-datacapture-core@[version]/build/js/index.js",
-          "scandit-web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@[version]/build/js/index.js",
-          "scandit-web-datacapture-core/build/js/worker/index": "https://cdn.jsdelivr.net/npm/scandit-web-datacapture-core@[version]/build/js/worker/index.js",
-          "scandit-web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@[version]/",
-          "scandit-web-datacapture-core/": "https://cdn.jsdelivr.net/npm/scandit-web-datacapture-core@[version]/"
-        }
+    {
+      "imports": {
+        "scandit-web-datacapture-core": "https://cdn.jsdelivr.net/npm/scandit-web-datacapture-core@[version]/build/js/index.js",
+        "scandit-web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@[version]/build/js/index.js",
+        "scandit-web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@[version]/",
+        "scandit-web-datacapture-core/": "https://cdn.jsdelivr.net/npm/scandit-web-datacapture-core@[version]/"
       }
+    }
 </script>
 
 <script type="module">
-	// Import everything
-	import * as SDCCore from 'scandit-web-datacapture-core';
-	import * as SDCBarcode from 'scandit-web-datacapture-barcode';
+ // Import only needed items
+ import { DataCaptureContext, Camera } from 'scandit-web-datacapture-core';
+ import { BarcodeCapture } from 'scandit-web-datacapture-barcode';
+ 
+ // OR import everything
+ import * as SDCCore from 'scandit-web-datacapture-core';
+ import * as SDCBarcode from 'scandit-web-datacapture-barcode'; 
 
-	// And/or import only needed items (examples)
-	import { DataCaptureContext, Camera } from 'scandit-web-datacapture-core';
-	import { BarcodeCapture } from 'scandit-web-datacapture-barcode';
-
-	// Insert your code here
+ // Insert your code here
 </script>
 ```
 
@@ -164,7 +166,6 @@ await configure({
   moduleLoaders: [barcodeCaptureLoader()]
 });
 ```
-
 
 You can easily encrypt your license key with this small nodejs script. Then you should copy the sdc-license.data file in the licenseDataPath in order to be correctly read at runtime in the configure phase. You can also check the related [sample](https://github.com/Scandit/datacapture-web-samples/tree/master/ElectronBarcodeCaptureSimpleSample).
 

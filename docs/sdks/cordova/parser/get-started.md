@@ -2,6 +2,9 @@
 sidebar_position: 2
 pagination_prev: null
 pagination_next: null
+framework: cordova
+keywords:
+  - cordova
 ---
 
 # Get Started

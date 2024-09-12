@@ -1,5 +1,8 @@
 ---
 sidebar_position: 2
+framework: xamarinAndroid
+keywords:
+  - xamarinAndroid
 ---
 
 # Get Started

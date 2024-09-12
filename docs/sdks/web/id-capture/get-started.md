@@ -1,5 +1,8 @@
 ---
 sidebar_position: 2
+framework: web
+keywords:
+  - web
 ---
 
 # Get Started With ID Capture

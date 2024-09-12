@@ -1,10 +1,41 @@
 ---
-toc_max_heading_level: 4
+toc_max_heading_level: 3
 displayed_sidebar: netAndroidSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: netAndroid
+keywords:
+  - netAndroid
 ---
+
+## 6.27.0
+
+**Released**: September 19, 2024
+
+### New Features
+
+#### ID
+
+* ID Capture supports scanning the Visual Inspection Zone (VIZ) of New York City IDs.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed result data encoding classification for raw byte data in 2d barcodes, in particular for Shift-JIS encoding.
+* Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when when the camera was quickly changing direction with a single barcode in the scene.
+* Fixed an issue where it was not possible to scan non-fluorescent French-Post barcodes without the extension `fluorescent_orange_ink`.
+
+## 6.26.1
+
+**Released**: September 4, 2024
+
+### Bug Fixes
+
+#### Barcode
+
+- Resolved cases in which  Smart Scan Intention was possibly reporting the wrong barcode when the camera was quickly changing direction with a single barcode in the scene.
 
 ## 6.26.0
 

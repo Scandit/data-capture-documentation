@@ -1,5 +1,8 @@
 ---
 sidebar_position: 2
+framework: capacitor
+keywords:
+  - capacitor
 ---
 
 # Get Started

@@ -1,6 +1,9 @@
 ---
 sidebar_position: 2
 pagination_prev: null
+framework: flutter
+keywords:
+  - flutter
 ---
 
 # Get Started

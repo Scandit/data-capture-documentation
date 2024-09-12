@@ -1,6 +1,10 @@
 ---
 sidebar_position: 3
 pagination_next: null
+framework: cordova
+keywords:
+  - cordova
+unlisted: true
 ---
 
 # Adding AR Overlays

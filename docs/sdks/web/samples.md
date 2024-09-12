@@ -3,6 +3,9 @@ sidebar_position: 2
 toc_max_heading_level: 5
 sidebar_label: 'Samples'
 pagination_next: null
+framework: web
+keywords:
+  - web
 ---
 
 # Web SDK Samples
@@ -54,9 +57,13 @@ Examples utilizing the low-level `BarcodeTracking` API.
 
 Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 
-##### [AR Bubbles](https://github.com/Scandit/datacapture-web-samples/tree/master/MatrixScanBubblesSample)
+#### MatrixScan Find
 
-Demonstrates more advanced use of MatrixScan by showing AR bubbles above the barcodes with the barcode data.
+![MatrixScan Find](/img/samples/ms_find_web.png)
+
+##### [Search and Find](https://github.com/Scandit/datacapture-web-samples/tree/master/SearchAndFindSample)
+
+Use barcode capture to define search criteria by scanning items, and MatrixScan Find can then be launched to find the pre-defined item.
 
 ## ID Scanning
 

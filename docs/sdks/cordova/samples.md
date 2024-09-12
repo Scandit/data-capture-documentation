@@ -3,6 +3,9 @@ sidebar_position: 2
 toc_max_heading_level: 5
 sidebar_label: 'Samples'
 pagination_next: null
+framework: cordova
+keywords:
+  - cordova
 ---
 
 # Cordova SDK Samples
@@ -57,10 +60,6 @@ Examples utilizing the low-level `BarcodeTracking` API.
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-cordova-samples/tree/master/MatrixScanSimpleSample)
 
 Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
-
-##### [AR Bubbles](https://github.com/Scandit/datacapture-cordova-samples/tree/master/MatrixScanBubblesSample)
-
-Demonstrates more advanced use of MatrixScan by showing AR bubbles above the barcodes with the barcode data.
 
 ##### [Rejection](https://github.com/Scandit/datacapture-cordova-samples/tree/master/MatrixScanRejectSample)
 

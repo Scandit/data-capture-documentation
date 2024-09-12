@@ -1,6 +1,9 @@
 ---
 sidebar_position: 2
 pagination_prev: null
+framework: android
+keywords:
+  - android
 ---
 
 # Get Started
@@ -41,7 +44,6 @@ If you directly add the AAR files to the project, you need to add these dependen
 | *ScanditBarcodeCapture.aar*   | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]        |
 | *ScanditParser.aar*      | No dependencies       |
 | *ScanditIdCapture.aar*      | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]       |
-------------------
 
 ### Internal Dependencies
 
@@ -54,7 +56,6 @@ Some of the Scandit Data Capture SDK modules depend on others to work:
 | *ScanditParser*      | No dependencies       |
 | *ScanditIdCapture*      | *ScanditCaptureCore*; *ScanditIdCaptureBackend (VIZ documents)*       |
 | *ScanditIdCaptureBackend*      | No dependencies       |
-------------------
 
 
 ## Create a Data Capture Context

@@ -4,7 +4,50 @@ displayed_sidebar: iosSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
+framework: ios
+keywords:
+  - ios
 ---
+
+## 6.27.0
+
+**Released**: September 19, 2024
+
+### New Features
+
+#### Barcode
+
+* Added [`SDCAztecBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.AztecBarcodeGeneratorBuilder) to generate Aztec barcodes.
+* MatrixScan Count users can now further classify the "not in list" barcodes when scanning against a list. Tapping on them will show a popup where the barcodes can be accepted or rejected. Check [`barcode.count.ui.BarcodeCountView.BarcodeNotInListActionSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.BarcodeNotInListActionSettings) to enable and customize the functionality. The classified barcodes will be added to [`barcode.count.BarcodeCountCaptureListSession.AcceptedBarcodes`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-count-capture-list-session.html#property-scandit.datacapture.barcode.count.BarcodeCountCaptureListSession.AcceptedBarcodes) or [`barcode.count.BarcodeCountCaptureListSession.RejectedBarcodes`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-count-capture-list-session.html#property-scandit.datacapture.barcode.count.BarcodeCountCaptureListSession.RejectedBarcodes).
+* MatrixScan Find now uses a 4:3 aspect ratio, providing a significantly larger field of view for enhanced scanning accuracy and coverage.
+* Added [`BarcodeFindView.ShouldShowZoomControl`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#property-scandit.datacapture.barcode.find.ui.BarcodeFindView.ShouldShowZoomControl) which enables the display of a button that allows switching to ultra wide lenses on supported devices for scanning at close range in narrow environments.
+
+#### ID
+
+* ID Capture supports scanning the Visual Inspection Zone (VIZ) of New York City IDs.
+* Added [`scandit.datacapture.id.CapturedId.UsRealIdStatus`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.UsRealIdStatus) to indicate whether a document is REAL ID compliant.
+
+#### Label
+
+* Added support for non-semantic text fields (not requiring textual identifiers) in LabelCapture.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed result data encoding classification for raw byte data in 2d barcodes, in particular for Shift-JIS encoding.
+* Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when when the camera was quickly changing direction with a single barcode in the scene.
+* Fixed an issue where it was not possible to scan non-fluorescent French-Post barcodes without the extension `fluorescent_orange_ink`.
+
+## 6.26.1
+
+**Released**: September 4, 2024
+
+### Bug Fixes
+
+#### Barcode
+
+- Resolved cases in which  Smart Scan Intention was possibly reporting the wrong barcode when the camera was quickly changing direction with a single barcode in the scene.
 
 ## 6.26.0
 
