@@ -133,15 +133,15 @@ export function createBarcodeScanningArr(framework: string, allCards: boolean) {
           ),
           link: `/sdks/${getFrameworkPath(frameworkData)}/matrixscan-count/intro`,
         },
-        // {
-        //   name: BarcodeScanning.MatrixScanPick,
-        //   text: "",
-        //   icon: <MatrixScanPick />,
-        //   isActive: frameworkData?.barcodeScanning.includes(
-        //     BarcodeScanning.MatrixScanPick
-        //   ),
-        //   link: `/sdks/${getFrameworkPath(frameworkData)}/matrixscan-pick/intro`,
-        // },
+        {
+           name: BarcodeScanning.MatrixScanPick,
+           text: "AR-Enabled Scan and Pick",
+           icon: <MatrixScanPick />,
+           isActive: frameworkData?.barcodeScanning.includes(
+             BarcodeScanning.MatrixScanPick
+           ),
+           link: `/sdks/${getFrameworkPath(frameworkData)}/matrixscan-pick/intro`,
+        },
         {
           name: BarcodeScanning.BarcodeSelection,
           text: "Scan One-of-Many",

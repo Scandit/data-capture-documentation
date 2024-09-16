@@ -153,6 +153,15 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
+              label: "MatrixScan Pick",
+              items: [
+                "sdks/ios/matrixscan-pick/intro",
+                "sdks/ios/matrixscan-pick/get-started",
+                "sdks/ios/matrixscan-pick/advanced",
+              ],
+            },
+            {
+              type: "category",
               label: "Label Capture",
               items: [
                 "sdks/ios/label-capture/get-started",
@@ -324,6 +333,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/android/matrixscan-find/intro",
                 "sdks/android/matrixscan-find/get-started",
                 "sdks/android/matrixscan-find/advanced",
+              ],
+            },
+            {
+              type: "category",
+              label: "MatrixScan Pick",
+              items: [
+                "sdks/android/matrixscan-pick/intro",
+                "sdks/android/matrixscan-pick/get-started",
+                "sdks/android/matrixscan-pick/advanced",
               ],
             },
             {
@@ -626,6 +644,15 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: "category",
+              label: "MatrixScan Pick",
+              items: [
+                "sdks/cordova/matrixscan-pick/intro",
+                "sdks/cordova/matrixscan-pick/get-started",
+                "sdks/cordova/matrixscan-pick/advanced",
+              ],
+            },
+            {
+              type: "category",
               label: "MatrixScan API",
               items: [
                 "sdks/cordova/matrixscan/intro",
@@ -779,6 +806,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/react-native/matrixscan-find/intro",
                 "sdks/react-native/matrixscan-find/get-started",
                 "sdks/react-native/matrixscan-find/advanced",
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Pick',
+              items: [
+                "sdks/react-native/matrixscan-pick/intro",
+                "sdks/react-native/matrixscan-pick/get-started",
+                "sdks/react-native/matrixscan-pick/advanced",
               ],
             },
             {
@@ -952,6 +988,15 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
+              type: 'category',
+              label: 'MatrixScan Pick',
+              items: [
+                "sdks/flutter/matrixscan-pick/intro",
+                "sdks/flutter/matrixscan-pick/get-started",
+                "sdks/flutter/matrixscan-pick/advanced",
+              ],
+            },
+            {
               type: "category",
               label: "MatrixScan API",
               items: [
@@ -1107,6 +1152,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/capacitor/matrixscan-find/intro",
                 "sdks/capacitor/matrixscan-find/get-started",
                 "sdks/capacitor/matrixscan-find/advanced",
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Pick',
+              items: [
+                "sdks/capacitor/matrixscan-pick/intro",
+                "sdks/capacitor/matrixscan-pick/get-started",
+                "sdks/capacitor/matrixscan-pick/advanced",
               ],
             },
             {
@@ -1772,6 +1826,15 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
+              type: 'category',
+              label: 'MatrixScan Pick',
+              items: [
+                "sdks/net/ios/matrixscan-pick/intro",
+                "sdks/net/ios/matrixscan-pick/get-started",
+                "sdks/net/ios/matrixscan-pick/advanced",
+              ],
+            },
+            {
               type: "category",
               label: "MatrixScan API",
               items: [
@@ -1927,6 +1990,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/net/android/matrixscan-find/intro",
                 "sdks/net/android/matrixscan-find/get-started",
                 "sdks/net/android/matrixscan-find/advanced",
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Pick',
+              items: [
+                "sdks/net/android/matrixscan-pick/intro",
+                "sdks/net/android/matrixscan-pick/get-started",
+                "sdks/net/android/matrixscan-pick/advanced",
               ],
             },
             {
