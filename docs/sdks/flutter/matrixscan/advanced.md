@@ -2,7 +2,6 @@
 sidebar_position: 3
 pagination_next: null
 framework: flutter
-tags: [flutter]
 keywords:
   - flutter
 unlisted: true

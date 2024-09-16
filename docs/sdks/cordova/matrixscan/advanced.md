@@ -2,7 +2,6 @@
 sidebar_position: 3
 pagination_next: null
 framework: cordova
-tags: [cordova]
 keywords:
   - cordova
 unlisted: true

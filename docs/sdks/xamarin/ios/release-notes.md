@@ -5,7 +5,6 @@ hide_title: true
 title: Release Notes
 pagination_prev: null
 framework: xamarinIos
-tags: [xamarinIos]
 keywords:
   - xamarinIos
 ---

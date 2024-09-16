@@ -1,7 +1,6 @@
 ---
 toc_max_heading_level: 4
 displayed_sidebar: sdcSidebar
-tags: [android, capacitor, cordova, flutter, ios, netIos, netAndroid, react-native, titanium, web, xamarinIos, xamarinAndroid, xamarinForms]
 ---
 
 # Symbology Properties

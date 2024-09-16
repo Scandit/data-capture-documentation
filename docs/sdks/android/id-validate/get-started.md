@@ -2,7 +2,6 @@
 sidebar_position: 2
 pagination_next: null
 framework: android
-tags: [android]
 keywords:
   - android
 ---

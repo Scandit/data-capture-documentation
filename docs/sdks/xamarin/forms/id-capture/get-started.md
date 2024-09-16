@@ -1,7 +1,6 @@
 ---
 sidebar_position: 2
 framework: xamarinForms
-tags: [xamarinForms]
 keywords:
   - xamarinForms
 ---

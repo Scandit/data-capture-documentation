@@ -3,7 +3,6 @@ sidebar_position: 2
 pagination_prev: null
 pagination_next: null
 framework: xamarinForms
-tags: [xamarinForms]
 keywords:
   - xamarinForms
 ---

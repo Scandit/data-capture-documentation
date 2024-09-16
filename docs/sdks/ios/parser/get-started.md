@@ -3,7 +3,6 @@ sidebar_position: 2
 pagination_prev: null
 pagination_next: null
 framework: ios
-tags: [ios]
 keywords:
   - ios
 ---
