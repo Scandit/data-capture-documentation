@@ -1,6 +1,7 @@
 ---
 sidebar_position: 2
 framework: netAndroid
+tags: [netAndroid]
 keywords:
   - netAndroid
 ---

@@ -4,6 +4,7 @@ toc_max_heading_level: 5
 sidebar_label: 'Samples'
 pagination_next: null
 framework: web
+tags: [web]
 keywords:
   - web
 ---
@@ -48,6 +49,14 @@ Demonstrates how you can adapt the barcode capture settings best to your needs a
 Use SparkScan to populate a list of scanned barcodes.
 
 ### Multi-Scanning
+
+#### MatrixScan Find
+
+![MatrixScan Find](/img/samples/ms_find_web.png)
+
+##### [Search and Find](https://github.com/Scandit/datacapture-web-samples/tree/master/SearchAndFindSample)
+
+Use barcode capture to define search criteria by scanning items, and MatrixScan Find can then be launched to find the pre-defined item.
 
 #### MatrixScan AR
 

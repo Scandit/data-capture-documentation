@@ -1,6 +1,7 @@
 ---
 sidebar_position: 2
 framework: react
+tags: [react-native]
 keywords:
   - react
 ---

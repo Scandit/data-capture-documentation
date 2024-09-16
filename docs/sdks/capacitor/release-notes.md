@@ -5,13 +5,14 @@ hide_title: true
 title: Release Notes
 pagination_prev: null
 framework: capacitor
+tags: [capacitor]
 keywords:
   - capacitor
 ---
 
-## 6.27.0
+## 6.28.0-beta-1
 
-**Released**: September 19, 2024
+**Released**: September 10, 2024
 
 ### New Features
 
@@ -19,6 +20,8 @@ keywords:
 
 * Added [`barcode.pick.ui.RectangularWithIcons.StatusIconSettings`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-pick-view-highlight-style-rectangular-with-icons.html#property-scandit.datacapture.barcode.pick.ui.RectangularWithIcons.StatusIconSettings) property to apply a `barcode.pick.ui.BarcodePickStatusIconSettings` object and customize the status icons appearances.
 * Added ability to customize the minimum width and height of the highlights in the [`scandit.datacapture.barcode.pick.ui.Rectangular`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-pick-view-highlight-style-rectangular.html) and [`scandit.datacapture.barcode.pick.ui.RectangularWithIcons`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-pick-view-highlight-style-rectangular-with-icons.html) highlight styles.
+* On Barcode Capture and SparkScan, we optimized the frame processing time in 4k-UHD resolution with dynamic resolution selection, resulting in up to 35% reduction on high-end devices and consistent performance improvements across all supported devices.
+platforms.
 
 #### ID
 
@@ -32,15 +35,33 @@ keywords:
 * Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when when the camera was quickly changing direction with a single barcode in the scene.
 * Fixed an issue where it was not possible to scan non-fluorescent French-Post barcodes without the extension `fluorescent_orange_ink`.
 
-## 6.26.1
+## 6.27.1
 
-**Released**: September 4, 2024
+**Released** September 6, 2024
+
+No updates for this framework in this version.
+
+## 6.27.0
+
+**Released**: September 5, 2024
+
+### API Changes
+
+#### Barcode
+
+- The [`BarcodeTrackingAdvancedOverlay.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode) and [`BarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) methods no longer support rendering any kind of images. For further details about this backwards incompatible change, contact [Scandit Support](mailto:support@scandit.com).
+
+### Behavioral Changes
+
+#### Core
+
+- The camera permission dialog is now delayed until the moment when camera is switching state. This change is intended to improve the user experience by showing the permission dialog only when the camera is actually needed.
 
 ### Bug Fixes
 
 #### Barcode
 
-- Resolved cases in which  Smart Scan Intention was possibly reporting the wrong barcode when the camera was quickly changing direction with a single barcode in the scene.
+- Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when the camera was quickly changing direction with a single barcode in the scene.
 
 ## 6.26.0
 

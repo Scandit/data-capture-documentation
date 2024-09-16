@@ -3,6 +3,7 @@ toc_max_heading_level: 4
 hide_title: true
 displayed_sidebar: sdcSidebar
 title: 'Features by Framework'
+tags: [android, capacitor, cordova, flutter, ios, netIos, netAndroid, react-native, titanium, web, xamarinIos, xamarinAndroid, xamarinForms]
 ---
 
 ## Core

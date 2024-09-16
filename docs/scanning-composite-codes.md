@@ -1,6 +1,7 @@
 ---
 sidebar_position: 2
 displayed_sidebar: sdcSidebar
+tags: [android, capacitor, cordova, flutter, ios, netIos, netAndroid, react-native, titanium, web, xamarinIos, xamarinAndroid, xamarinForms]
 ---
 
 # Composite Codes

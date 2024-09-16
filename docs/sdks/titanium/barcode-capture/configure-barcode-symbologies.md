@@ -2,6 +2,7 @@
 sidebar_position: 3
 pagination_next: null
 framework: titanium
+tags: [titanium]
 keywords:
   - titanium
 ---

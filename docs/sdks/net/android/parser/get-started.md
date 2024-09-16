@@ -3,6 +3,7 @@ sidebar_position: 2
 pagination_prev: null
 pagination_next: null
 framework: netAndroid
+tags: [netAndroid]
 keywords:
   - netAndroid
 ---

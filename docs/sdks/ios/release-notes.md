@@ -5,19 +5,22 @@ hide_title: true
 title: Release Notes
 pagination_prev: null
 framework: ios
+tags: [ios]
 keywords:
   - ios
 ---
 
-## 6.27.0
+## 6.28.0-beta-1
 
-**Released**: September 19, 2024
+**Released**: September 10, 2024
 
 ### New Features
 
 #### Barcode
 
-* Added [`SDCAztecBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.AztecBarcodeGeneratorBuilder) to generate Aztec barcodes.
+* Our [Barode Generator](./barcode-generator/) now allows the generation of Aztec codes. See [`SDCAztecBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.AztecBarcodeGeneratorBuilder).
+* On Barcode Capture and SparkScan, we optimized the frame processing time in 4k-UHD resolution with dynamic resolution selection, resulting in up to 35% reduction on high-end devices and consistent performance improvements across all supported devices.
+platforms.
 * MatrixScan Count users can now further classify the "not in list" barcodes when scanning against a list. Tapping on them will show a popup where the barcodes can be accepted or rejected. Check [`barcode.count.ui.BarcodeCountView.BarcodeNotInListActionSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.BarcodeNotInListActionSettings) to enable and customize the functionality. The classified barcodes will be added to [`barcode.count.BarcodeCountCaptureListSession.AcceptedBarcodes`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-count-capture-list-session.html#property-scandit.datacapture.barcode.count.BarcodeCountCaptureListSession.AcceptedBarcodes) or [`barcode.count.BarcodeCountCaptureListSession.RejectedBarcodes`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-count-capture-list-session.html#property-scandit.datacapture.barcode.count.BarcodeCountCaptureListSession.RejectedBarcodes).
 * MatrixScan Find now uses a 4:3 aspect ratio, providing a significantly larger field of view for enhanced scanning accuracy and coverage.
 * Added [`BarcodeFindView.ShouldShowZoomControl`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#property-scandit.datacapture.barcode.find.ui.BarcodeFindView.ShouldShowZoomControl) which enables the display of a button that allows switching to ultra wide lenses on supported devices for scanning at close range in narrow environments.
@@ -29,7 +32,7 @@ keywords:
 
 #### Label
 
-* Added support for non-semantic text fields (not requiring textual identifiers) in LabelCapture.
+* Added support for text fields that are identified only based on their data pattern. These do not need textual identifiers to be identified, and therefore no data type patterns (i.e., patterns for the textual identifiers) need to be specified for them.
 
 ### Bug Fixes
 
@@ -39,15 +42,27 @@ keywords:
 * Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when when the camera was quickly changing direction with a single barcode in the scene.
 * Fixed an issue where it was not possible to scan non-fluorescent French-Post barcodes without the extension `fluorescent_orange_ink`.
 
-## 6.26.1
+## 6.27.1
 
-**Released**: September 4, 2024
+**Released** September 6, 2024
+
+No updates for this framework in this version.
+
+## 6.27.0
+
+**Released**: September 5, 2024
+
+### API Changes
+
+#### Barcode
+
+- The [`BarcodeTrackingAdvancedOverlay.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode) and [`BarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) methods no longer support rendering any kind of images. For further details about this backwards incompatible change, contact [Scandit Support](mailto:support@scandit.com).
 
 ### Bug Fixes
 
 #### Barcode
 
-- Resolved cases in which  Smart Scan Intention was possibly reporting the wrong barcode when the camera was quickly changing direction with a single barcode in the scene.
+- Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when the camera was quickly changing direction with a single barcode in the scene.
 
 ## 6.26.0
 

@@ -2,6 +2,7 @@
 sidebar_position: 2
 pagination_prev: null
 framework: flutter
+tags: [flutter]
 keywords:
   - flutter
 ---

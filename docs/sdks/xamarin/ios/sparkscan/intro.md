@@ -2,6 +2,7 @@
 sidebar_position: 1
 pagination_prev: null
 framework: xamarinIos
+tags: [xamarinIos]
 keywords:
   - xamarinIos
 ---
@@ -71,6 +72,4 @@ Upon completing the scanning process (or to interact with the customer app layer
 
 ## Supported Symbologies
 
-SparkScan supports all of the major symbologies listed here: Barcode Symbologies except DotCode, MaxiCode and postal codes (KIX, RM4SCC, LAPA 4SC, USPS Intelligent Mail, etc.).
-
-If you are not familiar with the symbologies that are relevant for your use case, you can use capture presets that are tailored for different verticals (e.g. retail, logistics, etc.).
+SparkScan supports all of the major symbologies listed here: [Barcode Symbologies](/barcode-symbologies.md).

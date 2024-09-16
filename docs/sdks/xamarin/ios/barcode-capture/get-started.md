@@ -2,6 +2,7 @@
 sidebar_position: 2
 pagination_prev: null
 framework: xamarinIos
+tags: [xamarinIos]
 keywords:
   - xamarinIos
 ---

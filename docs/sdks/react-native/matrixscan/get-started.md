@@ -1,5 +1,6 @@
 ---
 framework: react
+tags: [react-native]
 keywords:
   - react
 unlisted: true

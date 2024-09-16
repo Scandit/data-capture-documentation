@@ -2,6 +2,7 @@
 title: Migrate from Barcode Scanner 5.x
 description: Migrate from Barcode Scanner 5.x to version 6.x of the Scandit Smart Data Capture SDK.
 sidebar_label: From 5.x to 6.x
+tags: [android, capacitor, cordova, flutter, ios, netIos, netAndroid, react-native, titanium, web, xamarinIos, xamarinAndroid, xamarinForms]
 ---
 
 # Migrate from Barcode Scanner 5.x

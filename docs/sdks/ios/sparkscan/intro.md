@@ -3,6 +3,7 @@ sidebar_position: 1
 displayed_sidebar: iosSidebar
 pagination_prev: null
 framework: ios
+tags: [ios]
 keywords:
   - ios
 ---
@@ -72,6 +73,4 @@ Upon completing the scanning process (or to interact with the customer app layer
 
 ## Supported Symbologies
 
-SparkScan supports all of the major [symbologies](../../../barcode-symbologies.md) except DotCode, MaxiCode and postal codes (KIX, RM4SCC, LAPA 4SC, USPS Intelligent Mail, etc.).
-
-If you are not familiar with the symbologies that are relevant for your use case, you can use [capture presets](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/capture-preset.html#enum-scandit.datacapture.barcode.CapturePreset) that are tailored for different verticals (e.g. retail, logistics, etc.).
+SparkScan supports all of the major symbologies listed here: [Barcode Symbologies](/barcode-symbologies.md).

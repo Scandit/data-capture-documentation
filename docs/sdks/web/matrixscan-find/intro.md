@@ -1,6 +1,10 @@
 ---
 sidebar_position: 1
 pagination_prev: null
+framework: web
+tags: [web]
+keywords:
+  - web
 ---
 
 # About MatrixScan Find

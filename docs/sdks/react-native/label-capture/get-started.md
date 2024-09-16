@@ -2,6 +2,7 @@
 pagination_prev: null
 pagination_next: null
 framework: react
+tags: [react-native]
 keywords:
   - react
 ---

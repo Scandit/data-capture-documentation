@@ -2,6 +2,7 @@
 sidebar_position: 3
 pagination_next: null
 framework: capacitor
+tags: [capacitor]
 keywords:
   - capacitor
 ---

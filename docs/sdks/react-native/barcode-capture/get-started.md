@@ -2,6 +2,7 @@
 sidebar_position: 2
 pagination_prev: null
 framework: react
+tags: [react-native]
 keywords:
   - react
 ---

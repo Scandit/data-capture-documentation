@@ -1,0 +1,51 @@
+android:
+  permalink: '/sdks/android/'
+  description: 'Scandit Barcode Scanner SDK for Android'
+
+capacitor:
+  permalink: '/sdks/capacitor/'
+  description: 'Scandit Barcode Scanner SDK for Capacitor'
+
+cordova:
+  permalink: '/sdks/cordova/'
+  description: 'Scandit Barcode Scanner SDK for Cordova'
+
+flutter:
+  permalink: '/sdks/flutter/'
+  description: 'Scandit Barcode Scanner SDK for Flutter'
+
+ios:
+  permalink: '/sdks/ios/'
+  description: 'Scandit Barcode Scanner SDK for iOS'
+
+react-native:
+  permalink: '/sdks/react-native/'
+  description: 'Scandit Barcode Scanner SDK for React Native'
+
+web:
+  permalink: '/sdks/web/'
+  description: 'Scandit Barcode Scanner SDK for Web'
+
+netIos:
+  permalink: '/sdks/net/ios/'
+  description: 'Scandit Barcode Scanner SDK for .NET for iOS'
+
+netAndroid:
+  permalink: '/sdks/net/android/'
+  description: 'Scandit Barcode Scanner SDK for .NET for Android'
+
+titanium:
+  permalink: '/sdks/titanium/'
+  description: 'Scandit Barcode Scanner SDK for Titanium'
+
+xamarinIos:
+  permalink: '/sdks/xamarin/ios/'
+  description: 'Scandit Barcode Scanner SDK for Xamarin for iOS'
+
+xamarinAndroid:
+  permalink: '/sdks/xamarin/android/'
+  description: 'Scandit Barcode Scanner SDK for Xamarin for Android'
+
+xamarinForms:
+  permalink: '/sdks/xamarin/forms/'
+  description: 'Scandit Barcode Scanner SDK for Xamarin.Forms'

@@ -1,6 +1,7 @@
 ---
 sidebar_position: 2
 framework: netIos
+tags: [netIos]
 keywords:
   - netIos
 ---
