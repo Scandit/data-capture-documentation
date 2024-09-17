@@ -1,5 +1,6 @@
 ---
 displayed_sidebar: flutterSidebar
+unlisted: true
 ---
 
 # Page Unavailable

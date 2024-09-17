@@ -1,5 +1,6 @@
 ---
 displayed_sidebar: capacitorSidebar
+unlisted: true
 ---
 
 # Page Unavailable

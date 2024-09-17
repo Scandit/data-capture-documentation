@@ -1,5 +1,6 @@
 ---
 displayed_sidebar: titaniumSidebar
+unlisted: true
 ---
 
 # Page Unavailable

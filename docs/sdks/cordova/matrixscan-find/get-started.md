@@ -1,5 +1,6 @@
 ---
 displayed_sidebar: cordovaSidebar
+unlisted: true
 ---
 
 # Page Unavailable

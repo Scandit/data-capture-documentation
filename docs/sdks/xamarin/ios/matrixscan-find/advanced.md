@@ -1,5 +1,6 @@
 ---
 displayed_sidebar: xamarinIosSidebar
+unlisted: true
 ---
 
 # Page Unavailable

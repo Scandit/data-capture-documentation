@@ -1,5 +1,6 @@
 ---
 displayed_sidebar: webSidebar
+unlisted: true
 ---
 
 # Page Unavailable
