@@ -2,7 +2,6 @@
 displayed_sidebar: sdcSidebar
 sidebar_position: 3
 toc_max_heading_level: 4
-tags: [android, capacitor, cordova, flutter, ios, netIos, netAndroid, react-native, titanium, web, xamarinIos, xamarinAndroid, xamarinForms]
 ---
 
 # Barcode Symbologies

@@ -1,7 +1,6 @@
 ---
 sidebar_position: 2
 framework: cordova
-tags: [cordova]
 keywords:
   - cordova
 ---

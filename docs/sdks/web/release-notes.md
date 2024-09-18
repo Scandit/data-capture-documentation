@@ -5,10 +5,34 @@ hide_title: true
 title: Release Notes
 pagination_prev: null
 framework: web
-tags: [web]
 keywords:
   - web
 ---
+
+## 6.28.0-beta-1
+
+**Released**: September 10, 2024
+
+### New Features
+
+#### Barcode
+
+* BarcodeFind is an API that implements [MatrixScan Find](/sdks/web/matrixscan-find/intro.md). MatrixScan Find is a pre-built UI that uses augmented reality overlays to highlight items that match predefined criteria. It allows you to add a search and find experience with augmented reality to an existing native app, with just a few lines of code.
+* On Barcode Capture and SparkScan, we optimized the frame processing time in 4k-UHD resolution with dynamic resolution selection, resulting in up to 35% reduction on high-end devices and consistent performance improvements across all supported devices.
+platforms.
+
+#### ID
+
+* ID Capture now supports scanning the Visual Inspection Zone (VIZ) on the back of the European  Health Insurance Card.
+* ID Capture supports scanning the Visual Inspection Zone (VIZ) of New York City IDs.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed result data encoding classification for raw byte data in 2d barcodes, in particular for Shift-JIS encoding.
+* Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when when the camera was quickly changing direction with a single barcode in the scene.
+* Fixed an issue where it was not possible to scan non-fluorescent French-Post barcodes without the extension `fluorescent_orange_ink`.
 
 ## 6.27.1
 

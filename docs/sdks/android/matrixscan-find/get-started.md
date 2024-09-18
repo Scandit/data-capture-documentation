@@ -1,7 +1,6 @@
 ---
 sidebar_position: 2
 framework: android
-tags: [android]
 keywords:
   - android
 ---
@@ -40,7 +39,7 @@ The first step to add capture capabilities to your application is to create a ne
 DataCaptureContext dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
 
-## Configure the Barcode Count Mode
+## Configure the Barcode Find Mode
 
 The main entry point for the Barcode Find Mode is the `BarcodeFind` object. You can configure the supported Symbologies through its [`BarcodeFindSettings`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight.
 

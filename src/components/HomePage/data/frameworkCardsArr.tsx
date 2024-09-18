@@ -35,6 +35,7 @@ export const frameworkCards = [
       BarcodeScanning.SparkScan,
       BarcodeScanning.MatrixScanFind,
       BarcodeScanning.MatrixScanCount,
+      BarcodeScanning.MatrixScanPick,
       BarcodeScanning.BarcodeSelection,
       BarcodeScanning.ScanditExpress,
     ],
@@ -52,6 +53,7 @@ export const frameworkCards = [
       BarcodeScanning.SparkScan,
       BarcodeScanning.MatrixScanFind,
       BarcodeScanning.MatrixScanCount,
+      BarcodeScanning.MatrixScanPick,
       BarcodeScanning.BarcodeSelection,
       BarcodeScanning.ScanditExpress,
     ],
@@ -65,6 +67,7 @@ export const frameworkCards = [
       BarcodeScanning.MatrixScan,
       BarcodeScanning.Parser,
       BarcodeScanning.SparkScan,
+      BarcodeScanning.MatrixScanFind,
     ],
     IDScanning: [
       IDScanning.IdCapture,
@@ -75,7 +78,7 @@ export const frameworkCards = [
   {
     framework: "react",
     icon: <ScanditReact iconClass={style.iconStyle} />,
-    link: 'react-native',
+    link: "react-native",
     barcodeScanning: [
       BarcodeScanning.BarcodeCapture,
       BarcodeScanning.MatrixScan,
@@ -83,6 +86,8 @@ export const frameworkCards = [
       BarcodeScanning.LabelCapture,
       BarcodeScanning.SparkScan,
       BarcodeScanning.MatrixScanCount,
+      BarcodeScanning.MatrixScanFind,
+      BarcodeScanning.MatrixScanPick,
       BarcodeScanning.BarcodeSelection,
     ],
     IDScanning: [IDScanning.IdCapture, IDScanning.IdValidate],
@@ -93,6 +98,7 @@ export const frameworkCards = [
     barcodeScanning: [
       BarcodeScanning.BarcodeCapture,
       BarcodeScanning.MatrixScan,
+      BarcodeScanning.MatrixScanPick,
       BarcodeScanning.Parser,
       BarcodeScanning.SparkScan,
       BarcodeScanning.BarcodeSelection,
@@ -116,7 +122,7 @@ export const frameworkCards = [
       {
         framework: "xamarinIos",
         icon: <XamarinIosFramework iconClass={style.iconStyle} />,
-        link: 'xamarin/ios',
+        link: "xamarin/ios",
         barcodeScanning: [
           BarcodeScanning.BarcodeCapture,
           BarcodeScanning.MatrixScan,
@@ -130,7 +136,7 @@ export const frameworkCards = [
       {
         framework: "xamarinAndroid",
         icon: <XamarinAndroidFramework iconClass={style.iconStyle} />,
-        link: 'xamarin/android',
+        link: "xamarin/android",
         barcodeScanning: [
           BarcodeScanning.BarcodeCapture,
           BarcodeScanning.MatrixScan,
@@ -144,7 +150,7 @@ export const frameworkCards = [
       {
         framework: "xamarin",
         icon: <Xamarin iconClass={style.iconStyle} />,
-        link: 'xamarin/forms',
+        link: "xamarin/forms",
         barcodeScanning: [
           BarcodeScanning.BarcodeCapture,
           BarcodeScanning.MatrixScan,
@@ -167,6 +173,7 @@ export const frameworkCards = [
       BarcodeScanning.SparkScan,
       BarcodeScanning.MatrixScanFind,
       BarcodeScanning.MatrixScanCount,
+      BarcodeScanning.MatrixScanPick,
       BarcodeScanning.BarcodeSelection,
     ],
     IDScanning: [IDScanning.IdCapture, IDScanning.IdValidate],
@@ -189,7 +196,7 @@ export const frameworkCards = [
       {
         framework: "netIos",
         icon: <NetIos iconClass={style.iconStyle} />,
-        link: 'net/ios',
+        link: "net/ios",
         barcodeScanning: [
           BarcodeScanning.BarcodeCapture,
           BarcodeScanning.MatrixScan,
@@ -197,6 +204,7 @@ export const frameworkCards = [
           BarcodeScanning.SparkScan,
           BarcodeScanning.MatrixScanFind,
           BarcodeScanning.MatrixScanCount,
+          BarcodeScanning.MatrixScanPick,
           BarcodeScanning.BarcodeSelection,
         ],
         IDScanning: [IDScanning.IdCapture, IDScanning.IdValidate],
@@ -204,7 +212,7 @@ export const frameworkCards = [
       {
         framework: "netAndroid",
         icon: <NetAndroid iconClass={style.iconStyle} />,
-        link: 'net/android',
+        link: "net/android",
         barcodeScanning: [
           BarcodeScanning.BarcodeCapture,
           BarcodeScanning.MatrixScan,
@@ -212,6 +220,7 @@ export const frameworkCards = [
           BarcodeScanning.SparkScan,
           BarcodeScanning.MatrixScanFind,
           BarcodeScanning.MatrixScanCount,
+          BarcodeScanning.MatrixScanPick,
           BarcodeScanning.BarcodeSelection,
         ],
         IDScanning: [IDScanning.IdCapture, IDScanning.IdValidate],
@@ -228,6 +237,7 @@ export const frameworkCards = [
       BarcodeScanning.SparkScan,
       BarcodeScanning.MatrixScanFind,
       BarcodeScanning.MatrixScanCount,
+      BarcodeScanning.MatrixScanPick,
       BarcodeScanning.BarcodeSelection,
     ],
     IDScanning: [IDScanning.IdCapture, IDScanning.IdValidate],
@@ -235,9 +245,7 @@ export const frameworkCards = [
   {
     framework: "titanium",
     icon: <TitaniumFramework iconClass={style.iconStyle} />,
-    barcodeScanning: [
-      BarcodeScanning.BarcodeCapture,
-    ],
+    barcodeScanning: [BarcodeScanning.BarcodeCapture],
     IDScanning: [],
   },
   {

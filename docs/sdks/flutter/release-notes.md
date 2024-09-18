@@ -5,10 +5,33 @@ hide_title: true
 title: Release Notes
 pagination_prev: null
 framework: flutter
-tags: [flutter]
 keywords:
   - flutter
 ---
+
+## 6.28.0-beta-1
+
+**Released**: September 10, 2024
+
+### New Features
+
+#### Barcode
+
+* Added [`barcode.count.ui.BarcodeCountView.ShouldShowTorchControl`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.ShouldShowTorchControl) and [`barcode.count.ui.BarcodeCountView.TorchControlPosition`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.TorchControlPosition) to control a torch button and its position in `barcode.count.ui.BarcodeCountView`.
+* On Barcode Capture and SparkScan, we optimized the frame processing time in 4k-UHD resolution with dynamic resolution selection, resulting in up to 35% reduction on high-end devices and consistent performance improvements across all supported devices.
+platforms.
+
+#### ID
+
+* ID Capture supports scanning the Visual Inspection Zone (VIZ) of New York City IDs.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed result data encoding classification for raw byte data in 2d barcodes, in particular for Shift-JIS encoding.
+* Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when when the camera was quickly changing direction with a single barcode in the scene.
+* Fixed an issue where it was not possible to scan non-fluorescent French-Post barcodes without the extension `fluorescent_orange_ink`.
 
 ## 6.27.1
 

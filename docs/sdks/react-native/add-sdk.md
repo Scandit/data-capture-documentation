@@ -3,7 +3,6 @@ sidebar_position: 1
 toc_max_heading_level: 4
 pagination_next: null
 framework: react
-tags: [react-native]
 keywords:
   - react
 ---

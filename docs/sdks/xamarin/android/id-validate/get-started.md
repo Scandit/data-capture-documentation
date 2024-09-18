@@ -2,7 +2,6 @@
 sidebar_position: 2
 pagination_next: null
 framework: xamarinAndroid
-tags: [xamarinAndroid]
 keywords:
   - xamarinAndroid
 ---

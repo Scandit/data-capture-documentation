@@ -5,10 +5,38 @@ hide_title: true
 title: Release Notes
 pagination_prev: null
 framework: react
-tags: [react-native]
 keywords:
   - react
 ---
+
+## 6.28.0-beta-1
+
+**Released**: September 10, 2024
+
+### New Features
+
+#### Barcode
+
+* Added [`barcode.pick.ui.RectangularWithIcons.StatusIconSettings`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-pick-view-highlight-style-rectangular-with-icons.html#property-scandit.datacapture.barcode.pick.ui.RectangularWithIcons.StatusIconSettings) property to apply a `barcode.pick.ui.BarcodePickStatusIconSettings` object and customize the status icons appearances.
+* Added ability to customize the minimum width and height of the highlights in the [`scandit.datacapture.barcode.pick.ui.Rectangular`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-pick-view-highlight-style-rectangular.html) and [`scandit.datacapture.barcode.pick.ui.RectangularWithIcons`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-pick-view-highlight-style-rectangular-with-icons.html) highlight styles.
+* On Barcode Capture and SparkScan, we optimized the frame processing time in 4k-UHD resolution with dynamic resolution selection, resulting in up to 35% reduction on high-end devices and consistent performance improvements across all supported devices.
+platforms.
+
+#### ID
+
+* ID Capture supports scanning the Visual Inspection Zone (VIZ) of New York City IDs.
+
+#### Label
+
+* Added support for text fields that are identified only based on their data pattern. These do not need textual identifiers to be identified, and therefore no data type patterns (i.e., patterns for the textual identifiers) need to be specified for them.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed result data encoding classification for raw byte data in 2d barcodes, in particular for Shift-JIS encoding.
+* Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when when the camera was quickly changing direction with a single barcode in the scene.
+* Fixed an issue where it was not possible to scan non-fluorescent French-Post barcodes without the extension `fluorescent_orange_ink`.
 
 ## 6.27.1
 

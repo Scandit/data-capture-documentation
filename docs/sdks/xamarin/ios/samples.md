@@ -4,7 +4,6 @@ toc_max_heading_level: 5
 sidebar_label: 'Samples'
 pagination_next: null
 framework: xamarinIos
-tags: [xamarinIos]
 keywords:
   - xamarinIos
 ---

@@ -1,5 +1,4 @@
 ---
-tags: [android, capacitor, cordova, flutter, ios, netIos, netAndroid, react-native, titanium, web, xamarinIos, xamarinAndroid, xamarinForms]
 ---
 
 # Core Concepts

@@ -1,7 +1,6 @@
 ---
 sidebar_position: 2
 framework: android
-tags: [android]
 keywords:
   - android
 ---
