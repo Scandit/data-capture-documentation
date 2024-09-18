@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-toc_max_heading_level: 5
+toc_max_heading_level: 4
 sidebar_label: 'Samples'
 pagination_next: null
 framework: web
@@ -18,8 +18,15 @@ The repository with all the samples can be found [here](https://github.com/Scand
 
 ### Single Scanning
 
-#### Barcode Capture
+#### SparkScan
 
+![SparkScan List Building](/img/samples/sparkscan_list_building.png)
+
+##### [List Building](https://github.com/Scandit/datacapture-web-samples/tree/master/ListBuildingSample)
+
+Use SparkScan to populate a list of scanned barcodes.
+
+#### Barcode Capture
 
 ##### [Single Scan](https://github.com/Scandit/datacapture-web-samples/tree/master/BarcodeCaptureSimpleSample)
 
@@ -36,16 +43,6 @@ Demonstrates the various ways to best integrate the scanner into the UI of your 
 ##### [Capture Settings](https://github.com/Scandit/datacapture-web-samples/tree/master/BarcodeCaptureSettingsSample)
 
 Demonstrates how you can adapt the barcode capture settings best to your needs and experiment with all the options.
-
-#### Pre-built Workflows
-
-##### SparkScan
-
-![SparkScan List Building](/img/samples/sparkscan_list_building.png)
-
-###### [List Building](https://github.com/Scandit/datacapture-web-samples/tree/master/ListBuildingSample)
-
-Use SparkScan to populate a list of scanned barcodes.
 
 ### Multi-Scanning
 
