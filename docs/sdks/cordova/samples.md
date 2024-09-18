@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-toc_max_heading_level: 5
+toc_max_heading_level: 4
 sidebar_label: 'Samples'
 pagination_next: null
 framework: cordova
@@ -20,7 +20,6 @@ The repository with all the samples can be found [here](https://github.com/Scand
 
 #### Barcode Capture
 
-
 ##### [Single Scan](https://github.com/Scandit/datacapture-cordova-samples/tree/master/BarcodeCaptureSimpleSample)
 
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
@@ -36,20 +35,6 @@ Demonstrates how you can adapt the barcode capture settings best to your needs a
 ##### [Rejection](https://github.com/Scandit/datacapture-cordova-samples/tree/master/BarcodeCaptureRejectSample)
 
 Sample that uses the camera to read a single QR code that starts with “09:” but ignores/rejects all other codes.
-
-#### Pre-built Workflows
-
-##### Barcode Selection
-
-![Barcode Selection](/img/samples/barcode_selection.png)
-
-###### [Simple Selection](https://github.com/Scandit/datacapture-cordova-samples/tree/master/BarcodeSelectionSimpleSample)
-
-Simple sample showing how to use the Barcode Selection mode to select a barcode.
-
-###### [Selection Settings](https://github.com/Scandit/datacapture-cordova-samples/tree/master/BarcodeSelectionSettingsSample)
-
-Demonstrates how you can adapt the barcode selection settings best to your needs and experiment with all the options.
 
 ### Multi-Scanning
 

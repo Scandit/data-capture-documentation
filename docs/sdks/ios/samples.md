@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-toc_max_heading_level: 5
+toc_max_heading_level: 4
 sidebar_label: 'Samples'
 pagination_next: null
 framework: ios
@@ -18,8 +18,19 @@ The repository with all the samples can be found [here](https://github.com/Scand
 
 ### Single Scanning
 
-#### Barcode Capture
+#### SparkScan
 
+![SparkScan List Building](/img/samples/sparkscan_list_building.png)
+
+##### [List Building](https://github.com/Scandit/datacapture-ios-samples/tree/master/ListBuildingSample)
+
+Use SparkScan to populate a list of scanned barcodes.
+
+##### [Receiving](https://github.com/Scandit/datacapture-ios-samples/tree/master/ReceivingSample)
+
+Use a combination of SparkScan and [MatrixScan Count](#matrixscan-count) for a receiving use case.
+
+#### Barcode Capture
 
 ##### [Single Scan](https://github.com/Scandit/datacapture-ios-samples/tree/master/BarcodeCaptureSimpleSampleSwift)
 
@@ -41,32 +52,6 @@ Demonstrates how you can adapt the barcode capture settings best to your needs a
 
 Sample that uses the camera to read a single QR code that starts with “09:” but ignores/rejects all other codes.
 
-#### Pre-built Workflows
-
-##### SparkScan
-
-![SparkScan List Building](/img/samples/sparkscan_list_building.png)
-
-###### [List Building](https://github.com/Scandit/datacapture-ios-samples/tree/master/ListBuildingSample)
-
-Use SparkScan to populate a list of scanned barcodes.
-
-###### [Receiving](https://github.com/Scandit/datacapture-ios-samples/tree/master/ReceivingSample)
-
-Use a combination of SparkScan and [MatrixScan Count](#matrixscan-count) for a receiving use case.
-
-##### Barcode Selection
-
-![Barcode Selection](/img/samples/barcode_selection.png)
-
-###### [Selection Settings](https://github.com/Scandit/datacapture-ios-samples/tree/master/BarcodeSelectionSettingsSample)
-
-Demonstrates how you can adapt the barcode selection settings best to your needs and experiment with all the options.
-
-###### [Reorder from Catalog](https://github.com/Scandit/datacapture-ios-samples/tree/master/ReorderFromCatalogSample)
-
-Sample showing how Barcode Selection can be used to reorder items from a catalog, enabling the user to tap the products that need to be reordered.
-
 ### Multi-Scanning
 
 #### MatrixScan AR
@@ -81,29 +66,27 @@ Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 
 Use custom conditions to highlight and scan only the barcodes that meet the specified criteria.
 
-#### Pre-built Workflows
-
-##### MatrixScan Count
+#### MatrixScan Count
 
 ![MatrixScan Count](/img/samples/ms_count.png)
 
-###### [Batch Scanning](https://github.com/Scandit/datacapture-ios-samples/tree/master/MatrixScanCountSimpleSample)
+##### [Batch Scanning](https://github.com/Scandit/datacapture-ios-samples/tree/master/MatrixScanCountSimpleSample)
 
 Use MatrixScan to batch scan and count the number of barcodes in a frame.
 
-###### [Receiving](https://github.com/Scandit/datacapture-ios-samples/tree/master/ReceivingSample)
+##### [Receiving](https://github.com/Scandit/datacapture-ios-samples/tree/master/ReceivingSample)
 
 Use a combination of [SparkScan](#sparkscan) and MatrixScan Count for a receiving use case.
 
-###### [Expiry Management](https://github.com/Scandit/datacapture-ios-samples/tree/master/ExpiryManagementSample)
+##### [Expiry Management](https://github.com/Scandit/datacapture-ios-samples/tree/master/ExpiryManagementSample)
 
 Share scan data between MatrixScan Count and Spark Scan to show the expiration status of scanned items.
 
-##### MatrixScan Find
+#### MatrixScan Find
 
 ![MatrixScan Find](/img/samples/ms_find_ios.png)
 
-###### [Search and Find](https://github.com/Scandit/datacapture-ios-samples/tree/master/SearchAndFindSample)
+##### [Search and Find](https://github.com/Scandit/datacapture-ios-samples/tree/master/SearchAndFindSample)
 
 Use barcode capture to define search criteria by scanning items, and MatrixScan Find can then be launched to find the pre-defined item.
 

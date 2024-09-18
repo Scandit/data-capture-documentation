@@ -22,8 +22,15 @@ The samples here are also available for [MAUI](https://github.com/Scandit/dataca
 
 ### Single Scanning
 
-#### Barcode Capture
+#### SparkScan
 
+![SparkScan List Building](/img/samples/sparkscan_list_building.png)
+
+##### [List Building](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/ListBuildingSample)
+
+Use SparkScan to populate a list of scanned barcodes.
+
+#### Barcode Capture
 
 ##### [Single Scan](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/BarcodeCaptureSimpleSample)
 
@@ -36,24 +43,6 @@ Demonstrates the various ways to best integrate the scanner into the UI of your 
 ##### [Rejection](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/BarcodeCaptureRejectSample)
 
 Sample that uses the camera to read a single QR code that starts with “09:” but ignores/rejects all other codes.
-
-#### Pre-built Workflows
-
-##### SparkScan
-
-![SparkScan List Building](/img/samples/sparkscan_list_building.png)
-
-###### [List Building](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/ListBuildingSample)
-
-Use SparkScan to populate a list of scanned barcodes.
-
-##### Barcode Selection
-
-![Barcode Selection](/img/samples/barcode_selection.png)
-
-###### [Simple Selection](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/BarcodeSelectionSimpleSample)
-
-Simple sample showing how to use the Barcode Selection mode to select a barcode.
 
 ### Multi-Scanning
 
@@ -69,21 +58,19 @@ Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 
 Use custom conditions to highlight and scan only the barcodes that meet the specified criteria.
 
-#### Pre-built Workflows
-
-##### MatrixScan Count
+#### MatrixScan Count
 
 ![MatrixScan Count](/img/samples/ms_count.png)
 
-###### [Batch Scanning](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/MatrixScanCountSimpleSample)
+##### [Batch Scanning](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/MatrixScanCountSimpleSample)
 
 Use MatrixScan to batch scan and count the number of barcodes in a frame.
 
-##### MatrixScan Find
+#### MatrixScan Find
 
 ![MatrixScan Find](/img/samples/ms_find_android.png)
 
-###### [Search and Find](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/SearchAndFindSample)
+##### [Search and Find](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/SearchAndFindSample)
 
 Use barcode capture to define search criteria by scanning items, and MatrixScan Find can then be launched to find the pre-defined item.
 

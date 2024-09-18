@@ -1,6 +1,6 @@
 ---
 sidebar_position: 2
-toc_max_heading_level: 5
+toc_max_heading_level: 4
 sidebar_label: 'Samples'
 pagination_next: null
 framework: capacitor
@@ -18,8 +18,15 @@ The repository with all the samples can be found [here](https://github.com/Scand
 
 ### Single Scanning
 
-#### Barcode Capture
+#### SparkScan
 
+![SparkScan List Building](/img/samples/sparkscan_list_building.png)
+
+##### [List Building](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/ListBuildingSample)
+
+Use SparkScan to populate a list of scanned barcodes.
+
+#### Barcode Capture
 
 ##### [Single Scan](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/BarcodeCaptureSimpleSample)
 
@@ -32,28 +39,6 @@ This sample is also available for [React](https://github.com/Scandit/datacapture
 ##### [Capture Views](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/BarcodeCaptureViewsSample)
 
 Demonstrates the various ways to best integrate the scanner into the UI of your app.
-
-#### Pre-built Workflows
-
-##### SparkScan
-
-![SparkScan List Building](/img/samples/sparkscan_list_building.png)
-
-###### [List Building](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/ListBuildingSample)
-
-Use SparkScan to populate a list of scanned barcodes.
-
-##### Barcode Selection
-
-![Barcode Selection](/img/samples/barcode_selection.png)
-
-###### [Simple Selection](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/BarcodeSelectionSimpleSample)
-
-Simple sample showing how to use the Barcode Selection mode to select a barcode.
-
-###### [Selection Settings](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/BarcodeSelectionSettingsSample)
-
-Demonstrates how you can adapt the barcode selection settings best to your needs and experiment with all the options.
 
 ### Multi-Scanning
 
