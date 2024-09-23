@@ -32,6 +32,12 @@ platforms.
 * Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when when the camera was quickly changing direction with a single barcode in the scene.
 * Fixed an issue where it was not possible to scan non-fluorescent French-Post barcodes without the extension `fluorescent_orange_ink`.
 
+## 6.27.2
+
+**Released**: September 23, 2024
+
+No updates for this framework in this release.
+
 ## 6.27.1
 
 **Released** September 6, 2024
