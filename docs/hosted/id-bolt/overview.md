@@ -7,6 +7,10 @@ displayed_sidebar: boltSidebar
 
 ID Bolt is a cloud-based identity scanning solution that enables you to provide customers a fast, foolproof ID scanning in just 1 second, leading to an improved customer experience as well as compliance. It works on-device, via desktop and mobile in a unified solution, ensuring no identity information is collected by third-party servers and reduces latency for quick scanning performance.
 
+:::tip
+In addition to ID Bolt, Scandit provides an [ID Capture SDK for the Web] (https://docs.scandit.com/sdks/web/id-capture/intro) that allows full flexibility around the user interface and user flow. 
+:::
+
 ## Features
 
 ID Bolt offers the following features:
