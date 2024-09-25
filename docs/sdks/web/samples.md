@@ -19,7 +19,7 @@ The repository with all the samples can be found [here](https://github.com/Scand
 
 ### Single Scanning
 
-#### SparkScan
+#### SparkScan, our pre-built component for high-speed single scanning.
 
 ![SparkScan List Building](/img/samples/sparkscan_list_building.png)
 
