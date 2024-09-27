@@ -5,19 +5,10 @@ import { createIdScanningArr } from "../data/createIdScanningArr";
 import { ArrowDropDown } from "../../IconComponents";
 import { useState } from "react";
 import { FrameworksName } from "../../constants/frameworksName";
-import { Framework } from "@site/src/pages";
+import BrowserOnly from "@docusaurus/BrowserOnly";
 
-interface CardsPartProps {
-  selectedFramework: Framework;
-}
-
-export default function CardsPart({ selectedFramework }: CardsPartProps) {
+export default function CardsPart() {
   const [allCards, setAllCards] = useState(false);
-  const barcodeScanning = createBarcodeScanningArr(
-    selectedFramework.framework,
-    allCards
-  );
-  const idScanning = createIdScanningArr(selectedFramework.framework);
 
   const transformFrameworkName = (framework: string): string => {
     const frameworkUrls: { [key: string]: string } = {
@@ -34,36 +25,51 @@ export default function CardsPart({ selectedFramework }: CardsPartProps) {
   };
 
   return (
-    <div className={style.cardsPartWrapper}>
-      <div className={style.cardsGroupWrapper}>
-        <CardsGroup
-          title={`Barcode Scanning for ${
-            FrameworksName[selectedFramework.framework]
-          }`}
-          content={barcodeScanning}
-          mainColor="var(--barcode-scanning-color)"
-          cardColor="var(--barcode-scanning-gradient)"
-          linkStarted={`${transformFrameworkName(selectedFramework.framework)}`}
-        ></CardsGroup>
-        <button
-          className={style.hiddenBtn}
-          onClick={() => setAllCards(!allCards)}
-        >
-          {allCards ? "Show less" : "Show more functionality"}
-          <ArrowDropDown iconClass={allCards ? style.reversIcon : style.icon} />
-        </button>
-      </div>
-      <div className={style.cardsGroupWrapper}>
-        <CardsGroup
-          title={`ID Scanning for ${
-            FrameworksName[selectedFramework.framework]
-          }`}
-          content={idScanning}
-          mainColor="var(--IDScanningColor)"
-          cardColor="var(--id-scanning-gradient)"
-          linkStarted={`${transformFrameworkName(selectedFramework.framework)}`}
-        ></CardsGroup>
-      </div>
-    </div>
+    <BrowserOnly>
+      {() => {
+        const paramsURL = Object.fromEntries(
+          new URLSearchParams(window.location.search)
+        );
+        const selectedFramework = paramsURL.framework || "ios";
+
+        const barcodeScanning = createBarcodeScanningArr(
+          selectedFramework,
+          allCards
+        );
+        const idScanning = createIdScanningArr(selectedFramework);
+
+        return (
+          <div className={style.cardsPartWrapper}>
+            <div className={style.cardsGroupWrapper}>
+              <CardsGroup
+                title={`Barcode Scanning for ${FrameworksName[selectedFramework]}`}
+                content={barcodeScanning}
+                mainColor="var(--barcode-scanning-color)"
+                cardColor="var(--barcode-scanning-gradient)"
+                linkStarted={`${transformFrameworkName(selectedFramework)}`}
+              />
+              <button
+                className={style.hiddenBtn}
+                onClick={() => setAllCards(!allCards)}
+              >
+                {allCards ? "Show less" : "Show more functionality"}
+                <ArrowDropDown
+                  iconClass={allCards ? style.reversIcon : style.icon}
+                />
+              </button>
+            </div>
+            <div className={style.cardsGroupWrapper}>
+              <CardsGroup
+                title={`ID Scanning for ${FrameworksName[selectedFramework]}`}
+                content={idScanning}
+                mainColor="var(--IDScanningColor)"
+                cardColor="var(--id-scanning-gradient)"
+                linkStarted={`${transformFrameworkName(selectedFramework)}`}
+              />
+            </div>
+          </div>
+        );
+      }}
+    </BrowserOnly>
   );
 }

@@ -27,7 +27,105 @@ const config: Config = {
     defaultLocale: "en",
     locales: ["en"],
   },
-  plugins: ["docusaurus-plugin-sass"],
+  plugins: [
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        fromExtensions: ['html'],
+        redirects: [
+          {
+            to: '/sdks/ios/add-sdk',
+            from: ['/data-capture-sdk/ios', '/data-capture-sdk/ios/add-sdk.html'],
+          },
+          {
+            to: '/sdks/android/add-sdk',
+            from: ['/data-capture-sdk/android', '/data-capture-sdk/android/add-sdk.html'],
+          },
+          {
+            to: '/sdks/web/add-sdk',
+            from: ['/data-capture-sdk/web', '/data-capture-sdk/web/add-sdk.html'],
+          },
+          {
+            to: '/sdks/cordova/add-sdk',
+            from: ['/data-capture-sdk/cordova', '/data-capture-sdk/cordova/add-sdk.html'],
+          },
+          {
+            to: '/sdks/react-native/add-sdk',
+            from: ['/data-capture-sdk/react-native', '/data-capture-sdk/react-native/add-sdk.html'],
+          },
+          {
+            to: '/sdks/flutter/add-sdk',
+            from: ['/data-capture-sdk/flutter', '/data-capture-sdk/flutter/add-sdk.html'],
+          },
+          {
+            to: '/sdks/capacitor/add-sdk',
+            from: ['/data-capture-sdk/capacitor', '/data-capture-sdk/capacitor/add-sdk.html'],
+          },
+          {
+            to: '/sdks/titanium/add-sdk',
+            from: ['/data-capture-sdk/titanium', '/data-capture-sdk/titanium/add-sdk.html'],
+          },
+          {
+            to: '/sdks/xamarin/ios/add-sdk',
+            from: ['/data-capture-sdk/xamarin.ios', '/data-capture-sdk/xamarin.ios/add-sdk.html'],
+          },
+          {
+            to: '/sdks/xamarin/android/add-sdk',
+            from: ['/data-capture-sdk/xamarin.android', '/data-capture-sdk/xamarin.android/add-sdk.html'],
+          },
+          {
+            to: '/sdks/xamarin/forms/add-sdk',
+            from: ['/data-capture-sdk/xamarin.forms', '/data-capture-sdk/xamarin.forms/add-sdk.html'],
+          },
+          {
+            to: '/sdks/net/ios/add-sdk',
+            from: ['/data-capture-sdk/dotnet.ios', '/data-capture-sdk/dotnet.ios/add-sdk.html'],
+          },
+          {
+            to: '/sdks/net/android/add-sdk',
+            from: ['/data-capture-sdk/dotnet.android', '/data-capture-sdk/dotnet.android/add-sdk.html'],
+          },
+          {
+            to: '/id-documents',
+            from: [
+              '/data-capture-sdk/android/id-capture/supported-documents.html',
+              '/data-capture-sdk/ios/id-capture/supported-documents.html', 
+              '/data-capture-sdk/web/id-capture/supported-documents.html',
+              '/data-capture-sdk/cordova/id-capture/supported-documents.html',
+              '/data-capture-sdk/react-native/id-capture/supported-documents.html',
+              '/data-capture-sdk/flutter/id-capture/supported-documents.html',
+              '/data-capture-sdk/capacitor/id-capture/supported-documents.html',
+              '/data-capture-sdk/titanium/id-capture/supported-documents.html',
+              '/data-capture-sdk/xamarin.ios/id-capture/supported-documents.html',
+              '/data-capture-sdk/xamarin.android/id-capture/supported-documents.html',
+              '/data-capture-sdk/xamarin.forms/id-capture/supported-documents.html',
+              '/data-capture-sdk/dotnet.ios/id-capture/supported-documents.html',
+              '/data-capture-sdk/dotnet.android/id-capture/supported-documents.html'
+            ],
+          },
+          {
+            to: 'system-requirements',
+            from: [
+              '/data-capture-sdk/android/requirements.html',
+              '/data-capture-sdk/ios/requirements.html',
+              '/data-capture-sdk/web/requirements.html',
+              '/data-capture-sdk/cordova/requirements.html',
+              '/data-capture-sdk/react-native/requirements.html',
+              '/data-capture-sdk/flutter/requirements.html',
+              '/data-capture-sdk/capacitor/requirements.html',
+              '/data-capture-sdk/titanium/requirements.html',
+              '/data-capture-sdk/xamarin.ios/requirements.html',
+              '/data-capture-sdk/xamarin.android/requirements.html',
+              '/data-capture-sdk/xamarin.forms/requirements.html',
+              '/data-capture-sdk/dotnet.ios/requirements.html',
+              '/data-capture-sdk/dotnet.android/requirements.html'
+            ],
+          },     
+      ],
+    },
+  ],
+  "docusaurus-plugin-sass",
+],
 
   presets: [
     [

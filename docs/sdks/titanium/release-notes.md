@@ -9,9 +9,9 @@ keywords:
   - titanium
 ---
 
-## 6.28.0-beta-1
+## 6.28.0-beta-2
 
-**Released**: September 10, 2024
+**Released**: September 25, 2024
 
 ### New Features
 

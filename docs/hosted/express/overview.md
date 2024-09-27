@@ -3,6 +3,10 @@ sidebar_position: 1
 sidebar_label: 'Overview'
 title: 'Scandit Express'
 displayed_sidebar: expressSidebar
+framework: express
+tags: [express]
+keywords:
+  - express
 ---
 
 Scandit Express is an application that enables you to instantly add barcode scanning to any existing app or software tool on a smart device.It requires no software changes or coding effort, and is compatible with any app or system, even those that cannot be modified. By adding a keyboard that has a scan button above the standard keys (a keyboard wedge), it allows users to scan barcodes directly into any input field.

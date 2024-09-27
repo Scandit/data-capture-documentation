@@ -13,6 +13,7 @@
   border: 1px solid var(--nav-border);
   cursor: default;
   opacity: .4;
+  user-select: none;
 }
 
 .cardNotActiveLink:hover {

@@ -1,3 +1,10 @@
+---
+framework: express
+tags: [express]
+keywords:
+  - express
+---
+
 # MatrixScan Find
 
 [MatrixScan Find](https://www.scandit.com/products/matrixscan-find/) is a feature available in Scandit Smart Data Capture that enables you to speed up finding and picking workflows by scanning multiple items at once and highlighting the correct item(s) in real-time using an AR overlay.

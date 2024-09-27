@@ -9,9 +9,9 @@ keywords:
   - ios
 ---
 
-## 6.28.0-beta-1
+## 6.28.0-beta-2
 
-**Released**: September 10, 2024
+**Released**: September 25, 2024
 
 ### New Features
 
@@ -26,7 +26,9 @@ platforms.
 
 #### ID
 
-* ID Capture supports scanning the Visual Inspection Zone (VIZ) of New York City IDs.
+* ID Capture now supports scanning:
+  * Visual Inspection Zone (VIZ) of New York City IDs.
+  * Florida Medical Marijuana IDs.
 * Added [`scandit.datacapture.id.CapturedId.UsRealIdStatus`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.UsRealIdStatus) to indicate whether a document is REAL ID compliant.
 
 #### Label

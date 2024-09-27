@@ -3,6 +3,10 @@ sidebar_position: 1
 sidebar_label: 'Overview'
 title: 'ID Bolt'
 displayed_sidebar: boltSidebar
+framework: bolt
+tags: [bolt]
+keywords:
+  - bolt
 ---
 
 ID Bolt is a cloud-based identity scanning solution that enables you to provide customers a fast, foolproof ID scanning in just 1 second, leading to an improved customer experience as well as compliance. It works on-device, via desktop and mobile in a unified solution, ensuring no identity information is collected by third-party servers and reduces latency for quick scanning performance.

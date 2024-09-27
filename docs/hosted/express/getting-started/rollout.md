@@ -2,6 +2,10 @@
 sidebar_label: 'Rollout via MDM/EMM'
 displayed_sidebar: expressSidebar
 sidebar_position: 2
+framework: express
+tags: [express]
+keywords:
+  - express
 ---
 
 # Production Rollout
