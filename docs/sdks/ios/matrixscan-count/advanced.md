@@ -48,7 +48,7 @@ For example, you might want to scan only Code 128 barcodes and no PDF417 barcode
 
 ```swift
 let filterSettings = BarcodeFilterSettings()
-filterSettings.excludedSymbologies = Set<Symbology>(.pdf417).map { NSNumber(value: $0.rawValue) }
+filterSettings.excludedSymbologies = [.pdf417]
 
 let barcodeCountSettings = BarcodeCountSettings()
 barcodeCountSettings.set(symbology: .code128, enabled: true))
