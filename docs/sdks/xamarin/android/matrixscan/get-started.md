@@ -1,7 +1,6 @@
 ---
 sidebar_position: 2
 framework: xamarinAndroid
-tags: [xamarinAndroid]
 keywords:
   - xamarinAndroid
 ---

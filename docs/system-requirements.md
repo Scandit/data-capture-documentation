@@ -1,7 +1,6 @@
 ---
 sidebar_position: 1
 displayed_sidebar: sdcSidebar
-tags: [android, capacitor, cordova, flutter, ios, netIos, netAndroid, react-native, titanium, web, xamarinIos, xamarinAndroid, xamarinForms]
 ---
 
 # System Requirements

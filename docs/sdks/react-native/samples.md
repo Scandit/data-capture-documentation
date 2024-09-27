@@ -4,7 +4,6 @@ toc_max_heading_level: 4
 sidebar_label: 'Samples'
 pagination_next: null
 framework: react
-tags: [react-native]
 keywords:
   - react
 ---
