@@ -34,7 +34,7 @@ The below code shows how to change the active symbol count for Code 128 to read 
 ```swift
 let settings = BarcodeCaptureSettings()
 let symbologySettings = settings.settings(for: .code128)
-symbologySettings.activeSymbolCounts = Set(6...8) as Set<NSNumber>
+symbologySettings.activeSymbolCounts = Set(6...8)
 ```
 
 ### How to Calculate the Active Symbol Count
