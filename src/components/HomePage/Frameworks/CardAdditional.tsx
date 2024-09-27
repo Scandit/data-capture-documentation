@@ -1,35 +1,19 @@
 import { FrameworksName } from "../../constants/frameworksName";
 import { FrameworkCardType } from "../../constants/types";
-import localStorageUtil from "../../utils/localStorageUtil";
 import style from "./CardAdditional.module.css";
 
-export default function CardAdditional({
-  framework,
-  selectedFramework,
-  setSelectedFramework,
-  handleFrameworkClick,
-}) {
-  function selectFramework(e: React.ChangeEvent<HTMLInputElement>) {
-    const formData = new FormData(e.target.form);
-    const frameworkValue = formData.get("framework");
-    setSelectedFramework((prevState) => ({
-      ...prevState,
-      framework: frameworkValue.toString(),
-    }));
-  }
+export default function CardAdditional({ framework, handleFrameworkClick }) {
+  const paramsURL = Object.fromEntries(new URLSearchParams(location.search));
+  const frameworkFromURL = paramsURL.framework || "ios";
 
-  function clickedFramework(
-    e: React.MouseEvent<HTMLDivElement>,
-    framework: FrameworkCardType
-  ) {
-    if (typeof window !== "undefined") {
-      e.stopPropagation();
-      const existingData = localStorage.getItem("selectedFramework");
-      let data = existingData ? JSON.parse(existingData) : {};
-      data.framework = framework.framework;
-      localStorageUtil.setItem("selectedFramework", data);
-      handleFrameworkClick();
-    }
+  function clickedFramework(e, framework: FrameworkCardType) {
+    e.stopPropagation();
+    window.history.pushState(
+      {},
+      "",
+      `${window.location.pathname}?framework=${framework.framework.toString()}`
+    );
+    handleFrameworkClick();
   }
 
   return (
@@ -38,17 +22,15 @@ export default function CardAdditional({
         className={style.input}
         value={framework.framework}
         type="radio"
-        name="framework"
+        name="frameworkAdditional"
         id={framework.framework}
-        onChange={selectFramework}
-        onClick={(e) => clickedFramework(e, framework)}
+        onChange={(e) => clickedFramework(e, framework)}
+        checked={framework.framework === frameworkFromURL}
       />
       <label
         htmlFor={framework.framework}
         className={`${style.iconWrapper} ${
-          framework.framework === selectedFramework.framework
-            ? style.checkedFramework
-            : ""
+          framework.framework === frameworkFromURL ? style.checkedFramework : ""
         }`}
       >
         {framework.icon}

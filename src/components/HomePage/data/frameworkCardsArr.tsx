@@ -101,7 +101,7 @@ export const frameworkCards = [
     IDScanning: [IDScanning.IdCapture, IDScanning.IdValidate],
   },
   {
-    framework: "xamarinParent",
+    framework: "xamarin",
     hasChildren: true,
     icon: <Xamarin iconClass={style.iconStyle} />,
     barcodeScanning: [
@@ -143,7 +143,7 @@ export const frameworkCards = [
         IDScanning: [IDScanning.IdCapture, IDScanning.IdValidate],
       },
       {
-        framework: "xamarin",
+        framework: "xamarinForms",
         icon: <Xamarin iconClass={style.iconStyle} />,
         link: 'xamarin/forms',
         barcodeScanning: [
@@ -173,7 +173,7 @@ export const frameworkCards = [
     IDScanning: [IDScanning.IdCapture, IDScanning.IdValidate],
   },
   {
-    framework: "netParent",
+    framework: "net",
     hasChildren: true,
     icon: <Net iconClass={style.iconStyle} />,
     barcodeScanning: [

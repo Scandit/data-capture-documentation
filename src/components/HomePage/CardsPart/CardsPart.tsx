@@ -5,19 +5,18 @@ import { createIdScanningArr } from "../data/createIdScanningArr";
 import { ArrowDropDown } from "../../IconComponents";
 import { useState } from "react";
 import { FrameworksName } from "../../constants/frameworksName";
-import { Framework } from "@site/src/pages";
 
-interface CardsPartProps {
-  selectedFramework: Framework;
-}
 
-export default function CardsPart({ selectedFramework }: CardsPartProps) {
+export default function CardsPart() {
   const [allCards, setAllCards] = useState(false);
+  const paramsURL = Object.fromEntries(new URLSearchParams(location.search));
+  const selectedFramework = paramsURL.framework || 'ios';
+
   const barcodeScanning = createBarcodeScanningArr(
-    selectedFramework.framework,
+    selectedFramework,
     allCards
   );
-  const idScanning = createIdScanningArr(selectedFramework.framework);
+  const idScanning = createIdScanningArr(selectedFramework);
 
   const transformFrameworkName = (framework: string): string => {
     const frameworkUrls: { [key: string]: string } = {
@@ -38,12 +37,12 @@ export default function CardsPart({ selectedFramework }: CardsPartProps) {
       <div className={style.cardsGroupWrapper}>
         <CardsGroup
           title={`Barcode Scanning for ${
-            FrameworksName[selectedFramework.framework]
+            FrameworksName[selectedFramework]
           }`}
           content={barcodeScanning}
           mainColor="var(--barcode-scanning-color)"
           cardColor="var(--barcode-scanning-gradient)"
-          linkStarted={`${transformFrameworkName(selectedFramework.framework)}`}
+          linkStarted={`${transformFrameworkName(selectedFramework)}`}
         ></CardsGroup>
         <button
           className={style.hiddenBtn}
@@ -56,12 +55,12 @@ export default function CardsPart({ selectedFramework }: CardsPartProps) {
       <div className={style.cardsGroupWrapper}>
         <CardsGroup
           title={`ID Scanning for ${
-            FrameworksName[selectedFramework.framework]
+            FrameworksName[selectedFramework]
           }`}
           content={idScanning}
           mainColor="var(--IDScanningColor)"
           cardColor="var(--id-scanning-gradient)"
-          linkStarted={`${transformFrameworkName(selectedFramework.framework)}`}
+          linkStarted={`${transformFrameworkName(selectedFramework)}`}
         ></CardsGroup>
       </div>
     </div>

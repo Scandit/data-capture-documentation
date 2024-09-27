@@ -3,22 +3,21 @@ import { useEffect, useRef, useState } from "react";
 import style from "./FrameworksMobile.module.css";
 import { frameworkCards } from "../data/frameworkCardsArr";
 import { FrameworksName } from "../../constants/frameworksName";
-import { Framework } from "@site/src/pages";
 import localStorageUtil from "../../utils/localStorageUtil";
 import { ArrowDown } from "../../IconComponents";
 
 interface FrameworksMobileProps {
-  setSelectedFramework: (framework: Framework) => void;
-  selectedFramework: Framework;
+  handleFrameworkClick: () => void;
 }
 
 export default function FrameworksMobile({
-  setSelectedFramework,
-  selectedFramework,
+  handleFrameworkClick,
 }: FrameworksMobileProps) {
   const [openSelector, setOpenSelector] = useState(false);
   const menuRef = useRef<HTMLFormElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
+  const paramsURL = Object.fromEntries(new URLSearchParams(location.search));
+  const selectedFramework = paramsURL.framework || "ios";
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -38,28 +37,18 @@ export default function FrameworksMobile({
     };
   }, []);
 
-  function selectFramework(e: React.ChangeEvent<HTMLInputElement>, framework) {
-    const formData = new FormData(e.target.form);
-    const frameworkValue = formData.get("framework");
-    setSelectedFramework({
-      frameworkParent: framework.framework,
-      framework: frameworkValue.toString(),
-    });
+  function selectFramework(framework: string) {
+    window.history.pushState({}, "", `?framework=${framework}`);
+    framework !== "net" && framework !== "xamarin" && handleFrameworkClick();
   }
 
-  function clickedFramework(e, framework) {
-    if (typeof window !== "undefined") {
-      localStorageUtil.setItem("selectedFramework", {
-        frameworkParent: framework.framework,
-        framework: e.target.value,
-      });
-      if (
-        e.target.value &&
-        e.target.value !== "netParent" &&
-        e.target.value !== "xamarinParent"
-      ) {
-        setOpenSelector(false);
-      }
+  function clickedFramework(e) {
+    if (
+      e.target.value &&
+      e.target.value !== "net" &&
+      e.target.value !== "xamarin"
+    ) {
+      setOpenSelector(false);
     }
   }
 
@@ -77,7 +66,7 @@ export default function FrameworksMobile({
               ref={fieldRef}
             >
               {FrameworksName[
-                selectedFramework.framework as keyof typeof FrameworksName
+                selectedFramework as keyof typeof FrameworksName
               ] || "Select framework"}
 
               <span
@@ -91,7 +80,7 @@ export default function FrameworksMobile({
                 {frameworkCards.map((item) => (
                   <div
                     key={item.framework}
-                    onClick={(e) => clickedFramework(e, item)}
+                    onClick={(e) => clickedFramework(e)}
                   >
                     <input
                       className={style.input}
@@ -99,16 +88,16 @@ export default function FrameworksMobile({
                       type="radio"
                       name="framework"
                       id={item.framework}
-                      onChange={(e) => selectFramework(e, item)}
+                      onChange={(e) => selectFramework(item.framework)}
                       checked={
-                        item.framework === selectedFramework.frameworkParent ||
-                        item.framework === selectedFramework.framework
+                        item.framework === selectedFramework ||
+                        item.framework === selectedFramework
                       }
                     />
                     <label
                       htmlFor={item.framework}
                       className={`${style.iconWrapper} ${
-                        item.framework === selectedFramework.framework
+                        item.framework === selectedFramework
                           ? style.checkedFramework
                           : ""
                       }`}
@@ -136,18 +125,16 @@ export default function FrameworksMobile({
                               name="framework"
                               id={additionalItem.framework}
                               onChange={(e) =>
-                                selectFramework(e, additionalItem)
+                                selectFramework(additionalItem.framework)
                               }
                               checked={
-                                additionalItem.framework ===
-                                selectedFramework.framework
+                                additionalItem.framework === selectedFramework
                               }
                             />
                             <label
                               htmlFor={additionalItem.framework}
                               className={`${style.iconWrapper} ${
-                                additionalItem.framework ===
-                                selectedFramework.framework
+                                additionalItem.framework === selectedFramework
                                   ? style.checkedFramework
                                   : ""
                               }`}
