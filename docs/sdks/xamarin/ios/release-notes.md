@@ -5,7 +5,6 @@ hide_title: true
 title: Release Notes
 pagination_prev: null
 framework: xamarinIos
-tags: [xamarinIos]
 keywords:
   - xamarinIos
 ---
@@ -39,11 +38,8 @@ platforms.
 
 **Released**: September 23, 2024
 
-### New Features
+No updates for this framework in this release.
 
-#### Barcode
-
-* The [`BarcodeTrackingAdvancedOverlay.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/xamarin.ios/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode) and [`BarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/xamarin.ios/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) methods require a special license key to support rendering any kind of images as this feature is available only in limited countries. Please contact [Scandit Support](mailto:support@scandit.com) for details.
 ## 6.27.1
 
 **Released** September 6, 2024
