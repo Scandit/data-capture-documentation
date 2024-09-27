@@ -49,3 +49,10 @@ xamarinAndroid:
 xamarinForms:
   permalink: '/sdks/xamarin/forms/'
   description: 'Scandit Barcode Scanner SDK for Xamarin.Forms'
+
+express:
+  permalink: '/hosted/express/'
+  description: 'No-code Smart Data Capture App'
+bolt:
+  permalink: '/hosted/id-bolt/'
+  description: 'Pre-built ID Capture for Web'
