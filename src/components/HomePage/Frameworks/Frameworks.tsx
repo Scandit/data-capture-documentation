@@ -4,6 +4,7 @@ import { FrameworkCard } from "./FrameworkCard";
 import CardAdditional from "./CardAdditional";
 import { FrameworkCardType } from "../../constants/types";
 import { useEffect, useState } from "react";
+import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
 interface FrameworksProps {
   handleFrameworkClick: () => void;
@@ -13,7 +14,10 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
   const [selectedFramework, setSelectedFramework] = useState<string>("ios");
 
   function clickedFramework(framework: FrameworkCardType) {
-    window.history.pushState({}, "", `?framework=${framework.framework}`);
+    if (ExecutionEnvironment.canUseDOM) {
+      window.history.pushState({}, "", `?framework=${framework.framework}`);
+      localStorage.setItem("framework", framework.framework);
+    }
     setSelectedFramework(framework.framework);
     framework.framework !== "xamarin" &&
       framework.framework !== "net" &&
@@ -22,11 +26,19 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
 
   useEffect(() => {
     const updateSelectedFramework = () => {
-      const paramsURL = Object.fromEntries(
-        new URLSearchParams(location.search)
-      );
-      const frameworkFromURL = paramsURL.framework || "ios";
-      setSelectedFramework(frameworkFromURL);
+      if (ExecutionEnvironment.canUseDOM) {
+        const paramsURL = Object.fromEntries(
+          new URLSearchParams(location.search)
+        );
+        const frameworkFromURL =
+          paramsURL.framework || localStorage.getItem("framework") || "ios";
+        window.history.pushState(
+          {},
+          "",
+          `?framework=${localStorage.getItem("framework") || "ios"}`
+        );
+        setSelectedFramework(frameworkFromURL);
+      }
     };
     updateSelectedFramework();
     window.addEventListener("popstate", updateSelectedFramework);
@@ -64,6 +76,10 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
                           handleFrameworkClick={handleFrameworkClick}
                           key={unit.framework}
                           framework={unit}
+                          selectedFramework={selectedFramework}
+                          setSelectedFramework={() =>
+                            setSelectedFramework(unit.framework)
+                          }
                         />
                       );
                     })}
