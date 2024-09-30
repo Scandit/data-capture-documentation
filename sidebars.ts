@@ -284,6 +284,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/android/single-scanning',
+          },
           collapsed: false,
           items: [
             {
