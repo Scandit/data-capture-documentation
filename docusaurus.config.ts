@@ -38,52 +38,104 @@ const config: Config = {
             from: ['/data-capture-sdk/ios', '/data-capture-sdk/ios/add-sdk.html'],
           },
           {
+            to: '/sdks/ios/samples',
+            from: '/data-capture-sdk/ios/samples/run-samples.html'
+          },
+          {
             to: '/sdks/android/add-sdk',
             from: ['/data-capture-sdk/android', '/data-capture-sdk/android/add-sdk.html'],
+          },
+          {
+            to: '/sdks/android/samples',
+            from: '/data-capture-sdk/android/samples/run-samples.html'
           },
           {
             to: '/sdks/web/add-sdk',
             from: ['/data-capture-sdk/web', '/data-capture-sdk/web/add-sdk.html'],
           },
           {
+            to: '/sdks/web/samples',
+            from: '/data-capture-sdk/web/samples/run-samples.html'
+          },
+          {
             to: '/sdks/cordova/add-sdk',
             from: ['/data-capture-sdk/cordova', '/data-capture-sdk/cordova/add-sdk.html'],
+          },
+          {
+            to: '/sdks/cordova/samples',
+            from: '/data-capture-sdk/cordova/samples/run-samples.html'
           },
           {
             to: '/sdks/react-native/add-sdk',
             from: ['/data-capture-sdk/react-native', '/data-capture-sdk/react-native/add-sdk.html'],
           },
           {
+            to: '/sdks/react-native/samples',
+            from: '/data-capture-sdk/react-native/samples/run-samples.html'
+          },
+          {
             to: '/sdks/flutter/add-sdk',
             from: ['/data-capture-sdk/flutter', '/data-capture-sdk/flutter/add-sdk.html'],
+          },
+          {
+            to: '/sdks/flutter/samples',
+            from: '/data-capture-sdk/flutter/samples/run-samples.html'
           },
           {
             to: '/sdks/capacitor/add-sdk',
             from: ['/data-capture-sdk/capacitor', '/data-capture-sdk/capacitor/add-sdk.html'],
           },
           {
+            to: '/sdks/capacitor/samples',
+            from: '/data-capture-sdk/capacitor/samples/run-samples.html'
+          },
+          {
             to: '/sdks/titanium/add-sdk',
             from: ['/data-capture-sdk/titanium', '/data-capture-sdk/titanium/add-sdk.html'],
+          },
+          {
+            to: '/sdks/titanium/samples',
+            from: '/data-capture-sdk/titanium/samples/run-samples.html'
           },
           {
             to: '/sdks/xamarin/ios/add-sdk',
             from: ['/data-capture-sdk/xamarin.ios', '/data-capture-sdk/xamarin.ios/add-sdk.html'],
           },
           {
+            to: '/sdks/xamarin/ios/samples',
+            from: '/data-capture-sdk/xamarin.ios/samples/run-samples.html'
+          },
+          {
             to: '/sdks/xamarin/android/add-sdk',
             from: ['/data-capture-sdk/xamarin.android', '/data-capture-sdk/xamarin.android/add-sdk.html'],
+          },
+          {
+            to: '/sdks/xamarin/android/samples',
+            from: '/data-capture-sdk/xamarin.android/samples/run-samples.html'
           },
           {
             to: '/sdks/xamarin/forms/add-sdk',
             from: ['/data-capture-sdk/xamarin.forms', '/data-capture-sdk/xamarin.forms/add-sdk.html'],
           },
           {
+            to: '/sdks/xamarin/forms/samples',
+            from: '/data-capture-sdk/xamarin.forms/samples/run-samples.html'
+          },
+          {
             to: '/sdks/net/ios/add-sdk',
             from: ['/data-capture-sdk/dotnet.ios', '/data-capture-sdk/dotnet.ios/add-sdk.html'],
           },
           {
+            to: '/sdks/net/ios/samples',
+            from: '/data-capture-sdk/dotnet.ios/samples/run-samples.html'
+          },
+          {
             to: '/sdks/net/android/add-sdk',
             from: ['/data-capture-sdk/dotnet.android', '/data-capture-sdk/dotnet.android/add-sdk.html'],
+          },
+          {
+            to: '/sdks/net/android/samples',
+            from: '/data-capture-sdk/dotnet.android/samples/run-samples.html'
           },
           {
             to: '/id-documents',

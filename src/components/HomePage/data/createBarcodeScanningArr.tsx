@@ -73,7 +73,6 @@ export function createBarcodeScanningArr(framework: string, allCards: boolean) {
             framework === "linux"
               ? "https://docs.scandit.com/stable/c_api/index.html "
               : `/sdks/${getFrameworkPath(frameworkData)}/matrixscan/intro`,
-
         },
         {
           name: BarcodeScanning.Parser,

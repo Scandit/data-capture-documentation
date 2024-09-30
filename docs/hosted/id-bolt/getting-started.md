@@ -36,11 +36,11 @@ Your specific application needs and design define when the ID Bolt pop-up should
 
 ```javascript
 import {
-	DocumentType,
 	DocumentSelection,
 	IdBoltSession,
 	Region,
-	RETURN_DATA_MODE,
+	Passport,
+	ReturnDataMode,
 	Validators,
 } from "@scandit/web-id-bolt";
 
@@ -51,14 +51,14 @@ const LICENSE_KEY = "-- YOUR LICENSE KEY HERE --";
 async function startIdBolt() {
 	// define which documents are allowed to be scanned. More complex rules can be added.
 	const documentSelection = DocumentSelection.create({
-		include: [[Region.WorldWide, DocumentType.Passport]],
+		accepted: [new Passport(Region.Any)],
 	});
 	// initialization of the ID Bolt session
 	const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
 		licenseKey: LICENSE_KEY,
 		documentSelection,
 		// define what data you expect in the onCompletion listener (set below)
-		returnDataMode: RETURN_DATA_MODE.FULL,
+		returnDataMode: ReturnDataMode.Full,
 		// add validation rules on the scanned document
 		validation: [Validators.notExpired()],
 		locale: "en",
@@ -67,7 +67,7 @@ async function startIdBolt() {
 	await idBoltSession.start();
 
 	// register some listeners:
-	idBoltSession.onCancellation = () => {
+	idBoltSession.onCancellation = (reason) => {
 		// the ID Bolt pop-up has been closed by the user without finishing the scan process.
 	};
 	idBoltSession.onCompletion = (result) => {
