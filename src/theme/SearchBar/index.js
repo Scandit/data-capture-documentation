@@ -74,6 +74,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
     if (match) {
       return match[0];
     }
+    return "";
   }, [currentUrl]);
 
   const facetFilters = contextualSearch
