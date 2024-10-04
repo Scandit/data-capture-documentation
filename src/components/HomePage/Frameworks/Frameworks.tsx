@@ -35,7 +35,11 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
         window.history.pushState(
           {},
           "",
-          `?framework=${localStorage.getItem("framework") || "ios"}`
+          `?framework=${
+            new URLSearchParams(location.search).get("framework") ||
+            localStorage.getItem("framework") ||
+            "ios"
+          }`
         );
         setSelectedFramework(frameworkFromURL);
       }
