@@ -10,9 +10,9 @@ keywords:
   - android
 ---
 
-## 6.28.0-beta-2
+## 6.28.0
 
-**Released**: September 25, 2024
+**Released**: October 7, 2024
 
 ### New Features
 
@@ -22,6 +22,10 @@ keywords:
 * On Barcode Capture and SparkScan, we optimized the frame processing time in 4k-UHD resolution with dynamic resolution selection, resulting in up to 35% reduction on high-end devices and consistent performance improvements across all supported devices.
 platforms.
 * Added [`BarcodeFindView.ShouldShowZoomControl`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-find-view.html#property-scandit.datacapture.barcode.find.ui.BarcodeFindView.ShouldShowZoomControl) which enables the display of a button that allows switching to ultra wide lenses on supported devices for scanning at close range in narrow environments.
+
+#### Core
+
+* Added support for 16KB page sizes.
 
 #### ID
 
@@ -41,6 +45,7 @@ platforms.
 * Fixed result data encoding classification for raw byte data in 2d barcodes, in particular for Shift-JIS encoding.
 * Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when when the camera was quickly changing direction with a single barcode in the scene.
 * Fixed an issue where it was not possible to scan non-fluorescent French-Post barcodes without the extension `fluorescent_orange_ink`.
+* Fixed an issue in SparkScan that resulted in lag when pressing the scan button on certain devices.
 
 ## 6.27.2
 
