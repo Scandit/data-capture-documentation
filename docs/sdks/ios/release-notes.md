@@ -9,9 +9,9 @@ keywords:
   - ios
 ---
 
-## 6.28.0-beta-2
+## 6.28.0
 
-**Released**: September 25, 2024
+**Released**: October 8, 2024
 
 ### New Features
 

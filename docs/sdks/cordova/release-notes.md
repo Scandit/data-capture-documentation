@@ -9,9 +9,9 @@ keywords:
   - cordova
 ---
 
-## 6.28.0-beta-2
+## 6.28.0
 
-**Released**: September 25, 2024
+**Released**: October 8, 2024
 
 ### New Features
 
@@ -35,6 +35,7 @@ platforms.
 * Fixed result data encoding classification for raw byte data in 2d barcodes, in particular for Shift-JIS encoding.
 * Resolved cases in which Smart Scan Intention was possibly reporting the wrong barcode when when the camera was quickly changing direction with a single barcode in the scene.
 * Fixed an issue where it was not possible to scan non-fluorescent French-Post barcodes without the extension `fluorescent_orange_ink`.
+* Fixed an issue where filter settings were not functioning properly in MatrixScan Count.
 
 ## 6.27.2
 
