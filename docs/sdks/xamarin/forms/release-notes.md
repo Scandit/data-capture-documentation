@@ -12,7 +12,7 @@ keywords:
 
 ## 6.28.0
 
-**Released**: October 7, 2024
+**Released**: October 8, 2024
 
 ### New Features
 
