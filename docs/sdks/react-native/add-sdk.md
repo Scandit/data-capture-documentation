@@ -91,13 +91,20 @@ cd ios && pod install
 
 ## Additional Information
 
-:::note
+### Android Content Providers
+
 On Android, the Scandit SDK uses content providers to initialize the scanning capabilities properly. If your own content providers depend on the Scandit SDK, choose an **initOrder** lower than 10 to make sure the SDK is ready first.
 
 If not specified, **initOrder** is zero by default and you have nothing to worry about.
 
 Check [the official `<provider>` documentation](https://developer.android.com/guide/topics/manifest/provider-element).
-:::
 
-- Camera Permissions: When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. On Android, you have to request camera permissions in your own application before starting scanning. To see how you can achieve this, take a look at our samples: [Run our Sample Apps](https://github.com/Scandit/datacapture-react-native-samples).
-- Remember that, if you want to use the camera as the frame source for barcode, text and label capture, you need to set the “Privacy - Camera Usage Description” field in the Info.plist file for iOS.
+### Apple Privacy Settings
+
+When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. You need to set the “Privacy - Camera Usage Description” field in the Info.plist file for iOS.
+
+![Info file](./img/info-file.png)
+
+### Camera Permissions
+
+When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. On Android, you have to request camera permissions in your own application before starting scanning. To see how you can achieve this, take a look at our [samples](./samples.md).

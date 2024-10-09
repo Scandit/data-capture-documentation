@@ -63,7 +63,9 @@ binary "https://ssl.scandit.com/sdk/download/carthage/ScanditParser.json"
 
 ## Swift Package Manager
 
-To integrate the Scandit Data Capture SDK into your Xcode project using Swift Package Manager, add the frameworks you want to add in the _Swift Packages_ section of your project.
+To integrate the Scandit Data Capture SDK into your Xcode project using Swift Package Manager, add the frameworks you want to add in the _Package Dependencies_ section of your project.
+
+![Add Package Dependencies](./img/spm.png)
 
 Add our SPM package repository:
 
