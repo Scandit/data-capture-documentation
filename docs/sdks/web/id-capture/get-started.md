@@ -43,8 +43,8 @@ The [ConfigureOptions.libraryLocation](https://docs.scandit.com/data-capture-sdk
 scandit-datacapture-sdk\*.wasm. WebAssembly requires these separate files which are loaded by our main library at runtime. They can be found inside the engine folder in the library you either added and installed via npm or access via
 a CDN; if you added and installed the library, these files should be put in a path that’s accessible to be downloaded by the running library script. The configuration option that you provide should then point to the folder containing these files, either as a path of your website or an absolute URL (like the CDN one). By default the library will look at the root of your website. If you use a CDN to access the library, you will want to set this to the following values depending on the data capture mode you are using:
 
-- for barcode capture: https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@6.x/build/engine/, https://unpkg.com/browse/scandit-web-datacapture-barcode@6.x/build/engine/, or similar.
-- for ID capture: https://cdn.jsdelivr.net/npm/scandit-web-datacapture-id@6.x/build/engine/, https://unpkg.com/browse/scandit-web-datacapture-id@6.x/build/engine/, or similar.
+- for barcode capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@6.x/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-barcode@6.x/sdc-lib/, or similar.
+- for ID capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@6.x/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-id@6.x/sdc-lib/, or similar.
 
 Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the libraryLocation option, either by ensuring the served files are up-to-date or the path/URL specifies a specific version. In case a common CDN is used here (jsDelivr or UNPKG) the library will automatically internally set up the correct URLs pointing directly at the files needed for the matching library version. It is highly recommended to handle the serving of these files yourself on your website/server, ensuring optimal compression, correct wasm files MIME type, no request redirections and correct caching headers usage; thus
 resulting in faster loading.
@@ -54,8 +54,8 @@ We recommended to call [configure](https://docs.scandit.com/data-capture-sdk/web
 For ID Capture, the result of [idCaptureLoader()](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#method-scandit.datacapture.id.IdCaptureLoader) must be passed to the [ConfigureOptions.moduleLoaders](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.ModuleLoaders) option. In this example, we will scan VIZ documents, so we also need to set [IdCaptureLoaderOptions.enableVIZDocuments](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#property-scandit.datacapture.id.IIdCaptureLoaderOptions.EnableVIZDocuments) to true:
 
 ```js
-import * as SDCCore from 'scandit-web-datacapture-core';
-import { idCaptureLoader } from 'scandit-web-datacapture-id';
+import * as SDCCore from '@scandit/web-datacapture-core';
+import { idCaptureLoader } from '@scandit/web-datacapture-id';
 
 await SDCCore.configure({
 	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
