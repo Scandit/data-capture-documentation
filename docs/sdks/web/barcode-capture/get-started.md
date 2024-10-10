@@ -49,26 +49,38 @@ The configuration expects a valid Scandit Data Capture SDK license key as part o
 
 The [ConfigureOptions.libraryLocation](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.LibraryLocation) configuration option must be provided and point to the location of the Scandit Data Capture library/engine location (external WebAssembly files): _scandit-datacapture-sdk*.min.js_ and _scandit-datacapture-sdk*.wasm_.
 
-WebAssembly requires these separate files which are loaded by our main library at runtime. They can be found inside the _engine_ folder in the library you either added and installed via npm or access via a CDN.
+WebAssembly requires these separate files which are loaded by our main library at runtime. They can be found inside the _sdc-lib_ folder in the library you either added and installed via npm or access via a CDN.
 
 If you added and installed the library, these files should be put in a path that’s accessible to be downloaded by the running library script. The configuration option that you provide should then point to the folder containing these files, either as a path of your website or an absolute URL (like the CDN one).
 
-By default the library will look at the root of your website. If you use a CDN to access the library, you will want to set this to the following values depending on the data capture mode you are using:
+By default, the library will look at the root of your website. 
+If you use a CDN to access the library, 
+you will want to set this to the following values depending on the data capture mode you are using:
 
-- for barcode capture: https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@6.x/build/engine/, https://unpkg.com/browse/scandit-web-datacapture-barcode@6.x/build/engine/, or similar.
+- for barcode capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode7.0/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-barcode7.0/sdc-lib/, or similar.
 
-- for ID capture: https://cdn.jsdelivr.net/npm/scandit-web-datacapture-id@6.x/build/engine/, https://unpkg.com/browse/scandit-web-datacapture-id@6.x/build/engine/, or similar.
+- for ID capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id/7.0/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-id/7.0/sdc-lib/, or similar.
 
-Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the libraryLocation option, either by ensuring the served files are up-to-date or the path/URL specifies a specific version. In case a common CDN is used here (jsDelivr or UNPKG) the library will automatically internally set up the correct URLs pointing directly at the files needed for the matching library version. It is highly recommended to handle the serving of these files yourself on your website/server, ensuring optimal compression, correct wasm files MIME type, no request redirections and correct caching headers usage; thus resulting in faster loading.
+Note: 
+please ensure
+that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files
+retrieved via the libraryLocation option,
+either by ensuring the served files are up-to-date or the path/URL specifies a specific version.
+In case a common CDN is used here (jsDelivr or UNPKG)
+the library will automatically internally set up the correct URLs
+pointing directly at the files needed for the matching library version.
+It is highly recommended to handle the serving of these files yourself on your website/server,
+ensuring optimal compression, correct wasm files MIME type, no request redirections and correct caching headers usage;
+thus resulting in faster loading.
 
 We recommended to call [configure](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html) as soon as possible in your application so that the files are already downloaded and initialized when the capture process is started.
 
 ```js
-import * as SDCCore from 'scandit-web-datacapture-core';
-import { barcodeCaptureLoader } from 'scandit-web-datacapture-barcode';
+import { configure } from '@scandit/web-datacapture-core';
+import { barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
 
-await SDCCore.configure({
-	licenseKey: 'SCANDIT_LICENSE_KEY',
+await configure({
+	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
 	libraryLocation: new URL('library/engine/', document.baseURI).toString(),
 	moduleLoaders: [barcodeCaptureLoader()],
 });
@@ -93,13 +105,14 @@ If you use a web framework that renders also on the server (SSR or SSG) it’s r
 To show some feedback to the user about the loading status you have two options: use the default UI provided with the SDK or subscribe to the loading status and update your own custom UI. Let’s see how we you can show the default UI first:
 
 ```js
-const view = new SDCCore.DataCaptureView();
+import { DataCaptureView, configure, DataCaptureContext } from '@scandit/web-datacapture-core';
+const view = new DataCaptureView();
 
 view.connectToElement(document.getElementById('data-capture-view'));
 view.showProgressBar();
 view.setProgressBarMessage('Loading ...');
 
-await SDCCore.configure({
+await configure({
 	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
 	libraryLocation: new URL('library/engine/', document.baseURI).toString(),
 	moduleLoaders: [barcodeCaptureLoader()],
@@ -107,7 +120,7 @@ await SDCCore.configure({
 
 view.hideProgressBar();
 
-const context = await SDCCore.DataCaptureContext.create();
+const context = await DataCaptureContext.create();
 await view.setContext(context);
 ```
 
@@ -116,19 +129,23 @@ await view.setContext(context);
 You can also just subscribe for the [loading status](https://docs.scandit.com/data-capture-sdk/web/core/api/web/loading-status.html) of the library by simply attaching a listener like this:
 
 ```js
-SDCCore.loadingStatus.subscribe((info) => {
+import { loadingStatus, configure } from '@scandit/web-datacapture-core';
+
+loadingStatus.subscribe((info) => {
 	// updateUI(info.percentage, info.loadedBytes)
 });
 
-await SDCCore.configure({
-	licenseKey: 'SCANDIT_LICENSE_KEY',
+await configure({
+	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
 	libraryLocation: '/engine',
 	moduleLoaders: [barcodeCaptureLoader()],
 });
 ```
 
 :::note
-We suggest to serve the library files with the proper headers Content-Length and Content-Encoding if any compression is present. In case of totally missing information we will show an estimated progress
+We suggest serving the library files with the proper headers Content-Length and Content-Encoding
+if any compression is present.
+In case of totally missing information, we will show estimated progress
 :::
 
 ## Create the Data Capture Context
@@ -136,8 +153,10 @@ We suggest to serve the library files with the proper headers Content-Length and
 The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext).
 
 ```js
+import { DataCaptureContext } from '@scandit/web-datacapture-core';
+
 // the license key used in configure() will be used
-const context = await SDCCore.DataCaptureContext.create();
+const context = await DataCaptureContext.create();
 ```
 
 ## Configure the Barcode Scanning Behavior
@@ -147,14 +166,16 @@ Barcode scanning is orchestrated by the [BarcodeCapture](https://docs.scandit.co
 For this tutorial, we will setup barcode scanning for a small list of different barcode types, called symbologies. The list of symbologies to enable is highly application specific. We recommend that you only enable the list of symbologies your application requires.
 
 ```js
-const settings = new SDCBarcode.BarcodeCaptureSettings();
+import { BarcodeCaptureSettings, Symbology } from '@scandit/web-datacapture-barcode';
+
+const settings = new BarcodeCaptureSettings();
 settings.enableSymbologies([
-	SDCBarcode.Symbology.Code128,
-	SDCBarcode.Symbology.Code39,
-	SDCBarcode.Symbology.QR,
-	SDCBarcode.Symbology.EAN8,
-	SDCBarcode.Symbology.UPCE,
-	SDCBarcode.Symbology.EAN13UPCA,
+	Symbology.Code128,
+	Symbology.Code39,
+	Symbology.QR,
+	Symbology.EAN8,
+	Symbology.UPCE,
+	Symbology.EAN13UPCA,
 ]);
 ```
 
@@ -163,7 +184,9 @@ If you are not disabling barcode capture immediately after having scanned the fi
 Next, create a [BarcodeCapture](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance with the settings initialized in the previous step:
 
 ```js
-const barcodeCapture = await SDCBarcode.BarcodeCapture.forContext(
+import { BarcodeCapture } from '@scandit/web-datacapture-barcode';
+
+const barcodeCapture = await BarcodeCapture.forContext(
 	context,
 	settings
 );
@@ -194,18 +217,18 @@ barcodeCapture.addListener(listener);
 
 The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
-When using the built-in camera there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
+When using the built-in camera, there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
 
 ```js
-const cameraSettings = SDCBarcode.BarcodeCapture.recommendedCameraSettings;
+import { Camera } from '@scandit/web-datacapture-core';
+import { BarcodeCapture } from '@scandit/web-datacapture-barcode';
+
+const cameraSettings = BarcodeCapture.recommendedCameraSettings;
 
 // Depending on the use case further camera settings adjustments can be made here.
 
-const camera = SDCCore.Camera.default;
-
-if (camera) {
-	await camera.applySettings(cameraSettings);
-}
+const camera = Camera.default;
+await camera.applySettings(cameraSettings);
 ```
 
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
@@ -217,23 +240,31 @@ await context.setFrameSource(camera);
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/web/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.On](https://docs.scandit.com/data-capture-sdk/web/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
 ```js
-await camera.switchToDesiredState(Scandit.FrameSourceState.On);
+await context.frameSource.switchToDesiredState(Scandit.FrameSourceState.On);
 ```
 
 ## Use a Capture View to Visualize the Scan Process
 
-When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
+When using the built-in camera as frameSource,
+you will typically want
+to display the camera preview on the screen together with UI elements that guide the user through the capturing process.
+To do that,
+add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```js
-const view = await SDCCore.DataCaptureView.forContext(context);
-view.connectToElement(htmlElement);
+import { DataCaptureView } from '@scandit/web-datacapture-core';
+
+const view = await DataCaptureView.forContext(context);
+view.connectToElement(document.querySelector("#the-element-where-to-attach-the-view"));
 ```
 
 To visualize the results of barcode scanning, the following [overlay](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) can be added:
 
 ```js
+import { BarcodeCaptureOverlay } from '@scandit/web-datacapture-barcode';
+
 const overlay =
-	await SDCBarcode.BarcodeCaptureOverlay.withBarcodeCaptureForView(
+	await BarcodeCaptureOverlay.withBarcodeCaptureForView(
 		barcodeCapture,
 		view
 	);
@@ -241,6 +272,15 @@ const overlay =
 
 ## Disabling Barcode Capture
 
-To disable barcode capture, for instance as a consequence of a barcode being recognized, call [BarcodeCapture.setEnabled()](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture.html#method-scandit.datacapture.barcode.BarcodeCapture.SetEnabled) passing false.
+```js
+await barcodeCapture.setEnabled(false);
+```
 
-The effect is immediate: no more frames will be processed after the change. However, if a frame is currently being processed, this frame will be completely processed and deliver any results/callbacks to the registered listeners. Note that disabling the capture mode does not stop the camera, the camera continues to stream frames until it is turned off.
+To disable barcode capture, for instance, as a consequence of a barcode 
+being recognized call [BarcodeCapture.setEnabled()](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture.html#method-scandit.datacapture.barcode.BarcodeCapture.SetEnabled) passing false.
+
+The effect is immediate: no more frames will be processed after the change. 
+However, if a frame is currently being processed,
+this frame will be completely processed and deliver any results/callbacks to the registered listeners. 
+Note that disabling the capture mode does not stop the camera,
+the camera continues to stream frames until it is turned off.
