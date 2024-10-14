@@ -15,40 +15,41 @@ const sidebars: SidebarsConfig = {
 
   // But you can create a sidebar manually
 
-  sdcSidebar: [
-    {
-      type: "category",
-      label: "Scandit Smart Data Capture",
-      items: [
-        "barcode-scanning",
-        "id-scanning",
-        "core-concepts",
-        "features-by-framework",
-        "system-requirements",
-        {
-          type: "category",
-          label: "Supported Symbologies and IDs",
+	sdcSidebar: [
+		{
+			type: 'category',
+			label: 'Scandit Smart Data Capture',
+			items: [
+        'barcode-scanning',
+        'id-scanning',
+				'core-concepts',
+				'features-by-framework',
+        'system-requirements',
+				{
+					type: 'category',
+					label: 'Supported Symbologies and IDs',
           collapsed: false,
-          items: [
-            "barcode-symbologies",
-            "symbology-properties",
-            "extension-codes",
-            "scanning-composite-codes",
-            "id-documents",
-          ],
-        },
-      {
-    type: 'category',
+					items: [
+            'barcode-symbologies',
+            'symbology-properties',
+            'extension-codes',
+            'scanning-composite-codes',
+            'id-documents',
+          ]
+				},
+        {
+					type: 'category',
 					label: 'Migration Guides',
           collapsed: true,
 					items: [
             'migrate-5-to-6',
           ]
 				},
-			],},
-  ],
+			],
+		},
+	],
 
-  expressSidebar: [
+	expressSidebar: [
 		{
 			type: 'category',
 			label: 'Scandit Express',
@@ -69,37 +70,49 @@ const sidebars: SidebarsConfig = {
 	],
 
   boltSidebar: [
-    {
-      type: "category",
-      label: "ID Bolt",
-      items: [
-        "hosted/id-bolt/overview",
-        "hosted/id-bolt/getting-started",
-        "hosted/id-bolt/api",
-        {
-          type: "link",
-          label: "Try the Demo",
-          href: "https://id-travel.demos.scandit.com/",
-        },
-      ],
-    },
-  ],
+		{
+			type: 'category',
+			label: 'ID Bolt',
+			items: [
+				'hosted/id-bolt/overview',
+				'hosted/id-bolt/getting-started',
+        'hosted/id-bolt/api',
+				{
+					type: 'link',
+					label: 'Try the Demo',
+					href: 'https://id-travel.demos.scandit.com/',
+				},
+			],
+		},
+	],
 
   iosSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for iOS",
+      type: 'category',
+      label: 'Data Capture SDK for iOS',
       collapsed: false,
-      items: ["sdks/ios/add-sdk", "sdks/ios/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/ios/add-sdk',
+        'sdks/ios/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/ios/single-scanning',
+          },
           collapsed: false,
           items: [
             {
@@ -149,15 +162,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/ios/matrixscan-find/intro",
                 "sdks/ios/matrixscan-find/get-started",
                 "sdks/ios/matrixscan-find/advanced",
-              ],
-            },
-            {
-              type: "category",
-              label: "MatrixScan Pick",
-              items: [
-                "sdks/ios/matrixscan-pick/intro",
-                "sdks/ios/matrixscan-pick/get-started",
-                "sdks/ios/matrixscan-pick/advanced",
               ],
             },
             {
@@ -217,11 +221,13 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: ["sdks/ios/parser/get-started"],
+          items: [
+            "sdks/ios/parser/get-started",
+          ],
         },
         {
           type: "doc",
-          id: "sdks/ios/barcode-generator",
+          id: "sdks/ios/barcode-generator/index",
           label: "Barcode Generator",
         },
       ],
@@ -263,27 +269,39 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/ios/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/ios/release-notes',
     },
   ],
 
   androidSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for Android",
+      type: 'category',
+      label: 'Data Capture SDK for Android',
       collapsed: false,
-      items: ["sdks/android/add-sdk", "sdks/android/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/android/add-sdk',
+        'sdks/android/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/android/single-scanning',
+          },
           collapsed: false,
           items: [
             {
@@ -333,15 +351,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/android/matrixscan-find/intro",
                 "sdks/android/matrixscan-find/get-started",
                 "sdks/android/matrixscan-find/advanced",
-              ],
-            },
-            {
-              type: "category",
-              label: "MatrixScan Pick",
-              items: [
-                "sdks/android/matrixscan-pick/intro",
-                "sdks/android/matrixscan-pick/get-started",
-                "sdks/android/matrixscan-pick/advanced",
               ],
             },
             {
@@ -401,11 +410,13 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: ["sdks/android/parser/get-started"],
+          items: [
+            "sdks/android/parser/get-started",
+          ],
         },
         {
           type: "doc",
-          id: "sdks/android/barcode-generator",
+          id: "sdks/android/barcode-generator/index",
           label: "Barcode Generator",
         },
       ],
@@ -447,27 +458,39 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/android/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/android/release-notes',
     },
   ],
 
   webSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for Web",
+      type: 'category',
+      label: 'Data Capture SDK for Web',
       collapsed: false,
-      items: ["sdks/web/add-sdk", "sdks/web/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/web/add-sdk',
+        'sdks/web/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/web/single-scanning',
+          },
           collapsed: false,
           items: [
             {
@@ -552,7 +575,9 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: ["sdks/web/parser/get-started"],
+          items: [
+            "sdks/web/parser/get-started",
+          ],
         },
       ],
     },
@@ -588,27 +613,39 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/web/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/web/release-notes',
     },
   ],
 
   cordovaSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for Cordova",
+      type: 'category',
+      label: 'Data Capture SDK for Cordova',
       collapsed: false,
-      items: ["sdks/cordova/add-sdk", "sdks/cordova/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/cordova/add-sdk',
+        'sdks/cordova/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/cordova/single-scanning',
+          },
           collapsed: false,
           items: [
             {
@@ -642,15 +679,6 @@ const sidebars: SidebarsConfig = {
           label: 'Multi-scanning',
           collapsed: false,
           items: [
-            {
-              type: "category",
-              label: "MatrixScan Pick",
-              items: [
-                "sdks/cordova/matrixscan-pick/intro",
-                "sdks/cordova/matrixscan-pick/get-started",
-                "sdks/cordova/matrixscan-pick/advanced",
-              ],
-            },
             {
               type: "category",
               label: "MatrixScan API",
@@ -700,7 +728,9 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: ["sdks/cordova/parser/get-started"],
+          items: [
+            "sdks/cordova/parser/get-started",
+          ],
         },
       ],
     },
@@ -736,27 +766,39 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/cordova/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/cordova/release-notes',
     },
   ],
 
   reactnativeSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for React Native",
+      type: 'category',
+      label: 'Data Capture SDK for React Native',
       collapsed: false,
-      items: ["sdks/react-native/add-sdk", "sdks/react-native/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/react-native/add-sdk',
+        'sdks/react-native/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/react-native/single-scanning',
+          },
           collapsed: false,
           items: [
             {
@@ -806,15 +848,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/react-native/matrixscan-find/intro",
                 "sdks/react-native/matrixscan-find/get-started",
                 "sdks/react-native/matrixscan-find/advanced",
-              ],
-            },
-            {
-              type: 'category',
-              label: 'MatrixScan Pick',
-              items: [
-                "sdks/react-native/matrixscan-pick/intro",
-                "sdks/react-native/matrixscan-pick/get-started",
-                "sdks/react-native/matrixscan-pick/advanced",
               ],
             },
             {
@@ -874,7 +907,9 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: ["sdks/react-native/parser/get-started"],
+          items: [
+            "sdks/react-native/parser/get-started",
+          ],
         },
       ],
     },
@@ -915,27 +950,39 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/react-native/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/react-native/release-notes',
     },
   ],
 
   flutterSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for Flutter",
+      type: 'category',
+      label: 'Data Capture SDK for Flutter',
       collapsed: false,
-      items: ["sdks/flutter/add-sdk", "sdks/flutter/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/flutter/add-sdk',
+        'sdks/flutter/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/flutter/single-scanning',
+          },
           collapsed: false,
           items: [
             {
@@ -988,15 +1035,6 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'MatrixScan Pick',
-              items: [
-                "sdks/flutter/matrixscan-pick/intro",
-                "sdks/flutter/matrixscan-pick/get-started",
-                "sdks/flutter/matrixscan-pick/advanced",
-              ],
-            },
-            {
               type: "category",
               label: "MatrixScan API",
               items: [
@@ -1046,7 +1084,9 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: ["sdks/flutter/parser/get-started"],
+          items: [
+            "sdks/flutter/parser/get-started",
+          ],
         },
       ],
     },
@@ -1082,27 +1122,39 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/flutter/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/flutter/release-notes',
     },
   ],
 
   capacitorSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for Capacitor",
+      type: 'category',
+      label: 'Data Capture SDK for Capacitor',
       collapsed: false,
-      items: ["sdks/capacitor/add-sdk", "sdks/capacitor/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/capacitor/add-sdk',
+        'sdks/capacitor/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/capacitor/single-scanning',
+          },
           collapsed: false,
           items: [
             {
@@ -1155,15 +1207,6 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'MatrixScan Pick',
-              items: [
-                "sdks/capacitor/matrixscan-pick/intro",
-                "sdks/capacitor/matrixscan-pick/get-started",
-                "sdks/capacitor/matrixscan-pick/advanced",
-              ],
-            },
-            {
               type: "category",
               label: "MatrixScan API",
               items: [
@@ -1213,7 +1256,9 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: ["sdks/capacitor/parser/get-started"],
+          items: [
+            "sdks/capacitor/parser/get-started",
+          ],
         },
       ],
     },
@@ -1249,22 +1294,30 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/capacitor/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/capacitor/release-notes',
     },
   ],
 
   titaniumSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for Titanium",
+      type: 'category',
+      label: 'Data Capture SDK for Titanium',
       collapsed: false,
-      items: ["sdks/titanium/add-sdk", "sdks/titanium/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/titanium/add-sdk',
+        'sdks/titanium/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
@@ -1273,8 +1326,8 @@ const sidebars: SidebarsConfig = {
           collapsed: false,
           items: [
             {
-              type: "category",
-              label: "Barcode Capture API",
+              type: 'category',
+              label: 'Barcode Capture API',
               items: [
                 "sdks/titanium/barcode-capture/get-started",
                 "sdks/titanium/barcode-capture/configure-barcode-symbologies",
@@ -1306,27 +1359,39 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/titanium/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/titanium/release-notes',
     },
   ],
 
   xamarinIosSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for Xamarin iOS",
+      type: 'category',
+      label: 'Data Capture SDK for Xamarin iOS',
       collapsed: false,
-      items: ["sdks/xamarin/ios/add-sdk", "sdks/xamarin/ios/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/xamarin/ios/add-sdk',
+        'sdks/xamarin/ios/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/xamarin/ios/single-scanning',
+          },
           collapsed: false,
           items: [
             {
@@ -1419,7 +1484,9 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: ["sdks/xamarin/ios/parser/get-started"],
+          items: [
+            "sdks/xamarin/ios/parser/get-started",
+          ],
         },
       ],
     },
@@ -1455,27 +1522,39 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/xamarin/ios/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/xamarin/ios/release-notes',
     },
   ],
 
   xamarinAndroidSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for Xamarin Android",
+      type: 'category',
+      label: 'Data Capture SDK for Xamarin Android',
       collapsed: false,
-      items: ["sdks/xamarin/android/add-sdk", "sdks/xamarin/android/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/xamarin/android/add-sdk',
+        'sdks/xamarin/android/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/xamarin/android/single-scanning',
+          },
           collapsed: false,
           items: [
             {
@@ -1568,7 +1647,9 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: ["sdks/xamarin/android/parser/get-started"],
+          items: [
+            "sdks/xamarin/android/parser/get-started",
+          ],
         },
       ],
     },
@@ -1604,27 +1685,39 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/xamarin/android/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/xamarin/android/release-notes',
     },
   ],
 
   xamarinFormsSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for Xamarin Forms",
+      type: 'category',
+      label: 'Data Capture SDK for Xamarin Forms',
       collapsed: false,
-      items: ["sdks/xamarin/forms/add-sdk", "sdks/xamarin/forms/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/xamarin/forms/add-sdk',
+        'sdks/xamarin/forms/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/xamarin/forms/single-scanning',
+          },
           collapsed: false,
           items: [
             {
@@ -1717,7 +1810,9 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: ["sdks/xamarin/forms/parser/get-started"],
+          items: [
+            "sdks/xamarin/forms/parser/get-started",
+          ],
         },
       ],
     },
@@ -1753,22 +1848,30 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/xamarin/forms/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/xamarin/forms/release-notes',
     },
   ],
 
   netIosSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for .NET iOS",
+      type: 'category',
+      label: 'Data Capture SDK for .NET iOS',
       collapsed: false,
-      items: ["sdks/net/ios/add-sdk", "sdks/net/ios/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/net/ios/add-sdk',
+        'sdks/net/ios/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
@@ -1826,15 +1929,6 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'MatrixScan Pick',
-              items: [
-                "sdks/net/ios/matrixscan-pick/intro",
-                "sdks/net/ios/matrixscan-pick/get-started",
-                "sdks/net/ios/matrixscan-pick/advanced",
-              ],
-            },
-            {
               type: "category",
               label: "MatrixScan API",
               items: [
@@ -1884,7 +1978,9 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: ["sdks/net/ios/parser/get-started"],
+          items: [
+            "sdks/net/ios/parser/get-started",
+          ],
         },
       ],
     },
@@ -1920,22 +2016,30 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/net/ios/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/net/ios/release-notes',
     },
   ],
 
   netAndroidSidebar: [
     {
-      type: "category",
-      label: "Data Capture SDK for .NET Android",
+      type: 'category',
+      label: 'Data Capture SDK for .NET Android',
       collapsed: false,
-      items: ["sdks/net/android/add-sdk", "sdks/net/android/samples"],
+      items: [
+        {
+          type: "link",
+          label: "Data Capture Basics",
+          href: "https://docs.scandit.com/core-concepts",
+        },
+        'sdks/net/android/add-sdk',
+        'sdks/net/android/samples',
+      ],
     },
     {
-      type: "category",
-      label: "Barcode Scanning",
+      type: 'category',
+      label: 'Barcode Scanning',
       collapsed: false,
       items: [
         {
@@ -1993,15 +2097,6 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
-              type: 'category',
-              label: 'MatrixScan Pick',
-              items: [
-                "sdks/net/android/matrixscan-pick/intro",
-                "sdks/net/android/matrixscan-pick/get-started",
-                "sdks/net/android/matrixscan-pick/advanced",
-              ],
-            },
-            {
               type: "category",
               label: "MatrixScan API",
               items: [
@@ -2051,7 +2146,9 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Parser",
-          items: ["sdks/net/android/parser/get-started"],
+          items: [
+            "sdks/net/android/parser/get-started",
+          ],
         },
       ],
     },
@@ -2087,9 +2184,9 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      label: "Release Notes",
-      id: "sdks/net/android/release-notes",
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/net/android/release-notes',
     },
   ],
 };
