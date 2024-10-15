@@ -112,9 +112,9 @@ SparkScan is a high-speed single scanning mode that enables you to quickly and e
 
 <CustomDocCard title="iOS" description="Integrate SparkScan in iOS" link="../sdks/ios/sparkscan/intro" smallIcon ><Ios/></CustomDocCard>
 
-<CustomDocCard title="Android" description="Integrate SparkScan in Android" link="../sdks/android/sparkscan/intro" Icon ><Android/></CustomDocCard>
+<CustomDocCard title="Android" description="Integrate SparkScan in Android" link="../sdks/android/sparkscan/intro" smallIcon ><Android/></CustomDocCard>
 
-<CustomDocCard title="Web" description="Integrate SparkScan for Web" link="../sdks/web/sparkscan/intro" Icon ><Javascript/> </CustomDocCard>
+<CustomDocCard title="Web" description="Integrate SparkScan for Web" link="../sdks/web/sparkscan/intro" smallIcon ><Javascript/> </CustomDocCard>
 
 <CustomDocCard title="Cordova" description="Integrate SparkScan in Cordova" link="../sdks/cordova/sparkscan/intro" smallIcon ><Cordova/> </CustomDocCard>
 
@@ -126,7 +126,7 @@ SparkScan is a high-speed single scanning mode that enables you to quickly and e
 
 <CustomDocCard title="Xamarin iOS" description="Integrate SparkScan in Xamarin iOS" link="../sdks/xamarin/ios/sparkscan/intro" smallIcon ><XamarinIos/></CustomDocCard>
 
-<CustomDocCard title="Xamarin Android" description="Integrate SparkScan for Xamarin Android" link="../sdks/xamarin/android/sparkscan/intro" Icon ><XamarinAndroid/></CustomDocCard>
+<CustomDocCard title="Xamarin Android" description="Integrate SparkScan for Xamarin Android" link="../sdks/xamarin/android/sparkscan/intro" smallIcon ><XamarinAndroid/></CustomDocCard>
 
 <CustomDocCard title="Xamarin Forms" description="Integrate SparkScan in Xamarin Forms" link="../sdks/xamarin/forms/sparkscan/intro" smallIcon ><XamarinForms/></CustomDocCard>
 
@@ -144,7 +144,7 @@ MatrixScan Count is a batch scanning mode that enables you to quickly and easily
 
 <CustomDocCard title="iOS" description="Integrate MatrixScan Count in iOS" link="../sdks/ios/matrixscan-count/intro" smallIcon ><Ios/></CustomDocCard>
 
-<CustomDocCard title="Android" description="Integrate MatrixScan Count in Android" link="../sdks/android/matrixscan-count/intro" Icon ><Android/></CustomDocCard>
+<CustomDocCard title="Android" description="Integrate MatrixScan Count in Android" link="../sdks/android/matrixscan-count/intro" smallIcon ><Android/></CustomDocCard>
 
 <CustomDocCard title="React Native" description="Integrate MatrixScan Count in React Native" link="../sdks/react-native/matrixscan-count/intro" smallIcon ><ReactIcon/> </CustomDocCard>
 
@@ -172,7 +172,7 @@ MatrixScan Find is a search and find mode that enables you to quickly and easily
 
 <CustomDocCard title="iOS" description="Integrate MatrixScan Find in iOS" link="../sdks/ios/matrixscan-find/intro" smallIcon ><Ios/></CustomDocCard>
 
-<CustomDocCard title="Android" description="Integrate MatrixScan Find in Android" link="../sdks/android/matrixscan-find/intro" Icon ><Android/></CustomDocCard>
+<CustomDocCard title="Android" description="Integrate MatrixScan Find in Android" link="../sdks/android/matrixscan-find/intro" smallIcon ><Android/></CustomDocCard>
 
 <CustomDocCard title="React Native" description="Integrate MatrixScan Find in React Native" link="../sdks/react-native/matrixscan-find/intro" smallIcon ><ReactIcon/> </CustomDocCard>
 
@@ -194,7 +194,7 @@ Barcode Selection is a mode that enables you to quickly and easily scan multiple
 
 <CustomDocCard title="iOS" description="Integrate Barcode Selection in iOS" link="../sdks/ios/barcode-selection/intro" smallIcon ><Ios/></CustomDocCard>
 
-<CustomDocCard title="Android" description="Integrate Barcode Selection in Android" link="../sdks/android/barcode-selection/intro" Icon ><Android/></CustomDocCard>
+<CustomDocCard title="Android" description="Integrate Barcode Selection in Android" link="../sdks/android/barcode-selection/intro" smallIcon ><Android/></CustomDocCard>
 
 <CustomDocCard title="Cordova" description="Integrate Barcode Selection in Cordova" link="../sdks/cordova/barcode-selection/intro" smallIcon ><Cordova/> </CustomDocCard>
 
@@ -229,7 +229,7 @@ Barcode Capture is a mode that enables you to quickly and easily scan and captur
 
 <CustomDocCard title="iOS" description="Integrate Barcode Capture in iOS" link="../sdks/ios/barcode-capture/get-started" smallIcon ><Ios/></CustomDocCard>
 
-<CustomDocCard title="Android" description="Integrate Barcode Capture in Android" link="../sdks/android/barcode-capture/get-started" Icon ><Android/></CustomDocCard>
+<CustomDocCard title="Android" description="Integrate Barcode Capture in Android" link="../sdks/android/barcode-capture/get-started" smallIcon ><Android/></CustomDocCard>
 
 <CustomDocCard title="Web" description="Integrate Barcode Capture for Web" link="../sdks/web/barcode-capture/get-started" smallIcon ><Javascript/> </CustomDocCard>
 
@@ -263,7 +263,7 @@ MatrixScanis a mode that enables you to quickly and easily scan multiple barcode
 
 <CustomDocCard title="iOS" description="Integrate MatrixScan in iOS" link="../sdks/ios/matrixscan/intro" smallIcon ><Ios/></CustomDocCard>
 
-<CustomDocCard title="Android" description="Integrate MatrixScan in Android" link="../sdks/android/matrixscan/intro" Icon ><Android/></CustomDocCard>
+<CustomDocCard title="Android" description="Integrate MatrixScan in Android" link="../sdks/android/matrixscan/intro" smallIcon ><Android/></CustomDocCard>
 
 <CustomDocCard title="Web" description="Integrate MatrixScan for Web" link="../sdks/web/matrixscan/intro" smallIcon ><Javascript/> </CustomDocCard>
 

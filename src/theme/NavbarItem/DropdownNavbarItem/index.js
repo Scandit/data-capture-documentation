@@ -77,7 +77,7 @@ function DropdownNavbarItemDesktop({
     }
   }, [currentPath]);
 
-  const newItems  = [
+  const newItems = [
     {
       type: "doc",
       label: "iOS",
@@ -171,6 +171,9 @@ function DropdownNavbarItemDesktop({
     },
   ];
 
+  const combinedItems =
+    items && items.some((item) => item.type === "doc") ? newItems : items;
+
   return (
     <div
       ref={dropdownRef}
@@ -200,7 +203,7 @@ function DropdownNavbarItemDesktop({
         {props.children ?? props.label}
       </NavbarNavLink>
       <ul className="dropdown__menu">
-        {newItems.map((childItemProps, i) => (
+        {combinedItems.map((childItemProps, i) => (
           <NavbarItem
             isDropdownItem
             activeClassName="dropdown__link--active"
