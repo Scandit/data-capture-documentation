@@ -237,6 +237,11 @@ const config: Config = {
       title: "Docs",
       items: [
         {
+          type: 'docsVersionDropdown',
+          position: 'left',
+          dropdownActiveClassDisabled: true,
+        },
+        {
           type: "dropdown",
           position: "left",
           label: "SDKs",
