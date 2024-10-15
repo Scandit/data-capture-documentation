@@ -2,6 +2,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 import * as dotenv from 'dotenv';
+import { version } from "react";
 dotenv.config();  // Load environment variables from .env file
 
 
@@ -200,6 +201,15 @@ const config: Config = {
               "danger",
             ],
           },
+          versions: {
+            current: {
+              label: 'Beta',
+              banner: 'unreleased',
+            },
+            '6.28.0': {
+              banner: 'none',
+            },
+          },
         },
         blog: false,
         gtag: {
@@ -247,82 +257,82 @@ const config: Config = {
           label: "SDKs",
           items: [
             {
-              type: "doc",
+              type: "docsVersion",
               label: "iOS",
               sidebarId: "iosSidebar",
-              docId: "sdks/ios/add-sdk",
+              to: "sdks/ios/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Android",
               sidebarId: "androidSidebar",
-              docId: "sdks/android/add-sdk",
+              to: "sdks/android/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Web",
               sidebarId: "webSidebar",
-              docId: "sdks/web/add-sdk",
+              to: "sdks/web/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Cordova",
               sidebarId: "cordovaSidebar",
-              docId: "sdks/cordova/add-sdk",
+              to: "sdks/cordova/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "React Native",
               sidebarId: "reactnativeSidebar",
-              docId: "sdks/react-native/add-sdk",
+              to: "sdks/react-native/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Flutter",
               sidebarId: "flutterSidebar",
-              docId: "sdks/flutter/add-sdk",
+              to: "sdks/flutter/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Capacitor",
               sidebarId: "capacitorSidebar",
-              docId: "sdks/capacitor/add-sdk",
+              to: "sdks/capacitor/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Titanium",
               sidebarId: "titaniumSidebar",
-              docId: "sdks/titanium/add-sdk",
+              to: "sdks/titanium/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Xamarin iOS",
               sidebarId: "xamarinIosSidebar",
-              docId: "sdks/xamarin/ios/add-sdk",
+              to: "sdks/xamarin/ios/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Xamarin Android",
               sidebarId: "xamarinAndroidSidebar",
-              docId: "sdks/xamarin/android/add-sdk",
+              to: "sdks/xamarin/android/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Xamarin Forms",
               sidebarId: "xamarinFormsSidebar",
-              docId: "sdks/xamarin/forms/add-sdk",
+              to: "sdks/xamarin/forms/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: ".NET iOS",
               sidebarId: "netIosSidebar",
-              docId: "sdks/net/ios/add-sdk",
+              to: "sdks/net/ios/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: ".NET Android",
               sidebarId: "netAndroidSidebar",
-              docId: "sdks/net/android/add-sdk",
+              to: "sdks/net/android/add-sdk",
             },
           ],
         },
@@ -333,14 +343,14 @@ const config: Config = {
 //          label: "Hosted Solutions",
 //          items: [
 //            {
-//              type: "doc",
+//              type: "docsVersion",
 //              label: "ID Bolt",
-//              docId: "hosted/id-bolt/overview",
+//              to: "hosted/id-bolt/overview",
 //            },
 //            {
-//              type: "doc",
+//              type: "docsVersion",
 //              label: "Scandit Express",
-//              docId: "hosted/express/overview",
+//              to: "hosted/express/overview",
 //            },
 //          ],
 //        },
