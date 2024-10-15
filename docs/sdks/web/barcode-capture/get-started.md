@@ -36,9 +36,9 @@ You can retrieve your Scandit Data Capture SDK license key, by signing in to you
 Some of the Scandit Data Capture SDK modules depend on others to work:
 
 
-| Module | Dependencies |
-|---|---|
-| ScanditCaptureCore | No dependencies |
+| Module                | Dependencies         |
+|-----------------------|----------------------|
+| ScanditCaptureCore    | No dependencies      |
 | ScanditBarcodeCapture | - ScanditCaptureCore |
 
 ### Configure and Initialize the Library

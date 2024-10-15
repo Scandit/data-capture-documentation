@@ -20,9 +20,9 @@ You need to add the `@scandit/web-datacapture-core` package,
 which contains the shared functionality used by the other data capture packages.
 
 If you’re using `barcodecapture`-related functionalities,
-make sure to also add the `@scandit/web-datacapture-barcode` package.
+make sure to also add the `@scandit/web-datacapture-barcode` package and or `@scandit/web-datacapture-parser`.
 In addition, you need to add `@scandit/web-datacapture-id` -
-the [ScanditIdCapture API](https://docs.scandit.com/data-capture-sdk/web/id-capture/overview.html) -
+the [ScanditIdCapture API](https://docs.scandit.com/sdks/web/id-capture/get-started) -
 if you want to scan personal identification documents, such as identity cards, passports or visas.
 
 :::note
