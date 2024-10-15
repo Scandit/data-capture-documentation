@@ -10,57 +10,9 @@ keywords:
 
 This guide will help you get started with Scandit ID Validate. The following verifier is available:
 
-* [`AAMVAVizBarcodeComparisonVerifier`](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/aamva-viz-barcode-comparison-verifier.html#class-scandit.datacapture.id.AamvaVizBarcodeComparisonVerifier): Validates the authenticity of the document by comparing the data from the VIZ and from the barcode on the back.
 * [`AAMVABarcodeVerifier`](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by analyzing the barcode on the back.
 
-Integrating ID Validate into your app follows the same general steps as [integrating ID Capture](../id-capture/get-started.md), with some minor differences based on the verifier you choose, as detailed in the following sections.
-
-## VIZ Barcode Comparison Verifier
-
-This verifier compares the data from the VIZ (the machine-readable zone) and the barcode on the back of the document and requires the front and back scanning mode.
-
-Create the verifier and initialize [`IdCapture`](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture.html#class-scandit.datacapture.id.IdCapture) with the following settings:
-
-```javascript
-const dataCaptureContext = Scandit.DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-
-const verifier = Scandit.AamvaVizBarcodeComparisonVerifier.create()
-
-const settings = new Scandit.IdCaptureSettings()
-settings.supportedDocuments = [Scandit.IdDocumentType.DLVIZ]
-settings.supportedSides = Scandit.SupportedSides.FrontAndBack
-
-const idCapture = Scandit.IdCapture.forContext(dataCaptureContext, settings)
-```
-
-Then proceed to capture the front and back sides of a document as usual. After you capture the back side and receive the combined result for both sides, you may run the verifier as follows:
-
-```javascript
-const idCaptureListener = {
-    didCaptureId: (_, session) => {
-        const capturedId = session.newlyCapturedId
-        const vizResult = capturedId.vizResult
-
-        if (vizResult && vizResult.capturedSides === Scandit.SupportedSides.FrontAndBack) {
-            verifier
-                .verify(session.newlyCapturedId)
-                .then(result => {
-                    if (result.checksPassed) {
-                        // Nothing suspicious was detected.
-                    } else {
-                        // You may inspect the results of individual checks, if you wish:
-                        if (result.datesOfBirthMatch.checkResult === Scandit.ComparisonCheckResult.Failed) {
-                          // The holder’s date of birth from the front side does not match the one encoded in the barcode.
-                        }
-                    }
-                })
-        }
-    }
-}
-```
-
-The return value allows you to query both the overall result of the verification and the results of individual checks. See [`AAMVAVizBarcodeComparisonResult`](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/aamva-viz-barcode-comparison-verifier.html#class-scandit.datacapture.id.AamvaVizBarcodeComparisonResult) for details.
-
+Integrating ID Validate into your app follows the same general steps as [integrating ID Capture](../id-capture/get-started.md), with some minor differences, as detailed in the following sections.
 
 ## Barcode Verifier
 
