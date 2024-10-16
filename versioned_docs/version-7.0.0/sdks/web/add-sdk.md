@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-toc_max_heading_level: 4
+toc_max_heading_level: 2
 pagination_next: null
 framework: web
 keywords:
@@ -97,7 +97,8 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
 <script type="module" src="script.js"></script>
 ```
 
-## Full CDN sample 
+### Full CDN sample
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
