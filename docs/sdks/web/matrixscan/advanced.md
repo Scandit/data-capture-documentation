@@ -49,8 +49,8 @@ The second way will take priority over the first one, which means that if a view
 - [BarcodeTrackingAdvancedOverlayListener.offsetForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.OffsetForTrackedBarcode) asks for an offset that is applied on the already anchored view. This offset is expressed through a [PointWithUnit](https://docs.scandit.com/data-capture-sdk/web/core/api/common.html#struct-scandit.datacapture.core.PointWithUnit).
 
 ```js
-import { PointWithUnit, MeasureUnit, NumberWithUnit, Anchor } from "scandit-web-datacapture-core"
-import { TrackedBarcodeView } from "scandit-web-datacapture-barcode"
+import { PointWithUnit, MeasureUnit, NumberWithUnit, Anchor } from "@scandit/web-datacapture-core"
+import { TrackedBarcodeView } from "@scandit/web-datacapture-barcode"
 
 // ...
 overlay.listener = {
@@ -86,8 +86,8 @@ The function [BarcodeTrackingListener.didUpdateSession()](https://docs.scandit.c
 [session](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-tracking-session.html#class-scandit.datacapture.barcode.tracking.BarcodeTrackingSession), which contains all added, updated and removed tracked barcodes. From here you can create the view you want to display, and then call [BarcodeTrackingAdvancedOverlay.setViewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode), [BarcodeTrackingAdvancedOverlay.setAnchorForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetAnchorForTrackedBarcode) and [BarcodeTrackingAdvancedOverlay.setOffsetForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetOffsetForTrackedBarcode)
 
 ```js
-import { PointWithUnit, MeasureUnit, NumberWithUnit, Anchor } from "scandit-web-datacapture-core"
-import { TrackedBarcodeView } from "scandit-web-datacapture-barcode"
+import { PointWithUnit, MeasureUnit, NumberWithUnit, Anchor } from "@scandit/web-datacapture-core"
+import { TrackedBarcodeView } from "@scandit/web-datacapture-barcode"
 
 // ...
 barcodeTracking.addListener({
