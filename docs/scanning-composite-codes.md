@@ -6,7 +6,7 @@ tags: [android, capacitor, cordova, flutter, ios, netIos, netAndroid, react-nati
 
 # Composite Codes
 
-The Scandit Data Capture SDK supports scanning of all [GS1 Composite Codes](./barcode-symbologies#gs1-composite-codes). The specification defines three different types: A, B and C.
+The Scandit Data Capture SDK supports scanning of all [GS1 Composite Codes](/barcode-symbologies.md#gs1-composite-codes). The specification defines three different types: A, B and C.
 
 :::note
 Composite codes are only supported in `SDCBarcodeCapture`.
