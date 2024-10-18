@@ -115,7 +115,7 @@ title: 'Features by Framework'
 
 | Feature                              | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
 |--------------------------------------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|------------------|
-| | 6.18 | 6.18 | n/a  | 6.22 | n/a | n/a | n/a | 6.22 | 6.22 | n/a | n/a | 6.22 | 6.21 |
+| | 6.18 | 6.18 | n/a  | 6.22 | n/a | n/a | n/a | 6.22 | 6.22 | n/a | 6.28 | 6.22 | 6.21 |
 
 ### Scanning
 

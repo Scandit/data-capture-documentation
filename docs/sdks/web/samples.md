@@ -36,10 +36,6 @@ Simple sample showing how to use the Barcode Capture mode to scan a single barco
 This sample is also available [here](https://github.com/Scandit/datacapture-web-samples/tree/master/BarcodeCaptureReactSample) for React, and for Progressive Web Apps (PWAs) [here](https://github.com/Scandit/datacapture-web-samples/tree/master/BarcodeCaptureSimplePwaSample).
 :::
 
-##### [Capture Views](https://github.com/Scandit/datacapture-web-samples/tree/master/BarcodeCaptureViewsSample)
-
-Demonstrates the various ways to best integrate the scanner into the UI of your app.
-
 ##### [Capture Settings](https://github.com/Scandit/datacapture-web-samples/tree/master/BarcodeCaptureSettingsSample)
 
 Demonstrates how you can adapt the barcode capture settings best to your needs and experiment with all the options.

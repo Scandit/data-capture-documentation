@@ -32,10 +32,6 @@ Use SparkScan to populate a list of scanned barcodes.
 
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
 
-##### [Capture Views](https://github.com/Scandit/datacapture-xamarin-samples/tree/master/ios/BarcodeCaptureViewsSample)
-
-Demonstrates the various ways to best integrate the scanner into the UI of your app.
-
 ##### [Capture Settings](https://github.com/Scandit/datacapture-xamarin-samples/tree/master/ios/BarcodeCaptureSettingsSample)
 
 Demonstrates how you can adapt the barcode capture settings best to your needs and experiment with all the options.

@@ -429,6 +429,12 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 * The Chronomark has 38 positions and the Routing code has 46 positions.
 * La Poste manages the specifications.
 
+### Swiss Post
+ 
+* This symbology is used by [Swiss Post](https://www.post.ch) for mail item identification. 
+* The Swiss Post 4-State barcodes have a fixed length of 93 bars. 
+* Swiss Post manages the specifications.
+
 ## Additional Symbologies
 
 ### GS1 Data Carrier

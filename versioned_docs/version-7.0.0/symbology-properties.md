@@ -28,7 +28,7 @@ Symbologies often have different properties, such as symbol count (length of the
 | Code 32  | **Mandatory**: mod10 | **Default**: 8<br/>**Range**: 8 | no| strict |
 | Code 39  | **Mandatory**: none<br/>**Supported**: mod43 | **Default**: 6-40<br/>**Range**: 3-50 | yes| full_ascii<br/>relaxed_sharp_quiet_zone_check<br/>strict |
 | Code 93  | **Mandatory**: mod47 | **Default**: 6-40<br/>**Range**: 5-60 | yes| full_ascii<br/>strict |
-| Codabar  | **Mandatory**: none<br/>**Supported**: mod16, mod11 | **Default**: 7-20<br/>**Range**: 3-34 | no| strict |
+| Codabar  | **Mandatory**: none<br/>**Supported**: mod16, mod11 | **Default**: 7-20<br/>**Range**: 3-34 | no| strict<br/>remove_delimiter_data |
 | GS1 DataBar 14  | **Mandatory**: mod10 | **Default**: 2<br/>**Range**: 2 | no| strict |
 | GS1 DataBar Expanded  | **Mandatory**: mod211 | **Default**: 1-11<br/>**Range**: 1-11 | no| strict |
 | GS1 DataBar Limited  | **Mandatory**: mod89 | **Default**: 1<br/>**Range**: 1 | no| relaxed_sharp_quiet_zone_check<br/>strict |
@@ -57,8 +57,8 @@ Symbologies often have different properties, such as symbol count (length of the
 
 ## Symbology Extension Descriptions
 
-| Extension                              | Description                                                                                                                                                                                                                 |
-|----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Extension  | Description     |
+|----------------------------------------|---------------------------------------------------------------|
 | full_ascii                             | Interprets the Code39 code data using two symbols per output character to encode all ASCII characters.                                                                                                                       |
 | relaxed_sharp_quiet_zone_check         | Enables scanning codes that have quiet zones (white area before and after the code) that are significantly smaller than allowed by the symbology specification. Use this extension if you are having difficulties to scan codes due to quiet zone violations. However, enabling it may come at the cost of more false positives under certain circumstances. |
 | return_as_upca                         | Transforms the UPCE result into its UPCA representation.                                                                                                                                                                     |
@@ -68,58 +68,56 @@ Symbologies often have different properties, such as symbol count (length of the
 | strict                                 | Enforce strict standard adherence to eliminate false positives in blurry, irregular or damaged barcodes at the cost of reduced scan performance.                                                                              |
 | fluorescent_orange_ink                 | Enables the scanning of low contrast fluorescent orange codes. Enabling this option can have a negative impact on the scan performance of other symbologies.                                                                  |
 | force_table_c, force_table_n and decode_bar_states | For Australian Post 4-State, customer information is decoded by default with Table N, and Table C is used as a fallback. force_table_c and force_table_n respectively enforce decoding with either C or N tables, and the symbology extension decode_bar_states will return the error-corrected customer information bars as a string of the bar states, A for ascending, D for descending, T for tracker and F for full.     |
+| remove_delimiter_data                  | For Codabar, removes the start and stop characters from the code and returns only the body of the code in the result.   |
 
 ## Calculating Symbol Counts for Variable-Length Symbologies
 
 The length of data encoded in variable-length symbologies such as Code 128, Codabar, Code 39 etc. is measured as the number of symbols. Depending on the symbology, the symbol count includes the start and end symbol, and/or checksum characters. The following list shows how to calculate the number of symbols for each variable-length symbology. These counts can be used as the input to sc_symbology_settings_set_active_symbol_counts().
 
-## Interleaved-Two-of-Five
+### Interleaved-Two-of-Five
 
 The number of symbols corresponds to the number of digits in the code. Note that the number of digits must be even. Example: the code c “1234567890123” has a symbol count of 14. For the active symbol count calculation, optional checksum digits are treated like normal data symbols.
 
-## Codabar
+### Codabar
 
-The number of symbols corresponds to the number of digits in the code, plus the start and end symbols. Example: the code c “A2334253D” has a symbol count of 7 + 2 = 9.
+The number of symbols corresponds to the number of digits in the code, plus the start and end symbols. Example: the code “A2334253D” has a symbol count of 7 + 2 = 9.
 
-## Code 11
+### Code 11
 
 The number of symbols corresponds to the number of digits in the code, plus one or two checksum symbols. For less than ten digits in the code, one checksum symbol is added. Two checksum symbols are added for ten or more digits in the code. Example: the code c “912-34956” (c “912-349566”) has a symbol count of 9 + 1 = 10. The code c “912-3495-6” (c “912-3495-638”) has a symbol count of 10 + 2 = 12.
 
-## Code 128
+### Code 128
 
 The number of symbols depends on the encoding used (A, B or C). All encodings require a start, an end and a checksum symbol. The ASCII encoding modes (A and B) store each character in one symbol. Example: the code c “ABC123” in mode A has a symbol count of 6 + 2 + 1 = 9. The numeric encoding mode (C) encodes pairs of digits in one symbol. Example: the code c “123456” has a symbol count of 3 + 2 + 1 = 6. Some encoders switch modes inside the code using switch symbols to optimize the code length. In this case the exact encoding used is needed to compute the number of symbols.
 
-## Code 93
+### Code 93
 
 The number of symbols corresponds to the number of characters in the code, plus the start and end symbols and 2 checksum digits. Shift characters used in “extended code93” are treated as normal data symbols. Example: the code c “ABCDE12345” has a symbol count of 10 + 2 + 2 = 14.
 
-## Code 39
+### Code 39
 
 The number of symbols corresponds to the number of characters in the code, plus the start and end symbols. Note that the start and end symbols are not included in the returned barcode data. Example: the code c “4F70050378196356D” (c “4F70050378196356D”) has a symbol count of 17 + 2 = 19.
 
-## MSI Plessey and Code 25
+### MSI Plessey and Code 25
 
 The number of symbols corresponds to the number of digits in the code. Example: the code c “12345674” has a symbol count of 8. For the active symbol count calculation, optional checksum digits are treated like normal data symbols.
 
-## GS1 DataBar 14
+### GS1 DataBar 14
 
 The symbol count corresponds to the number of finder patterns in the code. Each finder is accompanied by two data segments.
 
-## GS1 DataBar Expanded
+### GS1 DataBar Expanded
 
 The symbol count cannot be changed at the moment.
 
-## RM4SCC
+### RM4SCC
 
 The number of symbols corresponds to the number of characters in the code, including the checksum character.
 
-## KIX
+### KIX
 
 The number of symbols corresponds to the number of characters in the code.
 
-Australian Post 4-State
-The number of symbol corresponds to 10 digit FCC and DPID codes, and up to 31 characters representing the customer information bar states.
-
-## Australian Post 4-State
+### Australian Post 4-State
 
 The number of symbol corresponds to 10 digit FCC and DPID codes, and up to 31 characters representing the customer information bar states.
