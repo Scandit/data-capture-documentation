@@ -11,7 +11,7 @@ interface FrameworksProps {
 }
 
 export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
-  const [selectedFramework, setSelectedFramework] = useState<string>("ios");
+  const [selectedFramework, setSelectedFramework] = useState<string>("web");
 
   function clickedFramework(framework: FrameworkCardType) {
     if (ExecutionEnvironment.canUseDOM) {
@@ -31,14 +31,14 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
           new URLSearchParams(location.search)
         );
         const frameworkFromURL =
-          paramsURL.framework || localStorage.getItem("framework") || "ios";
+          paramsURL.framework || localStorage.getItem("framework") || "web";
         window.history.pushState(
           {},
           "",
           `?framework=${
             new URLSearchParams(location.search).get("framework") ||
             localStorage.getItem("framework") ||
-            "ios"
+            "web"
           }`
         );
         setSelectedFramework(frameworkFromURL);
