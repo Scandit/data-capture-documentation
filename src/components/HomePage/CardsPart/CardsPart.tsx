@@ -30,7 +30,7 @@ export default function CardsPart() {
         const paramsURL = Object.fromEntries(
           new URLSearchParams(window.location.search)
         );
-        const selectedFramework = paramsURL.framework || "ios";
+        const selectedFramework = paramsURL.framework || "web";
 
         const barcodeScanning = createBarcodeScanningArr(
           selectedFramework,
