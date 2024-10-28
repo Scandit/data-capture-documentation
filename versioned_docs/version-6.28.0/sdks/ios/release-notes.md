@@ -9,6 +9,35 @@ keywords:
   - ios
 ---
 
+## 6.28.1
+
+**Released**: October 29, 2024
+
+### New Features
+
+#### ID
+
+* ID Capture now supports scanning the following additional documents:
+  * Armenia - Passport
+  * Bahamas - Residence Permit, Work Permit
+  * Colombia - Temporary Protection Permit
+  * Comoros - Passport
+  * Dominican Republic - Non-Voter ID
+  * Jamaica - Voter ID
+  * Kazakhstan - Passport
+  * Kyrgyzstan - Passport
+  * Lebanon - Driver's License
+  * Peru - Minor ID
+  * Tajikistan - Passport
+  * Turkmenistan - Passport
+  * Uzbekistan - Passport, ID Card
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a sporadic issue where camera errors would result in a crash on some devices.
+
 ## 6.28.0
 
 **Released**: October 8, 2024
