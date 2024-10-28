@@ -166,6 +166,15 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
+              label: "MatrixScan Pick",
+              items: [
+                "sdks/ios/matrixscan-pick/intro",
+                "sdks/ios/matrixscan-pick/get-started",
+                "sdks/ios/matrixscan-pick/advanced",
+              ],
+            },
+            {
+              type: "category",
               label: "Label Capture",
               items: [
                 "sdks/ios/label-capture/get-started",
@@ -351,6 +360,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/android/matrixscan-find/intro",
                 "sdks/android/matrixscan-find/get-started",
                 "sdks/android/matrixscan-find/advanced",
+              ],
+            },
+            {
+              type: "category",
+              label: "MatrixScan Pick",
+              items: [
+                "sdks/android/matrixscan-pick/intro",
+                "sdks/android/matrixscan-pick/get-started",
+                "sdks/android/matrixscan-pick/advanced",
               ],
             },
             {
