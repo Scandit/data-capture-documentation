@@ -10,6 +10,35 @@ keywords:
   - ios
 ---
 
+## 6.28.1
+
+**Released**: November 1, 2024
+
+### New Features
+
+#### ID
+
+* ID Capture now supports scanning the following additional documents:
+  * Armenia - Passport
+  * Bahamas - Residence Permit, Work Permit
+  * Colombia - Temporary Protection Permit
+  * Comoros - Passport
+  * Dominican Republic - Non-Voter ID
+  * Jamaica - Voter ID
+  * Kazakhstan - Passport
+  * Kyrgyzstan - Passport
+  * Lebanon - Driver's License
+  * Peru - Minor ID
+  * Tajikistan - Passport
+  * Turkmenistan - Passport
+  * Uzbekistan - Passport, ID Card
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a sporadic issue where camera errors would result in a crash on some devices.
+
 ## 6.28.0
 
 **Released**: October 8, 2024
@@ -18,7 +47,7 @@ keywords:
 
 #### Barcode
 
-* Our [Barode Generator](./barcode-generator/) now allows the generation of Aztec codes. See [`SDCAztecBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.AztecBarcodeGeneratorBuilder).
+* Our [Barcode Generator](./barcode-generator/) now allows the generation of Aztec codes. See [`SDCAztecBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.AztecBarcodeGeneratorBuilder).
 * On Barcode Capture and SparkScan, we optimized the frame processing time in 4k-UHD resolution with dynamic resolution selection, resulting in up to 35% reduction on high-end devices and consistent performance improvements across all supported devices.
 platforms.
 * MatrixScan Count users can now further classify the "not in list" barcodes when scanning against a list. Tapping on them will show a popup where the barcodes can be accepted or rejected. Check [`barcode.count.ui.BarcodeCountView.BarcodeNotInListActionSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.BarcodeNotInListActionSettings) to enable and customize the functionality. The classified barcodes will be added to [`barcode.count.BarcodeCountCaptureListSession.AcceptedBarcodes`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-count-capture-list-session.html#property-scandit.datacapture.barcode.count.BarcodeCountCaptureListSession.AcceptedBarcodes) or [`barcode.count.BarcodeCountCaptureListSession.RejectedBarcodes`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-count-capture-list-session.html#property-scandit.datacapture.barcode.count.BarcodeCountCaptureListSession.RejectedBarcodes).

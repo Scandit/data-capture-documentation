@@ -10,6 +10,17 @@ keywords:
   - flutter
 ---
 
+## 6.28.1
+
+**Released**: November 1, 2024
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue where the camera was not being released when closing the `SparkScanView`.
+* Fixed an issue with initialization of the Flutter plugins when used in combination with the Firebase plugin.
+
 ## 6.28.0
 
 **Released**: October 8, 2024

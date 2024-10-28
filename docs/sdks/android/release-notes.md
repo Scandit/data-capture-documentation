@@ -10,6 +10,29 @@ keywords:
   - android
 ---
 
+## 6.28.1
+
+**Released**: November 1, 2024
+
+### New Features
+
+#### ID
+
+* ID Capture now supports scanning the following additional documents:
+  * Armenia - Passport
+  * Bahamas - Residence Permit, Work Permit
+  * Colombia - Temporary Protection Permit
+  * Comoros - Passport
+  * Dominican Republic - Non-Voter ID
+  * Jamaica - Voter ID
+  * Kazakhstan - Passport
+  * Kyrgyzstan - Passport
+  * Lebanon - Driver's License
+  * Peru - Minor ID
+  * Tajikistan - Passport
+  * Turkmenistan - Passport
+  * Uzbekistan - Passport, ID Card
+
 ## 6.28.0
 
 **Released**: October 8, 2024
@@ -18,7 +41,7 @@ keywords:
 
 #### Barcode
 
-* Our [Barode Generator](./barcode-generator/) now allows the generation of Aztec codes. See [`AztecBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.AztecBarcodeGeneratorBuilder).
+* Our [Barcode Generator](./barcode-generator/) now allows the generation of Aztec codes. See [`AztecBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.AztecBarcodeGeneratorBuilder).
 * On Barcode Capture and SparkScan, we optimized the frame processing time in 4k-UHD resolution with dynamic resolution selection, resulting in up to 35% reduction on high-end devices and consistent performance improvements across all supported devices.
 platforms.
 * Added [`BarcodeFindView.ShouldShowZoomControl`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-find-view.html#property-scandit.datacapture.barcode.find.ui.BarcodeFindView.ShouldShowZoomControl) which enables the display of a button that allows switching to ultra wide lenses on supported devices for scanning at close range in narrow environments.

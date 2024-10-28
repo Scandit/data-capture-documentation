@@ -10,6 +10,12 @@ keywords:
   - react
 ---
 
+## 6.28.1
+
+**Released**: November 1, 2024
+
+No updates for this framework in this release.
+
 ## 6.28.0
 
 **Released**: October 8, 2024
