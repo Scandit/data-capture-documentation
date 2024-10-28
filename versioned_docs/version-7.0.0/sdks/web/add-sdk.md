@@ -1,6 +1,6 @@
 ---
 sidebar_position: 1
-toc_max_heading_level: 2
+toc_max_heading_level: 3
 pagination_next: null
 framework: web
 keywords:
@@ -19,13 +19,13 @@ Scandit Data Capture SDKs [npm packages](https://www.npmjs.com/search?q=@scandit
 You need to add the `@scandit/web-datacapture-core` package, which contains the shared functionality used by the other data capture packages.
 
 If you’re using `barcodecapture`-related functionalities,
-make sure to also add the `@scandit/web-datacapture-barcode` package and/or `@scandit/web-datacapture-parser`.
+make sure to also add the:
+- `@scandit/web-datacapture-barcode` package, and/or
+- `@scandit/web-datacapture-parser`
 
-In addition, you need to add `@scandit/web-datacapture-id` -
-the [ScanditIdCapture API](https://docs.scandit.com/sdks/web/id-capture/get-started) -
-if you want to scan personal identification documents, such as identity cards, passports or visas.
+In addition, you need to add `@scandit/web-datacapture-id` if you want to scan personal identification documents, such as identity cards, passports or visas. See the [ID Capture documentation](https://docs.scandit.com/sdks/web/id-capture/get-started) to learn more.
 
-:::note
+:::tip
 You can safely remove _barcode_ or _id_ dependencies if you are not going to use their features.
 :::
 
@@ -40,9 +40,9 @@ Before you begin, make sure you have the following prerequisites in place:
 Devices running the Scandit Data Capture SDK need to have a GPU and run a browser capable of making it available (requires [WebGL - current support?](https://caniuse.com/#feat=webgl) and [OffscreenCanvas - current support?](https://caniuse.com/#feat=offscreencanvas)) or the performance will drastically decrease.
 :::
 
-## CDN
+## Install via CDN
 
-You can use the [jsDelivr](https://jsdelivr.com/) or [UNPKG](https://unpkg.com/) CDN to specify a certain version (range) and include and import from our library as follows (example for barcode capture):
+You can use the [jsDelivr](https://jsdelivr.com/) or [UNPKG](https://unpkg.com/) CDN to specify a certain version (or range) and include and import from our library as follows. This example imports the core and barcode capture packages:
 
 ```html
 <!-- 
@@ -97,7 +97,7 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
 <script type="module" src="script.js"></script>
 ```
 
-### Full CDN sample
+### Complete Example
 
 ```html
 <!DOCTYPE html>
@@ -190,7 +190,7 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
 </html> 
 ```
 
-## npm
+## Install via npm
 
 To add the packages via npm, you run the following command from your project’s root folder:
 
@@ -220,16 +220,44 @@ import * as SDCBarcode from '@scandit/web-datacapture-barcode';
 // Insert your code here
 ```
 
-# Additional Information
+## Configure the Library
 
-:::note
-When using the Scandit Data Capture SDK you will likely want to set the camera as the frame source for various capture modes. 
-The camera permissions are handled by the browser, can only be granted if a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) is used and have to be accepted by the user explicitly when needed.
+The library needs to be configured and initialized before it can be used, this is done via the [`configure`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#) function. Note that the configuration expects a valid license key as part of the options.
+
+:::tip
+We recommended to call [`configure`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#) as soon as possible in your application so that the files are already downloaded and initialized when the capture process is started.
 :::
 
-## Progressive Web App (PWA)
+The `LibraryLocation` configuration option must be provided and point to the location of the Scandit Data Capture library/engine location (external WebAssembly files): `scandit-datacapture-sdk\*.min.js` and `scandit-datacapture-sdk\*.wasm`.
 
-You can easily configure the scanner to work offline making the web app progressive (Progressive Web App). There are some settings to consider: If you use workbox a tool that uses workbox under the hood like [Vite PWA](https://vite-pwa-org.netlify.app/) plugin, you must set also these options:
+WebAssembly requires these separate files which are loaded by our main library at runtime. They can be found inside the `engine` folder in the library you either added and installed via npm or access via a CDN. If you added and installed the library, these files should be put in a path that's accessible to be downloaded by the running library script.
+
+The configuration option that you provide should then point to the folder containing these files, either as a path of your website or an absolute URL (like the CDN one). **By default the library will look at the root of your website**.
+If you use a CDN to access the library, you will want to set this to the following values depending on the data capture mode you are using:
+
+* For Barcode Capture:
+  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0/build/engine/`,
+  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0/build/engine/`, or similar.
+* For ID Capture:
+  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7.0/build/engine/`,
+  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7.0/build/engine/`, or similar.
+
+Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the `libraryLocation` option, either by ensuring the served files are up-to-date or the path/URL specifies a specific version.
+
+In case a common CDN is used (jsDelivr or UNPKG) the library will automatically, internally set up the correct URLs pointing to the files needed for the matching library version.
+It is highly recommended to handle the serving of these files yourself on your website/server, ensuring optimal compression, correct WASM files MIME type, no request redirections, and correct caching headers usage. This will aid in faster loading.
+
+## Additional Information
+
+### Camera Permissions
+
+When using the Scandit Data Capture SDK you will likely want to set the camera as the frame source for various capture modes. 
+The camera permissions are handled by the browser, and can only be granted if a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) is used and have to be accepted by the user explicitly.
+
+
+### Progressive Web App (PWA)
+
+You can configure the scanner to work offline making the web app progressive (Progressive Web App). There are some settings to consider. If you use workbox a tool that uses workbox under the hood like [Vite PWA](https://vite-pwa-org.netlify.app/) plugin, you must set also these options:
 
 ```js
 {
@@ -247,9 +275,9 @@ Check the [webkit tracker](https://bugs.webkit.org/buglist.cgi?quicksearch=pwa%2
 if you experience similar issues.
 :::
 
-## Electron
+### Electron
 
-You can easily configure the web sdk to work into an Electron app. There are some extra steps though. The register method must be called inside the main.ts file passing down some dependencies and the publicKey. The publicKey will be used to decrypt the encrypted license key file that must be placed into the [`ConfigureOptions.licenseDataPath`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.LicenseDataPath) option:
+You can configure the Scandit SDK to work into an Electron app. The register method must be called inside the `main.ts` file passing down some dependencies and the `publicKey`. The `publicKey` will be used to decrypt the encrypted license key file that must be placed into the [`ConfigureOptions.licenseDataPath`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.LicenseDataPath) option:
 
 ```ts
 // electron main.ts
