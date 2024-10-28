@@ -43,31 +43,84 @@ Here we configure it for tracking EAN13 codes, but you should change this to the
 
 ```java
 BarcodePickSettings settings = new BarcodePickSettings();
-settings.setSymbologyEnabled(Symbology.EAN13_UPCA, true);
+settings.enableSymbology(Symbology.EAN13_UPCA, true);
 ```
 
-Then you have to create the list of items that will be picked and quantity to be picked for each item.
+Then you have to create the product provider for the Barcode Pick mode. This provider is responsible for providing the items that should be highlighted in the AR view. Note that in this example we are using a hardcoded list of items, but in a real-world scenario, you would fetch this list from your backend.
 
 ```java
-Set<BarcodePickProduct> items = new HashSet<>();
-items.add(
-        new BarcodePickProduct(
-                new BarcodePickProductIdentifier("9783598215438"),
-                new BarcodePickProductQuantityToPick(3)
-        )
-);
-items.add(
-        new BarcodePickProduct(
-                new BarcodePickProductIdentifier("9783598215414"),
-                new BarcodePickProductQuantityToPick(3)
-        )
-);
+List<ProductDatabaseEntry> productDatabase = new ArrayList<>();
+        productDatabase.add(
+            new ProductDatabaseEntry(
+                /*product identifier*/"product_1",
+                /*quantity to pick*/2,
+                /*items for the product*/new HashSet<String>() {{
+                    add("9783598215438");
+                    add("9783598215414");
+                    add("9783598215441");
+                    add("9783598215412");
+                }})
+        );
+        productDatabase.add(
+            new ProductDatabaseEntry(
+                /*product identifier*/"product_2",
+                /*quantity to pick*/3,
+                /*items for the product*/new HashSet<String>() {{
+                    add("9783598215471");
+                    add("9783598215481");
+                    add("9783598215458");
+                    add("9783598215498");
+                    add("9783598215421");
+                }})
+        );
+
+        // Map the database products to create the Scandit product provider input.
+        Set<BarcodePickProduct> items = new HashSet<>();
+        for (ProductDatabaseEntry productDatabaseEntry : productDatabase) {
+            items.add(
+                new BarcodePickProduct(
+                    productDatabaseEntry.productIdentifier,
+                    productDatabaseEntry.quantityToPick
+                )
+            );
+        }
+
+        // Finally, create the product provider itself
+        BarcodePickProductProvider productProvider = new BarcodePickAsyncMapperProductProvider(
+            items,
+            new BarcodePickAsyncMapperProductProviderCallback() {
+                @Override
+                public void productIdentifierForItems(
+                    @NonNull List<String> itemsData,
+                    @NonNull BarcodePickProductProviderCallback callback
+                ) {
+                    ArrayList<BarcodePickProductProviderCallbackItem> results = new ArrayList<>();
+
+                    // Use the scanned itemsData list to retrieve the identifier of the product they belong to.
+                    // This should be an async query in real world scenarios if there are a lot of products/items to loop.
+                    for (String itemData : itemsData) {
+                        for (ProductDatabaseEntry entry : productDatabase) {
+                            if (entry.items.contains(itemData)) {
+                                results.add(
+                                    new BarcodePickProductProviderCallbackItem(
+                                        /*item data*/itemData,
+                                        /*product identifier*/entry.productIdentifier
+                                    )
+                                );
+                                break;
+                            }
+                        }
+                    }
+                    callback.onData(results);
+                }
+            }
+        );
 ```
 
 Create the mode with the previously created settings:
 
 ```java
-BarcodePick mode = new BarcodePick(settings);
+BarcodePick mode = new BarcodePick(dataCaptureContext, settings, productProvider);
 ```
 
 ## Setup the `BarcodePickView`
@@ -96,7 +149,7 @@ Next, create a `BarcodePickView` instance with the Data Capture Context and the 
 BarcodePickView barcodePickView = BarcodePickView.newInstance(parentView, dataCaptureContext, mode, viewSettings);
 ```
 
-Connect the `BarcodePickView` to the Android lifecycle. The view is dependent on calling `BarcodePickView.onPause()` and `BarcodePickView.onResume()` to set up the camera and its overlays properly.
+Connect the `BarcodePickView` to the Android lifecycle. The view is dependent on calling `BarcodePickView.onPause()`, `BarcodePickView.onResume()`, and `BarcodePickView.onDestroy()` to set up the camera and its overlays properly.
 
 ```java
 @Override
@@ -110,6 +163,12 @@ public void onPause() {
     super.onPause();
     barcodePickView.onPause();
 }
+
+@Override
+public void onDestroyView() {
+    super.onDestroyView(); 
+    barcodePickView.onDestroy();
+}
 ```
 
 ## Register the Listener
@@ -121,9 +180,9 @@ Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk
 In this tutorial, we will then navigate back to the previous screen to finish the find session.
 
 ```java
-barcodePickView.setListener(new BarcodePickViewUiListener() {
+barcodePickView.setUiListener(new BarcodePickViewUiListener() {
     @Override
-    public void onFinishButtonTapped(@NonNull Set<BarcodePickItem> foundItems) {
+    public void onFinishButtonTapped(@NonNull BarcodePickView view) {
         requireActivity().onBackPressed();
     }
 });

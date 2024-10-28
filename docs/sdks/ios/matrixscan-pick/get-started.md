@@ -46,24 +46,69 @@ let settings = BarcodePickSettings()
 settings.set(symbology: .ean13UPCA, enabled: true)
 ```
 
-Then you have to create the list of items that will be picked and quantity to be picked for each item.
+Then you have to create the product provider for the Barcode Pick mode. This provider is responsible for providing the items that should be highlighted in the AR view. Note that in this example we are using a hardcoded list of items, but in a real-world scenario, you would fetch this list from your backend.
 
 ```swift
-var items = Set<BarcodePickProduct>()
-items.insert(BarcodePickProduct(
-    identifier: BarcodePickProductIdentifier("9783598215438"),
-    quantityToPick: BarcodePickProductQuantityToPick(3),
-))
-items.insert(BarcodePickProduct(
-    identifier: BarcodePickProductIdentifier("9783598215414"),
-    quantityToPick: BarcodePickProductQuantityToPick(3)
-))
+let productDatabase: [ProductDatabaseEntry] = [
+    .init(
+        identifier: "product_1",
+        quantity: 2,
+        items: [
+            "9783598215438",
+            "9783598215414",
+            "9783598215441",
+            "9783598215412"
+        ]),
+    .init(
+        identifier: "product_2",
+        quantity: 3,
+        items: [
+            "9783598215471",
+            "9783598215481",
+            "9783598215458",
+            "9783598215498",
+            "9783598215421"
+        ])
+]
+
+var products: Set<BarcodePickProduct> = []
+productDatabase.forEach { entry in
+    products.insert(.init(identifier: entry.identifier,
+                        quantityToPick: entry.quantity))
+}
+
+let productProvider = BarcodePickAsyncMapperProductProvider(products: products,
+                                                            providerDelegate: self)
 ```
 
-Create the mode with the previously created settings:
+And the product provider delegate:
 
 ```swift
-let mode = BarcodePick(settings: settings)
+extension ViewController: BarcodePickAsyncMapperProductProviderDelegate {
+    func mapItems(_ items: [String], completionHandler: @escaping ([BarcodePickProductProviderCallbackItem]) -> Void) {
+        var result: [BarcodePickProductProviderCallbackItem] = []
+        // Use the scanned items list to retrieve the identifier of the product they belong to.
+        // This should be an async query in real world scenarios if there are a lot of products/items to loop.
+        items.forEach { item in
+            if let product = productDatabase.first(where: { entry in
+                entry.items.contains(item)
+            }) {
+                result.append(.init(itemData: item,
+                                    productIdentifier: product.identifier))
+            }
+        }
+
+        completionHandler(result)
+    }
+}
+```
+
+Then create the mode with the previously created settings:
+
+```swift
+let mode = BarcodePick(context: context,
+                        settings: settings,
+                        productProvider: productProvider)
 ```
 
 ## Setup the `BarcodePickView`
@@ -97,12 +142,25 @@ Connect the `BarcodePickView` to the iOS view controller lifecycle. In particula
 ```swift
 override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    BarcodePickView.prepareSearching()
+    barcodePickView.start()
 }
 
 override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
-    BarcodePickView.stopSearching()
+    barcodePickView.pause()
+    if isMovingFromParent {
+        barcodePickView.stop()
+    }
+}
+```
+
+And the BarcodePickViewUIDelegate:
+
+```swift
+extension ViewController: BarcodePickViewUIDelegate {
+    func barcodePickViewDidTapFinishButton(_ view: BarcodePickView) {
+        navigationController?.popViewController(animated: true)
+    }
 }
 ```
 
@@ -110,18 +168,17 @@ override func viewWillDisappear(_ animated: Bool) {
 
 The `BarcodePickView` displays a **Finish** button next to its shutter button button. 
 
-Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-pick-view.html#interface-scandit.datacapture.barcode.pick.ui.IBarcodePickViewUiListener) to be notified what items have been found once the finish button is pressed.
-
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+Register a [BarcodePickViewListener](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-pick-view-listener.html#interface-scandit.datacapture.barcode.pick.ui.BarcodePickViewListener) to be notified what items have been found once the finish button is pressed.
 
 ```swift
-BarcodePickView.uiDelegate = self
+extension ViewController: BarcodePickViewListener {
+    func barcodePickViewDidStartScanning(_ view: BarcodePickView) {}
 
-extension ViewController: BarcodePickViewUIDelegate {
-    func BarcodePickView(_ view: BarcodePickView,
-                        didTapFinishButton foundItems: Set<BarcodePickProduct>) {
-        navigationController?.popViewController(animated: true)
-    }
+    func barcodePickViewDidFreezeScanning(_ view: BarcodePickView) {}
+
+    func barcodePickViewDidPauseScanning(_ view: BarcodePickView) {}
+
+    func barcodePickViewDidStopScanning(_ view: BarcodePickView) {}
 }
 ```
 
