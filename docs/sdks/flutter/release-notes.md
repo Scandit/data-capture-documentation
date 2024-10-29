@@ -12,7 +12,7 @@ keywords:
 
 ## 6.28.1
 
-**Released**: November 1, 2024
+**Released**: October 29, 2024
 
 ### Bug Fixes
 
