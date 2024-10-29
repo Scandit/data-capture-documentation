@@ -11,7 +11,7 @@ displayed_sidebar: sdcSidebar
 
 | Requirement | Version |
 | ----------- | ------- |
-| iOS         | 13.0+   |
+| iOS         | 14.0+   |
 | Architecture| arm64, x86_64 |
 | Camera      | 720p+   |
 | GPU         |    |

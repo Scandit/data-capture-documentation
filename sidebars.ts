@@ -750,6 +750,11 @@ const sidebars: SidebarsConfig = {
             "sdks/cordova/parser/get-started",
           ],
         },
+        {
+          type: "doc",
+          id: "sdks/cordova/barcode-generator",
+          label: "Barcode Generator",
+        },
       ],
     },
     {
@@ -1277,6 +1282,11 @@ const sidebars: SidebarsConfig = {
           items: [
             "sdks/capacitor/parser/get-started",
           ],
+        },
+        {
+          type: "doc",
+          id: "sdks/capacitor/barcode-generator",
+          label: "Barcode Generator",
         },
       ],
     },

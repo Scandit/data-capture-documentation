@@ -730,6 +730,11 @@
           "items": [
             "sdks/cordova/parser/get-started"
           ]
+        },
+        {
+          "type": "doc",
+          "id": "sdks/cordova/barcode-generator",
+          "label": "Barcode Generator"
         }
       ]
     },
@@ -1252,6 +1257,11 @@
           "items": [
             "sdks/capacitor/parser/get-started"
           ]
+        },
+        {
+          "type": "doc",
+          "id": "sdks/capacitor/barcode-generator",
+          "label": "Barcode Generator"
         }
       ]
     },

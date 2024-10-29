@@ -54,7 +54,7 @@ try {
 }
 ```
 
-See the complete [API reference](https://docs.scandit.com/data-capture-sdk/android/barcode-generator/api.html) for more information.
+See the complete [API reference](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-generator.html) for more information.
 
 ## Generating QR Codes
 
@@ -86,4 +86,4 @@ try {
 }
 ```
 
-See the complete [API reference](https://docs.scandit.com/data-capture-sdk/android/barcode-generator/api.html) for more information.
+See the complete [API reference](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-generator.html) for more information.
