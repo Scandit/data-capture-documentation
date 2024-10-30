@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_label: Get Started
 pagination_prev: null
 pagination_next: null
 ---

@@ -101,7 +101,7 @@
             "type": "doc",
             "id": "sdks/ios/single-scanning"
           },
-          "collapsed": false,
+          "collapsed": true,
           "items": [
             {
               "type": "category",
@@ -131,9 +131,17 @@
         },
         {
           "type": "category",
-          "label": "Multi-scanning",
-          "collapsed": false,
+          "label": "MatrixScan",
+          "collapsed": true,
           "items": [
+            {
+              "type": "category",
+              "label": "MatrixScan Batch",
+              "items": [
+                "sdks/ios/matrixscan/intro",
+                "sdks/ios/matrixscan/get-started"
+              ]
+            },
             {
               "type": "category",
               "label": "MatrixScan Count",
@@ -167,13 +175,26 @@
               "items": [
                 "sdks/ios/label-capture/get-started"
               ]
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Additional Functionalities",
+          "collapsed": true,
+          "items": [
+            {
+              "type": "category",
+              "label": "Parser",
+              "items": [
+                "sdks/ios/parser/get-started"
+              ]
             },
             {
               "type": "category",
-              "label": "MatrixScan API",
+              "label": "Barcode Generator",
               "items": [
-                "sdks/ios/matrixscan/intro",
-                "sdks/ios/matrixscan/get-started"
+                "sdks/ios/barcode-generator"
               ]
             }
           ]
@@ -206,25 +227,6 @@
             "sdks/ios/id-validate/intro",
             "sdks/ios/id-validate/get-started"
           ]
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Additional Functionalities",
-      "collapsed": false,
-      "items": [
-        {
-          "type": "category",
-          "label": "Parser",
-          "items": [
-            "sdks/ios/parser/get-started"
-          ]
-        },
-        {
-          "type": "doc",
-          "id": "sdks/ios/barcode-generator",
-          "label": "Barcode Generator"
         }
       ]
     },
@@ -297,7 +299,7 @@
             "type": "doc",
             "id": "sdks/android/single-scanning"
           },
-          "collapsed": false,
+          "collapsed": true,
           "items": [
             {
               "type": "category",
@@ -327,9 +329,17 @@
         },
         {
           "type": "category",
-          "label": "Multi-scanning",
-          "collapsed": false,
+          "label": "MatrixScan",
+          "collapsed": true,
           "items": [
+            {
+              "type": "category",
+              "label": "MatrixScan Batch",
+              "items": [
+                "sdks/android/matrixscan/intro",
+                "sdks/android/matrixscan/get-started"
+              ]
+            },
             {
               "type": "category",
               "label": "MatrixScan Count",
@@ -363,13 +373,26 @@
               "items": [
                 "sdks/android/label-capture/get-started"
               ]
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Additional Functionalities",
+          "collapsed": true,
+          "items": [
+            {
+              "type": "category",
+              "label": "Parser",
+              "items": [
+                "sdks/android/parser/get-started"
+              ]
             },
             {
               "type": "category",
-              "label": "MatrixScan API",
+              "label": "Barcode Generator",
               "items": [
-                "sdks/android/matrixscan/intro",
-                "sdks/android/matrixscan/get-started"
+                "sdks/android/barcode-generator"
               ]
             }
           ]
@@ -402,25 +425,6 @@
             "sdks/android/id-validate/intro",
             "sdks/android/id-validate/get-started"
           ]
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Additional Functionalities",
-      "collapsed": false,
-      "items": [
-        {
-          "type": "category",
-          "label": "Parser",
-          "items": [
-            "sdks/android/parser/get-started"
-          ]
-        },
-        {
-          "type": "doc",
-          "id": "sdks/android/barcode-generator",
-          "label": "Barcode Generator"
         }
       ]
     },
@@ -493,7 +497,7 @@
             "type": "doc",
             "id": "sdks/web/single-scanning"
           },
-          "collapsed": false,
+          "collapsed": true,
           "items": [
             {
               "type": "category",
@@ -515,9 +519,17 @@
         },
         {
           "type": "category",
-          "label": "Multi-scanning",
-          "collapsed": false,
+          "label": "MatrixScan",
+          "collapsed": true,
           "items": [
+            {
+              "type": "category",
+              "label": "MatrixScan Batch",
+              "items": [
+                "sdks/web/matrixscan/intro",
+                "sdks/web/matrixscan/get-started"
+              ]
+            },
             {
               "type": "category",
               "label": "MatrixScan Find",
@@ -526,13 +538,19 @@
                 "sdks/web/matrixscan-find/get-started",
                 "sdks/web/matrixscan-find/advanced"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Additional Functionalities",
+          "collapsed": true,
+          "items": [
             {
               "type": "category",
-              "label": "MatrixScan API",
+              "label": "Parser",
               "items": [
-                "sdks/web/matrixscan/intro",
-                "sdks/web/matrixscan/get-started"
+                "sdks/web/parser/get-started"
               ]
             }
           ]
@@ -564,20 +582,6 @@
           "items": [
             "sdks/web/id-validate/intro",
             "sdks/web/id-validate/get-started"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Additional Functionalities",
-      "collapsed": false,
-      "items": [
-        {
-          "type": "category",
-          "label": "Parser",
-          "items": [
-            "sdks/web/parser/get-started"
           ]
         }
       ]
@@ -646,7 +650,7 @@
             "type": "doc",
             "id": "sdks/cordova/single-scanning"
           },
-          "collapsed": false,
+          "collapsed": true,
           "items": [
             {
               "type": "category",
@@ -676,15 +680,36 @@
         },
         {
           "type": "category",
-          "label": "Multi-scanning",
-          "collapsed": false,
+          "label": "MatrixScan",
+          "collapsed": true,
           "items": [
             {
               "type": "category",
-              "label": "MatrixScan API",
+              "label": "MatrixScan Batch",
               "items": [
                 "sdks/cordova/matrixscan/intro",
                 "sdks/cordova/matrixscan/get-started"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Additional Functionalities",
+          "collapsed": true,
+          "items": [
+            {
+              "type": "category",
+              "label": "Parser",
+              "items": [
+                "sdks/cordova/parser/get-started"
+              ]
+            },
+            {
+              "type": "category",
+              "label": "Barcode Generator",
+              "items": [
+                "sdks/cordova/barcode-generator"
               ]
             }
           ]
@@ -716,25 +741,6 @@
             "sdks/cordova/id-validate/intro",
             "sdks/cordova/id-validate/get-started"
           ]
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Additional Functionalities",
-      "collapsed": false,
-      "items": [
-        {
-          "type": "category",
-          "label": "Parser",
-          "items": [
-            "sdks/cordova/parser/get-started"
-          ]
-        },
-        {
-          "type": "doc",
-          "id": "sdks/cordova/barcode-generator",
-          "label": "Barcode Generator"
         }
       ]
     },
@@ -802,7 +808,7 @@
             "type": "doc",
             "id": "sdks/react-native/single-scanning"
           },
-          "collapsed": false,
+          "collapsed": true,
           "items": [
             {
               "type": "category",
@@ -832,9 +838,17 @@
         },
         {
           "type": "category",
-          "label": "Multi-scanning",
-          "collapsed": false,
+          "label": "MatrixScan",
+          "collapsed": true,
           "items": [
+            {
+              "type": "category",
+              "label": "MatrixScan Batch",
+              "items": [
+                "sdks/react-native/matrixscan/intro",
+                "sdks/react-native/matrixscan/get-started"
+              ]
+            },
             {
               "type": "category",
               "label": "MatrixScan Count",
@@ -859,13 +873,19 @@
               "items": [
                 "sdks/react-native/label-capture/get-started"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Additional Functionalities",
+          "collapsed": true,
+          "items": [
             {
               "type": "category",
-              "label": "MatrixScan API",
+              "label": "Parser",
               "items": [
-                "sdks/react-native/matrixscan/intro",
-                "sdks/react-native/matrixscan/get-started"
+                "sdks/react-native/parser/get-started"
               ]
             }
           ]
@@ -897,20 +917,6 @@
           "items": [
             "sdks/react-native/id-validate/intro",
             "sdks/react-native/id-validate/get-started"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Additional Functionalities",
-      "collapsed": false,
-      "items": [
-        {
-          "type": "category",
-          "label": "Parser",
-          "items": [
-            "sdks/react-native/parser/get-started"
           ]
         }
       ]
@@ -984,7 +990,7 @@
             "type": "doc",
             "id": "sdks/flutter/single-scanning"
           },
-          "collapsed": false,
+          "collapsed": true,
           "items": [
             {
               "type": "category",
@@ -1014,9 +1020,17 @@
         },
         {
           "type": "category",
-          "label": "Multi-scanning",
-          "collapsed": false,
+          "label": "MatrixScan",
+          "collapsed": true,
           "items": [
+            {
+              "type": "category",
+              "label": "MatrixScan Batch",
+              "items": [
+                "sdks/flutter/matrixscan/intro",
+                "sdks/flutter/matrixscan/get-started"
+              ]
+            },
             {
               "type": "category",
               "label": "MatrixScan Count",
@@ -1034,13 +1048,19 @@
                 "sdks/flutter/matrixscan-find/get-started",
                 "sdks/flutter/matrixscan-find/advanced"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Additional Functionalities",
+          "collapsed": true,
+          "items": [
             {
               "type": "category",
-              "label": "MatrixScan API",
+              "label": "Parser",
               "items": [
-                "sdks/flutter/matrixscan/intro",
-                "sdks/flutter/matrixscan/get-started"
+                "sdks/flutter/parser/get-started"
               ]
             }
           ]
@@ -1072,20 +1092,6 @@
           "items": [
             "sdks/flutter/id-validate/intro",
             "sdks/flutter/id-validate/get-started"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Additional Functionalities",
-      "collapsed": false,
-      "items": [
-        {
-          "type": "category",
-          "label": "Parser",
-          "items": [
-            "sdks/flutter/parser/get-started"
           ]
         }
       ]
@@ -1154,7 +1160,7 @@
             "type": "doc",
             "id": "sdks/capacitor/single-scanning"
           },
-          "collapsed": false,
+          "collapsed": true,
           "items": [
             {
               "type": "category",
@@ -1184,9 +1190,17 @@
         },
         {
           "type": "category",
-          "label": "Multi-scanning",
-          "collapsed": false,
+          "label": "MatrixScan",
+          "collapsed": true,
           "items": [
+            {
+              "type": "category",
+              "label": "MatrixScan Batch",
+              "items": [
+                "sdks/capacitor/matrixscan/intro",
+                "sdks/capacitor/matrixscan/get-started"
+              ]
+            },
             {
               "type": "category",
               "label": "MatrixScan Count",
@@ -1204,13 +1218,26 @@
                 "sdks/capacitor/matrixscan-find/get-started",
                 "sdks/capacitor/matrixscan-find/advanced"
               ]
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Additional Functionalities",
+          "collapsed": true,
+          "items": [
+            {
+              "type": "category",
+              "label": "Parser",
+              "items": [
+                "sdks/capacitor/parser/get-started"
+              ]
             },
             {
               "type": "category",
-              "label": "MatrixScan API",
+              "label": "Barcode Generator",
               "items": [
-                "sdks/capacitor/matrixscan/intro",
-                "sdks/capacitor/matrixscan/get-started"
+                "sdks/capacitor/barcode-generator"
               ]
             }
           ]
@@ -1243,25 +1270,6 @@
             "sdks/capacitor/id-validate/intro",
             "sdks/capacitor/id-validate/get-started"
           ]
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Additional Functionalities",
-      "collapsed": false,
-      "items": [
-        {
-          "type": "category",
-          "label": "Parser",
-          "items": [
-            "sdks/capacitor/parser/get-started"
-          ]
-        },
-        {
-          "type": "doc",
-          "id": "sdks/capacitor/barcode-generator",
-          "label": "Barcode Generator"
         }
       ]
     },
@@ -1393,7 +1401,7 @@
             "type": "doc",
             "id": "sdks/xamarin/ios/single-scanning"
           },
-          "collapsed": false,
+          "collapsed": true,
           "items": [
             {
               "type": "category",
@@ -1423,9 +1431,17 @@
         },
         {
           "type": "category",
-          "label": "Multi-scanning",
-          "collapsed": false,
+          "label": "MatrixScan",
+          "collapsed": true,
           "items": [
+            {
+              "type": "category",
+              "label": "MatrixScan Batch",
+              "items": [
+                "sdks/xamarin/ios/matrixscan/intro",
+                "sdks/xamarin/ios/matrixscan/get-started"
+              ]
+            },
             {
               "type": "category",
               "label": "MatrixScan Count",
@@ -1434,13 +1450,19 @@
                 "sdks/xamarin/ios/matrixscan-count/get-started",
                 "sdks/xamarin/ios/matrixscan-count/advanced"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Additional Functionalities",
+          "collapsed": true,
+          "items": [
             {
               "type": "category",
-              "label": "MatrixScan API",
+              "label": "Parser",
               "items": [
-                "sdks/xamarin/ios/matrixscan/intro",
-                "sdks/xamarin/ios/matrixscan/get-started"
+                "sdks/xamarin/ios/parser/get-started"
               ]
             }
           ]
@@ -1472,20 +1494,6 @@
           "items": [
             "sdks/xamarin/ios/id-validate/intro",
             "sdks/xamarin/ios/id-validate/get-started"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Additional Functionalities",
-      "collapsed": false,
-      "items": [
-        {
-          "type": "category",
-          "label": "Parser",
-          "items": [
-            "sdks/xamarin/ios/parser/get-started"
           ]
         }
       ]
@@ -1554,7 +1562,7 @@
             "type": "doc",
             "id": "sdks/xamarin/android/single-scanning"
           },
-          "collapsed": false,
+          "collapsed": true,
           "items": [
             {
               "type": "category",
@@ -1584,9 +1592,17 @@
         },
         {
           "type": "category",
-          "label": "Multi-scanning",
-          "collapsed": false,
+          "label": "MatrixScan",
+          "collapsed": true,
           "items": [
+            {
+              "type": "category",
+              "label": "MatrixScan Batch",
+              "items": [
+                "sdks/xamarin/android/matrixscan/intro",
+                "sdks/xamarin/android/matrixscan/get-started"
+              ]
+            },
             {
               "type": "category",
               "label": "MatrixScan Count",
@@ -1595,13 +1611,19 @@
                 "sdks/xamarin/android/matrixscan-count/get-started",
                 "sdks/xamarin/android/matrixscan-count/advanced"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Additional Functionalities",
+          "collapsed": true,
+          "items": [
             {
               "type": "category",
-              "label": "MatrixScan API",
+              "label": "Parser",
               "items": [
-                "sdks/xamarin/android/matrixscan/intro",
-                "sdks/xamarin/android/matrixscan/get-started"
+                "sdks/xamarin/android/parser/get-started"
               ]
             }
           ]
@@ -1633,20 +1655,6 @@
           "items": [
             "sdks/xamarin/android/id-validate/intro",
             "sdks/xamarin/android/id-validate/get-started"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Additional Functionalities",
-      "collapsed": false,
-      "items": [
-        {
-          "type": "category",
-          "label": "Parser",
-          "items": [
-            "sdks/xamarin/android/parser/get-started"
           ]
         }
       ]
@@ -1715,7 +1723,7 @@
             "type": "doc",
             "id": "sdks/xamarin/forms/single-scanning"
           },
-          "collapsed": false,
+          "collapsed": true,
           "items": [
             {
               "type": "category",
@@ -1745,9 +1753,17 @@
         },
         {
           "type": "category",
-          "label": "Multi-scanning",
-          "collapsed": false,
+          "label": "MatrixScan",
+          "collapsed": true,
           "items": [
+            {
+              "type": "category",
+              "label": "MatrixScan Batch",
+              "items": [
+                "sdks/xamarin/forms/matrixscan/intro",
+                "sdks/xamarin/forms/matrixscan/get-started"
+              ]
+            },
             {
               "type": "category",
               "label": "MatrixScan Count",
@@ -1756,13 +1772,19 @@
                 "sdks/xamarin/forms/matrixscan-count/get-started",
                 "sdks/xamarin/forms/matrixscan-count/advanced"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Additional Functionalities",
+          "collapsed": true,
+          "items": [
             {
               "type": "category",
-              "label": "MatrixScan API",
+              "label": "Parser",
               "items": [
-                "sdks/xamarin/forms/matrixscan/intro",
-                "sdks/xamarin/forms/matrixscan/get-started"
+                "sdks/xamarin/forms/parser/get-started"
               ]
             }
           ]
@@ -1794,20 +1816,6 @@
           "items": [
             "sdks/xamarin/forms/id-validate/intro",
             "sdks/xamarin/forms/id-validate/get-started"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Additional Functionalities",
-      "collapsed": false,
-      "items": [
-        {
-          "type": "category",
-          "label": "Parser",
-          "items": [
-            "sdks/xamarin/forms/parser/get-started"
           ]
         }
       ]
@@ -1872,7 +1880,7 @@
         {
           "type": "category",
           "label": "Single Scanning",
-          "collapsed": false,
+          "collapsed": true,
           "items": [
             {
               "type": "category",
@@ -1902,9 +1910,17 @@
         },
         {
           "type": "category",
-          "label": "Multi-scanning",
-          "collapsed": false,
+          "label": "MatrixScan",
+          "collapsed": true,
           "items": [
+            {
+              "type": "category",
+              "label": "MatrixScan Batch",
+              "items": [
+                "sdks/net/ios/matrixscan/intro",
+                "sdks/net/ios/matrixscan/get-started"
+              ]
+            },
             {
               "type": "category",
               "label": "MatrixScan Count",
@@ -1922,13 +1938,19 @@
                 "sdks/net/ios/matrixscan-find/get-started",
                 "sdks/net/ios/matrixscan-find/advanced"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Additional Functionalities",
+          "collapsed": true,
+          "items": [
             {
               "type": "category",
-              "label": "MatrixScan API",
+              "label": "Parser",
               "items": [
-                "sdks/net/ios/matrixscan/intro",
-                "sdks/net/ios/matrixscan/get-started"
+                "sdks/net/ios/parser/get-started"
               ]
             }
           ]
@@ -1960,20 +1982,6 @@
           "items": [
             "sdks/net/ios/id-validate/intro",
             "sdks/net/ios/id-validate/get-started"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Additional Functionalities",
-      "collapsed": false,
-      "items": [
-        {
-          "type": "category",
-          "label": "Parser",
-          "items": [
-            "sdks/net/ios/parser/get-started"
           ]
         }
       ]
@@ -2038,7 +2046,7 @@
         {
           "type": "category",
           "label": "Single Scanning",
-          "collapsed": false,
+          "collapsed": true,
           "items": [
             {
               "type": "category",
@@ -2068,9 +2076,17 @@
         },
         {
           "type": "category",
-          "label": "Multi-scanning",
-          "collapsed": false,
+          "label": "MatrixScan",
+          "collapsed": true,
           "items": [
+            {
+              "type": "category",
+              "label": "MatrixScan Batch",
+              "items": [
+                "sdks/net/android/matrixscan/intro",
+                "sdks/net/android/matrixscan/get-started"
+              ]
+            },
             {
               "type": "category",
               "label": "MatrixScan Count",
@@ -2088,13 +2104,19 @@
                 "sdks/net/android/matrixscan-find/get-started",
                 "sdks/net/android/matrixscan-find/advanced"
               ]
-            },
+            }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Additional Functionalities",
+          "collapsed": true,
+          "items": [
             {
               "type": "category",
-              "label": "MatrixScan API",
+              "label": "Parser",
               "items": [
-                "sdks/net/android/matrixscan/intro",
-                "sdks/net/android/matrixscan/get-started"
+                "sdks/net/android/parser/get-started"
               ]
             }
           ]
@@ -2126,20 +2148,6 @@
           "items": [
             "sdks/net/android/id-validate/intro",
             "sdks/net/android/id-validate/get-started"
-          ]
-        }
-      ]
-    },
-    {
-      "type": "category",
-      "label": "Additional Functionalities",
-      "collapsed": false,
-      "items": [
-        {
-          "type": "category",
-          "label": "Parser",
-          "items": [
-            "sdks/net/android/parser/get-started"
           ]
         }
       ]

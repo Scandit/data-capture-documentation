@@ -1,5 +1,6 @@
 ---
 displayed_sidebar: capacitorSidebar
+sidebar_label: Get Started
 pagination_prev: null
 pagination_next: null
 ---
