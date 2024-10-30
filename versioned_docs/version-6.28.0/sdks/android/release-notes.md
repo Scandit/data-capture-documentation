@@ -17,7 +17,7 @@ keywords:
 
 #### Barcode
 
-* Our [Barode Generator](./barcode-generator/) now allows the generation of Aztec codes. See [`AztecBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.AztecBarcodeGeneratorBuilder).
+* Our [Barcode Generator](./barcode-generator/) now allows the generation of Aztec codes. See [`AztecBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.AztecBarcodeGeneratorBuilder).
 * On Barcode Capture and SparkScan, we optimized the frame processing time in 4k-UHD resolution with dynamic resolution selection, resulting in up to 35% reduction on high-end devices and consistent performance improvements across all supported devices.
 platforms.
 * Added [`BarcodeFindView.ShouldShowZoomControl`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-find-view.html#property-scandit.datacapture.barcode.find.ui.BarcodeFindView.ShouldShowZoomControl) which enables the display of a button that allows switching to ultra wide lenses on supported devices for scanning at close range in narrow environments.
