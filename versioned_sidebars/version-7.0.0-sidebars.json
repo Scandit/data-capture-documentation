@@ -481,6 +481,7 @@
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
         },
+        "sdks/web/getting-started",
         "sdks/web/add-sdk",
         "sdks/web/samples"
       ]
