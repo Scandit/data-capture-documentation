@@ -10,7 +10,9 @@ keywords:
 
 # Quick Start Guide
 
-This quick start guide will help you get up and running with SparkScan, Scandit's pre-built barcode scanning solution and part of the Scandit Data Capture SDK.
+This quick start guide will help you get up and running with SparkScan, the easiest way to get started with Scandit barcode scanning.
+
+SparkScan provides top performance and optimized scanning UX with just a few lines of code, incorporating the best practices developed by Scandit across years of experience and billions of scans. The intentionally minimalistic UI floats on top of any smartphone application, without the need to adapt the existing app.
 
 The fastest way to get started is by running our sample application, so we'll cover that first. After that, we'll show you how to integrate SparkScan into your own application.
 
