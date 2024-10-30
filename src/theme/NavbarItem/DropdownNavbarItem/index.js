@@ -39,6 +39,7 @@ function DropdownNavbarItemDesktop({
   const dropdownRef = useRef(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const [link, setLink] = useState("/add-sdk");
+  const [linkVersion, setLinkVersion] = useState("sdks");
   const location = useLocation();
   const currentPath = location.pathname;
   useEffect(() => {
@@ -59,22 +60,28 @@ function DropdownNavbarItemDesktop({
   }, [dropdownRef]);
 
   useEffect(() => {
-    if (currentPath) {
-      let trimmedPath = "";
+    if (!currentPath) return;
+    const possibleVersions = ["/next", "/6.28.0"];
+    const match = currentPath.match(/(.*)(?=\/sdks)/);
+    setLinkVersion(match && match[0] ? `${match[0]}/sdks` : "/sdks");
 
-      for (const item of newItems) {
-        if (currentPath.includes(item.activeBasePath)) {
-          trimmedPath = currentPath.replace(item.activeBasePath, "");
-          break;
-        }
-        continue;
-      }
+    const activeBasePath = newItems.find((item) =>
+      currentPath.includes(item.activeBasePath)
+    )?.activeBasePath;
 
-      if (trimmedPath.endsWith("/")) {
-        trimmedPath = trimmedPath.slice(0, -1);
-      }
-      setLink(trimmedPath || "/add-sdk");
-    }
+    let trimmedPath = activeBasePath
+      ? currentPath.replace(activeBasePath, "")
+      : currentPath;
+
+    possibleVersions.forEach((version) => {
+      trimmedPath = trimmedPath.replace(version, "");
+    });
+
+    trimmedPath = trimmedPath.endsWith("/")
+      ? trimmedPath.slice(0, -1)
+      : trimmedPath;
+
+    setLink(trimmedPath || "/add-sdk");
   }, [currentPath]);
 
   const newItems = [
@@ -82,97 +89,99 @@ function DropdownNavbarItemDesktop({
       type: "docsVersion",
       label: "iOS",
       sidebarId: "iosSidebar",
-      to: `sdks/ios${link}`,
+      to: `${linkVersion}/ios${link}`,
       activeBasePath: "sdks/ios/",
     },
     {
       type: "docsVersion",
       label: "Android",
       sidebarId: "androidSidebar",
-      to: `sdks/android${link}`,
+      to: `${linkVersion}/android${link}`,
       activeBasePath: "sdks/android/",
     },
     {
       type: "docsVersion",
       label: "Web",
       sidebarId: "webSidebar",
-      to: `sdks/web${link}`,
+      to: `${linkVersion}/web${link}`,
       activeBasePath: "sdks/web/",
     },
     {
       type: "docsVersion",
       label: "Cordova",
       sidebarId: "cordovaSidebar",
-      to: `sdks/cordova${link}`,
+      to: `${linkVersion}/cordova${link}`,
       activeBasePath: "sdks/cordova/",
     },
     {
       type: "docsVersion",
       label: "React Native",
       sidebarId: "reactnativeSidebar",
-      to: `sdks/react-native${link}`,
+      to: `${linkVersion}/react-native${link}`,
       activeBasePath: "sdks/react-native/",
     },
     {
       type: "docsVersion",
       label: "Flutter",
       sidebarId: "flutterSidebar",
-      to: `sdks/flutter${link}`,
+      to: `${linkVersion}/flutter${link}`,
       activeBasePath: "sdks/flutter/",
     },
     {
       type: "docsVersion",
       label: "Capacitor",
       sidebarId: "capacitorSidebar",
-      to: `sdks/capacitor${link}`,
+      to: `${linkVersion}/capacitor${link}`,
       activeBasePath: "sdks/capacitor/",
     },
     {
       type: "docsVersion",
       label: "Titanium",
       sidebarId: "titaniumSidebar",
-      to: `sdks/titanium${link}`,
+      to: `${linkVersion}/titanium${link}`,
       activeBasePath: "sdks/titanium/",
     },
     {
       type: "docsVersion",
       label: "Xamarin iOS",
       sidebarId: "xamarinIosSidebar",
-      to: `sdks/xamarin/ios${link}`,
+      to: `${linkVersion}/xamarin/ios${link}`,
       activeBasePath: "sdks/xamarin/ios/",
     },
     {
       type: "docsVersion",
       label: "Xamarin Android",
       sidebarId: "xamarinAndroidSidebar",
-      to: `sdks/xamarin/android${link}`,
+      to: `${linkVersion}/xamarin/android${link}`,
       activeBasePath: "sdks/xamarin/android/",
     },
     {
       type: "docsVersion",
       label: "Xamarin Forms",
       sidebarId: "xamarinFormsSidebar",
-      to: `sdks/xamarin/forms${link}`,
+      to: `${linkVersion}/xamarin/forms${link}`,
       activeBasePath: "sdks/xamarin/forms/",
     },
     {
       type: "docsVersion",
       label: ".NET iOS",
       sidebarId: "netIosSidebar",
-      to: `sdks/net/ios${link}`,
+      to: `${linkVersion}/net/ios${link}`,
       activeBasePath: "sdks/net/ios/",
     },
     {
       type: "docsVersion",
       label: ".NET Android",
       sidebarId: "netAndroidSidebar",
-      to: `sdks/net/android${link}`,
+      to: `${linkVersion}/net/android${link}`,
       activeBasePath: "sdks/net/android/",
     },
   ];
 
   const combinedItems =
-    items && items.some((item) => item.type === "docsVersion") ? newItems : items;
+    items && items.some((item) => item.type === "docsVersion")
+      ? newItems
+      : items;
 
   return (
     <div
