@@ -52,23 +52,24 @@ Symbologies often have different properties, such as symbol count (length of the
 | MaxiCode       | no                       |                                          |
 | MicroPDF417    | no                       |                                          |
 | PDF417         | no                       |                                          |
-| QR Code        | yes                      |                                          |
+| QR Code        | yes                      | guess_encoding_disabled                  |
 | Micro QR Code  | yes                      |                                          |
 | ArUco          | yes                      |                                          |
 
 ## Symbology Extension Descriptions
 
-| Extension                              | Description                                                                                                                                                                                                                 |
-|----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Extension  | Description   |
+|----------------------------------------|-------------------------------------------------------------------|
 | full_ascii                             | Interprets the Code39 code data using two symbols per output character to encode all ASCII characters.                                                                                                                       |
 | relaxed_sharp_quiet_zone_check         | Enables scanning codes that have quiet zones (white area before and after the code) that are significantly smaller than allowed by the symbology specification. Use this extension if you are having difficulties to scan codes due to quiet zone violations. However, enabling it may come at the cost of more false positives under certain circumstances. |
-| return_as_upca                         | Transforms the UPCE result into its UPCA representation.                                                                                                                                                                     |
-| remove_leading_upca_zero               | Removes the leading zero digit from the result if the UPCA representation extension ‘return_as_upca’ is enabled.                                                                                                              |
-| strip_leading_fnc1                     | Removes the leading FNC1 character that indicates a GS1 code. To determine whether a certain code is a GS1 code, use ref sc_barcode_is_gs1_data_carrier.                                                                      |
+| return_as_upca                         | Transforms the UPCE result into its UPCA representation.  |
+| remove_leading_upca_zero               | Removes the leading zero digit from the result if the UPCA representation extension ‘return_as_upca’ is enabled.   |
+| strip_leading_fnc1                     | Removes the leading FNC1 character that indicates a GS1 code. To determine whether a certain code is a GS1 code, use ref sc_barcode_is_gs1_data_carrier.  |
 | direct_part_marking_mode               | Use this mode to improve scan performance when reading direct part marked (DPM) Data Matrix codes. Enabling this extension comes at the cost of increased frame processing times. It is recommended to restrict the scanning area to a smaller part of the image for best performance. |
-| strict                                 | Enforce strict standard adherence to eliminate false positives in blurry, irregular or damaged barcodes at the cost of reduced scan performance.                                                                              |
-| fluorescent_orange_ink                 | Enables the scanning of low contrast fluorescent orange codes. Enabling this option can have a negative impact on the scan performance of other symbologies.                                                                  |
+| strict                                 | Enforce strict standard adherence to eliminate false positives in blurry, irregular or damaged barcodes at the cost of reduced scan performance.      |
+| fluorescent_orange_ink                 | Enables the scanning of low contrast fluorescent orange codes. Enabling this option can have a negative impact on the scan performance of other symbologies.   |
 | force_table_c, force_table_n and decode_bar_states | For Australian Post 4-State, customer information is decoded by default with Table N, and Table C is used as a fallback. force_table_c and force_table_n respectively enforce decoding with either C or N tables, and the symbology extension decode_bar_states will return the error-corrected customer information bars as a string of the bar states, A for ascending, D for descending, T for tracker and F for full.     |
+| guess_encoding_disabled | By default QR code encoding is guessed based on the code's data. If guessing is disabled, ISO-8859-1 is reported as default (unless extension `use_utf8_as_default_encoding` is set to report UTF-8). |
 
 ## Calculating Symbol Counts for Variable-Length Symbologies
 
