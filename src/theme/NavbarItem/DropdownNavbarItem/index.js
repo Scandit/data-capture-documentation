@@ -211,7 +211,7 @@ function DropdownNavbarItemDesktop({
     <div>
       <div className={styles.frameworkNameWrapper}>
         <p className={styles.frameworkName}>
-          {items && items.some((item) => item.type === "docsVersion") && (
+          {items && items.some((item) => item.type === "docsVersion") && currentFramework &&  (
             <>
               Framework:
               <span style={{ fontWeight: "700", marginLeft: "4px" }}>
