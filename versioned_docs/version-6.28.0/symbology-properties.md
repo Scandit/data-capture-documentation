@@ -28,7 +28,7 @@ Symbologies often have different properties, such as symbol count (length of the
 | Code 32  | **Mandatory**: mod10 | **Default**: 8<br/>**Range**: 8 | no| strict |
 | Code 39  | **Mandatory**: none<br/>**Supported**: mod43 | **Default**: 6-40<br/>**Range**: 3-50 | yes| full_ascii<br/>relaxed_sharp_quiet_zone_check<br/>strict |
 | Code 93  | **Mandatory**: mod47 | **Default**: 6-40<br/>**Range**: 5-60 | yes| full_ascii<br/>strict |
-| Codabar  | **Mandatory**: none<br/>**Supported**: mod16, mod11 | **Default**: 7-20<br/>**Range**: 3-34 | no| strict |
+| Codabar  | **Mandatory**: none<br/>**Supported**: mod16, mod11 | **Default**: 7-20<br/>**Range**: 3-34 | no| strict<br/>remove_delimiter_data |
 | GS1 DataBar 14  | **Mandatory**: mod10 | **Default**: 2<br/>**Range**: 2 | no| strict |
 | GS1 DataBar Expanded  | **Mandatory**: mod211 | **Default**: 1-11<br/>**Range**: 1-11 | no| strict |
 | GS1 DataBar Limited  | **Mandatory**: mod89 | **Default**: 1<br/>**Range**: 1 | no| relaxed_sharp_quiet_zone_check<br/>strict |
@@ -43,22 +43,22 @@ Symbologies often have different properties, such as symbol count (length of the
 
 ## 2D Symbology Properties
 
-| Symbology      | Supports Color-Inversion | Extensions                               |
-|----------------|--------------------------|------------------------------------------|
-| Aztec Code     | yes                      |                                          |
-| Data Matrix    | yes                      | strip_leading_fnc1 (enabled by default)<br></br> direct_part_marking_mode |
+| Symbology      | Supports Color-Inversion | Extensions   |
+|----------------|--------------------------|------------------------|
+| Aztec Code     | yes    |     |
+| Data Matrix    | yes     | strip_leading_fnc1 (enabled by default)<br></br> direct_part_marking_mode |
 | DotCode        | yes                      |                                          |
 | MaxiCode       | no                       |                                          |
 | MicroPDF417    | no                       |                                          |
 | PDF417         | no                       |                                          |
-| QR Code        | yes                      |                                          |
+| QR Code        | yes   | guess_encoding_disabled    |
 | Micro QR Code  | yes                      |                                          |
 | ArUco          | yes                      |                                          |
 
 ## Symbology Extension Descriptions
 
-| Extension                              | Description                                                                                                                                                                                                                 |
-|----------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Extension  | Description     |
+|----------------------------------------|---------------------------------------------------------------|
 | full_ascii                             | Interprets the Code39 code data using two symbols per output character to encode all ASCII characters.                                                                                                                       |
 | relaxed_sharp_quiet_zone_check         | Enables scanning codes that have quiet zones (white area before and after the code) that are significantly smaller than allowed by the symbology specification. Use this extension if you are having difficulties to scan codes due to quiet zone violations. However, enabling it may come at the cost of more false positives under certain circumstances. |
 | return_as_upca                         | Transforms the UPCE result into its UPCA representation.                                                                                                                                                                     |
@@ -68,6 +68,8 @@ Symbologies often have different properties, such as symbol count (length of the
 | strict                                 | Enforce strict standard adherence to eliminate false positives in blurry, irregular or damaged barcodes at the cost of reduced scan performance.                                                                              |
 | fluorescent_orange_ink                 | Enables the scanning of low contrast fluorescent orange codes. Enabling this option can have a negative impact on the scan performance of other symbologies.                                                                  |
 | force_table_c, force_table_n and decode_bar_states | For Australian Post 4-State, customer information is decoded by default with Table N, and Table C is used as a fallback. force_table_c and force_table_n respectively enforce decoding with either C or N tables, and the symbology extension decode_bar_states will return the error-corrected customer information bars as a string of the bar states, A for ascending, D for descending, T for tracker and F for full.     |
+| remove_delimiter_data                  | For Codabar, removes the start and stop characters from the code and returns only the body of the code in the result.   |
+| guess_encoding_disabled | By default QR code encoding is guessed based on the code's data. If guessing is disabled, ISO-8859-1 is reported as default (unless extension `use_utf8_as_default_encoding` is set to report UTF-8). |
 
 ## Calculating Symbol Counts for Variable-Length Symbologies
 
@@ -79,7 +81,7 @@ The number of symbols corresponds to the number of digits in the code. Note that
 
 ### Codabar
 
-The number of symbols corresponds to the number of digits in the code, plus the start and end symbols. Example: the code c “A2334253D” has a symbol count of 7 + 2 = 9.
+The number of symbols corresponds to the number of digits in the code, plus the start and end symbols. Example: the code “A2334253D” has a symbol count of 7 + 2 = 9.
 
 ### Code 11
 
@@ -116,9 +118,6 @@ The number of symbols corresponds to the number of characters in the code, inclu
 ### KIX
 
 The number of symbols corresponds to the number of characters in the code.
-
-Australian Post 4-State
-The number of symbol corresponds to 10 digit FCC and DPID codes, and up to 31 characters representing the customer information bar states.
 
 ### Australian Post 4-State
 
