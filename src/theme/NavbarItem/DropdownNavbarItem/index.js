@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import clsx from "clsx";
 import {
   isRegexpStringMatch,
@@ -13,6 +13,7 @@ import NavbarNavLink from "@theme/NavbarItem/NavbarNavLink";
 import NavbarItem from "@theme/NavbarItem";
 import styles from "./styles.module.css";
 import { useLocation } from "@docusaurus/router";
+import { FrameworksName } from "@site/src/components/constants/frameworksName";
 
 function isItemActive(item, localPathname) {
   if (isSamePath(item.to, localPathname)) {
@@ -58,6 +59,29 @@ function DropdownNavbarItemDesktop({
       document.removeEventListener("focusin", handleClickOutside);
     };
   }, [dropdownRef]);
+
+  const currentFramework = useMemo(() => {
+    const regex = /(?<=\/sdks\/)(\w+)(?:\/(\w+))?/;
+    const match = currentPath.match(regex);
+    if (match) {
+      const primaryKey = match[1];
+      const secondaryKey = match[2];
+      if (primaryKey === "xamarin" || primaryKey === "net") {
+        const frameworkKey = secondaryKey
+          ? `${primaryKey}/${secondaryKey}`
+          : primaryKey;
+        const frameworksMap = {
+          "xamarin/ios": "Xamarin iOS",
+          "xamarin/android": "Xamarin Android",
+          "xamarin/forms": "Xamarin Forms",
+          "net/android": ".NET Android",
+          "net/ios": ".NET iOS",
+        };
+        return frameworksMap[frameworkKey] || null;
+      }
+      return FrameworksName[primaryKey] || null;
+    }
+  }, [currentPath]);
 
   useEffect(() => {
     if (!currentPath) return;
@@ -184,43 +208,58 @@ function DropdownNavbarItemDesktop({
       : items;
 
   return (
-    <div
-      ref={dropdownRef}
-      className={clsx("navbar__item", "dropdown", "dropdown--hoverable", {
-        "dropdown--right": position === "right",
-        "dropdown--show": showDropdown,
-      })}
-    >
-      <NavbarNavLink
-        aria-haspopup="true"
-        aria-expanded={showDropdown}
-        role="button"
-        // # hash permits to make the <a> tag focusable in case no link target
-        // See https://github.com/facebook/docusaurus/pull/6003
-        // There's probably a better solution though...
-        href={props.to ? undefined : "#"}
-        className={clsx("navbar__link", className)}
-        {...props}
-        onClick={props.to ? undefined : (e) => e.preventDefault()}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            setShowDropdown(!showDropdown);
-          }
-        }}
-      >
-        {props.children ?? props.label}
-      </NavbarNavLink>
-      <ul className="dropdown__menu">
-        {combinedItems.map((childItemProps, i) => (
-          <NavbarItem
-            isDropdownItem
-            activeClassName="dropdown__link--active"
-            {...childItemProps}
-            key={i}
-          />
-        ))}
-      </ul>
+    <div>
+      <div className={styles.frameworkNameWrapper}>
+        <p className={styles.frameworkName}>
+          {items && items.some((item) => item.type === "docsVersion") && (
+            <>
+              Framework:
+              <span style={{ fontWeight: "700", marginLeft: "4px" }}>
+                {currentFramework}
+              </span>
+            </>
+          )}
+        </p>
+
+        <div
+          ref={dropdownRef}
+          className={clsx("navbar__item", "dropdown", "dropdown--hoverable", {
+            "dropdown--right": position === "right",
+            "dropdown--show": showDropdown,
+          })}
+        >
+          <NavbarNavLink
+            aria-haspopup="true"
+            aria-expanded={showDropdown}
+            role="button"
+            // # hash permits to make the <a> tag focusable in case no link target
+            // See https://github.com/facebook/docusaurus/pull/6003
+            // There's probably a better solution though...
+            href={props.to ? undefined : "#"}
+            className={clsx("navbar__link", className)}
+            {...props}
+            onClick={props.to ? undefined : (e) => e.preventDefault()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                setShowDropdown(!showDropdown);
+              }
+            }}
+          >
+            {props.children ?? props.label}
+          </NavbarNavLink>
+          <ul className="dropdown__menu">
+            {combinedItems.map((childItemProps, i) => (
+              <NavbarItem
+                isDropdownItem
+                activeClassName="dropdown__link--active"
+                {...childItemProps}
+                key={i}
+              />
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }
