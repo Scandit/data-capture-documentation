@@ -7,10 +7,17 @@
 }
 
 .frameworkName {
+  display: block;
   margin: 0;
   font-size: 14px;
   font-weight: 400;
   height: 20px;
   line-height: 1.8em;
   align-self: center;
+}
+
+@media (width < 997px) {
+  .frameworkName {
+    display: none;
+  }
 }
