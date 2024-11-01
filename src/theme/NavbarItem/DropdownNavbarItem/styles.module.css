@@ -2,10 +2,6 @@
   cursor: pointer;
 }
 
-.frameworkNameWrapper {
-  display: flex;
-}
-
 .frameworkName {
   display: block;
   margin: 0;

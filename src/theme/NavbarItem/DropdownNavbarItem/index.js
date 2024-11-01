@@ -208,20 +208,7 @@ function DropdownNavbarItemDesktop({
       : items;
 
   return (
-    <div className={styles.frameworkNameWrapper}>
-      <p className={styles.frameworkName}>
-        {items &&
-          items.some((item) => item.type === "docsVersion") &&
-          currentFramework && (
-            <>
-              Framework:
-              <span style={{ fontWeight: "700", marginLeft: "4px" }}>
-                {currentFramework}
-              </span>
-            </>
-          )}
-      </p>
-
+    <>
       <div
         ref={dropdownRef}
         className={clsx("navbar__item", "dropdown", "dropdown--hoverable", {
@@ -229,26 +216,40 @@ function DropdownNavbarItemDesktop({
           "dropdown--show": showDropdown,
         })}
       >
-        <NavbarNavLink
-          aria-haspopup="true"
-          aria-expanded={showDropdown}
-          role="button"
-          // # hash permits to make the <a> tag focusable in case no link target
-          // See https://github.com/facebook/docusaurus/pull/6003
-          // There's probably a better solution though...
-          href={props.to ? undefined : "#"}
-          className={clsx("navbar__link", className)}
-          {...props}
-          onClick={props.to ? undefined : (e) => e.preventDefault()}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              setShowDropdown(!showDropdown);
-            }
-          }}
-        >
-          {props.children ?? props.label}
-        </NavbarNavLink>
+        {items &&
+          items.some((item) => item.type === "docsVersion") &&
+          currentFramework && (
+            <p className={styles.frameworkName}>
+              Framework:
+              <span style={{ fontWeight: "700", marginLeft: "4px" }}>
+                {currentFramework}
+              </span>
+            </p>
+          )}
+
+        {items.some((item) => item.type !== "docsVersion") && (
+          <NavbarNavLink
+            aria-haspopup="true"
+            aria-expanded={showDropdown}
+            role="button"
+            // # hash permits to make the <a> tag focusable in case no link target
+            // See https://github.com/facebook/docusaurus/pull/6003
+            // There's probably a better solution though...
+            href={props.to ? undefined : "#"}
+            className={clsx("navbar__link", className)}
+            {...props}
+            onClick={props.to ? undefined : (e) => e.preventDefault()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                setShowDropdown(!showDropdown);
+              }
+            }}
+          >
+            {props.children ?? props.label}
+          </NavbarNavLink>
+        )}
+
         <ul className="dropdown__menu">
           {combinedItems.map((childItemProps, i) => (
             <NavbarItem
@@ -260,7 +261,7 @@ function DropdownNavbarItemDesktop({
           ))}
         </ul>
       </div>
-    </div>
+    </>
   );
 }
 function DropdownNavbarItemMobile({
