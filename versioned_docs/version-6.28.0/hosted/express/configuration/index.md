@@ -14,13 +14,13 @@ There are many configuration options and functionalities available in Scandit Ex
 
 ### Recognized Symbologies
 
-You can configure which [barcode symbologies](../../../barcode-symbologies.md) Scandit Express should recognize. By default, all symbologies are enabled. You can disable symbologies that are not needed to improve scanning performance.
+You can configure which [barcode symbologies](/barcode-symbologies.md) Scandit Express should recognize. By default, all symbologies are enabled. You can disable symbologies that are not needed to improve scanning performance.
 
 1. Login to your [Scandit Dashboard](https://ssl.scandit.com/).
 2. Click on the Project card you want to configure.
 3. For each symbology, you can enable or disable it by checking the **enabled** checkbox.
     ![Symbology Configuration](/img/express/enabled_symbology.png)
-4. [Reload the configuration](../getting-started/rollout/#updating-configuration) in your app to apply the changes.
+4. [Reload the configuration](/hosted/express/getting-started/rollout.md#updating-configuration) in your app to apply the changes.
 
 If you want to further restrict what barcodes are accepted by Scandit Express, you can define a specific match as a regular expression. Only barcode data matching the specified regular expression will be accepted.
 
@@ -39,7 +39,7 @@ You can configure Scandit Express to inject additional keystrokes after a barcod
     * `enter` will inject an Enter keypress.
     * `\n` for Return Carriage.
     * `tab` for Tab.
-4. [Reload the configuration](../getting-started/rollout/#updating-configuration) in your app to apply the changes.
+4. [Reload the configuration](/hosted/express/getting-started/rollout.md#updating-configuration) in your app to apply the changes.
 
 ### Scanning Modes
 
