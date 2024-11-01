@@ -14,6 +14,7 @@ import NavbarItem from "@theme/NavbarItem";
 import styles from "./styles.module.css";
 import { useLocation } from "@docusaurus/router";
 import { FrameworksName } from "@site/src/components/constants/frameworksName";
+import { ArrowDown } from "@site/src/components/IconComponents";
 
 function isItemActive(item, localPathname) {
   if (isSamePath(item.to, localPathname)) {
@@ -221,9 +222,10 @@ function DropdownNavbarItemDesktop({
           currentFramework && (
             <p className={styles.frameworkName}>
               Framework:
-              <span style={{ fontWeight: "700", marginLeft: "4px" }}>
-                {currentFramework}
-              </span>
+              <p className={styles.framework}>
+                {currentFramework} 
+              </p>
+              <ArrowDown iconClass={styles.iconArrow}></ArrowDown>
             </p>
           )}
 

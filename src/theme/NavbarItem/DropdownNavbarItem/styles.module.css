@@ -3,13 +3,23 @@
 }
 
 .frameworkName {
-  display: block;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
   margin: 0;
   font-size: 14px;
   font-weight: 400;
-  height: 20px;
-  line-height: 1.8em;
-  align-self: center;
+  height: 28px;
+}
+
+.framework {
+  font-weight: 700;
+  margin: 0;
+  height: 21px;
+}
+
+.iconArrow {
+  height: 21px;
 }
 
 @media (width < 997px) {
