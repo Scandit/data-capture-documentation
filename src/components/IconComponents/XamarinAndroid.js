@@ -13,9 +13,9 @@ export default function XamarinAndroid({ iconClass = "svg-wrap--blue" }) {
         stroke="currentColor"
         strokeWidth="2"
       />
-      <path d="M31 35L35 35L35 31" stroke="currentColor" stroke-width="2" />
-      <path d="M9 5L5 5L5 9" stroke="currentColor" stroke-width="2" />
-      <path d="M31 5L35 5L35 9" stroke="currentColor" stroke-width="2" />
+      <path d="M31 35L35 35L35 31" stroke="currentColor" strokeWidth="2" />
+      <path d="M9 5L5 5L5 9" stroke="currentColor" strokeWidth="2" />
+      <path d="M31 5L35 5L35 9" stroke="currentColor" strokeWidth="2" />
       <path
         fillRule="evenodd"
         clipRule="evenodd"
