@@ -52,7 +52,7 @@ Use barcode capture to define search criteria by scanning items, and MatrixScan 
 
 #### MatrixScan AR
 
-Examples utilizing the low-level `BarcodeTracking` API.
+Examples utilizing the low-level `BarcodeBatch` API.
 
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-web-samples/tree/master/MatrixScanSimpleSample)
 

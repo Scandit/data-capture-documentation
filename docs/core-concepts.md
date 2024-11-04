@@ -39,7 +39,7 @@ A capture mode is responsible for one particular type of data capture, e.g. capt
 
 Each of the data capture modes follows the same basic structure and is made up of the same building blocks described below.
 
-Relevant classes: `SDCDataCaptureMode`, `SDCBarcodeCapture`, `SDCBarcodeTracking`
+Relevant classes: `SDCDataCaptureMode`, `SDCBarcodeCapture`, `SDCBarcodeBatch`
 
 ## Capture Mode Settings
 
@@ -47,7 +47,7 @@ Capture modes are configured through settings.
 
 Settings are specific to each data capture mode and allow to configure the data that is captured. For example, for barcode capture and barcode tracking, the settings allow to configure which symbologies are enabled. Settings are applied to the capture mode, which is when they take effect.
 
-Relevant classes: `SDCBarcodeCaptureSettings`, `SDCBarcodeTrackingSettings`
+Relevant classes: `SDCBarcodeCaptureSettings`, `SDCBarcodeBatchSettings`
 
 ## Capture Mode Listeners
 
@@ -55,7 +55,7 @@ Data capture events, such as when a new barcode has been recognized, are propaga
 
 Capture modes allow an arbitrary number of listeners to be registered.
 
-Relevant classes: `SDCBarcodeCaptureListener`, `SDCBarcodeTrackingListener`
+Relevant classes: `SDCBarcodeCaptureListener`, `SDCBarcodeBatchListener`
 
 ## Capture Mode Sessions
 
@@ -63,7 +63,7 @@ The captured data, such as the list of captured barcodes is available to the eve
 
 The session object is only safe to be accessed from the event callbacks themselves and should not be passed to other threads.
 
-Relevant classes: `SDCBarcodeCaptureSession`, `SDCBarcodeTrackingSession`
+Relevant classes: `SDCBarcodeCaptureSession`, `SDCBarcodeBatchSession`
 
 ## Overlays
 
@@ -71,4 +71,4 @@ Each of the capture modes has one or more overlays that visualize the ongoing da
 
 These overlays are added to the data capture view.
 
-Relevant classes: `SDCDataCaptureOverlay`, `SDCBarcodeCaptureOverlay`, `SDCBarcodeTrackingBasicOverlay`
+Relevant classes: `SDCDataCaptureOverlay`, `SDCBarcodeCaptureOverlay`, `SDCBarcodeBatchBasicOverlay`

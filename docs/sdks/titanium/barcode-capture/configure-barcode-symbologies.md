@@ -8,7 +8,7 @@ keywords:
 
 # Configure Barcode Symbologies
 
-In this guide you will learn how to configure a barcode based capture mode (`SDCBarcodeCapture` and `SDCBarcodeTracking`) to read the barcodes that you need it to read.
+In this guide you will learn how to configure a barcode based capture mode (`SDCBarcodeCapture` and `SDCBarcodeBatch`) to read the barcodes that you need it to read.
 
 ## Enable the Symbologies You Want to Read
 

@@ -130,7 +130,7 @@ title: 'Features by Framework'
 
 | Feature                                      | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
 |----------------------------------------------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|------------------|
-| Barcode Tracking Basic Overlay (Barcode Highlights) | 6.0 | 6.0     | 6.2     | 6.5          | 6.2         | 6.2             | 6.9           | 6.7     | 6.8       | n/a      | 6.19 | 6.16         | 6.16             |
+| Barcode Batch Basic Overlay (Barcode Highlights) | 6.0 | 6.0     | 6.2     | 6.5          | 6.2         | 6.2             | 6.9           | 6.7     | 6.8       | n/a      | 6.19 | 6.16         | 6.16             |
 | Overlay (Animated Views)                     | 6.0 | 6.0     | 6.2     | 6.5          | 6.2         | 6.2             | 6.9           | 6.7     | 6.8       | n/a      | 6.19 | 6.16         | 6.16             |
 
 ### Feedback

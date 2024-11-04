@@ -40,7 +40,7 @@ This sample is also available for [React](https://github.com/Scandit/datacapture
 
 #### MatrixScan AR
 
-Examples utilizing the low-level `BarcodeTracking` API.
+Examples utilizing the low-level `BarcodeBatch` API.
 
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/MatrixScanSimpleSample)
 

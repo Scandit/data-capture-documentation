@@ -13,7 +13,7 @@ _ScanditLabelCapture_ coordinates the process of simultaneously capturing data c
 * Two barcodes of different symbologies printed on boxes in a specific spatial arrangement. When multiple boxes are visible in the image, spatial information is required to group the codes present in the frame. Label capture will analyze the scanned barcodes and automatically assign them to different labels based on the available geometric information.
 * A barcode plus a short number printed as text below the barcode. Short numbers occur in many different contexts, so even with a perfect recognition solution short numbers from other contexts are still read even if they are not part of the form. By making the presence of the short number conditional on the presence of the barcodes, such false reads are eliminated very effectively.
 
-Label capture builds on top of other technologies: Barcode Tracking for reading and tracking barcodes over multiple frames and text recognition for reading text.
+Label capture builds on top of other technologies: Barcode Batch for reading and tracking barcodes over multiple frames and text recognition for reading text.
 
 Label capture follows the same architecture as other data capture modes. The functionality is split into the following classes:
 

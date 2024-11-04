@@ -40,7 +40,7 @@ Demonstrates how you can adapt the barcode capture settings best to your needs a
 
 #### MatrixScan AR
 
-Examples utilizing the low-level `BarcodeTracking` API.
+Examples utilizing the low-level `BarcodeBatch` API.
 
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-flutter-samples/tree/master/MatrixScanSimpleSample)
 

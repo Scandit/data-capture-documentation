@@ -143,7 +143,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'MatrixScan',
+          label: 'Batch Scanning (MatrixScan)',
           collapsed: true,
           items: [
             {
@@ -184,7 +184,7 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
-              label: "Label Capture",
+              label: "Smart Label Capture",
               items: [
                 "sdks/ios/label-capture/get-started",
               ],
@@ -343,7 +343,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'MatrixScan',
+          label: 'Batch Scanning (MatrixScan)',
           collapsed: true,
           items: [
             {
@@ -384,7 +384,7 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
-              label: "Label Capture",
+              label: "Smart Label Capture",
               items: [
                 "sdks/android/label-capture/get-started",
               ],
@@ -535,7 +535,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'MatrixScan',
+          label: 'Batch Scanning (MatrixScan)',
           collapsed: true,
           items: [
             {
@@ -698,7 +698,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'MatrixScan',
+          label: 'Batch Scanning (MatrixScan)',
           collapsed: true,
           items: [
             {
@@ -858,7 +858,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'MatrixScan',
+          label: 'Batch Scanning (MatrixScan)',
           collapsed: true,
           items: [
             {
@@ -890,7 +890,7 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
-              label: "Label Capture",
+              label: "Smart Label Capture",
               items: [
                 "sdks/react-native/label-capture/get-started",
               ],
@@ -1042,7 +1042,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'MatrixScan',
+          label: 'Batch Scanning (MatrixScan)',
           collapsed: true,
           items: [
             {
@@ -1214,7 +1214,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'MatrixScan',
+          label: 'Batch Scanning (MatrixScan)',
           collapsed: true,
           items: [
             {
@@ -1458,7 +1458,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'MatrixScan',
+          label: 'Batch Scanning (MatrixScan)',
           collapsed: true,
           items: [
             {
@@ -1621,7 +1621,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'MatrixScan',
+          label: 'Batch Scanning (MatrixScan)',
           collapsed: true,
           items: [
             {
@@ -1784,7 +1784,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'MatrixScan',
+          label: 'Batch Scanning (MatrixScan)',
           collapsed: true,
           items: [
             {
@@ -1943,7 +1943,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'MatrixScan',
+          label: 'Batch Scanning (MatrixScan)',
           collapsed: true,
           items: [
             {
@@ -2111,7 +2111,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'MatrixScan',
+          label: 'Batch Scanning (MatrixScan)',
           collapsed: true,
           items: [
             {

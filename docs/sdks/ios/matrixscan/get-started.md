@@ -34,25 +34,25 @@ The first step to add capture capabilities to your application is to create a ne
 self.context = DataCaptureContext(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
 ```
 
-## Configure the Barcode Tracking Mode
+## Configure the Barcode Batch Mode
 
-The main entry point for the Barcode Tracking Mode is the [`SDcBarcodeTracking`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) object. It is configured through [`SDCBarcodeTrackingSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-tracking-settings.html#class-scandit.datacapture.barcode.tracking.BarcodeTrackingSettings) and allows to register one or more listeners that will get informed whenever a new frame has been processed.
+The main entry point for the Barcode Batch Mode is the [`SDcBarcodeBatch`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-batch.html#class-scandit.datacapture.barcode.batch.BarcodeBatch) object. It is configured through [`SDCBarcodeBatchSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-batch-settings.html#class-scandit.datacapture.barcode.batch.BarcodeBatchSettings) and allows to register one or more listeners that will get informed whenever a new frame has been processed.
 
 :::note
-Typically you will not need to conform to a [`SDCBarcodeTrackingListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener), instead you will add a [`SDCBarcodeTrackingBasicOverlay`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlay) and conform to a [`SDCBarcodeTrackingBasicOverlayDelegate`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener).
+Typically you will not need to conform to a [`SDCBarcodeBatchListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-batch-listener.html#interface-scandit.datacapture.barcode.batch.IBarcodeBatchListener), instead you will add a [`SDCBarcodeBatchBasicOverlay`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay) and conform to a [`SDCBarcodeBatchBasicOverlayDelegate`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener).
 :::
 
-Here we will setup Barcode Tracking for tracking QR codes:
+Here we will setup Barcode Batch for tracking QR codes:
 
 ```swift
-let settings = BarcodeTrackingSettings()
+let settings = BarcodeBatchSettings()
 settings.set(symbology: .qr, enabled: true)
 ```
 
-Next, create a [`SDcBarcodeTracking`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) instance with the data capture context and the settings initialized in the previous steps:
+Next, create a [`SDcBarcodeBatch`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-batch.html#class-scandit.datacapture.barcode.batch.BarcodeBatch) instance with the data capture context and the settings initialized in the previous steps:
 
 ```swift
-barcodeTracking = BarcodeTracking(context: context, settings: settings)
+barcodeBatch = BarcodeBatch(context: context, settings: settings)
 ```
 
 ## Use the Built-in Camera
@@ -64,7 +64,7 @@ In iOS the user must explicitly grant permission to access cameras. Your app nee
 When using the built-in camera there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode.
 
 ```swift
-let cameraSettings = BarcodeTracking.recommendedCameraSettings
+let cameraSettings = BarcodeBatch.recommendedCameraSettings
 
 // Depending on the use case further camera settings adjustments can be made here.
 
@@ -97,37 +97,37 @@ captureView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 view.addSubview(captureView)
 ```
 
-To visualize the results of Barcode Tracking, first you need to add the following overlay:
+To visualize the results of Barcode Batch, first you need to add the following overlay:
 
 ```swift
-let overlay = BarcodeTrackingBasicOverlay(barcodeTracking: barcodeTracking, view: captureView)
+let overlay = BarcodeBatchBasicOverlay(barcodeBatch: barcodeBatch, view: captureView)
 ```
 
-Once the overlay has been added, you should conform to the [`SDCBarcodeTrackingBasicOverlayDelegate`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener) protocol. The method [`SDCBarcodeTrackingBasicOverlayDelegate.barcodeTrackingBasicOverlay:brushForTrackedBarcode:`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener.BrushForTrackedBarcode) is invoked every time a new tracked barcode appears and it can be used to set a brush used to highlight that specific barcode in the overlay.
+Once the overlay has been added, you should conform to the [`SDCBarcodeBatchBasicOverlayDelegate`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener) protocol. The method [`SDCBarcodeBatchBasicOverlayDelegate.barcodeBatchBasicOverlay:brushForTrackedBarcode:`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener.BrushForTrackedBarcode) is invoked every time a new tracked barcode appears and it can be used to set a brush used to highlight that specific barcode in the overlay.
 
 ```swift
-extension ViewController: BarcodeTrackingBasicOverlayDelegate {
-    func barcodeTrackingBasicOverlay(_ overlay: BarcodeTrackingBasicOverlay,
+extension ViewController: BarcodeBatchBasicOverlayDelegate {
+    func barcodeBatchBasicOverlay(_ overlay: BarcodeBatchBasicOverlay,
                                 brushFor trackedBarcode: TrackedBarcode) -> Brush? {
         // Return a custom Brush based on the tracked barcode.
     }
 }
 ```
 
-If you would like to make the highlights tappable, you need to implement the [`SDCBarcodeTrackingBasicOverlayDelegate.barcodeTrackingBasicOverlay:didTapTrackedBarcode:`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener.OnTrackedBarcodeTapped) method.
+If you would like to make the highlights tappable, you need to implement the [`SDCBarcodeBatchBasicOverlayDelegate.barcodeBatchBasicOverlay:didTapTrackedBarcode:`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener.OnTrackedBarcodeTapped) method.
 
 ```swift
-extension ViewController: BarcodeTrackingBasicOverlayDelegate {
-    func barcodeTrackingBasicOverlay(_ overlay: BarcodeTrackingBasicOverlay,
+extension ViewController: BarcodeBatchBasicOverlayDelegate {
+    func barcodeBatchBasicOverlay(_ overlay: BarcodeBatchBasicOverlay,
                                 didTap trackedBarcode: TrackedBarcode) {
         // A tracked barcode was tapped.
     }
 }
 ```
 
-## Barcode Tracking Feedback
+## Barcode Batch Feedback
 
-Barcode Tracking, unlike Barcode Capture, doesn’t emit feedback (sound or vibration) when a new barcode is recognized. However, you may implement a [`SDCBarcodeTrackingListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener) to provide a similar experience.
+Barcode Batch, unlike Barcode Capture, doesn’t emit feedback (sound or vibration) when a new barcode is recognized. However, you may implement a [`SDCBarcodeBatchListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-batch-listener.html#interface-scandit.datacapture.barcode.batch.IBarcodeBatchListener) to provide a similar experience.
 
 Here, we use the default [`SDCFeedback`](https://docs.scandit.com/data-capture-sdk/ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration.
 
@@ -138,12 +138,12 @@ override func viewDidLoad() {
 }
 ```
 
-Next, use this feedback in a `SDCBarcodeTrackingListener`:
+Next, use this feedback in a `SDCBarcodeBatchListener`:
 
 ```swift
-extension ScanningViewController: BarcodeTrackingListener {
-    func barcodeTracking(_ barcodeTracking: BarcodeTracking,
-                            didUpdate session: BarcodeTrackingSession,
+extension ScanningViewController: BarcodeBatchListener {
+    func barcodeBatch(_ barcodeBatch: BarcodeBatch,
+                            didUpdate session: BarcodeBatchSession,
                             frameData: FrameData) {
         if !session.addedTrackedBarcodes.isEmpty {
             feedback?.emit()
@@ -152,17 +152,17 @@ extension ScanningViewController: BarcodeTrackingListener {
 }
 ```
 
-[`SDCBarcodeTrackingListener.barcodeTracking:didUpdate:frameData:`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-tracking-listener.html#method-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener.OnSessionUpdated) is invoked for every processed frame. The session parameter contains information about the currently tracked barcodes. We check if there are any newly recognized barcodes and emit the feedback if so.
+[`SDCBarcodeBatchListener.barcodeBatch:didUpdate:frameData:`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-batch-listener.html#method-scandit.datacapture.barcode.batch.IBarcodeBatchListener.OnSessionUpdated) is invoked for every processed frame. The session parameter contains information about the currently tracked barcodes. We check if there are any newly recognized barcodes and emit the feedback if so.
 
-As the last step, register the delegate responsible for emitting the feedback with the [`SDcBarcodeTracking`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) instance.
+As the last step, register the delegate responsible for emitting the feedback with the [`SDcBarcodeBatch`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-batch.html#class-scandit.datacapture.barcode.batch.BarcodeBatch) instance.
 
 ```swift
-barcodeTracking.addListener(self)
+barcodeBatch.addListener(self)
 ```
 
-## Disable Barcode Tracking
+## Disable Barcode Batch
 
-To disable barcode tracking set [`SDCBarcodeTracking.enabled`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-tracking.html#property-scandit.datacapture.barcode.tracking.BarcodeTracking.IsEnabled) to `NO`.
+To disable barcode tracking set [`SDCBarcodeBatch.enabled`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-batch.html#property-scandit.datacapture.barcode.batch.BarcodeBatch.IsEnabled) to `NO`.
 
 The effect is immediate, no more frames will be processed after the change. However, if a frame is currently being processed, this frame will be completely processed and deliver any results/callbacks to the registered listeners.
 

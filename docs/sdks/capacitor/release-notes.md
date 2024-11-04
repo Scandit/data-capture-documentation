@@ -57,7 +57,7 @@ No updates for this framework in this version.
 
 #### Barcode
 
-- The [`BarcodeTrackingAdvancedOverlay.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode) and [`BarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) methods no longer support rendering any kind of images. For further details about this backwards incompatible change, contact [Scandit Support](mailto:support@scandit.com).
+- The [`BarcodeTrackingAdvancedOverlay.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#method-scandit.datacapture.barcode.batch.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode) and [`BarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) methods no longer support rendering any kind of images. For further details about this backwards incompatible change, contact [Scandit Support](mailto:support@scandit.com).
 
 ### Behavioral Changes
 
@@ -120,14 +120,14 @@ No updates for this framework in this version.
 ### Deprecations
 
 * Deprecated [`BarcodeCaptureSettings.batterySavingMode`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.BatterySavingMode) in favor of [`BarcodeCaptureSettings.batterySaving`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.BatterySaving).
-* Deprecated [`BarcodeTrackingScenario`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-tracking-scenario.html#enum-scandit.datacapture.barcode.tracking.BarcodeTrackingScenario) and [`BarcodeTrackingSettings.forScenario()`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-tracking-settings.html#method-scandit.datacapture.barcode.tracking.BarcodeTrackingSettings.ForScenario). Setting a scenario is no longer recommended, [`BarcodeTrackingSettings.BarcodeTrackingSettings()`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-tracking-settings.html#method-scandit.datacapture.barcode.tracking.BarcodeTrackingSettings.BarcodeTrackingSettings) should be used instead.
+* Deprecated [`BarcodeTrackingScenario`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-batch-scenario.html#enum-scandit.datacapture.barcode.batch.BarcodeTrackingScenario) and [`BarcodeTrackingSettings.forScenario()`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-batch-settings.html#method-scandit.datacapture.barcode.batch.BarcodeTrackingSettings.ForScenario). Setting a scenario is no longer recommended, [`BarcodeTrackingSettings.BarcodeTrackingSettings()`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-batch-settings.html#method-scandit.datacapture.barcode.batch.BarcodeTrackingSettings.BarcodeTrackingSettings) should be used instead.
 * Deprecated [`TextCapture`](https://docs.scandit.com/data-capture-sdk/capacitor/text-capture/api/text-capture.html#class-scandit.datacapture.text.TextCapture).
 * Deprecated [`SparkScanView.shouldShowScanAreaGuides`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.ShouldShowScanAreaGuides), [`SparkScanView.soundModeButtonVisible`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.SoundModeButtonVisible), [`SparkScanView.hapticModeButtonVisible`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.HapticModeButtonVisible) and [`SparkScanView.fastFindButtonVisible`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.FastFindButtonVisible) (renamed [`SparkScanView.barcodeFindButtonVisible`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.BarcodeFindButtonVisible)). Also deprecated [`SparkScanViewUiListener.onFastFindButtonTap()`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.ISparkScanViewUiListener.OnFastFindButtonTap) (renamed [`SparkScanViewUiListener.onBarcodeFindButtonTap()`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.ISparkScanViewUiListener.OnBarcodeFindButtonTap)).
 * Deprecated [`LaserlineViewfinderStyle`](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/laserline-viewfinder.html#enum-scandit.datacapture.core.ui.LaserlineViewfinderStyle).
 * Deprecated [`LaserlineViewfinder`](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/laserline-viewfinder.html#class-scandit.datacapture.core.ui.LaserlineViewfinder).
 * Deprecated Legacy value of the [`RectangularViewfinder`](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder).
 * Deprecated Legacy value of the [`BarcodeCaptureOverlayStyle`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-capture-overlay.html#enum-scandit.datacapture.barcode.ui.BarcodeCaptureOverlayStyle).
-* Deprecated Legacy value of the [`BarcodeTrackingBasicOverlayStyle`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#enum-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlayStyle).
+* Deprecated Legacy value of the [`BarcodeTrackingBasicOverlayStyle`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-batch-basic-overlay.html#enum-scandit.datacapture.barcode.batch.ui.BarcodeTrackingBasicOverlayStyle).
 
 ## 6.25.3
 
@@ -710,7 +710,7 @@ No updates for this framework in this release.
 
 #### Barcode
 
-- :`barcode.tracking.TrackedBarcode.ShouldAnimateFromPreviousToNextState` has been deprecated. :prop:`barcode.tracking.TrackedBarcode.Location` returns a continuously interpolated location so animating between locations is no longer needed.
+- :`barcode.batch.TrackedBarcode.ShouldAnimateFromPreviousToNextState` has been deprecated. :prop:`barcode.batch.TrackedBarcode.Location` returns a continuously interpolated location so animating between locations is no longer needed.
 
 ## 6.17.3
 
@@ -755,7 +755,7 @@ No updates for this framework in this release.
 - Added support for damaged QR and Micro QR finder patterns up to two borders can be missing/damaged.
 - Added `core.IFrameData` getters to: 
   - `barcode.IBarcodeCaptureListener.OnBarcodeScanned`
-  - `barcode.tracking.IBarcodeTrackingListener.OnSessionUpdated`
+  - `barcode.batch.IBarcodeTrackingListener.OnSessionUpdated`
   - `barcode.selection.IBarcodeSelectionListener.OnSessionUpdated`
   - `barcode.selection.IBarcodeSelectionListener.OnSelectionUpdated`
   - `text.ITextCaptureListener.OnTextCaptured`
