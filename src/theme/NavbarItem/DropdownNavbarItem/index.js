@@ -216,6 +216,8 @@ function DropdownNavbarItemDesktop({
           "dropdown--right": position === "right",
           "dropdown--show": showDropdown,
         })}
+      style={{height: '36px'}}
+
       >
         {items &&
           items.some((item) => item.type === "docsVersion") &&
