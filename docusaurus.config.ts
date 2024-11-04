@@ -218,10 +218,10 @@ const config: Config = {
           includeCurrentVersion: true,
           versions: {
             current: {
-              label: 'Beta',
+              label: '7.0.0',
               banner: 'unreleased',
             },
-            '6.28.0': {
+            '6.28.1': {
               banner: 'none',
             },
           },

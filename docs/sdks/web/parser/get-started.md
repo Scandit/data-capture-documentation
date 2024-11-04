@@ -87,9 +87,9 @@ import { barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
 import { parserLoader, Parser, ParserDataFormat } from "@scandit/web-datacapture-parser";
 
 await configure({
-  licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
-  libraryLocation: new URL('library/engine/', document.baseURI).toString(),
-  moduleLoaders: [barcodeCaptureLoader(), parserLoader()],
+	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
+	libraryLocation: new URL('library/engine/', document.baseURI).toString(),
+	moduleLoaders: [barcodeCaptureLoader(), parserLoader()],
 });
 
 const context: DataCaptureContext = await DataCaptureContext.create();

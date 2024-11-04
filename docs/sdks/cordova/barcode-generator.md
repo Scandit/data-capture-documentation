@@ -88,3 +88,4 @@ try {
 ```
 
 See the complete [API reference](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/barcode-generator.html) for more information.
+
