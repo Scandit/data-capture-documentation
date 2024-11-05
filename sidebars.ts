@@ -144,6 +144,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Batch Scanning (MatrixScan)',
+          link: {
+            type: 'doc',
+            id: 'sdks/ios/batch-scanning',
+          },
           collapsed: true,
           items: [
             {
@@ -344,6 +348,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Batch Scanning (MatrixScan)',
+          link: {
+            type: 'doc',
+            id: 'sdks/android/batch-scanning',
+          },
           collapsed: true,
           items: [
             {
@@ -536,6 +544,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Batch Scanning (MatrixScan)',
+          link: {
+            type: 'doc',
+            id: 'sdks/web/batch-scanning',
+          },
           collapsed: true,
           items: [
             {
@@ -699,6 +711,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Batch Scanning (MatrixScan)',
+          link: {
+            type: 'doc',
+            id: 'sdks/cordova/batch-scanning',
+          },
           collapsed: true,
           items: [
             {
@@ -859,6 +875,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Batch Scanning (MatrixScan)',
+          link: {
+            type: 'doc',
+            id: 'sdks/react-native/batch-scanning',
+          },
           collapsed: true,
           items: [
             {
@@ -1043,6 +1063,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Batch Scanning (MatrixScan)',
+          link: {
+            type: 'doc',
+            id: 'sdks/flutter/batch-scanning',
+          },
           collapsed: true,
           items: [
             {
@@ -1215,6 +1239,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Batch Scanning (MatrixScan)',
+          link: {
+            type: 'doc',
+            id: 'sdks/capacitor/batch-scanning',
+          },
           collapsed: true,
           items: [
             {
@@ -1459,6 +1487,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Batch Scanning (MatrixScan)',
+          link: {
+            type: 'doc',
+            id: 'sdks/xamarin/ios/batch-scanning',
+          },
           collapsed: true,
           items: [
             {
@@ -1622,6 +1654,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Batch Scanning (MatrixScan)',
+          link: {
+            type: 'doc',
+            id: 'sdks/xamarin/android/batch-scanning',
+          },
           collapsed: true,
           items: [
             {
@@ -1785,6 +1821,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Batch Scanning (MatrixScan)',
+          link: {
+            type: 'doc',
+            id: 'sdks/xamarin/forms/batch-scanning',
+          },
           collapsed: true,
           items: [
             {
@@ -1944,6 +1984,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Batch Scanning (MatrixScan)',
+          link: {
+            type: 'doc',
+            id: 'sdks/net/ios/batch-scanning',
+          },
           collapsed: true,
           items: [
             {
@@ -2112,6 +2156,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Batch Scanning (MatrixScan)',
+          link: {
+            type: 'doc',
+            id: 'sdks/net/android/batch-scanning',
+          },
           collapsed: true,
           items: [
             {
