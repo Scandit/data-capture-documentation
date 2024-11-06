@@ -38,7 +38,11 @@ The default value `app.id-scanning.com` is an alias that points to Scandit’s s
     - `ReturnDataMode.FullWithImages` to get all extracted data and images.
     - `ReturnDataMode.Full` to get all extracted data without images.
   - `validation?: Validators[]`: Optional array of validators, default: `[]`. See *[`Validators`](#validators)*. 
-  - `locale?: string`: the language in which the text is displayed. Currently only english (`"en"`) is supported. Default: `"en"`.
+  - `locale?: string`: The language in which the text is displayed. Default: `"en-US"`.
+  - `workflow?: WorkflowOptions`: Options to customize the workflow. See *[`WorkflowOptions`](#workflowoptions)*.
+  - `theme?: Theme`: Options to customize the theme. See *[`Theme`](#theme)*.
+  - `onCompletion: (result: CompletionResult) => void`: A callback that is called when the user has successfully scanned their ID.
+  - `onCancellation?: (reason: CancellationReason) => void`: A callback that is called whenever the flow can not be completed.
 
 Once created, a session object does nothing until you execute `start()` on it:
 
@@ -48,21 +52,22 @@ const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
 	documentSelection,
 	returnDataMode: ReturnDataMode.FullWithImages,
 	validation: [Validators.notExpired()],
+	onCompletion: (result) => {
+		alert("Successfully completed workflow");
+	},
+	onCancellation: (reason) => {
+		switch (reason) {
+			case CancellationReason.UserClosed:
+				console.log("User closed the scanning window");
+				break;
+			case CancellationReason.ServiceStartFailure:
+				console.log("ID Bolt service failed to start");
+				break;
+		}
+	}
 });
 await idBoltSession.start();
 ```
-
-#### `onCompletion`
-
-| Signature | Description |
-| --------- | ----------- |
-| `IdBoltSession.onCompletion: (result: CompletionResult) => void` | A callback that is called when the user has successfully scanned their ID. `result.capturedId` will contain the document data. |
-
-#### `onCancellation`
-
-| Signature | Description |
-| --------- | ----------- |
-| `IdBoltSession.onCancellation: (reason: CancellationReason) => void` | A callback that is called when the user has closed the ID Bolt pop-up without having finished the scanning workflow. The reasona argument contains the reason for the cancellation. |
 
 #### `start`
 
@@ -103,7 +108,7 @@ If you have very specific rules, you can use the `Selection.customCallback` opti
 
 ```ts
 const documentSelection = DocumentSelection.create({
-	include: [new Passport(Region.USA)],
+	accepted: [new Passport(Region.USA)],
 	customCallback: (capturedId: CapturedId, preCheckResults: PreCheckResults) => {
 		if (capturedId.documentNumber === "123") {
 			return {
@@ -148,6 +153,14 @@ new DriverLicense(Region.France) // French driver license
 new DriverLicense(Region.Any) // Driver license card from any country
 ```
 
+### VisaIcao
+
+Includes visas that comply with the International Civil Aviation Organization (ICAO) standards
+
+```ts
+new VisaIcao(Region.USA) // US ICAO-compliant visas
+new VisaIcao(Region.Any) // Any ICAO-compliant visa
+```
 
 ## Validators
 
@@ -186,6 +199,57 @@ const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
 | Signature | Description |
 | --------- | ----------- |
 | `Validators.US.isRealID()` | Checks that the scanned driver license is compliant with the rules of Real ID defined by the American Association of Motor Vehicle Administrators (AAMVA). Note that this test will not pass if the scanned document is not an AAMVA document.|
+
+
+## Callbacks
+
+### `onCompletion`
+
+A callback that is called when the user has successfully scanned their ID and passed all validations.
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| `result` | `CompletionResult` | Contains the scanning results including the captured ID data |
+
+The `CompletionResult` object contains:
+- `capturedId`: The scanned document data. See *[`CapturedId`](#capturedid)*. Will be `null` if no data was returned based on the `returnDataMode`.
+
+Example:
+```ts
+onCompletion: (result) => {
+    if (result.capturedId) {
+        console.log('Document type:', result.capturedId.documentType);
+        console.log('Full name:', result.capturedId.fullName);
+        console.log('Document number:', result.capturedId.documentNumber);
+    }
+}
+```
+
+### `onCancellation`
+
+A callback that is called when the user closes the ID Bolt pop-up without completing the scanning process.
+
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| `reason` | `CancellationReason` | The reason why the scanning was cancelled |
+
+The `CancellationReason` enum contains:
+- `CancellationReason.UserClosed`: The user closed the ID Bolt pop-up before completing the scanning process
+- `CancellationReason.ServiceStartFailure`: The ID Bolt service failed to start
+
+Example:
+```ts
+onCancellation: (reason) => {
+    switch (reason) {
+        case CancellationReason.UserClosed:
+            console.log("User closed the scanning window");
+            break;
+        case CancellationReason.ServiceStartFailure:
+            console.log("ID Bolt service failed to start");
+            break;
+    }
+}
+```
 
 ## Interfaces
 
@@ -280,3 +344,87 @@ Values used by `IdBoltCreateSessionOptions` to define what data is returned by `
 | ----- | ----------- |
 | `Full` | All extracted data is returned, but images are excluded. |
 | `FullWithImages` | All extracted data is returned, including images of the scanned ID. |
+
+## WorkflowOptions
+
+Options to customize the user interface of the ID Bolt workflow.
+
+#### Properties
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `showWelcomeScreen` | `boolean` | When enabled: Always shown on both desktop and mobile. When disabled: Only shown on desktop to allow users to select between scanning on local device or handing over. |
+| `showResultScreen` | `boolean` | Determines whether to show the result screen at the end of the workflow. |
+
+## Theme
+
+Options to customize the visual appearance of the ID Bolt interface.
+
+### Properties
+
+#### `colors`
+
+Object containing color definitions for various UI elements:
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `primary` | `string` | The primary color used throughout the interface |
+| `image` | `string` | Color used for image-related elements |
+| `background` | `string` | Main popup background color |
+| `backgroundSecondary` | `string` | Secondary background color, used for surfaces |
+| `backgroundInverse` | `string` | Inverse background color |
+| `textPrimary` | `string` | Primary text color |
+| `textSecondary` | `string` | Secondary text color |
+| `textTertiary` | `string` | Tertiary text color |
+| `textInverse` | `string` | Inverse text color |
+| `success` | `string` | Color for success states |
+| `error` | `string` | Color for error states |
+| `warning` | `string` | Color for warning states |
+| `info` | `string` | Color for informational states |
+| `buttonBackground` | `string` | Background color for buttons, defaults to `primary` |
+| `buttonText` | `string` | Text color for buttons, defaults to `textInverse` |
+| `buttonBorder` | `string` | Border color for buttons, defaults to `primary` |
+| `buttonBackgroundDisabled` | `string` | Background color for disabled buttons |
+| `buttonBorderDisabled` | `string` | Border color for disabled buttons |
+| `buttonTextDisabled` | `string` | Text color for disabled buttons |
+
+
+#### `dimensions`
+
+Object containing dimension values for UI elements:
+
+| Property | Type | Description |
+| -------- | ---- | ----------- |
+| `radiusPopup` | `string` | Border radius for the popup |
+| `radiusButton` | `string` | Border radius for buttons |
+| `radiusCard` | `string` | Border radius for cards |
+
+Example:
+```ts
+const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
+    // ... other options ...
+    theme: {
+        colors: {
+            primary: "#007AFF"
+        },
+        dimensions: {
+            radiusButton: "8px"
+        }
+    }
+});
+```
+
+## Supported Locales
+
+The following languages are supported:
+
+- `en-US`
+- `de-DE`
+- `de-CH`
+- `es-ES`
+- `fr-FR`
+- `it-IT`
+- `nl-NL`
+- `pl-PL`
+- `pt-PT`
+- `da-DK`
