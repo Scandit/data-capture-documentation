@@ -1,13 +1,13 @@
 import Link from "@docusaurus/Link";
 import Arrow from "../../IconComponents/Arrow";
-import { CardGroupType } from "../../constants/types";
 import Card from "./Card/Card";
 import style from "./CardsGroup.module.css";
+import { CardType } from "../../constants/types";
 
 interface CardsGroupProps {
   title: string;
   mainColor: string;
-  content: CardGroupType[];
+  content: CardType[];
   cardColor: string;
   linkStarted: string;
 }
@@ -19,7 +19,6 @@ export default function CardsGroup({
   cardColor,
   linkStarted,
 }: CardsGroupProps) {
-  
   return (
     <div className={style.cardsGroupWrapper}>
       <div className={style.cardsGroupHeader}>
@@ -34,33 +33,15 @@ export default function CardsGroup({
           <Arrow iconClass={style.cardsGroupIcon} />
         </Link>
       </div>
-      <ul>
-        {content.map((cardsGroup, index: number) => {
+      <ul className={style.cardsList}>
+        {content.map((card, index: number) => {
           return (
-            <li className={style.cardsGroup} key={index}>
-              {cardsGroup.cards.length !== 0 && (
-                <>
-                    {cardsGroup?.groupName &&   
-                    <h4 className={style.cardsGroupSubTitle}>
-                        {cardsGroup.groupName}
-                    </h4>
-                    }
-                </>
-              )}
-
-              <ul className={style.cardsList}>
-                {cardsGroup.cards.map((card, index) => {
-                  return (
-                    <Card
-                      card={card}
-                      mainColor={mainColor}
-                      cardColor={cardColor}
-                      key={index}
-                    ></Card>
-                  );
-                })}
-              </ul>
-            </li>
+            <Card
+              card={card}
+              mainColor={mainColor}
+              cardColor={cardColor}
+              key={index}
+            ></Card>
           );
         })}
       </ul>

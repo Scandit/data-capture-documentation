@@ -24,43 +24,22 @@ export function createIdScanningArr(framework: string) {
   function getFrameworkPath(frameworkData: FrameworkCardType): string {
     return frameworkData?.link ? frameworkData.link : framework;
   }
-
   return [
     {
-      cards: [
-        {
-          name: IDScanning.IdCapture,
-          text: "Scan and Extract ID Data",
-          icon: <IdCapture />,
-          isActive: frameworkData.IDScanning.includes(IDScanning.IdCapture),
-          link: `/sdks/${getFrameworkPath(frameworkData)}/id-capture/intro`,
-        },
-        {
-          name: IDScanning.IdValidate,
-          text: "Verify ID Validity",
-          icon: <IDValidate />,
-          isActive: frameworkData.IDScanning.includes(IDScanning.IdValidate),
-          link: `/sdks/${getFrameworkPath(frameworkData)}/id-validate/intro`,
-        },
-        {
-          name: IDScanning.IDCaptureValidation,
-          text: "Capture and Validate ID Data in One Step",
-          icon: <IdCapture />,
-          isActive: frameworkData.IDScanning.includes(IDScanning.IDCaptureValidation),
-          link: `/sdks/${getFrameworkPath(frameworkData)}/id-capture/intro`,
-        },
-      ],
+      name: IDScanning.IDCaptureValidation,
+      text: "Capture and Validate ID Data in One Step",
+      icon: <IDValidate />,
+      isActive: frameworkData.IDScanning.includes(
+        IDScanning.IDCaptureValidation
+      ),
+      link: `/sdks/${getFrameworkPath(frameworkData)}/id-capture/intro`,
     },
     {
-      cards: [
-        {
-          name: IDScanning.IdBolt,
-          text: "Add ID Scanning to Any Site",
-          icon: <Bolt />,
-          isActive: frameworkData.IDScanning.includes(IDScanning.IdBolt),
-          link: `/hosted/id-bolt/overview`,
-        },
-      ],
+      name: IDScanning.IdBolt,
+      text: "Add ID Scanning to Any Site",
+      icon: <Bolt />,
+      isActive: frameworkData.IDScanning.includes(IDScanning.IdBolt),
+      link: `/hosted/id-bolt/overview`,
     },
   ];
 }

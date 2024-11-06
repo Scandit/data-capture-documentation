@@ -52,5 +52,5 @@
   display: flex;
   flex-wrap: wrap;
   gap: clamp(12px, 3.5vw, 35px) 40px;
-  margin-top: 30px;
+  margin: 30px 0;
 }
