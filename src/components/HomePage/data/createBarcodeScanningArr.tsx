@@ -15,7 +15,7 @@ import {
 } from "../../IconComponents";
 import { FrameworkCardType } from "../../constants/types";
 
-export function createBarcodeScanningArr(framework: string, allCards: boolean) {
+export function createBarcodeScanningArr(framework: string) {
   function findFrameworkData() {
     const frameworkData: FrameworkCardType = frameworkCards.find(
       (item) => item.framework === framework
@@ -34,33 +34,33 @@ export function createBarcodeScanningArr(framework: string, allCards: boolean) {
 
   const frameworkData = findFrameworkData();
 
-  const hiddenList = [
-    BarcodeScanning.ScanditExpress,
-    BarcodeScanning.Parser,
-    BarcodeScanning.LabelCapture,
-    BarcodeScanning.BarcodeGenerator,
-    BarcodeScanning.BarcodeSelection,
-  ];
-
   function getFrameworkPath(frameworkData: FrameworkCardType): string {
     return frameworkData?.link ? frameworkData.link : framework;
   }
 
   const allCardsArray = [
     {
-      groupName: "Low-level APIs",
       cards: [
         {
-          name: BarcodeScanning.BarcodeCapture,
+          name: BarcodeScanning.SingleScanning,
           text: "Single Scanning",
           icon: <BarcodeCapture />,
           isActive: frameworkData?.barcodeScanning.includes(
-            BarcodeScanning.BarcodeCapture
+            BarcodeScanning.SingleScanning
+          ),
+          link: `/sdks/${getFrameworkPath(frameworkData)}/single-scanning`,
+        },
+        {
+          name: BarcodeScanning.BatchScanning,
+          text: "Single Scanning",
+          icon: <BarcodeCapture />,
+          isActive: frameworkData?.barcodeScanning.includes(
+            BarcodeScanning.BatchScanning
           ),
           link:
             framework === "linux"
               ? "https://docs.scandit.com/stable/c_api/index.html "
-              : `/sdks/${getFrameworkPath(frameworkData)}/barcode-capture/get-started`,
+              : `/sdks/${getFrameworkPath(frameworkData)}/batch-scanning`,
         },
         {
           name: BarcodeScanning.MatrixScan,
@@ -90,7 +90,9 @@ export function createBarcodeScanningArr(framework: string, allCards: boolean) {
           isActive: frameworkData?.barcodeScanning.includes(
             BarcodeScanning.LabelCapture
           ),
-          link: `/sdks/${getFrameworkPath(frameworkData)}/label-capture/get-started`,
+          link: `/sdks/${getFrameworkPath(
+            frameworkData
+          )}/label-capture/get-started`,
         },
         {
           name: BarcodeScanning.BarcodeGenerator,
@@ -107,7 +109,6 @@ export function createBarcodeScanningArr(framework: string, allCards: boolean) {
       ],
     },
     {
-      groupName: "Pre-built workflows",
       cards: [
         {
           name: BarcodeScanning.SparkScan,
@@ -125,7 +126,9 @@ export function createBarcodeScanningArr(framework: string, allCards: boolean) {
           isActive: frameworkData?.barcodeScanning.includes(
             BarcodeScanning.MatrixScanFind
           ),
-          link: `/sdks/${getFrameworkPath(frameworkData)}/matrixscan-find/intro`,
+          link: `/sdks/${getFrameworkPath(
+            frameworkData
+          )}/matrixscan-find/intro`,
         },
         {
           name: BarcodeScanning.MatrixScanCount,
@@ -134,16 +137,20 @@ export function createBarcodeScanningArr(framework: string, allCards: boolean) {
           isActive: frameworkData?.barcodeScanning.includes(
             BarcodeScanning.MatrixScanCount
           ),
-          link: `/sdks/${getFrameworkPath(frameworkData)}/matrixscan-count/intro`,
+          link: `/sdks/${getFrameworkPath(
+            frameworkData
+          )}/matrixscan-count/intro`,
         },
         {
-           name: BarcodeScanning.MatrixScanPick,
-           text: "AR-Enabled Scan and Pick",
-           icon: <MatrixScanPick />,
-           isActive: frameworkData?.barcodeScanning.includes(
-             BarcodeScanning.MatrixScanPick
-           ),
-           link: `/sdks/${getFrameworkPath(frameworkData)}/matrixscan-pick/intro`,
+          name: BarcodeScanning.MatrixScanPick,
+          text: "AR-Enabled Scan and Pick",
+          icon: <MatrixScanPick />,
+          isActive: frameworkData?.barcodeScanning.includes(
+            BarcodeScanning.MatrixScanPick
+          ),
+          link: `/sdks/${getFrameworkPath(
+            frameworkData
+          )}/matrixscan-pick/intro`,
         },
         {
           name: BarcodeScanning.BarcodeSelection,
@@ -152,7 +159,9 @@ export function createBarcodeScanningArr(framework: string, allCards: boolean) {
           isActive: frameworkData?.barcodeScanning.includes(
             BarcodeScanning.BarcodeSelection
           ),
-          link: `/sdks/${getFrameworkPath(frameworkData)}/barcode-selection/intro`,
+          link: `/sdks/${getFrameworkPath(
+            frameworkData
+          )}/barcode-selection/intro`,
         },
       ],
     },
@@ -172,12 +181,5 @@ export function createBarcodeScanningArr(framework: string, allCards: boolean) {
     },
   ];
 
-  if (allCards) {
-    return allCardsArray;
-  }
-
-  return allCardsArray.map((group) => ({
-    ...group,
-    cards: group.cards.filter((card) => !hiddenList.includes(card.name)),
-  }));
+  return allCardsArray;
 }

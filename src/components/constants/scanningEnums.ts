@@ -10,11 +10,13 @@ export enum BarcodeScanning {
   MatrixScanCount = "MatrixScan Count",
   BarcodeSelection = "Barcode Selection",
   ScanditExpress = "Scandit Express",
-  
+  SingleScanning = "Single Scanning",
+  BatchScanning = "Batch Scanning",
 }
 
 export enum IDScanning {
   IdCapture = "ID Capture",
   IdValidate = "ID Validate",
+  IDCaptureValidation = "ID Capture & Validation",
   IdBolt = "ID Bolt",
 }

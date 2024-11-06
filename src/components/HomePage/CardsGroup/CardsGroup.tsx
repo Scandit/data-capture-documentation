@@ -19,6 +19,7 @@ export default function CardsGroup({
   cardColor,
   linkStarted,
 }: CardsGroupProps) {
+  
   return (
     <div className={style.cardsGroupWrapper}>
       <div className={style.cardsGroupHeader}>
@@ -38,9 +39,13 @@ export default function CardsGroup({
           return (
             <li className={style.cardsGroup} key={index}>
               {cardsGroup.cards.length !== 0 && (
-                <h4 className={style.cardsGroupSubTitle}>
-                  {cardsGroup.groupName}
-                </h4>
+                <>
+                    {cardsGroup?.groupName &&   
+                    <h4 className={style.cardsGroupSubTitle}>
+                        {cardsGroup.groupName}
+                    </h4>
+                    }
+                </>
               )}
 
               <ul className={style.cardsList}>

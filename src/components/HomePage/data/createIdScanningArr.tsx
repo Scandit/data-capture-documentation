@@ -27,7 +27,6 @@ export function createIdScanningArr(framework: string) {
 
   return [
     {
-      groupName: "Low-level APIs",
       cards: [
         {
           name: IDScanning.IdCapture,
@@ -43,10 +42,16 @@ export function createIdScanningArr(framework: string) {
           isActive: frameworkData.IDScanning.includes(IDScanning.IdValidate),
           link: `/sdks/${getFrameworkPath(frameworkData)}/id-validate/intro`,
         },
+        {
+          name: IDScanning.IDCaptureValidation,
+          text: "Capture and Validate ID Data in One Step",
+          icon: <IdCapture />,
+          isActive: frameworkData.IDScanning.includes(IDScanning.IDCaptureValidation),
+          link: `/sdks/${getFrameworkPath(frameworkData)}/id-capture/intro`,
+        },
       ],
     },
     {
-      groupName: "Pre-built workflows",
       cards: [
         {
           name: IDScanning.IdBolt,
