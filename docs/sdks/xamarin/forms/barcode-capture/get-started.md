@@ -88,6 +88,30 @@ IList<Barcode> barcodes = args.Session?.NewlyRecognizedBarcode;
 }
 ```
 
+### Rejecting Barcodes
+
+To prevent scanning unwanted codes, you can reject them by adding the desired logic to the `didScan` method. This will prevent the barcode from being added to the session and will not trigger the `didUpdateSession` method.
+
+The example below will only scan barcodes beginning with the digits `09` and ignore all others, using a transparent brush to distinguish a rejected barcode from a recognized one:
+
+```csharp
+...
+if (barcode.Data?.StartsWith("09:") == false)
+{
+	this.RejectedCode?.Invoke(this, EventArgs.Empty);
+	return;
+}
+...
+```
+Which will trigger the following event from your ViewModel:
+
+```csharp
+this.viewModel.RejectedCode += (object sender, EventArgs e) =>
+{
+	this.Overlay.Brush = ScanditBrush.Brush.TransparentBrush;
+};
+```
+
 ## Use the Built-in Camera
 
 The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
