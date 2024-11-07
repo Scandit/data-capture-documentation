@@ -219,8 +219,7 @@ function DropdownNavbarItemDesktop({
       style={{height: '36px'}}
       >
         {items &&
-          items.some((item) => item.type === "docsVersion") &&
-          currentFramework && (
+          items.some((item) => item.type === "docsVersion") && (
             <p className={styles.frameworkName}>
               Framework:
               <p className={styles.framework}>
