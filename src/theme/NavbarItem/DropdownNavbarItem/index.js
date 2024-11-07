@@ -208,6 +208,13 @@ function DropdownNavbarItemDesktop({
       ? newItems
       : items;
 
+  const hasDocsVersionItems =
+    items && items.some((item) => item.type === "docsVersion");
+  const hasSDKsItems =
+    items && items.some((item) => item.type !== "docsVersion");
+  const shouldShowDropdownMenu =
+    hasSDKsItems || (hasDocsVersionItems && currentFramework);
+
   return (
     <>
       <div
@@ -218,13 +225,10 @@ function DropdownNavbarItemDesktop({
         })}
       style={{height: '36px'}}
       >
-        {items &&
-          items.some((item) => item.type === "docsVersion") && (
+        {hasDocsVersionItems && currentFramework && (
             <p className={styles.frameworkName}>
               Framework:
-              <p className={styles.framework}>
-                {currentFramework} 
-              </p>
+              <p className={styles.framework}>{currentFramework}</p>
               <ArrowDown iconClass={styles.iconArrow}></ArrowDown>
             </p>
           )}
@@ -252,16 +256,18 @@ function DropdownNavbarItemDesktop({
           </NavbarNavLink>
         )}
 
-        <ul className="dropdown__menu">
-          {combinedItems.map((childItemProps, i) => (
-            <NavbarItem
-              isDropdownItem
-              activeClassName="dropdown__link--active"
-              {...childItemProps}
-              key={i}
-            />
-          ))}
-        </ul>
+        {shouldShowDropdownMenu && (
+            <ul className="dropdown__menu">
+              {combinedItems.map((childItemProps, i) => (
+                <NavbarItem
+                  isDropdownItem
+                  activeClassName="dropdown__link--active"
+                  {...childItemProps}
+                  key={i}
+                />
+              ))}
+            </ul>
+          )}
       </div>
     </>
   );
