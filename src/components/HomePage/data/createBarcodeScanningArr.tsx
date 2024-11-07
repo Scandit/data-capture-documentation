@@ -29,7 +29,7 @@ export function createBarcodeScanningArr(framework: string) {
   const allCardsArray = [
     {
       name: BarcodeScanning.SingleScanning,
-      text: "Single Scanning",
+      text: "Ready-to-Use Workflows and APIs for Single Scanning",
       icon: <BarcodeCapture />,
       isActive: frameworkData?.barcodeScanning.includes(
         BarcodeScanning.SingleScanning
@@ -38,7 +38,7 @@ export function createBarcodeScanningArr(framework: string) {
     },
     {
       name: BarcodeScanning.BatchScanning,
-      text: "Batch Scanning",
+      text: "MatrixScan Workflows and APIs for Batch Scanning",
       icon: <Ms />,
       isActive: frameworkData?.barcodeScanning.includes(
         BarcodeScanning.BatchScanning
