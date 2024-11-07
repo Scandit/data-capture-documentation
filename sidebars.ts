@@ -40,8 +40,9 @@ const sidebars: SidebarsConfig = {
         {
 					type: 'category',
 					label: 'Migration Guides',
-          collapsed: true,
+          collapsed: false,
 					items: [
+            'migrate-6-to-7',
             'migrate-5-to-6',
           ]
 				},
