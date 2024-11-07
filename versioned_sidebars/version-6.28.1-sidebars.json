@@ -26,7 +26,7 @@
           "label": "Migration Guides",
           "collapsed": true,
           "items": [
-            "migrate-6-to7",
+            "migrate-6-to-7",
             "migrate-5-to-6"
           ]
         }
