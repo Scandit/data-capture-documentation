@@ -34,7 +34,10 @@ export function createBarcodeScanningArr(framework: string) {
       isActive: frameworkData?.barcodeScanning.includes(
         BarcodeScanning.SingleScanning
       ),
-      link: `/sdks/${getFrameworkPath(frameworkData)}/single-scanning`,
+      link:
+        framework === "linux"
+          ? "https://docs.scandit.com/stable/c_api/index.html "
+          : `/sdks/${getFrameworkPath(frameworkData)}/single-scanning`,
     },
     {
       name: BarcodeScanning.BatchScanning,
