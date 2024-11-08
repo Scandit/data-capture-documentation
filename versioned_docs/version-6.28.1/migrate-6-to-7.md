@@ -81,3 +81,12 @@ The `AdvancedOverlay` API will be deprecated in version 7.1 and replaced with a 
 ## Text Capture Changes
 
 Text Capture has been removed from the Scandit Data Capture SDK. If your use case requires text recognition you can use Smart Label Capture.
+
+## Web SDK Changes
+
+Starting with version 7.0, there are some critical changes in installing and hosting the Web SDK that you should be aware of:
+
+- NPM package scope has changed to `@scandit/web-datacapture-*`.
+- The public engine directory has been moved from `build/engine` to `sdc-lib`.
+
+See the Web SDK [installation guide](/sdks/web/add-sdk.md) for more information.
