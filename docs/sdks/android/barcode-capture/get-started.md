@@ -2,7 +2,6 @@
 sidebar_position: 2
 pagination_prev: null
 framework: android
-tags: [android]
 keywords:
   - android
 ---
@@ -101,10 +100,13 @@ First conform to the `BarcodeCaptureListener` interface. For example:
 
 ```java
 @Override
-public void onBarcodeScanned(@NonNull BarcodeCapture barcodeCapture,
-        @NonNull BarcodeCaptureSession session, @NonNull FrameData frameData) {
+public void onBarcodeScanned(
+        @NonNull BarcodeCapture barcodeCapture,
+        @NonNull BarcodeCaptureSession session,
+        @NonNull FrameData frameData
+) {
     List<Barcode> recognizedBarcodes = session.getNewlyRecognizedBarcode();
-    // Do something with the barcodes.
+    // Do something with the barcodes. See Rejecting Barcodes, below, for an example.
 }
 ```
 
@@ -112,6 +114,21 @@ Then add the listener:
 
 ```java
 barcodeCapture.addListener(this);
+```
+
+### Rejecting Barcodes
+
+To prevent scanning unwanted codes, you can reject them by adding the desired logic to the `onBarcodeScanned` method. This will prevent the barcode from being added to the session and will not trigger the `onSessionUpdated` method.
+
+The example below will only scan barcodes beginning with the digits `09` and ignore all others, using a transparent brush to distinguish a rejected barcode from a recognized one:
+
+```java
+...
+if (barcode.getData() == null || !barcode.getData().startsWith("09:")) {
+    overlay.setBrush(Brush.transparent());
+    return;
+}
+...
 ```
 
 ## Use the Built-in Camera

@@ -2,14 +2,10 @@ import CardsGroup from "../CardsGroup/CardsGroup";
 import style from "./CardsPart.module.css";
 import { createBarcodeScanningArr } from "../data/createBarcodeScanningArr";
 import { createIdScanningArr } from "../data/createIdScanningArr";
-import { ArrowDropDown } from "../../IconComponents";
-import { useState } from "react";
 import { FrameworksName } from "../../constants/frameworksName";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
 export default function CardsPart() {
-  const [allCards, setAllCards] = useState(false);
-
   const transformFrameworkName = (framework: string): string => {
     const frameworkUrls: { [key: string]: string } = {
       react: "sdks/react-native/add-sdk",
@@ -30,12 +26,9 @@ export default function CardsPart() {
         const paramsURL = Object.fromEntries(
           new URLSearchParams(window.location.search)
         );
-        const selectedFramework = paramsURL.framework || "ios";
+        const selectedFramework = paramsURL.framework || "web";
 
-        const barcodeScanning = createBarcodeScanningArr(
-          selectedFramework,
-          allCards
-        );
+        const barcodeScanning = createBarcodeScanningArr(selectedFramework);
         const idScanning = createIdScanningArr(selectedFramework);
 
         return (
@@ -48,15 +41,6 @@ export default function CardsPart() {
                 cardColor="var(--barcode-scanning-gradient)"
                 linkStarted={`${transformFrameworkName(selectedFramework)}`}
               />
-              <button
-                className={style.hiddenBtn}
-                onClick={() => setAllCards(!allCards)}
-              >
-                {allCards ? "Show less" : "Show more functionality"}
-                <ArrowDropDown
-                  iconClass={allCards ? style.reversIcon : style.icon}
-                />
-              </button>
             </div>
             <div className={style.cardsGroupWrapper}>
               <CardsGroup

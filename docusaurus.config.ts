@@ -2,6 +2,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 import * as dotenv from 'dotenv';
+import { version } from "react";
 dotenv.config();  // Load environment variables from .env file
 
 
@@ -171,7 +172,20 @@ const config: Config = {
               '/data-capture-sdk/xamarin.android/requirements.html',
               '/data-capture-sdk/xamarin.forms/requirements.html',
               '/data-capture-sdk/dotnet.ios/requirements.html',
-              '/data-capture-sdk/dotnet.android/requirements.html'
+              '/data-capture-sdk/dotnet.android/requirements.html',
+              '/data-capture-sdk/android/requirements.html/system-requirements',
+              '/data-capture-sdk/ios/requirements.html/system-requirements',
+              '/data-capture-sdk/web/requirements.html/system-requirements',
+              '/data-capture-sdk/cordova/requirements.html/system-requirements',
+              '/data-capture-sdk/react-native/requirements.html/system-requirements',
+              '/data-capture-sdk/flutter/requirements.html/system-requirements',
+              '/data-capture-sdk/capacitor/requirements.html/system-requirements',
+              '/data-capture-sdk/titanium/requirements.html/system-requirements',
+              '/data-capture-sdk/xamarin.ios/requirements.html/system-requirements',
+              '/data-capture-sdk/xamarin.android/requirements.html/system-requirements',
+              '/data-capture-sdk/xamarin.forms/requirements.html/system-requirements',
+              '/data-capture-sdk/dotnet.ios/requirements.html/system-requirements',
+              '/data-capture-sdk/dotnet.android/requirements.html/system-requirements'
             ],
           },     
       ],
@@ -200,6 +214,16 @@ const config: Config = {
               "caution",
               "danger",
             ],
+          },
+          includeCurrentVersion: true,
+          versions: {
+            current: {
+              label: '7.0.0',
+              banner: 'unreleased',
+            },
+            '6.28.1': {
+              banner: 'none',
+            },
           },
         },
         blog: false,
@@ -238,87 +262,92 @@ const config: Config = {
       title: "Docs",
       items: [
         {
+          type: 'docsVersionDropdown',
+          position: 'left',
+          dropdownActiveClassDisabled: true,
+        },
+        {
           type: "dropdown",
           position: "left",
           label: "SDKs",
           items: [
             {
-              type: "doc",
+              type: "docsVersion",
               label: "iOS",
               sidebarId: "iosSidebar",
-              docId: "sdks/ios/add-sdk",
+              to: "sdks/ios/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Android",
               sidebarId: "androidSidebar",
-              docId: "sdks/android/add-sdk",
+              to: "sdks/android/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Web",
               sidebarId: "webSidebar",
-              docId: "sdks/web/add-sdk",
+              to: "sdks/web/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Cordova",
               sidebarId: "cordovaSidebar",
-              docId: "sdks/cordova/add-sdk",
+              to: "sdks/cordova/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "React Native",
               sidebarId: "reactnativeSidebar",
-              docId: "sdks/react-native/add-sdk",
+              to: "sdks/react-native/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Flutter",
               sidebarId: "flutterSidebar",
-              docId: "sdks/flutter/add-sdk",
+              to: "sdks/flutter/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Capacitor",
               sidebarId: "capacitorSidebar",
-              docId: "sdks/capacitor/add-sdk",
+              to: "sdks/capacitor/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Titanium",
               sidebarId: "titaniumSidebar",
-              docId: "sdks/titanium/add-sdk",
+              to: "sdks/titanium/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Xamarin iOS",
               sidebarId: "xamarinIosSidebar",
-              docId: "sdks/xamarin/ios/add-sdk",
+              to: "sdks/xamarin/ios/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Xamarin Android",
               sidebarId: "xamarinAndroidSidebar",
-              docId: "sdks/xamarin/android/add-sdk",
+              to: "sdks/xamarin/android/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: "Xamarin Forms",
               sidebarId: "xamarinFormsSidebar",
-              docId: "sdks/xamarin/forms/add-sdk",
+              to: "sdks/xamarin/forms/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: ".NET iOS",
               sidebarId: "netIosSidebar",
-              docId: "sdks/net/ios/add-sdk",
+              to: "sdks/net/ios/add-sdk",
             },
             {
-              type: "doc",
+              type: "docsVersion",
               label: ".NET Android",
               sidebarId: "netAndroidSidebar",
-              docId: "sdks/net/android/add-sdk",
+              to: "sdks/net/android/add-sdk",
             },
           ],
         },
@@ -329,14 +358,14 @@ const config: Config = {
 //          label: "Hosted Solutions",
 //          items: [
 //            {
-//              type: "doc",
+//              type: "docsVersion",
 //              label: "ID Bolt",
-//              docId: "hosted/id-bolt/overview",
+//              to: "hosted/id-bolt/overview",
 //            },
 //            {
-//              type: "doc",
+//              type: "docsVersion",
 //              label: "Scandit Express",
-//              docId: "hosted/express/overview",
+//              to: "hosted/express/overview",
 //            },
 //          ],
 //        },

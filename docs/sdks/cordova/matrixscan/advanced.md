@@ -2,7 +2,6 @@
 sidebar_position: 3
 pagination_next: null
 framework: cordova
-tags: [cordova]
 keywords:
   - cordova
 unlisted: true
@@ -12,42 +11,42 @@ unlisted: true
 
 ## Prerequisites
 
-To proceed, you need to setup a project that uses MatrixScan first, check out [this guide](./get-started.md) (you can ignore the bottom section about the visualization of tracked barcodes using [BarcodeTrackingBasicOverlay](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlay)).
+To proceed, you need to setup a project that uses MatrixScan first, check out [this guide](./get-started.md) (you can ignore the bottom section about the visualization of tracked barcodes using [BarcodeBatchBasicOverlay](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay)).
 
 ## Getting started
 
-To add advanced AR overlays to a Data Capture View you can take advantage of the [BarcodeTrackingAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay) class, which provides a ready-to-use implementation for view-based AR overlays.
+To add advanced AR overlays to a Data Capture View you can take advantage of the [BarcodeBatchAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay) class, which provides a ready-to-use implementation for view-based AR overlays.
 
-### Using BarcodeTrackingAdvancedOverlay
+### Using BarcodeBatchAdvancedOverlay
 
-As mentioned above, the advanced overlay combined with its [listener](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener) offers an easy way of adding augmentations to your [DataCaptureView](https://docs.scandit.com/data-capture-sdk/cordova/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView). In this guide we will add a view above each barcode showing its content.
+As mentioned above, the advanced overlay combined with its [listener](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener) offers an easy way of adding augmentations to your [DataCaptureView](https://docs.scandit.com/data-capture-sdk/cordova/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView). In this guide we will add a view above each barcode showing its content.
 
-First of all, create a new instance of [BarcodeTrackingAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay) and add it to the [DataCaptureView](https://docs.scandit.com/data-capture-sdk/cordova/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
+First of all, create a new instance of [BarcodeBatchAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay) and add it to the [DataCaptureView](https://docs.scandit.com/data-capture-sdk/cordova/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 
 ```js
 const overlay =
-	Scandit.BarcodeTrackingAdvancedOverlay.withBarcodeTrackingForView(
-		barcodeTracking,
+	Scandit.BarcodeBatchAdvancedOverlay.withBarcodeBatchForView(
+		barcodeBatch,
 		view
 	);
 ```
 
 At this point, you have two options.
 
-- Add a [BarcodeTrackingAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener) to the overlay.
-- Use the setters in the [overlay](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay) to specify the view, anchor and offset for each barcode.
+- Add a [BarcodeBatchAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener) to the overlay.
+- Use the setters in the [overlay](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay) to specify the view, anchor and offset for each barcode.
 
 :::note
-The second way will take priority over the first one, which means that if a view for a barcode has been set using [BarcodeTrackingAdvancedOverlay.setViewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode), the function [BarcodeTrackingAdvancedOverlayListener.viewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) won’t be invoked for that specific barcode.
+The second way will take priority over the first one, which means that if a view for a barcode has been set using [BarcodeBatchAdvancedOverlay.setViewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#method-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay.SetViewForTrackedBarcode), the function [BarcodeBatchAdvancedOverlayListener.viewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener.ViewForTrackedBarcode) won’t be invoked for that specific barcode.
 :::
 
-Using [BarcodeTrackingAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener)
+Using [BarcodeBatchAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener)
 
-- You need to implement [BarcodeTrackingAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener). This interface’s methods are invoked every time a barcode is newly tracked.
-- [BarcodeTrackingAdvancedOverlayListener.viewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) asks for a view to animate on top of the barcode. Returning _null_ will show no view.
-- [BarcodeTrackingAdvancedOverlayListener.anchorForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.AnchorForTrackedBarcode) asks how to anchor the view to the barcode through [Anchor](https://docs.scandit.com/data-capture-sdk/cordova/core/api/anchor.html#enum-scandit.datacapture.core.Anchor). Be aware that it anchors the
+- You need to implement [BarcodeBatchAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener). This interface’s methods are invoked every time a barcode is newly tracked.
+- [BarcodeBatchAdvancedOverlayListener.viewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener.ViewForTrackedBarcode) asks for a view to animate on top of the barcode. Returning _null_ will show no view.
+- [BarcodeBatchAdvancedOverlayListener.anchorForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener.AnchorForTrackedBarcode) asks how to anchor the view to the barcode through [Anchor](https://docs.scandit.com/data-capture-sdk/cordova/core/api/anchor.html#enum-scandit.datacapture.core.Anchor). Be aware that it anchors the
   view’s center to the anchor point. To achieve anchoring the top of the view or the bottom etc. you will have to set an offset as explained in the next point.
-- [BarcodeTrackingAdvancedOverlayListener.offsetForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.OffsetForTrackedBarcode) asks for an offset that is applied on the already anchored view. This offset is expressed through a [PointWithUnit](https://docs.scandit.com/data-capture-sdk/cordova/core/api/common.html#struct-scandit.datacapture.core.PointWithUnit).
+- [BarcodeBatchAdvancedOverlayListener.offsetForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener.OffsetForTrackedBarcode) asks for an offset that is applied on the already anchored view. This offset is expressed through a [PointWithUnit](https://docs.scandit.com/data-capture-sdk/cordova/core/api/common.html#struct-scandit.datacapture.core.PointWithUnit).
 
 ```js
 overlay.listener = {
@@ -78,13 +77,13 @@ new Scandit.NumberWithUnit(-1, Scandit.MeasureUnit.Fraction),
 };
 ```
 
-Using the setters in the [overlay](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay)
+Using the setters in the [overlay](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay)
 
-The function [BarcodeTrackingListener.didUpdateSession()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/barcode-tracking-listener.html#method-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener.OnSessionUpdated) gives you access to a [session](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/barcode-tracking-session.html#class-scandit.datacapture.barcode.tracking.BarcodeTrackingSession), which contains all added, updated and removed tracked barcodes. From here you can create the view you
-want to display, and then call [BarcodeTrackingAdvancedOverlay.setViewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode), [BarcodeTrackingAdvancedOverlay.setAnchorForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetAnchorForTrackedBarcode) and [BarcodeTrackingAdvancedOverlay.setOffsetForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetOffsetForTrackedBarcode)
+The function [BarcodeBatchListener.didUpdateSession()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/barcode-batch-listener.html#method-scandit.datacapture.barcode.batch.IBarcodeBatchListener.OnSessionUpdated) gives you access to a [session](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/barcode-batch-session.html#class-scandit.datacapture.barcode.batch.BarcodeBatchSession), which contains all added, updated and removed tracked barcodes. From here you can create the view you
+want to display, and then call [BarcodeBatchAdvancedOverlay.setViewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#method-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay.SetViewForTrackedBarcode), [BarcodeBatchAdvancedOverlay.setAnchorForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#method-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay.SetAnchorForTrackedBarcode) and [BarcodeBatchAdvancedOverlay.setOffsetForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#method-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay.SetOffsetForTrackedBarcode)
 
 ```js
-didUpdateSession: (barcodeTracking, session) => {
+didUpdateSession: (barcodeBatch, session) => {
 	session.addedTrackedBarcodes.map((trackedBarcode) => {
 		let element = document.createElement('span');
 		element.innerText = trackedBarcode.barcode.data;

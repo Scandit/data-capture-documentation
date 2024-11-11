@@ -1,0 +1,19 @@
+You can customize many aspects of the default SparkScan UI and UX to suit your needs and particular use case. These customizations include the:
+
+* Colors of all items (i.e. icons, buttons, toolbar)
+* Trigger button icon
+* All toast messages
+* Size of the preview
+* Visibility of any/all icons
+* Trigger button
+
+### Trigger button
+
+The default trigger button in SparkScan has been designed based on our experience and feedback received to be generally suited across a multitude of industry use cases, custom trigger implementations are still supported.
+
+This is achieved by hiding the default trigger button (via `sparkScanView.isTriggerButtonVisible`), and then controlling the scanning process as best suits your needs:
+
+* Using a custom button embedded in you app to call `sparkScanView.startScanning()` to start scanning; and
+* Using the mini-preview close button (via `sparkScanView.previewCloseControlVisible`) or your desired button (via `sparkScanView.pauseScanning()`) to stop scanning.
+
+Alternatively, you can rely entirely on a hardware button, if you have enabled that feature.

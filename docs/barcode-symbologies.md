@@ -2,7 +2,6 @@
 displayed_sidebar: sdcSidebar
 sidebar_position: 3
 toc_max_heading_level: 4
-tags: [android, capacitor, cordova, flutter, ios, netIos, netAndroid, react-native, titanium, web, xamarinIos, xamarinAndroid, xamarinForms]
 ---
 
 # Barcode Symbologies
@@ -429,6 +428,12 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 * The French Post symbology consists of a two codes: a Chronomark and a Routing code. The two codes are printed side by side.
 * The Chronomark has 38 positions and the Routing code has 46 positions.
 * La Poste manages the specifications.
+
+### Swiss Post
+ 
+* This symbology is used by [Swiss Post](https://www.post.ch) for mail item identification. 
+* The Swiss Post 4-State barcodes have a fixed length of 93 bars. 
+* Swiss Post manages the specifications.
 
 ## Additional Symbologies
 

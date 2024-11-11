@@ -13,13 +13,13 @@ export default function FrameworksMobile({
   handleFrameworkClick,
 }: FrameworksMobileProps) {
   const [openSelector, setOpenSelector] = useState(false);
-  const [selectedFramework, setSelectedFramework] = useState("ios");
+  const [selectedFramework, setSelectedFramework] = useState("web");
   const menuRef = useRef<HTMLFormElement>(null);
   const fieldRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const paramsURL = Object.fromEntries(new URLSearchParams(window.location.search));
-    setSelectedFramework(paramsURL.framework || "ios");
+    setSelectedFramework(paramsURL.framework || "web");
   }, []);
 
   useEffect(() => {

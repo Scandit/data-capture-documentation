@@ -2,7 +2,6 @@
 sidebar_position: 3
 pagination_next: null
 framework: react
-tags: [react-native]
 keywords:
   - react
 unlisted: true
@@ -10,48 +9,48 @@ unlisted: true
 
 # Adding AR Overlays
 
-In the previous section we covered how to vizualize the scan process using the `BarcodeTrackingBasicOverlay`. In this section we will cover how to add custom AR overlays to your MatrixScan application.
+In the previous section we covered how to vizualize the scan process using the `BarcodeBatchBasicOverlay`. In this section we will cover how to add custom AR overlays to your MatrixScan application.
 
 There are two ways to add custom AR overlays to your application:
 
-- Using the [`BarcodeTrackingAdvancedOverlay`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay) class, our ready-to-use implementation for view-based AR overlays.
-- Provide your own fully custom implementation by using the [`BarcodeTrackingListener.didUpdateSession()`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#method-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener.OnSessionUpdated) function to retrieve the tracking information and implement your own AR overlay.
+- Using the [`BarcodeBatchAdvancedOverlay`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay) class, our ready-to-use implementation for view-based AR overlays.
+- Provide your own fully custom implementation by using the [`BarcodeBatchListener.didUpdateSession()`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-batch-listener.html#method-scandit.datacapture.barcode.batch.IBarcodeBatchListener.OnSessionUpdated) function to retrieve the tracking information and implement your own AR overlay.
 
 The first option is the easiest and recommended approach for most applications. It covers adding, removing, and animating the overlay’s views whenever needed and is also flexible enough to cover the majority of use cases.
 
-## Using BarcodeTrackingAdvancedOverlay
+## Using BarcodeBatchAdvancedOverlay
 
-As mentioned above, the advanced overlay combined with its [listener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener) offers an easy way of adding augmentations to your [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView). In this guide we will add a view above each barcode showing its content.
+As mentioned above, the advanced overlay combined with its [listener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener) offers an easy way of adding augmentations to your [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView). In this guide we will add a view above each barcode showing its content.
 
-First of all, create a new instance of [BarcodeTrackingAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay) and add it to the
+First of all, create a new instance of [BarcodeBatchAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay) and add it to the
 [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 
 ```js
-const overlay = BarcodeTrackingAdvancedOverlay.withBarcodeTrackingForView(
-	barcodeTracking,
+const overlay = BarcodeBatchAdvancedOverlay.withBarcodeBatchForView(
+	barcodeBatch,
 	view
 );
 ```
 
 At this point, you have two options.
 
-- Add a [BarcodeTrackingAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener) to the overlay.
-- Use the setters in the [overlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay) to specify the view, anchor and offset for each barcode.
+- Add a [BarcodeBatchAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener) to the overlay.
+- Use the setters in the [overlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay) to specify the view, anchor and offset for each barcode.
 
 :::note
-The second way will take priority over the first one, which means that if a view for a barcode has been set using [BarcodeTrackingAdvancedOverlay.setViewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode), the function [BarcodeTrackingAdvancedOverlayListener.viewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) won’t be invoked for that specific barcode.
+The second way will take priority over the first one, which means that if a view for a barcode has been set using [BarcodeBatchAdvancedOverlay.setViewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#method-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay.SetViewForTrackedBarcode), the function [BarcodeBatchAdvancedOverlayListener.viewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener.ViewForTrackedBarcode) won’t be invoked for that specific barcode.
 :::
 
-Using [BarcodeTrackingAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener)
+Using [BarcodeBatchAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener)
 
-- You need to implement [BarcodeTrackingAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener). This interface’s methods are invoked every time a barcode is newly tracked.
-- [BarcodeTrackingAdvancedOverlayListener.viewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) asks for a view to animate on top of the barcode. Returning _null_ will show no view.
-- [BarcodeTrackingAdvancedOverlayListener.anchorForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.AnchorForTrackedBarcode) asks how to anchor the view to the barcode through [Anchor](https://docs.scandit.com/data-capture-sdk/react-native/core/api/anchor.html#enum-scandit.datacapture.core.Anchor 'Anchor enum'). Be aware that it anchors the view’s center to the anchor point. To achieve anchoring the top of the view or the bottom etc. you will have to set an offset as explained in the next point.
-- [BarcodeTrackingAdvancedOverlayListener.offsetForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.OffsetForTrackedBarcode) asks for an offset that is applied on the already anchored view. This offset is expressed through a [PointWithUnit](https://docs.scandit.com/data-capture-sdk/react-native/core/api/common.html#struct-scandit.datacapture.core.PointWithUnit).
+- You need to implement [BarcodeBatchAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener). This interface’s methods are invoked every time a barcode is newly tracked.
+- [BarcodeBatchAdvancedOverlayListener.viewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener.ViewForTrackedBarcode) asks for a view to animate on top of the barcode. Returning _null_ will show no view.
+- [BarcodeBatchAdvancedOverlayListener.anchorForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener.AnchorForTrackedBarcode) asks how to anchor the view to the barcode through [Anchor](https://docs.scandit.com/data-capture-sdk/react-native/core/api/anchor.html#enum-scandit.datacapture.core.Anchor 'Anchor enum'). Be aware that it anchors the view’s center to the anchor point. To achieve anchoring the top of the view or the bottom etc. you will have to set an offset as explained in the next point.
+- [BarcodeBatchAdvancedOverlayListener.offsetForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener.OffsetForTrackedBarcode) asks for an offset that is applied on the already anchored view. This offset is expressed through a [PointWithUnit](https://docs.scandit.com/data-capture-sdk/react-native/core/api/common.html#struct-scandit.datacapture.core.PointWithUnit).
 
 ```js
 // The component must be registered: `AppRegistry.registerComponent('ARView', () => ARView)` e.g. in index.js
-class ARView extends BarcodeTrackingAdvancedOverlayView {
+class ARView extends BarcodeBatchAdvancedOverlayView {
 render() {
 return <Text style={{backgroundColor: 'white' }}>{this.props.barcodeData}</Text>
 }
@@ -87,13 +86,13 @@ new NumberWithUnit(-1, MeasureUnit.Fraction),
 };
 ```
 
-Using the setters in the [overlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay)
+Using the setters in the [overlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay)
 
-The function [BarcodeTrackingListener.didUpdateSession()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#method-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener.OnSessionUpdated) gives you access to a
-[session](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-session.html#class-scandit.datacapture.barcode.tracking.BarcodeTrackingSession), which contains all added, updated and removed tracked barcodes. From here you can create the view you want to display, and then call [BarcodeTrackingAdvancedOverlay.setViewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode), [BarcodeTrackingAdvancedOverlay.setAnchorForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetAnchorForTrackedBarcode) and [BarcodeTrackingAdvancedOverlay.setOffsetForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetOffsetForTrackedBarcode)
+The function [BarcodeBatchListener.didUpdateSession()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-batch-listener.html#method-scandit.datacapture.barcode.batch.IBarcodeBatchListener.OnSessionUpdated) gives you access to a
+[session](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-batch-session.html#class-scandit.datacapture.barcode.batch.BarcodeBatchSession), which contains all added, updated and removed tracked barcodes. From here you can create the view you want to display, and then call [BarcodeBatchAdvancedOverlay.setViewForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#method-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay.SetViewForTrackedBarcode), [BarcodeBatchAdvancedOverlay.setAnchorForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#method-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay.SetAnchorForTrackedBarcode) and [BarcodeBatchAdvancedOverlay.setOffsetForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#method-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay.SetOffsetForTrackedBarcode)
 
 ```js
-didUpdateSession: (barcodeTracking, session) => {
+didUpdateSession: (barcodeBatch, session) => {
 	session.addedTrackedBarcodes.map((trackedBarcode) => {
 		let trackedBarcodeView = new ARView({
 			barcodeData: trackedBarcode.barcode.data,
@@ -116,19 +115,19 @@ didUpdateSession: (barcodeTracking, session) => {
 
 If you do not want to use the overlay, it is also possible to add augmented reality features based on the tracking identifier and the [quadrilateral](https://docs.scandit.com/data-capture-sdk/react-native/core/api/common.html#struct-scandit.datacapture.core.Quadrilateral) coordinates that every tracked barcode has. Below are some pointers.
 
-- Set a [BarcodeTrackingListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener) on the barcode tracking
-- In the [BarcodeTrackingListener.didUpdateSession()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#method-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener.OnSessionUpdated) function fetch the [added](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-session.html#property-scandit.datacapture.barcode.tracking.BarcodeTrackingSession.AddedTrackedBarcodes) and [removed](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-session.html#property-scandit.datacapture.barcode.tracking.BarcodeTrackingSession.RemovedTrackedBarcodes) tracked barcodes.
+- Set a [BarcodeBatchListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-batch-listener.html#interface-scandit.datacapture.barcode.batch.IBarcodeBatchListener) on the barcode tracking
+- In the [BarcodeBatchListener.didUpdateSession()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-batch-listener.html#method-scandit.datacapture.barcode.batch.IBarcodeBatchListener.OnSessionUpdated) function fetch the [added](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-batch-session.html#property-scandit.datacapture.barcode.batch.BarcodeBatchSession.AddedTrackedBarcodes) and [removed](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-batch-session.html#property-scandit.datacapture.barcode.batch.BarcodeBatchSession.RemovedTrackedBarcodes) tracked barcodes.
 - Create and show the views for the added barcodes.
 - Remove the views for the lost barcodes.
-- Add a method that is called 60fps when [BarcodeTracking](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) is enabled. In this method, for each [TrackedBarcode](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/tracked-barcode.html#class-scandit.datacapture.barcode.tracking.TrackedBarcode) on-screen, update the position based on [TrackedBarcode.location](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/tracked-barcode.html#property-scandit.datacapture.barcode.tracking.TrackedBarcode.Location). Please note that there is no need to animate the change of location, the change of position will happen frequently enough that the view will look as it is animated.
+- Add a method that is called 60fps when [BarcodeBatch](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-batch.html#class-scandit.datacapture.barcode.batch.BarcodeBatch) is enabled. In this method, for each [TrackedBarcode](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/tracked-barcode.html#class-scandit.datacapture.barcode.batch.TrackedBarcode) on-screen, update the position based on [TrackedBarcode.location](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/tracked-barcode.html#property-scandit.datacapture.barcode.batch.TrackedBarcode.Location). Please note that there is no need to animate the change of location, the change of position will happen frequently enough that the view will look as it is animated.
 
 :::note
-The frame coordinates from [TrackedBarcode.location](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/tracked-barcode.html#property-scandit.datacapture.barcode.tracking.TrackedBarcode.Location) need to be mapped to view coordinates, using
+The frame coordinates from [TrackedBarcode.location](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/tracked-barcode.html#property-scandit.datacapture.barcode.batch.TrackedBarcode.Location) need to be mapped to view coordinates, using
 [DataCaptureView.viewQuadrilateralForFrameQuadrilateral()](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#method-scandit.datacapture.core.ui.DataCaptureView.MapFrameQuadrilateralToView).
 :::
 
 ```js
-didUpdateSession: (barcodeTracking, session) => {
+didUpdateSession: (barcodeBatch, session) => {
 	session.removedTrackedBarcodes.map((lostTrackIdentifier) => {
 		// You now know the identifier of the tracked barcode that has been lost.
 		// Usually here you would remove the views associated.

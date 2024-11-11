@@ -9,11 +9,6 @@ export interface CardType {
   icon: ReactElement;
 }
 
-export interface CardGroupType {
-  cards: CardType[];
-  groupName: string;
-}
-
 export interface FrameworkCardType {
   framework: string;
   icon: JSX.Element;

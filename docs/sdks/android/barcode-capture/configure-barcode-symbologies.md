@@ -2,14 +2,13 @@
 sidebar_position: 3
 pagination_next: null
 framework: android
-tags: [android]
 keywords:
   - android
 ---
 
 # Configure Barcode Symbologies
 
-This page describes the stesps to configure a barcode based capture mode ([BarcodeCapture](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) and [BarcodeTracking](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking)) to read the barcodes that you need it to read. The available symbol count range, checksum, extensions, etc., for all symbologies are listed in [Symbology Properties](../../../symbology-properties.md).
+This page describes the stesps to configure a barcode based capture mode ([BarcodeCapture](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) and [BarcodeBatch](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch.html#class-scandit.datacapture.barcode.batch.BarcodeBatch)) to read the barcodes that you need it to read. The available symbol count range, checksum, extensions, etc., for all symbologies are listed in [Symbology Properties](../../../symbology-properties.md).
 
 ## Prerequisites
 
@@ -23,7 +22,7 @@ To get the most out of this guide, it is recommended that you have read the foll
 
 The type of a barcode is referred to as its symbology, for example a [QR Code](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/symbology.html#value-scandit.datacapture.barcode.Symbology.Qr) or [Code 128](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/symbology.html#value-scandit.datacapture.barcode.Symbology.Code128). To enable scanning of a particular barcode, its symbology must be enabled. This is done through calling [BarcodeCaptureSettings.enableSymbology()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture-settings.html#method-scandit.datacapture.barcode.BarcodeCaptureSettings.EnableSymbology) on the [BarcodeCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture-settings.html#class-scandit.datacapture.barcode.BarcodeCaptureSettings) and then applying the settings to the [barcode capture](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance.
 
-Similarly, for barcode tracking (MatrixScan), the barcode’s symbology must be enabled by calling [BarcodeTrackingSettings.enableSymbology()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-tracking-settings.html#method-scandit.datacapture.barcode.tracking.BarcodeTrackingSettings.EnableSymbology) on the [BarcodeTrackingSettings](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-tracking-settings.html#class-scandit.datacapture.barcode.tracking.BarcodeTrackingSettings) and then applying the settings to the [barcode tracking](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) instance.
+Similarly, for barcode tracking (MatrixScan), the barcode’s symbology must be enabled by calling [BarcodeBatchSettings.enableSymbology()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch-settings.html#method-scandit.datacapture.barcode.batch.BarcodeBatchSettings.EnableSymbology) on the [BarcodeBatchSettings](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch-settings.html#class-scandit.datacapture.barcode.batch.BarcodeBatchSettings) and then applying the settings to the [barcode tracking](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch.html#class-scandit.datacapture.barcode.batch.BarcodeBatch) instance.
 
 If you already know the names of the symbologies you want to scan/read, take a look at the list of [symbologies supported](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology) by the Scandit Data Capture SDK. If you are unsure what the symbology of your barcode is, use the Scandit Demo App available in the [Android Play Store](https://play.google.com/store/apps/details?id=com.scandit.demoapp). After you have installed the app, select the “Any Code” mode and scan the codes you are interested in. The name of the symbology appears on the result screen.
 

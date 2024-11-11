@@ -26,7 +26,7 @@ export function FrameworkCard({
           new URLSearchParams(location.search)
         );
         const selectedFramework =
-          paramsURL.framework || localStorage.getItem("framework") || "ios";
+          paramsURL.framework || localStorage.getItem("framework") || "web";
         const isSelected = framework.framework === selectedFramework;
 
         return (

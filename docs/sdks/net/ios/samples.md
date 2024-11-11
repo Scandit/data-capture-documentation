@@ -4,7 +4,6 @@ toc_max_heading_level: 4
 sidebar_label: 'Samples'
 pagination_next: null
 framework: netIos
-tags: [netIos]
 keywords:
   - netIos
 ---
@@ -37,10 +36,6 @@ Use SparkScan to populate a list of scanned barcodes.
 
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
 
-##### [Capture Views](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/ios/BarcodeCaptureViewsSample)
-
-Demonstrates the various ways to best integrate the scanner into the UI of your app.
-
 ##### [Rejection](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/ios/BarcodeCaptureRejectSample)
 
 Sample that uses the camera to read a single QR code that starts with “09:” but ignores/rejects all other codes.
@@ -49,7 +44,7 @@ Sample that uses the camera to read a single QR code that starts with “09:” 
 
 #### MatrixScan AR
 
-Examples utilizing the low-level `BarcodeTracking` API.
+Examples utilizing the low-level `BarcodeBatch` API.
 
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/ios/MatrixScanSimpleSample)
 

@@ -1,7 +1,6 @@
 ---
 sidebar_position: 2
 framework: web
-tags: [web]
 keywords:
   - web
 ---
@@ -44,8 +43,8 @@ The [ConfigureOptions.libraryLocation](https://docs.scandit.com/data-capture-sdk
 scandit-datacapture-sdk\*.wasm. WebAssembly requires these separate files which are loaded by our main library at runtime. They can be found inside the engine folder in the library you either added and installed via npm or access via
 a CDN; if you added and installed the library, these files should be put in a path that’s accessible to be downloaded by the running library script. The configuration option that you provide should then point to the folder containing these files, either as a path of your website or an absolute URL (like the CDN one). By default the library will look at the root of your website. If you use a CDN to access the library, you will want to set this to the following values depending on the data capture mode you are using:
 
-- for barcode capture: https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@6.x/build/engine/, https://unpkg.com/browse/scandit-web-datacapture-barcode@6.x/build/engine/, or similar.
-- for ID capture: https://cdn.jsdelivr.net/npm/scandit-web-datacapture-id@6.x/build/engine/, https://unpkg.com/browse/scandit-web-datacapture-id@6.x/build/engine/, or similar.
+- for barcode capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-barcode@7.0.0/sdc-lib/, or similar.
+- for ID capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7.0.0/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-id@7.0.0/sdc-lib/, or similar.
 
 Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the libraryLocation option, either by ensuring the served files are up-to-date or the path/URL specifies a specific version. In case a common CDN is used here (jsDelivr or UNPKG) the library will automatically internally set up the correct URLs pointing directly at the files needed for the matching library version. It is highly recommended to handle the serving of these files yourself on your website/server, ensuring optimal compression, correct wasm files MIME type, no request redirections and correct caching headers usage; thus
 resulting in faster loading.
@@ -54,11 +53,11 @@ We recommended to call [configure](https://docs.scandit.com/data-capture-sdk/web
 
 For ID Capture, the result of [idCaptureLoader()](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#method-scandit.datacapture.id.IdCaptureLoader) must be passed to the [ConfigureOptions.moduleLoaders](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.ModuleLoaders) option. In this example, we will scan VIZ documents, so we also need to set [IdCaptureLoaderOptions.enableVIZDocuments](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#property-scandit.datacapture.id.IIdCaptureLoaderOptions.EnableVIZDocuments) to true:
 
-```js
-import * as SDCCore from 'scandit-web-datacapture-core';
-import { idCaptureLoader } from 'scandit-web-datacapture-id';
+```ts
+import { configure } from '@scandit/web-datacapture-core';
+import { idCaptureLoader } from '@scandit/web-datacapture-id';
 
-await SDCCore.configure({
+await configure({
 	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
 	libraryLocation: '/engine/',
 	moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
@@ -82,14 +81,15 @@ For more information:
 
 To show some feedback to the user about the loading status you have two options: use the default UI provided with the SDK or subscribe to the loading status and update your own custom UI. Let’s see how we you can show the default UI first:
 
-```js
-const view = new SDCCore.DataCaptureView();
+```ts
+import { configure, DataCaptureView, DataCaptureContext } from "@scandit/web-datacapture-core"
+const view = new DataCaptureView();
 
 view.connectToElement(document.getElementById('data-capture-view'));
 view.showProgressBar();
 view.setProgressBarMessage('Loading ...');
 
-await SDCCore.configure({
+await configure({
 	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
 	libraryLocation: '/engine/',
 	moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
@@ -97,8 +97,7 @@ await SDCCore.configure({
 
 view.hideProgressBar();
 
-const context: Scandit.DataCaptureContext =
-	await SDCCore.DataCaptureContext.create();
+const context: DataCaptureContext = await DataCaptureContext.create();
 await view.setContext(context);
 ```
 
@@ -106,12 +105,13 @@ await view.setContext(context);
 
 You can also just subscribe for the [loading status](https://docs.scandit.com/data-capture-sdk/web/core/api/web/loading-status.html) of the library by simply attaching a listener like this:
 
-```js
-SDCCore.loadingStatus.subscribe((info) => {
+```ts
+import { configure, loadingStatus } from "@scandit/web-datacapture-core"
+loadingStatus.subscribe((info) => {
 	// updateUI(info.percentage, info.loadedBytes)
 });
 
-await SDCCore.configure({
+await configure({
 	licenseKey: 'SCANDIT_LICENSE_KEY',
 	libraryLocation: '/engine',
 	moduleLoaders: [barcodeCaptureLoader()],
@@ -119,7 +119,8 @@ await SDCCore.configure({
 ```
 
 :::note
-We suggest to serve the library files with the proper headersContent-Length and Content-Encoding if any compression is present. In case of totally missing information we will show an estimated progress
+We suggest serving the library files with the proper headers `Content-Length` and `Content-Encoding` if any compression is present. 
+In case of totally missing information, we show an estimated progress.
 :::
 
 ## Create the Data Capture Context
@@ -127,25 +128,29 @@ We suggest to serve the library files with the proper headersContent-Length and 
 The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext).
 
 ```js
+import { DataCaptureContext } from "@scandit/web-datacapture-core"
+
 // the license key used in configure() will be used
-const context = await SDCCore.DataCaptureContext.create();
+const context = await DataCaptureContext.create();
 ```
 
 ## Add the Camera
 
 You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/web/core/api/camera.html#class-scandit.datacapture.core.Camera 'Camera class'):
 
-```js
-const camera = SDCCore.Camera.default;
+```ts
+import { Camera } from "@scandit/web-datacapture-core";
+import { IdCapture } from "@scandit/web-datacapture-id";
+
+
+const camera = Camera.default;
 await context.setFrameSource(camera);
 
-const cameraSettings = SDCCore.IdCapture.recommendedCameraSettings;
+const cameraSettings = IdCapture.recommendedCameraSettings;
 
 // Depending on the use case further camera settings adjustments can be made here.
 
-if (camera != null) {
-	await camera.applySettings(cameraSettings);
-}
+await camera.applySettings(cameraSettings);
 ```
 
 ## Create ID Capture Settings
@@ -156,21 +161,22 @@ Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/web/id-capture
 Using [IdDocumentType.DLVIZ](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or [IdDocumentType.IdCardVIZ](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) together with any MRZ document [IdDocumentType.IdCardMRZ](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardMrz),[IdDocumentType.VisaMRZ](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.VisaMrz), [IdDocumentType.PassportMRZ](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.PassportMrz), [IdDocumentType.SwissDLMRZ](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.SwissDlMrz)) while [SupportedSides.FrontAndBack](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-supported-document-sides.html#value-scandit.datacapture.id.SupportedSides.FrontAndBack) is enabled is currently not supported.
 :::
 
-```js
-const settings = new SDCId.IdCaptureSettings();
+```ts
+import { IdCaptureSettings, IdDocumentType } from "@scandit/web-datacapture-id";
+
+const settings = new IdCaptureSettings();
 settings.supportedDocuments = [
-	SDCId.IdDocumentType.IdCardVIZ,
-	SDCId.IdDocumentType.AAMVABarcode,
-	SDCId.IdDocumentType.DLVIZ,
+	IdDocumentType.IdCardVIZ,
+	IdDocumentType.AAMVABarcode,
+	IdDocumentType.DLVIZ,
 ];
 ```
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). A result is delivered as [CapturedId](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents. For more specific information use its non-_null_ result properties (for example
-[CapturedId.aamvaBarcodeResult](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.AamvaBarcode)).
+To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). A result is delivered as [CapturedId](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents. For more specific information use its non-_null_ result properties (for example [CapturedId.aamvaBarcodeResult](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.AamvaBarcode)).
 
-```js
+```ts
 const listener = {
 	didCaptureId: (idCapture, session) => {
 		if (session.newlyCapturedId.aamvaBarcodeResult != null) {
@@ -185,24 +191,34 @@ const listener = {
 
 Create a new ID Capture mode with the chosen settings. Then register the listener:
 
-```js
-const idCapture = await SDCId.IdCapture.forContext(context, settings);
+```ts
+import { IdCapture } from "@scandit/web-datacapture-id";
+
+// ...
+
+const idCapture = await IdCapture.forContext(context, settings);
 idCapture.addListener(listener);
 ```
 
 ## Use a Capture View to Visualize the Scan Process
 
-When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
+When using the built-in camera as [frameSource](https://docs.scandit.com/data-capture-sdk/web/core/api/frame-source.html#interface-scandit.datacapture.core.IFrameSource), you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process.
 
-```js
-const view = await SDCCore.DataCaptureView.forContext(context);
+To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
+
+```ts
+const view = await DataCaptureView.forContext(context);
 view.connectToElement(htmlElement);
 ```
 
 Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
 
-```js
-let overlay = await SDCId.IdCaptureOverlay.withIdCaptureForView(
+```ts
+import { IdCaptureOverlay } from "@scandit/web-datacapture-id";
+
+// ...
+
+let overlay = await IdCaptureOverlay.withIdCaptureForView(
 	idCapture,
 	dataCaptureView
 );
@@ -212,8 +228,10 @@ let overlay = await SDCId.IdCaptureOverlay.withIdCaptureForView(
 
 Finally, turn on the camera to start scanning:
 
-```js
-await camera.switchToDesiredState(SDCCore.FrameSourceState.On);
-```
+```ts
+import { FrameSourceState } from "@scandit/web-datacapture-core";
 
-And this is it. You can now scan documents.
+// ...
+
+await camera.switchToDesiredState(FrameSourceState.On);
+```

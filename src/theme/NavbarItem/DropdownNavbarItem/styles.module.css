@@ -1,3 +1,30 @@
 .dropdownNavbarItemMobile {
   cursor: pointer;
 }
+
+.frameworkName {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  height: 28px;
+}
+
+.framework {
+  font-weight: 700;
+  margin: 0;
+  height: 21px;
+  line-height: 22px;
+}
+
+.iconArrow {
+  height: 21px;
+}
+
+@media (width < 997px) {
+  .frameworkName {
+    display: none;
+  }
+}
