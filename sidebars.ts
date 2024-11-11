@@ -930,6 +930,13 @@ const sidebars: SidebarsConfig = {
                 "sdks/react-native/parser/get-started",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Generator",
+              items: [
+                "sdks/react-native/barcode-generator",
+              ],
+            },
           ],
         },
         {

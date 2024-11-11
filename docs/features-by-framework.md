@@ -1,5 +1,5 @@
 ---
-toc_max_heading_level: 4
+toc_max_heading_level: 2
 hide_title: true
 displayed_sidebar: sdcSidebar
 title: 'Features by Framework'
@@ -169,32 +169,6 @@ title: 'Features by Framework'
 | Scanning & parsing MRZs                        | 6.5 | 6.5     | 6.6     | 6.8          | 6.9         | 6.9             | 6.10          | 6.11    | 6.14      | n/a      | 6.13 | 6.16         | 6.16             |
 | Scanning & parsing PDF417 codes                | 6.5 | 6.5     | 6.6     | 6.8          | 6.9         | 6.9             | 6.10          | 6.11    | 6.14      | n/a      | 6.13 | 6.16         | 6.16             |
 
-## Text Capture
-
-| Feature                                         | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
-|-------------------------------------------------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|------------------|
-| | 6.1                                             | 6.1 | 6.4     | 6.5     | 6.5          | 6.5         | 6.11            | 6.11          | 6.11    | n/a       | 6.16     | 6.16 | 6.16         | 6.16             |
-
-### Location Selection / Area Restriction
-
-| Feature                                         | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
-|-------------------------------------------------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|------------------|
-| Radius | n/a | n/a  | n/a | n/a | n/a   | n/a             | n/a           | n/a     | n/a       | n/a      | n/a  | n/a    | n/a   |
-| Rectangular                                     | 6.1 | 6.1     | 6.4     | 6.5          | 6.5         | 6.5             | 6.11          | 6.11    | 6.11      | n/a      | n/a  | 6.16         | 6.16             |
-
-### UI
-
-| Feature                                         | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
-|-------------------------------------------------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|------------------|
-| Basic Overlay (No Highlights)                   | 6.1 | 6.1     | 6.4     | 6.5          | 6.5         | 6.5             | 6.11          | 6.11    | 6.11      | n/a      | n/a  | 6.16         | 6.16             |
-
-### Feedback
-
-| Feature                                         | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
-|-------------------------------------------------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|------------------|
-| Beep on Scan                                    | 6.1 | 6.1     | 6.4     | 6.5          | 6.5         | 6.5             | 6.11          | 6.11    | 6.11      | n/a      | n/a  | 6.16         | 6.16             |
-| Vibrate on Scan                                 | 6.1 | 6.1     | 6.4     | 6.5          | 6.5         | 6.5             | 6.11          | 6.11    | 6.11      | n/a      | n/a  | 6.16         | 6.16             |
-
 ## Label Capture
 
 | Feature | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
@@ -222,6 +196,6 @@ title: 'Features by Framework'
 
 ## Barcode Generator
 
-| Feature                              | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
-|--------------------------------------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|------------------|
-| | 6.21 | 6.21 | n/a  | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
+| Feature  | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
+|-----------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|------------------|
+| | 6.21 | 6.21 | 7.0  | 6.24 | n/a | n/a | n/a | n/a | 7.0 | n/a | n/a | n/a | n/a |
