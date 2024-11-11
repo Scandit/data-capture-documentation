@@ -4,7 +4,6 @@ toc_max_heading_level: 5
 sidebar_label: 'Samples'
 pagination_next: null
 framework: titanium
-tags: [titanium]
 keywords:
   - titanium
 ---
@@ -28,8 +27,3 @@ Simple sample showing how to use the Barcode Capture mode to scan a single barco
 ##### [Capture Settings](https://github.com/Scandit/datacapture-titanium-samples/tree/main/BarcodeCaptureSettingsSample)
 
 Demonstrates how you can adapt the barcode capture settings best to your needs and experiment with all the options.
-
-##### [Capture Views](https://github.com/Scandit/datacapture-titanium-samples/tree/main/BarcodeCaptureViewsSample)
-
-Demonstrates the various ways to best integrate the scanner into the UI of your app.
-

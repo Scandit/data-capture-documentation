@@ -42,6 +42,7 @@
   color: var(--light-gray-100);
   margin: 0;
   font-size: clamp(12px, 1.1vw, 16px);
+  line-height: 1.2em;
 }
 
 [data-theme="dark"] .cardIcon {

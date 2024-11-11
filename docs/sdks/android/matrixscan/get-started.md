@@ -1,7 +1,6 @@
 ---
 sidebar_position: 2
 framework: android
-tags: [android]
 keywords:
   - android
 ---
@@ -58,25 +57,25 @@ The first step to add capture capabilities to your application is to create a ne
 DataCaptureContext dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
 
-## Configure the Barcode Tracking Mode
+## Configure the Barcode Batch Mode
 
-The main entry point for the Barcode Tracking Mode is the [BarcodeTracking](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) object. It is configured through [BarcodeTrackingSettings](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-tracking-settings.html#class-scandit.datacapture.barcode.tracking.BarcodeTrackingSettings) and allows to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener) that  gets informed whenever a new frame has been processed.
+The main entry point for the Barcode Batch Mode is the [BarcodeBatch](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch.html#class-scandit.datacapture.barcode.batch.BarcodeBatch) object. It is configured through [BarcodeBatchSettings](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch-settings.html#class-scandit.datacapture.barcode.batch.BarcodeBatchSettings) and allows to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch-listener.html#interface-scandit.datacapture.barcode.batch.IBarcodeBatchListener) that  gets informed whenever a new frame has been processed.
 
 :::note
-Typically you do not need to implement to a `BarcodeTrackingListener`, instead you may add a [BarcodeTrackingBasicOverlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlay) and implement to a [BarcodeTrackingBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener).
+Typically you do not need to implement to a `BarcodeBatchListener`, instead you may add a [BarcodeBatchBasicOverlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay) and implement to a [BarcodeBatchBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener).
 :::
 
-For this task, we setup Barcode Tracking for tracking QR codes:
+For this task, we setup Barcode Batch for tracking QR codes:
 
 ```java
-BarcodeTrackingSettings settings = new BarcodeTrackingSettings();
+BarcodeBatchSettings settings = new BarcodeBatchSettings();
 settings.enableSymbology(Symbology.QR, true);
 ```
 
-Next, create a `BarcodeTracking` instance with the data capture context and the settings initialized in the previous steps:
+Next, create a `BarcodeBatch` instance with the data capture context and the settings initialized in the previous steps:
 
 ```java
-BarcodeTracking barcodeTracking = BarcodeTracking.forDataCaptureContext(dataCaptureContext, settings);
+BarcodeBatch barcodeBatch = BarcodeBatch.forDataCaptureContext(dataCaptureContext, settings);
 ```
 
 ## Use the Built-in Camera
@@ -92,7 +91,7 @@ When using the built-in camera there are recommended settings for each capture m
 The following lines show how to get the recommended settings and create the camera from it:
 
 ```java
-CameraSettings cameraSettings = BarcodeTracking.createRecommendedCameraSettings();
+CameraSettings cameraSettings = BarcodeBatch.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
 
@@ -127,35 +126,35 @@ DataCaptureView dataCaptureView = DataCaptureView.newInstance(this, dataCaptureC
 setContentView(dataCaptureView);
 ```
 
-To visualize the results of Barcode Tracking, first you need to add the following [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlay):
+To visualize the results of Barcode Batch, first you need to add the following [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay):
 
 ```java
-BarcodeTrackingBasicOverlay overlay = BarcodeTrackingBasicOverlay.newInstance(barcodeTracking, dataCaptureView);
+BarcodeBatchBasicOverlay overlay = BarcodeBatchBasicOverlay.newInstance(barcodeBatch, dataCaptureView);
 ```
 
-Once the overlay has been added, you must conform to the [BarcodeTrackingBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener) interface. The method [BarcodeTrackingBasicOverlayListener.brushForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener.BrushForTrackedBarcode) is invoked every time a new tracked barcode appears and it can be used to set a brush used to highlight that specific barcode in the [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlay).
+Once the overlay has been added, you must conform to the [BarcodeBatchBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener) interface. The method [BarcodeBatchBasicOverlayListener.brushForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener.BrushForTrackedBarcode) is invoked every time a new tracked barcode appears and it can be used to set a brush used to highlight that specific barcode in the [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay).
 
 ```java
 @Override
-public Brush brushForTrackedBarcode(@NonNull BarcodeTrackingBasicOverlay overlay,
+public Brush brushForTrackedBarcode(@NonNull BarcodeBatchBasicOverlay overlay,
                                     @NonNull TrackedBarcode trackedBarcode) {
     // Return a custom Brush based on the tracked barcode.
 }
 ```
 
-If you want to make the highlights tappable, you need to implement the [BarcodeTrackingBasicOverlayListener.onTrackedBarcodeTapped()] method.
+If you want to make the highlights tappable, you need to implement the [BarcodeBatchBasicOverlayListener.onTrackedBarcodeTapped()] method.
 
 ```java
 @Override
-public void onTap(@NonNull BarcodeTrackingBasicOverlay overlay,
+public void onTap(@NonNull BarcodeBatchBasicOverlay overlay,
                   @NonNull TrackedBarcode trackedBarcode) {
     // A tracked barcode was tapped.
 }
 ```
 
-## Barcode Tracking Feedback
+## Barcode Batch Feedback
 
-Barcode Tracking, unlike Barcode Capture, doesn’t emit feedback (sound or vibration) when a new barcode is recognized. However, you may implement a `BarcodeTrackingListener` to provide a similar experience.
+Barcode Batch, unlike Barcode Capture, doesn’t emit feedback (sound or vibration) when a new barcode is recognized. However, you may implement a `BarcodeBatchListener` to provide a similar experience.
 
 Here, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/android/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration.
 
@@ -168,26 +167,26 @@ override func viewDidLoad() {
 }
 ```
 
-Next, use this `feedback` in a `BarcodeTrackingListener`:
+Next, use this `feedback` in a `BarcodeBatchListener`:
 
 ```java
-public class FeedbackListener implements BarcodeTrackingListener {
+public class FeedbackListener implements BarcodeBatchListener {
     @Override
-    public void onObservationStarted(@NotNull BarcodeTracking barcodeTracking) {
-        // Called when Barcode Tracking is started.
+    public void onObservationStarted(@NotNull BarcodeBatch barcodeBatch) {
+        // Called when Barcode Batch is started.
         // We don't use this callback in this guide.
     }
 
     @Override
-    public void onObservationStopped(@NotNull BarcodeTracking barcodeTracking) {
-        // Called when Barcode Tracking is stopped.
+    public void onObservationStopped(@NotNull BarcodeBatch barcodeBatch) {
+        // Called when Barcode Batch is stopped.
         // We don't use this callback in this guide.
     }
 
     @Override
     public void onSessionUpdated(
-            @NotNull BarcodeTracking mode,
-            @NotNull BarcodeTrackingSession session,
+            @NotNull BarcodeBatch mode,
+            @NotNull BarcodeBatchSession session,
             @NotNull FrameData data
     ) {
         if (!session.getAddedTrackedBarcodes().isEmpty()) {
@@ -197,17 +196,17 @@ public class FeedbackListener implements BarcodeTrackingListener {
 }
 ```
 
-[BarcodeTrackingListener.onSessionUpdated()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-tracking-listener.html#method-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener.OnSessionUpdated) is invoked for every processed frame. The [session](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-tracking-session.html#class-scandit.datacapture.barcode.tracking.BarcodeTrackingSession) parameter contains information about the currently tracked barcodes, in particular, the newly recognized ones. We check if there are any and if so, we emit the feedback.
+[BarcodeBatchListener.onSessionUpdated()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch-listener.html#method-scandit.datacapture.barcode.batch.IBarcodeBatchListener.OnSessionUpdated) is invoked for every processed frame. The [session](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch-session.html#class-scandit.datacapture.barcode.batch.BarcodeBatchSession) parameter contains information about the currently tracked barcodes, in particular, the newly recognized ones. We check if there are any and if so, we emit the feedback.
 
-As the last step, register the listener responsible for emitting the feedback with the `BarcodeTracking` instance.
+As the last step, register the listener responsible for emitting the feedback with the `BarcodeBatch` instance.
 
 ```java
-barcodeTracking.addListener(feedbackListener);
+barcodeBatch.addListener(feedbackListener);
 ```
 
-## Disable Barcode Tracking
+## Disable Barcode Batch
 
-To disable barcode tracking, set `BarcodeTracking.isEnabled` to `FALSE`.
+To disable barcode tracking, set `BarcodeBatch.isEnabled` to `FALSE`.
 
 The effect is immediate, no more frames get processed after the change. However, if a frame is currently being processed, this frame will be completely processed and deliver any results/callbacks to the registered listeners.
 

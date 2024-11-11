@@ -4,7 +4,6 @@ toc_max_heading_level: 4
 sidebar_label: 'Samples'
 pagination_next: null
 framework: xamarinIos
-tags: [xamarinIos]
 keywords:
   - xamarinIos
 ---
@@ -33,10 +32,6 @@ Use SparkScan to populate a list of scanned barcodes.
 
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
 
-##### [Capture Views](https://github.com/Scandit/datacapture-xamarin-samples/tree/master/ios/BarcodeCaptureViewsSample)
-
-Demonstrates the various ways to best integrate the scanner into the UI of your app.
-
 ##### [Capture Settings](https://github.com/Scandit/datacapture-xamarin-samples/tree/master/ios/BarcodeCaptureSettingsSample)
 
 Demonstrates how you can adapt the barcode capture settings best to your needs and experiment with all the options.
@@ -49,7 +44,7 @@ Sample that uses the camera to read a single QR code that starts with “09:” 
 
 #### MatrixScan AR
 
-Examples utilizing the low-level `BarcodeTracking` API.
+Examples utilizing the low-level `BarcodeBatch` API.
 
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-xamarin-samples/tree/master/ios/MatrixScanSimpleSample)
 

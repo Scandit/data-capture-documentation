@@ -1,7 +1,6 @@
 ---
 sidebar_position: 1
 displayed_sidebar: sdcSidebar
-tags: [android, capacitor, cordova, flutter, ios, netIos, netAndroid, react-native, titanium, web, xamarinIos, xamarinAndroid, xamarinForms]
 ---
 
 # System Requirements
@@ -12,7 +11,7 @@ tags: [android, capacitor, cordova, flutter, ios, netIos, netAndroid, react-nati
 
 | Requirement | Version |
 | ----------- | ------- |
-| iOS         | 13.0+   |
+| iOS         | 14.0+   |
 | Architecture| arm64, x86_64 |
 | Camera      | 720p+   |
 | GPU         |    |

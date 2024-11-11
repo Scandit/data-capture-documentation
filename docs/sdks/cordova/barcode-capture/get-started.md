@@ -2,7 +2,6 @@
 sidebar_position: 2
 pagination_prev: null
 framework: cordova
-tags: [cordova]
 keywords:
   - cordova
 ---
@@ -95,6 +94,21 @@ Then add the listener:
 
 ```js
 barcodeCapture.addListener(listener);
+```
+
+### Rejecting Barcodes
+
+To prevent scanning unwanted codes, you can reject them by adding the desired logic to the `onBarcodeScanned` method. This will prevent the barcode from being added to the session and will not trigger the `onSessionUpdated` method.
+
+The example below will only scan barcodes beginning with the digits `09` and ignore all others, using a transparent brush to distinguish a rejected barcode from a recognized one:
+
+```js
+...
+if (!barcode.data || !barcode.data.startsWith('09:')) {
+	window.overlay.brush = Scandit.Brush.transparent;
+    return;
+}
+...
 ```
 
 ## Use the Built-in Camera

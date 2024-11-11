@@ -4,7 +4,6 @@ toc_max_heading_level: 4
 sidebar_label: 'Samples'
 pagination_next: null
 framework: android
-tags: [android]
 keywords:
   - android
 ---
@@ -37,10 +36,6 @@ Use a combination of SparkScan and [MatrixScan Count](#matrixscan-count) for a r
 
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
 
-##### [Capture Views](https://github.com/Scandit/datacapture-android-samples/tree/master/BarcodeCaptureViewsSample)
-
-Demonstrates the various ways to best integrate the scanner into the UI of your app.
-
 ##### [Capture Settings](https://github.com/Scandit/datacapture-android-samples/tree/master/BarcodeCaptureSettingsSample)
 
 Demonstrates how you can adapt the barcode capture settings best to your needs and experiment with all the options.
@@ -53,7 +48,7 @@ Sample that uses the camera to read a single QR code that starts with “09:” 
 
 #### MatrixScan AR
 
-Examples utilizing the low-level [`BarcodeTracking`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-tracking.html) API.
+Examples utilizing the low-level [`BarcodeBatch`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch.html) API.
 
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-android-samples/tree/master/MatrixScanSimpleSample)
 

@@ -2,7 +2,6 @@
 sidebar_position: 3
 pagination_next: null
 framework: web
-tags: [web]
 keywords:
   - web
 ---
@@ -79,25 +78,12 @@ sparkScanView.barcodeCountButtonVisible = true;
 sparkScanView.barcodeFindButtonVisible = true;
 ```
 
-## Customization
+## UI Customization
 
-### Customize colors and texts
+:::tip
+Please refer to [SparkScanView](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
+:::
 
-All texts (guidance inside the trigger button and hints’ messages), colors and opacity of the SparkScan UI elements (trigger button, setting toolbar, toasts) can be customized to match the desired language and color scheme. Please refer to [SparkScanView](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of available parameters.
+import Customization from '../../../partials/_sparkscan-customization.mdx';
 
-### Add Controls to the Setting Toolbar
-
-The Setting Toolbar comes with default buttons included, but the full list of available controls includes:
-
-* Target Mode (visible by default)
-* Continuous Mode
-* Torch Control (visible by default)
-* Audio Feedback Control
-* Haptics Control
-* Left-handed Mode
-
-- to prevent them disabling audio feedback on scan, as the work environment is always noisy
-- to prevent them toggling the continuous mode, as you want them to pick items one by one
-- etc.
-
-To do that, you can change the visibility of these buttons, hiding them from the setting toolbar. Please refer to [SparkScanView](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
+<Customization/>

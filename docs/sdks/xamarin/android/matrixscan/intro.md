@@ -2,7 +2,6 @@
 sidebar_position: 1
 pagination_prev: null
 framework: xamarinAndroid
-tags: [xamarinAndroid]
 keywords:
   - xamarinAndroid
 ---
@@ -11,7 +10,7 @@ keywords:
 
 MatrixScan enables you to build applications and workflows involving highlighting and/or interacting with multiple barcodes within the same frame.
 
-MatrixScan is powered by the `SDCBarcodeTracking` functionality of the Scandit Smart Data Capture SDK.
+MatrixScan is powered by the `SDCBarcodeBatch` functionality of the Scandit Smart Data Capture SDK.
 
 ## Limitations
 

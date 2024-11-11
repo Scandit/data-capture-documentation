@@ -2,7 +2,6 @@
 sidebar_position: 3
 pagination_next: null
 framework: flutter
-tags: [flutter]
 keywords:
   - flutter
 ---
@@ -97,28 +96,12 @@ void didTapBarcodeFindButton(SparkScanView view) {
 }
 ```
 
-## Customization
+## UI Customization
 
-### Customize Color and Text
+:::tip
+Please refer to [SparkScanView](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
+:::
 
-All text, colors and opacity of the SparkScan UI elements (trigger button, setting toolbar, toasts) can be customized to match the desired language and color scheme.
+import Customization from '../../../partials/_sparkscan-customization.mdx';
 
-See [SparkScanView](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
-
-### Add Controls to the Setting Toolbar
-
-The Setting Toolbar comes with default buttons included, but the full list of available controls includes:
-
-* Target Mode (visible by default)
-* Continuous Mode
-* Torch Control (visible by default)
-* Audio Feedback Control
-* Haptics Control
-* Left-handed Mode
-
-In some cases you want to avoid end users from accessing these controls, for example to prevent them from:
-
-* Disabling audio feedback on scan, as the work environment is always noisy
-* Toggling the continuous mode, as you want them to pick items one by one
-
-To add controls to the settings toolbar, just change the visibility of these buttons. Please refer to [SparkScanView](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
+<Customization/>
