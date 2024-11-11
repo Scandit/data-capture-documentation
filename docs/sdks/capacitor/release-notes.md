@@ -23,7 +23,7 @@ SparkScan, our flagship barcode scanning product, embodies the full potential of
 
 #### Barcode
 
-* A completely redesigned SparkScan offers a more intuitive and user-friendly experience, along with increased customization options. See the [migration guide](/migrate-6-to-7.md#sparkscan) for more details.
+* SparkScan introduces a completely redesigned user interface, enhancing ergonomics with a simplified API and in-demand customization options. These updates make SparkScan even more versatile, seamlessly integrating with various use cases and blending smoothly into any existing workflow and UI. See the [migration guide](/migrate-6-to-7.md#sparkscan) for more details.
 * Added the `remove_delimiter_data` extension to the CODABAR symbology.
 * The MatrixScan Find user interface is now optimized for 4:3 camera resolution.
 * The [Barcode Generator](/sdks/capacitor/barcode-generator.md) is now available for Capacitor.

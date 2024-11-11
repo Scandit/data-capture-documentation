@@ -23,7 +23,7 @@ SparkScan, our flagship barcode scanning product, embodies the full potential of
 
 #### Barcode
 
-* A completely redesigned SparkScan offers a more intuitive and user-friendly experience, along with increased customization options. See the [migration guide](/migrate-6-to-7.md#sparkscan) for more details.
+* SparkScan introduces a completely redesigned user interface, enhancing ergonomics with a simplified API and in-demand customization options. These updates make SparkScan even more versatile, seamlessly integrating with various use cases and blending smoothly into any existing workflow and UI. See the [migration guide](/migrate-6-to-7.md#sparkscan) for more details.
 * Added the `remove_delimiter_data` extension to the CODABAR symbology.
 * Added a new feature in Barcode Count to be able to show asynchronous product information during Receiving/Inventory processes. After scanning, the worker can now tap the new “Status icon” to see for example if they need to audit that box or if the product is expired. See `barcode.count.ui.BarcodeCountView.ShouldShowStatusModeButton` and `barcode.count.ui.BarcodeCountView.SetStatusProvider`.
 * The MatrixScan Find user interface is now optimized for 4:3 camera resolution.
