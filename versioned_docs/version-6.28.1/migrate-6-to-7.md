@@ -78,6 +78,122 @@ The `BarcodeTracking` API has been renamed to `BarcodeBatch`. Apart from the nam
 
 The `AdvancedOverlay` API will be deprecated in version 7.1 and replaced with a standalone module as MatrixScan Check. No changed are required for version 7.0, but you should be aware of the upcoming changes.
 
+## ID Capture Changes
+
+Version 7.0 introduces a completely redesigned ID Capture and Validation API. This new API provides a more intuitive and flexible way to capture and validate IDs, along with enhanced configuration options and improved result structures.
+
+### Document Selection
+
+Using the new ID Capture API, you can now select the document type(s) you want to capture or exclude based on geographic regions, along with the sections of the document(s) to be captured. This allows you to create a more tailored and efficient ID capture experience for your users.
+
+The tables below indicate the corresponding API and configurations for the previous ID Capture API in version 6.x and the new ID Capture API in version 7.0.
+
+#### Front and Back ID Capture
+
+Previously you would need to configure the `supportedSides` for your desired document types. In version 7.0, you select the `scannerType` to be used:
+
+| Version 6.x | Version 7.0 |
+|---|---|
+| `FRONT_ONLY` | [`SingleSideScanner`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-scanner.html#single-side-scanner) |
+| `FRONT_AND_BACK` | [`FullDocumentScanner`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-scanner.html#full-document-scanner) |
+
+#### Document Type Selection
+
+Previously there were separate document types based upon the zone(s) you wanted to capture, for example the VIZ zone or the MRZ zone. In version 7.0, this is simplified into a configuration of your scanner type based upon ending suffix in your previous configuration:
+
+| Version 6.x | Version 7.0 |
+|---|---|
+| `*_VIZ` | `SingleSideScanner.visualInspectionZone(true)` or `FullDocumentScanner` |
+| `*_MRZ` | `SingleSideScanner.machineReadableZone(true)` |
+| `*_BARCODE` | `SingleSideScanner.barcode(true)` |
+| Multiple zones | `FullDocumentScanner` or `SingleSideScanner` with multiple zones enabled |
+
+:::tip
+If you need to scan certain documents in full, and others only a specific zone, we recommend using the `FullDocumentScanner` for all documents.
+:::
+
+#### Document Category Selection
+
+Where previously there were separate document types for a given region and ID type (e.g. Colombia Driver's License, and Colombia ID), in version 7.0 you can select the document category and region to capture (or exclude).
+
+See [ID Capture Document](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-document.html#id-capture-document) for more information on **acceptedDocuments**.
+
+| 6.x API    | 7.x API    |
+|----------------------------|---------------------|
+| **supportedDocuments**     | **acceptedDocuments**  |
+| DL_VIZ       | DriverLicense|
+| AAMVA_BARCODE| DriverLicense and IdCard   |
+| VISA_MRZ     | Visalcao |
+| PASSPORT_MRZ | Passport |
+| SWISS_DL_MRZ | DriverLicense|
+| ID_CARD_MRZ  | IdCard and/or ResidencePermit and/or certain RegionSpecific documents.   |
+| ID_CARD_VIZ  | IdCard and/or ResidencePermit and/or certain RegionSpecific documents.   |
+| US_US_ID_BARCODE | RegionSpecific with US_UNIFORMED_SERVICES_ID subtype   |
+| COLOMBIA_DL_BARCODE        | DriverLicense limited to Region.Colombia |
+| COLOMBIA_ID_BARCODE        | IdCard limited to Region.Colombia    |
+| ARGENTINA_ID_BARCODE       | IdCard limited to Region.Argentina   |
+| SOUTH_AFRICA_DL_BARCODE    | DriverLicense limited to Region.SouthAfrica  |
+| SOUTH_AFRICA_ID_BARCODE    | IdCard limited to Region.SouthAfrica |
+| CHINA_MAINLAND_TRAVEL_PERMIT_MRZ | RegionSpecific with subtypes CHINA_MAINLAND_TRAVEL_PERMIT_TAIWAN and CHINA_MAINLAND_TRAVEL_PERMIT_HK_MACAU |
+| CHINA_EXIT_ENTRY_PERMIT_MRZ | RegionSpecific with subtype CHINA_EXIT_ENTRY_PERMIT   |
+| CHINA_ONE_WAY_PERMIT_BACK_MRZ | RegionSpecific with subtype CHINA_ONE_WAY_PERMIT    |
+| CHINA_ONE_WAY_PERMIT_FRONT_MRZ | RegionSpecific with subtype CHINA_ONE_WAY_PERMIT   |
+| APEC_BUSINESS_TRAVEL_CARD_MRZ | RegionSpecific with subtype APEC_BUSINESS_TRAVEL_CARD   |
+| PASSPORT_VIZ | Passport |
+| COMMON_ACCESS_CARD_BARCODE | RegionSpecific with subtype US_COMMON_ACCESS_CARD      |
+| HEALTH_INSURANCE_CARD_VIZ  | HealthInsuranceCard    |
+
+### Accepting and Rejecting Documents
+
+Previously you would need to create your own logic for which documents to accept or reject after the capture process.
+
+In version 7.0, you can now specify the documents you want to capture or exclude based on the document category and region directly in the [`IDCaptureSettings`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#id-capture-settings).
+
+You can accept or reject a given subset of documents based on the document category and region. For example, you can accept only Passports but not IDs, or reject anything except Drivers License.
+
+Setting the [`acceptedDocuments`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.AcceptedDocuments) will automatically reject any documents not specified in the list.
+
+Setting the [`rejectedDocuments`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectedDocuments) will automatically reject any documents specified in the list.
+
+### Document Images
+
+If you need to receive images of the captured document, you must migrate the `IdImageType` as follows:
+
+| Version 6.x | Version 7.0 |
+|---|---|
+| FACE | FACE |
+| ID_FRONT | CROPPED_DOCUMENT |
+| ID_BACK | CROPPED_DOCUMENT |
+
+There is no distinction between front and back. If using `SingleSideScanner`, you will receive the front, if using `FullDocumentScanner`, you will receive the front and back.
+
+For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult).
+
+### Callbacks
+
+There are now only two callbacks used: [`onIdCaptured`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-listener.html#method-scandit.datacapture.id.IIdCaptureListener.OnIdCaptured) and [`onIdRejected`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-listener.html#method-scandit.datacapture.id.IIdCaptureListener.OnIdRejected).
+
+:::tip
+For `FullDocumentScanner`, `onIdCaptured` will be called only when all sides are captured. The ID Capture UI automatically guides the user through the process.
+:::
+
+If you previously relied on `onIdCapturedTimedOut`, you will receive the very same callback as `onIdRejected` with `RejectionReason` TIMEOUT.
+
+:::warning
+**Web SDK Only**:
+If you rely on `SingleImageUploader`, `onIdCaptured` is now delivered if data from a document could be extracted and `onIdRejected` when it couldn’t. `RejectionReason` would be `SINGLE_IMAGE_NOT_CAPTURED` if no document could be detected in the image.
+:::
+
+### Capture Result
+
+The structure of [`CapturedId`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html) has been simplified and improved. Some of the changes include:
+
+- The `issuingCountry` field is now a `Region` type instead of a `String`.
+- `CapturedId::viz::capturedSides` type is now named `CapturedSides` not `SupportedSides`.
+- `CapturedId::documentType` is now renamed to `CapturedId::document` and has type `IdCaptureDocument`. You may also use methods like `CapturedId::isPassport()` to determine which document is captured.
+
+Additionally, you can access aggregate fields from the top level and also access fields extracted from individual zones by accessing `CapturedId::barcode`, `CapturedId::mrz` and `CapturedId::viz`. These substructures replace the previous ones that were document-specific, like `aamvaBarcode`.
+
 ## Text Capture Changes
 
 Text Capture has been removed from the Scandit Data Capture SDK. If your use case requires text recognition you can use Smart Label Capture.

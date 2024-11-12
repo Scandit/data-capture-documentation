@@ -96,6 +96,10 @@ const config: Config = {
             from: ['/data-capture-sdk/titanium', '/data-capture-sdk/titanium/add-sdk.html'],
           },
           {
+            to: '/sdks/titanium/barcode-capture/get-started',
+            from: ['/sdks/titanium/single-scanning'],
+          },
+          {
             to: '/sdks/titanium/samples',
             from: '/data-capture-sdk/titanium/samples/run-samples.html'
           },
