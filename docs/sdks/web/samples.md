@@ -36,11 +36,7 @@ Simple sample showing how to use the Barcode Capture mode to scan a single barco
 This sample is also available [here](https://github.com/Scandit/datacapture-web-samples/tree/master/BarcodeCaptureReactSample) for React, and for Progressive Web Apps (PWAs) [here](https://github.com/Scandit/datacapture-web-samples/tree/master/BarcodeCaptureSimplePwaSample).
 :::
 
-##### [Capture Settings](https://github.com/Scandit/datacapture-web-samples/tree/master/BarcodeCaptureSettingsSample)
-
-Demonstrates how you can adapt the barcode capture settings best to your needs and experiment with all the options.
-
-### Multi-Scanning
+### Batch Scanning
 
 #### MatrixScan Find
 
@@ -50,7 +46,7 @@ Demonstrates how you can adapt the barcode capture settings best to your needs a
 
 Use barcode capture to define search criteria by scanning items, and MatrixScan Find can then be launched to find the pre-defined item.
 
-#### MatrixScan AR
+#### MatrixScan Batch
 
 Examples utilizing the low-level `BarcodeBatch` API.
 

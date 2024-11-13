@@ -36,9 +36,9 @@ Simple sample showing how to use the Barcode Capture mode to scan a single barco
 This sample is also available for [React](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/BarcodeCaptureSimpleSampleWithReact), [Vue](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/BarcodeCaptureSimpleSampleWithVue), and [Angular](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/BarcodeCaptureSimpleSampleWithAngular).
 :::
 
-### Multi-Scanning
+### Batch Scanning
 
-#### MatrixScan AR
+#### MatrixScan Batch
 
 Examples utilizing the low-level `BarcodeBatch` API.
 

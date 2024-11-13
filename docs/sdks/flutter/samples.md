@@ -32,13 +32,9 @@ Use SparkScan to populate a list of scanned barcodes.
 
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
 
-##### [Capture Settings](https://github.com/Scandit/datacapture-flutter-samples/tree/master/BarcodeCaptureSettingsSample)
+### Batch Scanning
 
-Demonstrates how you can adapt the barcode capture settings best to your needs and experiment with all the options.
-
-### Multi-Scanning
-
-#### MatrixScan AR
+#### MatrixScan Batch
 
 Examples utilizing the low-level `BarcodeBatch` API.
 

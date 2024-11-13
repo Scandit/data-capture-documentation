@@ -24,11 +24,3 @@ The repository with all the samples can be found [here](https://github.com/Scand
 
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
 
-##### [Capture Settings](https://github.com/Scandit/datacapture-titanium-samples/tree/main/BarcodeCaptureSettingsSample)
-
-Demonstrates how you can adapt the barcode capture settings best to your needs and experiment with all the options.
-
-##### [Capture Views](https://github.com/Scandit/datacapture-titanium-samples/tree/main/BarcodeCaptureViewsSample)
-
-Demonstrates the various ways to best integrate the scanner into the UI of your app.
-
