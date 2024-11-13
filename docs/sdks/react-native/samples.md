@@ -32,17 +32,13 @@ Use SparkScan to populate a list of scanned barcodes.
 
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
 
-##### [Capture Settings](https://github.com/Scandit/datacapture-react-native-samples/tree/master/BarcodeCaptureSettingsSample)
-
-Demonstrates how you can adapt the barcode capture settings best to your needs and experiment with all the options.
-
 ##### [Rejection](https://github.com/Scandit/datacapture-react-native-samples/tree/master/BarcodeCaptureRejectSample)
 
 Sample that uses the camera to read a single QR code that starts with “09:” but ignores/rejects all other codes.
 
-### Multi-Scanning
+### Batch Scanning
 
-#### MatrixScan AR
+#### MatrixScan Batch
 
 Examples utilizing the low-level `BarcodeBatch` API.
 

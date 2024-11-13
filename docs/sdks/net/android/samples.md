@@ -40,9 +40,9 @@ Simple sample showing how to use the Barcode Capture mode to scan a single barco
 
 Sample that uses the camera to read a single QR code that starts with “09:” but ignores/rejects all other codes.
 
-### Multi-Scanning
+### Batch Scanning
 
-#### MatrixScan AR
+#### MatrixScan Batch
 
 Examples utilizing the low-level `BarcodeBatch` API.
 
