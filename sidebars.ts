@@ -430,26 +430,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning",
+      label: "ID Scanning and Validation",
       collapsed: false,
       items: [
-        {
-          type: "category",
-          label: "ID Capture",
-          items: [
-            "sdks/android/id-capture/intro",
-            "sdks/android/id-capture/get-started",
-            "sdks/android/id-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
-          label: "ID Validate",
-          items: [
-            "sdks/android/id-validate/intro",
-            "sdks/android/id-validate/get-started",
-          ],
-        },
+          "sdks/android/id-capture/intro",
+          "sdks/android/id-capture/get-started",
+          "sdks/android/id-capture/advanced",
       ],
     },
     {
