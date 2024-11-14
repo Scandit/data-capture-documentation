@@ -15,7 +15,12 @@ Scandit Data Capture SDKs are distributed as [npm packages](https://www.npmjs.co
 
 You need to add the `scandit-web-datacapture-core` package, which contains the shared functionality used by the other data capture packages.
 
-If you’re using `barcodecapture`-related functionalities, make sure to also add the `scandit-web-datacapture-barcode` package. In addition you need a add `scandit-web-datacapture-id` - the [ScanditIdCapture API](https://docs.scandit.com/data-capture-sdk/web/id-capture/overview.html) - if you want to scan personal identification documents, such as identity cards, passports or visas.
+If you’re using `barcodecapture`-related functionalities,
+make sure to also add the:
+- `scandit-web-datacapture-barcode` package, and/or
+- `scandit-web-datacapture-parser`
+
+In addition, you need to add `scandit-web-datacapture-id` if you want to scan personal identification documents, such as identity cards, passports or visas. See the [ID Capture documentation](/sdks/web/id-capture/get-started.md) to learn more.
 
 :::note
 You can safely remove _barcode_ or _id_ dependencies if you are not going to use their features.
