@@ -7,11 +7,7 @@ keywords:
 
 # Get Started
 
-In this guide you will learn step-by-step how to add ID Capture to your application.
-
-:::note
-Using ID Capture at the same time as other modes (e.g. Barcode Capture or Text Capture) is not supported.
-:::
+This page will guide you through the process of adding ID Capture to your iOS application. ID Capture is a mode of the Scandit Data Capture SDK that allows you to capture and extract information from personal identification documents, such as driver's licenses, passports, and ID cards.
 
 The general steps are:
 
@@ -22,13 +18,23 @@ The general steps are:
 - Setting up the Capture View and Overlay
 - Starting the Capture Process
 
+:::warning
+Using ID Capture at the same time as other modes (e.g. Barcode Capture) is not supported.
+:::
+
 ## Prerequisites
 
-Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out this [guide](/sdks/ios/add-sdk.md).
+Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. See the [installation guide](/sdks/ios/add-sdk.md) for details.
 
-:::note
+:::tip
 You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
 :::
+
+### Internal Dependencies
+
+import InternalDependencies from '../../../partials/_id-internal-deps.mdx';
+
+<InternalDependencies/>
 
 ## Create a Data Capture Context
 
@@ -53,21 +59,27 @@ camera?.apply(recommendedCameraSettings)
 
 ## Configure the Capture Settings
 
-Use [`SDCIdCaptureSettings`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the types of documents you need to scan. Check [`SDCIdDocumentType`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-document-type.html#enum-scandit.datacapture.id.IdDocumentType) for all the available options.
+Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scanner type to use and the documents that should be accepted and/or rejected.
 
-:::warning
-Using [`SDCIdDocumentTypeDLVIZ`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or [`SDCIdDocumentTypeIdCardVIZ`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) together with any MRZ document while [`SDCSupportedSidesFrontAndBack`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-supported-document-sides.html#value-scandit.datacapture.id.SupportedSides.FrontAndBack) is enabled **is not** supported.
-:::
+Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all the available options.
 
 ```swift
-idCaptureSettings.supportedDocuments = [.idCardViz, .aamvaBarcode, .dlViz]
+let settings = IdCaptureSettings()
+settings.scannerType = .SingleSideScanner // To scan only one-sided documents
+// or
+settings.scannerType = .FullDocumentScanner // To scan both sides of the document
+
+settings.acceptedDocuments = [.passport, .driver_license]
+settings.rejectedDocuments = [.id_card]
 ```
 
 ## Implement a Listener
 
-To receive scan results implement [`SDCIdCaptureListener`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
+To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
 
-A result is delivered as an [`SDCCapturedId`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents. For more specific information use its non-nil result properties (for example [`SDCCapturedId.aamvaBarcodeResult`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.AamvaBarcode)).
+Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
+
+For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 ```swift
 extension IdCaptureViewController: IdCaptureListener {
@@ -75,13 +87,9 @@ extension IdCaptureViewController: IdCaptureListener {
     let capturedId = session.newlyCapturedId
 
     // The recognized fields of the captured Id can vary based on the type.
-    if capturedId.mrzResult != nil {
+    if capturedId.isPassport = true {
         // Handle the information extracted.
-    } else if capturedId.vizResult != nil {
-        // Handle the information extracted.
-    } else if capturedId.aamvaBarcodeResult != nil {
-        // Handle the information extracted.
-    } else if capturedId.usUniformedServicesBarcodeResult != nil {
+    } else if capturedId.isDriverLicense = true {
         // Handle the information extracted.
     }
   }

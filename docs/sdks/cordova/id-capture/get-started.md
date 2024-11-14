@@ -11,7 +11,7 @@ keywords:
 In this guide you will learn step-by-step how to add ID Capture to your application.
 
 :::note
-Using ID Capture at the same time as other modes (e.g. Barcode Capture or Text Capture) is not supported.
+Using ID Capture at the same time as other modes (e.g. Barcode Capture) is not supported.
 :::
 
 The general steps are:
