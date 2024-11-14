@@ -7,11 +7,7 @@ keywords:
 
 # Get Started
 
-This page describes the steps to add ID Capture to your application.
-
-:::note
-Using ID Capture at the same time as other modes (e.g. Barcode Capture or Text Capture) is not supported.
-:::
+This page will guide you through the process of adding ID Capture to your Android application. ID Capture is a mode of the Scandit Data Capture SDK that allows you to capture and extract information from personal identification documents, such as driver's licenses, passports, and ID cards.
 
 The general steps are:
 
@@ -22,12 +18,16 @@ The general steps are:
 - Set-up the Capture View and Overlay
 - Start the Capture Process
 
+:::warning
+Using ID Capture at the same time as other modes (e.g. Barcode Capture ) is not supported.
+:::
+
 ## Prerequisites
 
-Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out this [guide](/sdks/android/add-sdk.md).
+Before starting with your integration, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. See the [installation guide](/sdks/android/add-sdk.md) for details.
 
-:::note
-You can retrieve your Scandit Data Capture SDK license key, by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
+:::tip
+You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
 ### External Dependencies
@@ -45,19 +45,9 @@ If you directly add the AAR files to the project, you need to add these dependen
 
 ### Internal Dependencies
 
-Some of the Scandit Data Capture SDK modules depend on others to work:
+import InternalDependencies from '../../../partials/_id-internal-deps.mdx';
 
-| Module      | Dependencies |
-| ----------- | ----------- |
-| *ScanditCaptureCore*      | No dependencies       |
-| *ScanditBarcodeCapture*   | *ScanditCaptureCore*        |
-| *ScanditParser*      | No dependencies       |
-| *ScanditIdCapture*      | *ScanditCaptureCore*; *ScanditIdCaptureBackend (VIZ documents)*       |
-| *ScanditIdCaptureBackend*      | No dependencies       |
-
-:::note
-Note that your license may support only a subset of ID Capture features. If you need to use additional features, [contact us](mailto:support@scandit.com).
-:::
+<InternalDependencies/>
 
 ## Create a Data Capture Context
 
@@ -83,26 +73,29 @@ dataCaptureContext.setFrameSource(camera);
 
 ## Configure the Capture Settings
 
-Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the types of documents you need to scan. Check [IdDocumentType](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-document-type.html#enum-scandit.datacapture.id.IdDocumentType) for all the available options.
+Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scanner type to use and the documents that should be accepted and/or rejected.
 
-:::warning
-Using `IdDocumentType.DL_VIZ` or `IdDocumentType.ID_CARD_VIZ` for configuration together with any MRZ document (`IdDocumentType.ID_CARD_MRZ`, `IdDocumentType.VISA_MRZ`, `IdDocumentType.PASSPORT_MRZ`, `IdDocumentType.SWISS_DL_MRZ`) while [SupportedSides.FRONT_AND_BACK is enabled](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-supported-document-sides.html#value-scandit.datacapture.id.SupportedSides.FrontAndBack) **is not** supported.
-:::
+Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all the available options.
 
 ```java
 IdCaptureSettings settings = new IdCaptureSettings();
-settings.setSupportedDocuments(
-        IdDocumentType.ID_CARD_VIZ,
-        IdDocumentType.DL_VIZ,
-        IdDocumentType.AAMVA_BARCODE
+settings.scannerType(
+    SingleSideScanner // To scan only one-sided documents
+    // or
+    FullDocumentScanner // To scan both sides of the document
 );
+
+settings.acceptedDocuments(PASSPORT, DRIVER_LICENSE);
+settings.rejectedDocuments(ID_CARD);
 ```
 
 ## Implement a Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
+To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
 
-A result is delivered as an [CapturedId](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents. For more specific information, use its non-null result properties (for example [CapturedId.aamvaBarcode](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.AamvaBarcode)).
+Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
+
+For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 ```java
 class MyListener implements IdCaptureListener {
@@ -115,13 +108,9 @@ class MyListener implements IdCaptureListener {
         CapturedId capturedId = session.getNewlyCapturedId();
 
         // The recognized fields of the captured Id can vary based on the type.
-        if (capturedId.getMrz() != null) {
+        if (capturedId.isPassport() = true) {
             // Handle the information extracted.
-        } else if (capturedId.getViz() != null) {
-            // Handle the information extracted.
-        } else if (capturedId.getAamvaBarcode() != null) {
-            // Handle the information extracted.
-        } else if (capturedId.getUsUniformedServicesBarcode() != null) {
+        } else if (capturedId.isDriverLicense() = true) {
             // Handle the information extracted.
         }
     }
@@ -162,7 +151,9 @@ Then, add an instance of [IdCaptureOverlay](https://docs.scandit.com/data-captur
 IdCaptureOverlay overlay = IdCaptureOverlay.newInstance(idCapture, dataCaptureView);
 ```
 
-The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings). If you prefer to show a different UI or to temporarily hide it, set the appropriate [IdCaptureOverlay.idLayout](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/ui/id-capture-overlay.html#property-scandit.datacapture.id.ui.IdCaptureOverlay.IdLayout).
+The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
+
+If you prefer to show a different UI or to temporarily hide it, set the appropriate [IdCaptureOverlay.idLayout](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/ui/id-capture-overlay.html#property-scandit.datacapture.id.ui.IdCaptureOverlay.IdLayout).
 
 ## Start the Capture Process
 

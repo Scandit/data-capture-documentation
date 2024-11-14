@@ -28,7 +28,7 @@ Before starting with adding a capture mode, make sure that you have a valid Scan
 that you added the necessary dependencies. If you have not done that yet, check out [this guide](../add-sdk.md).
 
 :::note
-You can retrieve your Scandit Data Capture SDK license key, by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
+You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
 Please note that your license may support only a subset of ID Capture features. If you would like to use additional features please contact us at [Scandit Support](mailto:support@scandit.com).
