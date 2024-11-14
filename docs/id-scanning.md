@@ -14,7 +14,7 @@ Scandit can capture and extract data from over 2,000 identity documents worldwid
 
 To experience Scandit scanning and verification capabilities firsthand, check out the ID Scanning mode on the Scandit Barcode Scanner Demo App ([iOS](https://apps.apple.com/us/app/scandit-barcode-scanner-demo/id453880584?ls=1), [Android](https://play.google.com/store/apps/details?id=com.scandit.demoapp&pli=1)), our [ID Bolt demo](https://id-travel.demos.scandit.com/) or get started using your desired framework below.
 
-## ID Scanning
+## ID Capture and Validation
 
 <CustomDocCardsWrapper>
 
@@ -41,36 +41,6 @@ To experience Scandit scanning and verification capabilities firsthand, check ou
 <CustomDocCard title=".NET iOS" description="Integrate ID Scanning in .NET iOS" link="./sdks/net/ios/id-capture/intro" smallIcon ><NetIos/></CustomDocCard>
 
 <CustomDocCard title=".NET Android" description="Integrate ID Scanning in .NET Android" link="./sdks/net/android/id-capture/intro" smallIcon ><NetAndroid/></CustomDocCard>
-
-</CustomDocCardsWrapper>
-
-## ID Validation
-
-<CustomDocCardsWrapper>
-
-<CustomDocCard title="iOS" description="Integrate ID Validation in iOS" link="./sdks/ios/id-validate/intro" smallIcon ><Ios/></CustomDocCard>
-
-<CustomDocCard title="Android" description="Integrate ID Validation in Android" link="./sdks/android/id-validate/intro" Icon ><Android/></CustomDocCard>
-
-<CustomDocCard title="Web" description="Integrate ID Validation for Web" link="./sdks/web/id-validate/intro" smallIcon ><Javascript/> </CustomDocCard>
-
-<CustomDocCard title="Cordova" description="Integrate ID Validation in Cordova" link="./sdks/cordova/id-validate/intro" smallIcon ><Cordova/> </CustomDocCard>
-
-<CustomDocCard title="React Native" description="Integrate ID Validation in React Native" link="./sdks/react-native/id-validate/intro" smallIcon ><ReactIcon/> </CustomDocCard>
-
-<CustomDocCard title="Flutter" description="Integrate ID Validation in Flutter" link="./sdks/flutter/id-validate/intro" smallIcon ><Flutter/> </CustomDocCard>
-
-<CustomDocCard title="Capacitor" description="Integrate ID Validation in Capacitor" link="./sdks/capacitor/id-validate/intro" smallIcon ><Capacitor/></CustomDocCard>
-
-<CustomDocCard title="Xamarin iOS" description="Integrate ID Validation in Xamarin iOS" link="./sdks/xamarin/ios/id-validate/intro" smallIcon ><XamarinIos/></CustomDocCard>
-
-<CustomDocCard title="Xamarin Android" description="Integrate ID Validation for Xamarin Android" link="./sdks/xamarin/android/id-validate/intro" smallIcon ><XamarinAndroid/></CustomDocCard>
-
-<CustomDocCard title="Xamarin Forms" description="Integrate ID Validation in Xamarin Forms" link="./sdks/xamarin/forms/id-validate/intro" smallIcon ><XamarinForms/></CustomDocCard>
-
-<CustomDocCard title=".NET iOS" description="Integrate ID Validation in .NET iOS" link="./sdks/net/ios/id-validate/intro" smallIcon ><NetIos/></CustomDocCard>
-
-<CustomDocCard title=".NET Android" description="Integrate ID Validation in .NET Android" link="./sdks/net/android/id-validate/intro" smallIcon ><NetAndroid/></CustomDocCard>
 
 </CustomDocCardsWrapper>
 
