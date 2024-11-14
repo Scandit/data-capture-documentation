@@ -23,7 +23,7 @@ make sure to also add the:
 - `@scandit/web-datacapture-barcode` package, and/or
 - `@scandit/web-datacapture-parser`
 
-In addition, you need to add `@scandit/web-datacapture-id` if you want to scan personal identification documents, such as identity cards, passports or visas. See the [ID Capture documentation](https://docs.scandit.com/sdks/web/id-capture/get-started) to learn more.
+In addition, you need to add `@scandit/web-datacapture-id` if you want to scan personal identification documents, such as identity cards, passports or visas. See the [ID Capture documentation](/sdks/web/id-capture/get-started.md) to learn more.
 
 :::tip
 You can safely remove _barcode_ or _id_ dependencies if you are not going to use their features.
