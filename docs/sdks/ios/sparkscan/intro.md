@@ -17,15 +17,14 @@ SparkScan bundles multiple scanning features together and addresses many common 
 
 The UI elements in SparkScan are intentionally minimalistic, meant to be overlayed on any application without the need to adapt the existing app while offering the best user experience.
 
-Three main elements compose the UI:
+Two main elements compose the UI:
 
-![SparkScan UI](/img/sparkscan/features.png)
+![SparkScan UI](/img/sparkscan/features_web.png)
 
 - **Camera preview**: A small camera preview helps with aiming and shows scan feedback. When not in use, the camera preview is hidden.
-- **Trigger button**: A large-sized, transparent, floating button that users can drag up and down to position it in the most ergonomic position. When not in use, the trigger button collapses to occupy less space.
-- **Settings toolbar**: A quick-access toolbar that includes controls of settings and scan modes.
+- **Trigger button**: A large-sized, transparent, floating button that users can drag to position it in the most ergonomic position. When not in use, the trigger button collapses to occupy less space.
 
-There are additional UI elements available for displaying errors or providing feedback to the user. These are described in the [Advanced](./advanced.md) section.
+There are additional UI elements available for displaying additional scanning modes, errors, or providing feedback to the user. These are described in the [Advanced](./advanced.md) section.
 
 ## Workflow Options
 
@@ -68,7 +67,9 @@ When the scanner is active the mini preview is shown. Depending on the scanning 
 
 Upon completing the scanning process (or to interact with the customer app layer), the user can tap in any area outside the trigger button and the mini preview. This collapses the scanner button back to the side, going back to the initial state.
 
-![SparkScan Workflow](/img/sparkscan/workflow-example.gif)
+<p align="center">
+  <img src="/img/sparkscan/workflow-example.gif" alt="SparkScan Workflow" /><br></br>List building use case using SparkScan.
+</p>
 
 ## Supported Symbologies
 

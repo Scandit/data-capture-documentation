@@ -17,3 +17,37 @@ This is achieved by hiding the default trigger button (via `sparkScanView.isTrig
 * Using the mini-preview close button (via `sparkScanView.previewCloseControlVisible`) or your desired button (via `sparkScanView.pauseScanning()`) to stop scanning.
 
 Alternatively, you can rely entirely on a hardware button, if you have enabled that feature.
+
+### Settings Toolbar
+
+The Settings Toolbar is hidden by default in SparkScan, as the most relevant controls are already visible in the camera preview.
+However, additional advanced controls can be made available, such as:
+
+* Target Mode
+* Continuos Mode
+
+By enabling the visibility of these buttons, the Settings Toolbar will appear at the bottom of the camera preview.
+
+### Add Advanced Scanning Modes to the Toolbar
+
+SparkScan is our best solution for high-speed single scanning and scan-intensive workflows. Depending on your use case, you can use SparkScan in conjunction with other Scandit advanced scanning modes, such as MatrixScan Find or MatrixScan Count, to speed up your workflows.
+
+SparkScan offers pre-build buttons you can add to the setting toolbar to easily move to different scan modes from within the SparkScan UI.
+
+First you will need to show these buttons:
+
+```sh
+// Show the MatrixScan Count and MatrixScan Find buttons
+sparkScanView.barcodeCountButtonVisible = true;
+sparkScanView.barcodeFindButtonVisible = true;
+```
+
+<p align="center">
+  <img src="/img/sparkscan/toolbar.png" alt="Toolbar without Scanning Modes" /><br></br>The standard toolbar without additional scanning modes added.
+</p>
+
+<p align="center">
+  <img src="/img/sparkscan/toolbar-buttons.png" alt="Toolbar with Scanning Modes" /><br></br>The toolbar with MatrixScan Find and MatrixScan Count buttons.
+</p>
+
+In addition you have to add a listener to the `SparkScanView` via `SparkScanView.setListener()`. You will then receive callbacks when the MatrixScan Find button or MatrixScan Count button is tapped from the toolbar.
