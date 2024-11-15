@@ -64,9 +64,6 @@ function DropdownNavbarItemDesktop({
     };
   }, [dropdownRef]);
 
- 
-  
-
   const currentFramework = useMemo(() => {
     const regex = /(?<=\/sdks\/)(\w+)(?:\/(\w+))?/;
     const match = currentPath.match(regex);
@@ -220,7 +217,7 @@ function DropdownNavbarItemDesktop({
     items && items.some((item) => item.type !== "docsVersion");
   const shouldShowDropdownMenu =
     hasSDKsItems || (hasDocsVersionItems && currentFramework);
-
+    
   return (
     <>
       <div
@@ -247,7 +244,10 @@ function DropdownNavbarItemDesktop({
             // # hash permits to make the <a> tag focusable in case no link target
             // See https://github.com/facebook/docusaurus/pull/6003
             // There's probably a better solution though...
-            href={props.to ? undefined : "#"}
+            
+            // href={"#"}: Prevents navigation when clicking on the link, ensuring that the dropdown functionality works correctly.
+            // In previous Docusaurus setup, the condition was href={props.to ? undefined : "#"}
+            href={"#"}
             className={clsx("navbar__link", className)}
             {...props}
             onClick={props.to ? undefined : (e) => e.preventDefault()}
