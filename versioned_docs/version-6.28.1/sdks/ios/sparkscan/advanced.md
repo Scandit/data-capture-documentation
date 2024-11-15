@@ -105,18 +105,12 @@ Please refer to [SDCSparkScanView](https://docs.scandit.com/data-capture-sdk/ios
 
 ### Add Controls to the Setting Toolbar
 
-The Setting Toolbar comes with default buttons included, but the full list of available controls includes:
+The Settings Toolbar is hidden by default in SparkScan, as the most relevant controls are already visible in the camera preview.
+However, additional advanced controls can be made available, such as:
 
-* Target Mode (visible by default)
+* Target Mode
 * Continuous Mode
-* Torch Control (visible by default)
-* Audio Feedback Control
-* Haptics Control
-* Left-handed Mode
 
-In some cases you want to avoid end users from accessing these controls, for example to prevent them from:
+By enabling the visibility of these buttons, the Settings Toolbar will appear at the bottom of the camera preview.
 
-* Disabling audio feedback on scan, as the work environment is always noisy
-* Toggling the continuous mode, as you want them to pick items one by one
-
-To add controls to the settings toolbar, just change the visibility of these buttons. Please refer to [SDCSparkScanView](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
+Please refer to [SDCSparkScanView](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
