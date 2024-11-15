@@ -44,6 +44,9 @@ function DropdownNavbarItemDesktop({
   const [linkVersion, setLinkVersion] = useState("sdks");
   const location = useLocation();
   const currentPath = location.pathname;
+  const regex =  /\/hosted\//;;
+  const isHostedPage = regex.test(currentPath)
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!dropdownRef.current || dropdownRef.current.contains(event.target)) {
@@ -60,6 +63,9 @@ function DropdownNavbarItemDesktop({
       document.removeEventListener("focusin", handleClickOutside);
     };
   }, [dropdownRef]);
+
+ 
+  
 
   const currentFramework = useMemo(() => {
     const regex = /(?<=\/sdks\/)(\w+)(?:\/(\w+))?/;
@@ -233,7 +239,7 @@ function DropdownNavbarItemDesktop({
             </p>
           )}
 
-        {items.some((item) => item.type !== "docsVersion") && (
+        {items.some((item) => item.type !== "docsVersion") && !isHostedPage && (
           <NavbarNavLink
             aria-haspopup="true"
             aria-expanded={showDropdown}
@@ -256,7 +262,7 @@ function DropdownNavbarItemDesktop({
           </NavbarNavLink>
         )}
 
-        {shouldShowDropdownMenu && (
+        {shouldShowDropdownMenu && !isHostedPage && (
             <ul className="dropdown__menu">
               {combinedItems.map((childItemProps, i) => (
                 <NavbarItem
