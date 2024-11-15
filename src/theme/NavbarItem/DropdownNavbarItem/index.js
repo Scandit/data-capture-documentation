@@ -44,6 +44,9 @@ function DropdownNavbarItemDesktop({
   const [linkVersion, setLinkVersion] = useState("sdks");
   const location = useLocation();
   const currentPath = location.pathname;
+  const regex =  /\/hosted\//;;
+  const isHostedPage = regex.test(currentPath)
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!dropdownRef.current || dropdownRef.current.contains(event.target)) {
@@ -214,7 +217,7 @@ function DropdownNavbarItemDesktop({
     items && items.some((item) => item.type !== "docsVersion");
   const shouldShowDropdownMenu =
     hasSDKsItems || (hasDocsVersionItems && currentFramework);
-
+    
   return (
     <>
       <div
@@ -233,7 +236,7 @@ function DropdownNavbarItemDesktop({
             </p>
           )}
 
-        {items.some((item) => item.type !== "docsVersion") && (
+        {items.some((item) => item.type !== "docsVersion") && !isHostedPage && (
           <NavbarNavLink
             aria-haspopup="true"
             aria-expanded={showDropdown}
@@ -241,7 +244,10 @@ function DropdownNavbarItemDesktop({
             // # hash permits to make the <a> tag focusable in case no link target
             // See https://github.com/facebook/docusaurus/pull/6003
             // There's probably a better solution though...
-            href={props.to ? undefined : "#"}
+            
+            // href={"#"}: Prevents navigation when clicking on the link, ensuring that the dropdown functionality works correctly.
+            // In previous Docusaurus setup, the condition was href={props.to ? undefined : "#"}
+            href={"#"}
             className={clsx("navbar__link", className)}
             {...props}
             onClick={props.to ? undefined : (e) => e.preventDefault()}
@@ -256,7 +262,7 @@ function DropdownNavbarItemDesktop({
           </NavbarNavLink>
         )}
 
-        {shouldShowDropdownMenu && (
+        {shouldShowDropdownMenu && !isHostedPage && (
             <ul className="dropdown__menu">
               {combinedItems.map((childItemProps, i) => (
                 <NavbarItem

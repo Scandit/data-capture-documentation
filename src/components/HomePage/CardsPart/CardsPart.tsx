@@ -14,7 +14,7 @@ export default function CardsPart() {
       netAndroid: "sdks/net/android/add-sdk",
       xamarinIos: "sdks/xamarin/ios/add-sdk",
       xamarinAndroid: "sdks/xamarin/android/add-sdk",
-      xamarin: "sdks/xamarin/forms/add-sdk",
+      xamarinForms: "sdks/xamarin/forms/add-sdk",
     };
 
     return frameworkUrls[framework] || `sdks/${framework}/add-sdk`;
