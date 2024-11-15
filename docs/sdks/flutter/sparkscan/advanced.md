@@ -25,7 +25,12 @@ You may want to introduce logic in your app to show an error message when scanni
 You can customize:
 
 - The text message.
-- The timeout of the error message: in this case, scanner is paused for the specified amount of time; however, user can quickly restart the scanning process by tapping the trigger button.
+- The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
+
+    :::tip
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\<2s) could allow the user to scan again without having to interact with the app, just momentarily pausing the workflow to acknowledge that a “special” barcode has been scanned.
+    :::
+ 
 - The color of the flashing screen upon scan. You can enable or disable the visual feedback via [SparkScanViewSettings.visualFeedbackEnabled](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.VisualFeedbackEnabled) and control the color via [SparkScanViewFeedback](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-feedback.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewFeedback).
 - The color of the highlight for the scanned barcode.
 - The feedback (sound, vibration).
@@ -49,52 +54,19 @@ SparkScanBarcodeFeedback? feedbackForBarcode(Barcode barcode) {
 }
 ```
 
-:::note
 You can have different error states triggered by different logic conditions. For example you can trigger an error state when a wrong barcode is scanned, and another one when a duplicate barcode is scanned. These errors can show different colors and have different timeouts.
-:::
 
+<p align="center">
+  <img src="/img/sparkscan/error-wrong.png" alt="Wrong scan error" /><br></br>This error state for a code that should not have been scanned.
+</p>
 
-
-A high timeout (for instance, `10`+ seconds) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). 
-
-A small timeout (for instance, less than `2`seconds) could allow the user to scan again without having to interact with the app, just momentarily pausing the workflow to acknowledge that a “special” barcode has been scanned. If timeout is set to 0 workflow is not paused at all.
+<p align="center">
+  <img src="/img/sparkscan/error-duplicate.png" alt="Duplicate scan error" /><br></br>This error state for a code that has been scanned more than once.
+</p>
 
 ### Reject Barcodes
 
 To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan's built-in error state. Setting the `scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay` parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
-
-### Add Advanced Scanning Modes to the Setting Toolbar
-
-SparkScan is our best solution for high-speed single scanning and scan-intensive workflows. Depending on your use case, you can use SparkScan in conjunction with other Scandit advanced scanning modes, such as MatrixScan Find or MatrixScan Count, to speed up your workflows.
-
-SparkScan offers pre-build buttons you can add to the setting toolbar to easily move to different scan modes from within the SparkScan UI.
-
-First you need to show these buttons:
-
-```dart
-// Show the MatrixScan Count and MatrixScan Find buttons
-sparkScanView.barcodeCountButtonVisible = true;
-sparkScanView.barcodeFindButtonVisible = true;
-```
-<!--
-![SparkScan Setting Toolbar](/img/sparkscan/toolbar-advanced.png)
--->
-
-In addition you have to add a listener to the [SparkScanView](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) via [SparkScanView.setListener()](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.SetListener). Subsequent to this, you receive callbacks when the **Barcode Find** button or **Barcode Count** button is tapped from the toolbar.
-
-```dart
-sparkScanView.setListener(this);
-
-//...
-
-@override
-void didTapBarcodeCountButton(SparkScanView view) {
-}
-
-@override
-void didTapBarcodeFindButton(SparkScanView view) {
-}
-```
 
 ## UI Customization
 
