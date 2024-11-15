@@ -1885,6 +1885,10 @@
         {
           "type": "category",
           "label": "Single Scanning",
+          "link": {
+            "type": "doc",
+            "id": "sdks/net/ios/single-scanning"
+          },
           "collapsed": false,
           "items": [
             {
@@ -2051,6 +2055,10 @@
         {
           "type": "category",
           "label": "Single Scanning",
+          "link": {
+            "type": "doc",
+            "id": "sdks/net/android/single-scanning"
+          },
           "collapsed": false,
           "items": [
             {
