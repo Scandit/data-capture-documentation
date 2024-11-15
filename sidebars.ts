@@ -1933,6 +1933,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/net/ios/single-scanning',
+          },
           collapsed: true,
           items: [
             {
@@ -2105,6 +2109,10 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Single Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/net/android/single-scanning',
+          },
           collapsed: true,
           items: [
             {
