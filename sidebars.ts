@@ -566,26 +566,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning",
+      label: "ID Capture and Validation",
       collapsed: false,
       items: [
-        {
-          type: "category",
-          label: "ID Capture",
-          items: [
             "sdks/web/id-capture/intro",
             "sdks/web/id-capture/get-started",
             "sdks/web/id-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
-          label: "ID Validate",
-          items: [
-            "sdks/web/id-validate/intro",
-            "sdks/web/id-validate/get-started",
-          ],
-        },
       ],
     },
     {
@@ -731,25 +717,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning",
+      label: "ID Capture and Validation",
       collapsed: false,
       items: [
-        {
-          type: "category",
-          label: "ID Capture",
-          items: [
             "sdks/cordova/id-capture/intro",
             "sdks/cordova/id-capture/get-started",
-          ],
-        },
-        {
-          type: "category",
-          label: "ID Validate",
-          items: [
-            "sdks/cordova/id-validate/intro",
-            "sdks/cordova/id-validate/get-started",
-          ],
-        },
+            "sdks/cordova/id-capture/advanced"
       ],
     },
     {
@@ -1284,26 +1257,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning",
+      label: "ID Capture and Validation",
       collapsed: false,
       items: [
-        {
-          type: "category",
-          label: "ID Capture",
-          items: [
             "sdks/capacitor/id-capture/intro",
             "sdks/capacitor/id-capture/get-started",
             "sdks/capacitor/id-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
-          label: "ID Validate",
-          items: [
-            "sdks/capacitor/id-validate/intro",
-            "sdks/capacitor/id-validate/get-started",
-          ],
-        },
       ],
     },
     {

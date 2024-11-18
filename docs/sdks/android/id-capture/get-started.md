@@ -19,7 +19,7 @@ The general steps are:
 - Start the Capture Process
 
 :::warning
-Using ID Capture at the same time as other modes (e.g. Barcode Capture ) is not supported.
+Using ID Capture at the same time as other modes (e.g. Barcode Capture) is not supported.
 :::
 
 ## Prerequisites
