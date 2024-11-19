@@ -356,3 +356,7 @@ const fs = require('node:fs/promises')
 It is recommended to NOT store the public key locally. We also recommend
 you enable [source code protection](https://electron-vite.org/guide/source-code-protection) with [bytenode](https://github.com/bytenode/bytenode).
 :::
+
+import OSSLicense from '../../partials/_third-party-licenses.mdx';
+
+<OSSLicense/>

@@ -168,7 +168,7 @@ if (camera != null) {
 ```
 
 :::note
-On Android, the Scandit Data Capture SDK is not lifecycle aware which means it is not able to turn off the camera when the app goes in the background. This has to be done so the camera is not locked for other apps and is left to the implementer. Make sure that you turn the camera off in the activity’s **onPause lifecycle** method. Often this means that you want to (re)start it in **onResume**. You can see a way of doing this in all of the [samples](https://github.com/Scandit/datacapture-android-samples).
+On Android, the Scandit Data Capture SDK is not lifecycle aware which means it is not able to turn off the camera when the app goes in the background. This has to be done so the camera is not locked for other apps and is left to the implementer. Make sure that you turn the camera off in the activity’s **onPause lifecycle** method. Often this means that you want to (re)start it in **onResume**. You can see a way of doing this in all of the [samples](/sdks/android/samples.md).
 :::
 
 ## Use a Capture View to Visualize the Scan Process

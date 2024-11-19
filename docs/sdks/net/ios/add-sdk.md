@@ -57,4 +57,8 @@ You can safely remove `Scandit.DataCapture.Barcode`, `Scandit.DataCapture.Parser
 
 When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. On .NET for iOS, you have to set the “Privacy - Camera Usage Description” field in the Info.plist file.
 
-When using the Scandit Data Capture SDK in MAUI application additionally you have to request camera permissions in your own application before starting scanning. To see how you can achieve this, take a look at our [samples](https://github.com/Scandit/datacapture-dotnet-samples).
+When using the Scandit Data Capture SDK in MAUI application additionally you have to request camera permissions in your own application before starting scanning. To see how you can achieve this, take a look at our [samples](/sdks/net/ios/samples.md).
+
+import OSSLicense from '../../../partials/_third-party-licenses.mdx';
+
+<OSSLicense/>
