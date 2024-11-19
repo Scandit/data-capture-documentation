@@ -1920,6 +1920,10 @@
         {
           "type": "category",
           "label": "Multi-scanning",
+          "link": {
+            "type": "doc",
+            "id": "sdks/net/ios/batch-scanning"
+          },
           "collapsed": false,
           "items": [
             {
@@ -2090,6 +2094,10 @@
         {
           "type": "category",
           "label": "Multi-scanning",
+          "link": {
+            "type": "doc",
+            "id": "sdks/net/android/batch-scanning"
+          },
           "collapsed": false,
           "items": [
             {
