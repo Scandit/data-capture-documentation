@@ -126,3 +126,9 @@ import ScanditParser
 
 </TabItem>
 </Tabs>
+
+## Additional Information
+
+import OSSLicense from '../../partials/_third-party-licenses.mdx';
+
+<OSSLicense/>

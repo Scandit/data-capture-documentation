@@ -79,5 +79,12 @@ After you download the archive containing all the modules at [ssl.scandit.com/da
 
 ## Additional Information
 
-- Camera Permissions: When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. On Android, you have to request camera permissions in your own application before starting scanning. To see how you can achieve this, take a look at our [samples](https://github.com/Scandit/datacapture-titanium-samples).
-- Remember that, if you want to use the camera as the frame source for barcode capture you need to set the “Privacy - Camera Usage Description” field in the Info.plist file for iOS.
+### Camera Permissions
+
+When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. On Android, you have to request camera permissions in your own application before starting scanning. To see how you can achieve this, take a look at our [samples](/sdks/titanium/samples.md).
+
+Remember that, if you want to use the camera as the frame source for barcode capture you need to set the “Privacy - Camera Usage Description” field in the Info.plist file for iOS.
+
+import OSSLicense from '../../partials/_third-party-licenses.mdx';
+
+<OSSLicense/>

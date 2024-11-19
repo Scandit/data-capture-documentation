@@ -54,14 +54,18 @@ You can safely remove `Scandit.DataCapture.Barcode`, `Scandit.DataCapture.Parser
 
 ## Additional Information
 
-:::note
+### Content Providers
+
 On Android, the Scandit SDK uses content providers to initialize the scanning capabilities properly. If your own content providers depend on the Scandit SDK, choose an **initOrder** lower than 10 to make sure the SDK is ready first.
 
 If not specified, **initOrder** is zero by default and you have nothing to worry about.
 
 Check [the official `<provider>` documentation](https://developer.android.com/guide/topics/manifest/provider-element).
-:::
 
 ### Camera Permissions
 
 When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. On .NET for Android or MAUI, you have to request camera permissions in your own application before starting scanning. To see how you can achieve this, take a look at our [samples](./samples.md).
+
+import OSSLicense from '../../../partials/_third-party-licenses.mdx';
+
+<OSSLicense/>
