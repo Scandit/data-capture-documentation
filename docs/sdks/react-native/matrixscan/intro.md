@@ -8,12 +8,6 @@ keywords:
 
 # About MatrixScan
 
-MatrixScan enables you to build applications and workflows involving highlighting and/or interacting with multiple barcodes within the same frame.
+import AboutMatrixScan from '../../../partials/_about-matrixscan.mdx'
 
-## Limitations
-
-MatrixScan does not support the following symbologies:
-
-- DotCode
-- MaxiCode
-- All postal codes (KIX, RM4SCC)
+<AboutMatrixScan />

@@ -1,9 +1,13 @@
 ---
-displayed_sidebar: cordovaSidebar
+sidebar_position: 1
+pagination_prev: null
+framework: cordova
+keywords:
+  - cordova
 ---
 
-# Page Unavailable
+# About MatrixScan Find
 
-This functionality is not currently supported in the selected framework.
+import AboutFind from '../../../partials/_about-matrixscan-find.mdx'
 
----
+<AboutFind />

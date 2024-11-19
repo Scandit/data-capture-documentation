@@ -10,9 +10,9 @@ keywords:
 
 This page describes how to integrate the Scandit Data Capture SDK into your iOS project. The SDK can be added via:
 
-- [CocoaPods](#cocoapods)
-- [Carthage](#carthage)
-- [Swift Package Manager](#swift-package-manager)
+- [CocoaPods](#install-via-package-manager)
+- [Carthage](#install-via-package-manager)
+- [Swift Package Manager](#install-via-package-manager)
 - [Import in Source Code](#import-in-source-code)
 
 ## Prerequisites
@@ -20,10 +20,20 @@ This page describes how to integrate the Scandit Data Capture SDK into your iOS 
 Before you begin, make sure you have the following prerequisites in place:
 
 - Latest version of Xcode
-- iOS project with a deployment target of iOS 13.0+
+- iOS project with a deployment target of iOS 14.0+
 - Scandit license key, sign up for a [free trial](https://www.scandit.com/trial/) if you don't already have a license key
 
-## CocoaPods
+### Internal Dependencies
+
+import InternalDependencies from '../../partials/_id-internal-deps.mdx';
+
+<InternalDependencies/>
+
+## Install via Package Manager
+
+<Tabs groupId="managers">
+
+<TabItem value="cocoaPods" label="CocoaPods">
 
 [CocoaPods](https://cocoapods.org/) is a dependency manager for Swift and Objective-C Cocoa projects. To integrate the Scandit Data Capture SDK into your Xcode project using CocoaPods, specify it in your `Podfile`:
 
@@ -38,7 +48,9 @@ pod 'ScanditParser',
 This command also downloads `ScanditCaptureCore` as `ScanditBarcodeCapture` depends on it.
 :::
 
-## Carthage
+</TabItem>
+
+<TabItem value="carthage" label="Carthage">
 
 [Carthage](https://github.com/Carthage/Carthage) is a decentralized dependency manager that builds your dependencies and provides you with binary frameworks.
 
@@ -61,7 +73,9 @@ binary "https://ssl.scandit.com/sdk/download/carthage/ScanditIdCapture.json"
 binary "https://ssl.scandit.com/sdk/download/carthage/ScanditParser.json"
 ```
 
-## Swift Package Manager
+</TabItem>
+
+<TabItem value="spm" label="Swift Package Manager">
 
 To integrate the Scandit Data Capture SDK into your Xcode project using Swift Package Manager, add the frameworks you want to add in the _Package Dependencies_ section of your project.
 
@@ -83,6 +97,10 @@ You also need to add [`ScanditCaptureCore`](https://docs.scandit.com/data-captur
 
 - `ScanditIdCapture`
 - `ScanditParser`
+
+</TabItem>
+
+</Tabs>
 
 ## Add the Frameworks Manually
 

@@ -23,6 +23,12 @@ This guide shows you how to add the Scandit Data Capture SDK to your existing pr
 Android devices running the Scandit Data Capture SDK need to have a GPU or the performance will drastically decrease.
 :::
 
+### Internal Dependencies
+
+import InternalDependencies from '../../partials/_id-internal-deps.mdx';
+
+<InternalDependencies/>
+
 ## Get a License Key
 
 1. [Sign up](https://ssl.scandit.com/dashboard/sign-up?p=test) or [Sign in](https://ssl.scandit.com/dashboard/sign-in) to your Scandit account
