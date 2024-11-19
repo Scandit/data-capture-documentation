@@ -685,6 +685,24 @@ const sidebars: SidebarsConfig = {
                 "sdks/cordova/matrixscan/advanced",
               ],
             },
+            {
+              type: 'category',
+              label: 'MatrixScan Count',
+              items: [
+                "sdks/cordova/matrixscan-count/intro",
+                "sdks/cordova/matrixscan-count/get-started",
+                "sdks/cordova/matrixscan-count/advanced",
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Find',
+              items: [
+                "sdks/cordova/matrixscan-find/intro",
+                "sdks/cordova/matrixscan-find/get-started",
+                "sdks/cordova/matrixscan-find/advanced",
+              ],
+            },
           ],
         },
         {

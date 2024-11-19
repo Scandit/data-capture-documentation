@@ -20,9 +20,15 @@ This guide shows you how to add the Scandit Data Capture SDK to your existing pr
 - A project with minimum iOS deployment target of 13.0 or higher. Or an Android project with target SDK version 23 (Android 6, Marshmallow) or higher.
 - A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
 
-:::warning
+:::tip
 Android devices running the Scandit Data Capture SDK need to have a GPU or the performance will drastically decrease.
 :::
+
+### Internal Dependencies
+
+import InternalDependencies from '../../partials/_id-internal-deps.mdx';
+
+<InternalDependencies/>
 
 ## Get a License Key
 

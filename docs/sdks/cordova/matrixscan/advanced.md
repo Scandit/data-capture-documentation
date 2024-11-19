@@ -4,7 +4,7 @@ pagination_next: null
 framework: cordova
 keywords:
   - cordova
-unlisted: true
+
 ---
 
 # Adding AR Overlays

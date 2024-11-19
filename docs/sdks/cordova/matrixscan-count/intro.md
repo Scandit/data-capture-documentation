@@ -1,9 +1,13 @@
 ---
-displayed_sidebar: cordovaSidebar
+sidebar_position: 1
+pagination_prev: null
+framework: cordova
+keywords:
+  - cordova
 ---
 
-# Page Unavailable
+# About MatrixScan Count
 
-This functionality is not currently supported in the selected framework.
+import AboutMatrixScanCount from '../../../partials/_about-matrixscan-count.mdx'
 
----
+<AboutMatrixScanCount />

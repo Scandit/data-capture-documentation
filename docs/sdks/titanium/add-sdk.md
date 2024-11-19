@@ -20,7 +20,7 @@ This page describes how to integrate the Scandit Data Capture SDK into your Tita
 - A project with minimum iOS deployment target of 11.0 or higher. Or an Android project with target SDK version 23 (Android 6, Marshmallow) or higher.
 - A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
 
-:::note
+:::tip
 Android devices running the Scandit Data Capture SDK need to have a GPU or the performance will drastically decrease.
 :::
 
@@ -36,7 +36,7 @@ If you have a paid subscription, please reach out to [Scandit Support](mailto:su
 
 Currently we support adding the Scandit Data Capture SDK Titanium modules to your project in two ways. The simplest way is to use the npm registry, alternatively you can manually download the modules and add them to your project.
 
-### Create a new project (optional)
+### Create a new project
 
 If you do not have a Titanium project yet that you’ll use, you should create a new one.
 
@@ -44,7 +44,7 @@ If you do not have a Titanium project yet that you’ll use, you should create a
 ti create -t app -n <PROJECT_NAME>
 ```
 
-### 2a. Add the Scandit Data Capture SDK from the npm registry
+### Add the SDK via npm
 
 To add our plugins from the npm registry, you can run these commands from your project’s root folder. In the following snippet we’re adding [ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/titanium/barcode-capture/api.html)
 
@@ -53,11 +53,11 @@ npm install scandit-titanium-datacapture-core
 npm install scandit-titanium-datacapture-barcode
 ```
 
-:::note
+:::tip
 You can also specify a version `@<version>`.
 :::
 
-### 2b. Add the Scandit Data Capture SDK manually
+### Add the SDK manually
 
 You need to declare the modules you want to use in the app’s tiapp.xml file, e.g. for barcode capture, declare the scandit-titanium-datacapture-barcode module:
 
@@ -70,7 +70,11 @@ You need to declare the modules you want to use in the app’s tiapp.xml file, e
 </modules>
 ```
 
-After you download the archive containing all the modules at [ssl.scandit.com/dashboard/downloads](https://ssl.scandit.com/dashboard/downloads), unzip the archive. It includes the available Titanium modules, including the scandit-titanium-datacapture-core module that all other modules depend on. Now you need to copy the the reqired modules to the root folder of the application. Sticking with the current example, it means that you need to copy:
+After you download the archive containing all the modules from the [Scandit Dashboard](https://ssl.scandit.com/dashboard/downloads), unzip the archive.
+
+It includes the available Titanium modules, including the `scandit-titanium-datacapture-core` module that all other modules depend on. Now you need to copy the the required modules to the root folder of the application.
+
+Sticking with the current example, it means that you need:
 
 - The barcode module for Android.
 - The core module for Android.

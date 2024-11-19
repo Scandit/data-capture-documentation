@@ -51,12 +51,13 @@ In this tutorial, let’s look up two items based on their EAN13 codes. We will 
 const items = [
 new BarcodeFindItem(new BarcodeFindItemSearchOptions("9783598215438"),
 new BarcodeFindItemContent("Mini Screwdriver Set", "(6-Piece)", null)),
-new BarcodeFindItem(new BarcodeFindItemSearchOptions("9783598215414"), null) // Item information is optional, used for
-display only
+new BarcodeFindItem(new BarcodeFindItemSearchOptions("9783598215414"), null) // Item information is optional, used for display only
 ]
+```
 
 Create the mode with the previously created settings and set the items:
 
+```js
 const mode = new BarcodeFind(settings);
 mode.setItemList(items);
 ```
