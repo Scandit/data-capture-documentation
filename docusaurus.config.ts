@@ -11,7 +11,7 @@ const config: Config = {
   tagline:
     "Developer Guides, API References, and Code Samples for building with Scandit Smart Data Capture",
   favicon: "img/sdk_icon.png",
-  trailingSlash: false,
+  trailingSlash: true,
 
   // Set the production url of your site here
   url: "https://docs.scandit.com",
