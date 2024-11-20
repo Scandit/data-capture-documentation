@@ -61,7 +61,7 @@ async function startIdBolt() {
 		returnDataMode: ReturnDataMode.Full,
 		// add validation rules on the scanned document
 		validation: [Validators.notExpired()],
-		locale: "en",
+		locale: "en-US",
 	});
 	// open the pop-up
 	await idBoltSession.start();
