@@ -10,8 +10,6 @@ keywords:
 
 This page will guide you through the process of adding ID Capture to your Cordova application. ID Capture is a mode of the Scandit Data Capture SDK that allows you to capture and extract information from personal identification documents, such as driver's licenses, passports, and ID cards.
 
-
-
 The general steps are:
 
 - Creating a new Data Capture Context instance
@@ -29,7 +27,7 @@ Using ID Capture at the same time as other modes (e.g. Barcode Capture) is not s
 
 Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out [this guide](/sdks/cordova/add-sdk.md).
 
-:::note
+:::tip
 You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
@@ -74,7 +72,7 @@ if (camera != null) {
 
 Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scanner type and the accepted and rejected documents.
 
-Check [IdDocumentType](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-document-type.html#enum-scandit.datacapture.id.IdDocumentType) for all the available options.
+Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all available options.
 
 ```js
 const settings = new Scandit.IdCaptureSettings();

@@ -8,42 +8,70 @@ keywords:
 
 # Advanced Configurations
 
-The are several advanced configurations that can be used to customize the behavior of the ID Capture SDK and enable additional features.
+There are several advanced configurations that can be used to customize the behavior of the ID Capture SDK and enable additional features.
 
-## Capture both the front and the back side of documents
+## Document Capture Zones
 
-By default, when [IdDocumentType.DlViz](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or [IdDocumentType.IdCardViz](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) are selected, _Id Capture_ scans only the front side of documents. Sometimes however, you may be interested in extracting combined information from both the front and the back side.
+By default, a new instance of [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) creates a single-sided scanner type with no accepted or rejected documents. 
 
-Currently the combined result contains the following information:
+To change this, use the `scannerType` method to set the scanner type to either [SingleSideScanner](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/id-capture-scanner.html#single-side-scanner) or [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/id-capture-scanner.html#full-document-scanner).
 
-- AAMVA-compliant documents (for example US Driver’s Licenses): the human-readable front side of the document and the data encoded in the PDF417 barcode in the back;
-- European IDs: the human-readable sections of the front and the back side, and the data encoded in the Machine Readable Zone (MRZ);
-- Other documents: the human-readable section of the front and the back side (if present).
 
-First, enable scanning of both sides of documents in [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings):
+The `FullDocumentScanner` extracts all document information by default. If using the `SingleSideScanner`, you can specify the document zones to extract:
 
 ```csharp
-settings.SupportedDocuments = IdDocumentType.IdCardViz | IdDocumentType.DlViz;
-settings.SupportedSides = SupportedSides.FrontAndBack;
+// To extract data from barcodes on IDs
+SingleSideScanner.barcode(true);
+// To extract data from the visual inspection zone (VIZ) on IDs
+SingleSideScanner.visualInspectionZone(true);
+// To extract data from the machine-readable zone (MRZ) on IDs
+SingleSideScanner.machineReadableZone(true);
 ```
 
-Start by scanning the front side of a document. After you receive the result in [IIdCaptureListener](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener), inspect [VizResult.BackSideCaptureSupported](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.IsBackSideCaptureSupported). If scanning of the back side of your document is supported, flip the document and capture the back side as well. The next result that you receive is a combined result that contains the information from both sides. You may verify this by checking [VizResult.CapturedSides](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.CapturedSides). After both sides of the document are scanned, you may proceed with another document.
+## Configure Accepted and Rejected Documents
 
-Sometimes, you may not be interested in scanning the back side of a document, after you completed the front scan. For example, your user may decide to cancel the process. Internally, _Id Capture_ maintains the state of the scan, that helps it to provide better combined results. To abandon capturing the back of a document, reset this state by calling:
+To configure the documents that should be accepted and/or rejected, use the `acceptedDocuments` and `rejectedDocuments` methods in `IdCaptureSettings`.
+
+These methods are used in conjunction with the [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) and [IdCaptureRegion](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enums to enable highly flexible document filtering as may be desired in your application.
+
+For example, to accept only US Driver Licenses:
 
 ```csharp
-idCapture.Reset();
+settings.AcceptedDocuments = IdDocumentType.DriverLicense | IdDocumentType.Region.US;
 ```
 
-Otherwise, _Id Capture_ may assume that the front side of a new document is actually the back side of an old one, and provide you with nonsensical results.
+Or to accept all Passports *except* those from the US:
 
-## Use ID Validate to detect fake IDs
+```csharp
+settings.AcceptedDocuments = IdDocumentType.Passport;
+settings.RejectedDocuments = IdDocumentType.Region.US;
+```
 
-_ID Validate_ is a fake ID detection software. It currently supports documents that follow the Driver License/Identification Card specification by the American Association of Motor Vehicle Administrators (AAMVA).
+## ID Images
 
-The following two verifiers are available:
+Your use can may require that you capture and extract images of the ID document. Use the [IdImageType](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/id-image-type.html#enum-scandit.datacapture.id.IdImageType) enum to specify the images you want to extract from the `CapturedId` object
 
-- [AamvaVizBarcodeComparisonVerifier](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/aamva-viz-barcode-comparison-verifier.html#class-scandit.datacapture.id.AamvaVizBarcodeComparisonVerifier): Validates the authenticity of the document by comparing the data from the VIZ and from the barcode on the back.
-- [AamvaBarcodeVerifier](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by scanning the barcode on the back.
+For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult) when creating the `IdCaptureSettings` object. This will pass the image type to the result, which you can then access in the `CapturedId` object.
 
-To enable ID Validate for your subscription, please reach out to [Scandit Support](mailto:support@scandit.com).
+## Callbacks and Scanning Workflows
+
+The ID Capture Listener provides two callbacks: `onIdCaptured` and `onIdRejected`. The `onIdCaptured` callback is called when an acceptable document is successfully captured, while the `onIdRejected` callback is called when a document is captured but rejected.
+
+For a successful capture, the `onIdCaptured` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
+
+For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
+
+* NOT_ACCEPTED_DOCUMENT_TYPE: The document is not in the list of accepted documents. In this scenario, you could direct the user to scan a different document.
+* INVALID_FORMAT: The document is in the list of accepted documents, but the format is invalid. In this scenario, you could direct the user to scan the document again.
+* DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
+* TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
+
+## Detect Fake IDs
+
+*ID Validate* is a fake ID detection software. It currently supports documents that follow the Driver License/Identification Card specification by the American Association of Motor Vehicle Administrators (AAMVA).
+
+The following verifier is available:
+
+* [AAMVABarcodeVerifier](https://docs.scandit.com/data-capture-sdk/xamarin.android/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by scanning the barcode on the back.
+
+To enable ID validation for your subscription, please reach out to [Scandit Support](mailto:support@scandit.com).

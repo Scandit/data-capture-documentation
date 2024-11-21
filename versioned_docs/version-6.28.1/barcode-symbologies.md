@@ -31,7 +31,7 @@ This page details the different barcode symbologies and their use cases.
 * Encode additional product data like issue number, date or price.
 * Can only be used in combination with an EAN-8, EAN-13, UPC-A or UPC-E code.
 * EAN-2 encodes two digits, EAN-5 encodes five digits.
-* Additional information can be found on the [Scan Add-On/Extension Codes](./extension-codes).
+* Additional information can be found on the [Scan Add-On/Extension Codes](/extension-codes.md).
 
 #### Universal Product Code (UPC)
 
@@ -325,7 +325,7 @@ Relevant enum value: `SDCSymbologyDotCode`.
 
 ## GS1 Composite Codes
 
-GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D code. See [Scanning Composite Codes](./scanning-composite-codes) for more information.
+GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D code. See [Scanning Composite Codes](/scanning-composite-codes.md) for more information.
 
 ### GS1 Composite Code A (CC-A)
 

@@ -69,7 +69,7 @@ if (camera != null) {
 
 Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scanner type to use and the documents that should be accepted and/or rejected.
 
-Check [IdDocumentType](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-document-type.html#enum-scandit.datacapture.id.IdDocumentType) for all available options.
+Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all available options.
 
 ```ts
 import { IdCaptureSettings, IdDocumentType } from "@scandit/web-datacapture-id";

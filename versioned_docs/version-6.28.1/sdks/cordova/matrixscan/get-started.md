@@ -21,7 +21,7 @@ The general steps are:
 
 ## Prerequisites
 
-Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out [this guide](../add-sdk.md).
+Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out [this guide](/sdks/cordova/add-sdk.md).
 
 :::note
 You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
@@ -105,8 +105,6 @@ The camera is off by default and must be turned on. This is done by calling [Fra
 ```js
 camera.switchToDesiredState(Scandit.FrameSourceState.On);
 ```
-
-There is a separate guide for [more advanced camera functionality](./advanced).
 
 ## Use a Capture View to Visualize the Scan Process
 
