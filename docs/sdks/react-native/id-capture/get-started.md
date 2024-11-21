@@ -7,52 +7,34 @@ keywords:
 
 # Get Started
 
-In this guide you will learn step-by-step how to add ID Capture to your application.
-
-:::note
-Using ID Capture at the same time as other modes (e.g. Barcode Capture) is not supported.
-:::
+This page will guide you through the process of adding ID Capture to your React Native application. ID Capture is a mode of the Scandit Data Capture SDK that allows you to capture and extract information from personal identification documents, such as driver's licenses, passports, and ID cards.
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
-- Accessing a Camera
-- Configuring the Capture Settings
-- Implementing a Listener to Receive Scan Results
-- Setting up the Capture View and Overlay
-- Starting the Capture Process
+- Create a new Data Capture Context instance
+- Access a Camera
+- Configure the Capture Settings
+- Implement a Listener to Receive Scan Results
+- Set-up the Capture View and Overlay
+- Start the Capture Process
+
+:::warning
+Using ID Capture at the same time as other modes (e.g. Barcode Capture) is not supported.
+:::
 
 ## Prerequisites
 
-Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out [this guide](../add-sdk.md).
-
-:::note
-You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
-:::
-
-## Internal dependencies
-
-Some of the Scandit Data Capture SDK modules depend on others to work:
-
-| Module      | Dependencies     |
-| --------------------------- | --------------------------------- |
-| scandit-react-native-datacapture-core                                                      | No dependencies                                                                 |
-| scandit-react-native-datacapture-barcode                                                   | scandit-react-native-datacapture-core                                           |
-| scandit-react-native-datacapture-parser                                                    | scandit-react-native-datacapture-core                                           |
-| scandit-react-native-datacapture-text                                                      | scandit-react-native-datacapture-core                                           |
-| scandit-react-native-datacapture-id                                                        | scandit-react-native-datacapture-core scandit-react-native-datacapture-text(VIZ documents)     |
-
-When adding `ScanditIdCapture` to a React Native project, certain native dependencies need to be added manually to your project, depending on the documents you want to scan:
-
-* If you’re only scanning barcode based documents, you only need to add the `ScanditIdCapture` React Native plugin.
-* If you’re scanning VIZ documents, you also need to add the `ScanditOCR` and `ScanditTextCaptureBase` native dependencies.
-* If you’re scanning MRZ documents, you also need the native `ScanditTextCapture` dependency.
+Before starting with your integration, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. See the [installation guide](/sdks/react-native/add-sdk.md) for details.
 
 :::tip
-If you’re scanning both VIZ and MRZ documents you can add the `ScanditTextCapture` React Native (`scandit-datacapture-react-native-text`) plugin, which includes the native dependencies for both VIZ and MRZ documents.
+You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-Please note that your license may support only a subset of ID Capture features. If you would like to use additional features please contact us at [Scandit Support](mailto:support@scandit.com).
+### Internal Dependencies
+
+import InternalDependencies from '../../../partials/_id-internal-deps.mdx';
+
+<InternalDependencies/>
 
 ## Create the Data Capture Context
 
@@ -81,31 +63,38 @@ if (camera != null) {
 }
 ```
 
-## Create ID Capture Settings
+## Configure the Capture Settings
 
-Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the types of documents that you’d like to scan. Check [IdDocumentType](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-document-type.html#enum-scandit.datacapture.id.IdDocumentType) for all the available options.
+Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scanner type to use and the documents that should be accepted and/or rejected.
 
-:::warning
-Using [IdDocumentType.DLVIZ](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or [IdDocumentType.IdCardVIZ](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) together with any MRZ document ([IdDocumentType.IdCardMRZ](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardMrz) [IdDocumentType.VisaMRZ](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.VisaMrz), [IdDocumentType.PassportMRZ](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.PassportMrz), [IdDocumentType.SwissDLMRZ](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.SwissDlMrz)) while [SupportedSides.FrontAndBack](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-supported-document-sides.html#value-scandit.datacapture.id.SupportedSides.FrontAndBack) is enabled is currently not supported.
-:::
+Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all the available options.
 
 ```js
 const settings = new IdCaptureSettings();
-settings.supportedDocuments = [
-	IdDocumentType.IdCardVIZ,
-	IdDocumentType.AAMVABarcode,
-	IdDocumentType.DLVIZ,
-];
+settings.scannerType(
+    SingleSideScanner // To scan only one-sided documents
+    // or
+    FullDocumentScanner // To scan both sides of the document
+);
+
+settings.acceptedDocuments(PASSPORT, DRIVER_LICENSE);
+settings.rejectedDocuments(ID_CARD);
 ```
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). A result is delivered as [CapturedId](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents. For more specific information use its non-_null_ result properties (for example [CapturedId.aamvaBarcodeResult](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.AamvaBarcode)).
+To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
+
+Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
+
+For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 ```js
 const listener = {
 	didCaptureId: (idCapture, session) => {
-		if (session.newlyCapturedId.aamvaBarcodeResult != null) {
+		if (session.newlyCapturedId.isPassport() = true) {
+			// Handle the information extracted.
+		} else if (session.newlyCapturedId.isDriverLicense() = true) {
 			// Handle the information extracted.
 		}
 	},
@@ -122,32 +111,33 @@ const idCapture = IdCapture.forContext(context, settings);
 idCapture.addListener(listener);
 ```
 
-## Use a Capture View to Visualize the Scan Process
+## Set up Capture View and Overlay
 
-When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
+When using the built-in camera as frame source, you may typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process.
+
+To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```js
 <DataCaptureView context={this.dataCaptureContext} ref={this.viewRef}>
 ```
 
-Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
+Then, add an instance of [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) to the view:
 
 ```js
-let overlay = IdCaptureOverlay.withTextCaptureForView(
+let overlay = IdCaptureOverlay.withIdCaptureForView(
 	idCapture,
 	this.viewRef.current
 );
 ```
 
-The overlay chooses the displayed UI automatically, based on the selected
-[IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
+The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
 
-## Turn on the Camera
+If you prefer to show a different UI or to temporarily hide it, set the appropriate [IdCaptureOverlay.idLayout](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/ui/id-capture-overlay.html#property-scandit.datacapture.id.ui.IdCaptureOverlay.IdLayout).
+
+## Start the Capture Process
 
 Finally, turn on the camera to start scanning:
 
 ```js
 camera.switchToDesiredState(FrameSourceState.On);
 ```
-
-And this is it. You can now scan documents.

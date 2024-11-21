@@ -911,26 +911,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning",
+      label: "ID Capture and Validation",
       collapsed: false,
       items: [
-        {
-          type: "category",
-          label: "ID Capture",
-          items: [
             "sdks/react-native/id-capture/intro",
             "sdks/react-native/id-capture/get-started",
             "sdks/react-native/id-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
-          label: "ID Validate",
-          items: [
-            "sdks/react-native/id-validate/intro",
-            "sdks/react-native/id-validate/get-started",
-          ],
-        },
       ],
     },
     {
@@ -1092,26 +1078,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning",
+      label: "ID Capture and Validation",
       collapsed: false,
       items: [
-        {
-          type: "category",
-          label: "ID Capture",
-          items: [
             "sdks/flutter/id-capture/intro",
             "sdks/flutter/id-capture/get-started",
             "sdks/flutter/id-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
-          label: "ID Validate",
-          items: [
-            "sdks/flutter/id-validate/intro",
-            "sdks/flutter/id-validate/get-started",
-          ],
-        },
       ],
     },
     {
@@ -1493,26 +1465,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning",
+      label: "ID Capture and Validation",
       collapsed: false,
       items: [
-        {
-          type: "category",
-          label: "ID Capture",
-          items: [
             "sdks/xamarin/ios/id-capture/intro",
             "sdks/xamarin/ios/id-capture/get-started",
             "sdks/xamarin/ios/id-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
-          label: "ID Validate",
-          items: [
-            "sdks/xamarin/ios/id-validate/intro",
-            "sdks/xamarin/ios/id-validate/get-started",
-          ],
-        },
       ],
     },
     {
@@ -1660,26 +1618,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning",
+      label: "ID Capture and Validation",
       collapsed: false,
       items: [
-        {
-          type: "category",
-          label: "ID Capture",
-          items: [
             "sdks/xamarin/android/id-capture/intro",
             "sdks/xamarin/android/id-capture/get-started",
             "sdks/xamarin/android/id-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
-          label: "ID Validate",
-          items: [
-            "sdks/xamarin/android/id-validate/intro",
-            "sdks/xamarin/android/id-validate/get-started",
-          ],
-        },
       ],
     },
     {
@@ -1827,26 +1771,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning",
+      label: "ID Capture and Validation",
       collapsed: false,
       items: [
-        {
-          type: "category",
-          label: "ID Capture",
-          items: [
             "sdks/xamarin/forms/id-capture/intro",
             "sdks/xamarin/forms/id-capture/get-started",
             "sdks/xamarin/forms/id-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
-          label: "ID Validate",
-          items: [
-            "sdks/xamarin/forms/id-validate/intro",
-            "sdks/xamarin/forms/id-validate/get-started",
-          ],
-        },
       ],
     },
     {
@@ -2003,26 +1933,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning",
+      label: "ID Capture and Validation",
       collapsed: false,
       items: [
-        {
-          type: "category",
-          label: "ID Capture",
-          items: [
             "sdks/net/ios/id-capture/intro",
             "sdks/net/ios/id-capture/get-started",
             "sdks/net/ios/id-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
-          label: "ID Validate",
-          items: [
-            "sdks/net/ios/id-validate/intro",
-            "sdks/net/ios/id-validate/get-started",
-          ],
-        },
       ],
     },
     {
@@ -2179,26 +2095,12 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning",
+      label: "ID Capture and Validation",
       collapsed: false,
       items: [
-        {
-          type: "category",
-          label: "ID Capture",
-          items: [
             "sdks/net/android/id-capture/intro",
             "sdks/net/android/id-capture/get-started",
             "sdks/net/android/id-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
-          label: "ID Validate",
-          items: [
-            "sdks/net/android/id-validate/intro",
-            "sdks/net/android/id-validate/get-started",
-          ],
-        },
       ],
     },
     {
