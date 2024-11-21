@@ -9,9 +9,9 @@ keywords:
   - netAndroid
 ---
 
-## 7.0.0-beta1
+## 7.0.0-beta2
 
-**Released**: November 11, 2024
+**Released**: November 21, 2024
 
 ### New Features
 

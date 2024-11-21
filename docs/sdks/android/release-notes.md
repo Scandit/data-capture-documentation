@@ -9,9 +9,9 @@ keywords:
   - android
 ---
 
-## 7.0.0-beta1
+## 7.0.0-beta2
 
-**Released**: November 11, 2024
+**Released**: November 21, 2024
 
 ### New Features
 
@@ -31,6 +31,7 @@ SparkScan, our flagship barcode scanning product, embodies the full potential of
 * The `BarcodePickView` API now includes a Reset function for restarting the workflow, where calling it clears all picked items and restores the initial state.
 * For `BarcodeCountView`, the `SetBrushForBarcode` methods now allow setting a null brush, using a transparent brush when so set.
 * Added the following property to `BarcodeBatchSettings`: `expectsOnlyUniqueBarcodes`.
+* Added the following function to `BarcodePickAsyncMapperProductProvider`: `UpdateProductList`. This function is used to change the product database and restart picking.
 
 #### Core
 
@@ -73,6 +74,8 @@ We’ve completely redesigned the ID Capture API to streamline document capture 
 ### Bug Fixes
 
 * Fixed an issue where calling `applySettings` would not update the Camera API.
+* Fixed a rare crash affecting the camera.
+* Fixed a sporadic crash in `BarcodePickView` caused by negative view sizing when opening the keyboard.
 
 ### Deprecations
 
