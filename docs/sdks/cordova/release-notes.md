@@ -9,9 +9,9 @@ keywords:
   - cordova
 ---
 
-## 7.0.0-beta1
+## 7.0.0-beta2
 
-**Released**: November 11, 2024
+**Released**: November 22, 2024
 
 ### New Features
 
