@@ -18,7 +18,7 @@ The UI elements in SparkScan are intentionally minimalistic, meant to be overlay
 
 Three main elements compose the UI:
 
-![SparkScan UI](/img/sparkscan/features.png)
+![SparkScan UI](../../../../img/features.png)
 
 - **Camera preview**: A small camera preview helps with aiming and shows scan feedback. When not in use, the camera preview is hidden.
 - **Trigger button**: A large-sized, transparent, floating button that users can drag up and down to position it in the most ergonomic position. When not in use, the trigger button collapses to occupy less space.

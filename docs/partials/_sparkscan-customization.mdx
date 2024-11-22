@@ -13,10 +13,20 @@ The default trigger button in SparkScan has been designed based on our experienc
 
 This is achieved by hiding the default trigger button (via `sparkScanView.isTriggerButtonVisible`), and then controlling the scanning process as best suits your needs:
 
-* Using a custom button embedded in you app to call `sparkScanView.startScanning()` to start scanning; and
+* Using a custom button embedded in you app to call `sparkScanView.startScanning()` to start scanning. You can adapt the trigger button to the state changes using the SparkScanViewUiListener.
 * Using the mini-preview close button (via `sparkScanView.previewCloseControlVisible`) or your desired button (via `sparkScanView.pauseScanning()`) to stop scanning.
 
-Alternatively, you can rely entirely on a hardware button, if you have enabled that feature.
+Alternatively, you can rely entirely on a hardware button, if you have enabled that feature (via sparkScanViewSettings.hardwareTriggerEnabled).
+
+Some example customizations:
+
+<p align="center">
+  <img src="/img/sparkscan/SparkScanSelfScanning.png" alt="SparkScan Customized on Mobile" /><br></br>Customized Self-Scanning application with custom FAB button and preview expanded by default
+</p>
+
+<p align="center">
+  <img src="/img/sparkscan/SparkScanmPOS.png" alt="SparkScan Customized on Tablet" /><br></br>Customized mPOS application using the existing scan button to trigger the scanner
+</p>
 
 ### Settings Toolbar
 
