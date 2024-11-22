@@ -83,9 +83,7 @@ sparkScanView.BarcodeCountButtonVisible = true;
 sparkScanView.BarcodeFindButtonVisible = true;
 ```
 
-<!--
-![SparkScan Setting Toolbar](/img/sparkscan/toolbar-advanced.png)
--->
+![SparkScan Advanced Scanning Modes](../../../../img/toolbars.png)
 
 In addition you have to add a listener to the `scandit.datacapture.barcode.spark.ui.SparkScanView` via `scandit.datacapture.barcode.spark.ui.SparkScanView.UiListener`. You will then receive callbacks when the **Barcode Find** button or **Barcode Count** button is tapped from the toolbar.
 

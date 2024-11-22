@@ -33,9 +33,15 @@ self.sparkScanView.emitFeedback(SparkScanViewErrorFeedback(message: "This code s
 resumeCapturingDelay: 6, visualFeedbackColor: UIColor.red))
 ```
 
-**NOTE**: you can have different error states triggered by different logic conditions. For example you can trigger an error state when a wrong barcode is scanned, and another one when a duplicate barcode is scanned. These errors can show different colors and have different timeouts.
+:::note
+You can have different error states triggered by different logic conditions. For example you can trigger an error state when a wrong barcode is scanned, and another one when a duplicate barcode is scanned. These errors can show different colors and have different timeouts.
+:::
 
-**NOTE**: a high timeout (e.g. >10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (e.g. \<2s) could allow the user to scan again without having to interact with the app, just momentarily pausing the workflow to acknowledge that a “special” barcode has been scanned.
+![SparkScan Error State](../../../img/errors.png)
+
+A high timeout (e.g. `10`+ seconds) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow, for example when a wrong barcode is scanned and some actions need to be performed.
+
+A small timeout could allow the user to scan again without having to interact with the app, just momentarily pausing the workflow to acknowledge that a “special” barcode has been scanned. If timeout is set to 0 workflow is not paused at all.
 
 ### Reject Barcodes
 
@@ -54,6 +60,8 @@ First you need to show these buttons:
 sparkScanView.barcodeCountButtonVisible = true;
 sparkScanView.barcodeFindButtonVisible = true;
 ```
+
+![SparkScan Advanced Scanning Modes](../../../img/toolbars.png)
 
 ## Customization
 
