@@ -60,8 +60,6 @@ settings.setShouldPassImageTypeToResult(ImageType.CROPPED_DOCUMENT);
 settings.setShouldPassImageTypeToResult(ImageType.FULL_FRAME);
 ```
 
-
-
 ## Callbacks and Scanning Workflows
 
 The ID Capture Listener provides two callbacks: `onIdCaptured` and `onIdRejected`. The `onIdCaptured` callback is called when an acceptable document is successfully captured, while the `onIdRejected` callback is called when a document is captured but rejected.

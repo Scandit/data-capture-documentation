@@ -40,13 +40,33 @@ import InternalDependencies from '../../../partials/_id-internal-deps.mdx';
 
 The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
+<Tabs groupId="language">
+
+<TabItem value="swift" label="Swift">
+
 ```swift
 self.context = DataCaptureContext(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
 ```
 
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+SDCDataCaptureContext *dataCaptureContext = [SDCDataCaptureContext contextForLicenseKey:@"-- ENTER YOUR SCANDIT LICENSE KEY HERE --"];
+```
+
+</TabItem>
+
+</Tabs>
+
 ## Access a Camera
 
 Next, you need to create a new instance of the [`SDCCamera`](https://docs.scandit.com/data-capture-sdk/ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera that will be used to stream previews and to capture images. The camera settings are also configured, in this case, we use the `recommendedCameraSettings` that come withe ID Capture SDK.
+
+<Tabs groupId="language">
+
+<TabItem value="swift" label="Swift">
 
 ```swift
 camera = Camera.default
@@ -57,58 +77,294 @@ let recommendedCameraSettings = IdCapture.recommendedCameraSettings
 camera?.apply(recommendedCameraSettings)
 ```
 
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+SDCCamera *camera = [SDCCamera defaultCamera];
+[dataCaptureContext setFrameSource:camera completionHandler:nil];
+
+auto recommendedCameraSettings = [SDCIdCapture recommendedCameraSettings];
+[camera applySettings:recommendedCameraSettings completionHandler:nil];
+```
+
+</TabItem>
+
+</Tabs>
+
 ## Configure the Capture Settings
 
 Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scanner type to use and the documents that should be accepted and/or rejected.
 
 Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all the available options.
 
-```swift
-let settings = IdCaptureSettings()
-settings.scannerType = .SingleSideScanner // To scan only one-sided documents
-// or
-settings.scannerType = .FullDocumentScanner // To scan both sides of the document
+<Tabs groupId="language">
 
-settings.acceptedDocuments = [.passport, .driver_license]
-settings.rejectedDocuments = [.id_card]
+<TabItem value="swift" label="Swift">
+
+```swift
+var acceptedDocuments = [IdCaptureDocument]()
+var rejectedDocuments = [IdCaptureDocument]()
+
+// Passports from any region:
+acceptedDocuments.append(Passport(region: .any))
+
+// Only documents issued by a specific country:
+acceptedDocuments.append(IdCard(region: .germany))
+
+// Standardized documents issued in Europe:
+acceptedDocuments.append(IdCard(region: .euAndSchengen))
+acceptedDocuments.append(DriverLicense(region: .euAndSchengen))
+
+// Regional documents:
+acceptedDocuments.append(RegionSpecific(subtype: .apecBusinessTravelCard))
+acceptedDocuments.append(RegionSpecific(subtype: .chinaExitEntryPermit))
+
+// Reject passports from certain regions:
+rejectedDocuments.append(Passport(region: .cuba))
+
+// Configure:
+let settings = IdCaptureSettings()
+settings.acceptedDocuments = acceptedDocuments
+settings.rejectedDocuments = rejectedDocuments
+
+// Capture only one-side documents and a given zone
+// Capture only barcodes
+settings.scannerType = SingleSideScanner(enablingBarcode: true,
+                                         machineReadableZone: false,
+                                         visualInspectionZone: false)
+
+// Capture only Machine Readable Zone (MRZ)
+settings.scannerType = SingleSideScanner(enablingBarcode: false,
+                                         machineReadableZone: true,
+                                         visualInspectionZone: false)
+
+// Capture only Visual Inspection Zone (VIZ)
+settings.scannerType = SingleSideScanner(enablingBarcode: false,
+                                         machineReadableZone: false,
+                                         visualInspectionZone: true)
+
+// Full document scanner
+settings.scannerType = FullDocumentScanner()
 ```
+
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+NSMutableArray<SDCIdCaptureDocument *> *acceptedDocuments = [NSMutableArray new];
+NSMutableArray<SDCIdCaptureDocument *> *rejectedDocuments = [NSMutableArray new];
+
+// Passports from any region:
+[acceptedDocuments addObject:[SDCPassport documentWithRegion:SDCIdCaptureRegionAny]];
+
+// Only documents issued by a specific country:
+[acceptedDocuments addObject:[SDCIdCard documentWithRegion:SDCIdCaptureRegionGermany]];
+
+// Standardized documents issued in Europe:
+[acceptedDocuments addObject:[SDCIdCard documentWithRegion:SDCIdCaptureRegionEUAndSchengen]];
+[acceptedDocuments addObject:[SDCDriverLicense documentWithRegion:SDCIdCaptureRegionEUAndSchengen]];
+
+// Regional documents:
+[acceptedDocuments addObject:[SDCRegionSpecific documentWithSubtype:SDCIdCaptureRegionSpecificSubtypeApecBusinessTravelCard]];
+[acceptedDocuments addObject:[SDCRegionSpecific documentWithSubtype:SDCIdCaptureRegionSpecificSubtypeChinaExitEntryPermit]];
+
+// Reject passports from certain regions:
+[rejectedDocuments addObject:[SDCPassport documentWithRegion:SDCIdCaptureRegionCuba]];
+
+// Configure:
+SDCIdCaptureSettings *settings = [SDCIdCaptureSettings new];
+settings.acceptedDocuments = acceptedDocuments;
+settings.rejectedDocuments = rejectedDocuments;
+
+// Capture only one-side documents and a given zone
+// Capture only barcodes
+settings.scannerType = [SDCSingleSideScanner scannerEnablingBarcode:YES
+                                                machineReadableZone:NO
+                                               visualInspectionZone:NO];
+
+// Capture only Machine Readable Zone (MRZ)
+settings.scannerType = [SDCSingleSideScanner scannerEnablingBarcode:NO
+                                                machineReadableZone:YES
+                                               visualInspectionZone:NO];
+
+// Capture only Visual Inspection Zone (VIZ)
+settings.scannerType = [SDCSingleSideScanner scannerEnablingBarcode:NO
+                                                machineReadableZone:NO
+                                               visualInspectionZone:YES];
+
+// Full document scanner
+settings.scannerType = [SDCFullDocumentScanner scanner];
+```
+
+</TabItem>
+
+</Tabs>
+
+Create a new ID Capture mode with the chosen settings:
+
+<Tabs groupId="language">
+
+<TabItem value="swift" label="Swift">
+
+```swift
+idCapture = IdCapture(context: context, settings: idCaptureSettings)
+```
+
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+SDCIdCapture *idCapture = [SDCIdCapture idCaptureWithContext:dataCaptureContext settings:idCaptureSettings];
+```
+
+</TabItem>
+
+</Tabs>
 
 ## Implement a Listener
 
-To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
+To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `didCapture` and `didReject`
+
+<Tabs groupId="language">
+
+<TabItem value="swift" label="Swift">
+
+```swift
+extension IdCaptureViewController: IdCaptureListener {
+
+    func idCapture(_ idCapture: IdCapture, didCapture capturedId: CapturedId) {
+        // Success! Handle extracted data here.
+    }
+
+    func idCapture(_ idCapture: IdCapture,
+                   didReject capturedId: CapturedId?,
+                   reason: RejectionReason) {
+        // Something went wrong. Inspect the reason to determine the follow-up action.
+    }
+}
+
+idCapture.addListener(self)
+```
+
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+- (void)idCapture:(SDCIdCapture *)idCapture didCapture:(SDCCapturedId *)capturedId {
+    // Success! Handle extracted data here.
+}
+
+- (void)idCapture:(SDCIdCapture *)idCapture
+        didReject:(nullable SDCCapturedId *)capturedId
+           reason:(SDCRejectionReason)rejectionReason {
+    // Something went wrong. Inspect the reason to determine the follow-up action.
+}
+
+[idCapture addListener:self];
+```
+
+</TabItem>
+
+</Tabs>
+
+### Handling Success
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
 For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
+On a successful scan you may read the extracted data from `CapturedId`:
+
+<Tabs groupId="language">
+
+<TabItem value="swift" label="Swift">
+
 ```swift
-extension IdCaptureViewController: IdCaptureListener {
-  func idCapture(_ idCapture: IdCapture, didCaptureIn session: IdCaptureSession, frameData: FrameData) {
-    let capturedId = session.newlyCapturedId
+func idCapture(_ idCapture: IdCapture, didCapture capturedId: CapturedId) {
+    let fullName = capturedId.fullName
+    let dateOfBirth = capturedId.dateOfBirth
+    let dateOfExpiry = capturedId.dateOfExpiry
+    let documentNumber = capturedId.documentNumber
 
-    // The recognized fields of the captured Id can vary based on the type.
-    if capturedId.isPassport = true {
-        // Handle the information extracted.
-    } else if capturedId.isDriverLicense = true {
-        // Handle the information extracted.
-    }
-  }
-
-  func idCapture(_ idCapture: IdCapture,
-                didFailWithError error: Error,
-                session: IdCaptureSession,
-                frameData: FrameData) {
-    // Handle the error.
-  }
+    // Process data:
+    processData(fullName, dateOfBirth, dateOfExpiry, documentNumber)
 }
 ```
 
-Create a new ID Capture mode with the chosen settings. Then register the listener:
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+- (void)idCapture:(SDCIdCapture *)idCapture didCapture:(SDCCapturedId *)capturedId {
+    NSString *fullName = capturedId.fullName;
+    NSDate *dateOfBirth = capturedId.dateOfBirth;
+    NSDate *dateOfExpiry = capturedId.dateOfExpiry;
+    NSString *documentNumber = capturedId.documentNumber;
+
+    // Process data:
+    [self processData:fullName dateOfBirth:dateOfBirth dateOfExpiry:dateOfExpiry documentNumber:documentNumber];
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+:::tip
+All data fields are optional, so it's important to verify whether the required information is present if some of the accepted documents may not contain certain data.
+:::
+
+### Handling Rejection
+
+The ID scanning process may fail for various reasons. Start by inspecting [`RejectionReason`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) to understand the cause.
+
+You may wish to implement the follow-up action based on the reason of failure:
+
+<Tabs groupId="language">
+
+<TabItem value="swift" label="Swift">
 
 ```swift
-idCapture = IdCapture(context: context, settings: idCaptureSettings)
-idCapture.addListener(self)
+func idCapture(_ idCapture: IdCapture,
+               didReject capturedId: CapturedId?,
+               reason: RejectionReason) {
+    if reason == .timeout {
+        // Ask the user to retry, or offer alternative input method.
+    } else if reason == .notAcceptedDocumentType {
+        // Ask the user to provide alternative document.
+    } else {
+     // Handle other rejection reasons, if necessary.
+    }
+}
 ```
+
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+- (void)idCapture:(SDCIdCapture *)idCapture
+        didReject:(nullable SDCCapturedId *)capturedId
+           reason:(SDCRejectionReason)rejectionReason {
+    if (rejectionReason == SDCRejectionReasonTimeout) {
+        // Ask the user to retry, or offer alternative input method.
+    } else if (rejectionReason == SDCRejectionReasonNotAcceptedDocumentType) {
+        // Ask the user to provide alternative document.
+    } else {
+     // Handle other rejection reasons, if necessary.
+    }
+}
+```
+
+</TabItem>
+
+</Tabs>
 
 ## Set up Capture View and Overlay
 
@@ -116,18 +372,64 @@ When using the built-in camera as frame source, you will typically want to displ
 
 To do that, add a [`SDCDataCaptureView`](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
+<Tabs groupId="language">
+
+<TabItem value="swift" label="Swift">
+
 ```swift
-let captureView = DataCaptureView(for: context, frame: view.bounds)
-captureView.dataCaptureContext = context
-captureView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-view.addSubview(captureView)
+let dataCaptureView = DataCaptureView(context: dataCaptureContext, frame: .zero)
+view.addSubview(dataCaptureView)
+
+dataCaptureView.translatesAutoresizingMaskIntoConstraints = false
+view.addConstraints([
+    dataCaptureView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+    dataCaptureView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+    dataCaptureView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+    dataCaptureView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+])
 ```
 
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+SDCDataCaptureView *dataCaptureView =
+  [SDCDataCaptureView dataCaptureViewForContext:dataCaptureContext frame:CGRectZero];
+
+dataCaptureView.translatesAutoresizingMaskIntoConstraints = NO;
+[self.view addSubview:dataCaptureView];
+[self.view addConstraint:[dataCaptureView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor]];
+[self.view addConstraint:[dataCaptureView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor]];
+[self.view addConstraint:[dataCaptureView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor]];
+[self.view addConstraint:[dataCaptureView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor]];
+```
+
+</TabItem>
+
+</Tabs>
+
 Then, add a [`SDCIdCaptureOverlay`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) to the view:
+
+<Tabs groupId="language">
+
+<TabItem value="swift" label="Swift">
 
 ```swift
 let overlay = IdCaptureOverlay(idCapture: idCapture, view: captureView)
 ```
+
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+SDCIdCaptureOverlay *overlay = [SDCIdCaptureOverlay overlayWithIdCapture:idCapture view:dataCaptureView];
+```
+
+</TabItem>
+
+</Tabs>
 
 The overlay chooses the displayed UI automatically, based on the selected `SDCIdCaptureSettings`.
 
@@ -135,6 +437,22 @@ The overlay chooses the displayed UI automatically, based on the selected `SDCId
 
 Finally, turn on the camera to start scanning:
 
+<Tabs groupId="language">
+
+<TabItem value="swift" label="Swift">
+
 ```swift
 camera?.switch(toDesiredState: .on)
 ```
+
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+[camera switchToDesiredState:SDCFrameSourceStateOn];
+```
+
+</TabItem>
+
+</Tabs>

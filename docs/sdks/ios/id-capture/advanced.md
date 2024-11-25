@@ -10,48 +10,120 @@ keywords:
 
 There are several advanced configurations that can be used to customize the behavior of the ID Capture SDK and enable additional features.
 
-## Document Capture Zones
+## Decode EU Driver Licenses
 
-By default, a new instance of [SDCIdCaptureSettings](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) creates a single-sided scanner type with no accepted or rejected documents. 
+By default, ID Capture doesn’t extract data from the table on the back of European Driver Licenses. If you are interested in this data, you may enable the extraction by calling:
 
-To change this, use the `scannerType` method to set the scanner type to either [SDCSingleSideScanner](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-scanner.html#single-side-scanner) or [SDCFullDocumentScanner](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-scanner.html#full-document-scanner).
+<Tabs groupId="language">
 
-
-The `FullDocumentScanner` extracts all document information by default. If using the `SingleSideScanner`, you can specify the document zones to extract:
-
-```swift
-// To extract data from barcodes on IDs
-SingleSideScanner.barcode(true)
-// To extract data from the visual inspection zone (VIZ) on IDs
-SingleSideScanner.visualInspectionZone(true)
-// To extract data from the machine-readable zone (MRZ) on IDs
-SingleSideScanner.machineReadableZone(true)
-```
-
-## Configure Accepted and Rejected Documents
-
-To configure the documents that should be accepted and/or rejected, use the `acceptedDocuments` and `rejectedDocuments` methods in `SDCIdCaptureSettings`.
-
-These methods are used in conjunction with the [SDCIdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) and [SDCIdCaptureRegion](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enums to enable highly flexible document filtering as may be desired in your application.
-
-For example, to accept only US Driver Licenses:
+<TabItem value="swift" label="Swift">
 
 ```swift
-settings.acceptedDocuments([.driverLicense], region: .us)
+settings.decodeBackOfEuropeanDrivingLicense = true
 ```
 
-Or to accept all Passports *except* those from the US:
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+settings.decodeBackOfEuropeanDrivingLicense = YES;
+```
+
+</TabItem>
+
+</Tabs>
+
+## Configure Data Anonymization
+
+By default, data extracted from documents is anonymized according to local regulations. See [Anonymized Documents](/sdks/ios/id-capture/intro.md#anonymized-documents) for more information.
+
+That means certain data from certain fields won’t be returned, even if it’s present on a document. You control the anonymization level with the following setting:
+
+<Tabs groupId="language">
+
+<TabItem value="swift" label="Swift">
 
 ```swift
-settings.acceptedDocuments([.passport])
-settings.rejectedDocuments(region: .us)
+// Default value:
+settings.anonymizationMode = .fieldsOnly
+
+// Sensitive data is additionally covered with black boxes on returned images:
+settings.anonymizationMode = .fieldsAndImages
+
+// Only images are anonymized:
+settings.anonymizationMode = .imagesOnly
+
+// No anonymization:
+settings.anonymizationMode = .none
 ```
+
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+// Default value:
+settings.anonymizationMode = SDCIdAnonymizationModeFieldsOnly;
+
+// Sensitive data is additionally covered with black boxes on returned images:
+settings.anonymizationMode = SDCIdAnonymizationModeFieldsAndImages;
+
+// Only images are anonymized:
+settings.anonymizationMode = SDCIdAnonymizationModeImagesOnly;
+
+// No anonymization:
+settings.anonymizationMode = SDCIdAnonymizationModeNone;
+```
+
+</TabItem>
+
+</Tabs>
 
 ## ID Images
 
-Your use can may require that you capture and extract images of the ID document. Use the [SDCIdImageType](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-image-type.html#enum-scandit.datacapture.id.IdImageType) enum to specify the images you want to extract from the `SDCCapturedId` object
+Your use can may require that you capture and extract images of the ID document. Use the [IdImageType](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-image-type.html#enum-scandit.datacapture.id.IdImageType) enum to specify the images you want to extract from the `CapturedId` object.
 
-For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult) when creating the `SDCIdCaptureSettings` object. This will pass the image type to the result, which you can then access in the `SDCCapturedId` object.
+:::tip
+Face and Cropped Document can be extracted only by either `SingleSideScanner` with `visualInspectionZone` enabled or by `FullDocumentScanner`.
+In the case of `FullDocumentScanner`, if the front & the back side of a document are scanned, Cropped Document and Full Frame are returned for both sides.
+:::
+
+For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult) when creating the `IdCaptureSettings` object. This will pass the image type to the result, which you can then access in the `CapturedId` object.
+
+<Tabs groupId="language">
+
+<TabItem value="swift" label="Swift">
+
+```swift
+// Holder's picture as printed on a document:
+settings.resultShouldContainImage(true, for: .face)
+
+// Cropped image of a document:
+settings.resultShouldContainImage(true, for: .croppedDocument)
+
+// Full camera frame that contains the document:
+settings.resultShouldContainImage(true, for: .frame)
+```
+
+</TabItem>
+
+<TabItem value="objc" label="Objective-C">
+
+```objectivec
+// Holder's picture as printed on a document:
+[settings resultShouldContainImage:YES forImageType:SDCIdImageTypeFace];
+
+// Cropped image of a document:
+[settings resultShouldContainImage:YES forImageType:SDCIdImageTypeCroppedDocument];
+
+// Full camera frame that contains the document:
+[settings resultShouldContainImage:YES forImageType:SDCIdImageTypeFrame];
+```
+
+</TabItem>
+
+</Tabs>
 
 ## Callbacks and Scanning Workflows
 
