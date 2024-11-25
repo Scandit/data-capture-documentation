@@ -78,60 +78,100 @@ Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/id-cap
 Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all the available options.
 
 ```java
-IdCaptureSettings settings = new IdCaptureSettings();
-settings.scannerType(
-    SingleSideScanner // To scan only one-sided documents
-    // or
-    FullDocumentScanner // To scan both sides of the document
-);
+List<DocumentType> acceptedDocuments = new ArrayList();
+List<DocumentType> rejectedDocuments = new ArrayList();
 
-settings.acceptedDocuments(PASSPORT, DRIVER_LICENSE);
-settings.rejectedDocuments(ID_CARD);
+// Documents from any region:
+acceptedDocuments.add(new IdCard(Region.AnyRegion));
+// Only documents issued by a specific country:
+acceptedDocuments.add(new IdCard(Region.Germany));
+// Regional documents:
+acceptedDocuments.add(new RegionSpecific.ApecBusinessTravelCard());
+// Reject passports from certain regions:
+rejectedDocuments.add(new Passport(Region.Cuba));
+
+IdCaptureSettings settings = new IdCaptureSettings();
+settings.acceptedDocuments = acceptedDocuments;
+settings.rejectedDocuments = rejectedDocuments;
+
+// To scan only one-sided documents and a given zone:
+settings.scannerType = new SingleSideScanner(barcode = true);
+// or
+settings.scannerType = new SingleSideScanner(machineReadableZone = true);
+// or
+settings.scannerType = new SingleSideScanner(visualInspectionZone = true);
+
+// To scan both sides of the document:
+settings.scannerType = new FullDocumentScanner();
+```
+
+Create a new ID Capture mode with the chosen settings:
+
+```java
+IdCapture idCapture = IdCapture.forDataCaptureContext(context, settings);
 ```
 
 ## Implement a Listener
 
-To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
+To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `onIdCaptured` and `onIdRejected`.
+
+```java
+IdCaptureListener listener = new IdCaptureListner() {
+    @Override
+    public void onIdCaptured(CapturedId data) {
+    // Success! Handle extracted data here.
+}
+
+    @Override
+    public void onIdRejected(CapturedId data, RejectionReason reason) {
+    // Something went wrong. Inspect the reason to determine the follow-up action.
+    }
+}
+
+idCapture.setListener(listener);
+```
+
+### Handling Success
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
 For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
+On a successful scan you may read the extracted data from `CapturedId`:
+    
 ```java
-class MyListener implements IdCaptureListener {
-    @Override
-    public void onIdCaptured(
-            @NotNull IdCapture mode,
-            @NotNull IdCaptureSession session,
-            @NotNull FrameData data
-    ) {
-        CapturedId capturedId = session.getNewlyCapturedId();
+@Override
+public void onIdCaptured(CapturedId data) {
+    String fullName = data.getFullName();
+    DateResult dateOfBirth = data.getDateOfBirth();
+    DateResult dateOfExpiry = data.getDateOfExpiry();
+    String documentNumber = data.getDocumentNumber();
 
-        // The recognized fields of the captured Id can vary based on the type.
-        if (capturedId.isPassport() = true) {
-            // Handle the information extracted.
-        } else if (capturedId.isDriverLicense() = true) {
-            // Handle the information extracted.
-        }
-    }
-
-    @Override
-    public void onErrorEncountered(
-            @NotNull IdCapture mode,
-            @NotNull Throwable error,
-            @NotNull IdCaptureSession session,
-            @NotNull FrameData data
-    ) {
-      // Handle the error
-    }
+    // Process data:
+    processData(fullName, dateOfBirth, dateOfExpiry, documentNumber); 
 }
 ```
+:::tip
+All data fields are optional, so it's important to verify whether the required information is present  if some of the accepted documents may not contain certain data.
+:::
 
-Create a new ID Capture mode with the chosen settings. Then register the listener:
+### Handling Rejection
+
+The ID scanning process may fail for various reasons. Start from inspecting [`RejectionReason`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) to understand the cause.
+
+You may wish to implement the follow-up action based on the reason of failure:
 
 ```java
-idCapture = IdCapture.forDataCaptureContext(dataCaptureContext, settings);
-idCapture.addListener(this);
+@Override
+public void onIdRejected(CapturedId data, RejectionReason reason) {
+     if (reason == RejectionReason.Timeout) {
+         // Ask the user to retry, or offer alternative input method.
+     } else if (reason == RejectionReason.DocumentExpired) {
+         // Ask the user to provide alternative document.
+     } else if (reason == RejectionReason.HolderUnderage) {
+         // Reject the process.
+     }
+}
 ```
 
 ## Set up Capture View and Overlay
