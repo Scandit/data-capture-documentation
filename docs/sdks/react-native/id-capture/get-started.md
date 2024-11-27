@@ -30,11 +30,11 @@ Before starting with your integration, make sure that you have a valid Scandit D
 You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-### Internal Dependencies
+### Module Overview
 
-import InternalDependencies from '../../../partials/_internal-deps.mdx';
+import IdModuleOverview from '../../../partials/_id-module-overview-no-eu-dl.mdx';
 
-<InternalDependencies/>
+<IdModuleOverview/>
 
 ## Create the Data Capture Context
 
