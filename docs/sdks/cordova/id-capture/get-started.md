@@ -33,7 +33,7 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to [you
 
 ### Internal dependencies
 
-import InternalDependencies from '../../../partials/_id-internal-deps.mdx';
+import InternalDependencies from '../../../partials/_internal-deps.mdx';
 
 When adding `ScanditIdCapture` to a Cordova project, certain native dependencies need to be added manually to your project, depending on the documents you want to scan.
 

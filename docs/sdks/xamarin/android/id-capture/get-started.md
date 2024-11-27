@@ -32,7 +32,7 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to [you
 
 ### Internal dependencies
 
-import InternalDependencies from '../../../../partials/_id-internal-deps.mdx';
+import InternalDependencies from '../../../../partials/_internal-deps.mdx';
 
 <InternalDependencies/>
 

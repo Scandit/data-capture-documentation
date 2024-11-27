@@ -34,7 +34,7 @@ Please note that your license may support only a subset of ID Capture features. 
 
 ### Internal Dependencies
 
-import InternalDependencies from '../../../partials/_id-internal-deps.mdx';
+import InternalDependencies from '../../../partials/_internal-deps.mdx';
 
 <InternalDependencies/>
 
