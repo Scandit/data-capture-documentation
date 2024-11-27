@@ -45,7 +45,7 @@ If you directly add the AAR files to the project, you need to add these dependen
 
 ### Internal Dependencies
 
-import InternalDependencies from '../../../partials/_id-internal-deps.mdx';
+import InternalDependencies from '../../../partials/_internal-deps.mdx';
 
 <InternalDependencies/>
 
