@@ -39,8 +39,6 @@ If you directly add the AAR files to the project, you need to add these dependen
 | Module      | Dependencies |
 | ----------- | ----------- |
 | *ScanditCaptureCore.aar*      | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]; com.squareup.okhttp3:okhttp:4.9.2       |
-| *ScanditBarcodeCapture.aar*   | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]        |
-| *ScanditParser.aar*      | No dependencies       |
 | *ScanditIdCapture.aar*      | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]       |
 
 ### Internal Dependencies
