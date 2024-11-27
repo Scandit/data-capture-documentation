@@ -36,10 +36,9 @@ The Scandit Data Capture SDK modules depend on a few standard libraries that you
 
 If you directly add the AAR files to the project, you need to add these dependencies yourself.
 
-| Module      | Dependencies |
-| ----------- | ----------- |
-| *ScanditCaptureCore.aar*      | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]; com.squareup.okhttp3:okhttp:4.9.2       |
-| *ScanditIdCapture.aar*      | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]       |
+* `org.jetbrains.kotlin:kotlin-stdlib:[version]`
+* `androidx.annotation:annotation:[version]`
+* `com.squareup.okhttp3:okhttp:4.9.2`
 
 ### Module Overview
 
