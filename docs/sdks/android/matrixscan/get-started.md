@@ -35,7 +35,6 @@ The Scandit Data Capture SDK modules depend on a few standard libraries that you
 | *ScanditCaptureCore.aar*      | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]; com.squareup.okhttp3:okhttp:4.9.2       |
 | *ScanditBarcodeCapture.aar*   | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]        |
 | *ScanditParser.aar*      | No dependencies       |
-| *ScanditIdCapture.aar*      | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]       |
 
 ### Internal Dependencies
 
@@ -46,8 +45,6 @@ Some of the Scandit Data Capture SDK modules depend on others to work:
 | *ScanditCaptureCore*      | No dependencies       |
 | *ScanditBarcodeCapture*   | *ScanditCaptureCore*        |
 | *ScanditParser*      | No dependencies       |
-| *ScanditIdCapture*      | *ScanditCaptureCore*; *ScanditIdCaptureBackend (VIZ documents)*       |
-| *ScanditIdCaptureBackend*      | No dependencies       |
 
 ## Create a Data Capture Context
 
