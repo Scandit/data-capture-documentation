@@ -72,47 +72,89 @@ Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/capacitor/id-c
 Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all available options.
 
 ```ts
-import { IdCaptureSettings, IdDocumentType } from "@scandit/web-datacapture-id";
+const settings = new Scandit.IdCaptureSettings();
 
-const settings = new IdCaptureSettings();
-settings.scannerType(
-    SingleSideScanner // To scan only one-sided documents
-    // or
-    FullDocumentScanner // To scan both sides of the document
-);
+// Documents from any region:
+settings.acceptedDocuments.push(new Scandit.IdCard(Scandit.Region.AnyRegion));
+// Only documents issued by a specific country:
+settings.acceptedDocuments.push(new Scandit.IdCard(Scandit.Region.Germany));
+// Regional documents:
+settings.acceptedDocuments.push(new Scandit.RegionSpecific.ApecBusinessTravelCard());
+// Reject passports from certain regions:
+settings.rejectedDocuments.push(new Scandit.Passport(Scandit.Region.Cuba));
 
-settings.acceptedDocuments(PASSPORT, DRIVER_LICENSE);
-settings.rejectedDocuments(ID_CARD);
+// To scan only one-sided documents and a given zone:
+settings.scannerType = new Scandit.SingleSideScanner({ barcode: true });
+// or
+settings.scannerType = new Scandit.SingleSideScanner({ machineReadableZone: true });
+// or
+settings.scannerType = new Scandit.SingleSideScanner({ visualInspectionZone: true });
+
+// To scan both sides of the document:
+settings.scannerType = new Scandit.FullDocumentScanner();
+```
+
+Create a new ID Capture mode with the chosen settings:
+
+```ts
+const idCapture = Scandit.IdCapture.forContext(context, settings);
 ```
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). 
+To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `onIdCaptured` and `onIdRejected`.
+
+```ts
+idCapture.addListener({
+	onIdCaptured: (data) => {
+		// Success! Handle extracted data here.
+	},
+	onIdRejected: (data, reason) => {
+		// Something went wrong. Inspect the reason to determine the follow-up action.
+	}
+});
+```
+
+### Handling Success
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
 For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
+On a successful scan you may read the extracted data from `CapturedId`:
+
 ```ts
-const listener = {
-	didCaptureId: (idCapture, session) => {
-		if (session.newlyCapturedId.isPassport() = true) {
-			// Handle the information extracted.
-		} else if (session.newlyCapturedId.isDriverLicense() = true) {
-			// Handle the information extracted.
-		}
-	},
-	didFailWithError: (idCapture, error, session) => {
-		// Handle the error.
-	},
-};
+onIdCaptured: (data) => {
+	const fullName = data.fullName;
+	const dateOfBirth = data.dateOfBirth;
+	const dateOfExpiry = data.dateOfExpiry;
+	const documentNumber = data.documentNumber;
+
+	// Process data:
+	processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
+}
 ```
 
-Create a new ID Capture mode with the chosen settings. Then register the listener:
+:::tip
+All data fields are optional, so it's important to verify whether the required information is present if some of the accepted documents may not contain certain data.
+:::
 
-```js
-const idCapture = Scandit.IdCapture.forContext(context, settings);
-idCapture.addListener(listener);
+### Handling Rejection
+
+The ID scanning process may fail for various reasons. Start from inspecting [RejectionReason](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) to understand the cause.
+
+You may wish to implement the follow-up action based on the reason of failure:
+
+```ts
+onIdRejected: (data, reason) => {
+	if (reason === Scandit.RejectionReason.Timeout) {
+		// Ask the user to retry, or offer alternative input method.
+	} else if (reason === Scandit.RejectionReason.DocumentExpired) {
+		// Ask the user to provide alternative document.
+	} else if (reason === Scandit.RejectionReason.HolderUnderage) {
+		// Reject the process.
+	}
+}
 ```
 
 ## Set up Capture View and Overlay

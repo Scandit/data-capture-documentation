@@ -10,48 +10,55 @@ keywords:
 
 There are several advanced configurations that can be used to customize the behavior of the ID Capture SDK and enable additional features.
 
-## Document Capture Zones
+## Decode EU Driver Licenses
 
-By default, a new instance of [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) creates a single-sided scanner type with no accepted or rejected documents. 
-
-To change this, use the `scannerType` method to set the scanner type to either [SingleSideScanner](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-scanner.html#single-side-scanner) or [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-scanner.html#full-document-scanner).
-
-
-The `FullDocumentScanner` extracts all document information by default. If using the `SingleSideScanner`, you can specify the document zones to extract:
+By default, ID Capture doesn’t extract data from the table on the back of European Driver Licenses. If you are interested in this data, you may enable the extraction by calling:
 
 ```js
-// To extract data from barcodes on IDs
-SingleSideScanner.barcode(true);
-// To extract data from the visual inspection zone (VIZ) on IDs
-SingleSideScanner.visualInspectionZone(true);
-// To extract data from the machine-readable zone (MRZ) on IDs
-SingleSideScanner.machineReadableZone(true);
+settings.decodeBackOfEuropeanDrivingLicenses();
 ```
 
-## Configure Accepted and Rejected Documents
+## Configure Data Anonymization
 
-To configure the documents that should be accepted and/or rejected, use the `acceptedDocuments` and `rejectedDocuments` methods in `IdCaptureSettings`.
+By default, data extracted from documents is anonymized according to local regulations. See [Anonymized Documents](/sdks/capacitor/id-capture/intro.md#anonymized-documents) for more information.
 
-These methods are used in conjunction with the [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) and [IdCaptureRegion](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enums to enable highly flexible document filtering as may be desired in your application.
-
-For example, to accept only US Driver Licenses:
+That means certain data from certain fields won’t be returned, even if it’s present on a document. You control the anonymization level with the following setting:
 
 ```js
-settings.acceptedDocuments(DRIVER_LICENSE, Region.US);
-```
+// Default value:
+settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_ONLY);
 
-Or to accept all Passports *except* those from the US:
+// Sensitive data is additionally covered with black boxes on returned images:
+settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_AND_IMAGES);
 
-```js
-settings.acceptedDocuments(PASSPORT);
-settings.rejectedDocuments(Region.US);
+// Only images are anonymized:
+settings.setAnyonymizationMode(IdAnonymizationMode.IMAGES_ONLY);
+
+// No anonymization:
+settings.setAnyonymizationMode(IdAnonymizationMode.NONE);
 ```
 
 ## ID Images
 
-Your use can may require that you capture and extract images of the ID document. Use the [IdImageType](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-image-type.html#enum-scandit.datacapture.id.IdImageType) enum to specify the images you want to extract from the `CapturedId` object
+Your use can may require that you capture and extract images of the ID document. Use the [IdImageType](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-image-type.html#enum-scandit.datacapture.id.IdImageType) enum to specify the images you want to extract from the `CapturedId` object.
+
+:::tip
+Face and Cropped Document can be extracted only by either `SingleSideScanner` with `visualInspectionZone` enabled or by `FullDocumentScanner`.
+In the case of `FullDocumentScanner`, if the front & the back side of a document are scanned, Cropped Document and Full Frame are returned for both sides.
+:::
 
 For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult) when creating the `IdCaptureSettings` object. This will pass the image type to the result, which you can then access in the `CapturedId` object.
+
+```js
+// Holder's picture as printed on a document:
+settings.setShouldPassImageTypeToResult(ImageType.FACE);
+
+// Cropped image of a document:
+settings.setShouldPassImageTypeToResult(ImageType.CROPPED_DOCUMENT);
+
+// Full camera frame that contains the document:
+settings.setShouldPassImageTypeToResult(ImageType.FULL_FRAME);
+```
 
 ## Callbacks and Scanning Workflows
 
