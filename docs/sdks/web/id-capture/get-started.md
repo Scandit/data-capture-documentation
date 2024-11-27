@@ -32,11 +32,11 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to [you
 
 Please note that your license may support only a subset of ID Capture features. If you would like to use additional features please contact us at [Scandit Support](mailto:support@scandit.com).
 
-### Internal Dependencies
+### Module Overview
 
-import InternalDependencies from '../../../partials/_internal-deps.mdx';
+import IdModuleOverview from '../../../partials/_id-module-overview-no-eu-dl.mdx';
 
-<InternalDependencies/>
+<IdModuleOverview/>
 
 ### Configure and Initialize the Library
 
