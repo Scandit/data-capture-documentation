@@ -30,11 +30,11 @@ Before starting with adding a capture mode, make sure that you have a valid Scan
 You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-### Internal Dependencies
+### Module Overview
 
-import InternalDependencies from '../../../partials/_id-internal-deps.mdx';
+import IdModuleOverview from '../../../partials/_id-module-overview.mdx';
 
-<InternalDependencies/>
+<IdModuleOverview/>
 
 ## Create a Data Capture Context
 

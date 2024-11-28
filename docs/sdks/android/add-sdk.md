@@ -30,7 +30,7 @@ Devices running the Scandit Data Capture SDK need a GPU. Otherwise, you can see 
 
 ### Internal Dependencies
 
-import InternalDependencies from '../../partials/_id-internal-deps.mdx';
+import InternalDependencies from '../../partials/_internal-deps.mdx';
 
 <InternalDependencies/>
 
