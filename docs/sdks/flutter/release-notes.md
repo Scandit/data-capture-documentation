@@ -9,9 +9,9 @@ keywords:
   - flutter
 ---
 
-## 7.0.0-beta2
+## 7.0.0
 
-**Released**: November 22, 2024
+**Released**: November 29, 2024
 
 ### New Features
 
