@@ -18,6 +18,10 @@ By default, ID Capture doesn’t extract data from the table on the back of Euro
 settings.decodeBackOfEuropeanDrivingLicenses();
 ```
 
+:::warning
+To use this feature, you will need to include the `ScanditIdEuropeDrivingLicense` module in your project. See the [module overview](/sdks/android/id-capture/get-started.md#module-overview) for details.
+:::
+
 ## Configure Data Anonymization
 
 By default, data extracted from documents is anonymized according to local regulations. See [Anonymized Documents](/sdks/android/id-capture/intro.md#anonymized-documents) for more information.
