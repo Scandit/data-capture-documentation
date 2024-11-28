@@ -23,6 +23,10 @@
       --ifm-col-width: calc(3 / 13.628 * 100%);
     }
 
+    & details {
+      background-color: transparent;
+    }
+
     & article .theme-edit-this-page {
       font-family: var(--font-family);
       font-weight: 400;

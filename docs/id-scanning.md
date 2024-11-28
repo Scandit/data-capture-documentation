@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 toc_max_heading_level: 4
-sidebar_label: 'ID Scanning'
+sidebar_label: 'ID Scanning and Validation'
 hide_title: true
 displayed_sidebar: sdcSidebar
 ---
@@ -14,7 +14,7 @@ Scandit can capture and extract data from over 2,000 identity documents worldwid
 
 To experience Scandit scanning and verification capabilities firsthand, check out the ID Scanning mode on the Scandit Barcode Scanner Demo App ([iOS](https://apps.apple.com/us/app/scandit-barcode-scanner-demo/id453880584?ls=1), [Android](https://play.google.com/store/apps/details?id=com.scandit.demoapp&pli=1)), our [ID Bolt demo](https://id-travel.demos.scandit.com/) or get started using your desired framework below.
 
-## ID Capture and Validation
+## ID Scanning and Validation
 
 <CustomDocCardsWrapper>
 
