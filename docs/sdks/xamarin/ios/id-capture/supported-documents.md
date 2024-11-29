@@ -1,16 +1,14 @@
 ---
+sidebar_label: Supported Documents
+title: Supported Documents
+hide_title: true
+toc_min_heading_level: 2
+toc_max_heading_level: 4
 sidebar_position: 3
-pagination_next: null
 framework: xamarinIos
 keywords:
   - xamarinIos
 ---
-
-# Supported Documents
-
-import TOCInline from '@theme/TOCInline';
-
-<TOCInline toc={toc} />
 
 ## ID Scanning Supported Documents
 

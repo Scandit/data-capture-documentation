@@ -12,7 +12,7 @@ There are several advanced configurations that can be used to customize the beha
 
 ## Configure Data Anonymization
 
-By default, data extracted from documents is anonymized according to local regulations. See [Anonymized Documents](/sdks/capacitor/id-capture/intro.md#anonymized-documents) for more information.
+By default, data extracted from documents is anonymized according to local regulations. See [Anonymized Documents](/sdks/capacitor/id-capture/supported-documents.md#anonymized-documents) for more information.
 
 That means certain data from certain fields won’t be returned, even if it’s present on a document. You control the anonymization level with the following setting:
 

@@ -40,7 +40,7 @@ To use this feature, you will need to include the `ScanditIdEuropeDrivingLicense
 
 ## Configure Data Anonymization
 
-By default, data extracted from documents is anonymized according to local regulations. See [Anonymized Documents](/sdks/ios/id-capture/intro.md#anonymized-documents) for more information.
+By default, data extracted from documents is anonymized according to local regulations. See [Anonymized Documents](/sdks/ios/id-capture/supported-documents.md#anonymized-documents) for more information.
 
 That means certain data from certain fields won’t be returned, even if it’s present on a document. You control the anonymization level with the following setting:
 
