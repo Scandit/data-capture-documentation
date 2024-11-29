@@ -1,48 +1,13 @@
-## Supported Documents 
+### Full Document Scanner
 
-The following ID types are supported:
+This scanner extracts combines data extraction from all supported parts of the document and combines the data from barcodes, human-readable test, and machine-readable text. 
+* For card-format documents, data is extracted from the front & the back side of the document. 
+* For booklet-format documents (e.g. passports), data is extracted from the main information page.
 
-### Machine Readable Zone (MRZ) Documents
+<details>
+<summary>Asia</summary>
 
-Scandit ID Capture supports all versions of Machine Readable Travel Documents (MRTD) specified by the International Civil Aviation Organization (ICAO). This includes all documents of the types TD1 (ID cards), TD2 (other official travel documents), TD3/MRP (passports) and MRV (visas).
-
-In addition, ID Capture supports some non-ICAO standards. A non-exhaustive list of supported documents can be found below.
-
-| Region      | Supported Document Types                                                                         |
-|-------------|--------------------------------------------------------------------------------------------------|
-| Worldwide   | Passport (TD3)                                                                                   |
-| Europe      | All ID Cards (TD1/TD2)                                                                           |
-| USA         | Enhanced Driver’s License (TD1)                                                                  |
-|             | Green Card, Passport Card, Border Crossing Card, NEXUS + Global Entry Cards (TD1)                |
-| Canada      | Enhanced Driver’s License (TD1)                                                                  |
-| Switzerland | Driver’s License (non-ICAO)                                                                      |
-| Asia        | China Mainland Travel Permit for Hong Kong & Macau Residents (non-ICAO)                         |
-|             | China Mainland Travel Permit for Taiwan Residents (non-ICAO)                                     |
-|             | China Exit-Entry Permit for Traveling to and from Hong Kong and Macau (往来港澳通行证) (non-ICAO) |
-|             | China Exit-Entry Permit for Traveling to and from Taiwan (往来台灣通行证) (non-ICAO)               |
-|             | APEC (Asia-Pacific Economic Cooperation) Business Travel Card (non-ICAO)                        |
-
-
-### Barcode ID Formats
-
-ID Capture supports the following documents with PDF417 barcodes:
-
-| Country     | Supported Document Types    |
-|-------------|---------------------|
-| USA         | AAMVA-compliant documents: ID Capture supports all versions of the Driver License and Identification Standard published by AAMVA. Some pre-Standard barcodes (documents issued before 2000) may also be successfully parsed, if their format doesn’t differ much from version 1 of the Standard. **Encrypted barcodes issued in the US State of Georgia before 2012 are currently not supported**. More information can be found in the API documentation of `CapturedId` and `AAMVABarcodeResult`. |
-|             | US Uniformed Services Identification Card with PDF417 barcodes: both Sponsor and Dependant documents are supported (versions 1, 2 and 3). More information can be found in the API Documentation of `CapturedId` and `UsUniformedServicesBarcodeResult`.  |
-|             | Common Access Card: the PDF417 on the front side of the document.  |
-| Argentina   | ID Card (Documento Nacional de Identidad): the PDF417 on the front side of the document. More information can be found in the API Documentation of `CapturedId` and `ArgentinaIdBarcodeResult`. |
-| Colombia    | ID Card (Cédula de Ciudadanía): the PDF417 on the back side of the document. More information can be found in the API Documentation of `CapturedId` and `ColombiaIdBarcodeResult`.   |
-|             | Driver’s License (Licencia de Conducción): The PDF417 on the back side of the document. More information can be found in the API Documentation of `CapturedId` and `ColombiaDlBarcodeResult`.  |
-| South Africa| Driver’s License - version 2: the PDF417 on the back side of the document. More information can be found in the API Documentation of `CapturedId` and `SouthAfricaDLBarcodeResult`.   |
-|             | Smart ID Card: the PDF417 on the back side of the document. More information can be found in the API Documentation of `CapturedId` and `SouthAfricaIdBarcodeResult`.   |
-
-### Human-Readable Text
-
-#### Asia
-
-| Country                        | Supported Document Types                                                                                                                                                                                                |
+| Country                        | Supported Documents                                                                                                                                                                                                |
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Afghanistan                    | ID Card                                                                                                                                                                                                                 |
 | Armenia                        | ID Card                                                                                                                                                                                                                 |
@@ -69,10 +34,12 @@ ID Capture supports the following documents with PDF417 barcodes:
 | Sri Lanka                      | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
 | Thailand                       | ID Card, Passport, Alien ID                                                                                                                                                                                             |
 | Uzbekistan                     | Passport                                                                                                                                                                                                                |
+</details>
 
-#### Europe
+<details>
+<summary>Europe</summary>
 
-| Country                        | Supported Document Types                                                                                                                                                                                                |
+| Country                        | Supported Documents                                                                                                                                                                                                |
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Europe                         | Health Insurance Card                                                                                                                                                                                                   |
 | Albania                        | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
@@ -117,10 +84,12 @@ ID Capture supports the following documents with PDF417 barcodes:
 | Switzerland                    | Driver’s License, ID Card, Passport, Residence Permit                                                                                                                                                                   |
 | UK                             | Driver’s License, Passport, Residence Permit, Proof of Age Card                                                                                                                                                         |
 | Ukraine                        | Driver’s License (incl. Cyrillic script), ID Card (incl. Cyrillic script), Passport, Residence Permit (incl. Cyrillic script)                                                                                           |
+</details>
 
-#### Central and South America
+<details>
+<summary>Central and South America</summary>
 
-| Country                        | Supported Document Types                                                                                                                                                                                                |
+| Country                        | Supported Documents                                                                                                                                                                                                |
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Argentina                      | ID Card, Passport, Alien ID                                                                                                                                                                                             |
 | Bahamas                        | Driver’s License                                                                                                                                                                                                        |
@@ -172,10 +141,12 @@ ID Capture supports the following documents with PDF417 barcodes:
 | Trinidad And Tobago            | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
 | Uruguay                        | ID Card                                                                                                                                                                                                                 |
 | Venezuela                      | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
+</details>
 
-#### Middle East and Africa
+<details>
+<summary>Middle East and Africa</summary>
 
-| Country                        | Supported Document Types                                                                                                                                                                                                |
+| Country                        | Supported Documents                                                                                                                                                                                                |
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Algeria                        | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
 | Bahrain                        | ID Card (incl. Arabic script)                                                                                                                                                                                           |
@@ -214,10 +185,12 @@ ID Capture supports the following documents with PDF417 barcodes:
 | UAE                            | Driver’s License, ID Card (incl. Arabic script), Passport (incl. Arabic script), Resident ID (incl. Arabic script)                                                                                                      |
 | Uganda                         | Driver’s License, ID Card                                                                                                                                                                                               |
 | Zimbabwe                       | ID Card, Passport                                                                                                                                                                                                       |
+</details>
 
-#### North America
+<details>
+<summary>North America</summary>
 
-| Country                        | Supported Document Types                                                                                                                                                                                                |
+| Country                        | Supported Documents                                                                                                                                                                                                |
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Canada                         | Passport, Residence Permit, Tribal ID                                                                                                                                                                                   |
 | Canada Alberta                 | Driver’s License, ID Card                                                                                                                                                                                               |
@@ -285,10 +258,11 @@ ID Capture supports the following documents with PDF417 barcodes:
 | USA Wyoming                    | Driver’s License*, ID Card*                                                                                                                                                                                             |
 
 \* Vertical IDs are supported
+</details>
 
-#### Oceania
-
-| Country                        | Supported Document Types                                                                                                                                                                                                |
+<details>
+<summary>Oceania</summary>
+| Country                        | Supported Documents                                                                                                                                                                                                |
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Australia                      | Passport                                                                                                                                                                                                                |
 | Australia Australian Capital Territory| Driver’s License, ID Card                                                                                                                                                                                               |
@@ -300,14 +274,17 @@ ID Capture supports the following documents with PDF417 barcodes:
 | Australia Victoria             | Driver’s License, Proof of Age Card                                                                                                                                                                                     |
 | Australia Western Australia    | Driver’s License, ID Card                                                                                                                                                                                               |
 | New Zealand                    | Driver’s License, Passport                                                                                                                                                                                              |
+</details>
 
+#### Anonymized Documents
 
-### Anonymized Documents
+Some countries have specific requirements for the anonymization of documents. By default, ID Capture will omit sensitive fields from countries with such restrictions. To control this behavior, you can set the `IdAnonymizationMode` parameter.
+Depending on the anonymization mode, certain sensitive fields are not extracted from documents (their values are returned as nil) or they are blacked out on the returned document images.
 
-If `IdAnonymizationMode` is enabled, certain sensitive fields are not extracted from documents (their values are returned as nil) and/or are blacked out on the returned document images. This currently affects human-readable text (VIZ) & Machine Readable Zones (MRZ).
+Documents and fields that are subject to anonymization are listed below:
 
-Here is the list of the affected documents and their respective fields:
-
+<details>
+<summary>Anonymized Documents</summary>
 | Country      | Documents                                               | Fields                                                |
 |--------------|---------------------------------------------------------|-------------------------------------------------------|
 | Germany      | ID Card                                                  | Document Number (VIZ & MRZ), Additional Document Number, Full MRZ |
@@ -326,3 +303,4 @@ Here is the list of the affected documents and their respective fields:
 | South Korea  | Driver’s License                                         | Personal ID Number                                    |
 | South Korea  | ID Card                                                  | Document Number                                       |
 | South Korea  | Passport, Diplomatic Passport                            | Personal ID Number, MRZ Opt1, Full MRZ                |
+</details>

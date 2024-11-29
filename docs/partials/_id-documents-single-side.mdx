@@ -1,0 +1,39 @@
+### Single Side Scanner
+
+#### Machine Readable Zone (MRZ)
+
+The machine readable zone mode of the ID Capture `SingleSideScanner` supports all versions of machine readable travel documents (MRTD) specified by the International Civil Aviation Organization (ICAO). This includes all documents of the types TD1, TD2, TD3/MRP and MRV. In addition, ID Capture supports some non-ICAO standards. 
+
+Machine-readable zones are captured and parsed so that the data can be accessed via `CapturedId`. To access the raw MRZ data, consult the documentation of `MrzResult`.
+
+| Region      | Supported Documents | ICAO MRTD Type |
+|-------------|-------------------|----------------|
+| Worldwide   | All Passports | TD3 |
+| Worldwide   | ICAO-compliant Visa | MRV |
+| Europe      | All ID Cards | TD1 |
+| USA         | Enhanced Driver’s License<br/>Green Card<br/>Passport Card<br/>Border Crossing Card<br/>NEXUS + Global Entry Cards | TD1 |
+| Canada      | Enhanced Driver’s License | TD1 |
+| Switzerland | Driver’s License | Non-ICAO |
+| Asia        | China Mainland Travel Permit for Hong Kong & Macau Residents<br/>China Mainland Travel Permit for Taiwan Residents<br/>China Exit-Entry Permit for Traveling to and from Hong Kong and Macau (往来港澳通行证)<br/>China Exit-Entry Permit for Traveling to and from Taiwan (往来台灣通行证)<br/>APEC (Asia-Pacific Economic Cooperation) Business Travel Card | Non-ICAO |
+
+
+#### Barcode
+
+The barcode mode of the ID Capture `SingleSideScanner` supports capturing ID documents with PDF417 barcodes.
+
+Barcodes are captured and parsed so that the data can be accessed via `CapturedId`. To access the raw barcode data, consult the documentation of `BarcodeResult`.
+
+| Country     | Supported Documents                                              | Barcode Location |
+|-------------|------------------------------------------------------------------|----------|
+| USA         | Driver License, ID Card                                          | PDF417 barcode on the back of the document.<br/>ID Capture supports all versions of the Driver License and Identification Standard published by AAMVA. |
+| USA         | Common Access Card (CAC)                                         | PDF417 in the front of the Common Access Card. |
+| USA         | Uniformed Services ID Card (USID)                                | PDF417 in the back of Uniformed Services ID Card issued before 2020.<br/>**Next Generation USID** cards have no PDF417 barcode and need to be captured with `FullDocumentScanner` or `SingleSideScanner.visualInspectionZone`. |
+| Argentina   | ID Card                                                          | PDF417 on the front of the document. |
+| Colombia    | ID Card, Driver’s License                                        | PDF417 Barcode on the back of the document. |
+| South Africa | Smart ID Card, Driver’s License                                 | PDF417 Barcode on the back of the document. |
+
+#### Visual Inspection Zone
+
+The visual inspection zone mode of the ID Capture `SingleSideScanner` supports capturing the human-readable text. It supports all documents listed in `FullDocumentScanner` section. In contrast to the `FullDocumentScanner`, the `SingleSideScanner` only scans the front side of the document and only extracts data from the human-readable text while barcodes and MRZ are ignored. 
+
+The extracted data can be accessed via `CapturedId`. To access the raw text data, consult the documentation of `VizResult`.

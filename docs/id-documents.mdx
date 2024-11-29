@@ -2,11 +2,24 @@
 toc_max_heading_level: 4
 ---
 
-# ID Documents
+# Supported ID Documents
 
-ID Capture supports scanning and verifying ID documents based on their Machine Readable Zone (MRZ), Barcodes, and human-readable text.
+## ID Scanning Supported Documents
 
-import IdDocuments from './partials/_id-documents.mdx';
+ID Capture offers different [IdCaptureScanner](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-scanner.html#id-capture-scanner) types. Each scanner type offers a different scan flow, where either parts of the document or the whole document including front and back side is scanned. This sections lists the supported documents for each scanner type.
 
-<IdDocuments/>
+import IdDocumentsFull from './partials/_id-documents-full-document.mdx';
 
+<IdDocumentsFull/>
+
+import IdDocumentsSingleSide from './partials/_id-documents-single-side.mdx';
+
+<IdDocumentsSingleSide/>
+
+## ID Validation Supported Documents
+
+ID Validate supports documents that follow the Driver License/Identification Card specification by the American Association of Motor Vehicle Administrators (AAMVA). The following ID types are supported:
+
+import IdValidateDocuments from './partials/_id-documents-validate.mdx';
+
+<IdValidateDocuments/>
