@@ -32,19 +32,15 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 ### Module Overview
 
-import IdModuleOverview from '../../../partials/_id-module-overview-no-eu-dl.mdx';
+import IdModuleOverview from '../../../partials/get-started/_id-module-overview-no-eu-dl.mdx';
 
 <IdModuleOverview/>
 
 ## Create the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+import DataCaptureContextReactNative from '../../../partials/get-started/_create-data-capture-context-react-native.mdx';
 
-```js
-const context = DataCaptureContext.forLicenseKey(
-	'-- ENTER YOUR SCANDIT LICENSE KEY HERE --'
-);
-```
+<DataCaptureContextReactNative/>
 
 ## Add the Camera
 

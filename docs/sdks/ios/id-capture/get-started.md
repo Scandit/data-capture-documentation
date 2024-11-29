@@ -32,33 +32,15 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 ### Module Overview
 
-import IdModuleOverview from '../../../partials/_id-module-overview.mdx';
+import IdModuleOverview from '../../../partials/get-started/_id-module-overview.mdx';
 
 <IdModuleOverview/>
 
 ## Create a Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+import DataCaptureContextIos from '../../../partials/get-started/_create-data-capture-context-ios.mdx';
 
-<Tabs groupId="language">
-
-<TabItem value="swift" label="Swift">
-
-```swift
-self.context = DataCaptureContext(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-```
-
-</TabItem>
-
-<TabItem value="objc" label="Objective-C">
-
-```objectivec
-SDCDataCaptureContext *dataCaptureContext = [SDCDataCaptureContext contextForLicenseKey:@"-- ENTER YOUR SCANDIT LICENSE KEY HERE --"];
-```
-
-</TabItem>
-
-</Tabs>
+<DataCaptureContextIos/>
 
 ## Access a Camera
 

@@ -84,6 +84,6 @@ To prevent scanning unwanted barcodes (like those already listed or from incorre
 Please refer to [SparkScanView](https://docs.scandit.com/data-capture-sdk/xamarin.ios/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
 :::
 
-import Customization from '../../../../partials/_sparkscan-customization.mdx';
+import Customization from '../../../../partials/advanced/_sparkscan-customization.mdx';
 
 <Customization/>

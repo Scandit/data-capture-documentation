@@ -48,11 +48,9 @@ Some of the Scandit Data Capture SDK modules depend on others to work:
 
 ## Create a Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+import DataCaptureContextAndroid from '../../../partials/get-started/_create-data-capture-context-android.mdx';
 
-```java
-DataCaptureContext dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
-```
+<DataCaptureContextAndroid/>
 
 ## Configure the Barcode Batch Mode
 

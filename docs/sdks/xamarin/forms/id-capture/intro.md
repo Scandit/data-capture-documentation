@@ -9,6 +9,6 @@ keywords:
   - xamarinForms
 ---
 
-import AboutIdCapture from '../../../../partials/_about-id-capture.mdx';
+import AboutIdCapture from '../../../../partials/intro/_about-id-capture.mdx';
 
 <AboutIdCapture/>

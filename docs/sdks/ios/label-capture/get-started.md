@@ -1,5 +1,5 @@
 ---
-pagination_prev: null
+sidebar_position: 2
 pagination_next: null
 framework: ios
 keywords:
@@ -7,6 +7,14 @@ keywords:
 ---
 
 # Get Started
+
+## Create a Data Capture Context
+
+import DataCaptureContextIos from '../../../partials/get-started/_create-data-capture-context-ios.mdx';
+
+<DataCaptureContextIos/>
+
+## Configure Label Capture Settings
 
 _ScanditLabelCapture_ coordinates the process of simultaneously capturing data contained in multiple barcodes and text that occur together. The basis of label capture is a label definition that specifies the spatial arrangement as well as the content of the barcodes and text of the label (its fields). Typical use cases for label capture are labels consisting of:
 

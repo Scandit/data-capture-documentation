@@ -8,6 +8,6 @@ keywords:
 
 # About MatrixScan Count
 
-import AboutMatrixScanCount from '../../../partials/_about-matrixscan-count.mdx'
+import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-count.mdx'
 
 <AboutMatrixScanCount />

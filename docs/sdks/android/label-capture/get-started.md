@@ -1,5 +1,5 @@
 ---
-pagination_prev: null
+sidebar_position: 2
 pagination_next: null
 framework: android
 keywords:
@@ -8,16 +8,186 @@ keywords:
 
 # Get Started
 
-_ScanditLabelCapture_ coordinates the process of simultaneously capturing data contained in multiple barcodes and text that occur together. The basis of label capture is a label definition that specifies the spatial arrangement as well as the content of the barcodes and text of the label (its fields). Typical use cases for label capture are labels consisting of:
+In this guide you will learn step-by-step how to add Smart Label Capture to your application.
 
-* Two barcodes of different symbologies printed on boxes in a specific spatial arrangement. When multiple boxes are visible in the image, spatial information is required to group the codes present in the frame. Label capture will analyze the scanned barcodes and automatically assign them to different labels based on the available geometric information.
-* A barcode plus a short number printed as text below the barcode. Short numbers occur in many different contexts, so even with a perfect recognition solution short numbers from other contexts are still read even if they are not part of the form. By making the presence of the short number conditional on the presence of the barcodes, such false reads are eliminated very effectively.
+The general steps are:
 
-Label capture builds on top of other technologies: Barcode Batch for reading and tracking barcodes over multiple frames and text recognition for reading text.
+- Creating a new Data Capture Context instance
+- Configuring the LabelCapture mode
+- Using the built-in camera
+- Visualizing the scan process
+- Providing feedback
+- Disabling LabelCapture
 
-Label capture follows the same architecture as other data capture modes. The functionality is split into the following classes:
+## Prerequisites
+
+Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out this [guide](/sdks/android/add-sdk.md).
+
+:::note
+You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
+:::
+
+### Module Overview
+
+import LabelCaptureModuleOverview from '../../../partials/get-started/_smart-label-capture-module-overview.mdx';
+
+<LabelCaptureModuleOverview/>
+
+## Create a Data Capture Context
+
+import DataCaptureContextAndroid from '../../../partials/get-started/_create-data-capture-context-android.mdx';
+
+<DataCaptureContextAndroid/>
+
+## Configure the Label Capture Mode
+
+The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object. It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that  gets informed whenever a new frame has been processed.
+
+<Tabs groupId="language">
+<TabItem value="kotlin" label="Kotlin">
+```kotlin
+val settings = LabelCaptureSettings()
+```
+</TabItem>
+<TabItem value="java" label="Java">
+```java
+LabelCaptureSettings settings = new LabelCaptureSettings();
+```
+</TabItem>
+</Tabs>
+
+## Use the Built-in Camera
+
+The data capture context supports using different frame sources to perform recognition on. Most applications uses the built-in camera of the device, for instance, the world-facing camera of a device. The remainder of this tutorial assumes that you use the built-in camera.
+
+:::note
+In Android, the user must explicitly grant permission for each app to access cameras. Your app needs to declare the use of the Camera permission in the *AndroidManifest.xml* file and request it at runtime so the user can grant or deny the permission. To do that follow the guidelines from [Request app permissions](https://developer.android.com/training/permissions/requesting) to request the android.permission.CAMERA permission.
+:::
+
+When using the built-in camera there are recommended settings for each capture mode. These must be used to achieve the best performance and user experience for the respective mode.
+
+The following lines show how to get the recommended settings and create the camera from it:
+
+```java
+CameraSettings cameraSettings = BarcodeBatch.createRecommendedCameraSettings();
+
+// Depending on the use case further camera settings adjustments can be made here.
+
+Camera camera = Camera.getDefaultCamera();
+if (camera != null) {
+  camera.applySettings(cameraSettings, null);
+}
+```
+
+Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
+
+```java
+dataCaptureContext.setFrameSource(camera);
+```
+
+The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.ON](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
+
+```java
+if (camera != null) {
+  camera.switchToDesiredState(FrameSourceState.ON);
+}
+```
+
+## Visualize the Scan Process
+
+When using the built-in camera as frame source, you typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process.
+
+To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
+
+```java
+DataCaptureView dataCaptureView = DataCaptureView.newInstance(this, dataCaptureContext);
+setContentView(dataCaptureView);
+```
+
+To visualize the results of Barcode Batch, first you need to add the following [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay):
+
+```java
+BarcodeBatchBasicOverlay overlay = BarcodeBatchBasicOverlay.newInstance(barcodeBatch, dataCaptureView);
+```
+
+Once the overlay has been added, you must conform to the [BarcodeBatchBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener) interface. The method [BarcodeBatchBasicOverlayListener.brushForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener.BrushForTrackedBarcode) is invoked every time a new tracked barcode appears and it can be used to set a brush used to highlight that specific barcode in the [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay).
+
+```java
+@Override
+public Brush brushForTrackedBarcode(@NonNull BarcodeBatchBasicOverlay overlay,
+                                    @NonNull TrackedBarcode trackedBarcode) {
+    // Return a custom Brush based on the tracked barcode.
+}
+```
+
+If you want to make the highlights tappable, you need to implement the [BarcodeBatchBasicOverlayListener.onTrackedBarcodeTapped()] method.
+
+```java
+@Override
+public void onTap(@NonNull BarcodeBatchBasicOverlay overlay,
+                  @NonNull TrackedBarcode trackedBarcode) {
+    // A tracked barcode was tapped.
+}
+```
+
+## Barcode Batch Feedback
+
+Barcode Batch, unlike Barcode Capture, doesn’t emit feedback (sound or vibration) when a new barcode is recognized. However, you may implement a `BarcodeBatchListener` to provide a similar experience.
+
+Here, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/android/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration.
+
+First, we create a feedback and release it after it is no longer used, to avoid resources being unnecessarily held.
+
+```java
+override func viewDidLoad() {
+    super.viewDidLoad()
+    feedback = Feedback.default
+}
+```
+
+Next, use this `feedback` in a `BarcodeBatchListener`:
+
+```java
+public class FeedbackListener implements BarcodeBatchListener {
+    @Override
+    public void onObservationStarted(@NotNull BarcodeBatch barcodeBatch) {
+        // Called when Barcode Batch is started.
+        // We don't use this callback in this guide.
+    }
+
+    @Override
+    public void onObservationStopped(@NotNull BarcodeBatch barcodeBatch) {
+        // Called when Barcode Batch is stopped.
+        // We don't use this callback in this guide.
+    }
+
+    @Override
+    public void onSessionUpdated(
+            @NotNull BarcodeBatch mode,
+            @NotNull BarcodeBatchSession session,
+            @NotNull FrameData data
+    ) {
+        if (!session.getAddedTrackedBarcodes().isEmpty()) {
+            feedback.emit();
+        }
+    }
+}
+```
+
+[BarcodeBatchListener.onSessionUpdated()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch-listener.html#method-scandit.datacapture.barcode.batch.IBarcodeBatchListener.OnSessionUpdated) is invoked for every processed frame. The [session](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch-session.html#class-scandit.datacapture.barcode.batch.BarcodeBatchSession) parameter contains information about the currently tracked barcodes, in particular, the newly recognized ones. We check if there are any and if so, we emit the feedback.
+
+As the last step, register the listener responsible for emitting the feedback with the `BarcodeBatch` instance.
+
+```java
+barcodeBatch.addListener(feedbackListener);
+```
 
 * [`LabelCapture`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) is the actual data capture mode that coordinates the label capture process. A [`LabelCaptureListener`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) instance can be registered to get informed whenever the state of label capture changes.
 * [`LabelCaptureSettings`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) holds the `LabelCapture` configuration (the label definitions as well as recognition settings).
 * [`LabelCaptureSession`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-session.html#class-scandit.datacapture.label.LabelCaptureSession) holds the currently captured labels ([`CapturedLabel`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/captured-label.html#class-scandit.datacapture.label.CapturedLabel) each with one or more [`LabelField`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-field.html#class-scandit.datacapture.label.LabelField) instances).
 * A [`LabelCaptureBasicOverlay`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureBasicOverlay) can be added to the [`DataCaptureView`](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to visualize the label capture process.
+
+<p align="center">
+  <img src="/img/batch-scanning/SLC.gif" alt="Label Capture workflow for scanning smart device labels" />
+  <br/>Capturing multiple barcodes and text data from labels in a single scan
+</p>

@@ -191,6 +191,7 @@ const sidebars: SidebarsConfig = {
               type: "category",
               label: "Smart Label Capture",
               items: [
+                "sdks/ios/label-capture/intro",
                 "sdks/ios/label-capture/get-started",
               ],
             },
@@ -382,6 +383,7 @@ const sidebars: SidebarsConfig = {
               type: "category",
               label: "Smart Label Capture",
               items: [
+                "sdks/android/label-capture/intro",
                 "sdks/android/label-capture/get-started",
               ],
             },
@@ -417,7 +419,7 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Capture and Validation",
+      label: "ID Scanning and Validation",
       collapsed: false,
       items: [
           "sdks/android/id-capture/intro",
@@ -880,6 +882,7 @@ const sidebars: SidebarsConfig = {
               type: "category",
               label: "Smart Label Capture",
               items: [
+                "sdks/react-native/label-capture/intro",
                 "sdks/react-native/label-capture/get-started",
               ],
             },

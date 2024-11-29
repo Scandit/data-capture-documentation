@@ -34,7 +34,7 @@ Please note that your license may support only a subset of ID Capture features. 
 
 ### Module Overview
 
-import IdModuleOverview from '../../../partials/_id-module-overview-no-eu-dl.mdx';
+import IdModuleOverview from '../../../partials/get-started/_id-module-overview-no-eu-dl.mdx';
 
 <IdModuleOverview/>
 
