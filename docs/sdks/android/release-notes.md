@@ -9,9 +9,9 @@ keywords:
   - android
 ---
 
-## 7.0.0-beta2
+## 7.0.0
 
-**Released**: November 22, 2024
+**Released**: November 29, 2024
 
 ### New Features
 
@@ -76,6 +76,7 @@ We’ve completely redesigned the ID Capture API to streamline document capture 
 * Fixed an issue where calling `applySettings` would not update the Camera API.
 * Fixed a rare crash affecting the camera.
 * Fixed a sporadic crash in `BarcodePickView` caused by negative view sizing when opening the keyboard.
+* Fixed a MatrixScan Count issue where the tap-to-uncount hints did not correctly show the number of uncounted items.
 
 ### Deprecations
 

@@ -220,10 +220,11 @@ const config: Config = {
             ],
           },
           includeCurrentVersion: true,
+          lastVersion: "current",
           versions: {
             current: {
               label: '7.0.0',
-              banner: 'unreleased',
+              banner: 'none',
             },
             '6.28.1': {
               banner: 'none',

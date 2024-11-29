@@ -30,13 +30,11 @@ Before starting with adding a capture mode, make sure that you have a valid Scan
 You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-### Internal dependencies
+### Module Overview
 
-import InternalDependencies from '../../../partials/_id-internal-deps.mdx';
+import IdModuleOverview from '../../../partials/_id-module-overview-no-eu-dl.mdx';
 
-When adding `ScanditIdCapture` to a Flutter project, certain native dependencies need to be added manually to your project, depending on the documents you want to scan.
-
-<InternalDependencies/>
+<IdModuleOverview/>
 
 ### Initialize the ID Plugin
 

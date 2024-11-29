@@ -36,18 +36,15 @@ The Scandit Data Capture SDK modules depend on a few standard libraries that you
 
 If you directly add the AAR files to the project, you need to add these dependencies yourself.
 
-| Module      | Dependencies |
-| ----------- | ----------- |
-| *ScanditCaptureCore.aar*      | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]; com.squareup.okhttp3:okhttp:4.9.2       |
-| *ScanditBarcodeCapture.aar*   | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]        |
-| *ScanditParser.aar*      | No dependencies       |
-| *ScanditIdCapture.aar*      | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]       |
+* `org.jetbrains.kotlin:kotlin-stdlib:[version]`
+* `androidx.annotation:annotation:[version]`
+* `com.squareup.okhttp3:okhttp:4.9.2`
 
-### Internal Dependencies
+### Module Overview
 
-import InternalDependencies from '../../../partials/_id-internal-deps.mdx';
+import IdModuleOverview from '../../../partials/_id-module-overview.mdx';
 
-<InternalDependencies/>
+<IdModuleOverview/>
 
 ## Create a Data Capture Context
 
