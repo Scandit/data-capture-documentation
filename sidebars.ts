@@ -226,7 +226,7 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning and Validation",
+      label: "ID Capture and Validation",
       collapsed: false,
       items: [
         "sdks/ios/id-capture/intro",
@@ -417,7 +417,7 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning and Validation",
+      label: "ID Capture and Validation",
       collapsed: false,
       items: [
           "sdks/android/id-capture/intro",
