@@ -1,0 +1,65 @@
+Smart Label Capture enables workflows that require reading information from one or multiple texts and barcodes. 
+By combining barcode recognition with OCR with inbuilt intelligence it can understand the context of the data and extract only the relevant fields for your application.
+
+
+<p align="center">
+  <img src="/img/batch-scanning/SLC-smart-devices.jpg" width="700px" alt="Label Capture result for scanning smart device labels" />
+  <br/>Capturing multiple barcodes and text data from labels in a single scan
+</p>
+
+## Understanding Labels in Smart Label Capture
+
+The first step to using Smart Label Capture is to define the labels that you want to capture.
+A label is a collection of text and barcode fields that are meant to be scanned in one scan process.
+
+To intelligently extract only the fields that are relevant, Smart Label Capture relies on a combination of multiple cues:
+
+* The content of texts or barcodes
+* The barcode symbology
+* The relative position of fields
+* Textual context, i.e. text that is close to the field and describes it's meaning
+
+import LabelCapture from "../../../src/components/IconComponents/LabelCapture";
+
+<CustomDocCardsWrapper>
+
+<CustomDocCard 
+  title="Label Definition" 
+  description={
+    <>
+      <strong>Barcode fields<em> - zero or more</em></strong> 
+      <br />
+      Defined by their symbology, pattern or textual context.
+      <br />
+      <strong>Text fields<em> - zero or more</em></strong> 
+      <br />
+      Defined by their pattern, relative position or textual context.
+    </>
+  } 
+  smallIcon
+>
+  <div className="icon-wrapper"><LabelCapture/></div>
+</CustomDocCard>
+
+</CustomDocCardsWrapper>
+
+:::tip
+Label fields can be defined as optional, so that they are only captured if they are present.
+:::
+
+
+## Applications and Use Cases for Smart Label Capture
+
+To illustrate how Smart Label Capture can be used, let's look at a few examples.
+While the `LabelCapture` API allows configuring arbitray labels, the following examples should give an idea of the versatility and applications of this data capture mode.
+
+* <strong>Retail Products</strong>
+<br/>Streamline in-store order fulfillment by capturing barcodes, expiry dates, net weights and other texts automatically.<br/><img src="/img/batch-scanning/SLC-retail.gif" width="400px" alt="Label Capture workflow for scanning smart device labels" />
+* <strong>Smart Device Labels with Multiple Barcodes</strong>
+<br/>Read UPC, serial number, IMEI1 and IMEI2 and other data from smart devices labels, regardless of the design and format of the individual label.<br/><img src="/img/batch-scanning/SLC-smart-devices.gif" width="400px" alt="Label Capture workflow for scanning smart device labels" />
+* <strong>Price Labels</strong>
+<br/>Recognize price, barcodes and other texts to verify prices and check stock.
+* <strong>Loyalty and Gift Card Scanning</strong>
+<br/>Smart Label Capture can read texts to avoid manual data entry for loyalty numbers and gift card codes.
+* <strong>And many more...</strong>
+<br/>The flexibility of Smart Label Capture allows it to be used in a wide range of different applications. To implement your own use case, have a look at the `LabelCapture` API documentation. Contact us to get support for your specific use case.
