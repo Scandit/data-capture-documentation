@@ -12,7 +12,3 @@ keywords:
 import AboutIdCapture from '../../../partials/_about-id-capture.mdx';
 
 <AboutIdCapture/>
-
-import IdDocuments from '../../../partials/_id-documents.mdx';
-
-<IdDocuments/>

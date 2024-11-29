@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 pagination_next: null
 framework: ios
 keywords:
@@ -34,9 +34,13 @@ settings.decodeBackOfEuropeanDrivingLicense = YES;
 
 </Tabs>
 
+:::warning
+To use this feature, you will need to include the `ScanditIdEuropeDrivingLicense` module in your project. See the [module overview](/sdks/ios/id-capture/get-started.md#module-overview) for details.
+:::
+
 ## Configure Data Anonymization
 
-By default, data extracted from documents is anonymized according to local regulations. See [Anonymized Documents](/sdks/ios/id-capture/intro.md#anonymized-documents) for more information.
+By default, data extracted from documents is anonymized according to local regulations. See [Anonymized Documents](/sdks/ios/id-capture/supported-documents.md#anonymized-documents) for more information.
 
 That means certain data from certain fields won’t be returned, even if it’s present on a document. You control the anonymization level with the following setting:
 

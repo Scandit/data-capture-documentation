@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 4
 pagination_next: null
 framework: capacitor
 keywords:
@@ -10,17 +10,9 @@ keywords:
 
 There are several advanced configurations that can be used to customize the behavior of the ID Capture SDK and enable additional features.
 
-## Decode EU Driver Licenses
-
-By default, ID Capture doesn’t extract data from the table on the back of European Driver Licenses. If you are interested in this data, you may enable the extraction by calling:
-
-```js
-settings.decodeBackOfEuropeanDrivingLicenses();
-```
-
 ## Configure Data Anonymization
 
-By default, data extracted from documents is anonymized according to local regulations. See [Anonymized Documents](/sdks/capacitor/id-capture/intro.md#anonymized-documents) for more information.
+By default, data extracted from documents is anonymized according to local regulations. See [Anonymized Documents](/sdks/capacitor/id-capture/supported-documents.md#anonymized-documents) for more information.
 
 That means certain data from certain fields won’t be returned, even if it’s present on a document. You control the anonymization level with the following setting:
 
