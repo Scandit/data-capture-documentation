@@ -1,0 +1,34 @@
+The data capture context supports using different frame sources to perform recognition on. Most applications uses the built-in camera of the device, for instance, the world-facing camera of a device. The remainder of this tutorial assumes that you use the built-in camera.
+
+:::note
+In Android, the user must explicitly grant permission for each app to access cameras. Your app needs to declare the use of the Camera permission in the *AndroidManifest.xml* file and request it at runtime so the user can grant or deny the permission. To do that follow the guidelines from [Request app permissions](https://developer.android.com/training/permissions/requesting) to request the android.permission.CAMERA permission.
+:::
+
+When using the built-in camera there are recommended settings for each capture mode. These must be used to achieve the best performance and user experience for the respective mode.
+
+The following lines show how to get the recommended settings and create the camera from it:
+
+```java
+CameraSettings cameraSettings = LabelCapture.createRecommendedCameraSettings();
+
+// Depending on the use case further camera settings adjustments can be made here.
+
+Camera camera = Camera.getDefaultCamera();
+if (camera != null) {
+  camera.applySettings(cameraSettings, null);
+}
+```
+
+Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
+
+```java
+dataCaptureContext.setFrameSource(camera);
+```
+
+The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.ON](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
+
+```java
+if (camera != null) {
+  camera.switchToDesiredState(FrameSourceState.ON);
+}
+```

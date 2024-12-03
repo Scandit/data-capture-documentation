@@ -385,6 +385,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/android/label-capture/intro",
                 "sdks/android/label-capture/get-started",
+                "sdks/android/label-capture/advanced",
               ],
             },
           ],
