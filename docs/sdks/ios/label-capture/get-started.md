@@ -1,6 +1,5 @@
 ---
 sidebar_position: 2
-pagination_next: null
 framework: ios
 keywords:
   - ios
@@ -8,24 +7,209 @@ keywords:
 
 # Get Started
 
-## Create a Data Capture Context
+In this guide you will learn step-by-step how to add Smart Label Capture to your application.
+
+The general steps are:
+
+- Create a view controller
+- Initialize the Data Capture context
+- Initialize the Label Capture mode
+- Implement a listener to handle captured labels
+- Visualize the scan process
+- Start the camera
+- Provide feedback
+
+## Prerequisites
+
+Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out this [guide](/sdks/ios/add-sdk.md).
+
+:::tip
+You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
+:::
+
+### Module Overview
+
+import LabelCaptureModuleOverview from '../../../partials/get-started/_smart-label-capture-module-overview.mdx';
+
+<LabelCaptureModuleOverview/>
+
+## Create a view controller
+
+```swift
+import ScanditLabelCapture
+
+class YourScanViewController: UIViewController {
+    private var context: DataCaptureContext!
+    private var labelCapture: LabelCapture!
+    private var dataCaptureView: DataCaptureView!
+    private var labelCaptureOverlay: LabelCaptureBasicOverlay!
+    private var camera: Camera?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        /* Initialize the components as lined out in the following sections */
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        /* Start the camera */
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        /* Start the camera, disable capture mode */
+    }
+
+    // ...
+}
+```
+
+## Initialize the Data Capture Context
 
 import DataCaptureContextIos from '../../../partials/get-started/_create-data-capture-context-ios.mdx';
 
 <DataCaptureContextIos/>
 
-## Configure Label Capture Settings
+## Initialize the Label Capture Mode
 
-_ScanditLabelCapture_ coordinates the process of simultaneously capturing data contained in multiple barcodes and text that occur together. The basis of label capture is a label definition that specifies the spatial arrangement as well as the content of the barcodes and text of the label (its fields). Typical use cases for label capture are labels consisting of:
+The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object. 
+It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
-* Two barcodes of different symbologies printed on boxes in a specific spatial arrangement. When multiple boxes are visible in the image, spatial information is required to group the codes present in the frame. Label capture will analyze the scanned barcodes and automatically assign them to different labels based on the available geometric information.
-* A barcode plus a short number printed as text below the barcode. Short numbers occur in many different contexts, so even with a perfect recognition solution short numbers from other contexts are still read even if they are not part of the form. By making the presence of the short number conditional on the presence of the barcodes, such false reads are eliminated very effectively.
+```swift
+let labelDefinition: LabelDefinition {
+    let barcodeField = CustomBarcode(name: "<your-barcode-field-name>",
+                                    symbologies: [
+                                        NSNumber(value: Symbology.ean13UPCA.rawValue),
+                                        NSNumber(value: Symbology.gs1DatabarExpanded.rawValue),
+                                        NSNumber(value: Symbology.code128.rawValue)
+                                    ])
+    barcodeField.patterns = ["\\d{12,14}"]
 
-Label capture builds on top of other technologies: Barcode Batch for reading and tracking barcodes over multiple frames and text recognition for reading text.
+    let expiryDateField = ExpiryDateText(name: "<your-expiry-date-field-name>")
+    expiryDateField.optional = false
 
-Label capture follows the same architecture as other data capture modes. The functionality is split into the following classes:
+    return LabelDefinition(
+      name: "<your-label-name>", 
+      fields: [barcodeField, expiryDateField]
+    )
+}
 
-* [`SDCLabelCapture`](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) is the actual data capture mode that coordinates the label capture process. A [`SDCLabelCaptureListener`](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) instance can be registered to get informed whenever the state of label capture changes.
-* [`SDCLabelCaptureSettings`](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) holds the `SDCLabelCapture` configuration (the label definitions as well as recognition settings).
-* [`SDCLabelCaptureSession`](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-session.html#class-scandit.datacapture.label.LabelCaptureSession) holds the currently captured labels ([`SDCCapturedLabel`](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/captured-label.html#class-scandit.datacapture.label.CapturedLabel) each with one or more [`SDCLabelField`](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-field.html#class-scandit.datacapture.label.LabelField) instances).
-* A [`SDCLabelCaptureBasicOverlay`](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureBasicOverlay) can be added to the [`SDCDataCaptureView`](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to visualize the label capture process.
+guard let labelCaptureSettings = try? LabelCaptureSettings(
+    labelDefinitions: [labelDefinition]
+) else {
+    /*
+    * Creating label capture settings can fail if the label definitions are invalid. 
+    * You can handle the error here.
+    */
+}
+
+/*
+* Create the label capture mode with the settings 
+* and data capture context created earlier
+*/
+labelCapture = LabelCapture(context: context, settings: labelCaptureSettings)
+
+/*
+* Add a listener to the label capture mode, see the following section 
+* for more information on implementing the listener
+*/
+labelCapture.addListener(self)
+```
+
+## Implement a Listener to Handle Captured Labels
+
+To get informed whenever a new label has been recognized, add a [LabelCaptureListener](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) through [LabelCapture.addListener()](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture.html#method-scandit.datacapture.label.LabelCapture.AddListener) and implement the listener methods to suit your application’s needs.
+
+First conform to the `LabelCaptureListener` interface. Here is an example of how to implement a listener that processes the captured labels based on the label capture settings defined above:
+
+```swift
+extension YourScanViewController: LabelCaptureListener {
+    func labelCapture(
+      _ labelCapture: LabelCapture, 
+      didUpdate session: LabelCaptureSession, 
+      frameData: FrameData
+    ) {
+        /* 
+         * The did update callback is called for every processed frame.
+         * Check if the session contains any captured labels; 
+         * if not, continue capturing.
+         */
+        guard let label = session.capturedLabels.first else { return }
+              
+        /*
+         * Given the label capture settings defined above, barcode data will always be present.
+         */
+        guard let barcodeField = label.field(for: "<your-barcode-field-name>"),
+              let barcodeData = barcodeField.barcode?.data else { return }
+
+        /*
+         * The expiry date field is optional. 
+         * Check for nil in your result handling.
+         */
+        let expiryDate = label.field(for: "<your-expiry-date-field-name>").text
+
+        /*
+         * Emit feedback to notify the user that a label has been captured.
+         */
+        Feedback.default.emit()
+
+        DispatchQueue.main.async {
+            camera?.switch(toDesiredState: .off)
+            labelCapture.isEnabled = false
+            /*
+             * Handle the captured barcode and expiry date here.
+             */
+        }
+    }
+}
+```
+
+## Visualize the Scan Process
+
+The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls what UI elements such as the viewfinder, as well as the overlays that are shown to visualize captured labels.
+To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy.
+
+To visualize the results of Label Capture, you can choose between two overlays, [LabelCaptureBasicOverlay](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureBasicOverlay) and [LabelCaptureAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-advanced-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureAdvancedOverlay).
+
+Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptureView`:
+
+```swift
+/* 
+* Create the data capture view and attach it to the data capture context created earlier.
+*/
+dataCaptureView = DataCaptureView(context: dataCaptureContext, frame: .zero)
+
+/* 
+* Add the data capture view to your view hierarchy, e.g. with insertSubview.
+*/
+@IBOutlet weak var containerView: UIView!
+containerView.insertSubview(dataCaptureView, at: 0)
+
+/* 
+* Create the overlay with the label capture mode and data capture view created earlier.
+*/
+labelCaptureOverlay = LabelCaptureBasicOverlay(labelCapture: labelCapture, view: dataCaptureView)
+labelCaptureOverlay.viewfinder = RectangularViewfinder(style: .square)
+```
+
+:::tip
+See the [Advanced Configurations](advanced.md) section for more information about how to customize the appearance of the overlays and how to use the advanced overlay to display arbitrary iOS views such as text views, icons or images.
+:::
+
+## Start the Camera
+
+import CameraIos from '../../../partials/get-started/_camera-ios.mdx';
+
+<CameraIos/>
+
+## Provide Feedback
+
+Label Capture, unlike Barcode Capture, doesn’t emit feedback (sound or vibration) when a new label is recognized, as it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
+
+However, we provide a [Feedback](https://docs.scandit.com/data-capture-sdk/ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback) class that you can use to emit feedback when a label is recognized and successfully processed. You may use the default feedback or configure custom sounds or vibration.
+
+See the `LabelCaptureListener` implementation above for an example of how to emit feedback.
+
+:::note
+Audio feedback is only played if the device is not muted.
+:::

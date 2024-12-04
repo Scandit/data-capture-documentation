@@ -1,0 +1,27 @@
+The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device.
+
+:::note
+In iOS, the user must explicitly grant permission for each app to access cameras. Your app needs to provide static messages to display to the user when the system asks for camera permission. To do that include the [`NSCameraUsageDescription`](https://developer.apple.com/documentation/bundleresources/information_property_list/nscamerausagedescription) key in your app’s `Info.plist` file.
+:::
+
+When using the built-in camera there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
+
+```swift
+let cameraSettings = BarcodeCapture.recommendedCameraSettings
+
+// Depending on the use case further camera settings adjustments can be made here.
+
+let camera = Camera.default
+camera?.apply(cameraSettings)
+```
+
+Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [`SDCDataCaptureContext.setFrameSource:completionHandler:`](https://docs.scandit.com/data-capture-sdk/ios/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync).
+
+The camera is off by default and must be turned on. This is done by calling [`SDCFrameSource.switchToDesiredState:completionHandler:`](https://docs.scandit.com/data-capture-sdk/ios/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [`SDCFrameSourceStateOn`](https://docs.scandit.com/data-capture-sdk/ios/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
+
+```swift
+context.setFrameSource(camera)
+
+
+camera?.switch(toDesiredState: .on)
+```

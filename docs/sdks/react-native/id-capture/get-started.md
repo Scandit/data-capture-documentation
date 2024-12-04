@@ -44,20 +44,9 @@ import DataCaptureContextReactNative from '../../../partials/get-started/_create
 
 ## Add the Camera
 
-You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/react-native/core/api/camera.html#class-scandit.datacapture.core.Camera):
+import CameraReactNative from '../../../partials/get-started/_camera-react-native.mdx';
 
-```js
-const camera = Camera.default;
-context.setFrameSource(camera);
-
-const cameraSettings = IdCapture.recommendedCameraSettings;
-
-// Depending on the use case further camera settings adjustments can be made here.
-
-if (camera != null) {
-	camera.applySettings(cameraSettings);
-}
-```
+<CameraReactNative/>
 
 ## Configure the Capture Settings
 

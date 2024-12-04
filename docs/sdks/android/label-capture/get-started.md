@@ -11,13 +11,12 @@ In this guide you will learn step-by-step how to add Smart Label Capture to your
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
-- Configuring the LabelCapture mode
-- Defining the a listener to handle captured labels
-- Using the built-in camera
-- Visualizing the scan process
-- Providing feedback
-- Disabling LabelCapture
+- Create a new Data Capture Context instance
+- Configure the LabelCapture mode
+- Define a listener to handle captured labels
+- Start the camera
+- Visualize the scan process
+- Provide feedback
 
 ## Prerequisites
 
@@ -126,16 +125,22 @@ labelCapture.addListener(object : LabelCaptureListener {
         session: LabelCaptureSession,
         data: FrameData
     ) {
-        // onSessionUpdated is called for every processed frame.
-        // Check if the session contains any captured labels; if not, continue capturing.
+        /* 
+         * The session update callback is called for every processed frame.
+         * Check if the session contains any captured labels; if not, continue capturing.
+         */
         val capturedLabel = session.capturedLabels.firstOrNull() ?: return
 
-        // Given the label capture settings defined above, barcode data will always be present.
+        /* 
+         * Given the label capture settings defined above, barcode data will always be present.
+         */
         val barcodeData = capturedLabel.fields
             .find { it.name == "<your-barcode-field-name>" }?.barcode?.data
 
-        // Expiry date, weight, and unit price are optional fields.
-        // Check for null in your result handling.
+        /* 
+         * Expiry date, weight, and unit price are optional fields.
+         * Check for null in your result handling.
+         */
         val expiryDate = capturedLabel.fields
             .find { it.name == "<your-expiry-date-field-name>" }?.text
         val netWeight = capturedLabel.fields
@@ -143,14 +148,23 @@ labelCapture.addListener(object : LabelCaptureListener {
         val unitPrice = capturedLabel.fields
             .find { it.name == "<your-unit-price-field-name>" }?.text
 
-        // Disable the label capture mode after a label has been captured
-        // to prevent it from capturing the same label multiple times.
+        /* 
+         * Disable the label capture mode after a label has been captured
+         * to prevent it from capturing the same label multiple times.
+         */
         mode.isEnabled = false
         
-        // Consider handling the results in a coroutine to avoid blocking the main thread
-        // when updating the UI.
+        /* 
+         * Consider handling the results in a coroutine to avoid blocking the main thread
+         * when updating the UI.
+         */
         coroutineScope.launch {
             handleResults(barcodeData, expiryDate, netWeight, unitPrice)
+            
+            /* 
+             * You may want to communicate a successful scan with feedback.emit() here.
+             * See the Feedback section for more information.
+             */
         }
     }
 })
@@ -188,6 +202,9 @@ public class LabelCaptureRepository implements LabelCaptureListener {
         if (!labels.isEmpty()) {
             final CapturedLabel label = labels.get(0);
             
+            /* 
+             * Given the label capture settings defined above, barcode data will always be present.
+             */
             String barcodeData = label.getFields().find { it.getName().equals("<your-barcode-field-name>") }?.getBarcode()?.getData();
 
             /* 
@@ -208,6 +225,11 @@ public class LabelCaptureRepository implements LabelCaptureListener {
              * Post the captured results for further processing.
              */
             capturedLabels.postValue(new CapturedLabelEvent(barcodeData, expiryDate, netWeight, unitPrice));
+            
+            /* 
+             * You may want to communicate a successful scan with feedback.emit() here. 
+             * See the Feedback section for more information.
+             */
         }
     }
 }
@@ -215,7 +237,7 @@ public class LabelCaptureRepository implements LabelCaptureListener {
 </TabItem>
 </Tabs>
 
-## Use the Built-in Camera
+## Start the Camera
 
 import CameraAndroid from '../../../partials/get-started/_camera-android.mdx';
 
@@ -255,6 +277,7 @@ container.addView(
 val overlay = LabelCaptureBasicOverlay.newInstance(labelCapture, dataCaptureView)
 overlay.viewfinder = RectangularViewfinder(RectangularViewfinderStyle.SQUARE)
 ```
+
 </TabItem>
 <TabItem value="java" label="Java">
 
@@ -279,6 +302,7 @@ container.addView(
 LabelCaptureBasicOverlay overlay = LabelCaptureBasicOverlay.newInstance(labelCapture, dataCaptureView);
 overlay.setViewfinder(new RectangularViewfinder(RectangularViewfinderStyle.SQUARE));
 ```
+
 </TabItem>
 </Tabs>
 
@@ -287,4 +311,31 @@ See the [Advanced Configurations](advanced.md) section for more information abou
 :::
 
 ## Provide Feedback
-**WIP**
+
+Label Capture, unlike Barcode Capture, doesn’t emit feedback (sound or vibration) when a new label is recognized, as it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
+
+However, we provide a `Feedback` class that you can use to emit feedback when a label is recognized and successfully processed. Here, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration.
+
+
+<Tabs groupId="language">
+<TabItem value="kotlin" label="Kotlin">
+
+```kotlin
+private val feedback = Feedback.defaultFeedback()
+```
+
+</TabItem>
+<TabItem value="java" label="Java">
+
+```java
+private Feedback feedback = Feedback.defaultFeedback();
+```
+
+</TabItem>
+</Tabs>
+
+After creating the feedback, you can emit it on successful scans with `feedback.emit()`. See the `LabelCaptureListener` implementation above for more information.
+
+:::note
+Audio feedback is only played if the device is not muted.
+:::

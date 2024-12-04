@@ -193,6 +193,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/ios/label-capture/intro",
                 "sdks/ios/label-capture/get-started",
+                "sdks/ios/label-capture/advanced",
               ],
             },
           ],
@@ -885,6 +886,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/react-native/label-capture/intro",
                 "sdks/react-native/label-capture/get-started",
+                "sdks/react-native/label-capture/advanced",
               ],
             },
           ],
