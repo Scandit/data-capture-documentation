@@ -8,14 +8,15 @@ keywords:
 
 # Advanced Configurations
 
+## Customize the Overlay Appearance
 
-### Customize the Overlay Appearance
+To customize the appearance of the overlay, you can implement a [LabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener).
 
-To customize the appearance of the overlay, you can implement a [LabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener).\
-The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is invoked every time a label captured and [brushForField()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is invoked for each of it's fields and allows customizing the displayed over overlays.
+The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is invoked every time a label is captured, and [brushForField()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is invoked for each of it's fields and allows customizing the displayed overlays.
 
 <Tabs groupId="language">
 <TabItem value="kotlin" label="Kotlin">
+
 ```kotlin
 overlay.listener = object : LabelCaptureBasicOverlayListener {
     /*
@@ -54,6 +55,7 @@ overlay.listener = object : LabelCaptureBasicOverlayListener {
 ```
 </TabItem>
 <TabItem value="java" label="Java">
+
 ```java
 overlay.setListener(new LabelCaptureBasicOverlayListener() {
     @Nullable

@@ -23,7 +23,7 @@ The general steps are:
 
 Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out this [guide](/sdks/android/add-sdk.md).
 
-:::note
+:::tip
 You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
@@ -41,7 +41,9 @@ import DataCaptureContextAndroid from '../../../partials/get-started/_create-dat
 
 ## Configure the Label Capture Mode
 
-The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object. It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that  gets informed whenever a new frame has been processed.
+The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object.
+
+It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
 <Tabs groupId="language">
 <TabItem value="kotlin" label="Kotlin">
@@ -116,6 +118,7 @@ First conform to the `LabelCaptureListener` interface. Here is an example of how
 
 <Tabs groupId="language">
 <TabItem value="kotlin" label="Kotlin">
+
 ```kotlin
 labelCapture.addListener(object : LabelCaptureListener {
     override fun onSessionUpdated(
@@ -152,9 +155,13 @@ labelCapture.addListener(object : LabelCaptureListener {
     }
 })
 ```
+
 </TabItem>
 <TabItem value="java" label="Java">
-In this example, we create a `LabelCaptureRepository` class that implements the `LabelCaptureListener` interface. This class is responsible for handling the captured labels and processing them accordingly. Depending on your app architecture and whether you use dependency injection or not, you may use a fragment or a repository to implement the listener.
+
+In this example, we create a `LabelCaptureRepository` class that implements the `LabelCaptureListener` interface. This class is responsible for handling the captured labels and processing them accordingly.
+
+Depending on your app architecture and whether you use dependency injection or not, you may use a fragment or a repository to implement the listener.
 
 ```java
 public class LabelCaptureRepository implements LabelCaptureListener {
@@ -223,10 +230,9 @@ To visualize the results of Label Capture, you can choose between two overlays, 
 
 Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptureView`:
 
-
-
 <Tabs groupId="language">
 <TabItem value="kotlin" label="Kotlin">
+
 ```kotlin
 /* 
  * Create the data capture view and attach it to the data capture context created earlier.
@@ -251,6 +257,7 @@ overlay.viewfinder = RectangularViewfinder(RectangularViewfinderStyle.SQUARE)
 ```
 </TabItem>
 <TabItem value="java" label="Java">
+
 ```java
 /* 
  * Create the data capture view and attach it to the data capture context created earlier.
