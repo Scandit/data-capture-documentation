@@ -14,8 +14,8 @@ The general steps are:
 - Create a new Data Capture Context instance
 - Configure the LabelCapture mode
 - Define a listener to handle captured labels
-- Start the camera
 - Visualize the scan process
+- Start the camera
 - Provide feedback
 
 ## Prerequisites
@@ -239,12 +239,6 @@ public class LabelCaptureRepository implements LabelCaptureListener {
 </TabItem>
 </Tabs>
 
-## Start the Camera
-
-import CameraAndroid from '../../../partials/get-started/_camera-android.mdx';
-
-<CameraAndroid/>
-
 ## Visualize the Scan Process
 
 The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls what UI elements such as the viewfinder, as well as the overlays that are shown to visualize captured labels.
@@ -311,6 +305,27 @@ overlay.setViewfinder(new RectangularViewfinder(RectangularViewfinderStyle.SQUAR
 :::tip
 See the [Advanced Configurations](advanced.md) section for more information about how to customize the appearance of the overlays and how to use the advanced overlay to display arbitrary Android views such as text views, icons or images.
 :::
+
+## Start the Camera
+
+Next, you need to create a new instance of the [Camera](https://docs.scandit.com/data-capture-sdk/android/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera to stream previews and to capture images.
+
+When initializing the camera, you can pass the recommended camera settings for Label Capture.
+
+```java
+camera = Camera.getDefaultCamera(LabelCapture.createRecommendedCameraSettings());
+if (camera == null) {
+    throw new IllegalStateException("Failed to init camera!");
+}
+dataCaptureContext.setFrameSource(camera);
+```
+
+Once the Camera, DataCaptureContext, DataCaptureView and LabelCapture are initialized, you can switch on the camera to start capturing labels.
+Typically, this is done on resuming the view and when the user granted permission to use the camera, or once the user pressed continue scanning after handling a previous scan.
+
+```java
+camera.switchToDesiredState(FrameSourceState.ON);
+```
 
 ## Provide Feedback
 

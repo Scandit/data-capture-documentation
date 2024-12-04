@@ -207,9 +207,24 @@ See the [Advanced Configurations](advanced.md) section for more information abou
 
 ## Start the Camera
 
-import CameraIos from '../../../partials/get-started/_camera-ios.mdx';
+Next, you need to create a new instance of the [`SDCCamera`](https://docs.scandit.com/data-capture-sdk/ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera that will be used to stream previews and to capture images. 
 
-<CameraIos/>
+You can initialize the camera with the recommended settings for Label Capture.
+
+```swift
+camera = Camera.default
+context.setFrameSource(camera, completionHandler: nil)
+
+let recommendedCameraSettings = LabelCapture.recommendedCameraSettings
+camera?.apply(recommendedCameraSettings)
+```
+
+Once the Camera, DataCaptureContext, DataCaptureView and LabelCapture are initialized, you can switch on the camera to start capturing labels.
+This could be done in the `viewWillAppear` method of your view controller, or once a user pressed continue scanning after handling a previous scan.
+ 
+```swift
+camera?.switch(toDesiredState: .on)
+```
 
 ## Provide Feedback
 
