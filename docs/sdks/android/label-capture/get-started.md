@@ -51,28 +51,28 @@ import com.scandit.datacapture.label.capture.labelCaptureSettings
 
 val settings = labelCaptureSettings {
     label("<your-label-name>") {
+        /*
+         * Add a barcode field with the expected symbologies and pattern.
+         * You can omit the pattern if the content of the barcode is unknown. 
+         */
         customBarcode("<your-barcode-field-name>") {
-            // configure the expected barcodes symbologies
             setSymbologies(Symbology.EAN13_UPCA, Symbology.CODE128)
-            // you can set an expected regex pattern to filter out irrelevant barcodes
             setPattern("\\d{12,14}")
         }
+        /*
+         * Add a text field for capturing expiry dates.
+         * The field is set as optional so that the capture can complete 
+         * even if the expiry date is not present or not readable.
+         */
         expiryDateText("<your-expiry-date-field-name>") {
-            // required fields must be present to complete the capture
-            // note: setting isOptional to false can be omitted as it is the default value
             isOptional = false
-        }
-        weightText("<your-weight-field-name>") {
-            // optional fields are only captured if present and readable
-            isOptional = true 
-        }
-        unitPriceText("<your-unit-price-field-name>") {
-            isOptional = true
         }
     }
 }
 
-// Create the label capture mode with the settings and data capture context created earlier
+/*
+ * Create the label capture mode with the settings and data capture context created earlier.
+ */
 val labelCapture = LabelCapture.forDataCaptureContext(dataCaptureContext, settings)
 ```
 </TabItem>
@@ -83,27 +83,28 @@ import com.scandit.datacapture.label.capture.LabelCaptureSettings;
 
 LabelCaptureSettings settings = LabelCaptureSettings.builder()
     .addLabel()
+        /*
+         * Add a barcode field with the expected symbologies and pattern.
+         * You can omit the pattern if the content of the barcode is unknown. 
+         */
         .addCustomBarcode()
-            // configure the expected barcodes symbologies
             .setSymbologies(Symbology.EAN13_UPCA, Symbology.CODE128)
             .setPattern("\\d{12,14}")
         .buildFluent("<your-barcode-field-name")
+        /*
+         * Add a text field for capturing expiry dates.
+         * The field is set as optional so that the capture can complete 
+         * even if the expiry date is not present or not readable.
+         */
         .addExpiryDateText()
-            // required fields must be present to complete the capture
-            // note: setting isOptional to false can be omitted as it is the default value
             .isOptional(false)
         .buildFluent("<your-expiry-date-field-name>")
-        .addWeightText()
-            // optional fields are only captured if present and readable
-            .isOptional(true)
-        .buildFluent("<your-weight-field-name>")
-        .addUnitPriceText()
-            .isOptional(true)
-        .buildFluent("<your-unit-price-field-name>")
     .buildFluent("<your-label-name>")
 .build();
 
-// Create the label capture mode with the settings and data capture context created earlier
+/*
+ * Create the label capture mode with the settings and data capture context created earlier.
+ */
 LabelCapture labelCapture = LabelCapture.forDataCaptureContext(dataCaptureContext, settings)
 ```
 </TabItem>
@@ -127,26 +128,23 @@ labelCapture.addListener(object : LabelCaptureListener {
     ) {
         /* 
          * The session update callback is called for every processed frame.
-         * Check if the session contains any captured labels; if not, continue capturing.
+         * Check if the session contains any captured labels; 
+         * if not, continue capturing.
          */
         val capturedLabel = session.capturedLabels.firstOrNull() ?: return
 
         /* 
-         * Given the label capture settings defined above, barcode data will always be present.
+         * Given the label capture settings defined above, 
+         * barcode data will always be present.
          */
         val barcodeData = capturedLabel.fields
             .find { it.name == "<your-barcode-field-name>" }?.barcode?.data
 
         /* 
-         * Expiry date, weight, and unit price are optional fields.
-         * Check for null in your result handling.
+         * The expiry date field is optional. Check for null in your result handling.
          */
         val expiryDate = capturedLabel.fields
             .find { it.name == "<your-expiry-date-field-name>" }?.text
-        val netWeight = capturedLabel.fields
-            .find { it.name == "<your-weight-field-name>" }?.text
-        val unitPrice = capturedLabel.fields
-            .find { it.name == "<your-unit-price-field-name>" }?.text
 
         /* 
          * Disable the label capture mode after a label has been captured
@@ -159,12 +157,8 @@ labelCapture.addListener(object : LabelCaptureListener {
          * when updating the UI.
          */
         coroutineScope.launch {
-            handleResults(barcodeData, expiryDate, netWeight, unitPrice)
-            
-            /* 
-             * You may want to communicate a successful scan with feedback.emit() here.
-             * See the Feedback section for more information.
-             */
+            handleResults(barcodeData, expiryDate)
+            Feedback.defaultFeedback().emit()
         }
     }
 })
@@ -203,17 +197,24 @@ public class LabelCaptureRepository implements LabelCaptureListener {
             final CapturedLabel label = labels.get(0);
             
             /* 
-             * Given the label capture settings defined above, barcode data will always be present.
+             * Given the label capture settings defined above, 
+             * the barcode field would always be present.
              */
-            String barcodeData = label.getFields().find { it.getName().equals("<your-barcode-field-name>") }?.getBarcode()?.getData();
+            String barcodeData = label.getFields().stream()
+                .filter(field -> field.getName().equals("<your-barcode-field-name>"))
+                .findFirst()
+                .map(field -> field.getBarcode().getData())
+                .orElse(null);
 
             /* 
-             * Expiry date, weight, and unit price are optional fields.
+             * The expiry date field is optional. 
              * Check for null in your result handling.
              */
-            String expiryDate = label.getFields().find { it.getName().equals("<your-expiry-date-field-name>") }?.getText();
-            String netWeight = label.getFields().find { it.getName().equals("<your-weight-field-name>") }?.getText();
-            String unitPrice = label.getFields().find { it.getName().equals("<your-unit-price-field-name>") }?.getText();
+            String expiryDate = label.getFields().stream()
+                .filter(field -> field.getName().equals("<your-expiry-date-field-name>"))
+                .findFirst()
+                .map(CapturedField::getText)
+                .orElse(null);
 
             /* 
              * Disable the label capture mode after a label has been captured
@@ -224,12 +225,13 @@ public class LabelCaptureRepository implements LabelCaptureListener {
             /* 
              * Post the captured results for further processing.
              */
-            capturedLabels.postValue(new CapturedLabelEvent(barcodeData, expiryDate, netWeight, unitPrice));
+            capturedLabels.postValue(new CapturedLabelEvent(barcodeData, expiryDate));
             
             /* 
-             * You may want to communicate a successful scan with feedback.emit() here. 
+             * Consider communicating a successful scan with audio and vibration feedback. 
              * See the Feedback section for more information.
              */
+            Feedback.defaultFeedback().emit();
         }
     }
 }
@@ -312,10 +314,9 @@ See the [Advanced Configurations](advanced.md) section for more information abou
 
 ## Provide Feedback
 
-Label Capture, unlike Barcode Capture, doesn’t emit feedback (sound or vibration) when a new label is recognized, as it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
+Label Capture, unlike Barcode Capture, doesn't emit any sound or vibration automatically when a new label is recognized. This is because it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
 
-However, we provide a `Feedback` class that you can use to emit feedback when a label is recognized and successfully processed. Here, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration.
-
+However, we provide a [Feedback](https://docs.scandit.com/data-capture-sdk/android/core/api/feedback.html#class-scandit.datacapture.core.Feedback) class that you can use to emit feedback when a label is recognized and successfully processed. You can use the default feedback, or configure your own sound or vibration.
 
 <Tabs groupId="language">
 <TabItem value="kotlin" label="Kotlin">
@@ -333,8 +334,6 @@ private Feedback feedback = Feedback.defaultFeedback();
 
 </TabItem>
 </Tabs>
-
-After creating the feedback, you can emit it on successful scans with `feedback.emit()`. See the `LabelCaptureListener` implementation above for more information.
 
 :::note
 Audio feedback is only played if the device is not muted.

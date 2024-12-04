@@ -21,7 +21,7 @@ The general steps are:
 
 ## Prerequisites
 
-Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out this [guide](/sdks/ios/add-sdk.md).
+Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you have added the necessary dependencies. If you have not done that yet, check out this [guide](/sdks/ios/add-sdk.md).
 
 :::tip
 You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
@@ -57,7 +57,7 @@ class YourScanViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        /* Start the camera, disable capture mode */
+        /* Stop the camera, disable capture mode */
     }
 
     // ...
@@ -77,14 +77,24 @@ It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-ca
 
 ```swift
 let labelDefinition: LabelDefinition {
-    let barcodeField = CustomBarcode(name: "<your-barcode-field-name>",
-                                    symbologies: [
-                                        NSNumber(value: Symbology.ean13UPCA.rawValue),
-                                        NSNumber(value: Symbology.gs1DatabarExpanded.rawValue),
-                                        NSNumber(value: Symbology.code128.rawValue)
-                                    ])
+    /*
+     * Add a barcode field with the expected symbologies and pattern.
+     * You can omit the pattern if the content of the barcode is unknown. 
+     */
+    let barcodeField = CustomBarcode(
+        name: "<your-barcode-field-name>",
+        symbologies: [
+            NSNumber(value: Symbology.ean13UPCA.rawValue),
+            NSNumber(value: Symbology.code128.rawValue)
+        ]
+    )
     barcodeField.patterns = ["\\d{12,14}"]
 
+    /*
+     * Add a text field for capturing expiry dates.
+     * The field is set as optional so that the capture can complete 
+     * even if the expiry date is not present or not readable.
+     */
     let expiryDateField = ExpiryDateText(name: "<your-expiry-date-field-name>")
     expiryDateField.optional = false
 
@@ -163,13 +173,12 @@ extension YourScanViewController: LabelCaptureListener {
     }
 }
 ```
-
 ## Visualize the Scan Process
 
 The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls what UI elements such as the viewfinder, as well as the overlays that are shown to visualize captured labels.
 To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy.
 
-To visualize the results of Label Capture, you can choose between two overlays, [LabelCaptureBasicOverlay](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureBasicOverlay) and [LabelCaptureAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-advanced-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureAdvancedOverlay).
+To visualize the results of Label Capture, you can choose between two overlays, [LabelCaptureBasicOverlay](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay.html#label-capture-basic-overlay) and [LabelCaptureAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-advanced-overlay.html#label-capture-advanced-overlay).
 
 Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptureView`:
 
@@ -204,11 +213,14 @@ import CameraIos from '../../../partials/get-started/_camera-ios.mdx';
 
 ## Provide Feedback
 
-Label Capture, unlike Barcode Capture, doesn’t emit feedback (sound or vibration) when a new label is recognized, as it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
+Label Capture, unlike Barcode Capture, doesn't emit any sound or vibration automatically when a new label is recognized. This is because it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
 
-However, we provide a [Feedback](https://docs.scandit.com/data-capture-sdk/ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback) class that you can use to emit feedback when a label is recognized and successfully processed. You may use the default feedback or configure custom sounds or vibration.
+However, we provide a [Feedback](https://docs.scandit.com/data-capture-sdk/android/core/api/feedback.html#class-scandit.datacapture.core.Feedback) class that you can use to emit feedback when a label is recognized and successfully processed. You can use the default feedback, or configure your own sound or vibration.
 
-See the `LabelCaptureListener` implementation above for an example of how to emit feedback.
+```swift
+let feedback = Feedback.defaultFeedback()
+feedback.emit()
+```
 
 :::note
 Audio feedback is only played if the device is not muted.

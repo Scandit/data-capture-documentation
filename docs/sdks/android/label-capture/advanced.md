@@ -12,7 +12,7 @@ keywords:
 
 To customize the appearance of the overlay, you can implement a [LabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener).
 
-The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is invoked every time a label is captured, and [brushForField()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is invoked for each of it's fields and allows customizing the displayed overlays.
+The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [brushForField()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
 <Tabs groupId="language">
 <TabItem value="kotlin" label="Kotlin">
@@ -29,8 +29,6 @@ overlay.listener = object : LabelCaptureBasicOverlayListener {
     ): Brush? = when (field.name) {
         "<your-barcode-field-name>" -> Brush(Color.CYAN.withAlpha(128), Color.CYAN, 1f)
         "<your-expiry-date-field-name>" -> Brush(Color.GREEN.withAlpha(128), Color.GREEN, 1f)
-        "<your-weight-field-name>" -> Brush(Color.MAGENTA.withAlpha(128), Color.MAGENTA, 1f)
-        "<your-unit-price-field-name>" -> Brush(Color.YELLOW.withAlpha(128), Color.YELLOW, 1f)
         else -> Brush(Color.TRANSPARENT, Color.TRANSPARENT, 0f)
     }
 
@@ -43,13 +41,14 @@ overlay.listener = object : LabelCaptureBasicOverlayListener {
         label: CapturedLabel
     ): Brush? = null
 
-    /*
-     * Handle the user tap gesture on the label.
-     */
     override fun onLabelTapped(
         overlay: LabelCaptureBasicOverlay,
         label: CapturedLabel
-    ) { /* ... */ }
+    ) { 
+        /*
+         * Handle the user tap gesture on the label.
+         */
+    }
 }
 
 ```
@@ -76,9 +75,13 @@ overlay.setListener(new LabelCaptureBasicOverlayListener() {
             );
         } 
         
-        /* 
-         * Brushes for expiry date, weight, and unit price are omitted for brevity.
-         */
+        if (field.getName().equals("<your-expiry-date-field-name>")) {
+            return new Brush(
+              getResources().getColor(R.color.expiry_date_overlay_fill),
+              getResources().getColor(R.color.expiry_date_overlay_stroke), 
+              0f
+            );
+        } 
         
         return null;
     }
@@ -90,3 +93,4 @@ overlay.setListener(new LabelCaptureBasicOverlayListener() {
 :::tip
 You can also use `LabelCaptureBasicOverlay.setLabelBrush()` and `LabelCaptureBasicOverlay.setCapturedFieldBrush()` to configure the overlay if you don't need to customize the appearance based on the name or content of the fields.
 :::
+
