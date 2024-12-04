@@ -15,7 +15,7 @@ To customize the appearance of the overlay, you can implement a [LabelCaptureBas
 
 The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label captured and [brushForField()](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
-```typescript
+```js
 const overlayListener = useMemo<LabelCaptureBasicOverlayListener>(() => ({
     brushForFieldOfLabel: (_, field) => {
       switch (field.name) {

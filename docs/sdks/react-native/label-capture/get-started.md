@@ -11,9 +11,9 @@ In this guide you will learn step-by-step how to add Smart Label Capture to your
 
 The general steps are:
 
-- Create a new Data Capture Context instance
-- Configure the LabelCapture mode
-- Define a listener to handle captured labels
+- Initialize the Data Capture Context
+- Initialize the Label Capture Mode
+- Implement a listener to handle captured labels
 - Visualize the scan process
 - Start the camera
 - Provide feedback
@@ -32,13 +32,13 @@ import LabelCaptureModuleOverview from '../../../partials/get-started/_smart-lab
 
 <LabelCaptureModuleOverview/>
 
-## Create a Data Capture Context
+## Initialize the Data Capture Context
 
 import DataCaptureContextReactNative from '../../../partials/get-started/_create-data-capture-context-react-native.mdx';
 
 <DataCaptureContextReactNative/>
 
-## Configure the Label Capture Mode
+## Initialize the Label Capture Mode
 
 The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object. 
 It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
@@ -80,7 +80,7 @@ const settings = LabelCaptureSettings.settingsFromLabelDefinitions([labelDefinit
 const labelCapture = LabelCapture.forContext(dataCaptureContext, settings);
 ```
 
-## Define a Listener to Handle Captured Labels
+## Implement a Listener to Handle Captured Labels
 
 To get informed whenever a new label has been recognized, add a [LabelCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) through [LabelCapture.addListener()](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-capture.html#method-scandit.datacapture.label.LabelCapture.AddListener) and implement the listener methods to suit your application’s needs.
 
