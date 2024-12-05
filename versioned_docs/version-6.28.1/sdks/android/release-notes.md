@@ -9,6 +9,19 @@ keywords:
   - android
 ---
 
+## 6.28.2
+
+**Released**: December 10, 2024
+
+### New Features
+
+* The `BarcodePickView` API now includes a Reset function for restarting the workflow, where calling it clears all picked items and restores the initial state.
+
+### Bug Fixes
+
+* Fixed a rare crash affecting the camera.
+* Fixed a sporadic crash in `BarcodePickView` caused by negative view sizing when opening the keyboard.
+
 ## 6.28.1
 
 **Released**: October 29, 2024
