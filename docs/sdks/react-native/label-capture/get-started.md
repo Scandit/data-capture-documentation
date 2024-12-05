@@ -40,7 +40,8 @@ import DataCaptureContextReactNative from '../../../partials/get-started/_create
 
 ## Initialize the Label Capture Mode
 
-The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object. 
+The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object.
+
 It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
 ```js
@@ -146,7 +147,7 @@ useEffect(() => {
 
 ## Visualize the Scan Process
 
-The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls what UI elements such as the viewfinder, as well as the overlays that are shown to visualize captured labels.
+The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls the UI elements, such as the viewfinder and overlays, that are shown to visualize captured labels.
 
 To visualize the results of Label Capture, you can choose between two overlays, [LabelCaptureBasicOverlay](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/ui/label-capture-basic-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureBasicOverlay) and [LabelCaptureAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/ui/label-capture-advanced-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureAdvancedOverlay).
 
@@ -197,7 +198,8 @@ if (camera != null) {
 ```
 
 Once the Camera, DataCaptureContext, DataCaptureView and LabelCapture are initialized, you can switch on the camera to start capturing labels.
-Typically, this is done once the view becomes active and the user granted permission to use the camera, or once the user pressed continue scanning after handling a previous scan.
+
+Typically, this is done once the view becomes active and the user granted permission to use the camera, or once the user presses continue scanning after handling a previous scan.
 
 ```js
 camera.switchToDesiredState(FrameSourceState.ON);
@@ -205,9 +207,11 @@ camera.switchToDesiredState(FrameSourceState.ON);
 
 ## Provide Feedback
 
-Label Capture, unlike Barcode Capture, doesn’t emit feedback (sound or vibration) when a new label is recognized, as it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
+Label Capture doesn’t emit feedback (sound or vibration) by default when a new label is recognized, as it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
 
-However, we provide a `Feedback` class that you can use to emit feedback when a label is recognized and successfully processed. Here, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration.
+However, we provide a `Feedback` class that you can use to emit feedback when a label is recognized and successfully processed.
+
+Here, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration.
 
 ```js
 import { Feedback } from 'scandit-react-native-datacapture-core';

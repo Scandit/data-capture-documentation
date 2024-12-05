@@ -72,7 +72,8 @@ import DataCaptureContextIos from '../../../partials/get-started/_create-data-ca
 
 ## Initialize the Label Capture Mode
 
-The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object. 
+The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object.
+
 It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
 ```swift
@@ -175,8 +176,7 @@ extension YourScanViewController: LabelCaptureListener {
 ```
 ## Visualize the Scan Process
 
-The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls what UI elements such as the viewfinder, as well as the overlays that are shown to visualize captured labels.
-To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy.
+The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls the UI elements, such as the viewfinder and overlays, that are shown to visualize captured labels.
 
 To visualize the results of Label Capture, you can choose between two overlays, [LabelCaptureBasicOverlay](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay.html#label-capture-basic-overlay) and [LabelCaptureAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-advanced-overlay.html#label-capture-advanced-overlay).
 
@@ -207,9 +207,9 @@ See the [Advanced Configurations](advanced.md) section for more information abou
 
 ## Start the Camera
 
-Next, you need to create a new instance of the [`SDCCamera`](https://docs.scandit.com/data-capture-sdk/ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera that will be used to stream previews and to capture images. 
+Next, you need to create a new instance of the [`SDCCamera`](https://docs.scandit.com/data-capture-sdk/ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera that will be used to stream previews and capture images. 
 
-You can initialize the camera with the recommended settings for Label Capture.
+You can initialize the camera with the recommended settings for Label Capture:
 
 ```swift
 camera = Camera.default
@@ -220,7 +220,8 @@ camera?.apply(recommendedCameraSettings)
 ```
 
 Once the Camera, DataCaptureContext, DataCaptureView and LabelCapture are initialized, you can switch on the camera to start capturing labels.
-This could be done in the `viewWillAppear` method of your view controller, or once a user pressed continue scanning after handling a previous scan.
+
+This can be done in the `viewWillAppear` method of your view controller, or once a user presses continue scanning after handling a previous scan.
  
 ```swift
 camera?.switch(toDesiredState: .on)
@@ -228,9 +229,11 @@ camera?.switch(toDesiredState: .on)
 
 ## Provide Feedback
 
-Label Capture, unlike Barcode Capture, doesn't emit any sound or vibration automatically when a new label is recognized. This is because it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
+Label Capture doesn't emit any sound or vibration automatically when a new label is recognized. This is because it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
 
-However, we provide a [Feedback](https://docs.scandit.com/data-capture-sdk/android/core/api/feedback.html#class-scandit.datacapture.core.Feedback) class that you can use to emit feedback when a label is recognized and successfully processed. You can use the default feedback, or configure your own sound or vibration.
+However, we provide a [Feedback](https://docs.scandit.com/data-capture-sdk/android/core/api/feedback.html#class-scandit.datacapture.core.Feedback) class that can be used to emit feedback when a label is recognized and successfully processed.
+
+You can use the default feedback, or configure your own sound or vibration.
 
 ```swift
 let feedback = Feedback.defaultFeedback()

@@ -242,7 +242,6 @@ public class LabelCaptureRepository implements LabelCaptureListener {
 ## Visualize the Scan Process
 
 The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls what UI elements such as the viewfinder, as well as the overlays that are shown to visualize captured labels.
-To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy.
 
 To visualize the results of Label Capture, you can choose between two overlays, [LabelCaptureBasicOverlay](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureBasicOverlay) and [LabelCaptureAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-advanced-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureAdvancedOverlay).
 
@@ -329,9 +328,11 @@ camera.switchToDesiredState(FrameSourceState.ON);
 
 ## Provide Feedback
 
-Label Capture, unlike Barcode Capture, doesn't emit any sound or vibration automatically when a new label is recognized. This is because it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
+Label Capture doesn't emit any sound or vibration automatically when a new label is recognized. This is because it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
 
-However, we provide a [Feedback](https://docs.scandit.com/data-capture-sdk/android/core/api/feedback.html#class-scandit.datacapture.core.Feedback) class that you can use to emit feedback when a label is recognized and successfully processed. You can use the default feedback, or configure your own sound or vibration.
+However, we provide a [Feedback](https://docs.scandit.com/data-capture-sdk/android/core/api/feedback.html#class-scandit.datacapture.core.Feedback) class that can be uses to emit feedback when a label is recognized and successfully processed.
+
+You can use the default feedback, or configure your own sound or vibration.
 
 <Tabs groupId="language">
 <TabItem value="kotlin" label="Kotlin">
