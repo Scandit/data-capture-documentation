@@ -9,6 +9,14 @@ keywords:
   - capacitor
 ---
 
+## 6.28.2
+
+**Released**: December 10, 2024
+
+### Bug Fixes
+
+* Fixed an issue with the frame retrieval when calling `getFrameData` in various callbacks.
+
 ## 6.28.1
 
 **Released**: October 29, 2024

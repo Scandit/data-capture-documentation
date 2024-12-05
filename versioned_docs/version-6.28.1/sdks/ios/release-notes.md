@@ -9,6 +9,12 @@ keywords:
   - ios
 ---
 
+## 6.28.2
+
+**Released**: December 10, 2024
+
+No updates for this framework in this release.
+
 ## 6.28.1
 
 **Released**: October 29, 2024
