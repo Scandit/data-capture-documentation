@@ -43,11 +43,9 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 ## Create a Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+import DataCaptureContextIos from '../../../partials/get-started/_create-data-capture-context-ios.mdx';
 
-```swift
-self.context = DataCaptureContext(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-```
+<DataCaptureContextIos/>
 
 ## Configure the SparkScan Mode
 

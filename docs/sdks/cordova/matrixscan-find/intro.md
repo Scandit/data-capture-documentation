@@ -8,6 +8,6 @@ keywords:
 
 # About MatrixScan Find
 
-import AboutFind from '../../../partials/_about-matrixscan-find.mdx'
+import AboutFind from '../../../partials/intro/_about-matrixscan-find.mdx'
 
 <AboutFind />

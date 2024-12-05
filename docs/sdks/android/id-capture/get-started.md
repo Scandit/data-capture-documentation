@@ -32,27 +32,21 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 ### External Dependencies
 
-The Scandit Data Capture SDK modules depend on a few standard libraries that you can find listed below. If you are including the Scandit Data Capture SDK through **Gradle** or **Maven**, all of these dependencies are automatically pulled in and there is no need for you to do anything further.
+import ExternalDependencies from '../../../partials/get-started/_external-deps-android.mdx';
 
-If you directly add the AAR files to the project, you need to add these dependencies yourself.
-
-* `org.jetbrains.kotlin:kotlin-stdlib:[version]`
-* `androidx.annotation:annotation:[version]`
-* `com.squareup.okhttp3:okhttp:4.9.2`
+<ExternalDependencies/>
 
 ### Module Overview
 
-import IdModuleOverview from '../../../partials/_id-module-overview.mdx';
+import IdModuleOverview from '../../../partials/get-started/_id-module-overview.mdx';
 
 <IdModuleOverview/>
 
 ## Create a Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+import DataCaptureContextAndroid from '../../../partials/get-started/_create-data-capture-context-android.mdx';
 
-```java
-DataCaptureContext dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
-```
+<DataCaptureContextAndroid/>
 
 ## Access a Camera
 

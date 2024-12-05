@@ -30,24 +30,15 @@ Devices running the Scandit Data Capture SDK need a GPU. Otherwise, you can see 
 
 ### Internal Dependencies
 
-import InternalDependencies from '../../partials/_internal-deps.mdx';
+import InternalDependencies from '../../partials/get-started/_internal-deps.mdx';
 
 <InternalDependencies/>
 
 ### External Dependencies
 
-The Scandit Data Capture SDK modules depend on the following standard libraries.
+import ExternalDependencies from '../../partials/get-started/_external-deps-android.mdx';
 
-If you include the Scandit Data Capture SDK through Gradle or Maven, all of these dependencies are automatically pulled in and there is no further action items for you.
-
-If you directly add the AAR files to the project, you need to add these dependencies yourself.
-
-| Module | Dependencies  |
-| ------------------------- | ----------------------------------------- |
-| ScanditCaptureCore.aar    | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]; com.squareup.okhttp3:okhttp:4.9.2 |
-| ScanditBarcodeCapture.aar | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version]                                    |
-| ScanditParser.aar   | No dependencies      |
-| ScanditIdCapture.aar      | org.jetbrains.kotlin:kotlin-stdlib:[version]; androidx.annotation:annotation:[version] |
+<ExternalDependencies/>
 
 ## Install via Package Manager
 

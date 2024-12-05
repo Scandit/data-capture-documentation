@@ -25,7 +25,7 @@ Android devices running the Scandit Data Capture SDK need to have a GPU or the p
 
 ### Internal Dependencies
 
-import InternalDependencies from '../../partials/_internal-deps-no-label-capture.mdx';
+import InternalDependencies from '../../partials/get-started/_internal-deps-no-label-capture.mdx';
 
 <InternalDependencies/>
 
