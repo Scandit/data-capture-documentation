@@ -27,13 +27,11 @@ Before starting with adding a capture mode, make sure that you have a valid Scan
 You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-## Create a Data Capture Context
+## Create the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new Data Capture Context. The context expects a valid Scandit Data Capture SDK license key during construction.
+import DataCaptureContextReactNative from '../../../partials/get-started/_create-data-capture-context-react-native.mdx';
 
-```javascript
-const dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
-```
+<DataCaptureContextReactNative/>
 
 ## Configure the Barcode Pick Mode
 

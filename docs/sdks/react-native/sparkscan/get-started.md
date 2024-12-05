@@ -24,13 +24,11 @@ In this guide you will learn step-by-step how to add SparkScan to your applicati
 Android devices running the Scandit Data Capture SDK need to have a GPU or the performance will drastically decrease.
 :::
 
-## Create a New Data Capture Context Instance
+## Create the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+import DataCaptureContextReactNative from '../../../partials/get-started/_create-data-capture-context-react-native.mdx';
 
-```sh
-const context = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
-```
+<DataCaptureContextReactNative/>
 
 ## Configure the SparkScan Mode
 

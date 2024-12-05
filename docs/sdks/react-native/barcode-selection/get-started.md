@@ -30,13 +30,9 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to [you
 
 ## Create the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext 'data capture context class'). The context expects a valid Scandit Data Capture SDK license key during construction.
+import DataCaptureContextReactNative from '../../../partials/get-started/_create-data-capture-context-react-native.mdx';
 
-```js
-const context = DataCaptureContext.forLicenseKey(
-	'-- ENTER YOUR SCANDIT LICENSE KEY HERE --'
-);
-```
+<DataCaptureContextReactNative/>
 
 ## Configure the Barcode Selection Behavior
 

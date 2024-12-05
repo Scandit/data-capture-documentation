@@ -27,11 +27,9 @@ The general steps are:
 
 ## Create a Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context]. The context expects a valid Scandit Data Capture SDK license key during construction.
+import DataCaptureContextAndroid from '../../../partials/get-started/_create-data-capture-context-android.mdx';
 
-```java
-DataCaptureContext dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
-```
+<DataCaptureContextAndroid/>
 
 ## Configure the Barcode Count Mode
 

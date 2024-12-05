@@ -25,7 +25,7 @@ Before you begin, make sure you have the following prerequisites in place:
 
 ### Internal Dependencies
 
-import InternalDependencies from '../../partials/_internal-deps.mdx';
+import InternalDependencies from '../../partials/get-started/_internal-deps.mdx';
 
 <InternalDependencies/>
 
