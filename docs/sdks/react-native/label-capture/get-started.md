@@ -36,7 +36,8 @@ import LabelCaptureModuleOverview from '../../../partials/get-started/_smart-lab
 ## Create a Component to Handle the Capture Process {#create-component}
 
 To start capturing labels, you need to setup and configure the Data Capture Context, Camera, and Label Capture Mode.
-You can then add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy to display the camera preview on the screen together with UI elements that guide the user through the capturing process.
+
+You can then add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy to display the camera preview on the screen together with UI elements that guide the user through the capture process.
 
 You can create a component that initializes all the necessary objects and adds the DataCaptureView to the view hierarchy.
 
@@ -144,7 +145,9 @@ const labelCapture = useMemo<LabelCapture>(() => {
 
 To get informed whenever a new label has been recognized, add a [LabelCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) through [LabelCapture.addListener()](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-capture.html#method-scandit.datacapture.label.LabelCapture.AddListener) and implement the listener methods to suit your application’s needs.
 
-First conform to the `LabelCaptureListener` interface. Here is an example of how to implement a listener that processes the captured labels based on the label capture settings defined above. Remember to add and remove listeners from LabelCapture as described in [Create Component](#create-component) section.
+First conform to the `LabelCaptureListener` interface. Here is an example of how to implement a listener that processes the captured labels based on the label capture settings defined above. 
+
+Remember to add and remove listeners as described in the [Create Component](#create-component) section.
 
 ```js
 import { CapturedLabel, LabelCaptureListener } from 'scandit-react-native-datacapture-label';
@@ -205,7 +208,7 @@ The capture process can be visualized by adding a [DataCaptureView](https://docs
 
 To visualize the results of Label Capture, you can choose between two overlays, [LabelCaptureBasicOverlay](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/ui/label-capture-basic-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureBasicOverlay) and [LabelCaptureAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/ui/label-capture-advanced-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureAdvancedOverlay).
 
-Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptureView`. Remember to add and remove overlays from the data capture view as described in [Create Component](#create-component) section.
+Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptureView`. Remember to add and remove overlays from the data capture view as described in the [Create Component](#create-component) section.
 
 ```js
 import { RectangularViewfinder, RectangularViewfinderStyle } from 'scandit-react-native-datacapture-core';
@@ -245,14 +248,14 @@ if (camera != null) {
 ```
 
 Once the Camera, DataCaptureContext, DataCaptureView and LabelCapture are initialized, you can switch on the camera to start capturing labels.
-Typically, this is done once the view becomes active and the user granted permission to use the camera, or once the user pressed continue scanning after handling a previous scan. 
-Please refer to the [sample apps](https://github.com/Scandit/) for detailed examples of camera permission handling and view lifecycle management.
 
 Typically, this is done once the view becomes active and the user granted permission to use the camera, or once the user presses continue scanning after handling a previous scan.
 
 ```js
 camera.switchToDesiredState(FrameSourceState.ON);
 ```
+
+Please refer to the available [sample apps](/sdks/react-native/samples.md) for detailed examples of camera permission handling and view lifecycle management.
 
 ## Provide Feedback
 

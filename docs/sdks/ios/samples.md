@@ -82,6 +82,14 @@ Share scan data between MatrixScan Count and Spark Scan to show the expiration s
 
 Use barcode capture to define search criteria by scanning items, and MatrixScan Find can then be launched to find the pre-defined item.
 
+#### Smart Label Capture
+
+![Smart Label Capture](/img/batch-scanning/SLC-smart-devices.jpg)
+
+##### [Price and Weight Label Capture](https://github.com/Scandit/datacapture-ios-samples/tree/master/PriceWeightLabelCaptureSample)
+
+Use Smart Label Capture to scan labels and extract price and weight information simultaneously.
+
 ## ID Scanning
 
 ![ID Scanning](/img/samples/id_scanning.png)
