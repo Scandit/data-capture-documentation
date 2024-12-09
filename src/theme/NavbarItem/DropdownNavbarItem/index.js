@@ -44,8 +44,8 @@ function DropdownNavbarItemDesktop({
   const [linkVersion, setLinkVersion] = useState("sdks");
   const location = useLocation();
   const currentPath = location.pathname;
-  const regex =  /\/hosted\//;;
-  const isHostedPage = regex.test(currentPath)
+  const regex = /\/hosted\//;
+  const isHostedPage = regex.test(currentPath);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -89,7 +89,7 @@ function DropdownNavbarItemDesktop({
 
   useEffect(() => {
     if (!currentPath) return;
-    const possibleVersions = ["/next", "/6.28.0"];
+    const possibleVersions = ["/next", "/6.28.1"];
     const match = currentPath.match(/(.*)(?=\/sdks)/);
     setLinkVersion(match && match[0] ? `${match[0]}/sdks` : "/sdks");
 
@@ -217,7 +217,7 @@ function DropdownNavbarItemDesktop({
     items && items.some((item) => item.type !== "docsVersion");
   const shouldShowDropdownMenu =
     hasSDKsItems || (hasDocsVersionItems && currentFramework);
-    
+
   return (
     <>
       <div
@@ -226,15 +226,15 @@ function DropdownNavbarItemDesktop({
           "dropdown--right": position === "right",
           "dropdown--show": showDropdown,
         })}
-      style={{height: '36px'}}
+        style={{ height: "36px" }}
       >
         {hasDocsVersionItems && currentFramework && (
-            <p className={styles.frameworkName}>
-              Framework:
-              <p className={styles.framework}>{currentFramework}</p>
-              <ArrowDown iconClass={styles.iconArrow}></ArrowDown>
-            </p>
-          )}
+          <p className={styles.frameworkName}>
+            Framework:
+            <p className={styles.framework}>{currentFramework}</p>
+            <ArrowDown iconClass={styles.iconArrow}></ArrowDown>
+          </p>
+        )}
 
         {items.some((item) => item.type !== "docsVersion") && !isHostedPage && (
           <NavbarNavLink
@@ -244,7 +244,7 @@ function DropdownNavbarItemDesktop({
             // # hash permits to make the <a> tag focusable in case no link target
             // See https://github.com/facebook/docusaurus/pull/6003
             // There's probably a better solution though...
-            
+
             // href={"#"}: Prevents navigation when clicking on the link, ensuring that the dropdown functionality works correctly.
             // In previous Docusaurus setup, the condition was href={props.to ? undefined : "#"}
             href={"#"}
@@ -263,17 +263,17 @@ function DropdownNavbarItemDesktop({
         )}
 
         {shouldShowDropdownMenu && !isHostedPage && (
-            <ul className="dropdown__menu">
-              {combinedItems.map((childItemProps, i) => (
-                <NavbarItem
-                  isDropdownItem
-                  activeClassName="dropdown__link--active"
-                  {...childItemProps}
-                  key={i}
-                />
-              ))}
-            </ul>
-          )}
+          <ul className="dropdown__menu">
+            {combinedItems.map((childItemProps, i) => (
+              <NavbarItem
+                isDropdownItem
+                activeClassName="dropdown__link--active"
+                {...childItemProps}
+                key={i}
+              />
+            ))}
+          </ul>
+        )}
       </div>
     </>
   );
