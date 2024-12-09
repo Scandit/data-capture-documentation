@@ -236,11 +236,11 @@ The configuration option that you provide should then point to the folder contai
 If you use a CDN to access the library, you will want to set this to the following values depending on the data capture mode you are using:
 
 * For Barcode Capture:
-  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0/build/engine/`,
-  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0/build/engine/`, or similar.
+  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0/build/sdc-lib/`,
+  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0/build/sdc-lib/`, or similar.
 * For ID Capture:
-  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7.0/build/engine/`,
-  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7.0/build/engine/`, or similar.
+  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7.0/build/sdc-lib/`,
+  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7.0/build/sdc-lib/`, or similar.
 
 Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the `libraryLocation` option, either by ensuring the served files are up-to-date or the path/URL specifies a specific version.
 
