@@ -11,7 +11,7 @@ keywords:
 
 ## 6.28.2
 
-**Released**: December 10, 2024
+**Released**: December 11, 2024
 
 ### New Features
 
