@@ -38,13 +38,9 @@ import ExternalDependencies from '../../../partials/get-started/_external-deps-a
 
 ### Internal Dependencies
 
-Some of the Scandit Data Capture SDK modules depend on others to work:
+import InternalDependencies from '../../../partials/get-started/_internal-deps.mdx';
 
-| Module      | Dependencies |
-| ----------- | ----------- |
-| *ScanditCaptureCore*      | No dependencies       |
-| *ScanditBarcodeCapture*   | *ScanditCaptureCore*        |
-| *ScanditParser*      | No dependencies       |
+<InternalDependencies/>
 
 ## Create a Data Capture Context
 

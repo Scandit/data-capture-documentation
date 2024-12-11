@@ -35,12 +35,6 @@ First of all, include the ScanditParser library and its dependencies to your pro
 
 ## Internal dependencies
 
-Some of the Scandit Data Capture SDK modules depend on others to work:
+import InternalDependencies from '../../../partials/get-started/_internal-deps.mdx';
 
-| Module                                   | Dependencies                                                                               |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------ |
-| scandit-react-native-datacapture-core    | No dependencies                                                                            |
-| scandit-react-native-datacapture-barcode | scandit-react-native-datacapture-core                                                      |
-| scandit-react-native-datacapture-parser  | scandit-react-native-datacapture-core                                                      |
-| scandit-react-native-datacapture-text    | scandit-react-native-datacapture-core                                                      |
-| scandit-react-native-datacapture-id      | scandit-react-native-datacapture-core scandit-react-native-datacapture-text(VIZ documents) |
+<InternalDependencies/>

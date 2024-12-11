@@ -72,14 +72,12 @@ To add our plugins via npm or git repo, you can run these commands from your pro
 cordova plugin add scandit-cordova-datacapture-core
 cordova plugin add scandit-cordova-datacapture-barcode
 cordova plugin add scandit-cordova-datacapture-parser
-cordova plugin add scandit-cordova-datacapture-text
 cordova plugin add scandit-cordova-datacapture-id
 
 # git repo
 cordova plugin add https://github.com/Scandit/scandit-cordova-datacapture-core.git
 cordova plugin add https://github.com/Scandit/scandit-cordova-datacapture-barcode.git
 cordova plugin add https://github.com/Scandit/scandit-cordova-datacapture-parser.git
-cordova plugin add https://github.com/Scandit/scandit-cordova-datacapture-text.git
 cordova plugin add https://github.com/Scandit/scandit-cordova-datacapture-id.git
 ```
 
