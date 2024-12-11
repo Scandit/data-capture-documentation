@@ -61,8 +61,6 @@ dependencies {
   implementation "com.scandit.datacapture:core:[version]"
   implementation "com.scandit.datacapture:barcode:[version]"
   implementation "com.scandit.datacapture:parser:[version]"
-  implementation "com.scandit.datacapture:text-base:[version]"
-  implementation "com.scandit.datacapture:text:[version]"
   implementation "com.scandit.datacapture:id:[version]"
 }
 ```
@@ -111,7 +109,6 @@ You can add the necessary artifacts as dependencies:
 
 <dependency>
   <groupId>com.scandit.datacapture</groupId>
-  <artifactId>text-base</artifactId>
   <version>[version]</version>
 </dependency>
 

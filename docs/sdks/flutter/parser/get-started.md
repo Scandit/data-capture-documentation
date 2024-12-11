@@ -36,12 +36,6 @@ First of all, include the ScanditParser library and its dependencies to your pro
 
 ## Internal dependencies
 
-Some of the Scandit Data Capture SDK modules depend on others to work:
+import InternalDependencies from '../../../partials/get-started/_internal-deps.mdx';
 
-| Module                              | Dependencies                                                                     |
-| ----------------------------------- | -------------------------------------------------------------------------------- |
-| scandit-flutter-datacapture-core    | No dependencies                                                                  |
-| scandit-flutter-datacapture-barcode | scandit-flutter-datacapture-core                                                 |
-| scandit-flutter-datacapture-parser  | scandit-flutter-datacapture-core                                                 |
-| scandit-flutter-datacapture-text    | scandit-flutter-datacapture-core                                                 |
-| scandit-flutter-datacapture-id      | scandit-flutter-datacapture-core scandit-flutter-datacapture-text(VIZ documents) |
+<InternalDependencies/>

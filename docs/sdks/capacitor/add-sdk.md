@@ -60,7 +60,6 @@ To add our plugins from the npm registry, you can run these commands from your p
 ```sh
 yarn add scandit-capacitor-datacapture-core
 yarn add scandit-capacitor-datacapture-barcode
-yarn add scandit-capacitor-datacapture-text
 yarn add scandit-capacitor-datacapture-parser
 yarn add scandit-capacitor-datacapture-id
 ```
@@ -83,7 +82,6 @@ Once this is done, you can continue with adding the plugin(s) for your desired f
 
 ```sh
 yarn add <path to scandit-capacitor-datacapture-barcode plugin>
-yarn add <path to scandit-capacitor-datacapture-text plugin>
 yarn add <path to scandit-capacitor-datacapture-parser plugin>
 yarn add <path to scandit-capacitor-datacapture-id plugin>
 ```

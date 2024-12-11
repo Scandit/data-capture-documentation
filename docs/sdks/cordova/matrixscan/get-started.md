@@ -29,15 +29,9 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to [you
 
 ### Internal dependencies
 
-Some of the Scandit Data Capture SDK modules depend on others to work:
+import InternalDependencies from '../../../partials/get-started/_internal-deps.mdx';
 
-| Module                              | Dependencies                                                                     |
-| ----------------------------------- | -------------------------------------------------------------------------------- |
-| scandit-cordova-datacapture-core    | No dependencies                                                                  |
-| scandit-cordova-datacapture-barcode | scandit-cordova-datacapture-core                                                 |
-| scandit-cordova-datacapture-parser  | scandit-cordova-datacapture-core                                                 |
-| scandit-cordova-datacapture-text    | scandit-cordova-datacapture-core                                                 |
-| scandit-cordova-datacapture-id      | scandit-cordova-datacapture-core scandit-cordova-datacapture-text(VIZ documents) |
+<InternalDependencies/>
 
 ## Create the Data Capture Context
 

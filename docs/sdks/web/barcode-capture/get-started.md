@@ -33,13 +33,9 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 ### Internal dependencies
 
-Some of the Scandit Data Capture SDK modules depend on others to work:
+import InternalDependencies from '../../../partials/get-started/_internal-deps.mdx';
 
-
-| Module | Dependencies |
-|---|---|
-| ScanditCaptureCore | No dependencies |
-| ScanditBarcodeCapture | - ScanditCaptureCore |
+<InternalDependencies/>
 
 ### Configure and Initialize the Library
 

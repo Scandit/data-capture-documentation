@@ -74,8 +74,6 @@ dependencies:
     sdk: flutter
   scandit_flutter_datacapture_barcode:
     path: libs/scandit-flutter-datacapture-barcode
-  scandit_flutter_datacapture_text:
-    path: libs/scandit-flutter-datacapture-text
   scandit_flutter_datacapture_parser:
     path: libs/scandit-flutter-datacapture-parser
   scandit_flutter_datacapture_id:

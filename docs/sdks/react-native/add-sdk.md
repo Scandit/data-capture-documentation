@@ -62,7 +62,6 @@ To add our plugins from the npm registry, you can run these commands from your p
 ```sh
 yarn add scandit-react-native-datacapture-core
 yarn add scandit-react-native-datacapture-barcode
-yarn add scandit-react-native-datacapture-text
 yarn add scandit-react-native-datacapture-parser
 yarn add scandit-react-native-datacapture-id
 ```

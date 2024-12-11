@@ -35,12 +35,6 @@ First of all, include the ScanditParser library and its dependencies to your pro
 
 ## Internal dependencies
 
-Some of the Scandit Data Capture SDK modules depend on others to work:
+import InternalDependencies from '../../../partials/get-started/_internal-deps.mdx';
 
-| Module                                | Dependencies                                                                         |
-| ------------------------------------- | ------------------------------------------------------------------------------------ |
-| scandit-capacitor-datacapture-core    | No dependencies                                                                      |
-| scandit-capacitor-datacapture-barcode | scandit-capacitor-datacapture-core                                                   |
-| scandit-capacitor-datacapture-id      | scandit-capacitor-datacapture-core scandit-capacitor-datacapture-text(VIZ documents) |
-| scandit-capacitor-datacapture-text    | scandit-capacitor-datacapture-core                                                   |
-| scandit-capacitor-datacapture-parser  | scandit-capacitor-datacapture-core                                                   |
+<InternalDependencies/>
