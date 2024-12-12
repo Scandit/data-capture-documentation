@@ -1,17 +1,19 @@
 ### Full Document Scanner
 
 This scanner combines data extraction from all supported parts of the document and merges the data from barcodes, human-readable text, and machine-readable text into one result.
- 
-* For card-format documents, data is extracted from the front & the back side of the document. 
+
+* For card-format documents, data is extracted from the front & the back side of the document.
 * For booklet-format documents (e.g. passports), data is extracted from the main information page.
 
+<!-- Do not remove this marker, it is used to generate the table -->
+<!-- BEGIN_SUPPORTED_DOCUMENTS -->
 <details>
 <summary>Asia</summary>
 
-| Country                        | Supported Documents                                                                                                                                                                                                |
+| Country                        | Supported Documents                                                                                                                                                                                                     |
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Afghanistan                    | ID Card                                                                                                                                                                                                                 |
-| Armenia                        | ID Card                                                                                                                                                                                                                 |
+| Armenia                        | ID Card, Passport                                                                                                                                                                                                       |
 | Azerbaijan                     | ID Card                                                                                                                                                                                                                 |
 | Bangladesh                     | ID Card, Passport                                                                                                                                                                                                       |
 | Brunei                         | ID Card                                                                                                                                                                                                                 |
@@ -23,7 +25,8 @@ This scanner combines data extraction from all supported parts of the document a
 | India Maharashtra              | Driver’s License                                                                                                                                                                                                        |
 | Indonesia                      | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
 | Japan                          | Passport                                                                                                                                                                                                                |
-| Kyrgyzstan                     | ID Card                                                                                                                                                                                                                 |
+| Kazakhstan                     | Passport                                                                                                                                                                                                                |
+| Kyrgyzstan                     | ID Card, Passport                                                                                                                                                                                                       |
 | Malaysia                       | Driver’s License, Passport, MyKAS, MyKad, MyKid, MyPR, MyTentera, Refugee ID, i-Kad                                                                                                                                     |
 | Maldives                       | ID Card                                                                                                                                                                                                                 |
 | Myanmar                        | Driver’s License, Passport                                                                                                                                                                                              |
@@ -33,14 +36,17 @@ This scanner combines data extraction from all supported parts of the document a
 | Philippines                    | Driver’s License, ID Card, Passport, Multipurpose ID, Professional ID, Social Security Card                                                                                                                             |
 | Singapore                      | Driver’s License, ID Card, Passport, Employment Pass, Fin Card, Resident ID, S Pass, Work Permit                                                                                                                        |
 | Sri Lanka                      | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
+| Tajikistan                     | ID Card                                                                                                                                                                                                                 |
 | Thailand                       | ID Card, Passport, Alien ID                                                                                                                                                                                             |
-| Uzbekistan                     | Passport                                                                                                                                                                                                                |
+| Turkmenistan                   | Passport                                                                                                                                                                                                                |
+| Uzbekistan                     | ID Card, Passport                                                                                                                                                                                                       |
+
 </details>
 
 <details>
 <summary>Europe</summary>
 
-| Country                        | Supported Documents                                                                                                                                                                                                |
+| Country                        | Supported Documents                                                                                                                                                                                                     |
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Europe                         | Health Insurance Card                                                                                                                                                                                                   |
 | Albania                        | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
@@ -85,15 +91,16 @@ This scanner combines data extraction from all supported parts of the document a
 | Switzerland                    | Driver’s License, ID Card, Passport, Residence Permit                                                                                                                                                                   |
 | UK                             | Driver’s License, Passport, Residence Permit, Proof of Age Card                                                                                                                                                         |
 | Ukraine                        | Driver’s License (incl. Cyrillic script), ID Card (incl. Cyrillic script), Passport, Residence Permit (incl. Cyrillic script)                                                                                           |
+
 </details>
 
 <details>
 <summary>Central and South America</summary>
 
-| Country                        | Supported Documents                                                                                                                                                                                                |
+| Country                        | Supported Documents                                                                                                                                                                                                     |
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Argentina                      | ID Card, Passport, Alien ID                                                                                                                                                                                             |
-| Bahamas                        | Driver’s License                                                                                                                                                                                                        |
+| Bahamas                        | Driver’s License, Residence Permit, Work Permit                                                                                                                                                                         |
 | Bolivia                        | Driver’s License, ID Card, Passport, Minors ID                                                                                                                                                                          |
 | Brazil                         | Driver’s License, Alien ID                                                                                                                                                                                              |
 | Brazil Distrito Federal        | ID Card                                                                                                                                                                                                                 |
@@ -101,16 +108,16 @@ This scanner combines data extraction from all supported parts of the document a
 | Brazil Rio De Janeiro          | ID Card                                                                                                                                                                                                                 |
 | Brazil Sao Paolo               | ID Card                                                                                                                                                                                                                 |
 | Chile                          | Driver’s License, ID Card, Passport, Alien ID                                                                                                                                                                           |
-| Colombia                       | Driver’s License, ID Card, Passport, Alien ID, Minors ID                                                                                                                                                                |
+| Colombia                       | Driver’s License, ID Card, Passport, Alien ID, Minors ID, Temporary Protection Permit                                                                                                                                   |
 | Costa Rica                     | ID Card, Passport                                                                                                                                                                                                       |
 | Cuba                           | Passport                                                                                                                                                                                                                |
-| Dominican Republic             | ID Card, Passport                                                                                                                                                                                                       |
+| Dominican Republic             | ID Card, Passport, Non Voter ID                                                                                                                                                                                         |
 | Ecuador                        | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
 | El Salvador                    | ID Card                                                                                                                                                                                                                 |
 | Guatemala                      | Driver’s License, ID Card, Passport, Alien ID, Consular ID                                                                                                                                                              |
 | Guyana                         | ID Card                                                                                                                                                                                                                 |
 | Haiti                          | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
-| Jamaica                        | Driver’s License, Passport                                                                                                                                                                                              |
+| Jamaica                        | Driver’s License, Passport, Voter ID                                                                                                                                                                                    |
 | Mexico                         | Passport, Consular Voter ID, Voter ID                                                                                                                                                                                   |
 | Mexico Aguascalientes          | Driver’s License                                                                                                                                                                                                        |
 | Mexico Baja California         | Driver’s License                                                                                                                                                                                                        |
@@ -136,24 +143,26 @@ This scanner combines data extraction from all supported parts of the document a
 | Nicaragua                      | ID Card                                                                                                                                                                                                                 |
 | Panama                         | Driver’s License, ID Card, Passport, Residence Permit                                                                                                                                                                   |
 | Paraguay                       | Driver’s License, ID Card                                                                                                                                                                                               |
-| Peru                           | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
+| Peru                           | Driver’s License, ID Card, Passport, Minors ID                                                                                                                                                                          |
 | Puerto Rico                    | Driver’s License                                                                                                                                                                                                        |
 | Saint Kitts And Nevis          | Driver’s License                                                                                                                                                                                                        |
 | Trinidad And Tobago            | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
 | Uruguay                        | ID Card                                                                                                                                                                                                                 |
 | Venezuela                      | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
+
 </details>
 
 <details>
 <summary>Middle East and Africa</summary>
 
-| Country                        | Supported Documents                                                                                                                                                                                                |
+| Country                        | Supported Documents                                                                                                                                                                                                     |
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Algeria                        | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
 | Bahrain                        | ID Card (incl. Arabic script)                                                                                                                                                                                           |
 | Botswana                       | ID Card                                                                                                                                                                                                                 |
 | Burkina Faso                   | ID Card                                                                                                                                                                                                                 |
 | Cameroon                       | ID Card, Passport                                                                                                                                                                                                       |
+| Comoros                        | Passport                                                                                                                                                                                                                |
 | Egypt                          | ID Card (incl. Arabic script)                                                                                                                                                                                           |
 | Eswatini                       | Passport                                                                                                                                                                                                                |
 | Ghana                          | Driver’s License, ID Card, Passport                                                                                                                                                                                     |
@@ -163,7 +172,7 @@ This scanner combines data extraction from all supported parts of the document a
 | Jordan                         | ID Card (incl. Arabic script)                                                                                                                                                                                           |
 | Kenya                          | ID Card, Passport                                                                                                                                                                                                       |
 | Kuwait                         | Driver’s License, ID Card (incl. Arabic script), Resident ID (incl. Arabic script)                                                                                                                                      |
-| Lebanon                        | ID Card (incl. Arabic script)                                                                                                                                                                                           |
+| Lebanon                        | Driver’s License, ID Card (incl. Arabic script)                                                                                                                                                                         |
 | Libya                          | Passport (incl. Arabic script)                                                                                                                                                                                          |
 | Mauritius                      | ID Card                                                                                                                                                                                                                 |
 | Morocco                        | Driver’s License, ID Card                                                                                                                                                                                               |
@@ -186,12 +195,13 @@ This scanner combines data extraction from all supported parts of the document a
 | UAE                            | Driver’s License, ID Card (incl. Arabic script), Passport (incl. Arabic script), Resident ID (incl. Arabic script)                                                                                                      |
 | Uganda                         | Driver’s License, ID Card                                                                                                                                                                                               |
 | Zimbabwe                       | ID Card, Passport                                                                                                                                                                                                       |
+
 </details>
 
 <details>
 <summary>North America</summary>
 
-| Country                        | Supported Documents                                                                                                                                                                                                |
+| Country                        | Supported Documents                                                                                                                                                                                                     |
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Canada                         | Passport, Residence Permit, Tribal ID                                                                                                                                                                                   |
 | Canada Alberta                 | Driver’s License, ID Card                                                                                                                                                                                               |
@@ -251,7 +261,7 @@ This scanner combines data extraction from all supported parts of the document a
 | USA Tennessee                  | Driver’s License*, ID Card*                                                                                                                                                                                             |
 | USA Texas                      | Driver’s License*, ID Card*                                                                                                                                                                                             |
 | USA Utah                       | Driver’s License*, ID Card*                                                                                                                                                                                             |
-| USA Vermont                    | Driver’s License*, ID Card                                                                                                                                                                                              |
+| USA Vermont                    | Driver’s License*, ID Card*                                                                                                                                                                                             |
 | USA Virginia                   | Driver’s License*, ID Card*                                                                                                                                                                                             |
 | USA Washington                 | Driver’s License*, ID Card*                                                                                                                                                                                             |
 | USA West Virginia              | Driver’s License*, ID Card*                                                                                                                                                                                             |
@@ -263,7 +273,8 @@ This scanner combines data extraction from all supported parts of the document a
 
 <details>
 <summary>Oceania</summary>
-| Country                        | Supported Documents                                                                                                                                                                                                |
+
+| Country                        | Supported Documents                                                                                                                                                                                                     |
 |-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Australia                      | Passport                                                                                                                                                                                                                |
 | Australia Australian Capital Territory| Driver’s License, ID Card                                                                                                                                                                                               |
@@ -275,7 +286,10 @@ This scanner combines data extraction from all supported parts of the document a
 | Australia Victoria             | Driver’s License, Proof of Age Card                                                                                                                                                                                     |
 | Australia Western Australia    | Driver’s License, ID Card                                                                                                                                                                                               |
 | New Zealand                    | Driver’s License, Passport                                                                                                                                                                                              |
+
 </details>
+
+<!-- END_SUPPORTED_DOCUMENTS -->
 
 #### Anonymized Documents
 
@@ -284,6 +298,8 @@ Depending on the anonymization mode, certain sensitive fields are not extracted 
 
 Documents and fields that are subject to anonymization are listed below:
 
+<!-- Do not remove this marker, it is used to generate the table -->
+<!-- BEGIN_ANONYMIZED_DOCUMENTS -->
 <details>
 <summary>Anonymized Documents</summary>
 | Country      | Documents                                               | Fields                                                |
@@ -305,3 +321,4 @@ Documents and fields that are subject to anonymization are listed below:
 | South Korea  | ID Card                                                  | Document Number                                       |
 | South Korea  | Passport, Diplomatic Passport                            | Personal ID Number, MRZ Opt1, Full MRZ                |
 </details>
+<!-- END_ANONYMIZED_DOCUMENTS -->
