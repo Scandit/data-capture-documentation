@@ -9,6 +9,18 @@ keywords:
   - react
 ---
 
+## 6.28.2
+
+**Released**: December 12, 2024
+
+### New Features
+
+* Added support for React Native 0.76.x, which introduces the possibility to use React Native's new architecture in apps using the Scandit plugin.
+
+### Bug Fixes
+
+* Fixed various compatibility issues when using the new architecture in 0.76.x+ releases of Reach Native.
+
 ## 6.28.1
 
 **Released**: October 29, 2024

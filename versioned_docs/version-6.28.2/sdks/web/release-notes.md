@@ -9,6 +9,14 @@ keywords:
   - web
 ---
 
+## 6.28.2
+
+**Released**: December 12, 2024
+
+### Bug Fixes
+
+* Fixed an issue in ID Capture where no more frame would be processed after a frame source change.
+
 ## 6.28.1
 
 **Released**: October 29, 2024
