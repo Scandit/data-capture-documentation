@@ -52,9 +52,9 @@ If you added and installed the library, these files should be put in a path that
 By default, the library will look at the root of your website. 
 If you use a CDN to access the library, you will want to set this to the following values depending on the data capture mode you are using:
 
-- for barcode capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode7.0/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-barcode7.0/sdc-lib/, or similar.
+- for barcode capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode7.0.0/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-barcode7.0.0/sdc-lib/, or similar.
 
-- for ID capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id/7.0/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-id/7.0/sdc-lib/, or similar.
+- for ID capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id/7.0.0/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-id/7.0.0/sdc-lib/, or similar.
 
 :::note
 Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the `libraryLocation` option, either by ensuring the served files are up-to-date or the path/URL specifies a specific version.
@@ -72,7 +72,7 @@ import { barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
 
 await configure({
 	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
-	libraryLocation: new URL('library/engine/', document.baseURI).toString(),
+	libraryLocation: new URL('self-hosted-sdc-lib/', document.baseURI).toString(),
 	moduleLoaders: [barcodeCaptureLoader()],
 });
 ```
@@ -105,7 +105,7 @@ view.setProgressBarMessage('Loading ...');
 
 await configure({
 	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
-	libraryLocation: new URL('library/engine/', document.baseURI).toString(),
+	libraryLocation: new URL('self-hosted-sdc-lib/', document.baseURI).toString(),
 	moduleLoaders: [barcodeCaptureLoader()],
 });
 
@@ -128,7 +128,7 @@ loadingStatus.subscribe((info) => {
 
 await configure({
 	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
-	libraryLocation: '/engine',
+	libraryLocation: '/self-hosted-sdc-lib/',
 	moduleLoaders: [barcodeCaptureLoader()],
 });
 ```

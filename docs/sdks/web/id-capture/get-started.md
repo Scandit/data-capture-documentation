@@ -52,68 +52,13 @@ import { idCaptureLoader } from '@scandit/web-datacapture-id';
 
 await configure({
 	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
-	libraryLocation: '/sdc-lib/',
+	libraryLocation: '/self-hosted-sdc-lib/',
 	moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
 });
 ```
 
 :::warning
 You must await the returned promise as shown to be able to continue.
-:::
-
-### Server Side Rendering and Server Side Generation
-
-If you use a web framework that renders also on the server (SSR or SSG) it’s recommended to execute the library only on the client turning off the rendering on the server.
-
-For more information:
-
-- [GatsbyJS - Using client side only packages](https://www.gatsbyjs.com/docs/using-client-side-only-packages/).
-- [NextJS - Lazy Loading with no ssr](https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading#with-no-ssr).
-
-## Show loading status with default UI
-
-To show some feedback to the user about the loading status you have two options: use the default UI provided with the SDK or subscribe to the loading status and update your own custom UI. Let’s see how we you can show the default UI first:
-
-```ts
-import { configure, DataCaptureView, DataCaptureContext } from "@scandit/web-datacapture-core"
-const view = new DataCaptureView();
-
-view.connectToElement(document.getElementById('data-capture-view'));
-view.showProgressBar();
-view.setProgressBarMessage('Loading ...');
-
-await configure({
-	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
-	libraryLocation: '/engine/',
-	moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
-});
-
-view.hideProgressBar();
-
-const context: DataCaptureContext = await DataCaptureContext.create();
-await view.setContext(context);
-```
-
-## Show loading status with custom UI
-
-You can also just subscribe for the [loading status](https://docs.scandit.com/data-capture-sdk/web/core/api/web/loading-status.html) of the library by simply attaching a listener like this:
-
-```ts
-import { configure, loadingStatus } from "@scandit/web-datacapture-core"
-loadingStatus.subscribe((info) => {
-	// updateUI(info.percentage, info.loadedBytes)
-});
-
-await configure({
-	licenseKey: 'SCANDIT_LICENSE_KEY',
-	libraryLocation: '/engine',
-	moduleLoaders: [barcodeCaptureLoader()],
-});
-```
-
-:::note
-We suggest serving the library files with the proper headers `Content-Length` and `Content-Encoding` if any compression is present. 
-In case of totally missing information, we show an estimated progress.
 :::
 
 ## Create the Data Capture Context
