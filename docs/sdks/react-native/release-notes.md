@@ -9,6 +9,18 @@ keywords:
   - react
 ---
 
+## 7.0.1
+
+**Released**: December 18, 2024
+
+### New Features
+
+* Added support for React Native 0.76.x, which introduces the possibility to use React Native's new architecture in apps using the Scandit plugin.
+
+### Bug Fixes
+
+* Fixed various compatibility issues when using the new architecture in 0.76.x+ releases of Reach Native.
+
 ## 7.0.0
 
 **Released**: November 29, 2024

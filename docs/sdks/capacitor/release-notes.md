@@ -9,6 +9,14 @@ keywords:
   - capacitor
 ---
 
+## 7.0.1
+
+**Released**: December 18, 2024
+
+### Bug Fixes
+
+* Fixed an issue with setting the default scanning behavior in `SparkScanView`.
+
 ## 7.0.0
 
 **Released**: November 29, 2024

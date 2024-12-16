@@ -9,6 +9,12 @@ keywords:
   - ios
 ---
 
+## 7.0.1
+
+**Released**: December 18, 2024
+
+No updates for this framework in this release.
+
 ## 7.0.0
 
 **Released**: November 29, 2024
