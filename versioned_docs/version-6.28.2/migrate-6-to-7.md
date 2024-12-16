@@ -74,9 +74,15 @@ Version 7.0 introduces new naming conventions for the MatrixScan APIs that bette
 
 The `BarcodeTracking` API has been renamed to `BarcodeBatch`. Apart from the name change, the API remains largely the same and simply requires updating the class name in your code for migration.
 
+:::warning
+If your application uses of any `BarcodeTracking` APIs alongside another product (e.g. MatrixScan Count), you must update any mentions to conform with this naming change.
+:::
+
 #### AdvancedOverlay
 
-The `AdvancedOverlay` API will be deprecated in version 7.1 and replaced with a standalone module as MatrixScan Check. No changed are required for version 7.0, but you should be aware of the upcoming changes.
+The `AdvancedOverlay` API will be deprecated in version 8.x. No changes are required for version 7.0, but you should be aware of the upcoming changes.
+
+In version 7.1, a new ready-to-use solution - MatrixScan Check - will be released that enables fast and easy integration of Advanced Overlay features into your application.
 
 ## ID Capture Changes
 
