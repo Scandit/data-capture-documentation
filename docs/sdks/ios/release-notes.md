@@ -11,7 +11,7 @@ keywords:
 
 ## 7.0.1
 
-**Released**: December 18, 2024
+**Released**: December 19, 2024
 
 No updates for this framework in this release.
 
