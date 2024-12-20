@@ -68,7 +68,7 @@ These platforms are based on the native platforms and therefore the requirements
 |-----------------|-----------------------------------------------------|
 | Capacitor       | - Capacitor 2.0.0<br/>- Swift 4.0+                   |
 | Cordova         | - cordova 8.0.0<br/>- cordova-android 7.0.0<br/>- cordova-ios 4.5.5<br/>- Swift 4.0+ |
-| Flutter         | - Flutter 3.22.0 (Dart 3.4.0)<br/>- Swift 4.0+      |
+| Flutter         | - Flutter 3.22.0+ (Dart 3.4.0+)<br/>- Swift 4.0+      |
 | Xamarin.Android | - Xamarin.Android 13.2.2<br/>- Kotlin 1.8.22           |
 | Xamarin.iOS     | - Xamarin.iOS 16.4.0.23                             |
 | Xamarin.Forms   | - Xamarin.Forms 4.8<br/>- Kotlin 1.8.22              |
