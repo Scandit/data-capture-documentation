@@ -190,9 +190,9 @@ title: 'Features by Framework'
 
 ## Parser
 
-| Feature                              | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
+| Feature  | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
 |--------------------------------------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|------------------|
-| | 6.1 | 6.1 | 6.3  | 6.5 | 6.5 | 6.5 | 6.9 | 6.10 | 6.10 | n/a | n/a | 6.22 | 6.21 |
+| | 6.1 | 6.1 | 6.3  | 6.5 | 6.5 | 6.5 | 6.9 | 6.10 | 6.10 | n/a | 6.25 | 6.22 | 6.21 |
 
 ## Barcode Generator
 
