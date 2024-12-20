@@ -9,6 +9,14 @@ keywords:
   - cordova
 ---
 
+## 7.0.1
+
+**Released**: December 19, 2024
+
+### Bug Fixes
+
+* Fixed case when white screen would be displayed after a scan.
+
 ## 7.0.0
 
 **Released**: November 29, 2024
