@@ -222,7 +222,7 @@ const config: Config = {
               label: '7.0.1',
               banner: 'none',
             },
-            '6.28.2': {
+            '6.28.3': {
               banner: 'none',
             },
           },

@@ -9,6 +9,16 @@ keywords:
   - xamarinAndroid
 ---
 
+## 6.28.3
+
+**Released**: December 23, 2024
+
+### Bug Fixes
+
+#### Core
+
+* Resolved a rare issue where a race condition during the deconstruction of MatrixScan Data Capture views could lead to invalid memory access.
+
 ## 6.28.2
 
 **Released**: December 12, 2024
