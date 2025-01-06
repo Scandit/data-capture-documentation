@@ -30,6 +30,36 @@ displayed_sidebar: sdcSidebar
 On Android hardware acceleration has to be enabled for the camera preview to work. Hardware acceleration is enabled by default since API level 14 but can potentially be turned off in the Manifest, do not do this if you use the camera.
 :::
 
+### Linux
+
+Supported distributions:
+
+* Ubuntu 18.04 or newer
+* Debian/GNU Linux 10 (Buster) or newer
+* Raspbian 2017-08-17 or newer
+
+:::note
+Most Debian/GNU Linux based systems should be supported as as long as the
+dependency requirements below are met.
+
+RedHat based systems (RPM packages) are not supported officially. The tool 'alien' can be used to convert the Debian packages to RPM packages. If you want to run the SDK on any other Linux 
+distribution, unpack the `.deb` file and install the library and headers manually.
+:::
+
+#### Dependencies
+
+| Requirement | Version |
+| ----------- | ------- |
+| GCC (or a comparable compiler) | >= 4.9  |
+| libc        | >= 2.27 |
+| pthread     |  -  |
+| dbus        | >= 1.6.8 |
+| zlib        | >= 1.2.8 (i386 and arm64 only) |
+| NEON CPU support (armhf only)        |  -  |
+| OpenGLES (optional for GPU acceleration)    | >= 2.0  |
+| Python (optional for the Python bindings)     | >= 3.0  |
+
+
 ## Web SDK
 
 | Requirement | Notes |
