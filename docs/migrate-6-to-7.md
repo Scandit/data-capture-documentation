@@ -27,6 +27,12 @@ Version 7.0 includes the removal of all APIs that were deprecated throughout the
 
 ## Barcode Capture Changes
 
+Beginning with version 7.0, [Scan Intention](https://docs.scandit.com/data-capture-sdk/android/core/api/scan-intention.html) is set to `SMART` by default.
+
+:::warning
+When using a single image frame source, you must set the scan intention to `MANUAL` to ensure correct behavior.
+:::
+
 ### SparkScan
 
 In version 7.0, we are introducing the second generation of our ready-to-use barcode scanning UI, SparkScan. This new UI is more intuitive and provides a more modern look and feel, as well as bringing more customization options.
