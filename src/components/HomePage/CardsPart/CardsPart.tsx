@@ -9,7 +9,6 @@ export default function CardsPart() {
   const transformFrameworkName = (framework: string): string => {
     const frameworkUrls: { [key: string]: string } = {
       react: "sdks/react-native/add-sdk",
-      linux: "https://docs.scandit.com/stable/c_api/index.html",
       netIos: "sdks/net/ios/add-sdk",
       netAndroid: "sdks/net/android/add-sdk",
       xamarinIos: "sdks/xamarin/ios/add-sdk",
