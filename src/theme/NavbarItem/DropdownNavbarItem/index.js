@@ -204,6 +204,13 @@ function DropdownNavbarItemDesktop({
       to: `${linkVersion}/net/android${link}`,
       activeBasePath: "sdks/net/android/",
     },
+    {
+      type: "docsVersion",
+      label: "Linux",
+      sidebarId: "linuxSidebar",
+      to: `${linkVersion}/linux${link}`,
+      activeBasePath: "sdks/linux/",
+    },
   ];
 
   const combinedItems =
