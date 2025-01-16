@@ -2158,6 +2158,55 @@ const sidebars: SidebarsConfig = {
       id: 'sdks/net/android/release-notes',
     },
   ],
+
+  linuxSidebar: [
+    {
+      type: 'category',
+      label: 'Scandit SDK for C / Linux',
+      collapsed: false,
+      items: [
+        'sdks/linux/overview',
+        'sdks/linux/add-sdk',
+        'sdks/linux/samples',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Barcode Scanning',
+      collapsed: false,
+      items: [
+        "sdks/linux/barcode-capture/get-started",
+        "sdks/linux/barcode-capture/configure-barcode-symbologies",
+        "sdks/linux/barcode-generator",
+      ],
+    },
+    {
+      type: "category",
+      label: "Reference",
+      items: [
+        {
+          type: "link",
+          label: "Data Structures",
+          href: "https://docs.scandit.com/stable/c_api/annotated.html",
+        },
+        {
+          type: "link",
+          label: "Data Fields",
+          href: "https://docs.scandit.com/stable/c_api/functions.html",
+        },
+        {
+          type: "link",
+          label: "Files",
+          href: "https://docs.scandit.com/stable/c_api/files.html",
+        },
+      ],
+    },
+    {
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/linux/release-notes',
+    },
+  ],
 };
 
 export default sidebars;

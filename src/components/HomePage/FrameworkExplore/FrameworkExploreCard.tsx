@@ -20,7 +20,7 @@ export default function FrameworkExploreCard({
       ? `/sdks/${link}/add-sdk`
       : `/sdks/${framework}/add-sdk`;
     return framework === "linux"
-      ? "https://docs.scandit.com/stable/c_api/index.html"
+      ? `/sdks/linux/add-sdk`
       : basePath;
   }
 

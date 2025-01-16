@@ -73,35 +73,55 @@ Symbologies often have different properties, such as symbol count (length of the
 
 ## Calculating Symbol Counts for Variable-Length Symbologies
 
-The length of data encoded in variable-length symbologies such as Code 128, Codabar, Code 39 etc. is measured as the number of symbols. Depending on the symbology, the symbol count includes the start and end symbol, and/or checksum characters. The following list shows how to calculate the number of symbols for each variable-length symbology. These counts can be used as the input to sc_symbology_settings_set_active_symbol_counts().
+The length of data encoded in variable-length symbologies such as Code 128, Codabar, Code 39 etc. is measured as the number of symbols. Depending on the symbology, the symbol count includes the start and end symbol, and/or checksum characters. The following list shows how to calculate the number of symbols for each variable-length symbology. These counts can be used as the input to `sc_symbology_settings_set_active_symbol_counts()`.
 
 ### Interleaved-Two-of-Five
 
-The number of symbols corresponds to the number of digits in the code. Note that the number of digits must be even. Example: the code c “1234567890123” has a symbol count of 14. For the active symbol count calculation, optional checksum digits are treated like normal data symbols.
+The number of symbols corresponds to the number of digits in the code. Note that the number of digits must be even. 
+
+Example: the code `“1234567890123”` has a symbol count of 14. For the active symbol count calculation, optional checksum digits are treated like normal data symbols.
 
 ### Codabar
 
-The number of symbols corresponds to the number of digits in the code, plus the start and end symbols. Example: the code “A2334253D” has a symbol count of 7 + 2 = 9.
+The number of symbols corresponds to the number of digits in the code, plus the start and end symbols. 
+
+Example: the code `“A2334253D”` has a symbol count of 7 + 2 = 9.
 
 ### Code 11
 
-The number of symbols corresponds to the number of digits in the code, plus one or two checksum symbols. For less than ten digits in the code, one checksum symbol is added. Two checksum symbols are added for ten or more digits in the code. Example: the code c “912-34956” (c “912-349566”) has a symbol count of 9 + 1 = 10. The code c “912-3495-6” (c “912-3495-638”) has a symbol count of 10 + 2 = 12.
+The number of symbols corresponds to the number of digits in the code, plus one or two checksum symbols. For less than ten digits in the code, one checksum symbol is added. Two checksum symbols are added for ten or more digits in the code. 
+
+Example: the code `“912-34956”` (`“912-349566”`) has a symbol count of 9 + 1 = 10. The code `“912-3495-6”` (`“912-3495-638”`) has a symbol count of 10 + 2 = 12.
 
 ### Code 128
 
-The number of symbols depends on the encoding used (A, B or C). All encodings require a start, an end and a checksum symbol. The ASCII encoding modes (A and B) store each character in one symbol. Example: the code c “ABC123” in mode A has a symbol count of 6 + 2 + 1 = 9. The numeric encoding mode (C) encodes pairs of digits in one symbol. Example: the code c “123456” has a symbol count of 3 + 2 + 1 = 6. Some encoders switch modes inside the code using switch symbols to optimize the code length. In this case the exact encoding used is needed to compute the number of symbols.
+The number of symbols depends on the encoding used (A, B or C). All encodings require a start, an end and a checksum symbol. The ASCII encoding modes (A and B) store each character in one symbol. 
+
+Example: the code `“ABC123”` in mode A has a symbol count of 6 + 2 + 1 = 9.
+
+The numeric encoding mode (C) encodes pairs of digits in one symbol.
+
+Example: the code `“123456”` has a symbol count of 3 + 2 + 1 = 6.
+
+Some encoders switch modes inside the code using switch symbols to optimize the code length. In this case the exact encoding used is needed to compute the number of symbols.
 
 ### Code 93
 
-The number of symbols corresponds to the number of characters in the code, plus the start and end symbols and 2 checksum digits. Shift characters used in “extended code93” are treated as normal data symbols. Example: the code c “ABCDE12345” has a symbol count of 10 + 2 + 2 = 14.
+The number of symbols corresponds to the number of characters in the code, plus the start and end symbols and 2 checksum digits. Shift characters used in “extended code93” are treated as normal data symbols.
+
+Example: the code `“ABCDE12345”` has a symbol count of 10 + 2 + 2 = 14.
 
 ### Code 39
 
-The number of symbols corresponds to the number of characters in the code, plus the start and end symbols. Note that the start and end symbols are not included in the returned barcode data. Example: the code c “4F70050378196356D” (c “4F70050378196356D”) has a symbol count of 17 + 2 = 19.
+The number of symbols corresponds to the number of characters in the code, plus the start and end symbols. Note that the start and end symbols are not included in the returned barcode data. 
+
+Example: the code `“4F70050378196356D”` (`“*4F70050378196356D”`) has a symbol count of 17 + 2 = 19.
 
 ### MSI Plessey and Code 25
 
-The number of symbols corresponds to the number of digits in the code. Example: the code c “12345674” has a symbol count of 8. For the active symbol count calculation, optional checksum digits are treated like normal data symbols.
+The number of symbols corresponds to the number of digits in the code.
+
+Example: the code `“12345674”` has a symbol count of 8. For the active symbol count calculation, optional checksum digits are treated like normal data symbols.
 
 ### GS1 DataBar 14
 
@@ -109,7 +129,7 @@ The symbol count corresponds to the number of finder patterns in the code. Each 
 
 ### GS1 DataBar Expanded
 
-The symbol count cannot be changed at the moment.
+The symbol count cannot be changed.  All lengths defined by the standard are supported.
 
 ### RM4SCC
 
@@ -118,6 +138,10 @@ The number of symbols corresponds to the number of characters in the code, inclu
 ### KIX
 
 The number of symbols corresponds to the number of characters in the code.
+
+### UPU 4-State
+
+The number of symbols corresponds to the number of code words. Two lengths are supported, 19 or 25 codewords with a maximum number of error correcting codewords of 6 or 12 respectively.
 
 ### Australian Post 4-State
 
