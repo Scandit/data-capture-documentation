@@ -19,6 +19,19 @@ export default function CardsPart() {
     return frameworkUrls[framework] || `sdks/${framework}/add-sdk`;
   };
 
+  const transformFrameworkNameId = (framework: string): string => {
+    const frameworkUrls: { [key: string]: string } = {
+      react: "sdks/react-native/id-capture/get-started/",
+      netIos: "sdks/net/ios/id-capture/get-started/",
+      netAndroid: "sdks/net/id-capture/get-started/",
+      xamarinIos: "sdks/xamarin/id-capture/get-started/",
+      xamarinAndroid: "sdks/xamarin/android/id-capture/get-started/",
+      xamarinForms: "sdks/xamarin/forms/id-capture/get-started/",
+    };
+
+    return frameworkUrls[framework] || `sdks/${framework}/id-capture/get-started/`;
+  };
+
   return (
     <BrowserOnly>
       {() => {
@@ -47,7 +60,7 @@ export default function CardsPart() {
                 content={idScanning}
                 mainColor="var(--IDScanningColor)"
                 cardColor="var(--id-scanning-gradient)"
-                linkStarted={`${transformFrameworkName(selectedFramework)}`}
+                linkStarted={`${transformFrameworkNameId(selectedFramework)}`}
               />
             </div>
           </div>
