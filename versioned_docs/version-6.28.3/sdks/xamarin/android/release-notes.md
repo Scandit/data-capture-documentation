@@ -21,7 +21,7 @@ keywords:
 
 ## 6.28.2
 
-**Released**: December 11, 2024
+**Released**: December 12, 2024
 
 No updates for this framework in this release.
 
