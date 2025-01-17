@@ -73,10 +73,10 @@ First you need to install the required packages. You can this via npm:
 
 ```bash
 # Core library
-npm i scandit-web-datacapture-core
+npm install --save @scandit/web-datacapture-core
 
 # Barcode scanning functionality
-npm i scandit-web-datacapture-barcode
+npm install --save @scandit/web-datacapture-barcode
 ```
 
 ### 2. Create the Context
@@ -116,7 +116,6 @@ const viewSettings = new SparkScanViewSettings();
 viewSettings.defaultScanningMode = SparkScanScanningModeTarget;
 viewSettings.soundEnabled = true;
 viewSettings.hapticEnabled = false;
-viewSettings.defaultHandMode = SparkScanViewHandMode.Left;
 ```
 
 In this example, we're:
@@ -124,7 +123,6 @@ In this example, we're:
 - Setting the default scanning mode to `SparkScanScanningModeTarget` for precision scanning
 - Enabling sound feedback
 - Disabling haptic feedback
-- Setting the default hand mode for left-handed users
 
 Next, we create the `SparkScanView` instance, adding the scanning interface to the application:
 

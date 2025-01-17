@@ -14,6 +14,7 @@ export default function CardsPart() {
       xamarinIos: "sdks/xamarin/ios/add-sdk",
       xamarinAndroid: "sdks/xamarin/android/add-sdk",
       xamarinForms: "sdks/xamarin/forms/add-sdk",
+      web: "sdks/web/getting-started",
     };
 
     return frameworkUrls[framework] || `sdks/${framework}/add-sdk`;
