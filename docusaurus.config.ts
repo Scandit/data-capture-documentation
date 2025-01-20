@@ -219,7 +219,7 @@ const config: Config = {
           lastVersion: "current",
           versions: {
             current: {
-              label: '7.0.1',
+              label: '7.0.2',
               banner: 'none',
             },
             '6.28.3': {

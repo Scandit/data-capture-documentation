@@ -9,6 +9,14 @@ keywords:
   - linux
 ---
 
+## 7.0.2
+
+**Released**: January 20, 2025
+
+### Bug Fixes
+
+* Resolved a rare issue where a race condition during the deconstruction of MatrixScan Data Capture views could lead to invalid memory access.
+
 ## 7.0.1
 
 **Released**: December 19, 2024
