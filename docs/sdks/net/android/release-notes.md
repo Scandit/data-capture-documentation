@@ -9,6 +9,23 @@ keywords:
   - netAndroid
 ---
 
+## 7.0.2
+
+**Released**: January 20, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Resolved a rare issue where a race condition during the deconstruction of MatrixScan Data Capture views could lead to invalid memory access.
+
+#### ID
+
+* Fixed an issue where it was not possible to scan Visual Inspection Zone of passports if a license included the Visual Inspection Zone flag but no Machine Readable Zone flag.
+* Fixed an issue where the scanning would become unresponsive when scanning the back of Romanian ID Cards.
+* Fixed an issue where the personal identification number was not correctly anonymized on certain passports.
+* Fixed an issue with `ResidencePermit` not instantiating correctly for the Spanish NIE document.
+
 ## 7.0.1
 
 **Released**: December 19, 2024
