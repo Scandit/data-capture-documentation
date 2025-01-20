@@ -45,7 +45,7 @@ Currently we support adding the Scandit Data Capture SDK Cordova plugins to your
 You should first always add the `scandit-cordova-datacapture-core` plugin, as all other plugins depend on it.
 :::
 
-### Create a new project (optional)
+### Create a new project
 
 If you do not have a Cordova project yet that you’ll use, you should create a new one.
 
@@ -63,9 +63,11 @@ The Scandit Data Capture SDK depends on WKWebView on iOS, so you’ll manually h
 > cordova plugin add cordova-plugin-wkwebview-engine
 ```
 
-### Add the SDK via npm or GitHub repo
+### Install via npm or GitHub repo
 
-To add our plugins via npm or git repo, you can run these commands from your project’s root folder. In the following snippet we’re adding multiple plugins for different functionalities, but you can add only the ones you need.
+To add Scandit plugins via npm or GitHub repo, run the corresponding commands from your project’s root folder.
+
+In the following snippet we’re adding multiple plugins for different functionalities, but you can add only the ones you need as described in the [Internal Dependencies](#internal-dependencies) section.
 
 ```sh
 # npm package
@@ -82,7 +84,8 @@ cordova plugin add https://github.com/Scandit/scandit-cordova-datacapture-id.git
 ```
 
 :::note
-For npm dependencies, you can also specify a version `@<version>`. For GitHub dependencies, you can also specify the version `#<version>`.
+For npm dependencies, you can also specify a version using `@<version>`.
+For GitHub dependencies, you can specify the version using `#<version>`.
 :::
 
 ### Add the Scandit Data Capture SDK manually

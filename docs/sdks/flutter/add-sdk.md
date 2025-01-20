@@ -42,13 +42,15 @@ If you have a paid subscription, please reach out to [Scandit Support](mailto:su
 
 Currently we support adding the Scandit Data Capture SDK Flutter plugins to your project in two ways. The simplest way is to use the [pub.dev](https://pub.dev/) registry, alternatively you can manually download the plugins and add them to your project.
 
-### Create a new project (optional)
+### Create a new project
 
 If you do not have a Flutter project yet that you’ll use, you should create a new one using your IDE of choice.
 
 ### Add the SDK from pub.dev
 
-To add our plugins from the _pub.dev_ registry, you need to open the `pubspec.yaml` file located inside the app folder, and add required Scandit plugin(s) under dependencies. In the following snippet we’re adding multiple plugins for different functionalities, but you can add only the ones you need.
+To add our plugins from the _pub.dev_ registry, you need to open the `pubspec.yaml` file located inside the app folder, and add the required Scandit plugin(s) as listed under [interal dependencies](#internal-dependencies).
+
+In the following snippet we’re adding multiple plugins for different functionalities, but you can add only the ones you need.
 
 ```yml
 dependencies:

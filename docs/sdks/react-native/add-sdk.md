@@ -43,10 +43,10 @@ If you have a paid subscription, please reach out to [Scandit Support](mailto:su
 Currently we support adding the Scandit Data Capture SDK React Native plugins to your project in two ways. The simplest way is to use the npm registry, alternatively you can manually download the plugins and add them to your project.
 
 :::tip
-You should always make sure to add the scandit-react-native-datacapture-core plugin, as all other plugins depend on it.
+You should always make sure to add the `scandit-react-native-datacapture-core` plugin, as all other plugins depend on it.
 :::
 
-### Create a new project (optional)
+### Create a new project
 
 If you do not have a React Native project yet that you’ll use, you should create a new one.
 
@@ -57,7 +57,9 @@ cd HelloScandit
 
 ### Add the SDK from npm
 
-To add our plugins from the npm registry, you can run these commands from your project’s root folder. In the following snippet we’re adding multiple plugins for different functionalities, but you can add only the ones you need.
+To add Scandit plugins from the npm registry, run the corresponding commands from your project’s root folder.
+
+In the following snippet we’re adding multiple plugins for different functionalities, but you can add only the ones you need as described in the [Internal Dependencies](#internal-dependencies) section.
 
 ```sh
 yarn add scandit-react-native-datacapture-core
@@ -80,7 +82,7 @@ First add `scandit-react-native-datacapture-core` plugin:
 yarn add <path to scandit-react-native-datacapture-core plugin>
 ```
 
-Once this is done, you can continue with adding the plugin(s) for your desired functionality, e.g. for barcode capture add the `scandit-react-native-datacapture-barcode` plugin:
+Once this is done, you can continue with adding the plugin(s) for your desired functionality:
 
 ```sh
 yarn add <path to scandit-react-native-datacapture-barcode plugin>
