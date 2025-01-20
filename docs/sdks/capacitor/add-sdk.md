@@ -43,7 +43,7 @@ Currently we support adding the Scandit Data Capture SDK Capacitor plugins to yo
 You should always make sure to add the scandit-capacitor-datacapture-core plugin, as all other plugins depend on it.
 :::
 
-### Create a new project (optional)
+### Create a new project
 
 If you do not have a Capacitor project yet that you’ll use, you should create a new one.
 
@@ -55,7 +55,9 @@ npx cap add android
 
 ### Add the SDK from npm
 
-To add our plugins from the npm registry, you can run these commands from your project’s root folder. In the following snippet we’re adding multiple plugins for different functionalities, but you can add only the ones you need.
+To add Scandit plugins via npm, run the corresponding commands from your project’s root folder.
+
+In the following snippet we’re adding multiple plugins for different functionalities, but you can add only the ones you need as described in the [Internal Dependencies](#internal-dependencies) section.
 
 ```sh
 yarn add scandit-capacitor-datacapture-core
