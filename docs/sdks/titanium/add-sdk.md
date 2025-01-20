@@ -46,7 +46,7 @@ ti create -t app -n <PROJECT_NAME>
 
 ### Add the SDK via npm
 
-To add our plugins from the npm registry, you can run these commands from your project’s root folder. In the following snippet we’re adding [ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/titanium/barcode-capture/api.html)
+To add our plugins from the npm registry, you can run these commands from your project’s root folder:
 
 ```sh
 npm install scandit-titanium-datacapture-core
@@ -59,7 +59,7 @@ You can also specify a version `@<version>`.
 
 ### Add the SDK manually
 
-You need to declare the modules you want to use in the app’s tiapp.xml file, e.g. for barcode capture, declare the scandit-titanium-datacapture-barcode module:
+You need to declare the modules you want to use in the app’s `tiapp.xml` file:
 
 ```xml
 <modules>

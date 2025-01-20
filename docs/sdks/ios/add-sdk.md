@@ -35,18 +35,12 @@ import InternalDependencies from '../../partials/get-started/_internal-deps.mdx'
 
 <TabItem value="cocoaPods" label="CocoaPods">
 
-[CocoaPods](https://cocoapods.org/) is a dependency manager for Swift and Objective-C Cocoa projects. To integrate the Scandit Data Capture SDK into your Xcode project using CocoaPods, specify it in your `Podfile`:
+[CocoaPods](https://cocoapods.org/) is a dependency manager for Swift and Objective-C Cocoa projects. To integrate the Scandit Data Capture SDK into your Xcode project using CocoaPods, specify the required pods for your use case, detailed above in [Internal Dependencies](#internal-dependencies), in your `Podfile`:
 
 ```ruby
-pod 'ScanditBarcodeCapture',
-# Add the following pods if you want to use additional features
-pod 'ScanditIdCapture',
-pod 'ScanditParser',
+pod 'ScanditCaptureCore',
+# Add the necessary pods based on the features needed for your use case
 ```
-
-:::note
-This command also downloads `ScanditCaptureCore` as `ScanditBarcodeCapture` depends on it.
-:::
 
 </TabItem>
 
@@ -57,20 +51,15 @@ This command also downloads `ScanditCaptureCore` as `ScanditBarcodeCapture` depe
 To integrate the Scandit Data Capture SDK into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ```ruby
-binary "https://ssl.scandit.com/sdk/download/carthage/ScanditBarcodeCapture.json"
-```
-
-You also need to add [`ScanditCaptureCore`](https://docs.scandit.com/data-capture-sdk/ios/core/api.html) since [`ScanditBarcodeCapture`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api.html) API depends on it.
-
-```ruby
 binary "https://ssl.scandit.com/sdk/download/carthage/ScanditCaptureCore.json"
 ```
 
-If applicable for your use case, you can also add the following Carthage binaries:
+You also need to add the corresponding binaries based on the features you need as detailed above in [Internal Dependencies](#internal-dependencies).
+
+For example, if you want to add the [`ScanditBarcodeCapture`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api.html) API, you need to add the following Carthage binary:
 
 ```ruby
-binary "https://ssl.scandit.com/sdk/download/carthage/ScanditIdCapture.json"
-binary "https://ssl.scandit.com/sdk/download/carthage/ScanditParser.json"
+binary "https://ssl.scandit.com/sdk/download/carthage/ScanditBarcodeCapture.json"
 ```
 
 </TabItem>
@@ -93,11 +82,7 @@ Or if you prefer checking out git repositories via SSH:
 git@github.com:Scandit/datacapture-spm.git
 ```
 
-You also need to add [`ScanditCaptureCore`](https://docs.scandit.com/data-capture-sdk/ios/core/api.html) since [`ScanditBarcodeCapture`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api.html) API depends on it, and if applicable for your use case, you can also add the following packages:
-
-- `ScanditIdCapture`
-- `ScanditParser`
-
+You also need to add the corresponding frameworks based on the features you need as detailed in [Internal Dependencies](#internal-dependencies).
 </TabItem>
 
 </Tabs>
@@ -128,6 +113,7 @@ To import the Scandit Data Capture SDK into your source code, add the following 
 ```swift
 import ScanditCaptureCore
 import ScanditBarcodeCapture
+import ScanditLabelCapture
 import ScanditIdCapture
 import ScanditParser
 ```
@@ -138,6 +124,7 @@ import ScanditParser
 ```objectivec
 @import ScanditCaptureCore;
 @import ScanditBarcodeCapture;
+@import ScanditLabelCapture;
 @import ScanditIdCapture;
 @import ScanditParser;
 ```

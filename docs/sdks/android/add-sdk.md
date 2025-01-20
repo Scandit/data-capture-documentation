@@ -46,7 +46,7 @@ import ExternalDependencies from '../../partials/get-started/_external-deps-andr
 
 <TabItem value="gradle" label="Gradle">
 
-You can add _mavenCentral()_ repository in _build.gradle_ file:
+Add _mavenCentral()_ repository in your _build.gradle_ file:
 
 ```java
 repositories {
@@ -54,14 +54,11 @@ repositories {
 }
 ```
 
-You can add the necessary artifacts as dependencies to the app’s _build.gradle_:
+See [Internal Dependencies](#internal-dependencies) to identify the artifacts needed based on your desired functionality. Then add the necessary dependencies to your app’s _build.gradle_ file:
 
 ```java
 dependencies {
-  implementation "com.scandit.datacapture:core:[version]"
-  implementation "com.scandit.datacapture:barcode:[version]"
-  implementation "com.scandit.datacapture:parser:[version]"
-  implementation "com.scandit.datacapture:id:[version]"
+  implementation "com.scandit.datacapture:[dependency]:[version]"
 }
 ```
 
@@ -71,7 +68,7 @@ You can find the latest version on [Sonatype](https://s01.oss.sonatype.org/conte
 
 <TabItem value="maven" label="Maven">
 
-You can add the _mavenCentral_ repository in _pom.xml_ file:
+Add the _mavenCentral_ repository in _pom.xml_ file:
 
 ```java
 <repositories>
@@ -86,43 +83,18 @@ You can add the _mavenCentral_ repository in _pom.xml_ file:
 </repositories>
 ```
 
-You can add the necessary artifacts as dependencies:
+See [Internal Dependencies](#internal-dependencies) to identify the artifacts needed based on your desired functionality. Then add the necessary dependencies:
 
 ```java
-<dependency>
-  <groupId>com.scandit.datacapture</groupId>
-  <artifactId>core</artifactId>
-  <version>[version]</version>
-</dependency>
+...
 
 <dependency>
   <groupId>com.scandit.datacapture</groupId>
-  <artifactId>barcode</artifactId>
+  <artifactId>[required_dependency]</artifactId>
   <version>[version]</version>
 </dependency>
 
-<dependency>
-  <groupId>com.scandit.datacapture</groupId>
-  <artifactId>parser</artifactId>
-  <version>[version]</version>
-</dependency>
-
-<dependency>
-  <groupId>com.scandit.datacapture</groupId>
-  <version>[version]</version>
-</dependency>
-
-<dependency>
-  <groupId>com.scandit.datacapture</groupId>
-  <artifactId>text</artifactId>
-  <version>[version]</version>
-</dependency>
-
-<dependency>
-  <groupId>com.scandit.datacapture</groupId>
-  <artifactId>id</artifactId>
-  <version>[version]</version>
-</dependency>
+...
 ```
 
 </TabItem>
@@ -131,11 +103,9 @@ You can add the necessary artifacts as dependencies:
 
 ## Install Manually
 
-You need to add a reference to `ScanditCaptureCore.aar`, which contains the shared functionality used by the other data capture modules. In addition, depending on the data capture task, you need a reference to:
+You need to add a reference to `ScanditCaptureCore.aar`, which contains the shared functionality used by the other data capture modules.
 
-- [ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api.html) if you want to use barcode-related functionality, such as barcode capture or MatrixScan
-- [ScanditParser API](https://docs.scandit.com/data-capture-sdk/android/parser/api.html) if you want to parse data strings, for instance, as found in barcodes, into a set of key-value mappings
-- [ScanditIdCapture API](https://docs.scandit.com/data-capture-sdk/android/id-capture/api.html) if you want to scan personal identification documents, such as identity cards, passports or visas
+Depending on the data capture task, you also need to reference the specific module(s) needed as detailed in [Internal Dependencies](#internal-dependencies).
 
 If your project already has a local `flatDir` repository, add the AAR files to that folder. If you do not have a `flatDir` repository yet, create a new one in your _build.gradle_ file as illustrated below:
 
