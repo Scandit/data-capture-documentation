@@ -30,6 +30,12 @@ This feature is used to provide users with more details regarding the items they
 
 See the [Expiry Management Sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/ExpiryManagementSample) for an example of how to use this feature.
 
+## Clustering
+
+import Clustering from '../../../partials/count/_clustering.mdx'
+
+<Clustering />
+
 ## Strap Mode
 
 It can be difficult to reach the shutter button if the smart device is attached to the user’s wrist by a strap or similar.

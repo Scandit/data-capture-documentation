@@ -33,6 +33,12 @@ This feature is used to provide users with more details regarding the items they
 - Wrong items
 - Fragile items
 
+## Clustering
+
+import Clustering from '../../../../partials/count/_clustering.mdx'
+
+<Clustering />
+
 ## Strap Mode
 
 It can be difficult to reach the shutter button if the smart device is attached to the user’s wrist by a strap or similar. In this instance, you can enable a floating shutter button that can be positioned by the end user in a more ergonomically suitable position.
