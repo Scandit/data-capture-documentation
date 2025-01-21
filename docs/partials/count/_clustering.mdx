@@ -1,3 +1,10 @@
 Clustering is a feature that enables grouping multiple barcodes together, either based upon their visual context or manually by the user.
 
 <ReactPlayer playing controls url="/img/matrixscan-count/clustering.mp4" />
+
+By default, clustering is disabled. It is configured via setting `ClusteringMode` to one of the following available options:
+
+* `DISABLED`: No clustering is performed.
+* `MANUAL`: Manual clustering is supported. The user can select which barcodes to cluster using the on-screen UI.
+* `AUTO`: Clustering is automatically performed and cannot be manually tuned.
+* `AUTO_WITH_MANUAL_CORRECTION`: Clustering is performed automatically, but clusters can also be formed or dissolved manually using the UI.

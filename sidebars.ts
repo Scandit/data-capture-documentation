@@ -355,6 +355,15 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
+              label: "MatrixScan Check",
+              items: [
+                "sdks/android/matrixscan-check/intro",
+                "sdks/android/matrixscan-check/get-started",
+                "sdks/android/matrixscan-check/advanced",
+              ],
+            },
+            {
+              type: "category",
               label: "MatrixScan Count",
               items: [
                 "sdks/android/matrixscan-count/intro",
