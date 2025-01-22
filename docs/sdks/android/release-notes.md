@@ -9,6 +9,87 @@ keywords:
   - android
 ---
 
+## 7.1.0-beta.1
+
+**Released**: January 23, 2025
+
+### New Features
+
+#### Core
+
+* `DataCaptureContext` has been adapted to work as a singleton.
+  * You can use the `DataCaptureContext.SharedInstance` property to retrieve the singleton instance.
+  * The license key must be set using `DataCaptureContext.Initialize`. This step is only required once. Once initialized, the context can be used as before.
+  * It is important to call `DataCaptureContext.RemoveCurrentMode()` when the active mode is no longer needed, such as when navigating away from a screen used for scanning.
+  * The following methods have been added (also see Deprecations, below, for removed methods):
+    * `setMode`: Sets a mode to be the active mode in the context.
+    * `removeCurrentMode`: Removes the currently active mode in the context.
+    * `static sharedInstance`: Returns a singleton instance of DataCaptureContext. This instance is unusable until properly configured by calling initialize() on it.
+    * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
+    * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
+* Calling `DataCaptureContext.addMode()` or `DataCaptureContext.setMode()` now replaces the current mode with the new one, so it’s no longer needed to remove a mode when adding a new one.
+
+#### Barcode
+
+* [MatrixScan Check](/sdks/android/matrixscan-check/intro.md) in now available, offering prebuilt views designed to quickly build custom workflows with augmented reality for your existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
+* MatrixScan Count now includes the ability to [cluster barcodes](/sdks/android/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
+* MatrixScan Count now includes the concept of a `Barcode Spacial Grid`, bringing the ability to map totes in a grid-like structure. Scanned codes will be returned with their relative location and can be displayed in a map view. This allows for fast and error-free in-store picking using dedicated carts and totes. The following classes have been added:
+  * `BarcodeSpatialGrid`
+  * `BarcodeSpatialGridEditorView`
+  * `BarcodeSpatialGridEditorViewSettings`
+  * `BarcodeSpatialGridEditorViewListener`
+* A new setting in available in SparkScan to control the mirroring of the camera feed, enabling support for periscope devices:
+  * `sparkScanViewSettings.isPeriscopeModeEnabled()`
+* This version adds a smart functionality to the previous `codeDuplicateFilter`, with the special value `-2` now as the default resulting in Smart Scan Intention behavior being used. See the [documentation](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
+* The following function has been added to `BarcodePickAsyncMapperProductProvider`, to enable changing the product database and restart picking:
+  * `UpdateProductList`
+* The following methods have been added to `BarcodeCountView`:
+  * `setBrushForAcceptedBarcode()`
+  * `setBrushForRejectedBarcode()`
+* Added a new constructor for `BarcodeFindItemSearchOptions` for receiving a Brush, allowing different barcodes to use different Brushes for rendering the dots.
+
+#### Label Capture
+
+* Added support for dates in the `Label` Field. If a field is a date, you can get it as a date object via `LabelField.asDate()`.
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved scanning speed for color-inverted QR and MicroQR codes.
+* Improved scanning rate for small QR codes.
+
+### Behavioral Changes
+
+* Enabled color-inverted decoding by default for QR and MicroQR symbologies.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a rare crash affecting the camera.
+* Fixed a rare camera crash that occurred if updating the camera settings while the camera is active.
+* Fixed bugs in `BarcodeCountView` where filtered barcode indicators would not be tapable and where TalkBack would incorrectly focus on empty, unlabeled views.
+* Fixed a bug in `BarcodeCountView` where setting a property would not immediately refresh the UI.
+
+#### ID
+
+* Fixed an issue where it was not possible to scan the Visual Inspection Zone of passports if a license included the Visual Inspection Zone flag, but no Machine Readable Zone flag. 
+* Fixed an issue where the scanning would become unresponsive when scanning certain passports.
+* Fixed an issue where the scanning would become unresponsive when scanning the back side of Romanian IDs.
+* Fixed an issue where some residence permits were incorrectly identified as ID cards when scanning their Machine Readable Zone.
+* Fixed an issue where it was not possible to scan an Irish Passport Card when `ScannerType::FullDocumentScanner` was enabled.
+* Fixed an issue where the personal identification number was not correctly anonymized on certain passports.
+* When scanning German Passport or ID Card MRZs the nationality was returned as `D` instead of the three-letter ISO (3166 standard) code `DEU`.
+
+### Deprecations
+
+#### Core
+
+* The following methods of `DataCaptureContext` have been removed:
+  * `addMode`: Replaced by `setMode` as only one mode can be active at a time.
+  * `removeAllModes`: Replaced by `removeCurrentMode` as only one mode can be active at a time.
+
 ## 7.0.2
 
 **Released**: January 20, 2025

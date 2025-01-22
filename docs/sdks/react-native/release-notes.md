@@ -9,6 +9,56 @@ keywords:
   - react
 ---
 
+## 7.1.0-beta.1
+
+**Released**: January 23, 2025
+
+### New Features
+
+#### Core
+
+* `DataCaptureContext` has been adapted to work as a singleton.
+  * You can use the `DataCaptureContext.SharedInstance` property to retrieve the singleton instance.
+  * The license key must be set using `DataCaptureContext.Initialize`. This step is only required once. Once initialized, the context can be used as before.
+  * It is important to call `DataCaptureContext.RemoveCurrentMode()` when the active mode is no longer needed, such as when navigating away from a screen used for scanning.
+  * The following methods have been added (also see Deprecations, below, for removed methods):
+    * `setMode`: Sets a mode to be the active mode in the context.
+    * `removeCurrentMode`: Removes the currently active mode in the context.
+    * `static sharedInstance`: Returns a singleton instance of DataCaptureContext. This instance is unusable until properly configured by calling initialize() on it.
+    * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
+    * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
+* Calling `DataCaptureContext.addMode()` or `DataCaptureContext.setMode()` now replaces the current mode with the new one, so it’s no longer needed to remove a mode when adding a new one.
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved scanning speed for color-inverted QR and MicroQR codes.
+* Improved scanning rate for small QR codes.
+
+### Behavioral Changes
+
+* Enabled color-inverted decoding by default for QR and MicroQR symbologies.
+
+### Bug Fixes
+
+#### ID
+
+* Fixed an issue where it was not possible to scan the Visual Inspection Zone of passports if a license included the Visual Inspection Zone flag, but no Machine Readable Zone flag. 
+* Fixed an issue where the scanning would become unresponsive when scanning certain passports.
+* Fixed an issue where the scanning would become unresponsive when scanning the back side of Romanian IDs.
+* Fixed an issue where some residence permits were incorrectly identified as ID cards when scanning their Machine Readable Zone.
+* Fixed an issue where it was not possible to scan an Irish Passport Card when `ScannerType::FullDocumentScanner` was enabled.
+* Fixed an issue where the personal identification number was not correctly anonymized on certain passports.
+
+### Deprecations
+
+#### Core
+
+* The following methods of `DataCaptureContext` have been removed:
+  * `addMode`: Replaced by `setMode` as only one mode can be active at a time.
+  * `removeAllModes`: Replaced by `removeCurrentMode` as only one mode can be active at a time.
+
 ## 7.0.2
 
 **Released**: January 20, 2025
