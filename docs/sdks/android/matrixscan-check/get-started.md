@@ -44,14 +44,13 @@ BarcodeCheckSettings settings = new BarcodeCheckSettings();
 settings.enableSymbology(Symbology.EAN13_UPCA, true);
 ```
 
-Then you have to create the product provider for the Barcode Check mode. This provider is responsible for providing the items that should be highlighted in the AR view. Note that in this example we are using a hardcoded list of items, but in a real-world scenario, you would fetch this list from your backend.
+Then you have to create the product provider(s) for the Barcode Check mode. These providers are responsible for indicating the items that should be highlighted and/or annotated in the AR view. Note that in this example we are using a hardcoded list of items, but in a real-world scenario, you would fetch this list from your backend.
 
 ```java
 List<ProductDatabaseEntry> productDatabase = new ArrayList<>();
         productDatabase.add(
             new ProductDatabaseEntry(
                 /*product identifier*/"product_1",
-                /*quantity to check*/2,
                 /*items for the product*/new HashSet<String>() {{
                     add("9783598215438");
                     add("9783598215414");
@@ -62,7 +61,6 @@ List<ProductDatabaseEntry> productDatabase = new ArrayList<>();
         productDatabase.add(
             new ProductDatabaseEntry(
                 /*product identifier*/"product_2",
-                /*quantity to check*/3,
                 /*items for the product*/new HashSet<String>() {{
                     add("9783598215471");
                     add("9783598215481");
@@ -125,16 +123,13 @@ BarcodeCheck mode = new BarcodeCheck(dataCaptureContext, settings, productProvid
 
 MatrixScan Check’s built-in AR user interface includes buttons and overlays that guide the user through the scan and check process. By adding a [`BarcodeCheckView`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckView), the scanning interface is added automatically to your application.
 
-The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSettings`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view-settings.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckViewSettings) to match your application’s look and feel. The following settings can be customized:
+The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSettings`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view-settings.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckViewSettings), and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
 
-* Colors of dots in augmented reality overlay
-* Enable sound and haptic alerts
-* Guidelines text
-* Showing hints
-* Finish button
-* Pause button
-* Zoom button
-* Loading Dialog
+* Audio and haptic feedback
+* Torch button visibility and its position
+* Switch camera button visibility and its position
+* Zoom control visibility and its position
+* The size, colors, and styles of the highlight and annotation overlays
 
 ```java
 BarcodeCheckViewSettings viewSettings = new BarcodeCheckViewSettings();
