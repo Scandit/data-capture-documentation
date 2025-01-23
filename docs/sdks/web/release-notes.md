@@ -31,6 +31,7 @@ keywords:
 
 #### Barcode
 
+* [MatrixScan Check](/sdks/web/matrixscan-check/intro.md) in now available, offering prebuilt views designed to quickly build custom workflows with augmented reality for your existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
 * A new setting in available in SparkScan to control the mirroring of the camera feed, enabling support for periscope devices:
   * `sparkScanViewSettings.isPeriscopeModeEnabled()`
 * This version adds a smart functionality to the previous `codeDuplicateFilter`, with the special value `-2` now as the default resulting in Smart Scan Intention behavior being used. See the [documentation](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
