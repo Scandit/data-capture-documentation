@@ -48,6 +48,14 @@ keywords:
   * `setBrushForRejectedBarcode()`
 * Added a new constructor for `BarcodeFindItemSearchOptions` for receiving a Brush, allowing different barcodes to use different Brushes for rendering the dots.
 
+#### ID
+
+* Launched DataConsistency Verification, which identifies suspicious documents by verifying the consistency of data encoded in various parts of the document. This helps detect potential tampering or anomalies.
+* Enhanced the scanning capabilities for specific document types. When `ScannerType::FullDocument` is enabled, seamless scanning is now supported even for documents where the Scandit DataCapture SDK offers only Machine Readable Zone (MRZ) scanning.
+* Added support for scanning the Machine Readable Zone of  non-standard Indian passports, where an MRZ line consists of 42 characters instead of 44. 
+* Added support for scanning the Machine Readable Zone of the Chinese Mainland Travel Permit issued for non-Chinese citizens being residents of Hong Kong or Macau.
+
+
 #### Label Capture
 
 * Added support for dates in the `Label` Field. If a field is a date, you can get it as a date object via `LabelField.asDate()`.
@@ -58,6 +66,10 @@ keywords:
 
 * Improved scanning speed for color-inverted QR and MicroQR codes.
 * Improved scanning rate for small QR codes.
+
+#### ID
+
+* Scandit ID Scanning now uses an improved AI model to detect forged barcodes on US documents, which significantly improves accuracy.
 
 ### Behavioral Changes
 
