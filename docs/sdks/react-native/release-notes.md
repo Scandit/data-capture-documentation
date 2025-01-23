@@ -69,6 +69,10 @@ keywords:
 * Improved scanning speed for color-inverted QR and MicroQR codes.
 * Improved scanning rate for small QR codes.
 
+#### ID
+
+* Scandit ID Scanning now uses an improved AI model to detect forged barcodes on US documents, which significantly improves accuracy.
+
 ### Behavioral Changes
 
 * Enabled color-inverted decoding by default for QR and MicroQR symbologies.
