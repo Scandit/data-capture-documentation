@@ -359,7 +359,6 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/android/matrixscan-check/intro",
                 "sdks/android/matrixscan-check/get-started",
-                "sdks/android/matrixscan-check/advanced",
               ],
             },
             {
