@@ -29,6 +29,20 @@ keywords:
     * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
 * Calling `DataCaptureContext.addMode()` or `DataCaptureContext.setMode()` now replaces the current mode with the new one, so it’s no longer needed to remove a mode when adding a new one.
 
+#### Barcode
+
+* A new setting in available in SparkScan to control the mirroring of the camera feed, enabling support for periscope devices:
+  * `sparkScanViewSettings.isPeriscopeModeEnabled()`
+* This version adds a smart functionality to the previous `codeDuplicateFilter`, with the special value `-2` now as the default resulting in Smart Scan Intention behavior being used. See the [documentation](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
+
+#### ID
+
+* Launched DataConsistency Verification, which identifies suspicious documents by verifying the consistency of data encoded in various parts of the document. This helps detect potential tampering or anomalies.
+* Enhanced the scanning capabilities for specific document types. When `ScannerType::FullDocument` is enabled, seamless scanning is now supported even for documents where the Scandit DataCapture SDK offers only Machine Readable Zone (MRZ) scanning.
+* Added support for scanning the Machine Readable Zone of  non-standard Indian passports, where an MRZ line consists of 42 characters instead of 44. 
+* Added support for scanning the Machine Readable Zone of the Chinese Mainland Travel Permit issued for non-Chinese citizens being residents of Hong Kong or Macau.
+* Added `UsRealIdStatus`.
+
 ### Performance Improvements
 
 #### Barcode
@@ -42,6 +56,10 @@ keywords:
 
 ### Bug Fixes
 
+#### Barcode
+
+* If using Safari, the browser would become stuck while opening `IndexedDB`.
+
 #### ID
 
 * Fixed an issue where it was not possible to scan the Visual Inspection Zone of passports if a license included the Visual Inspection Zone flag, but no Machine Readable Zone flag. 
@@ -50,6 +68,7 @@ keywords:
 * Fixed an issue where some residence permits were incorrectly identified as ID cards when scanning their Machine Readable Zone.
 * Fixed an issue where it was not possible to scan an Irish Passport Card when `ScannerType::FullDocumentScanner` was enabled.
 * Fixed an issue where the personal identification number was not correctly anonymized on certain passports.
+* When scanning German Passport or ID Card MRZs the nationality was returned as `D` instead of the three-letter ISO (3166 standard) code `DEU`.
 
 ### Deprecations
 

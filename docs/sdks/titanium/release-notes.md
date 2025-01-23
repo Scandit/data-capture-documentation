@@ -28,6 +28,8 @@ keywords:
     * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
     * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
 * Calling `DataCaptureContext.addMode()` or `DataCaptureContext.setMode()` now replaces the current mode with the new one, so it’s no longer needed to remove a mode when adding a new one.
+* Added the following API to fetch Open Source Software license text and attributions for all third-party software used by the Scandit SDK.
+  * `DataCaptureContext.openSourceSoftwareLicenseInfo`
 
 ### Performance Improvements
 
@@ -39,17 +41,6 @@ keywords:
 ### Behavioral Changes
 
 * Enabled color-inverted decoding by default for QR and MicroQR symbologies.
-
-### Bug Fixes
-
-#### ID
-
-* Fixed an issue where it was not possible to scan the Visual Inspection Zone of passports if a license included the Visual Inspection Zone flag, but no Machine Readable Zone flag. 
-* Fixed an issue where the scanning would become unresponsive when scanning certain passports.
-* Fixed an issue where the scanning would become unresponsive when scanning the back side of Romanian IDs.
-* Fixed an issue where some residence permits were incorrectly identified as ID cards when scanning their Machine Readable Zone.
-* Fixed an issue where it was not possible to scan an Irish Passport Card when `ScannerType::FullDocumentScanner` was enabled.
-* Fixed an issue where the personal identification number was not correctly anonymized on certain passports.
 
 ### Deprecations
 
