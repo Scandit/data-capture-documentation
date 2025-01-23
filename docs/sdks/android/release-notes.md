@@ -55,7 +55,6 @@ keywords:
 * Added support for scanning the Machine Readable Zone of  non-standard Indian passports, where an MRZ line consists of 42 characters instead of 44. 
 * Added support for scanning the Machine Readable Zone of the Chinese Mainland Travel Permit issued for non-Chinese citizens being residents of Hong Kong or Macau.
 
-
 #### Label Capture
 
 * Added support for dates in the `Label` Field. If a field is a date, you can get it as a date object via `LabelField.asDate()`.
