@@ -9,6 +9,29 @@ keywords:
   - linux
 ---
 
+## 7.1.0-beta.1
+
+**Released**: January 23, 2025
+
+### New Features
+
+* Added the following new barcode scanner presets:
+  * `SC_PRESET_HIGH_EFFORT` to achieve the best accuracy by spending more resources.
+  * `SC_PRESET_SINGLE_CODE_HAND_HELD` to enable smart single code scanning.
+* `sc_barcode_scanner_settings_set_code_duplicate_filter()` has been extended to accept -2 (`SC_DUPLICATE_FILTER_DEFAULT`) to indicate that an application-specific duplicate filter should be used. -2 is the new default and is currently identical to 0 (duplicate filtering disabled).    
+  * New constants `SC_DUPLICATE_FILTER_DEFAULT` and `SC_DUPLICATE_FILTER_OFF` were added to indicate the intent of these values more clearly.
+* Updated the package to no longer embed required resources into `libscanditsdk.so` and instead load them from `/usr/share/scanditsdk/resources`.
+
+### Performance Improvements
+
+* Improved scanning speed for color-inverted QR and MicroQR codes.
+* Improved scanning rate for small QR codes.
+* Improved the barcode detection and tracking robustness of `ScObjectTracker`.
+
+### Behavioral Changes
+
+* Enabled color-inverted decoding by default for QR and MicroQR symbologies.
+
 ## 7.0.2
 
 **Released**: January 20, 2025
