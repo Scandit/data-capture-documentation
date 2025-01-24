@@ -37,9 +37,7 @@ keywords:
   * `BarcodeSpatialGridEditorView`
   * `BarcodeSpatialGridEditorViewSettings`
   * `BarcodeSpatialGridEditorViewListener`
-* A new setting in available in SparkScan to control the mirroring of the camera feed, enabling support for periscope devices:
-  * `sparkScanViewSettings.isPeriscopeModeEnabled()`
-* This version adds a smart functionality to the previous `codeDuplicateFilter`, with the special value `-2` now as the default resulting in Smart Scan Intention behavior being used. See the [documentation](https://docs.scandit.com/data-capture-sdk/xamarin/forms/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
+* Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/xamarin/forms/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
 
 #### ID
 
@@ -52,8 +50,7 @@ keywords:
 
 #### Barcode
 
-* Improved scanning speed for color-inverted QR and MicroQR codes.
-* Improved scanning rate for small QR codes.
+* We’ve increased the scan rate of 10% on our datasets of QR codes with high perspective distortion (so scanned at high angles). This is particularly important for cases such as receiving boxes or scanning shelf labels.
 
 #### ID
 
@@ -61,7 +58,7 @@ keywords:
 
 ### Behavioral Changes
 
-* Enabled color-inverted decoding by default for QR and MicroQR symbologies.
+* After further improving the scanning speed on color-inverted QR and MicroQR codes, these variations can now be scanned without having to set any specific setting (as opposed to before), offering a better experience to developers.
 
 ### Bug Fixes
 
