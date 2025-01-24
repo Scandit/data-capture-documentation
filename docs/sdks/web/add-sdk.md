@@ -51,11 +51,11 @@ More info about this feature here https://developer.mozilla.org/en-US/docs/Web/H
 -->
 <link 
     rel="modulepreload"
-    href="https://cdn.jsdelivr.net/npm/scandit-web-datacapture-core@7.0.0/build/js/index.js"
+    href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/build/js/index.js"
 />
 <link
     rel="modulepreload"
-    href="https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@7.0.0/build/js/index.js"
+    href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/build/js/index.js"
 />
 <!-- polyfill browsers not supporting import maps. use the latest version from here https://github.com/guybedford/es-module-shims/releases -->
 <script async src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"></script>
@@ -79,7 +79,7 @@ More info about this feature here https://developer.mozilla.org/en-US/docs/Web/H
 </script>
  OR
 <script type="module">
-    // OR import everything
+    // OR import everything. Not recommended.
     import * as SDCCore from '@scandit/web-datacapture-core';
     import * as SDCBarcode from '@scandit/web-datacapture-barcode';
 
