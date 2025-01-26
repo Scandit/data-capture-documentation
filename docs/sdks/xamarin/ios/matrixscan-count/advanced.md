@@ -70,6 +70,10 @@ BarcodeCountSettings settings = new BarcodeCountSettings();
 settings.FilterSettings.ExcludedCodesRegex = "^1234.*";
 ```
 
+By default the filters applied to the relevant barcodes are transparent, but you can use [`BarcodeFilterHighlightSettings`](https://docs.scandit.com/data-capture-sdk/xamarin/ios/barcode-capture/api/ui/barcode-filter-highlight-settings.html#barcode-filter-highlight-settings) to change the color and level of transparency.
+
+![Different Filters in MatrixScan Count](/img/matrixscan-count/filtering_styles.png)
+
 ## Clear Screen Button
 
 There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned.
