@@ -216,11 +216,15 @@ const config: Config = {
             ],
           },
           includeCurrentVersion: true,
-          lastVersion: "current",
+          lastVersion: "7.0.2",
           versions: {
             current: {
+              label: '7.1.0',
+              banner: 'unreleased',
+            },
+            '7.0.2': {
               label: '7.0.2',
-              banner: 'none',
+              banner: 'none'
             },
             '6.28.3': {
               banner: 'none',

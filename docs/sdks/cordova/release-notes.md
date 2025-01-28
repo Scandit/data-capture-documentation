@@ -9,6 +9,88 @@ keywords:
   - cordova
 ---
 
+## 7.1.0-beta.1
+
+**Released**: January 28, 2025
+
+### New Features
+
+#### Core
+
+* `DataCaptureContext` has been adapted to work as a singleton.
+  * You can use the `DataCaptureContext.SharedInstance` property to retrieve the singleton instance.
+  * The license key must be set using `DataCaptureContext.Initialize`. This step is only required once. Once initialized, the context can be used as before.
+  * It is important to call `DataCaptureContext.RemoveCurrentMode()` when the active mode is no longer needed, such as when navigating away from a screen used for scanning.
+  * The following methods have been added (also see Deprecations, below, for removed methods):
+    * `setMode`: Sets a mode to be the active mode in the context.
+    * `removeCurrentMode`: Removes the currently active mode in the context.
+    * `static sharedInstance`: Returns a singleton instance of DataCaptureContext. This instance is unusable until properly configured by calling initialize() on it.
+    * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
+    * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
+* Calling `DataCaptureContext.addMode()` or `DataCaptureContext.setMode()` now replaces the current mode with the new one, so it’s no longer needed to remove a mode when adding a new one.
+
+#### Barcode
+
+* MatrixScan Count now includes the ability to [cluster barcodes](/sdks/cordova/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
+* MatrixScan Count now includes the concept of a `Barcode Spacial Grid`, bringing the ability to map totes in a grid-like structure. Scanned codes will be returned with their relative location and can be displayed in a map view. This allows for fast and error-free in-store picking using dedicated carts and totes. The following classes have been added:
+  * `BarcodeSpatialGrid`
+  * `BarcodeSpatialGridEditorView`
+  * `BarcodeSpatialGridEditorViewSettings`
+  * `BarcodeSpatialGridEditorViewListener`
+* Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
+* The following APIs have been added:
+  * `BarcodeFindViewSettings`
+    * `withHardwareTriggers()`
+    * `hardwareTriggerEnabled()`
+    * `hardwareTriggerKeyCode()`
+  * `BarcodeFindView`
+    * `shouldShowZoomControl`
+    * `hardwareTriggerSupported`
+
+#### ID
+
+* Launched DataConsistency Verification, which identifies suspicious documents by verifying the consistency of data encoded in various parts of the document. This helps detect potential tampering or anomalies.
+* Enhanced the scanning capabilities for specific document types. When `ScannerType::FullDocument` is enabled, seamless scanning is now supported even for documents where the Scandit DataCapture SDK offers only Machine Readable Zone (MRZ) scanning.
+* Added support for scanning the Machine Readable Zone of  non-standard Indian passports, where an MRZ line consists of 42 characters instead of 44. 
+* Added support for scanning the Machine Readable Zone of the Chinese Mainland Travel Permit issued for non-Chinese citizens being residents of Hong Kong or Macau.
+
+### Performance Improvements
+
+#### Barcode
+
+* We’ve increased the scan rate of 10% on our datasets of QR codes with high perspective distortion (so scanned at high angles). This is particularly important for cases such as receiving boxes or scanning shelf labels.
+
+#### ID
+
+* Scandit ID Scanning now uses an improved AI model to detect forged barcodes on US documents, which significantly improves accuracy.
+
+### Behavioral Changes
+
+* After further improving the scanning speed on color-inverted QR and MicroQR codes, these variations can now be scanned without having to set any specific setting (as opposed to before), offering a better experience to developers.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed the setting of the default scanning behavior in SparkScanView.
+
+#### ID
+
+* Fixed an issue where it was not possible to scan the Visual Inspection Zone of passports if a license included the Visual Inspection Zone flag, but no Machine Readable Zone flag. 
+* Fixed an issue where the scanning would become unresponsive when scanning certain passports.
+* Fixed an issue where the scanning would become unresponsive when scanning the back side of Romanian IDs.
+* Fixed an issue where some residence permits were incorrectly identified as ID cards when scanning their Machine Readable Zone.
+* Fixed an issue where it was not possible to scan an Irish Passport Card when `ScannerType::FullDocumentScanner` was enabled.
+* Fixed an issue where the personal identification number was not correctly anonymized on certain passports.
+
+### Deprecations
+
+#### Core
+
+* The following methods of `DataCaptureContext` have been removed:
+  * `addMode`: Replaced by `setMode` as only one mode can be active at a time.
+  * `removeAllModes`: Replaced by `removeCurrentMode` as only one mode can be active at a time.
+
 ## 7.0.2
 
 **Released**: January 20, 2025
