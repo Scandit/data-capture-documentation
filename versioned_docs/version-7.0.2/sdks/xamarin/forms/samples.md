@@ -30,6 +30,8 @@ Use SparkScan to populate a list of scanned barcodes.
 
 ##### [Single Scan](https://github.com/Scandit/datacapture-xamarin-forms-samples/tree/master/BarcodeCaptureSimpleSample)
 
+<ReactPlayer playing controls url="/img/samples/bc-simple.mp4" />
+
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
 
 ##### [Rejection](https://github.com/Scandit/datacapture-xamarin-forms-samples/tree/master/BarcodeCaptureRejectSample)
@@ -44,6 +46,8 @@ Examples utilizing the low-level `BarcodeBatch` API.
 
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-xamarin-forms-samples/tree/master/MatrixScanSimpleSample)
 
+<ReactPlayer playing controls url="/img/samples/ms-simple.mp4" />
+
 Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 
 #### MatrixScan Count
@@ -51,6 +55,8 @@ Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 ![MatrixScan Count](/img/samples/ms_count.png)
 
 ##### [Batch Scanning](https://github.com/Scandit/datacapture-xamarin-forms-samples/tree/master/MatrixScanCountSimpleSample)
+
+<ReactPlayer playing controls url="/img/samples/ms-count-simple.mp4" />
 
 Use MatrixScan to batch scan and count the number of barcodes in a frame.
 
@@ -62,14 +68,20 @@ Use MatrixScan to batch scan and count the number of barcodes in a frame.
 
 #### [Simple ID Capture](https://github.com/Scandit/datacapture-xamarin-forms-samples/tree/master/IdCaptureSimpleSample)
 
+<ReactPlayer playing controls url="/img/samples/id-simple.mp4" />
+
 Simple sample showing how to use the ID Capture mode to scan an ID card.
 
 #### [Extended ID Capture](https://github.com/Scandit/datacapture-xamarin-forms-samples/tree/master/IdCaptureExtendedSample)
+
+<ReactPlayer playing controls url="/img/samples/id-extended.mp4" />
 
 Sample showing how to use the ID Capture mode to scan an ID card with additional fields.
 
 ### ID Verification
 
 #### [US Driver's License](https://github.com/Scandit/datacapture-xamarin-forms-samples/tree/master/USDLVerificationSample)
+
+<ReactPlayer playing controls url="/img/samples/id-usdl.mp4" />
 
 Sample showing how to use the ID Capture mode to verify a US driver's license.

@@ -30,6 +30,8 @@ Use SparkScan to populate a list of scanned barcodes.
 
 ##### [Single Scan](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/BarcodeCaptureSimpleSample)
 
+<ReactPlayer playing controls url="/img/samples/bc-simple.mp4" />
+
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
 
 :::tip
@@ -44,6 +46,8 @@ Examples utilizing the low-level `BarcodeBatch` API.
 
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/MatrixScanSimpleSample)
 
+<ReactPlayer playing controls url="/img/samples/ms-simple.mp4" />
+
 Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 
 ## ID Scanning
@@ -54,10 +58,14 @@ Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 
 #### [Simple ID Capture](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/IdCaptureSimpleSample)
 
+<ReactPlayer playing controls url="/img/samples/id-simple.mp4" />
+
 Simple sample showing how to use the ID Capture mode to scan an ID card.
 
 ### ID Verification
 
 #### [US Driver's License](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/USDLVerificationSample)
+
+<ReactPlayer playing controls url="/img/samples/id-usdl.mp4" />
 
 Sample showing how to use the ID Capture mode to verify a US driver's license.

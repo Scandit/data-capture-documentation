@@ -34,6 +34,8 @@ Use SparkScan to populate a list of scanned barcodes.
 
 ##### [Single Scan](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/BarcodeCaptureSimpleSample)
 
+<ReactPlayer playing controls url="/img/samples/bc-simple.mp4" />
+
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
 
 ##### [Rejection](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/BarcodeCaptureRejectSample)
@@ -48,9 +50,13 @@ Examples utilizing the low-level `BarcodeBatch` API.
 
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/MatrixScanSimpleSample)
 
+<ReactPlayer playing controls url="/img/samples/ms-simple.mp4" />
+
 Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 
 ##### [Rejection](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/MatrixScanRejectSample)
+
+<ReactPlayer playing controls url="/img/samples/ms-reject.mp4" />
 
 Use custom conditions to highlight and scan only the barcodes that meet the specified criteria.
 
@@ -60,6 +66,8 @@ Use custom conditions to highlight and scan only the barcodes that meet the spec
 
 ##### [Batch Scanning](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/MatrixScanCountSimpleSample)
 
+<ReactPlayer playing controls url="/img/samples/ms-count-simple.mp4" />
+
 Use MatrixScan to batch scan and count the number of barcodes in a frame.
 
 #### MatrixScan Find
@@ -67,6 +75,8 @@ Use MatrixScan to batch scan and count the number of barcodes in a frame.
 ![MatrixScan Find](/img/samples/ms_find_android.png)
 
 ##### [Search and Find](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/SearchAndFindSample)
+
+<ReactPlayer playing controls url="/img/samples/ms-find.mp4" />
 
 Use barcode capture to define search criteria by scanning items, and MatrixScan Find can then be launched to find the pre-defined item.
 
@@ -78,14 +88,20 @@ Use barcode capture to define search criteria by scanning items, and MatrixScan 
 
 #### [Simple ID Capture](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/IdCaptureSimpleSample)
 
+<ReactPlayer playing controls url="/img/samples/id-simple.mp4" />
+
 Simple sample showing how to use the ID Capture mode to scan an ID card.
 
 #### [Extended ID Capture](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/IdCaptureExtendedSample)
+
+<ReactPlayer playing controls url="/img/samples/id-extended.mp4" />
 
 Sample showing how to use the ID Capture mode to scan an ID card with additional fields.
 
 ### ID Verification
 
 #### [US Driver's License](https://github.com/Scandit/datacapture-dotnet-samples/tree/master/android/USDLVerificationSample)
+
+<ReactPlayer playing controls url="/img/samples/id-usdl.mp4" />
 
 Sample showing how to use the ID Capture mode to verify a US driver's license.
