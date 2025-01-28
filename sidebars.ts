@@ -162,6 +162,13 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
+              label: "MatrixScan Check",
+              items: [
+                "sdks/ios/matrixscan-check/intro",
+              ],
+            },
+            {
+              type: "category",
               label: "MatrixScan Count",
               items: [
                 "sdks/ios/matrixscan-count/intro",
@@ -548,6 +555,13 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
+              label: "MatrixScan Check",
+              items: [
+                "sdks/web/matrixscan-check/intro",
+              ],
+            },
+            {
+              type: "category",
               label: "MatrixScan Find",
               items: [
                 "sdks/web/matrixscan-find/intro",
@@ -871,6 +885,13 @@ const sidebars: SidebarsConfig = {
               ],
             },
             {
+              type: "category",
+              label: "MatrixScan Check",
+              items: [
+                "sdks/react-native/matrixscan-check/intro",
+              ],
+            },
+            {
               type: 'category',
               label: 'MatrixScan Count',
               items: [
@@ -1052,6 +1073,13 @@ const sidebars: SidebarsConfig = {
                 "sdks/flutter/matrixscan/intro",
                 "sdks/flutter/matrixscan/get-started",
                 "sdks/flutter/matrixscan/advanced",
+              ],
+            },
+            {
+              type: "category",
+              label: "MatrixScan Check",
+              items: [
+                "sdks/flutter/matrixscan-check/intro",
               ],
             },
             {
