@@ -65,6 +65,6 @@ When using the Scandit Data Capture SDK you will want to set the camera as the f
 
 When using the Scandit Data Capture SDK in MAUI application additionally you have to request camera permissions in your own application before starting scanning. To see how you can achieve this, take a look at our [samples](/sdks/net/ios/samples.md).
 
-import OSSLicense from '../../../partials/_third-party-licenses.mdx';
+import OSSLicense from '../../../partials/_third-party-licenses-csharp.mdx';
 
 <OSSLicense/>

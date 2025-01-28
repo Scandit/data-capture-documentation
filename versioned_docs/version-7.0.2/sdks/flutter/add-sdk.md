@@ -110,6 +110,6 @@ When using the Scandit Data Capture SDK you will want to set the camera as the f
 
 Remember that, if you want to use the camera as the frame source for barcode, text and label capture, you need to set the “Privacy - Camera Usage Description” field in the `Info.plist` file for iOS.
 
-import OSSLicense from '../../partials/_third-party-licenses.mdx';
+import OSSLicense from '../../partials/_third-party-licenses-js.mdx';
 
 <OSSLicense/>
