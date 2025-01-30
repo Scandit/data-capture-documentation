@@ -21,9 +21,7 @@ MatrixScan Pick is implemented through functionality provided by [`BarcodePick`]
 * Status icons can be defined to provide further information to users for a given barcode. In the live view, the icons are displayed but not tapable. In the frozen view, the status icons can be tapped and expanded to provide additional textual information.
 * This guide takes you through the process to install the full UI. However, you can then customize it by choosing to remove any elements on the screen except for the AR overlays. This allows you to create custom UIs suitable for your own workflows.
 
-<p align="center">
-  <img src="/img/matrixscan-pick/ui-overview.png" alt="Wrong scan error" /><br></br>Default MatrixScan Pick UI
-</p>
+<ReactPlayer playing controls width='800' url="/img/matrixscan-pick/ms_pick.mp4" />
 
 ## Supported Symbologies
 
