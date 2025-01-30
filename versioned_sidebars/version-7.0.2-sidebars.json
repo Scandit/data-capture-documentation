@@ -86,6 +86,11 @@
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
         },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
+        },
         "sdks/ios/add-sdk",
         "sdks/ios/samples"
       ]
@@ -277,6 +282,11 @@
           "type": "link",
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
+        },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
         },
         "sdks/android/add-sdk",
         "sdks/android/samples"
@@ -470,6 +480,11 @@
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
         },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
+        },
         "sdks/web/add-sdk",
         "sdks/web/samples"
       ]
@@ -614,6 +629,11 @@
           "type": "link",
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
+        },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
         },
         "sdks/cordova/add-sdk",
         "sdks/cordova/samples"
@@ -783,6 +803,11 @@
           "type": "link",
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
+        },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
         },
         "sdks/react-native/add-sdk",
         "sdks/react-native/samples"
@@ -967,6 +992,11 @@
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
         },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
+        },
         "sdks/flutter/add-sdk",
         "sdks/flutter/samples"
       ]
@@ -1128,6 +1158,11 @@
           "type": "link",
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
+        },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
         },
         "sdks/capacitor/add-sdk",
         "sdks/capacitor/samples"
@@ -1298,6 +1333,11 @@
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
         },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
+        },
         "sdks/titanium/add-sdk",
         "sdks/titanium/samples"
       ]
@@ -1361,6 +1401,11 @@
           "type": "link",
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
+        },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
         },
         "sdks/xamarin/ios/add-sdk",
         "sdks/xamarin/ios/samples"
@@ -1515,6 +1560,11 @@
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
         },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
+        },
         "sdks/xamarin/android/add-sdk",
         "sdks/xamarin/android/samples"
       ]
@@ -1668,6 +1718,11 @@
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
         },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
+        },
         "sdks/xamarin/forms/add-sdk",
         "sdks/xamarin/forms/samples"
       ]
@@ -1820,6 +1875,11 @@
           "type": "link",
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
+        },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
         },
         "sdks/net/ios/add-sdk",
         "sdks/net/ios/samples"
@@ -1982,6 +2042,11 @@
           "type": "link",
           "label": "Data Capture Basics",
           "href": "https://docs.scandit.com/core-concepts"
+        },
+        {
+          "type": "link",
+          "label": "FAQs",
+          "href": "https://support.scandit.com/hc/en-us"
         },
         "sdks/net/android/add-sdk",
         "sdks/net/android/samples"
