@@ -140,6 +140,6 @@ Check [the official `<provider>` documentation](https://developer.android.com/gu
 
 When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. The camera permissions are handled by the plugins, so you don’t need to specify anything explicitly.
 
-import OSSLicense from '../../partials/_third-party-licenses.mdx';
+import OSSLicense from '../../partials/_third-party-licenses-js.mdx';
 
 <OSSLicense/>

@@ -9,6 +9,46 @@ keywords:
   - titanium
 ---
 
+## 7.1.0-beta.1
+
+**Released**: January 28, 2025
+
+### New Features
+
+#### Core
+
+* `DataCaptureContext` has been adapted to work as a singleton.
+  * You can use the `DataCaptureContext.SharedInstance` property to retrieve the singleton instance.
+  * The license key must be set using `DataCaptureContext.Initialize`. This step is only required once. Once initialized, the context can be used as before.
+  * It is important to call `DataCaptureContext.RemoveCurrentMode()` when the active mode is no longer needed, such as when navigating away from a screen used for scanning.
+  * The following methods have been added (also see Deprecations, below, for removed methods):
+    * `setMode`: Sets a mode to be the active mode in the context.
+    * `removeCurrentMode`: Removes the currently active mode in the context.
+    * `static sharedInstance`: Returns a singleton instance of DataCaptureContext. This instance is unusable until properly configured by calling initialize() on it.
+    * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
+    * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
+* Calling `DataCaptureContext.addMode()` or `DataCaptureContext.setMode()` now replaces the current mode with the new one, so it’s no longer needed to remove a mode when adding a new one.
+* Added the following API to fetch Open Source Software license text and attributions for all third-party software used by the Scandit SDK.
+  * `DataCaptureContext.openSourceSoftwareLicenseInfo`
+
+### Performance Improvements
+
+#### Barcode
+
+* We’ve increased the scan rate of 10% on our datasets of QR codes with high perspective distortion (so scanned at high angles). This is particularly important for cases such as receiving boxes or scanning shelf labels.
+
+### Behavioral Changes
+
+* After further improving the scanning speed on color-inverted QR and MicroQR codes, these variations can now be scanned without having to set any specific setting (as opposed to before), offering a better experience to developers.
+
+### Deprecations
+
+#### Core
+
+* The following methods of `DataCaptureContext` have been removed:
+  * `addMode`: Replaced by `setMode` as only one mode can be active at a time.
+  * `removeAllModes`: Replaced by `removeCurrentMode` as only one mode can be active at a time.
+
 ## 7.0.2
 
 **Released**: January 20, 2025

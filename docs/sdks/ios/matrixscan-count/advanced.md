@@ -28,7 +28,15 @@ This feature is used to provide users with more details regarding the items they
 
 ![Barcode Count Status](/img/matrixscan-count/barcode_count_status.png)
 
-See the [Expiry Management Sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/ExpiryManagementSample) for an example of how to use this feature.
+See the [Expiry Management Sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/ExpiryManagementSample)
+
+<ReactPlayer playing controls url="/img/samples/ss-expiry.mp4" /> for an example of how to use this feature.
+
+## Clustering
+
+import Clustering from '../../../partials/count/_clustering.mdx'
+
+<Clustering />
 
 ## Strap Mode
 
@@ -65,6 +73,10 @@ settings.excludedCodesRegex = "^1234.*"
 let barcodeCountSettings = BarcodeCountSettings()
 barcodeCountSettings.filterSettings = filterSettings
 ```
+
+By default the filters applied to the relevant barcodes are transparent, but you can use [`BarcodeFilterHighlightSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-filter-highlight-settings.html#barcode-filter-highlight-settings) to change the color and level of transparency.
+
+![Different Filters in MatrixScan Count](/img/matrixscan-count/filtering_styles.png)
 
 ## Clear Screen Button
 

@@ -11,6 +11,7 @@ import TabItem from '@theme/TabItem';
 import CustomDocCard from '../components/CustomDocCard';
 import CustomDocCardsWrapper from '../components/CustomDocCardsWrapper';
 import { Android, BarcodeCapture, BarcodeSelection, Cordova, Flutter, Ios, Javascript, MsAr, MsCount, MsFind, Sparkscan, ReactIcon, Capacitor, Xamarin, Bolt, Express, XamarinForms, XamarinIos, XamarinAndroid, NetIos, NetAndroid, Titanium } from '../components/IconComponents';
+import ReactPlayer from 'react-player';
 
 // import '../pages/wpwp.css';
 
@@ -51,4 +52,5 @@ export default {
   NetIos,
   NetAndroid,
   Titanium,
+  ReactPlayer,
 };
