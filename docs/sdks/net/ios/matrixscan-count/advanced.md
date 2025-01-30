@@ -33,6 +33,12 @@ This feature is used to provide users with more details regarding the items they
 - Wrong items
 - Fragile items
 
+## Clustering
+
+import Clustering from '../../../../partials/count/_clustering.mdx'
+
+<Clustering />
+
 ## Strap Mode
 
 It can be difficult to reach the shutter button if the smart device is attached to the user’s wrist by a strap or similar. In this instance, you can enable a floating shutter button that can be positioned by the end user in a more ergonomically suitable position.
@@ -63,6 +69,10 @@ BarcodeCountSettings settings = new BarcodeCountSettings();
 
 settings.FilterSettings.ExcludedCodesRegex = "^1234.*";
 ```
+
+By default the filters applied to the relevant barcodes are transparent, but you can use [`BarcodeFilterHighlightSettings`](https://docs.scandit.com/data-capture-sdk/net/ios/barcode-capture/api/ui/barcode-filter-highlight-settings.html#barcode-filter-highlight-settings) to change the color and level of transparency.
+
+![Different Filters in MatrixScan Count](/img/matrixscan-count/filtering_styles.png)
 
 ## Clear Screen Button
 

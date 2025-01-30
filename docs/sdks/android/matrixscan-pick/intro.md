@@ -18,8 +18,8 @@ MatrixScan Pick is implemented through functionality provided by [`BarcodePick`]
 * It highlights items with obvious and colorful visual dots on screen.
 * When paused, MatrixScan Pick freezes the display at the last view, even if the device is moved. The Play button transitions back to the live view.
 * Textual guidance is displayed from the beginning of the session and as the workflow progresses, informing of the user of changes in item status (i.e. Detected, Ignored, To-Pick, or Picked).
-* Status icons can be defined to provide further information to users for a given barcode. In the live view, the icons are displayed but not tappable. In the frozen view, the status icons can be tapped and expanded to provide additional textual information.
-* The Quick Start Guide takes you through the process to install the full UI. However, you can then customize it by choosing to remove any elements on the screen except for the AR overlays. This allows you to create custom UIs suitable for your own workflows.
+* Status icons can be defined to provide further information to users for a given barcode. In the live view, the icons are displayed but not tapable. In the frozen view, the status icons can be tapped and expanded to provide additional textual information.
+* This guide takes you through the process to install the full UI. However, you can then customize it by choosing to remove any elements on the screen except for the AR overlays. This allows you to create custom UIs suitable for your own workflows.
 
 <p align="center">
   <img src="/img/matrixscan-pick/ui-overview.png" alt="Wrong scan error" /><br></br>Default MatrixScan Pick UI
