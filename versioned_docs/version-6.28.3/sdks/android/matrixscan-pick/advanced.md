@@ -12,7 +12,7 @@ MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless
 
 ## BarcodePick Listener
 
-You can register a [`BarcodePickListener`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-pick-listener.html) on the mode, which can be used to get updates about the scanned items with each frame.
+You can register a [`BarcodePickListener`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/barcode-pick-listener.html) on the mode, which can be used to get updates about the scanned items with each frame.
 
 ```java
 mode.addListener(new BarcodePickListener() {
@@ -32,7 +32,7 @@ mode.addListener(new BarcodePickListener() {
 
 ## BarcodePickScanning Listener
 
-You can register a [`BarcodePickScanningListener`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-pick-scanning-listener.html) on the mode, which can be used to listen to every time the pick state changes.
+You can register a [`BarcodePickScanningListener`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-pick-scanning-listener.html) on the mode, which can be used to listen to every time the pick state changes.
 
 ```java
 mode.addScanningListener(new BarcodePickScanningListener() {
@@ -59,7 +59,7 @@ mode.addScanningListener(new BarcodePickScanningListener() {
 
 You may want more fine-grained knowledge over the different events happening during the life of the `BarcodePick` mode, such as when the search starts, pauses, and stops.
 
-To do this, you can directly register a [`BarcodePickViewListener`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-pick-view-listener.html) on the mode itself, keeping in mind that these listeners are called from a background thread.
+To do this, you can directly register a [`BarcodePickViewListener`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/barcode-pick-view-listener.html) on the mode itself, keeping in mind that these listeners are called from a background thread.
 
 ```java
 barcodePickView.setListener(new BarcodePickViewListener() {
@@ -79,7 +79,7 @@ barcodePickView.setListener(new BarcodePickViewListener() {
 
 ## BarcodePickAction Listener
 
-You can also register a [`BarcodePickActionListener`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-pick-action-listener.html) on the mode, which can be used to reject specific pick/unpick actions.
+You can also register a [`BarcodePickActionListener`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-pick-action-listener.html) on the mode, which can be used to reject specific pick/unpick actions.
 
 ```java
 barcodePickView.addActionListener(new BarcodePickActionListener() {

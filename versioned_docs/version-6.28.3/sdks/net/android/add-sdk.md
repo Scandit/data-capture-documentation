@@ -43,9 +43,9 @@ In addition, depending on the data capture task, you will need a reference to:
 
 | Functionality | Description | Required Module(s) |
 | --- | --- | --- |
-| Barcode Capture | [ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api.html) if you want to use barcode-related functionality, such as barcode capture or MatrixScan. | _com.scandit.datacapture:barcode_ |
-| Parser | [ScanditParser API](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api.html) if you want to parse data strings, for instance, as found in barcodes, into a set of key-value mappings. | _com.scandit.datacapture:parser_ |
-| ID Capture | [ScanditIdCapture API](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api.html) if you want to scan personal identification documents, such as identity cards, passports or visas. | _com.scandit.datacapture:id_ |
+| Barcode Capture | [ScanditBarcodeCapture API](https://docs.scandit.com/6.28/data-capture-sdk/dotnet.android/barcode-capture/api.html) if you want to use barcode-related functionality, such as barcode capture or MatrixScan. | _com.scandit.datacapture:barcode_ |
+| Parser | [ScanditParser API](https://docs.scandit.com/6.28/data-capture-sdk/dotnet.android/parser/api.html) if you want to parse data strings, for instance, as found in barcodes, into a set of key-value mappings. | _com.scandit.datacapture:parser_ |
+| ID Capture | [ScanditIdCapture API](https://docs.scandit.com/6.28/data-capture-sdk/dotnet.android/id-capture/api.html) if you want to scan personal identification documents, such as identity cards, passports or visas. | _com.scandit.datacapture:id_ |
 
 :::tip
 You can safely remove `Scandit.DataCapture.Barcode`, `Scandit.DataCapture.Parser`, or `Scandit.DataCapture.IdCapture` dependencies if you are not going to use their features.

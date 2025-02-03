@@ -62,9 +62,9 @@ When adding ScanditIdCapture to a Flutter project, certain native dependencies n
 
 If you’re only scanning barcode based documents, you only need to add the ScanditIdCapture Flutter plugin.
 
-If you’re also scanning VIZ documents, you also need to add the ScanditOCR and ScanditTextCaptureBase native dependencies, as described in our [iOS](https://docs.scandit.com/data-capture-sdk/ios/../add-sdk.md) and [Android](https://docs.scandit.com/data-capture-sdk/android/../add-sdk.md) documentation.
+If you’re also scanning VIZ documents, you also need to add the ScanditOCR and ScanditTextCaptureBase native dependencies, as described in our [iOS](https://docs.scandit.com/6.28/data-capture-sdk/ios/../add-sdk.md) and [Android](https://docs.scandit.com/6.28/data-capture-sdk/android/../add-sdk.md) documentation.
 
-If you’re also scanning MRZ documents, you also need the native ScanditTextCapture dependency. You can add this as well as described in our [iOS](https://docs.scandit.com/data-capture-sdk/ios/../add-sdk.md) and [Android](https://docs.scandit.com/data-capture-sdk/android/../add-sdk.md) documentation.
+If you’re also scanning MRZ documents, you also need the native ScanditTextCapture dependency. You can add this as well as described in our [iOS](https://docs.scandit.com/6.28/data-capture-sdk/ios/../add-sdk.md) and [Android](https://docs.scandit.com/6.28/data-capture-sdk/android/../add-sdk.md) documentation.
 
 Alternatively, if you’re scanning both VIZ and MRZ documents, you can add the ScanditTextCapture Flutter (scandit-datacapture-flutter-text) plugin, which includes the native dependencies for both VIZ and MRZ documents.
 
@@ -72,7 +72,7 @@ Please note that your license may support only a subset of ID Capture features. 
 
 ## Create the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/6.28/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```dart
 var context = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
@@ -80,7 +80,7 @@ var context = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KE
 
 ## Add the Camera
 
-You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/flutter/core/api/camera.html#class-scandit.datacapture.core.Camera):
+You need to also create the [Camera](https://docs.scandit.com/6.28/data-capture-sdk/flutter/core/api/camera.html#class-scandit.datacapture.core.Camera):
 
 ```dart
 Camera? camera = Camera.defaultCamera;
@@ -94,11 +94,11 @@ context.setFrameSource(camera);
 
 ## Create ID Capture Settings
 
-Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the types of documents that you’d like to scan. Check [IdDocumentType](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-document-type.html#enum-scandit.datacapture.id.IdDocumentType) for all the available options.
+Use [IdCaptureSettings](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the types of documents that you’d like to scan. Check [IdDocumentType](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/id-document-type.html#enum-scandit.datacapture.id.IdDocumentType) for all the available options.
 
 :::warning
-Using [IdDocumentType.dlViz](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or
-[IdDocumentType.idCardViz](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) together with any MRZ document ([IdDocumentType.idCardMrz](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardMrz), [IdDocumentType.visaMrz](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.VisaMrz), [IdDocumentType.passportMrz](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.PassportMrz), [IdDocumentType.swissDlMrz](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.SwissDlMrz)) while [SupportedSides.frontAndBack](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-supported-document-sides.html#value-scandit.datacapture.id.SupportedSides.FrontAndBack) is enabled is currently not supported.
+Using [IdDocumentType.dlViz](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or
+[IdDocumentType.idCardViz](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) together with any MRZ document ([IdDocumentType.idCardMrz](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardMrz), [IdDocumentType.visaMrz](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.VisaMrz), [IdDocumentType.passportMrz](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.PassportMrz), [IdDocumentType.swissDlMrz](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.SwissDlMrz)) while [SupportedSides.frontAndBack](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/id-supported-document-sides.html#value-scandit.datacapture.id.SupportedSides.FrontAndBack) is enabled is currently not supported.
 :::
 
 ```dart
@@ -109,7 +109,7 @@ settings.supportedDocuments.addAll(
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). A result is delivered as [CapturedId](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents. For more specific information use its non-_null_ result properties (for example [CapturedId.aamvaBarcode](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.AamvaBarcode)).
+To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). A result is delivered as [CapturedId](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents. For more specific information use its non-_null_ result properties (for example [CapturedId.aamvaBarcode](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.AamvaBarcode)).
 
 ```dart
 @override
@@ -128,20 +128,20 @@ idCapture.addListener(this)
 
 ## Use a Capture View to Visualize the Scan Process
 
-When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/flutter/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
+When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/6.28/data-capture-sdk/flutter/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```dart
 var dataCaptureView = DataCaptureView.forContext(dataCaptureContext);
 // Add the dataCaptureView to your widget tree
 ```
 
-Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
+Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
 
 ```dart
 overlay = IdCaptureOverlay.withIdCaptureForView(idCapture, dataCaptureView);
 ```
 
-The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
+The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/6.28/data-capture-sdk/flutter/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
 
 ## Turn on the Camera
 

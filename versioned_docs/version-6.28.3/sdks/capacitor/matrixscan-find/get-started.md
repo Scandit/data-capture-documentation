@@ -22,7 +22,7 @@ The general steps are:
 
 ## Create a new Data Capture Context instance
 
-The first step to add find capabilities to your application is to create a new [DataCaptureContext](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add find capabilities to your application is to create a new [DataCaptureContext](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```js
 const dataCaptureContext = DataCaptureContext.forLicenseKey(
@@ -32,7 +32,7 @@ const dataCaptureContext = DataCaptureContext.forLicenseKey(
 
 ## Configure the Barcode Find Mode
 
-The main entry point for the Barcode Find Mode is the [BarcodeFind](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [BarcodeFindSettings](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight (e.g. a list of products).
+The main entry point for the Barcode Find Mode is the [BarcodeFind](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [BarcodeFindSettings](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight (e.g. a list of products).
 
 For this tutorial, we will set up Barcode Find for tracking EAN13 codes. Change this to the correct symbologies for your use case (e.g. Code 128, Code 39…).
 
@@ -63,9 +63,9 @@ mode.setItemList(items);
 
 ## Setup the BarcodeFindView
 
-MatrixScan Find’s built-in AR user interface includes buttons and overlays that guide the user through the searching process. By adding a [BarcodeFindView](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView), the scanning interface (camera preview and searching UI elements) will be added automatically to your application.
+MatrixScan Find’s built-in AR user interface includes buttons and overlays that guide the user through the searching process. By adding a [BarcodeFindView](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView), the scanning interface (camera preview and searching UI elements) will be added automatically to your application.
 
-The BarcodeFindView appearance can be customized through [BarcodeFindViewSettings](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-find-view-settings.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindViewSettings):
+The BarcodeFindView appearance can be customized through [BarcodeFindViewSettings](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-find-view-settings.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindViewSettings):
 
 - Colors of dots in augmented reality overlay
 - Enable sound and haptic alerts
@@ -92,7 +92,7 @@ let barcodeFind;
 
 ## Register a listener to be notified with found items
 
-The BarcodeFindView displays next to its shutter button a handy “finish” button. Register a [BarcodeFindViewUiListener](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-find-view.html#interface-scandit.datacapture.barcode.find.ui.IBarcodeFindViewUiListener) to be notified what items have been found once the finish button is pressed.
+The BarcodeFindView displays next to its shutter button a handy “finish” button. Register a [BarcodeFindViewUiListener](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-find-view.html#interface-scandit.datacapture.barcode.find.ui.IBarcodeFindViewUiListener) to be notified what items have been found once the finish button is pressed.
 
 In this tutorial, we will then navigate back to the previous screen to finish the find session.
 
@@ -108,7 +108,7 @@ barcodeFindView.barcodeFindViewUiListener = {
 
 ## Start searching
 
-As soon as everything is set up, control the [BarcodeFindView](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) to start the search.
+As soon as everything is set up, control the [BarcodeFindView](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) to start the search.
 
 ```js
 barcodeFindView.startSearching();

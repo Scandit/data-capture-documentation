@@ -12,7 +12,7 @@ MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless
 
 ## Set up a listener on the BarcodeFind mode
 
-You may want more fine-grained knowledge over the different events happening during the life of the BarcodeFind mode, such as when the search starts, pauses and stops. To do this, you can directly register a [BarcodeFindListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-find-listener.html#interface-scandit.datacapture.barcode.find.IBarcodeFindListener) on the mode itself.
+You may want more fine-grained knowledge over the different events happening during the life of the BarcodeFind mode, such as when the search starts, pauses and stops. To do this, you can directly register a [BarcodeFindListener](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-find-listener.html#interface-scandit.datacapture.barcode.find.IBarcodeFindListener) on the mode itself.
 
 Be aware that these listeners will be called from a background thread.
 
@@ -34,7 +34,7 @@ mode.addListener({
 
 ## UI configuration
 
-The [BarcodeFindView](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) will by default show a set of UI elements, which can be optionally hidden:
+The [BarcodeFindView](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) will by default show a set of UI elements, which can be optionally hidden:
 
 - A play/pause button
 - A finish button

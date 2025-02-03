@@ -12,7 +12,7 @@ The are several advanced configurations that can be used to customize the behavi
 
 ## Capture both the front and the back side of documents
 
-By default, when [IdDocumentType.DlViz](https://docs.scandit.com/data-capture-sdk/xamarin.forms/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or [IdDocumentType.IdCardViz](https://docs.scandit.com/data-capture-sdk/xamarin.forms/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) are selected, _Id Capture_ scans only the front side of documents. Sometimes however, you may be interested in extracting combined information from both the front and the back side.
+By default, when [IdDocumentType.DlViz](https://docs.scandit.com/6.28/data-capture-sdk/xamarin.forms/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or [IdDocumentType.IdCardViz](https://docs.scandit.com/6.28/data-capture-sdk/xamarin.forms/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) are selected, _Id Capture_ scans only the front side of documents. Sometimes however, you may be interested in extracting combined information from both the front and the back side.
 
 Currently the combined result contains the following information:
 
@@ -20,14 +20,14 @@ Currently the combined result contains the following information:
 - European IDs: the human-readable sections of the front and the back side, and the data encoded in the Machine Readable Zone (MRZ);
 - Other documents: the human-readable section of the front and the back side (if present).
 
-First, enable scanning of both sides of documents in [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/xamarin.forms/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings):
+First, enable scanning of both sides of documents in [IdCaptureSettings](https://docs.scandit.com/6.28/data-capture-sdk/xamarin.forms/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings):
 
 ```csharp
 settings.SupportedDocuments = IdDocumentType.IdCardViz | IdDocumentType.DlViz;
 settings.SupportedSides = SupportedSides.FrontAndBack;
 ```
 
-Start by scanning the front side of a document. After you receive the result in [IIdCaptureListener](https://docs.scandit.com/data-capture-sdk/xamarin.forms/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener), inspect [VizResult.BackSideCaptureSupported](https://docs.scandit.com/data-capture-sdk/xamarin.forms/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.IsBackSideCaptureSupported). If scanning of the back side of your document is supported, flip the document and capture the back side as well. The next result that you receive is a combined result that contains the information from both sides. You may verify this by checking [VizResult.CapturedSides](https://docs.scandit.com/data-capture-sdk/xamarin.forms/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.CapturedSides). After both sides of the document are scanned, you may proceed with another document.
+Start by scanning the front side of a document. After you receive the result in [IIdCaptureListener](https://docs.scandit.com/6.28/data-capture-sdk/xamarin.forms/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener), inspect [VizResult.BackSideCaptureSupported](https://docs.scandit.com/6.28/data-capture-sdk/xamarin.forms/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.IsBackSideCaptureSupported). If scanning of the back side of your document is supported, flip the document and capture the back side as well. The next result that you receive is a combined result that contains the information from both sides. You may verify this by checking [VizResult.CapturedSides](https://docs.scandit.com/6.28/data-capture-sdk/xamarin.forms/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.CapturedSides). After both sides of the document are scanned, you may proceed with another document.
 
 Sometimes, you may not be interested in scanning the back side of a document, after you completed the front scan. For example, your user may decide to cancel the process. Internally, _Id Capture_ maintains the state of the scan, that helps it to provide better combined results. To abandon capturing the back of a document, reset this state by calling:
 
@@ -43,7 +43,7 @@ _ID Validate_ is a fake ID detection software. It currently supports documents t
 
 The following two verifiers are available:
 
-- [AamvaVizBarcodeComparisonVerifier](https://docs.scandit.com/data-capture-sdk/xamarin.forms/id-capture/api/aamva-viz-barcode-comparison-verifier.html#class-scandit.datacapture.id.AamvaVizBarcodeComparisonVerifier): Validates the authenticity of the document by comparing the data from the VIZ and from the barcode on the back.
-- [AamvaBarcodeVerifier](https://docs.scandit.com/data-capture-sdk/xamarin.forms/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by scanning the barcode on the back.
+- [AamvaVizBarcodeComparisonVerifier](https://docs.scandit.com/6.28/data-capture-sdk/xamarin.forms/id-capture/api/aamva-viz-barcode-comparison-verifier.html#class-scandit.datacapture.id.AamvaVizBarcodeComparisonVerifier): Validates the authenticity of the document by comparing the data from the VIZ and from the barcode on the back.
+- [AamvaBarcodeVerifier](https://docs.scandit.com/6.28/data-capture-sdk/xamarin.forms/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by scanning the barcode on the back.
 
 To enable ID Validate for your subscription, please reach out to [Scandit Support](mailto:support@scandit.com).

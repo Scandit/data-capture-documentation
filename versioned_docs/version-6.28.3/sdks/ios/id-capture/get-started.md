@@ -32,7 +32,7 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 ## Create a Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/6.28/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```swift
 self.context = DataCaptureContext(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
@@ -40,7 +40,7 @@ self.context = DataCaptureContext(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY
 
 ## Access a Camera
 
-Next, you need to create a new instance of the [`SDCCamera`](https://docs.scandit.com/data-capture-sdk/ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera that will be used to stream previews and to capture images. The camera settings are also configured, in this case, we use the `recommendedCameraSettings` that come withe ID Capture SDK.
+Next, you need to create a new instance of the [`SDCCamera`](https://docs.scandit.com/6.28/data-capture-sdk/ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera that will be used to stream previews and to capture images. The camera settings are also configured, in this case, we use the `recommendedCameraSettings` that come withe ID Capture SDK.
 
 ```swift
 camera = Camera.default
@@ -53,10 +53,10 @@ camera?.apply(recommendedCameraSettings)
 
 ## Configure the Capture Settings
 
-Use [`SDCIdCaptureSettings`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the types of documents you need to scan. Check [`SDCIdDocumentType`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-document-type.html#enum-scandit.datacapture.id.IdDocumentType) for all the available options.
+Use [`SDCIdCaptureSettings`](https://docs.scandit.com/6.28/data-capture-sdk/ios/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the types of documents you need to scan. Check [`SDCIdDocumentType`](https://docs.scandit.com/6.28/data-capture-sdk/ios/id-capture/api/id-document-type.html#enum-scandit.datacapture.id.IdDocumentType) for all the available options.
 
 :::warning
-Using [`SDCIdDocumentTypeDLVIZ`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or [`SDCIdDocumentTypeIdCardVIZ`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) together with any MRZ document while [`SDCSupportedSidesFrontAndBack`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-supported-document-sides.html#value-scandit.datacapture.id.SupportedSides.FrontAndBack) is enabled **is not** supported.
+Using [`SDCIdDocumentTypeDLVIZ`](https://docs.scandit.com/6.28/data-capture-sdk/ios/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or [`SDCIdDocumentTypeIdCardVIZ`](https://docs.scandit.com/6.28/data-capture-sdk/ios/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) together with any MRZ document while [`SDCSupportedSidesFrontAndBack`](https://docs.scandit.com/6.28/data-capture-sdk/ios/id-capture/api/id-supported-document-sides.html#value-scandit.datacapture.id.SupportedSides.FrontAndBack) is enabled **is not** supported.
 :::
 
 ```swift
@@ -65,9 +65,9 @@ idCaptureSettings.supportedDocuments = [.idCardViz, .aamvaBarcode, .dlViz]
 
 ## Implement a Listener
 
-To receive scan results implement [`SDCIdCaptureListener`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
+To receive scan results implement [`SDCIdCaptureListener`](https://docs.scandit.com/6.28/data-capture-sdk/ios/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
 
-A result is delivered as an [`SDCCapturedId`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents. For more specific information use its non-nil result properties (for example [`SDCCapturedId.aamvaBarcodeResult`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.AamvaBarcode)).
+A result is delivered as an [`SDCCapturedId`](https://docs.scandit.com/6.28/data-capture-sdk/ios/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents. For more specific information use its non-nil result properties (for example [`SDCCapturedId.aamvaBarcodeResult`](https://docs.scandit.com/6.28/data-capture-sdk/ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.AamvaBarcode)).
 
 ```swift
 extension IdCaptureViewController: IdCaptureListener {
@@ -106,7 +106,7 @@ idCapture.addListener(self)
 
 When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. 
 
-To do that, add a [`SDCDataCaptureView`](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
+To do that, add a [`SDCDataCaptureView`](https://docs.scandit.com/6.28/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```swift
 let captureView = DataCaptureView(for: context, frame: view.bounds)
@@ -115,7 +115,7 @@ captureView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 view.addSubview(captureView)
 ```
 
-Then, add a [`SDCIdCaptureOverlay`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) to the view:
+Then, add a [`SDCIdCaptureOverlay`](https://docs.scandit.com/6.28/data-capture-sdk/ios/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) to the view:
 
 ```swift
 let overlay = IdCaptureOverlay(idCapture: idCapture, view: captureView)

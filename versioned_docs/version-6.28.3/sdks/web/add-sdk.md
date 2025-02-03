@@ -130,7 +130,7 @@ On iOS there’s a [persisting issue](https://bugs.webkit.org/show_bug.cgi?id=25
 
 ## Electron
 
-You can easily configure the web sdk to work into an Electron app. There are some extra steps though. The register method must be called inside the main.ts file passing down some dependencies and the publicKey. The publicKey will be used to decrypt the encrypted license key file that must be placed into the [`ConfigureOptions.licenseDataPath`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.LicenseDataPath) option:
+You can easily configure the web sdk to work into an Electron app. There are some extra steps though. The register method must be called inside the main.ts file passing down some dependencies and the publicKey. The publicKey will be used to decrypt the encrypted license key file that must be placed into the [`ConfigureOptions.licenseDataPath`](https://docs.scandit.com/6.28/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.LicenseDataPath) option:
 
 ```ts
 // electron main.ts

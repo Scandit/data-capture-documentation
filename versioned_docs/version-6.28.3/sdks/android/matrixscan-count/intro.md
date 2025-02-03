@@ -31,7 +31,7 @@ Upon completing the scanning process, if all items have been successfully scanne
 MatrixScan Count does not include a UI for reviewing the scan list; however a recommended UI for this process can be seen in our [Receiving Sample](../samples.md#receiving-1).
 :::
 
-MatrixScan Count is conformed through functionality provided by [BarcodeCount](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount).
+MatrixScan Count is conformed through functionality provided by [BarcodeCount](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount).
 
 ## Prerequisites
 

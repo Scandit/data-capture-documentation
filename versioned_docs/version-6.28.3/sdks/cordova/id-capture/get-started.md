@@ -74,7 +74,7 @@ Please note that your license may support only a subset of ID Capture features. 
 
 ## Create the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/cordova/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/6.28/data-capture-sdk/cordova/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```js
 const context = Scandit.DataCaptureContext.forLicenseKey(
@@ -84,7 +84,7 @@ const context = Scandit.DataCaptureContext.forLicenseKey(
 
 ## Add the Camera
 
-You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/cordova/core/api/camera.html#class-scandit.datacapture.core.Camera):
+You need to also create the [Camera](https://docs.scandit.com/6.28/data-capture-sdk/cordova/core/api/camera.html#class-scandit.datacapture.core.Camera):
 
 ```js
 const camera = Scandit.Camera.default;
@@ -101,10 +101,10 @@ if (camera != null) {
 
 ## Create ID Capture Settings
 
-Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the types of documents that you’d like to scan. Check [IdDocumentType](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-document-type.html#enum-scandit.datacapture.id.IdDocumentType) for all the available options.
+Use [IdCaptureSettings](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the types of documents that you’d like to scan. Check [IdDocumentType](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-document-type.html#enum-scandit.datacapture.id.IdDocumentType) for all the available options.
 
 :::warning
-Using [IdDocumentType.DLVIZ](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or [IdDocumentType.IdCardVIZ](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) together with any MRZ document ([IdDocumentType.IdCardMRZ](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardMrz), [IdDocumentType.VisaMRZ](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.VisaMrz), [IdDocumentType.PassportMRZ](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.PassportMrz), [IdDocumentType.SwissDLMRZ](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.SwissDlMrz)) while [SupportedSides.FrontAndBack](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-supported-document-sides.html#value-scandit.datacapture.id.SupportedSides.FrontAndBack) is enabled is currently not supported.
+Using [IdDocumentType.DLVIZ](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or [IdDocumentType.IdCardVIZ](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) together with any MRZ document ([IdDocumentType.IdCardMRZ](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardMrz), [IdDocumentType.VisaMRZ](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.VisaMrz), [IdDocumentType.PassportMRZ](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.PassportMrz), [IdDocumentType.SwissDLMRZ](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.SwissDlMrz)) while [SupportedSides.FrontAndBack](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-supported-document-sides.html#value-scandit.datacapture.id.SupportedSides.FrontAndBack) is enabled is currently not supported.
 :::
 
 ```js
@@ -118,7 +118,7 @@ settings.supportedDocuments = [
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). A result is delivered as [CapturedId](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents. For more specific information use its non-_null_ result properties (for example [CapturedId.aamvaBarcodeResult](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.AamvaBarcode)).
+To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). A result is delivered as [CapturedId](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents. For more specific information use its non-_null_ result properties (for example [CapturedId.aamvaBarcodeResult](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.AamvaBarcode)).
 
 ```js
 const listener = {
@@ -142,14 +142,14 @@ idCapture.addListener(listener);
 
 ## Use a Capture View to Visualize the Scan Process
 
-When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/cordova/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
+When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/6.28/data-capture-sdk/cordova/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```js
 const view = Scandit.DataCaptureView.forContext(context);
 view.connectToElement(htmlElement);
 ```
 
-Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
+Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
 
 ```js
 let overlay = Scandit.IdCaptureOverlay.withTextCaptureForView(
@@ -158,7 +158,7 @@ let overlay = Scandit.IdCaptureOverlay.withTextCaptureForView(
 );
 ```
 
-The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
+The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
 
 ## Turn on the Camera
 
@@ -172,11 +172,11 @@ And this is it. You can now scan documents.
 
 ## Capture both the front and the back side of documents
 
-By default, when [IdDocumentType.DLVIZ](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or [IdDocumentType.IdCardVIZ](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) are selected, _Id Capture_ scans only the front side of documents. Sometimes however, you may be interested in extracting combined information from both the front and the back side.
+By default, when [IdDocumentType.DLVIZ](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.DlViz) or [IdDocumentType.IdCardVIZ](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-document-type.html#value-scandit.datacapture.id.IdDocumentType.IdCardViz) are selected, _Id Capture_ scans only the front side of documents. Sometimes however, you may be interested in extracting combined information from both the front and the back side.
 
 Currently the combined result contains the following information: \* AAMVA-compliant documents (for example US Driver’s Licenses): the human-readable front side of the document and the data encoded in the PDF417 barcode in the back; \* European IDs: the human-readable sections of the front and the back side, and the data encoded in the Machine Readable Zone (MRZ); \* Other documents: the human-readable section of the front and the back side (if present).
 
-First, enable scanning of both sides of documents in [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings):
+First, enable scanning of both sides of documents in [IdCaptureSettings](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings):
 
 ```js
 settings.supportedDocuments = [
@@ -186,8 +186,8 @@ settings.supportedDocuments = [
 settings.supportedSides = Scandit.SupportedSides.FrontAndBack;
 ```
 
-Start by scanning the front side of a document. After you receive the result in [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener), inspect [VIZResult.isBackSideCaptureSupported](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.IsBackSideCaptureSupported). If scanning of the back side of your document is supported, flip the document and capture the back side as well. The next result that you receive is a combined result that contains
-the information from both sides. You may verify this by checking [VIZResult.capturedSides](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.CapturedSides). After both sides of the document are scanned, you may proceed with another document.
+Start by scanning the front side of a document. After you receive the result in [IdCaptureListener](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener), inspect [VIZResult.isBackSideCaptureSupported](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.IsBackSideCaptureSupported). If scanning of the back side of your document is supported, flip the document and capture the back side as well. The next result that you receive is a combined result that contains
+the information from both sides. You may verify this by checking [VIZResult.capturedSides](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.CapturedSides). After both sides of the document are scanned, you may proceed with another document.
 
 Sometimes, you may not be interested in scanning the back side of a document, after you completed the front scan. For example, your user may decide to cancel the process. Internally, _Id Capture_ maintains the state of the scan, that helps it to provide better combined results. To abandon capturing the back of a document, reset this state by calling:
 

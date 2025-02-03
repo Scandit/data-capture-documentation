@@ -215,6 +215,7 @@ const config: Config = {
               "danger",
             ],
           },
+          showLastUpdateTime: true,
           includeCurrentVersion: true,
           lastVersion: "7.0.2",
           versions: {
@@ -224,7 +225,8 @@ const config: Config = {
             },
             '7.0.2': {
               label: '7.0.2',
-              banner: 'none'
+              banner: 'none',
+              badge: false,
             },
             '6.28.3': {
               banner: 'none',

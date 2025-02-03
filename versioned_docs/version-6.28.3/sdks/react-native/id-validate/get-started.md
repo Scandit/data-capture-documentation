@@ -10,8 +10,8 @@ keywords:
 
 This guide will help you get started with Scandit ID Validate. There are two verifiers available:
 
-* [`AAMVAVizBarcodeComparisonVerifier`](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/aamva-viz-barcode-comparison-verifier.html#class-scandit.datacapture.id.AamvaVizBarcodeComparisonVerifier): Validates the authenticity of the document by comparing the data from the VIZ and from the barcode on the back.
-* [`AAMVABarcodeVerifier`](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by analyzing the barcode on the back.
+* [`AAMVAVizBarcodeComparisonVerifier`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/id-capture/api/aamva-viz-barcode-comparison-verifier.html#class-scandit.datacapture.id.AamvaVizBarcodeComparisonVerifier): Validates the authenticity of the document by comparing the data from the VIZ and from the barcode on the back.
+* [`AAMVABarcodeVerifier`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by analyzing the barcode on the back.
 
 Integrating ID Validate into your app follows the same general steps as [integrating ID Capture](../id-capture/get-started.md), with some minor differences based on the verifier you choose, as detailed in the following sections.
 
@@ -19,7 +19,7 @@ Integrating ID Validate into your app follows the same general steps as [integra
 
 This verifier compares the data from the VIZ (the machine-readable zone) and the barcode on the back of the document and requires the front and back scanning mode.
 
-Create the verifier and initialize [`IdCapture`](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture.html#class-scandit.datacapture.id.IdCapture) with the following settings:
+Create the verifier and initialize [`IdCapture`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/id-capture/api/id-capture.html#class-scandit.datacapture.id.IdCapture) with the following settings:
 
 ```javascript
 const dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
@@ -59,7 +59,7 @@ const idCaptureListener = {
 }
 ```
 
-The return value allows you to query both the overall result of the verification and the results of individual checks. See [`AAMVAVizBarcodeComparisonResult`](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/aamva-viz-barcode-comparison-verifier.html#class-scandit.datacapture.id.AamvaVizBarcodeComparisonResult) for details.
+The return value allows you to query both the overall result of the verification and the results of individual checks. See [`AAMVAVizBarcodeComparisonResult`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/id-capture/api/aamva-viz-barcode-comparison-verifier.html#class-scandit.datacapture.id.AamvaVizBarcodeComparisonResult) for details.
 
 ## Barcode Verifier
 

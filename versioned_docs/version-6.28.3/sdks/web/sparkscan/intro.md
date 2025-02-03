@@ -38,22 +38,22 @@ Scanning modes:
 - **Target mode**: Ideal for scanning scenarios where precision is important. This mode will add an aimer to the preview, to precisely select the barcode to scan. This is useful when multiple barcodes are in view (e.g. long range scanning).
 
 :::note
-Users can enable the target mode by toggling the dedicated icon in the setting toolbar, shown by default ([`SparkScanView.targetModeButtonVisible`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.TargetModeButtonVisible)). Hiding this button will remove the possibility to toggle scanning mode for the end-user.
+Users can enable the target mode by toggling the dedicated icon in the setting toolbar, shown by default ([`SparkScanView.targetModeButtonVisible`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.TargetModeButtonVisible)). Hiding this button will remove the possibility to toggle scanning mode for the end-user.
 :::
 
 Scanning behaviors:
 
 - **Single scan**: Scan one barcode at a time. The user needs to trigger the scanner every time to scan a barcode. This allows for a more controlled scanning and lower battery consumption.
 - **Continuous scan**: Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.
-    - Users can enable continuous scanning by holding down the trigger button ([`SparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)). This gesture can be disabled.
-    - Developers can show a dedicated setting in the toolbar to let the user enable continuous scan mode ([`SparkScanView.scanningBehaviorButtonVisible`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.ScanningBehaviorButtonVisible)), which is hidden by default.
+    - Users can enable continuous scanning by holding down the trigger button ([`SparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)). This gesture can be disabled.
+    - Developers can show a dedicated setting in the toolbar to let the user enable continuous scan mode ([`SparkScanView.scanningBehaviorButtonVisible`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.ScanningBehaviorButtonVisible)), which is hidden by default.
 
 Camera preview behaviors:
 
 - **Default**: Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.
 - **Persistent**: Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode.
 
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode ([`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode)).
+Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode ([`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode)).
 
 ## Workflow Description
 

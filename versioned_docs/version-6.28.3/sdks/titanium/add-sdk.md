@@ -46,7 +46,7 @@ ti create -t app -n <PROJECT_NAME>
 
 ### 2a. Add the Scandit Data Capture SDK from the npm registry
 
-To add our plugins from the npm registry, you can run these commands from your project’s root folder. In the following snippet we’re adding [ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/titanium/barcode-capture/api.html)
+To add our plugins from the npm registry, you can run these commands from your project’s root folder. In the following snippet we’re adding [ScanditBarcodeCapture API](https://docs.scandit.com/6.28/data-capture-sdk/titanium/barcode-capture/api.html)
 
 ```sh
 npm install scandit-titanium-datacapture-core

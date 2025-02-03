@@ -24,9 +24,9 @@ Depending on the data capture task, you need a reference to:
 
 | Functionality | Description | Required Module(s) |
 | --- | --- | --- |
-| Barcode Capture | [ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api.html) if you want to use barcode-related functionality, such as barcode capture or MatrixScan. | _com.scandit.datacapture:barcode_ |
-| Parser | [ScanditParser API](https://docs.scandit.com/data-capture-sdk/android/parser/api.html) if you want to parse data strings, for instance, as found in barcodes, into a set of key-value mappings. | _com.scandit.datacapture:parser_ |
-| ID Capture | [ScanditIdCapture API](https://docs.scandit.com/data-capture-sdk/android/id-capture/api.html) if you want to scan personal identification documents, such as identity cards, passports or visas. | _com.scandit.datacapture:id_ |
+| Barcode Capture | [ScanditBarcodeCapture API](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api.html) if you want to use barcode-related functionality, such as barcode capture or MatrixScan. | _com.scandit.datacapture:barcode_ |
+| Parser | [ScanditParser API](https://docs.scandit.com/6.28/data-capture-sdk/android/parser/api.html) if you want to parse data strings, for instance, as found in barcodes, into a set of key-value mappings. | _com.scandit.datacapture:parser_ |
+| ID Capture | [ScanditIdCapture API](https://docs.scandit.com/6.28/data-capture-sdk/android/id-capture/api.html) if you want to scan personal identification documents, such as identity cards, passports or visas. | _com.scandit.datacapture:id_ |
 
 :::tip
 You can safely remove _barcode_, _parser_, or _id_ dependencies if you are not going to use their features.
@@ -130,9 +130,9 @@ You can add the necessary artifacts as dependencies:
 
 You need to add a reference to `ScanditCaptureCore.aar`, which contains the shared functionality used by the other data capture modules. In addition, depending on the data capture task, you need a reference to:
 
-- [ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api.html) if you want to use barcode-related functionality, such as barcode capture or MatrixScan
-- [ScanditParser API](https://docs.scandit.com/data-capture-sdk/android/parser/api.html) if you want to parse data strings, for instance, as found in barcodes, into a set of key-value mappings
-- [ScanditIdCapture API](https://docs.scandit.com/data-capture-sdk/android/id-capture/api.html) if you want to scan personal identification documents, such as identity cards, passports or visas
+- [ScanditBarcodeCapture API](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api.html) if you want to use barcode-related functionality, such as barcode capture or MatrixScan
+- [ScanditParser API](https://docs.scandit.com/6.28/data-capture-sdk/android/parser/api.html) if you want to parse data strings, for instance, as found in barcodes, into a set of key-value mappings
+- [ScanditIdCapture API](https://docs.scandit.com/6.28/data-capture-sdk/android/id-capture/api.html) if you want to scan personal identification documents, such as identity cards, passports or visas
 
 If your project already has a local `flatDir` repository, add the AAR files to that folder. If you do not have a `flatDir` repository yet, create a new one in your _build.gradle_ file as illustrated below:
 

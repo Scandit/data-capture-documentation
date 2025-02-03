@@ -16,7 +16,7 @@ SparkScan is optimized by default for efficiency, accuracy, and a seamless user 
 
 Allowing the end user to control the scanner with hardware buttons can be useful if your users typically wear gloves. It can also improve ergonomics in some workflows.
 
-SparkScan offers a built-in API to let you do this via [SparkScanViewSettings.hardwareTriggerEnabled](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
+SparkScan offers a built-in API to let you do this via [SparkScanViewSettings.hardwareTriggerEnabled](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
 
 ### Trigger Error State
 
@@ -26,17 +26,17 @@ You can customize:
 
 - The text message.
 - The timeout of the error message: in this case, scanner is paused for the specified amount of time; however, user can quickly restart the scanning process by tapping the trigger button.
-- The color of the flashing screen upon scan. You can enable or disable the visual feedback via [SparkScanViewSettings.visualFeedbackEnabled](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.VisualFeedbackEnabled) and control the color via [SparkScanViewFeedback](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-feedback.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewFeedback).
+- The color of the flashing screen upon scan. You can enable or disable the visual feedback via [SparkScanViewSettings.visualFeedbackEnabled](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.VisualFeedbackEnabled) and control the color via [SparkScanViewFeedback](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-feedback.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewFeedback).
 - The color of the highlight for the scanned barcode.
 - The feedback (sound, vibration).
 
-To emit an error, you have to implement a [`SparkScanFeedbackDelegate`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-feedback-delegate.html#interface-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate) and set it to the `SparkScanView`:
+To emit an error, you have to implement a [`SparkScanFeedbackDelegate`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/spark-scan-feedback-delegate.html#interface-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate) and set it to the `SparkScanView`:
 
 ```java
 sparkScanView.setFeedbackDelegate(this);
 ```
 
-In the [`SparkScanFeedbackDelegate.getFeedbackForBarcode()`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-feedback-delegate.html#method-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate.GetFeedbackForBarcode) you can then return an error or a success feedback:
+In the [`SparkScanFeedbackDelegate.getFeedbackForBarcode()`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/spark-scan-feedback-delegate.html#method-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate.GetFeedbackForBarcode) you can then return an error or a success feedback:
 
 ```java
 @Nullable
@@ -63,7 +63,7 @@ A small timeout (for instance, less than `2`seconds) could allow the user to sca
 
 ### Reject Barcodes
 
-To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan's built-in error state. Setting the [`Error.resumeCapturingDelay`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
+To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan's built-in error state. Setting the [`Error.resumeCapturingDelay`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
 
 ### Add Advanced Scanning Modes to the Setting Toolbar
 
@@ -81,7 +81,7 @@ sparkScanView.setBarcodeFindButtonVisible(true);
 
 ![SparkScan Advanced Scanning Modes](../../../img/toolbars.png)
 
-In addition you have to add a listener to the [SparkScanView](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) via [SparkScanView.setListener()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.SetListener). Subsequent to this, you receive callbacks when the **Barcode Find** button or **Barcode Count** button is tapped from the toolbar.
+In addition you have to add a listener to the [SparkScanView](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) via [SparkScanView.setListener()](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.SetListener). Subsequent to this, you receive callbacks when the **Barcode Find** button or **Barcode Count** button is tapped from the toolbar.
 
 ```java
 sparkScanView.setListener(this);
@@ -127,4 +127,4 @@ In some cases you want to avoid end users from accessing these controls, for exa
 * Disabling audio feedback on scan, as the work environment is always noisy
 * Toggling the continuous mode, as you want them to pick items one by one
 
-To add controls to the settings toolbar, just change the visibility of these buttons. Please refer to [SparkScanView](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
+To add controls to the settings toolbar, just change the visibility of these buttons. Please refer to [SparkScanView](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.

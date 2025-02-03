@@ -48,7 +48,7 @@ Sample that uses the camera to read a single QR code that starts with “09:” 
 
 #### MatrixScan AR
 
-Examples utilizing the low-level [`BarcodeTracking`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-tracking.html) API.
+Examples utilizing the low-level [`BarcodeTracking`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-tracking.html) API.
 
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-android-samples/tree/master/MatrixScanSimpleSample)
 

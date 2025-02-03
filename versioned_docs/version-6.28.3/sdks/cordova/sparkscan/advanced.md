@@ -16,7 +16,7 @@ SparkScan is optimized by default for efficiency, accuracy, and a seamless user 
 
 Allowing the end user to control the scanner with hardware buttons can be useful if your users typically wear gloves. It can also improve ergonomics in some workflows.
 
-SparkScan offers a built-in API to let you do this via [`SparkScanViewSettings.hardwareTriggerEnabled`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
+SparkScan offers a built-in API to let you do this via [`SparkScanViewSettings.hardwareTriggerEnabled`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
 
 ### Trigger Error State
 
@@ -24,7 +24,7 @@ You may want to introduce logic in your app to show an error message when scanni
 
 - The text message
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button
-- The color of the flashing screen upon scan. You can enable or disable the visual feedback via [SparkScanViewSettings.visualFeedbackEnabled](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.VisualFeedbackEnabled) and you can control the color via [SparkScanViewSuccessFeedback](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-feedback.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSuccessFeedback) and [SparkScanViewErrorFeedback](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-feedback.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewErrorFeedback).
+- The color of the flashing screen upon scan. You can enable or disable the visual feedback via [SparkScanViewSettings.visualFeedbackEnabled](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.VisualFeedbackEnabled) and you can control the color via [SparkScanViewSuccessFeedback](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-feedback.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSuccessFeedback) and [SparkScanViewErrorFeedback](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-feedback.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewErrorFeedback).
 
 An error example is here reported:
 
@@ -45,7 +45,7 @@ A small timeout could allow the user to scan again without having to interact wi
 
 ### Reject Barcodes
 
-To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan’s built-in error state. Setting the [`SparkScanBarcodeErrorFeedback.resumeCapturingDelay`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to 0 allows the user to continue scanning immediately without pausing on rejected codes.
+To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan’s built-in error state. Setting the [`SparkScanBarcodeErrorFeedback.resumeCapturingDelay`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to 0 allows the user to continue scanning immediately without pausing on rejected codes.
 
 ### Add Advanced Scanning Modes to the Setting Toolbar
 
@@ -69,7 +69,7 @@ sparkScanView.barcodeFindButtonVisible = true;
 
 All text, colors and opacity of the SparkScan UI elements (trigger button, setting toolbar, toasts) can be customized to match the desired language and color scheme.
 
-Please refer to [SparkScanView](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of available parameters.
+Please refer to [SparkScanView](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of available parameters.
 
 ### Add Controls to the Setting Toolbar
 
@@ -86,4 +86,4 @@ The Setting Toolbar comes with default buttons included, but the full list of av
 - to prevent them toggling the continuous mode, as you want them to pick items one by one
 - etc.
 
-To do that, you can change the visibility of these buttons, hiding them from the setting toolbar. Please refer to [SparkScanView](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
+To do that, you can change the visibility of these buttons, hiding them from the setting toolbar. Please refer to [SparkScanView](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
