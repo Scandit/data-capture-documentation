@@ -36,7 +36,7 @@ DataCaptureContext dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENT
 
 ## Configure the Barcode Selection Mode
 
-Barcode selection is orchestrated by the [BarcodeSelection](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) [data capture mode](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-mode.html#interface-scandit.datacapture.core.IDataCaptureMode). It is configured via [BarcodeSelectionSettings](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection-settings.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) for when new codes have been selected.
+Barcode selection is orchestrated by the [BarcodeSelection](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) [data capture mode](https://docs.scandit.com/6.28/data-capture-sdk/android/core/api/data-capture-mode.html#interface-scandit.datacapture.core.IDataCaptureMode). It is configured via [BarcodeSelectionSettings](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection-settings.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionSettings) and allows you to register one or more [listeners](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) for when new codes have been selected.
 
 For this task, we setup barcode scanning for a small list of different barcode types, called [symbologies](/barcode-symbologies.md). The list of symbologies to enable is highly application specific. It is recommended that you **only enable the list of symbologies your application requires**.
 
@@ -50,25 +50,25 @@ settings.enableSymbology(Symbology.EAN13_UPCA, true);
 
 ### Selection Types
 
-The behavior of Barcode Selection can be changed by using a different [selection type](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection-type.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionType). This defines the method used by [BarcodeSelection](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) to select codes.
+The behavior of Barcode Selection can be changed by using a different [selection type](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection-type.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionType). This defines the method used by [BarcodeSelection](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) to select codes.
 
 There are two types:
 
-- If you want the user to select barcodes with a tap, use [BarcodeSelectionTapSelection](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection-tap-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionTapSelection).
-    - This selection type can automatically freeze the camera preview to make the selection easier. You can configure the freezing behavior via [BarcodeSelectionTapSelection.freezeBehavior](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection-tap-selection.html#property-scandit.datacapture.barcode.selection.BarcodeSelectionTapSelection.FreezeBehavior). 
-    - With [BarcodeSelectionTapSelection.tapBehavior](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection-tap-selection.html#property-scandit.datacapture.barcode.selection.BarcodeSelectionTapSelection.TapBehavior) you can decide if a second tap on a barcode means that the barcode is unselected or if it is selected another time (increasing the counter).
+- If you want the user to select barcodes with a tap, use [BarcodeSelectionTapSelection](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection-tap-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionTapSelection).
+    - This selection type can automatically freeze the camera preview to make the selection easier. You can configure the freezing behavior via [BarcodeSelectionTapSelection.freezeBehavior](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection-tap-selection.html#property-scandit.datacapture.barcode.selection.BarcodeSelectionTapSelection.FreezeBehavior). 
+    - With [BarcodeSelectionTapSelection.tapBehavior](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection-tap-selection.html#property-scandit.datacapture.barcode.selection.BarcodeSelectionTapSelection.TapBehavior) you can decide if a second tap on a barcode means that the barcode is unselected or if it is selected another time (increasing the counter).
 
 :::note
 Using BarcodeSelectionTapSelection requires the MatrixScan add-on.
 :::
 
-- If you want the selection to happen automatically based on where the user points the camera, then use [BarcodeSelectionAimerSelection](https://docs.scandit.com/data-capture-sdk/android/selecting-one-of-many.html#:~:text=BarcodeSelectionAimerSelection). It is possible to choose between two different [selection strategies](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection-strategy.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionStrategy):
-    - Use [BarcodeSelectionAutoSelectionStrategy](https://docs.scandit.com/data-capture-sdk/android/selecting-one-of-many.html#:~:text=BarcodeSelectionAutoSelectionStrategy) if you want the barcodes to be selected automatically when aiming at them as soon as the intention is understood by our internal algorithms.
-    - Use [BarcodeSelectionManualSelectionStrategy](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection-strategy.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionManualSelectionStrategy) if you want the barcodes to be selected when aiming at them and tapping anywhere on the screen.
+- If you want the selection to happen automatically based on where the user points the camera, then use [BarcodeSelectionAimerSelection](https://docs.scandit.com/6.28/data-capture-sdk/android/selecting-one-of-many.html#:~:text=BarcodeSelectionAimerSelection). It is possible to choose between two different [selection strategies](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection-strategy.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionStrategy):
+    - Use [BarcodeSelectionAutoSelectionStrategy](https://docs.scandit.com/6.28/data-capture-sdk/android/selecting-one-of-many.html#:~:text=BarcodeSelectionAutoSelectionStrategy) if you want the barcodes to be selected automatically when aiming at them as soon as the intention is understood by our internal algorithms.
+    - Use [BarcodeSelectionManualSelectionStrategy](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection-strategy.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionManualSelectionStrategy) if you want the barcodes to be selected when aiming at them and tapping anywhere on the screen.
 
 ### Single Barcode Auto Detection
 
-If you want to automatically select a barcode when it is the only one on screen, turn on [BarcodeSelectionSettings.singleBarcodeAutoDetection](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection-settings.html#property-scandit.datacapture.barcode.selection.BarcodeSelectionSettings.SingleBarcodeAutoDetection).
+If you want to automatically select a barcode when it is the only one on screen, turn on [BarcodeSelectionSettings.singleBarcodeAutoDetection](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection-settings.html#property-scandit.datacapture.barcode.selection.BarcodeSelectionSettings.SingleBarcodeAutoDetection).
 
 ### Creating the Mode
 
@@ -80,7 +80,7 @@ BarcodeSelection barcodeSelection = BarcodeSelection.forDataCaptureContext(dataC
 
 ## Registering the Listener
 
-To get informed whenever a new code has been recognized, add a [BarcodeSelectionListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) through [BarcodeSelection.addListener()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection.html#method-scandit.datacapture.barcode.selection.BarcodeSelection.AddListener) and implement the listener methods to suit your application’s needs.
+To get informed whenever a new code has been recognized, add a [BarcodeSelectionListener](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) through [BarcodeSelection.addListener()](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection.html#method-scandit.datacapture.barcode.selection.BarcodeSelection.AddListener) and implement the listener methods to suit your application’s needs.
 
 First implement the `BarcodeSelectionListener` interface. For example:
 
@@ -149,13 +149,13 @@ if (camera != null) {
 }
 ```
 
-Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
+Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/6.28/data-capture-sdk/android/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
 ```java
 dataCaptureContext.setFrameSource(camera);
 ```
 
-The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.ON](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
+The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/6.28/data-capture-sdk/android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.ON](https://docs.scandit.com/6.28/data-capture-sdk/android/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
 ```java
 if (camera != null) {

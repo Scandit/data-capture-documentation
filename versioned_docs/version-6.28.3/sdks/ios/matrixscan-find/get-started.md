@@ -13,7 +13,7 @@ In this guide you will learn step-by-step how to add MatrixScan Find to your app
 - A Barcode Find View: The pre-built UI elements used to highlight found items.
 
 :::note
-MatrixScan Count is implemented via [`SDCBarcodeFind`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind).
+MatrixScan Count is implemented via [`SDCBarcodeFind`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind).
 :::
 
 The general steps are:
@@ -33,7 +33,7 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 ## Create a Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/6.28/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```swift
 self.context = DataCaptureContext(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
@@ -41,7 +41,7 @@ self.context = DataCaptureContext(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY
 
 ## Configure the Barcode Count Mode
 
-The main entry point for the Barcode Find Mode is the [`SDCBarcodeFind`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [`SDCBarcodeFindSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight.
+The main entry point for the Barcode Find Mode is the [`SDCBarcodeFind`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [`SDCBarcodeFindSettings`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight.
 
 Here we configure it for tracking EAN13 codes, but you should change this to the correct symbologies for your use case.
 
@@ -50,7 +50,7 @@ let settings = BarcodeFindSettings()
 settings.set(symbology: .ean13UPCA, enabled: true)
 ```
 
-Next, create the list of items that will be actively searched for. We will also attach some optional information to the first item that can be used by the [`BarcodeFindView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) to display extra information:
+Next, create the list of items that will be actively searched for. We will also attach some optional information to the first item that can be used by the [`BarcodeFindView`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) to display extra information:
 
 ```swift
 var items = Set<BarcodeFindItem>()
@@ -67,7 +67,7 @@ items.insert(BarcodeFindItem(
 ))
 ```
 
-Finally, create a [`SDCBarcodeFind`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) instance with the Data Capture Context and the settings initialized in the previous step:
+Finally, create a [`SDCBarcodeFind`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) instance with the Data Capture Context and the settings initialized in the previous step:
 
 ```swift
 let barcodeFind = BarcodeFind(context: context, settings: settings)
@@ -78,7 +78,7 @@ mode.setItemsList(items)
 
 MatrixScan Find’s built-in AR user interface includes buttons and overlays that guide the user through the searching process. By adding a `SDCBarcodeFindView`, the scanning interface is added automatically to your application.
 
-The [`BarcodeFindView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) appearance can be customized through [`SDCBarcodeFindViewSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view-settings.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindViewSettings) to match your application’s look and feel. For example, you can change the color of the dots that are overlaid on top of the items that are found and enable sound and haptic alerts.
+The [`BarcodeFindView`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) appearance can be customized through [`SDCBarcodeFindViewSettings`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view-settings.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindViewSettings) to match your application’s look and feel. For example, you can change the color of the dots that are overlaid on top of the items that are found and enable sound and haptic alerts.
 
 ```swift
 let viewSettings = BarcodeFindViewSettings()
@@ -94,7 +94,7 @@ Next, create a `SDCBarcodeFindView` instance with the Data Capture Context and t
 let barcodeFindView = BarcodeFindView(parentView: view, context: context, barcodeFind: mode, settings: viewSettings)
 ```
 
-Last, connect the [`BarcodeFindView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) to the iOS view controller lifecycle. 
+Last, connect the [`BarcodeFindView`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) to the iOS view controller lifecycle. 
 
 :::note
 Be sure to call `BarcodeFindView.prepareSearching()` on your `UIViewController`’s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) method to ensure optimal start up time.
@@ -114,9 +114,9 @@ override func viewWillDisappear(_ animated: Bool) {
 
 ## Register the Listener
 
-The [`BarcodeFindView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) displays a **Finish** button next to its shutter button button. 
+The [`BarcodeFindView`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) displays a **Finish** button next to its shutter button button. 
 
-Here we register a [`SDCBarcodeFindViewUIDelegate`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#interface-scandit.datacapture.barcode.find.ui.IBarcodeFindViewUiListener) to be notified what items have been found once the finish button is pressed, and then navigate back to the previous screen to finish the find session.
+Here we register a [`SDCBarcodeFindViewUIDelegate`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#interface-scandit.datacapture.barcode.find.ui.IBarcodeFindViewUiListener) to be notified what items have been found once the finish button is pressed, and then navigate back to the previous screen to finish the find session.
 
 ```swift
 barcodeFindView.uiDelegate = self

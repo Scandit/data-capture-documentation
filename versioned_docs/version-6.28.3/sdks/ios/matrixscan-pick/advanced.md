@@ -14,7 +14,7 @@ MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless
 
 You may want more fine-grained knowledge over the different events happening during the life of the `BarcodePick` mode, such as when the search starts, pauses, and stops.
 
-To do this, you can directly register a [`BarcodePickListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-pick-listener.html#interface-scandit.datacapture.barcode.pick.IBarcodePickListener) on the mode itself, keeping in mind that these listeners are called from a background thread.
+To do this, you can directly register a [`BarcodePickListener`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/barcode-pick-listener.html#interface-scandit.datacapture.barcode.pick.IBarcodePickListener) on the mode itself, keeping in mind that these listeners are called from a background thread.
 
 ```swift
 extension ViewController: BarcodePickListener {
@@ -47,7 +47,7 @@ extension ViewController: BarcodePickActionListener {
 
 ## BarcodePickScanning Listener
 
-You can register a [`BarcodePickScanningListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-pick-scanning-listener.html#interface-scandit.datacapture.barcode.pick.IBarcodePickScanningListener) on the mode, which can be used to listen to every time the pick state changes.
+You can register a [`BarcodePickScanningListener`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/barcode-pick-scanning-listener.html#interface-scandit.datacapture.barcode.pick.IBarcodePickScanningListener) on the mode, which can be used to listen to every time the pick state changes.
 
 ```swift
 extension ViewController: BarcodePickScanningListener {

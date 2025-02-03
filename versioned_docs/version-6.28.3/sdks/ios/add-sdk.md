@@ -48,7 +48,7 @@ To integrate the Scandit Data Capture SDK into your Xcode project using Carthage
 binary "https://ssl.scandit.com/sdk/download/carthage/ScanditBarcodeCapture.json"
 ```
 
-You also need to add [`ScanditCaptureCore`](https://docs.scandit.com/data-capture-sdk/ios/core/api.html) since [`ScanditBarcodeCapture`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api.html) API depends on it.
+You also need to add [`ScanditCaptureCore`](https://docs.scandit.com/6.28/data-capture-sdk/ios/core/api.html) since [`ScanditBarcodeCapture`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api.html) API depends on it.
 
 ```ruby
 binary "https://ssl.scandit.com/sdk/download/carthage/ScanditCaptureCore.json"
@@ -79,7 +79,7 @@ Or if you prefer checking out git repositories via SSH:
 git@github.com:Scandit/datacapture-spm.git
 ```
 
-You also need to add [`ScanditCaptureCore`](https://docs.scandit.com/data-capture-sdk/ios/core/api.html) since [`ScanditBarcodeCapture`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api.html) API depends on it, and if applicable for your use case, you can also add the following packages:
+You also need to add [`ScanditCaptureCore`](https://docs.scandit.com/6.28/data-capture-sdk/ios/core/api.html) since [`ScanditBarcodeCapture`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api.html) API depends on it, and if applicable for your use case, you can also add the following packages:
 
 - `ScanditIdCapture`
 - `ScanditParser`

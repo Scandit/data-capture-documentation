@@ -16,7 +16,7 @@ SparkScan is optimized by default for efficiency, accuracy, and a seamless user 
 
 Allowing the end user to control the scanner with hardware buttons can be useful if your users typically wear gloves. It can also improve ergonomics in some workflows.
 
-SparkScan offers a built-in API to let you do this via [SparkScanViewSettings.hardwareTriggerEnabled](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
+SparkScan offers a built-in API to let you do this via [SparkScanViewSettings.hardwareTriggerEnabled](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
 
 ### Trigger Error State
 
@@ -26,7 +26,7 @@ You can customize:
 
 - The text message.
 - The timeout of the error message: in this case, scanner is paused for the specified amount of time; however, user can quickly restart the scanning process by tapping the trigger button.
-- The color of the flashing screen upon scan. You can enable or disable the visual feedback via [SparkScanViewSettings.visualFeedbackEnabled](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.VisualFeedbackEnabled) and control the color via [SparkScanViewFeedback](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-feedback.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewFeedback).
+- The color of the flashing screen upon scan. You can enable or disable the visual feedback via [SparkScanViewSettings.visualFeedbackEnabled](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.VisualFeedbackEnabled) and control the color via [SparkScanViewFeedback](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-feedback.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewFeedback).
 - The color of the highlight for the scanned barcode.
 - The feedback (sound, vibration).
 
@@ -79,7 +79,7 @@ sparkScanView.barcodeFindButtonVisible = true;
 
 ![SparkScan Advanced Scanning Modes](../../../img/toolbars.png)
 
-In addition you have to add a listener to the [SparkScanView](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) via [SparkScanView.setListener()](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.SetListener). Subsequent to this, you receive callbacks when the **Barcode Find** button or **Barcode Count** button is tapped from the toolbar.
+In addition you have to add a listener to the [SparkScanView](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) via [SparkScanView.setListener()](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.SetListener). Subsequent to this, you receive callbacks when the **Barcode Find** button or **Barcode Count** button is tapped from the toolbar.
 
 ```dart
 sparkScanView.setListener(this);
@@ -101,7 +101,7 @@ void didTapBarcodeFindButton(SparkScanView view) {
 
 All text, colors and opacity of the SparkScan UI elements (trigger button, setting toolbar, toasts) can be customized to match the desired language and color scheme.
 
-See [SparkScanView](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
+See [SparkScanView](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
 
 ### Add Controls to the Setting Toolbar
 
@@ -119,4 +119,4 @@ In some cases you want to avoid end users from accessing these controls, for exa
 * Disabling audio feedback on scan, as the work environment is always noisy
 * Toggling the continuous mode, as you want them to pick items one by one
 
-To add controls to the settings toolbar, just change the visibility of these buttons. Please refer to [SparkScanView](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.
+To add controls to the settings toolbar, just change the visibility of these buttons. Please refer to [SparkScanView](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) for the full list of parameters.

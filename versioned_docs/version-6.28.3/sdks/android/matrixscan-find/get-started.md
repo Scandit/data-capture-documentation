@@ -13,7 +13,7 @@ In this guide you will learn step-by-step how to add MatrixScan Find to your app
 - A Barcode Find View: The pre-built UI elements used to highlight found items.
 
 :::note
-MatrixScan Count is implemented via [`BarcodeFind`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind).
+MatrixScan Count is implemented via [`BarcodeFind`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind).
 :::
 
 The general steps are:
@@ -41,7 +41,7 @@ DataCaptureContext dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENT
 
 ## Configure the Barcode Find Mode
 
-The main entry point for the Barcode Find Mode is the `BarcodeFind` object. You can configure the supported Symbologies through its [`BarcodeFindSettings`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight.
+The main entry point for the Barcode Find Mode is the `BarcodeFind` object. You can configure the supported Symbologies through its [`BarcodeFindSettings`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight.
 
 Here we configure it for tracking EAN13 codes, but you should change this to the correct symbologies for your use case.
 
@@ -77,9 +77,9 @@ mode.setItemList(items);
 
 ## Setup the `BarcodeFindView`
 
-MatrixScan Find’s built-in AR user interface includes buttons and overlays that guide the user through the searching process. By adding a [`BarcodeFindView`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView), the scanning interface is added automatically to your application.
+MatrixScan Find’s built-in AR user interface includes buttons and overlays that guide the user through the searching process. By adding a [`BarcodeFindView`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView), the scanning interface is added automatically to your application.
 
-The `BarcodeFindView` appearance can be customized through [`BarcodeFindViewSettings`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-find-view-settings.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindViewSettings) to match your application’s look and feel. For example, you can change the color of the dots that are overlaid on top of the items that are found and enable sound and haptic alerts.
+The `BarcodeFindView` appearance can be customized through [`BarcodeFindViewSettings`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/barcode-find-view-settings.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindViewSettings) to match your application’s look and feel. For example, you can change the color of the dots that are overlaid on top of the items that are found and enable sound and haptic alerts.
 
 ```java
 BarcodeFindViewSettings viewSettings = new BarcodeFindViewSettings();
@@ -115,7 +115,7 @@ public void onPause() {
 
 The `BarcodeFindView` displays a **Finish** button next to its shutter button button. 
 
-Register a [BarcodeFindViewUiListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-find-view.html#interface-scandit.datacapture.barcode.find.ui.IBarcodeFindViewUiListener) to be notified what items have been found once the finish button is pressed.
+Register a [BarcodeFindViewUiListener](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/barcode-find-view.html#interface-scandit.datacapture.barcode.find.ui.IBarcodeFindViewUiListener) to be notified what items have been found once the finish button is pressed.
 
 In this tutorial, we will then navigate back to the previous screen to finish the find session.
 

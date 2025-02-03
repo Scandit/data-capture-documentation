@@ -66,7 +66,7 @@ keywords:
 #### Barcode
 
 * BarcodeFind is an API that implements [MatrixScan Find](/sdks/web/matrixscan-find/intro.md). MatrixScan Find is a pre-built UI that uses augmented reality overlays to highlight items that match predefined criteria. It allows you to add a search and find experience with augmented reality to an existing native app, with just a few lines of code.
-  * Added [`BarcodeFindTransformer`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-find-transformer.html).
+  * Added [`BarcodeFindTransformer`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/barcode-find-transformer.html).
 * On Barcode Capture and SparkScan, we optimized the frame processing time in 4k-UHD resolution with dynamic resolution selection, resulting in up to 35% reduction on high-end devices and consistent performance improvements across all supported devices.
 platforms.
 
@@ -76,7 +76,7 @@ platforms.
   * Visual Inspection Zone (VIZ) on the back of the European Health Insurance Card.
   * Visual Inspection Zone (VIZ) of New York City IDs.
   * Florida Medical Marijuana IDs.
-* Added Blood Type and Sponsor fields to [`CapturedResultType.VizResult`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Viz).
+* Added Blood Type and Sponsor fields to [`CapturedResultType.VizResult`](https://docs.scandit.com/6.28/data-capture-sdk/web/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Viz).
 
 ### Bug Fixes
 
@@ -96,7 +96,7 @@ platforms.
 
 #### Barcode
 
-* The [`BarcodeTrackingAdvancedOverlay.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode) and [`BarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) methods require a special license key to support rendering any kind of images as this feature is available only in limited countries. Please contact [Scandit Support](mailto:support@scandit.com) for details.
+* The [`BarcodeTrackingAdvancedOverlay.ViewForTrackedBarcode()`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode) and [`BarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode()`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) methods require a special license key to support rendering any kind of images as this feature is available only in limited countries. Please contact [Scandit Support](mailto:support@scandit.com) for details.
 
 ## 6.27.2
 
@@ -118,7 +118,7 @@ No updates for this framework in this version.
 
 #### Barcode
 
-- The [`BarcodeTrackingAdvancedOverlay.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode) and [`BarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode()`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) methods no longer support rendering any kind of images. For further details about this backwards incompatible change, contact [Scandit Support](mailto:support@scandit.com).
+- The [`BarcodeTrackingAdvancedOverlay.ViewForTrackedBarcode()`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode) and [`BarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode()`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) methods no longer support rendering any kind of images. For further details about this backwards incompatible change, contact [Scandit Support](mailto:support@scandit.com).
 
 ### Bug Fixes
 
@@ -135,13 +135,13 @@ No updates for this framework in this version.
 
 #### ID
 
-* Added properties [`VizResult.firstName`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.FirstName), [`VizResult.lastName`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.LastName), [`VizResult.secondaryLastName`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.SecondaryLastName), [`VizResult.fullName`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.FullName).
-* Added [`DrivingLicenseDetails.restrictions`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/driving-license-details.html#property-scandit.datacapture.id.DrivingLicenseDetails.Restrictions) and [`DrivingLicenseDetails.endorsements`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/driving-license-details.html#property-scandit.datacapture.id.DrivingLicenseDetails.Endorsements) which correspond to the restrictions to driving privileges and to the additional privileges granted to the driver license owner respectively.
-* Added [`IdCapture.parse()`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#method-scandit.datacapture.id.IdCapture.Parse) that parses string representations of MRZ and PDF417 barcode raw data, returning [`CapturedId`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId).
+* Added properties [`VizResult.firstName`](https://docs.scandit.com/6.28/data-capture-sdk/web/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.FirstName), [`VizResult.lastName`](https://docs.scandit.com/6.28/data-capture-sdk/web/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.LastName), [`VizResult.secondaryLastName`](https://docs.scandit.com/6.28/data-capture-sdk/web/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.SecondaryLastName), [`VizResult.fullName`](https://docs.scandit.com/6.28/data-capture-sdk/web/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.FullName).
+* Added [`DrivingLicenseDetails.restrictions`](https://docs.scandit.com/6.28/data-capture-sdk/web/id-capture/api/driving-license-details.html#property-scandit.datacapture.id.DrivingLicenseDetails.Restrictions) and [`DrivingLicenseDetails.endorsements`](https://docs.scandit.com/6.28/data-capture-sdk/web/id-capture/api/driving-license-details.html#property-scandit.datacapture.id.DrivingLicenseDetails.Endorsements) which correspond to the restrictions to driving privileges and to the additional privileges granted to the driver license owner respectively.
+* Added [`IdCapture.parse()`](https://docs.scandit.com/6.28/data-capture-sdk/web/id-capture/api/id-capture.html#method-scandit.datacapture.id.IdCapture.Parse) that parses string representations of MRZ and PDF417 barcode raw data, returning [`CapturedId`](https://docs.scandit.com/6.28/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId).
 
 #### Core
 
-* Added [`RectangularViewfinder.disabledColor`](https://docs.scandit.com/data-capture-sdk/web/core/api/rectangular-viewfinder.html#property-scandit.datacapture.core.ui.RectangularViewfinder.DisabledColor) to color the logo and viewfinder when the mode is disabled.
+* Added [`RectangularViewfinder.disabledColor`](https://docs.scandit.com/6.28/data-capture-sdk/web/core/api/rectangular-viewfinder.html#property-scandit.datacapture.core.ui.RectangularViewfinder.DisabledColor) to color the logo and viewfinder when the mode is disabled.
 
 ### Performance Improvements
 
@@ -164,12 +164,12 @@ No updates for this framework in this version.
 
 ### Deprecations
 
-* Deprecated [`SparkScanSession.newlyRecognizedBarcodes`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcodes), prefer [`SparkScanSession.newlyRecognizedBarcode`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode).
-* Deprecated [`BarcodeCaptureSession.newlyRecognizedBarcodes`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture-session.html#property-scandit.datacapture.barcode.BarcodeCaptureSession.NewlyRecognizedBarcodes), prefer [`BarcodeCaptureSession.newlyRecognizedBarcode`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture-session.html#property-scandit.datacapture.barcode.BarcodeCaptureSession.NewlyRecognizedBarcode).
-* Deprecated [`SparkScanView.soundModeButtonVisible`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.SoundModeButtonVisible), [`SparkScanView.hapticModeButtonVisible`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.HapticModeButtonVisible).
-* Deprecated [`LaserlineViewfinderStyle`](https://docs.scandit.com/data-capture-sdk/web/core/api/laserline-viewfinder.html#enum-scandit.datacapture.core.ui.LaserlineViewfinderStyle).
-* Deprecated [`LaserlineViewfinder`](https://docs.scandit.com/data-capture-sdk/web/core/api/laserline-viewfinder.html#class-scandit.datacapture.core.ui.LaserlineViewfinder).
-* Deprecated Legacy value of the [`BarcodeTrackingBasicOverlayStyle`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#enum-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlayStyle).
+* Deprecated [`SparkScanSession.newlyRecognizedBarcodes`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcodes), prefer [`SparkScanSession.newlyRecognizedBarcode`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode).
+* Deprecated [`BarcodeCaptureSession.newlyRecognizedBarcodes`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/barcode-capture-session.html#property-scandit.datacapture.barcode.BarcodeCaptureSession.NewlyRecognizedBarcodes), prefer [`BarcodeCaptureSession.newlyRecognizedBarcode`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/barcode-capture-session.html#property-scandit.datacapture.barcode.BarcodeCaptureSession.NewlyRecognizedBarcode).
+* Deprecated [`SparkScanView.soundModeButtonVisible`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.SoundModeButtonVisible), [`SparkScanView.hapticModeButtonVisible`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.HapticModeButtonVisible).
+* Deprecated [`LaserlineViewfinderStyle`](https://docs.scandit.com/6.28/data-capture-sdk/web/core/api/laserline-viewfinder.html#enum-scandit.datacapture.core.ui.LaserlineViewfinderStyle).
+* Deprecated [`LaserlineViewfinder`](https://docs.scandit.com/6.28/data-capture-sdk/web/core/api/laserline-viewfinder.html#class-scandit.datacapture.core.ui.LaserlineViewfinder).
+* Deprecated Legacy value of the [`BarcodeTrackingBasicOverlayStyle`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#enum-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlayStyle).
 
 ## 6.25.3
 
@@ -209,11 +209,11 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* Added [Parser](https://docs.scandit.com/data-capture-sdk/web/parser/api/parser.html#class-scandit.datacapture.parser.Parser) for parsing many [data formats](https://docs.scandit.com/data-capture-sdk/web/parser/formats.html).
+* Added [Parser](https://docs.scandit.com/6.28/data-capture-sdk/web/parser/api/parser.html#class-scandit.datacapture.parser.Parser) for parsing many [data formats](https://docs.scandit.com/6.28/data-capture-sdk/web/parser/formats.html).
 
 #### ID
 
-* Added the following properties to [`SDCVizResult`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/viz-result.html#viz-result):
+* Added the following properties to [`SDCVizResult`](https://docs.scandit.com/6.28/data-capture-sdk/web/id-capture/api/viz-result.html#viz-result):
   - `SDCVizResult.mothersName` to represent the mother’s name of the document owner.
   - `SDCVizResult.fathersName` to represent the father’s name of the document owner.
 * Improved the extraction of the document number from UK driver’s licenses.
@@ -236,7 +236,7 @@ No updates for this framework in this release.
 
 #### ID
 
-* Fixed missing property [`AAMVABarcodeResult.barcodeDataElements`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/aamva-barcode-result.html#property-scandit.datacapture.id.AamvaBarcodeResult.BarcodeDataElements) on [`CapturedId`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId).
+* Fixed missing property [`AAMVABarcodeResult.barcodeDataElements`](https://docs.scandit.com/6.28/data-capture-sdk/web/id-capture/api/aamva-barcode-result.html#property-scandit.datacapture.id.AamvaBarcodeResult.BarcodeDataElements) on [`CapturedId`](https://docs.scandit.com/6.28/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId).
 
 ## 6.24.0
 

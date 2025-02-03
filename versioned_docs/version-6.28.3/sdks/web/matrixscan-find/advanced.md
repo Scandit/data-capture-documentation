@@ -14,7 +14,7 @@ MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless
 
 You may want more fine-grained knowledge over the different events happening during the life of the `BarcodeFind` mode, such as when the search starts, pauses, and stops.
 
-To do this, you can directly register a [`BarcodeFindListener`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-find-listener.html#interface-scandit.datacapture.barcode.find.IBarcodeFindListener) on the mode itself, keeping in mind that these listeners are called from a background thread.
+To do this, you can directly register a [`BarcodeFindListener`](https://docs.scandit.com/6.28/data-capture-sdk/web/barcode-capture/api/barcode-find-listener.html#interface-scandit.datacapture.barcode.find.IBarcodeFindListener) on the mode itself, keeping in mind that these listeners are called from a background thread.
 
 ```typescript
 barcodeFindMode.addListener({

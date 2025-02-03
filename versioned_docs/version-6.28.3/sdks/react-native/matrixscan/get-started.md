@@ -19,7 +19,7 @@ The general steps are:
 
 ## Create a Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```js
 const context = DataCaptureContext.forLicenseKey(
@@ -29,9 +29,9 @@ const context = DataCaptureContext.forLicenseKey(
 
 ## Configure the Barcode Tracking Mode
 
-The main entry point for the Barcode Tracking Mode is the [BarcodeTracking](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) object. It is configured through [BarcodeTrackingSettings](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-settings.html#class-scandit.datacapture.barcode.tracking.BarcodeTrackingSettings) and allows to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener) that will get informed whenever a new frame has been processed.
+The main entry point for the Barcode Tracking Mode is the [BarcodeTracking](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) object. It is configured through [BarcodeTrackingSettings](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-settings.html#class-scandit.datacapture.barcode.tracking.BarcodeTrackingSettings) and allows to register one or more [listeners](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener) that will get informed whenever a new frame has been processed.
 
-Most of the times, you will not need to implement a [BarcodeTrackingListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener), instead you will add a [BarcodeTrackingBasicOverlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlay) and implement a [BarcodeTrackingBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener).
+Most of the times, you will not need to implement a [BarcodeTrackingListener](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener), instead you will add a [BarcodeTrackingBasicOverlay](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlay) and implement a [BarcodeTrackingBasicOverlayListener](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener).
 
 For this tutorial, we will setup Barcode Tracking for tracking QR codes.
 
@@ -40,7 +40,7 @@ const settings = new BarcodeTrackingSettings();
 settings.enableSymbology(Symbology.QR, true);
 ```
 
-Next, create a [BarcodeTracking](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) instance with the data capture context and the settings initialized in the previous steps:
+Next, create a [BarcodeTracking](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) instance with the data capture context and the settings initialized in the previous steps:
 
 ```js
 const barcodeTracking = BarcodeTracking.forContext(context, settings);
@@ -71,13 +71,13 @@ if (camera != null) {
 }
 ```
 
-Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
+Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
 ```js
 context.setFrameSource(camera);
 ```
 
-The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/react-native/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.On](https://docs.scandit.com/data-capture-sdk/react-native/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
+The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.On](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
 ```js
 camera.switchToDesiredState(FrameSourceState.On);
@@ -87,13 +87,13 @@ camera.switchToDesiredState(FrameSourceState.On);
 
 ## Use a Capture View to Visualize the Scan Process
 
-When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
+When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```js
 <DataCaptureView context={this.dataCaptureContext} ref={this.viewRef}>
 ```
 
-To visualize the results of Barcode Tracking, first you need to add the following [overlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlay):
+To visualize the results of Barcode Tracking, first you need to add the following [overlay](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlay):
 
 ```js
 const overlay = BarcodeTrackingBasicOverlay.withBarcodeTrackingForView(
@@ -102,7 +102,7 @@ const overlay = BarcodeTrackingBasicOverlay.withBarcodeTrackingForView(
 );
 ```
 
-Once the overlay has been added, you should implement the [BarcodeTrackingBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener) interface. The method [BarcodeTrackingBasicOverlayListener.brushForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener.BrushForTrackedBarcode) is invoked every time a new tracked barcode appears and it can be used to set a [brush](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/brush.html#class-scandit.datacapture.core.ui.Brush) that will be used to highlight that specific barcode in the [overlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlay).
+Once the overlay has been added, you should implement the [BarcodeTrackingBasicOverlayListener](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#interface-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener) interface. The method [BarcodeTrackingBasicOverlayListener.brushForTrackedBarcode()](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener.BrushForTrackedBarcode) is invoked every time a new tracked barcode appears and it can be used to set a [brush](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/ui/brush.html#class-scandit.datacapture.core.ui.Brush) that will be used to highlight that specific barcode in the [overlay](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlay).
 
 ```js
 overlay.listener = {
@@ -112,7 +112,7 @@ overlay.listener = {
 };
 ```
 
-If you would like to make the highlights tappable, you need to implement the [BarcodeTrackingBasicOverlayListener.didTapTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener.OnTrackedBarcodeTapped) method.
+If you would like to make the highlights tappable, you need to implement the [BarcodeTrackingBasicOverlayListener.didTapTrackedBarcode()](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingBasicOverlayListener.OnTrackedBarcodeTapped) method.
 
 ```js
 overlay.listener = {
@@ -125,13 +125,13 @@ overlay.listener = {
 ## Get Barcode Tracking Feedback
 
 Barcode Tracking, unlike Barcode Capture, doesn’t emit feedback (sound or vibration) when a new barcode is recognized. However, you may implement a
-[BarcodeTrackingListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener) to provide a similar experience. Below, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/react-native/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration if you want.
+[BarcodeTrackingListener](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener) to provide a similar experience. Below, we use the default [Feedback](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration if you want.
 
 ```js
 const feedback = Feedback.defaultFeedback;
 ```
 
-Next, use this [feedback](https://docs.scandit.com/data-capture-sdk/react-native/core/api/feedback.html#class-scandit.datacapture.core.Feedback) in a [BarcodeTrackingListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener):
+Next, use this [feedback](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/feedback.html#class-scandit.datacapture.core.Feedback) in a [BarcodeTrackingListener](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener):
 
 ```js
 const feedbackListener = {
@@ -143,9 +143,9 @@ const feedbackListener = {
 };
 ```
 
-[BarcodeTrackingListener.didUpdateSession()](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#method-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener.OnSessionUpdated) is invoked for every processed frame. The [session](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-session.html#class-scandit.datacapture.barcode.tracking.BarcodeTrackingSession) parameter contains information about the currently tracked barcodes, in particular, the newly recognized ones. We check if there are any and if so, we emit the feedback.
+[BarcodeTrackingListener.didUpdateSession()](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-listener.html#method-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener.OnSessionUpdated) is invoked for every processed frame. The [session](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-session.html#class-scandit.datacapture.barcode.tracking.BarcodeTrackingSession) parameter contains information about the currently tracked barcodes, in particular, the newly recognized ones. We check if there are any and if so, we emit the feedback.
 
-As the last step, register the listener responsible for emitting the feedback with the [BarcodeTracking](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) instance.
+As the last step, register the listener responsible for emitting the feedback with the [BarcodeTracking](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) instance.
 
 ```js
 barcodeTracking.addListener(feedbackListener);
@@ -153,7 +153,7 @@ barcodeTracking.addListener(feedbackListener);
 
 ## Disabling Barcode Tracking
 
-To disable barcode tracking set [BarcodeTracking.isEnabled](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking.html#property-scandit.datacapture.barcode.tracking.BarcodeTracking.IsEnabled) to _false_. The effect is immediate: no more frames will be processed _after_ the change. However, if a frame is currently being processed, this frame will be completely processed and deliver any results/callbacks to the registered listeners.
+To disable barcode tracking set [BarcodeTracking.isEnabled](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking.html#property-scandit.datacapture.barcode.tracking.BarcodeTracking.IsEnabled) to _false_. The effect is immediate: no more frames will be processed _after_ the change. However, if a frame is currently being processed, this frame will be completely processed and deliver any results/callbacks to the registered listeners.
 
-Note that disabling the capture mode does not stop the camera, the camera continues to stream frames until it is turned off or put it in standby calling [SwitchToDesiredState](https://docs.scandit.com/data-capture-sdk/react-native/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of
-[StandBy](https://docs.scandit.com/data-capture-sdk/react-native/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.Standby).
+Note that disabling the capture mode does not stop the camera, the camera continues to stream frames until it is turned off or put it in standby calling [SwitchToDesiredState](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of
+[StandBy](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.Standby).

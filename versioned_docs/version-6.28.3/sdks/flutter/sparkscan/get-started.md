@@ -54,7 +54,7 @@ var viewSettings = SparkScanViewSettings();
 
 The SparkScan built-in user interface includes the camera preview and scanning UI elements. These guide the user through the scanning process.
 
-The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [SparkScanViewSettings](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSetttings).
+The [`SparkScanView`](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [SparkScanViewSettings](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSetttings).
 
 ```dart
 SparkScanViewSettings viewSettings = new SparkScanViewSettings();
@@ -63,15 +63,15 @@ SparkScanViewSettings viewSettings = new SparkScanViewSettings();
 
 See the [SparkScan Workflow Options](./intro.md#workflow-options) section for more information.
 
-By adding a [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView), the scanning interface (camera preview and scanning UI elements) gets added automatically to your application.
+By adding a [`SparkScanView`](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView), the scanning interface (camera preview and scanning UI elements) gets added automatically to your application.
 
-You can add a [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) to your view hierarchy:
+You can add a [`SparkScanView`](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) to your view hierarchy:
 
 ```dart
 var sparkScanView = SparkScanView.forContext(YOUR_WIDGET_TREE_BODY, widget.dataCaptureContext, sparkScan, null);
 ```
 
-Additionally, make sure to call [`SparkScanView.onPause()`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.OnPause) in your app state handling logic. You have to call this for the correct functioning of the [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView).
+Additionally, make sure to call [`SparkScanView.onPause()`](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.OnPause) in your app state handling logic. You have to call this for the correct functioning of the [`SparkScanView`](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView).
 
 ```dart
 @override
@@ -84,14 +84,14 @@ void didChangeAppLifecycleState(AppLifecycleState state) {
 
 ## Register the Listener
 
-To keep track of the barcodes that have been scanned, implement the [SparkScanListener](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface and register the listener to the SparkScan mode.
+To keep track of the barcodes that have been scanned, implement the [SparkScanListener](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface and register the listener to the SparkScan mode.
 
 ```dart
 // Register self as a listener to monitor the spark scan session.
 sparkScan.addListener(this);
 ```
 
-[SparkScanListener.onBarcodeScanned()](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list: [SparkScanSession.newlyRecognizedBarcode](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode).
+[SparkScanListener.onBarcodeScanned()](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list: [SparkScanSession.newlyRecognizedBarcode](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode).
 
 :::note
 Note that this list only contains one barcode entry.

@@ -26,7 +26,7 @@ Devices running the Scandit Data Capture SDK need to have a GPU or the performan
 
 ## Create a New Data Capture Context Instance
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/cordova/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/6.28/data-capture-sdk/cordova/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```sh
 const context = Scandit.DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
@@ -34,7 +34,7 @@ const context = Scandit.DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT 
 
 ## Configure the SparkScan Mode
 
-The SparkScan Mode is configured through [`SparkScanSettings`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#class-scandit.datacapture.barcode.spark.SparkScanSettings) and allows you to register one or more listeners that are informed whenever a new barcode is scanned.
+The SparkScan Mode is configured through [`SparkScanSettings`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#class-scandit.datacapture.barcode.spark.SparkScanSettings) and allows you to register one or more listeners that are informed whenever a new barcode is scanned.
 
 For this tutorial, we will set up SparkScan for scanning EAN13 codes. Change this to the correct symbologies for your use case (for example, Code 128, Code 39…).
 
@@ -53,7 +53,7 @@ const sparkScan = Scandit.SparkScan.forSettings(settings);
 
 The SparkScan built-in user interface includes the camera preview and scanning UI elements. These guide the user through the scanning process.
 
-The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings).
+The [`SparkScanView`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings).
 
 ```js
 const viewSettings = new Scandit.SparkScanViewSettings();
@@ -76,8 +76,8 @@ const sparkScanComponent = (
 );
 ```
 
-Additionally, make sure to call [SparkScanView.stopScanning()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your app state handling logic. You have to call this for the correct functioning of the
-[SparkScanView](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView).
+Additionally, make sure to call [SparkScanView.stopScanning()](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your app state handling logic. You have to call this for the correct functioning of the
+[SparkScanView](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView).
 
 ```js
 componentWillUnmount() {
@@ -94,7 +94,7 @@ sparkScanComponent.stopScanning();
 ## Register the Listener
 
 To keep track of the barcodes that have been scanned, implement the
-[SparkScanListener](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface and register the listener to the SparkScan mode.
+[SparkScanListener](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface and register the listener to the SparkScan mode.
 
 ```js
 // Register a listener object to monitor the spark scan session.
@@ -111,8 +111,8 @@ const listener = {
 sparkScan.addListener(listener);
 ```
 
-[SparkScanListener.didScan()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list:
-[SparkScanSession.newlyRecognizedBarcode](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode). Please note that this list only contains one barcode entry.
+[SparkScanListener.didScan()](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list:
+[SparkScanSession.newlyRecognizedBarcode](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode). Please note that this list only contains one barcode entry.
 
 ## Scan Some Barcodes
 
