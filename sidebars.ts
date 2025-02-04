@@ -170,6 +170,7 @@ const sidebars: SidebarsConfig = {
               label: "MatrixScan Check",
               items: [
                 "sdks/ios/matrixscan-check/intro",
+                "sdks/ios/matrixscan-check/get-started",
               ],
             },
             {
