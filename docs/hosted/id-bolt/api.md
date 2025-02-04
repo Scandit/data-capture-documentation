@@ -9,9 +9,9 @@ keywords:
   - bolt
 ---
 
-## IdBoltSession
+## ID Bolt Session
 
-The main class of ID Bolt. It represents a session in which the end-user is guided through a workflow to scan their ID. The `IdBoltSession.onCompletion()` callback is called when the user has scanned their ID, the ID has been accepted and the ID Bolt pop-up is closed. Similarly, `IdBoltSession.onCancellation()` is called when the user closes the ID Bolt pop-up without finishing the full process successfully.
+The main class of ID Bolt is `IdBoltSession`. It represents a session in which the end-user is guided through a workflow to scan their ID. The `IdBoltSession.onCompletion()` callback is called when the user has scanned their ID, the ID has been accepted and the ID Bolt pop-up is closed. Similarly, `IdBoltSession.onCancellation()` is called when the user closes the ID Bolt pop-up without finishing the full process successfully.
 
 Using validators, ID Bolt can verify the expiration date or other features of the ID. Optionally, this can be done without sharing any personally identifiable information (PII) with your website.
 
@@ -33,16 +33,19 @@ The default value `app.id-scanning.com` is an alias that points to Scandit’s s
 
 - `options: IdBoltCreateSessionOptions`: Object specifying the session options:
   - `licenseKey: string`: Your license key, provided in you account on the [Scandit dashboard](https://ssl.scandit.com/dashboard).
-  - `documentSelection: DocumentSelection`: Object specifying the acceptable documents. See *[`DocumentSelection`](#documentselection)*.
+  - `documentSelection: Document Selection`: Object specifying the acceptable documents. See *[`Document Selection`](#document-selection)*.
   - `returnDataMode: ReturnDataMode`: Defines the extent of the data returned by the `onCompletion()` callback. Use:    
     - `ReturnDataMode.FullWithImages` to get all extracted data and images.
     - `ReturnDataMode.Full` to get all extracted data without images.
+  - `scanner?: Scanner`: Options to customize the scanner. See *[`Scanner`](#scanner-options)*.
   - `validation?: Validators[]`: Optional array of validators, default: `[]`. See *[`Validators`](#validators)*. 
   - `locale?: string`: The language in which the text is displayed. Default: `"en-US"`.
-  - `workflow?: WorkflowOptions`: Options to customize the workflow. See *[`WorkflowOptions`](#workflowoptions)*.
+  - `workflow?: WorkflowOptions`: Options to customize the workflow. See *[`Workflow Options`](#workflow-options)*.
   - `theme?: Theme`: Options to customize the theme. See *[`Theme`](#theme)*.
+  - `textOverrides?: TextOverrides`: Options to customize the text. See *[`Text Overrides`](#text-overrides)*.
   - `onCompletion: (result: CompletionResult) => void`: A callback that is called when the user has successfully scanned their ID.
   - `onCancellation?: (reason: CancellationReason) => void`: A callback that is called whenever the flow can not be completed.
+
 
 Once created, a session object does nothing until you execute `start()` on it:
 
@@ -75,13 +78,13 @@ await idBoltSession.start();
 | --------- | ----------- |
 | `async IdBoltSession.start(): Promise<string>` | Open the ID Bolt pop-up to start the scanning workflow. This method returns a session ID identifying the session. |
 
-## DocumentSelection
+## Document Selection
+
+Documents are selected using the `DocumentSelection` class.
 
 A class to define which types of documents the ID Bolt will accept. The list of documents is provided as specific document objects, instantiated with a `Region`. For example passports from the USA would be `new Passport(Region.USA)`.
 
 Documents that are not acceptable may still get recognized by the scanner. In this case the user will be notified to use one of the accepted document types.
-
-### Methods
 
 #### `create`
 
@@ -104,29 +107,13 @@ const documentSelection = DocumentSelection.create({
 });
 ```
 
-If you have very specific rules, you can use the `Selection.customCallback` option where you can decide if the scanned document should be accepted or not:
+### Document Types
 
-```ts
-const documentSelection = DocumentSelection.create({
-	accepted: [new Passport(Region.USA)],
-	customCallback: (capturedId: CapturedId, preCheckResults: PreCheckResults) => {
-		if (capturedId.documentNumber === "123") {
-			return {
-				valid: false,
-				// this message will be displayed to the user
-				message: `Documents starting with "123" are not accepted.`,
-			};
-		}
-		// when not returning anything, the default behavior will take place
-	},
-});
-```
+Document types are represented by classes. The general purpose document classes can all be instantiated with a specific region. 
 
-## Document Types
+These document type instances are used to define which documents are accepted or rejected in the `DocumentSelection` class.
 
-Each document type is represented with a specific class. These classes are instantiated in with a specific region to select accepted and rejected documents. 
-
-### Passport
+#### Passport
 
 Includes all Passports
 
@@ -135,7 +122,7 @@ new Passport(Region.USA) // US passports
 new Passport(Region.Any) // Any passport
 ```
 
-### IDCard
+#### ID Card
 
 Includes national identity cards
 
@@ -144,7 +131,7 @@ new IDCard(Region.Germany) // German identity cards
 new IDCard(Region.Any) // National identity card from any country
 ```
 
-### DriverLicense
+#### Driver License
 
 Includes driver licenses
 
@@ -153,7 +140,7 @@ new DriverLicense(Region.France) // French driver license
 new DriverLicense(Region.Any) // Driver license card from any country
 ```
 
-### VisaIcao
+#### Visa (ICAO)
 
 Includes visas that comply with the International Civil Aviation Organization (ICAO) standards
 
@@ -162,48 +149,131 @@ new VisaIcao(Region.USA) // US ICAO-compliant visas
 new VisaIcao(Region.Any) // Any ICAO-compliant visa
 ```
 
+
+#### Residence Permit
+
+Includes residence permits
+
+```ts
+new ResidencePermit(Region.USA) // US residence permits
+new ResidencePermit(Region.Any) // Residence permit from any country
+```
+
+#### Health Insurance Card
+
+Includes health insurance cards
+
+```ts
+new HealthInsuranceCard(Region.Germany) // German health insurance cards
+new HealthInsuranceCard(Region.Any) // Health insurance card from any country
+```
+
+#### Region Specific Documents
+
+In addition to the general purpose document classes, there are also region specific document. These documents are instantiated with the `RegionSpecific` class and a `RegionSpecificSubtype` argument.
+
+Example:
+```ts
+new RegionSpecific(RegionSpecificSubtype.BelgiumMinorsId) // Belgian minors ID
+new RegionSpecific(RegionSpecificSubtype.MexicoTaxId) // Mexican tax ID
+```
+
+The list of supported region specific document types can be found [here](#supported-region-specific-documents).
+
+
+
+### Regions
+
+Regions are used to define the region of a document. They can be used to define which documents are accepted or rejected in the `DocumentSelection` class.
+
+Regions can be chosen using the `Region` enum. The `Region` enum contains both the ISO code and the name of the region.
+If your system uses three-letter ISO codes, you can also directly use those strings.
+
+Example:
+
+```ts
+// France
+Region.FRA;
+Region.France;
+
+Region.FRA === Region.France === "FRA"; // true
+
+// Any
+Region.Any;
+```
+
+
+#### Two-letter ISO code
+
+If you have a two-letter ISO code, you can convert it to a region using the `Region.fromShortCode` method. To convert a region to a two-letter ISO code, use the `Region.toShortCode` method.
+
+Example:
+
+```ts
+const region = Region.fromShortCode("FR"); // == Region.France == "FRA"
+const shortCode = Region.toShortCode(Region.FRA); // == "FR"
+```
+
+In case the provided short code is not valid, the methods throw an exception.
+
+
+
 ## Validators
 
-Validators enable you to run checks on the scanned ID. They are only run on accepted documents.
+Validators enable you to run checks on the scanned ID. They are only run on documents that are from the list of accepted documents.
 
-### Methods
+The avaliablde validators can be created by using the `Validators` class.
 
-#### `notExpired`
+The following validators are available:
 
-| Signature | Description |
-| --------- | ----------- |
-| `Validators.notExpired()` | Checks that the document has not expired. Note that this test will not pass if the expiration date could not be determined from the extracted data.|
+#### Not Expired
+
+The `notExpired` validator checks that the scanned document has not expired. This validator will not pass if the expiration date could not be determined from the extracted data.
+
+```ts
+	...
+	validation: [Validators.notExpired()],
+	...
+```
 
 
-#### `notExpiredIn`
 
-| Signature | Description |
-| --------- | ----------- |
-| `Validators.notExpiredIn(duration: Duration)` | Checks that the document has still not expired after the duration passed in argument. This test will not pass if the expiration date could not be determined from the extracted data.|
-| | `Duration` is an object with following properties: `days?: number`, `months?: number`. |
+#### Not Expired In
 
+The `notExpiredIn` validator checks that the scanned document has still not expired after the duration passed in argument. This test will not pass if the expiration date could not be determined from the extracted data.
+
+This validator takes a `Duration` object as argument with the following properties: 
+
+```ts
+type Duration = {
+	days?: number;
+	months?: number;
+}
+```
 
 In the following example, the ID must not expire in the next 12 months:
 
 ```ts
-const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
-	licenseKey: LICENSE_KEY,
-	documentSelection: ...,
-	returnDataMode: RETURN_DATA_MODE.FULL_WITH_IMAGES,
+	...
 	validation: [Validators.notExpiredIn({months: 12})],
-});
+	...
 ```
 
-#### `US.isRealID`
+#### US Real ID
 
-| Signature | Description |
-| --------- | ----------- |
-| `Validators.US.isRealID()` | Checks that the scanned driver license is compliant with the rules of Real ID defined by the American Association of Motor Vehicle Administrators (AAMVA). Note that this test will not pass if the scanned document is not an AAMVA document.|
+The `US.isRealID` validator checks that the scanned driver license is compliant with the rules of Real ID defined by the American Association of Motor Vehicle Administrators (AAMVA). This validator will not pass if the scanned document is not an AAMVA document.
 
+```ts
+	...
+	validation: [Validators.US.isRealID()],
+	...
+```
 
 ## Callbacks
 
-### `onCompletion`
+### Methods
+
+#### `onCompletion`
 
 A callback that is called when the user has successfully scanned their ID and passed all validations.
 
@@ -216,16 +286,18 @@ The `CompletionResult` object contains:
 
 Example:
 ```ts
-onCompletion: (result) => {
-    if (result.capturedId) {
-        console.log('Document type:', result.capturedId.documentType);
-        console.log('Full name:', result.capturedId.fullName);
-        console.log('Document number:', result.capturedId.documentNumber);
-    }
-}
+	...
+	onCompletion: (result) => {
+		if (result.capturedId) {
+			console.log('Document type:', result.capturedId.documentType);
+			console.log('Full name:', result.capturedId.fullName);
+			console.log('Document number:', result.capturedId.documentNumber);
+		}
+	}
+	...
 ```
 
-### `onCancellation`
+#### `onCancellation`
 
 A callback that is called when the user closes the ID Bolt pop-up without completing the scanning process.
 
@@ -239,25 +311,27 @@ The `CancellationReason` enum contains:
 
 Example:
 ```ts
-onCancellation: (reason) => {
-    switch (reason) {
-        case CancellationReason.UserClosed:
-            console.log("User closed the scanning window");
-            break;
-        case CancellationReason.ServiceStartFailure:
-            console.log("ID Bolt service failed to start");
-            break;
-    }
-}
+...
+	onCancellation: (reason) => {
+		switch (reason) {
+			case CancellationReason.UserClosed:
+				console.log("User closed the scanning window");
+				break;
+			case CancellationReason.ServiceStartFailure:
+				console.log("ID Bolt service failed to start");
+				break;
+		}
+	}
+...
 ```
 
-## Interfaces
+### Result Data Types
 
-### `CapturedId`
+#### `CapturedId`
 
 The interface defining the object you receive in `CompletionResult.capturedId`.
 
-#### Properties
+##### Properties
 
 | Property | Type | Default | Description |
 | -------- | ---- | ------- | ----------- |
@@ -280,9 +354,9 @@ The interface defining the object you receive in `CompletionResult.capturedId`.
 | `images` | `ImageData` | `null` | Object containing base64 encoded jpg images |
 
 
-### `ImageData`
+#### `ImageData`
 
-#### Properties
+##### Properties
 
 
 
@@ -293,11 +367,11 @@ The interface defining the object you receive in `CompletionResult.capturedId`.
 
 
 
-### `DateResult`
+#### `DateResult`
 
 An object representing a date.
 
-#### Properties
+##### Properties
 
 | Property | Type |
 | -------- | ---- |
@@ -305,38 +379,7 @@ An object representing a date.
 | `month` | `number` |
 | `year` | `number` |
 
-### `PreCheckResults` 
-
-An object containing the current acceptance status for the scanned document according to the configured rules in `IdBoltSession.documentSelection`.
-
-#### Properties
-
-| Property | Type | Description |
-| -------- | ---- | ----------- |
-| `isIncluded` | `boolean` | The scanned document is acceptable. |
-| `isExcluded` | `boolean` | The scanned document is excluded. |
-| `valid` | `boolean` | Final outcome, the document is considered acceptable. |
-
-## Const 
-
-### `Region`
-
-An enumeration of regions (countries), both as ISO codes as well as names.
-
-Example:
-
-```ts
-// France
-Region.FRA;
-Region.France;
-
-Region.FRA === Region.France === "FRA"; // true
-
-// Any
-Region.Any;
-```
-
-### `ReturnDataMode`
+## Return Data Mode
 
 Values used by `IdBoltCreateSessionOptions` to define what data is returned by `IdBoltSession.onCompletion()`. Possible values are:
 
@@ -345,7 +388,7 @@ Values used by `IdBoltCreateSessionOptions` to define what data is returned by `
 | `Full` | All extracted data is returned, but images are excluded. |
 | `FullWithImages` | All extracted data is returned, including images of the scanned ID. |
 
-## WorkflowOptions
+## Workflow Options
 
 Options to customize the user interface of the ID Bolt workflow.
 
@@ -355,6 +398,39 @@ Options to customize the user interface of the ID Bolt workflow.
 | -------- | ---- | ----------- |
 | `showWelcomeScreen` | `boolean` | When enabled: Always shown on both desktop and mobile. When disabled: Only shown on desktop to allow users to select between scanning on local device or handing over. |
 | `showResultScreen` | `boolean` | Determines whether to show the result screen at the end of the workflow. |
+
+
+## Scanner Options
+
+The scanner used can be customized using the `scanner` option in `IdBoltCreateSessionOptions`.
+
+By default, the scanner is set to `SingleSideScanner` with all modalities enabled.
+
+The following scanners are available:
+
+#### Single Side Scanner
+
+The single side scanner extracts all data from a single side scan of the document. The scanning modalities can be chosen individually in the constructor.
+
+```ts
+	...
+	scanner: new SingleSideScanner(
+	    true, // Enable reading of barcode ID-documents
+		true, // Enable reading of machine readable zone (MRZ) documents
+		true, // Enable reading of visual inspection zone (VIZ) documents
+	),
+	...
+```
+
+#### Full Document Scanner
+
+The full document scanner forces the user to scan both the front and back side of the document. It uses all modalities enabled by default.
+
+```ts
+	...
+	scanner: new FullDocumentScanner(),
+	...
+```
 
 ## Theme
 
@@ -401,8 +477,7 @@ Object containing dimension values for UI elements:
 
 Example:
 ```ts
-const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
-    // ... other options ...
+	...
     theme: {
         colors: {
             primary: "#007AFF"
@@ -411,8 +486,107 @@ const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
             radiusButton: "8px"
         }
     }
-});
+	...
 ```
+
+
+## Text Overrides
+
+Text overrides are used to customize the text displayed in the ID Bolt interface.
+The text overrides are defined using the `textOverrides` option in `IdBoltCreateSessionOptions`.
+
+The following texts can be overridden:
+
+- `titles.SCANNER_HEADER`: The header of the scanner screen.
+- `titles.LOCAL_SCAN_HEADER`: The header of the local scan screen.
+- `texts.HELP_SUPPORTED_DOCUMENTS_INCLUDE_LIST`: The list of documents that are accepted, as displayed in the help screen.
+- `texts.HELP_SUPPORTED_DOCUMENTS_INCLUDE_LIST_BRIEF`: A brief description of the documents that are accepted, as displayed in the main screen.
+- `texts.HELP_SUPPORTED_DOCUMENTS_EXCLUDE_LIST`: The list of documents that are excluded, as displayed in the help screen. Only shown if there are excluded documents.
+
+Example:
+```ts
+    ...
+    textOverrides: {
+        "titles.SCANNER_HEADER": "Scan your Passport for John Doe",
+        "titles.LOCAL_SCAN_HEADER": "Scan your Passport for John Doe",
+        "texts.HELP_SUPPORTED_DOCUMENTS_INCLUDE_LIST": "Scan your passport, ID card or driver license",
+        "texts.HELP_SUPPORTED_DOCUMENTS_INCLUDE_LIST_BRIEF": "Scan your passport, ID card or driver license",
+        "texts.HELP_SUPPORTED_DOCUMENTS_EXCLUDE_LIST": "Not accepted are documents issued before 2000",
+	....
+```
+
+
+## Supported Region Specific Documents
+
+Region specific document types are instantiated with the `RegionSpecific` class and a `RegionSpecificSubtype` argument like `new RegionSpecific(RegionSpecificSubtype.BelgiumMinorsId)`.
+
+The following region specific document types are supported:
+
+
+* `UsBorderCrossingCard`
+* `ChinaExitEntryPermit`
+* `UsGlobalEntryCard`
+* `ChinaMainlandTravelPermitTaiwan`
+* `UsNexusCard`
+* `ChinaMainlandTravelPermitHongKongMacau`
+* `ApecBusinessTravelCard`
+* `PakistanAfghanCitizenCard`
+* `SingaporeFinCard`
+* `UsGreenCard`
+* `MalaysiaIkad`
+* `MalaysiaMykad`
+* `MalaysiaMypr`
+* `MexicoConsularVoterId`
+* `GermanyEid`
+* `UsCommonAccessCard`
+* `PhilippinesMultipurposeId`
+* `MalaysiaMykas`
+* `MalaysiaMykid`
+* `MalaysiaMytentera`
+* `MexicoProfessionalId`
+* `MalaysiaRefugeeId`
+* `CanadaTribalId`
+* `UsUniformedServicesId`
+* `UsVeteranId`
+* `PhilippinesWorkPermit`
+* `SingaporeWorkPermit`
+* `UsWorkPermit`
+* `PhilippinesSocialSecurityCard`
+* `SwedenSocialSecurityCard`
+* `CanadaSocialSecurityCard`
+* `UsSocialSecurityCard`
+* `BelgiumMinorsId`
+* `ColombiaMinorsId`
+* `PeruMinorsId`
+* `BoliviaMinorsId`
+* `HungaryAddressCard`
+* `UkAsylumRequest`
+* `CanadaCitizenshipCertificate`
+* `SingaporeEmploymentPass`
+* `CanadaMinorsPublicServicesCard`
+* `MalaysiaMypolis`
+* `PhilippinesNbiClearance`
+* `IndiaPanCard`
+* `PhilippinesPostalId`
+* `PakistanProofOfRegistration`
+* `SingaporeSPass`
+* `SwedenSisId`
+* `ColombiaTemporaryProtectionPermit`
+* `UsTwicCard`
+* `UsWeaponPermit`
+* `CanadaWeaponPermit`
+* `IrelandPublicServicesCard`
+* `CanadaPublicServicesCard`
+* `PakistanConsularId`
+* `GuatemalaConsularId`
+* `MexicoConsularId`
+* `PhilippinesTaxId`
+* `MexicoTaxId`
+* `ChinaOneWayPermit`
+* `UsMedicalMarijuanaCard`
+* `UsMunicipalId`
+* `AustraliaAsicCard`
+* `UaeVehicleRegistrationCard`
 
 ## Supported Locales
 
