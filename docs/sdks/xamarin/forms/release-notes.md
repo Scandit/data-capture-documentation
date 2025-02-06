@@ -9,9 +9,9 @@ keywords:
   - xamarinForms
 ---
 
-## 7.1.0-beta.1
+## 7.1.0-beta.2
 
-**Released**: January 28, 2025
+**Released**: February 6, 2025
 
 ### New Features
 
@@ -45,6 +45,7 @@ keywords:
 * Enhanced the scanning capabilities for specific document types. When `ScannerType::FullDocument` is enabled, seamless scanning is now supported even for documents where the Scandit DataCapture SDK offers only Machine Readable Zone (MRZ) scanning.
 * Added support for scanning the Machine Readable Zone of  non-standard Indian passports, where an MRZ line consists of 42 characters instead of 44. 
 * Added support for scanning the Machine Readable Zone of the Chinese Mainland Travel Permit issued for non-Chinese citizens being residents of Hong Kong or Macau.
+* Unified the value of the sex field from VIZ and MRZ results so that it is always one of the values `female`, `male` or `unspecified`.
 
 ### Performance Improvements
 

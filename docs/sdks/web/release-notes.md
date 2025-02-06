@@ -9,9 +9,9 @@ keywords:
   - web
 ---
 
-## 7.1.0-beta.1
+## 7.1.0-beta.2
 
-**Released**: January 28, 2025
+**Released**: February 6, 2025
 
 ### New Features
 
@@ -28,11 +28,14 @@ keywords:
     * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
     * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
 * Calling `DataCaptureContext.addMode()` or `DataCaptureContext.setMode()` now replaces the current mode with the new one, so it’s no longer needed to remove a mode when adding a new one.
+* Enabled Barcode and Parser to be used with CDN by adding an optional `libraryLocation` at loader level.
 
 #### Barcode
 
 * [MatrixScan Check](/sdks/web/matrixscan-check/intro.md) in now available, offering prebuilt views designed to quickly build custom workflows with augmented reality for your existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
 * Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
+* SparkScan now enables you to switch to the user-facing camera for scanning. This is useful in specific situations where the rear camera is not accessible or barcodes are hard to reach otherwise. The relevant API is:
+  * `SparkScanView.cameraSwitchButtonVisible`
 
 #### ID
 
@@ -40,6 +43,7 @@ keywords:
 * Enhanced the scanning capabilities for specific document types. When `ScannerType::FullDocument` is enabled, seamless scanning is now supported even for documents where the Scandit DataCapture SDK offers only Machine Readable Zone (MRZ) scanning.
 * Added support for scanning the Machine Readable Zone of  non-standard Indian passports, where an MRZ line consists of 42 characters instead of 44. 
 * Added support for scanning the Machine Readable Zone of the Chinese Mainland Travel Permit issued for non-Chinese citizens being residents of Hong Kong or Macau.
+* Unified the value of the sex field from VIZ and MRZ results so that it is always one of the values `female`, `male` or `unspecified`.
 * Added `UsRealIdStatus`.
 
 ### Performance Improvements
