@@ -28,8 +28,14 @@ Devices running the Scandit Data Capture SDK need to have a GPU or the performan
 
 The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
-```sh
-const context = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+```js
+await configure({
+  libraryLocation: 'your-sdc-lib-location-here',
+  licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
+  moduleLoaders: [barcodeCaptureLoader()]
+})
+
+const context = await DataCaptureContext.create();
 ```
 
 ## Configure the SparkScan Mode
@@ -67,13 +73,12 @@ By adding a `SparkScanView`, the scanning interface (camera preview and scanning
 Add a `SparkScanView` to your view hierarchy. Construct a new SparkScan view. The `SparkScan` view is automatically added to the provided parentView:
 
 ```js
-const sparkScanComponent = (
-	<SparkScanView
-		context={context}
-		sparkScan={sparkScan}
-		sparkScanViewSettings={viewSettings}
-	/>
-);
+const sparkScanView = await SparkScanView.forElement(
+  document.body,
+  context,
+  sparkScan,
+  sparkScanViewSettings
+)
 ```
 
 Additionally, make sure to call [SparkScanView.stopScanning()](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your app state handling logic. You have to call this for the correct functioning of the

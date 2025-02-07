@@ -38,6 +38,12 @@ import Clustering from '../../../partials/count/_clustering.mdx'
 
 <Clustering />
 
+## Tote Mapping
+
+import Totes from '../../../partials/count/_tote-mapping.mdx'
+
+<Totes />
+
 ## Strap Mode
 
 It can be difficult to reach the shutter button if the smart device is attached to the user’s wrist by a strap or similar.
