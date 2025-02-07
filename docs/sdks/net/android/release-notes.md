@@ -71,6 +71,7 @@ keywords:
 
 ### Behavioral Changes
 
+* XCode 16.1+ is now required.
 * After further improving the scanning speed on color-inverted QR and MicroQR codes, these variations can now be scanned without having to set any specific setting (as opposed to before), offering a better experience to developers.
 
 ### Bug Fixes
