@@ -8,11 +8,11 @@ keywords:
 
 # Overview
 
-The Scandit C API offers a low-level interface to the Data Capture SDK. The low-level API is the default interface on Linux but it is also available for Android, iOS and Windows on request.
+The Scandit C API offers a low-level interface to the Data Capture SDK. The low-level API is the default interface on Linux but it is also available for Android and iOS.
 
 This interface is very limited compared to the Data Capture API provided in the SDKs for all platforms. It allows you to pass image data directly to the data capture modules, such as barcode scanning. The API does not include a user interface, image or stream management, or advanced camera control. On Linux a basic camera interface for Video4Linux 2 (V4L2) cameras is provided.
 
-If you are creating a mobile application for Android, iOS or Windows where the Scandit SDK is the only camera user, then you **should not** use the low-level API and use the Data Capture API instead. Possible scenarios requiring the low-level API include building:
+If you are creating a mobile application for Android and/or iOS where the Scandit SDK is the only camera user, then you **should not** use the low-level API and use the Data Capture API instead. Possible scenarios requiring the low-level API include building:
 
 * An embedded system with custom camera handling.
 * A batch or single image processing system on an embedded system or server
