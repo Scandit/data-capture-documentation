@@ -164,7 +164,7 @@ extension ViewController: BarcodePickViewUIDelegate {
 
 ## Register the Listener
 
-The `BarcodePickView` displays a **Finish** button next to its shutter button button. 
+The `BarcodePickView` displays a **Finish** button next to its shutter button. 
 
 Register a [BarcodePickViewListener](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-pick-view-listener.html#interface-scandit.datacapture.barcode.pick.ui.BarcodePickViewListener) to be notified what items have been found once the finish button is pressed.
 

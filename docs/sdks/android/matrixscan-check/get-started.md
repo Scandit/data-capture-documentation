@@ -44,84 +44,17 @@ BarcodeCheckSettings settings = new BarcodeCheckSettings();
 settings.enableSymbology(Symbology.EAN13_UPCA, true);
 ```
 
-Then you have to create the product provider(s) for the Barcode Check mode. These providers are responsible for indicating the items that should be highlighted and/or annotated in the AR view. Note that in this example we are using a hardcoded list of items, but in a real-world scenario, you would fetch this list from your backend.
+The create the mode with the previously created settings:
 
 ```java
-List<ProductDatabaseEntry> productDatabase = new ArrayList<>();
-        productDatabase.add(
-            new ProductDatabaseEntry(
-                /*product identifier*/"product_1",
-                /*items for the product*/new HashSet<String>() {{
-                    add("9783598215438");
-                    add("9783598215414");
-                    add("9783598215441");
-                    add("9783598215412");
-                }})
-        );
-        productDatabase.add(
-            new ProductDatabaseEntry(
-                /*product identifier*/"product_2",
-                /*items for the product*/new HashSet<String>() {{
-                    add("9783598215471");
-                    add("9783598215481");
-                    add("9783598215458");
-                    add("9783598215498");
-                    add("9783598215421");
-                }})
-        );
-
-        // Map the database products to create the Scandit product provider input.
-        Set<BarcodeCheckProduct> items = new HashSet<>();
-        for (ProductDatabaseEntry productDatabaseEntry : productDatabase) {
-            items.add(
-                new BarcodeCheckProduct(
-                    productDatabaseEntry.productIdentifier,
-                    productDatabaseEntry.quantityToCheck
-                )
-            );
-        }
-
-        // Finally, create the product provider itself
-        BarcodeCheckProductProvider productProvider = new BarcodeCheckAsyncMapperProductProvider(
-            items,
-            new BarcodeCheckAsyncMapperProductProviderCallback() {
-                @Override
-                public void productIdentifierForItems(
-                    @NonNull List<String> itemsData,
-                    @NonNull BarcodeCheckProductProviderCallback callback
-                ) {
-                    ArrayList<BarcodeCheckProductProviderCallbackItem> results = new ArrayList<>();
-
-                    // Use the scanned itemsData list to retrieve the identifier of the product they belong to.
-                    // This should be an async query in real world scenarios if there are a lot of products/items to loop.
-                    for (String itemData : itemsData) {
-                        for (ProductDatabaseEntry entry : productDatabase) {
-                            if (entry.items.contains(itemData)) {
-                                results.add(
-                                    new BarcodeCheckProductProviderCallbackItem(
-                                        /*item data*/itemData,
-                                        /*product identifier*/entry.productIdentifier
-                                    )
-                                );
-                                break;
-                            }
-                        }
-                    }
-                    callback.onData(results);
-                }
-            }
-        );
-```
-
-Create the mode with the previously created settings:
-
-```java
-BarcodeCheck mode = new BarcodeCheck(dataCaptureContext, settings, productProvider);
+BarcodeCheck mode = new BarcodeCheck(dataCaptureContext, settings);
 ```
 
 ## Setup the `BarcodeCheckView`
 
 MatrixScan Check’s built-in AR user interface includes buttons and overlays that guide the user through the scan and check process. By adding a [`BarcodeCheckView`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckView), the scanning interface is added automatically to your application.
+
+The `BarcodeCheckView` is where you provide the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.AnnotationProvider) to supply the highlight and annotation information for the barcodes to be checked. If *null*, a default highlight is used and no annotations are provided.
 
 The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSettings`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view-settings.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckViewSettings), and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
 
@@ -166,11 +99,11 @@ public void onDestroyView() {
 
 ## Register the Listener
 
-The `BarcodeCheckView` displays a **Finish** button next to its shutter button button. 
+The `BarcodeCheckView` displays a **Finish** button next to its shutter button. 
 
 Register a [BarcodeCheckViewUiListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeCheckViewUiListener) to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the session.
 
 ```java
 barcodeCheckView.setUiListener(new BarcodeCheckViewUiListener() {
@@ -188,5 +121,3 @@ With everything configured, you can now start searching for items. This is done 
 ```java
 barcodeCheckView.start();
 ```
-
-This is the equivalent of pressing the Play button programmatically. It will start the search process, turn on the camera, and hide the item carousel.
