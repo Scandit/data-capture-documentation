@@ -111,7 +111,7 @@ public void onPause() {
 
 ## Register the Listener
 
-The `BarcodeFindView` displays a **Finish** button next to its shutter button button. 
+The `BarcodeFindView` displays a **Finish** button next to its shutter button. 
 
 Register a [BarcodeFindViewUiListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-find-view.html#interface-scandit.datacapture.barcode.find.ui.IBarcodeFindViewUiListener) to be notified what items have been found once the finish button is pressed.
 

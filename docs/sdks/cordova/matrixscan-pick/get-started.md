@@ -90,7 +90,7 @@ const BarcodePickView = BarcodePickView.forModeWithViewSettings(dataCaptureConte
 
 ## Register the Listener
 
-The `BarcodePickView` displays a **Finish** button next to its shutter button button. 
+The `BarcodePickView` displays a **Finish** button next to its shutter button. 
 
 Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-pick-view.html#interface-scandit.datacapture.barcode.pick.ui.IBarcodePickViewUiListener) to be notified what items have been found once the finish button is pressed.
 

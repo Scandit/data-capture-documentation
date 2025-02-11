@@ -182,7 +182,7 @@ protected override void OnDisappearing()
 
 ## Subscribe to View Events
 
-The `BarcodePickView` displays a **Finish** button next to its shutter button button. 
+The `BarcodePickView` displays a **Finish** button next to its shutter button. 
 
 Subscribe to a `BarcodePickView.onFinishButtonTapped` event to be notified what items have been found once the finish button is pressed.
 

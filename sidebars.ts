@@ -573,6 +573,7 @@ const sidebars: SidebarsConfig = {
               label: "MatrixScan Check",
               items: [
                 "sdks/web/matrixscan-check/intro",
+                "sdks/web/matrixscan-check/get-started",
               ],
             },
             {
@@ -914,6 +915,7 @@ const sidebars: SidebarsConfig = {
               label: "MatrixScan Check",
               items: [
                 "sdks/react-native/matrixscan-check/intro",
+                "sdks/react-native/matrixscan-check/get-started",
               ],
             },
             {
@@ -1110,6 +1112,7 @@ const sidebars: SidebarsConfig = {
               label: "MatrixScan Check",
               items: [
                 "sdks/flutter/matrixscan-check/intro",
+                "sdks/flutter/matrixscan-check/get-started",
               ],
             },
             {
