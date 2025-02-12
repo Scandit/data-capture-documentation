@@ -9,6 +9,16 @@ keywords:
   - android
 ---
 
+## 6.28.4
+
+**Released**: February 19, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed an issue that was causing a crash when creating multiple instances of `BarcodeCapture` without setting a `BatterySavingMode`.
+
 ## 6.28.3
 
 **Released**: December 23, 2024
