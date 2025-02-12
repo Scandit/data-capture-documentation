@@ -345,6 +345,7 @@ The interface defining the object you receive in `CompletionResult.capturedId`.
 | `issuingCountry` | `Region` | `null` | The ISO (Alpha-3 code) abbreviation of the issuing country of the document.|
 | `documentNumber` | `string` | `null` | |
 | `documentAdditionalNumber` | `string` | `null` ||
+| `personalIdNumber` | `string` | `null` | Documents that have both a personal and a document number will have the personal number in this field. |
 | `dateOfBirth` | `DateResult` | `null` | |
 | `age` | `number` | `null` | |
 | `dateOfExpiry` | `DateResult` | `null` | |
