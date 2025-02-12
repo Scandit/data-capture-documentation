@@ -28,7 +28,7 @@ Using validators, ID Bolt can verify the expiration date or other features of th
 - `serviceUrl: string`: URL that ID Bolt loads when started. Provided in your account on the [Scandit dashboard](https://ssl.scandit.com/dashboard).
 
 :::note
-The default value `app.id-scanning.com` is an alias that points to Scandit’s servers. In a production environment it can be changed to your own domain name pointing to Scandit’s servers. This will require you to configure a CNAME record in the DNS settings of your domain.
+The default value `app.id-scanning.com` is an alias that points to Scandit’s servers. In a production environment it can be changed to your own domain name pointing to Scandit’s servers. This will require you to configure a CNAME record in the DNS settings of your domain. Contact your Scandit account manager for more information.
 :::
 
 - `options: IdBoltCreateSessionOptions`: Object specifying the session options:
