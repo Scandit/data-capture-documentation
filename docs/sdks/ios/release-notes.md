@@ -15,20 +15,6 @@ keywords:
 
 ### New Features
 
-#### Core
-
-* `DataCaptureContext` has been adapted to work as a singleton.
-  * You can use the `DataCaptureContext.SharedInstance` property to retrieve the singleton instance.
-  * The license key must be set using `DataCaptureContext.Initialize`. This step is only required once. Once initialized, the context can be used as before.
-  * It is important to call `DataCaptureContext.RemoveCurrentMode()` when the active mode is no longer needed, such as when navigating away from a screen used for scanning.
-  * The following methods have been added (also see Deprecations, below, for removed methods):
-    * `setMode`: Sets a mode to be the active mode in the context.
-    * `removeCurrentMode`: Removes the currently active mode in the context.
-    * `static sharedInstance`: Returns a singleton instance of DataCaptureContext. This instance is unusable until properly configured by calling initialize() on it.
-    * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
-    * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
-* Calling `DataCaptureContext.addMode()` or `DataCaptureContext.setMode()` now replaces the current mode with the new one, so it’s no longer needed to remove a mode when adding a new one.
-
 #### Barcode
 
 * [MatrixScan Check](/sdks/ios/matrixscan-check/intro.md) in now available, offering prebuilt views designed to quickly build custom workflows with augmented reality for your existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
@@ -40,6 +26,7 @@ keywords:
   * `BarcodeSpatialGridEditorViewListener`
 * SparkScan now supports periscope devices with a new setting that adjusts the camera feed by mirroring it as needed:
   * `sparkScanViewSettings.isPeriscopeModeEnabled()`
+* User Facing Camera in SparkScan: It is now possible to switch to the user-facing camera for scanning. This is useful in specific use-cases where the rear camera is not accessible or barcodes are hard to reach otherwise. See `SDCSparkScanView.cameraSwitchButtonVisible`.
 * Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
 * Added a new constructor for `BarcodeFindItemSearchOptions` for receiving a Brush, allowing different barcodes to use different Brushes for rendering the dots.
 
@@ -55,6 +42,20 @@ keywords:
 #### Label Capture
 
 * To simplify working with dates in Smart Label Capture (e.g., capturing an expiry date), we’ve added native support for dates in `LabelField`. Now, if a field contains a date you can retrieve it as a date object using `LabelField.asDate()`.
+
+#### Core
+
+* DataCaptureContext can be used as a singleton through `DataCaptureContext.SharedInstance`.
+  * The license key must be set using `DataCaptureContext.Initialize`. This step is only required once. Once initialized, the context can be used as before.
+  * It is important to call `DataCaptureContext.RemoveCurrentMode()` when the active mode is no longer needed, such as when navigating away from a screen used for scanning.
+  * The following methods have been added (also see Deprecations, below, for removed methods):
+    * `setMode`: Sets a mode to be the active mode in the context.
+    * `removeCurrentMode`: Removes the currently active mode in the context.
+    * `static sharedInstance`: Returns a singleton instance of `DataCaptureContext`. This instance is unusable until properly configured by calling initialize() on it.
+    * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
+    * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
+  * Calling `DataCaptureContext.addMode()` or `DataCaptureContext.setMode()` now replaces the current mode with the new one, so it’s no longer needed to remove a mode when adding a new one.
+  * The old non-singleton API is still available.
 
 ### Performance Improvements
 

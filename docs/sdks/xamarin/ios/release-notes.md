@@ -15,20 +15,6 @@ keywords:
 
 ### New Features
 
-#### Core
-
-* `DataCaptureContext` has been adapted to work as a singleton.
-  * You can use the `DataCaptureContext.SharedInstance` property to retrieve the singleton instance.
-  * The license key must be set using `DataCaptureContext.Initialize`. This step is only required once. Once initialized, the context can be used as before.
-  * It is important to call `DataCaptureContext.RemoveCurrentMode()` when the active mode is no longer needed, such as when navigating away from a screen used for scanning.
-  * The following methods have been added (also see Deprecations, below, for removed methods):
-    * `setMode`: Sets a mode to be the active mode in the context.
-    * `removeCurrentMode`: Removes the currently active mode in the context.
-    * `static sharedInstance`: Returns a singleton instance of DataCaptureContext. This instance is unusable until properly configured by calling initialize() on it.
-    * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
-    * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
-* Calling `DataCaptureContext.addMode()` or `DataCaptureContext.setMode()` now replaces the current mode with the new one, so it’s no longer needed to remove a mode when adding a new one.
-
 #### Barcode
 
 * MatrixScan Count now includes the ability to [cluster barcodes](/sdks/xamarin/ios/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
@@ -47,6 +33,20 @@ keywords:
 * Added support for scanning the Machine Readable Zone of  non-standard Indian passports, where an MRZ line consists of 42 characters instead of 44. 
 * Added support for scanning the Machine Readable Zone of the Chinese Mainland Travel Permit issued for non-Chinese citizens being residents of Hong Kong or Macau.
 * Unified the value of the sex field from VIZ and MRZ results so that it is always one of the values `female`, `male` or `unspecified`.
+
+#### Core
+
+* DataCaptureContext can be used as a singleton through `DataCaptureContext.SharedInstance`.
+  * The license key must be set using `DataCaptureContext.Initialize`. This step is only required once. Once initialized, the context can be used as before.
+  * It is important to call `DataCaptureContext.RemoveCurrentMode()` when the active mode is no longer needed, such as when navigating away from a screen used for scanning.
+  * The following methods have been added (also see Deprecations, below, for removed methods):
+    * `setMode`: Sets a mode to be the active mode in the context.
+    * `removeCurrentMode`: Removes the currently active mode in the context.
+    * `static sharedInstance`: Returns a singleton instance of `DataCaptureContext`. This instance is unusable until properly configured by calling initialize() on it.
+    * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
+    * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
+  * Calling `DataCaptureContext.addMode()` or `DataCaptureContext.setMode()` now replaces the current mode with the new one, so it’s no longer needed to remove a mode when adding a new one.
+  * The old non-singleton API is still available.
 
 ### Performance Improvements
 
