@@ -9,6 +9,17 @@ keywords:
   - titanium
 ---
 
+## 6.28.4
+
+**Released**: February 14, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed an issue which reduced scans for low-resolution and blurry codes affected by distortion or damage, when multiple symbologies were enabled.
+* Fixed an issue where scanned blurry codes locations are sometimes flipped.
+
 ## 6.28.3
 
 **Released**: December 23, 2024
