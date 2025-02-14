@@ -11,9 +11,14 @@ keywords:
 
 ## 6.28.4
 
-**Released**: February 19, 2025
+**Released**: February 14, 2025
 
-No updates for this framework in this release.
+### Bug Fixes
+
+#### Core
+
+* Fixed an issue which reduced scans for low-resolution and blurry codes affected by distortion or damage, when multiple symbologies were enabled.
+* Fixed an issue where scanned blurry codes locations are sometimes flipped.
 
 ## 6.28.3
 
