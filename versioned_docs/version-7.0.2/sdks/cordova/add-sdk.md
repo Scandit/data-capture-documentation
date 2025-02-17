@@ -59,6 +59,10 @@ If you do not have a Cordova project yet that you’ll use, you should create a 
 
 The Scandit Data Capture SDK depends on WKWebView on iOS, so you’ll manually have to add this dependency if your project doesn’t use WKWebView yet.
 
+:::tip
+The `cordova-plugin-wkwebview-engine` is only supported in `cordova-ios`  `>=4`-`<6` but is now [default in new versions](https://github.com/apache/cordova-plugin-wkwebview-engine?tab=readme-ov-file#deprecation-notice).
+:::
+
 ```sh
 > cordova plugin add cordova-plugin-wkwebview-engine
 ```
