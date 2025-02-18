@@ -1,7 +1,7 @@
 ---
 sidebar_label: 'Getting Started'
 title: 'Getting Started'
-hide_title: true
+hide_title: false
 displayed_sidebar: boltSidebar
 framework: bolt
 tags: [bolt]

@@ -24,3 +24,4 @@ ID Bolt offers the following features:
 * **Device Handover**: ID Bolt works on both desktop and mobile devices, providing a unified solution. Desktop/laptop users can scan IDs using their mobile device camera.
 * **Industry Leading UX**: ID Bolt provides a seamless user experience with a simple and intuitive interface, designed based on the millions of scans performed by Scandit customers each year.
 * **Compliance**: ID Bolt ensures compliance with data protection regulations, such as GDPR, by processing all data on-device and not collecting any identity information on third-party servers.
+* **White-Label Solution**: ID Bolt can be placed behind your own domain, allowing you to maintain brand consistency and provide a seamless, integrated experience to your customers while leveraging Scandit's powerful ID scanning capabilities.

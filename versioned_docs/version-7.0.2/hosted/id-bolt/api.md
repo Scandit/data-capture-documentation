@@ -28,7 +28,7 @@ Using validators, ID Bolt can verify the expiration date or other features of th
 - `serviceUrl: string`: URL that ID Bolt loads when started. Provided in your account on the [Scandit dashboard](https://ssl.scandit.com/dashboard).
 
 :::note
-The default value `app.id-scanning.com` is an alias that points to Scandit’s servers. In a production environment it can be changed to your own domain name pointing to Scandit’s servers. This will require you to configure a CNAME record in the DNS settings of your domain.
+The default value `app.id-scanning.com` is an alias that points to Scandit’s servers. In a production environment it can be changed to your own domain name pointing to Scandit’s servers. This will require you to configure a CNAME record in the DNS settings of your domain. Contact your Scandit account manager for more information.
 :::
 
 - `options: IdBoltCreateSessionOptions`: Object specifying the session options:
@@ -37,6 +37,7 @@ The default value `app.id-scanning.com` is an alias that points to Scandit’s s
   - `returnDataMode: ReturnDataMode`: Defines the extent of the data returned by the `onCompletion()` callback. Use:    
 	- `ReturnDataMode.FullWithImages` to get all extracted data and images.
 	- `ReturnDataMode.Full` to get all extracted data without images.
+  - `anonymizationMode?: AnonymizationMode`: Define the extend returned data is anonymized. See *[`Anonymization Mode`](#anonymization-mode)*.
   - `scanner?: Scanner`: Options to customize the scanner. See *[`Scanner`](#scanner-options)*.
   - `validation?: Validators[]`: Optional array of validators, default: `[]`. See *[`Validators`](#validators)*. 
   - `locale?: string`: The language in which the text is displayed. Default: `"en-US"`.
@@ -342,8 +343,9 @@ The interface defining the object you receive in `CompletionResult.capturedId`.
 | `nationality` | `string` | `null` | |
 | `address` | `string` | `null` | |
 | `issuingCountry` | `Region` | `null` | The ISO (Alpha-3 code) abbreviation of the issuing country of the document.|
-| `documentNumber` | `string` | `null` | |
+| `documentNumber` | `string` | `null` |  A unique identifier assigned to an individual document, such as an identification card or passport. This number is specific to the document itself and may change if a new document is issued. |
 | `documentAdditionalNumber` | `string` | `null` ||
+| `personalIdNumber` | `string` | `null` | A unique identification number assigned to an individual, often for life, used for identification and administrative purposes (e.g., taxation, social security, or government records). |
 | `dateOfBirth` | `DateResult` | `null` | |
 | `age` | `number` | `null` | |
 | `dateOfExpiry` | `DateResult` | `null` | |
@@ -388,6 +390,36 @@ Values used by `IdBoltCreateSessionOptions` to define what data is returned by `
 | `Full` | All extracted data is returned, but images are excluded. |
 | `FullWithImages` | All extracted data is returned, including images of the scanned ID. |
 
+Example:
+```ts
+	...
+	returnDataMode: ReturnDataMode.Full,
+	...
+```
+
+## Anonymization Mode
+
+Some countries have specific requirements for the anonymization of documents. ID-Bolt can be configured to not extract those sensitive fields from documents.
+Black boxes cover sensitive data in result images.
+
+The `AnonymizationMode` enum has the following values:
+
+| Value             | Description                           |
+| ----------------- | ------------------------------------- |
+| `None`            | No anonymization is applied (default) |
+| `FieldsOnly`      | Only fields (data) are anonymized     |
+| `ImagesOnly`      | Only images are anonymized            |
+| `FieldsAndImages` | Both fields and images are anonymized |
+
+Note that when image anonymization is enabled, the `FullWithImages` return data mode does not return full-frame images. Cropped images are still returned, if available.
+
+Example:
+```ts
+	...
+	anonymizationMode: AnonymizationMode.FieldsOnly,
+	...
+```
+
 ## Workflow Options
 
 Options to customize the user interface of the ID Bolt workflow.
@@ -399,6 +431,15 @@ Options to customize the user interface of the ID Bolt workflow.
 | `showWelcomeScreen` | `boolean` | When enabled: Always shown on both desktop and mobile. When disabled: Only shown on desktop to allow users to select between scanning on local device or handing over. |
 | `showResultScreen` | `boolean` | Determines whether to show the result screen at the end of the workflow. |
 
+Example:
+```ts
+	...
+	workflow: {
+		showWelcomeScreen: false,
+		showResultScreen: true,
+	},
+	...
+```
 
 ## Scanner Options
 
