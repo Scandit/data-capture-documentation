@@ -1,15 +1,13 @@
 ---
 sidebar_label: 'Getting Started'
 title: 'Getting Started'
-hide_title: true
+hide_title: false
 displayed_sidebar: boltSidebar
 framework: bolt
 tags: [bolt]
 keywords:
   - bolt
 ---
-
-## Getting Started
 
 ID Bolt can be integrated into your existing application or website with minimal time and effort, often ready to test in your staging environment in just one hour.
 

@@ -28,7 +28,7 @@ Using validators, ID Bolt can verify the expiration date or other features of th
 - `serviceUrl: string`: URL that ID Bolt loads when started. Provided in your account on the [Scandit dashboard](https://ssl.scandit.com/dashboard).
 
 :::note
-The default value `app.id-scanning.com` is an alias that points to Scandit’s servers. In a production environment it can be changed to your own domain name pointing to Scandit’s servers. This will require you to configure a CNAME record in the DNS settings of your domain.
+The default value `app.id-scanning.com` is an alias that points to Scandit’s servers. In a production environment it can be changed to your own domain name pointing to Scandit’s servers. This will require you to configure a CNAME record in the DNS settings of your domain. Contact your Scandit account manager for more information.
 :::
 
 - `options: IdBoltCreateSessionOptions`: Object specifying the session options:
@@ -343,8 +343,9 @@ The interface defining the object you receive in `CompletionResult.capturedId`.
 | `nationality` | `string` | `null` | |
 | `address` | `string` | `null` | |
 | `issuingCountry` | `Region` | `null` | The ISO (Alpha-3 code) abbreviation of the issuing country of the document.|
-| `documentNumber` | `string` | `null` | |
+| `documentNumber` | `string` | `null` |  A unique identifier assigned to an individual document, such as an identification card or passport. This number is specific to the document itself and may change if a new document is issued. |
 | `documentAdditionalNumber` | `string` | `null` ||
+| `personalIdNumber` | `string` | `null` | A unique identification number assigned to an individual, often for life, used for identification and administrative purposes (e.g., taxation, social security, or government records). |
 | `dateOfBirth` | `DateResult` | `null` | |
 | `age` | `number` | `null` | |
 | `dateOfExpiry` | `DateResult` | `null` | |
