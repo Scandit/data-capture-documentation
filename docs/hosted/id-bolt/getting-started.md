@@ -9,6 +9,8 @@ keywords:
   - bolt
 ---
 
+## Getting Started
+
 ID Bolt can be integrated into your existing application or website with minimal time and effort, often ready to test in your staging environment in just one hour.
 
 ID Bolt is available as an [npm package](https://www.npmjs.com/package/@scandit/web-id-bolt) and can be installed using `npm` or `yarn`.
