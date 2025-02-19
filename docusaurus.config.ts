@@ -360,17 +360,12 @@ const config: Config = {
             },
           ],
         },
-//        {
-//          type: "dropdown",
-//          sidebarId: "hostedSidebar",
-//          position: "left",
-//          label: "Hosted Solutions",
-//          items: [
-//            {
-//              type: "docsVersion",
-//              label: "ID Bolt",
-//              to: "hosted/id-bolt/overview",
-//            },
+        {
+          type: "docsVersion",
+          label: "ID Bolt",
+          position: "left",
+          to: "hosted/id-bolt/overview",
+        },
 //            {
 //              type: "docsVersion",
 //              label: "Scandit Express",
