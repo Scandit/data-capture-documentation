@@ -9,9 +9,9 @@ keywords:
   - xamarinIos
 ---
 
-## 7.1.0-beta.2
+## 7.1.0
 
-**Released**: February 6, 2025
+**Released**: February 21, 2025
 
 ### New Features
 

@@ -30,7 +30,7 @@ export const frameworkCards = [
       BarcodeScanning.SingleScanning,
       BarcodeScanning.BatchScanning,
     ],
-    IDScanning: [IDScanning.IDCaptureValidation],
+    IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
   },
   {
     framework: "android",
@@ -40,7 +40,7 @@ export const frameworkCards = [
       BarcodeScanning.SingleScanning,
       BarcodeScanning.BatchScanning,
     ],
-    IDScanning: [IDScanning.IDCaptureValidation],
+    IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
   },
   {
     framework: "web",
@@ -61,7 +61,7 @@ export const frameworkCards = [
       BarcodeScanning.BatchScanning,
       BarcodeScanning.ScanditExpress,
     ],
-    IDScanning: [IDScanning.IDCaptureValidation],
+    IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
   },
   {
     framework: "cordova",
@@ -71,7 +71,7 @@ export const frameworkCards = [
       BarcodeScanning.BatchScanning,
       BarcodeScanning.ScanditExpress,
     ],
-    IDScanning: [IDScanning.IDCaptureValidation],
+    IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
   },
   {
     framework: "xamarin",
@@ -82,7 +82,7 @@ export const frameworkCards = [
       BarcodeScanning.BatchScanning,
       BarcodeScanning.ScanditExpress,
     ],
-    IDScanning: [IDScanning.IDCaptureValidation],
+    IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
     additional: [
       {
         framework: "xamarinIos",
@@ -93,7 +93,7 @@ export const frameworkCards = [
           BarcodeScanning.BatchScanning,
           BarcodeScanning.ScanditExpress,
         ],
-        IDScanning: [IDScanning.IDCaptureValidation],
+        IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
       },
       {
         framework: "xamarinAndroid",
@@ -104,7 +104,7 @@ export const frameworkCards = [
           BarcodeScanning.BatchScanning,
           BarcodeScanning.ScanditExpress,
         ],
-        IDScanning: [IDScanning.IDCaptureValidation],
+        IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
       },
       {
         framework: "xamarinForms",
@@ -115,7 +115,7 @@ export const frameworkCards = [
           BarcodeScanning.BatchScanning,
           BarcodeScanning.ScanditExpress,
         ],
-        IDScanning: [IDScanning.IDCaptureValidation],
+        IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
       },
     ],
   },
@@ -127,7 +127,7 @@ export const frameworkCards = [
       BarcodeScanning.BatchScanning,
       BarcodeScanning.ScanditExpress,
     ],
-    IDScanning: [IDScanning.IDCaptureValidation],
+    IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
   },
   {
     framework: "net",
@@ -138,7 +138,7 @@ export const frameworkCards = [
       BarcodeScanning.BatchScanning,
       BarcodeScanning.ScanditExpress,
     ],
-    IDScanning: [IDScanning.IDCaptureValidation],
+    IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
     additional: [
       {
         framework: "netIos",
@@ -149,7 +149,7 @@ export const frameworkCards = [
           BarcodeScanning.BatchScanning,
           BarcodeScanning.ScanditExpress,
         ],
-        IDScanning: [IDScanning.IDCaptureValidation],
+        IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
       },
       {
         framework: "netAndroid",
@@ -160,7 +160,7 @@ export const frameworkCards = [
           BarcodeScanning.BatchScanning,
           BarcodeScanning.ScanditExpress,
         ],
-        IDScanning: [IDScanning.IDCaptureValidation],
+        IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
       },
     ],
   },
@@ -172,7 +172,7 @@ export const frameworkCards = [
       BarcodeScanning.BatchScanning,
       BarcodeScanning.ScanditExpress,
     ],
-    IDScanning: [IDScanning.IDCaptureValidation],
+    IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
   },
   {
     framework: "titanium",
@@ -181,7 +181,7 @@ export const frameworkCards = [
       BarcodeScanning.SingleScanning,
       BarcodeScanning.ScanditExpress,
     ],
-    IDScanning: [],
+    IDScanning: [IDScanning.IdBolt],
   },
   {
     framework: "linux",

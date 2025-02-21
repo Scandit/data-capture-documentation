@@ -217,14 +217,10 @@ const config: Config = {
           },
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          lastVersion: "7.0.2",
+          lastVersion: "current",
           versions: {
             current: {
               label: '7.1.0',
-              banner: 'unreleased',
-            },
-            '7.0.2': {
-              label: '7.0.2',
               banner: 'none',
               badge: false,
             },
@@ -248,12 +244,12 @@ const config: Config = {
   ],
 
   themeConfig: {
-    announcementBar: {
-      id: 'new_version',
-      content: 'Scandit Smart Data Capture SDK Version 7.0 is now available! See the <a href="/migrate-6-to-7">Migration Guide</a> to get started today.',
-      backgroundColor: '#065db8',
-      textColor: '#f0f0f0',
-    },
+  //  announcementBar: {
+  //    id: 'new_version',
+  //    content: 'Scandit Smart Data Capture SDK Version 7.0 is now available! See the <a href="/migrate-6-to-7">Migration Guide</a> to get started today.',
+  //    backgroundColor: '#065db8',
+  //    textColor: '#f0f0f0',
+  //  },
     algolia: {
       appId: "RYKD97E6SH",
       apiKey: "8372250579ef3ea82cc637a28e50f73f",
@@ -364,17 +360,12 @@ const config: Config = {
             },
           ],
         },
-//        {
-//          type: "dropdown",
-//          sidebarId: "hostedSidebar",
-//          position: "left",
-//          label: "Hosted Solutions",
-//          items: [
-//            {
-//              type: "docsVersion",
-//              label: "ID Bolt",
-//              to: "hosted/id-bolt/overview",
-//            },
+        {
+          type: "docsVersion",
+          label: "ID Bolt",
+          position: "left",
+          to: "hosted/id-bolt/overview",
+        },
 //            {
 //              type: "docsVersion",
 //              label: "Scandit Express",
