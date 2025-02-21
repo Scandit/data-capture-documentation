@@ -11,7 +11,7 @@ keywords:
 
 ## 7.1.0
 
-**Released**: February 20, 2025
+**Released**: February 21, 2025
 
 ### Performance Improvements
 
