@@ -25,11 +25,23 @@ The general steps are:
 
 ## Prerequisites
 
-Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out [this guide](../add-sdk.md).
+Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out this [guide](/sdks/android/add-sdk).
 
-:::note
-You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
+:::tip
+You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
 :::
+
+### External Dependencies
+
+import ExternalDependencies from '../../../partials/get-started/_external-deps-android.mdx';
+
+<ExternalDependencies/>
+
+### Internal Dependencies
+
+import InternalDependencies from '../../../partials/get-started/_internal-deps.mdx';
+
+<InternalDependencies/>
 
 ## Create a Data Capture Context
 
