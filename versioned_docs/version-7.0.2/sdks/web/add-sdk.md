@@ -11,6 +11,7 @@ keywords:
 
 This page describes how to integrate the Scandit Data Capture SDK into your web project.
 You can consume the Scandit Data Capture SDK Web packages in two ways:
+
 - as an external resource from a CDN in HTML
 - as package dependency via npm.
 
@@ -20,6 +21,7 @@ You need to add the `@scandit/web-datacapture-core` package, which contains the 
 
 If you’re using `barcodecapture`-related functionalities,
 make sure to also add the:
+
 - `@scandit/web-datacapture-barcode` package, and/or
 - `@scandit/web-datacapture-parser`
 
@@ -51,11 +53,11 @@ More info about this feature here https://developer.mozilla.org/en-US/docs/Web/H
 -->
 <link 
     rel="modulepreload"
-    href="https://cdn.jsdelivr.net/npm/scandit-web-datacapture-core@7.0.0/build/js/index.js"
+    href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/build/js/index.js"
 />
 <link
     rel="modulepreload"
-    href="https://cdn.jsdelivr.net/npm/scandit-web-datacapture-barcode@7.0.0/build/js/index.js"
+    href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/build/js/index.js"
 />
 <!-- polyfill browsers not supporting import maps. use the latest version from here https://github.com/guybedford/es-module-shims/releases -->
 <script async src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"></script>
@@ -211,7 +213,9 @@ import { BarcodeCapture, barcodeCaptureLoader } from '@scandit/web-datacapture-b
 
 // Insert your code here
 ```
-OR 
+
+OR
+
 ```js
 // Import everything
 import * as SDCCore from '@scandit/web-datacapture-core';
@@ -222,7 +226,7 @@ import * as SDCBarcode from '@scandit/web-datacapture-barcode';
 
 ## Configure the Library
 
-The library needs to be configured and initialized before it can be used, this is done via the [`configure`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#) function. 
+The library needs to be configured and initialized before it can be used, this is done via the [`configure`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#) function.
 Note that the configuration expects a valid license key as part of the options.
 
 :::tip
@@ -231,31 +235,32 @@ We recommended to call [`configure`](https://docs.scandit.com/data-capture-sdk/w
 
 The `LibraryLocation` configuration option must be provided and point to the location of the Scandit Data Capture `sdc-lib` location (external WebAssembly files): `scandit-datacapture-sdk\*.min.js` and `scandit-datacapture-sdk\*.wasm`.
 
-WebAssembly requires these separate files which are loaded by our main library at runtime. 
-They can be found inside the `sdc-lib` folder in the library you either added and installed via npm or access via a CDN. 
-If you installed the library through npm, these files should be copied and served correctly in a path that will be accessible by the sdk in the configure phase. 
+WebAssembly requires these separate files which are loaded by our main library at runtime.
+They can be found inside the `sdc-lib` folder in the library you either added and installed via npm or access via a CDN.
+If you installed the library through npm, these files should be copied and served correctly in a path that will be accessible by the sdk in the configure phase.
 
 The configuration option that you provide should then point to the folder containing these files, either as a path of your website or an absolute URL (like the CDN one). **By default the library will look at the root of your website**.
 If you use a CDN to access the library, you will want to set this to the following values depending on the data capture mode you are using:
 
-* For Barcode Capture:
-  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcde@7.0.0/sdc-lib/`
-* For ID Capture:
-  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7.0.0/sdc-lib/`,
+- For Barcode Capture:
+  - `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcde@7.0.0/sdc-lib/`
+- For ID Capture:
+  - `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7.0.0/sdc-lib/`,
 
-Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the `libraryLocation` option, 
+Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the `libraryLocation` option,
 either by ensuring the served files are up-to-date or the path/URL specifies a specific version.
 
 In case a common CDN is used (jsDelivr or UNPKG) the library will automatically, internally set up the correct URLs pointing to the files needed for the matching library version.
-**It is highly recommended to handle the serving of these files yourself on your website/server, ensuring optimal compression, correct WASM files MIME type, no request redirections, and correct caching headers usage.** 
+**It is highly recommended to handle the serving of these files yourself on your website/server, ensuring optimal compression, correct WASM files MIME type, no request redirections, and correct caching headers usage.**
 This will aid in faster loading.
 
 ## Show loading status with default UI
 
-It could take a while the very first time to download the .wasm files. 
-To show some feedback to the user about the loading status you have two options: 
-- use the default UI provided with the SDK 
-- subscribe to the loading status and update your own custom UI. 
+It could take a while the very first time to download the .wasm files.
+To show some feedback to the user about the loading status you have two options:
+
+- use the default UI provided with the SDK
+- subscribe to the loading status and update your own custom UI.
 
 Let’s see how to do it with the default UI first:
 
@@ -269,9 +274,9 @@ view.showProgressBar();
 view.setProgressBarMessage('Loading ...');
 
 await configure({
-	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
-	libraryLocation: '/self-hosted-sdc-lib/',
-	moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
+ licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
+ libraryLocation: '/self-hosted-sdc-lib/',
+ moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
 });
 
 view.hideProgressBar();
@@ -288,13 +293,13 @@ by simply attaching a listener like this:
 ```ts
 import { configure, loadingStatus } from "@scandit/web-datacapture-core"
 loadingStatus.subscribe((info) => {
-	// updateUI(info.percentage, info.loadedBytes)
+ // updateUI(info.percentage, info.loadedBytes)
 });
 
 await configure({
-	licenseKey: 'SCANDIT_LICENSE_KEY',
-	libraryLocation: '/self-hosted-sdc-lib/',
-	moduleLoaders: [barcodeCaptureLoader()],
+ licenseKey: 'SCANDIT_LICENSE_KEY',
+ libraryLocation: '/self-hosted-sdc-lib/',
+ moduleLoaders: [barcodeCaptureLoader()],
 });
 ```
 
@@ -316,9 +321,8 @@ For more information:
 
 ### Camera Permissions
 
-When using the Scandit Data Capture SDK you will likely want to set the camera as the frame source for various capture modes. 
+When using the Scandit Data Capture SDK you will likely want to set the camera as the frame source for various capture modes.
 The camera permissions are handled by the browser, and can only be granted if a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) is used and have to be accepted by the user explicitly.
-
 
 ### Progressive Web App (PWA)
 
@@ -335,8 +339,8 @@ You can configure the scanner to work offline making the web app progressive (Pr
 With these settings in place and the service worker correctly configured, you will be able to have a full offline scanning experience.
 
 :::warning
-On iOS there's an [issue](https://bugs.webkit.org/show_bug.cgi?id=252465) while accessing the video stream inside a progressive web app. The issue is flaky and gets reopened periodically. 
-Check the [webkit tracker](https://bugs.webkit.org/buglist.cgi?quicksearch=pwa%20getUserMedia) 
+On iOS there's an [issue](https://bugs.webkit.org/show_bug.cgi?id=252465) while accessing the video stream inside a progressive web app. The issue is flaky and gets reopened periodically.
+Check the [webkit tracker](https://bugs.webkit.org/buglist.cgi?quicksearch=pwa%20getUserMedia)
 if you experience similar issues.
 :::
 
@@ -384,7 +388,7 @@ await configure({
 });
 ```
 
-You can encrypt your license key with this small Node.js script. Then you should copy the `sdc-license.data` file in the `licenseDataPath` in order to be correctly read at runtime in the configure phase. 
+You can encrypt your license key with this small Node.js script. Then you should copy the `sdc-license.data` file in the `licenseDataPath` in order to be correctly read at runtime in the configure phase.
 
 You can also check the related [sample](https://github.com/Scandit/datacapture-web-samples/tree/master/ElectronBarcodeCaptureSimpleSample).
 
