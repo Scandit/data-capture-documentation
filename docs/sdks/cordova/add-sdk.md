@@ -106,17 +106,18 @@ First add `scandit-cordova-datacapture-core` plugin:
 cordova plugin add <path to scandit-cordova-datacapture-core plugin>
 ```
 
-If your project is not yet configured to use Swift on iOS, you’ll need to add the following line to your _config.xml_ file to specify the Swift version you’d like to use:
+If your project is not yet configured to use Swift on iOS, you’ll need to add the following lines to your _config.xml_ file to specify the iOS version targeted and the Swift version you’d like to use:
 
 ```jsx
 <platform name="ios">
 	...
-	<preference name="SwiftVersion" value="5" />
+	<preference name="deployment-target" value="14.0" />
+  	<preference name="SwiftVersion" value="5" />
 	...
 </platform>
 ```
 
-Once this is done, you can continue with adding the plugin for your desired functionality, e.g. for barcode capture, add the scandit-cordova-datacapture-barcode plugin:
+Once this is done, you can continue with adding the plugin for your desired functionality, e.g. for barcode capture, add the `scandit-cordova-datacapture-barcode` plugin:
 
 ```sh
 cordova plugin add <path to scandit-cordova-datacapture-barcode plugin>
