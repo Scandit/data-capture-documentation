@@ -11,6 +11,7 @@ keywords:
 
 This page describes how to integrate the Scandit Data Capture SDK into your web project.
 You can consume the Scandit Data Capture SDK Web packages in two ways:
+
 - as an external resource from a CDN in HTML
 - as package dependency via npm.
 
@@ -18,8 +19,9 @@ Scandit Data Capture SDKs [npm packages](https://www.npmjs.com/search?q=@scandit
 
 You need to add the `@scandit/web-datacapture-core` package, which contains the shared functionality used by the other data capture packages.
 
-If you’re using `barcodecapture`-related functionalities,
+If you're using `barcodecapture`-related functionalities,
 make sure to also add the:
+
 - `@scandit/web-datacapture-barcode` package, and/or
 - `@scandit/web-datacapture-parser`
 
@@ -192,7 +194,7 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
 
 ## Install via npm
 
-To add the packages via npm, you run the following command from your project’s root folder:
+To add the packages via npm, you run the following command from your project's root folder:
 
 ```sh
 npm install --save @scandit/web-datacapture-core @scandit/web-datacapture-barcode
@@ -211,7 +213,9 @@ import { BarcodeCapture, barcodeCaptureLoader } from '@scandit/web-datacapture-b
 
 // Insert your code here
 ```
-OR 
+
+OR
+
 ```js
 // Import everything
 import * as SDCCore from '@scandit/web-datacapture-core';
@@ -222,42 +226,136 @@ import * as SDCBarcode from '@scandit/web-datacapture-barcode';
 
 ## Configure the Library
 
-The library needs to be configured and initialized before it can be used, this is done via the [`configure`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#) function. 
+The library needs to be configured and initialized before it can be used, this is done via the [`configure`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#) function.
 Note that the configuration expects a valid license key as part of the options.
 
 :::tip
 We recommended to call [`configure`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#) as soon as possible in your application so that the files are already downloaded and initialized when the capture process is started.
 :::
 
-The `LibraryLocation` configuration option must be provided and point to the location of the Scandit Data Capture `sdc-lib` location (external WebAssembly files): `scandit-datacapture-sdk\*.min.js` and `scandit-datacapture-sdk\*.wasm`.
+The `LibraryLocation` configuration option must be provided and point to the location of the Scandit Data Capture `sdc-lib` location (external WebAssembly files): `scandit-datacapture-sdk\*.js` and `scandit-datacapture-sdk\*.wasm`.
 
-WebAssembly requires these separate files which are loaded by our main library at runtime. 
-They can be found inside the `sdc-lib` folder in the library you either added and installed via npm or access via a CDN. 
-If you installed the library through npm, these files should be copied and served correctly in a path that will be accessible by the sdk in the configure phase. 
+WebAssembly requires these separate files which are loaded by our main library at runtime.
+They can be found inside the `sdc-lib` folder in the library you either added and installed via npm or access via a CDN.
+If you installed the library through npm, **these files should be copied and served correctly in a path that will be accessible by the sdk in the configure phase**.
 
 The configuration option that you provide should then point to the folder containing these files, either as a path of your website or an absolute URL (like the CDN one). **By default the library will look at the root of your website**.
-If you use a CDN to access the library, you will want to set this to the following values depending on the data capture mode you are using:
 
-* For Barcode Capture:
-  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcde@7.0.0/sdc-lib/`
-* For ID Capture:
-  * `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7.0.0/sdc-lib/`,
-
-Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the `libraryLocation` option, 
+Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the `libraryLocation` option,
 either by ensuring the served files are up-to-date or the path/URL specifies a specific version.
 
 In case a common CDN is used (jsDelivr or UNPKG) the library will automatically, internally set up the correct URLs pointing to the files needed for the matching library version.
-**It is highly recommended to handle the serving of these files yourself on your website/server, ensuring optimal compression, correct WASM files MIME type, no request redirections, and correct caching headers usage.** 
+**It is highly recommended to handle the serving of these files yourself on your website/server, ensuring optimal compression, correct WASM files MIME type, no request redirections, and correct caching headers usage.**
 This will aid in faster loading.
+
+## Hosting the `sdc-lib` files
+
+We recommend serving the `sdc-lib` folder yourself.
+
+When doing so, be sure to copy the entire folder and serve the files correctly by setting up the correct MIME type for the `.wasm`, `.model`, and `.js` files. Some common examples are provided below:
+
+<Tabs groupId="selfhost">
+
+<TabItem value="ASP.NET Core" label="ASP.NET Core">
+
+```csharp
+app.UseStaticFiles(new StaticFileOptions()
+{
+  ServeUnknownFileTypes = true,
+  DefaultContentType = "application/octet-stream"
+});
+```
+
+Or
+
+```csharp
+var provider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider();
+provider.Mappings[".model"] = "application/octet-stream";
+provider.Mappings[".js"] = "application/javascript";
+provider.Mappings[".wasm"] = "application/wasm";
+```
+
+</TabItem>
+
+<TabItem value="Apache" label="Apache">
+
+Add these MIME types to your `.htaccess` file or Apache configuration:
+
+```apache
+AddType application/wasm .wasm
+AddType application/octet-stream .model
+AddType application/javascript .js
+```
+
+</TabItem>
+
+<TabItem value="Nginx" label="Nginx">
+
+Add these MIME types to your Nginx configuration file:
+
+```nginx
+types {
+    application/wasm wasm;
+    application/octet-stream model;
+    application/javascript js;
+}
+```
+
+</TabItem>
+
+<TabItem value="Express.js" label="Express.js">
+
+For Express.js, you can configure the MIME types like this:
+
+```javascript
+const express = require('express');
+const app = express();
+
+express.static.mime.define({'application/wasm': ['wasm']});
+express.static.mime.define({'application/octet-stream': ['model']});
+express.static.mime.define({'application/javascript': ['js']});
+app.use(express.static('self-hosted-sdc-lib')); // Serve static files from 'public' directory
+```
+
+</TabItem>
+
+<TabItem value="Python Flask" label="Python Flask">
+
+For Flask, you can set the MIME types when serving the files:
+
+```python
+from flask import Flask, send_file
+
+app = Flask(__name__)
+
+@app.route('/self-hosted-sdc-lib/<path:filename>')
+def serve_file(filename):
+    mimetype = None
+    if filename.endswith('.wasm'):
+        mimetype = 'application/wasm'
+    elif filename.endswith('.model'):
+        mimetype = 'application/octet-stream'
+    elif filename.endswith('.js'):
+        mimetype = 'application/javascript'
+    return send_file(
+        f'/self-hosted-sdc-lib/{filename}',
+        mimetype=mimetype
+    )
+```
+
+</TabItem>
+
+</Tabs>
 
 ## Show loading status with default UI
 
-It could take a while the very first time to download the .wasm files. 
-To show some feedback to the user about the loading status you have two options: 
-- use the default UI provided with the SDK 
-- subscribe to the loading status and update your own custom UI. 
+It could take a while the very first time to download the .wasm files.
+To show some feedback to the user about the loading status you have two options:
 
-Let’s see how to do it with the default UI first:
+- use the default UI provided with the SDK
+- subscribe to the loading status and update your own custom UI.
+
+Let's see how to do it with the default UI first:
 
 ```ts
 import { configure, DataCaptureView, DataCaptureContext } from "@scandit/web-datacapture-core"
@@ -269,9 +367,9 @@ view.showProgressBar();
 view.setProgressBarMessage('Loading ...');
 
 await configure({
-	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
-	libraryLocation: '/self-hosted-sdc-lib/',
-	moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
+ licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
+ libraryLocation: '/self-hosted-sdc-lib/',
+ moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
 });
 
 view.hideProgressBar();
@@ -288,13 +386,13 @@ by simply attaching a listener like this:
 ```ts
 import { configure, loadingStatus } from "@scandit/web-datacapture-core"
 loadingStatus.subscribe((info) => {
-	// updateUI(info.percentage, info.loadedBytes)
+ // updateUI(info.percentage, info.loadedBytes)
 });
 
 await configure({
-	licenseKey: 'SCANDIT_LICENSE_KEY',
-	libraryLocation: '/self-hosted-sdc-lib/',
-	moduleLoaders: [barcodeCaptureLoader()],
+ licenseKey: 'SCANDIT_LICENSE_KEY',
+ libraryLocation: '/self-hosted-sdc-lib/',
+ moduleLoaders: [barcodeCaptureLoader()],
 });
 ```
 
@@ -316,9 +414,8 @@ For more information:
 
 ### Camera Permissions
 
-When using the Scandit Data Capture SDK you will likely want to set the camera as the frame source for various capture modes. 
-The camera permissions are handled by the browser, and can only be granted if a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) is used and have to be accepted by the user explicitly.
-
+When using the Scandit Data Capture SDK you will likely want to set the camera as the frame source for various capture modes.
+The camera permissions are handled by the browser, and can only be granted if a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) is used and have been accepted by the user explicitly.
 
 ### Progressive Web App (PWA)
 
@@ -335,8 +432,8 @@ You can configure the scanner to work offline making the web app progressive (Pr
 With these settings in place and the service worker correctly configured, you will be able to have a full offline scanning experience.
 
 :::warning
-On iOS there's an [issue](https://bugs.webkit.org/show_bug.cgi?id=252465) while accessing the video stream inside a progressive web app. The issue is flaky and gets reopened periodically. 
-Check the [webkit tracker](https://bugs.webkit.org/buglist.cgi?quicksearch=pwa%20getUserMedia) 
+On iOS there's an [issue](https://bugs.webkit.org/show_bug.cgi?id=252465) while accessing the video stream inside a progressive web app. The issue is flaky and gets reopened periodically.
+Check the [webkit tracker](https://bugs.webkit.org/buglist.cgi?quicksearch=pwa%20getUserMedia)
 if you experience similar issues.
 :::
 
@@ -384,7 +481,7 @@ await configure({
 });
 ```
 
-You can encrypt your license key with this small Node.js script. Then you should copy the `sdc-license.data` file in the `licenseDataPath` in order to be correctly read at runtime in the configure phase. 
+You can encrypt your license key with this small Node.js script. Then you should copy the `sdc-license.data` file in the `licenseDataPath` in order to be correctly read at runtime in the configure phase.
 
 You can also check the related [sample](https://github.com/Scandit/datacapture-web-samples/tree/master/ElectronBarcodeCaptureSimpleSample).
 
