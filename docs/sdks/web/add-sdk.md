@@ -248,11 +248,15 @@ In case a common CDN is used (jsDelivr or UNPKG) the library will automatically,
 **It is highly recommended to handle the serving of these files yourself on your website/server, ensuring optimal compression, correct WASM files MIME type, no request redirections, and correct caching headers usage.**
 This will aid in faster loading.
 
-## Self host the sdc-lib files correctly
+## Hosting the `sdc-lib` files
 
-Serving the `sdc-lib` folder yourself is the recommended way to go. Be sure to copy the whole folder and serve the files correctly setting up the correct MIME type for the `.wasm` files and the `.model` files as also for the `.js` files.
+We recommend serving the `sdc-lib` folder yourself.
 
-### Example for ASP.NET Core
+When doing so, be sure to copy the entire folder and serve the files correctly by setting up the correct MIME type for the `.wasm`, `.model`, and `.js` files. Some common examples are provided below:
+
+<Tabs groupId="selfhost">
+
+<TabItem value="ASP.NET Core" label="ASP.NET Core">
 
 ```csharp
 app.UseStaticFiles(new StaticFileOptions()
@@ -271,7 +275,9 @@ provider.Mappings[".js"] = "application/javascript";
 provider.Mappings[".wasm"] = "application/wasm";
 ```
 
-### Example for Apache
+</TabItem>
+
+<TabItem value="Apache" label="Apache">
 
 Add these MIME types to your `.htaccess` file or Apache configuration:
 
@@ -281,7 +287,9 @@ AddType application/octet-stream .model
 AddType application/javascript .js
 ```
 
-### Example for Nginx
+</TabItem>
+
+<TabItem value="Nginx" label="Nginx">
 
 Add these MIME types to your Nginx configuration file:
 
@@ -293,7 +301,9 @@ types {
 }
 ```
 
-### Example for Express.js
+</TabItem>
+
+<TabItem value="Express.js" label="Express.js">
 
 For Express.js, you can configure the MIME types like this:
 
@@ -307,7 +317,9 @@ express.static.mime.define({'application/javascript': ['js']});
 app.use(express.static('self-hosted-sdc-lib')); // Serve static files from 'public' directory
 ```
 
-### Example for Python Flask
+</TabItem>
+
+<TabItem value="Python Flask" label="Python Flask">
 
 For Flask, you can set the MIME types when serving the files:
 
@@ -330,6 +342,10 @@ def serve_file(filename):
         mimetype=mimetype
     )
 ```
+
+</TabItem>
+
+</Tabs>
 
 ## Show loading status with default UI
 
