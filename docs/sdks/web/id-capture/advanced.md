@@ -72,7 +72,7 @@ For a rejected document, a [RejectionReason](https://docs.scandit.com/data-captu
 The following verifiers are available:
 
 * [AAMVABarcodeVerifier](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by scanning the barcode on the back.
-* [DataConsistencyVerifies](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/data-consistency-verifier.html): Compares the human-readable data of a document with that encoded in the MRZ or barcode, checking for inconsistencies.
+* [DataConsistencyVerifier](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/data-consistency-verifier.html): Compares the human-readable data of a document with that encoded in the MRZ or barcode, checking for inconsistencies.
 
 :::tip
 Instead of instantiating the verifiers manually, the result can be performed automatically by enabling [`IdCaptureSettings.rejectInconsistentData`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectInconsistentData) and/or [`IdCaptureSettings.rejectForgedAamvaBarcodes`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectInconsistentData).
