@@ -248,6 +248,11 @@ const sidebars: SidebarsConfig = {
         "sdks/ios/id-capture/get-started",
         "sdks/ios/id-capture/supported-documents",
         "sdks/ios/id-capture/advanced",
+          {
+            type: "link",
+            label: "ID Bolt Documentation",
+            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+          },
       ],
     },
     {
@@ -454,6 +459,11 @@ const sidebars: SidebarsConfig = {
           "sdks/android/id-capture/get-started",
           "sdks/android/id-capture/supported-documents",
           "sdks/android/id-capture/advanced",
+          {
+            type: "link",
+            label: "ID Bolt Documentation",
+            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+          },
       ],
     },
     {
@@ -618,6 +628,11 @@ const sidebars: SidebarsConfig = {
             "sdks/web/id-capture/get-started",
             "sdks/web/id-capture/supported-documents",
             "sdks/web/id-capture/advanced",
+          {
+            type: "link",
+            label: "ID Bolt Documentation",
+            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+          },
       ],
     },
     {
@@ -792,7 +807,12 @@ const sidebars: SidebarsConfig = {
             "sdks/cordova/id-capture/intro",
             "sdks/cordova/id-capture/get-started",
             "sdks/cordova/id-capture/supported-documents",
-            "sdks/cordova/id-capture/advanced"
+            "sdks/cordova/id-capture/advanced",
+            {
+              type: "link",
+              label: "ID Bolt Documentation",
+              href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+            },
       ],
     },
     {
@@ -985,6 +1005,11 @@ const sidebars: SidebarsConfig = {
             "sdks/react-native/id-capture/get-started",
             "sdks/react-native/id-capture/supported-documents",
             "sdks/react-native/id-capture/advanced",
+          {
+            type: "link",
+            label: "ID Bolt Documentation",
+            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+          },
       ],
     },
     {
@@ -1166,6 +1191,11 @@ const sidebars: SidebarsConfig = {
             "sdks/flutter/id-capture/get-started",
             "sdks/flutter/id-capture/supported-documents",
             "sdks/flutter/id-capture/advanced",
+          {
+            type: "link",
+            label: "ID Bolt Documentation",
+            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+          },
       ],
     },
     {
@@ -1341,6 +1371,11 @@ const sidebars: SidebarsConfig = {
             "sdks/capacitor/id-capture/get-started",
             "sdks/capacitor/id-capture/supported-documents",
             "sdks/capacitor/id-capture/advanced",
+          {
+            type: "link",
+            label: "ID Bolt Documentation",
+            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+          },
       ],
     },
     {
@@ -1570,6 +1605,11 @@ const sidebars: SidebarsConfig = {
             "sdks/xamarin/ios/id-capture/get-started",
             "sdks/xamarin/ios/id-capture/supported-documents",
             "sdks/xamarin/ios/id-capture/advanced",
+          {
+            type: "link",
+            label: "ID Bolt Documentation",
+            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+          },
       ],
     },
     {
@@ -1729,6 +1769,11 @@ const sidebars: SidebarsConfig = {
             "sdks/xamarin/android/id-capture/get-started",
             "sdks/xamarin/android/id-capture/supported-documents",
             "sdks/xamarin/android/id-capture/advanced",
+          {
+            type: "link",
+            label: "ID Bolt Documentation",
+            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+          },
       ],
     },
     {
@@ -1888,6 +1933,11 @@ const sidebars: SidebarsConfig = {
             "sdks/xamarin/forms/id-capture/get-started",
             "sdks/xamarin/forms/id-capture/supported-documents",
             "sdks/xamarin/forms/id-capture/advanced",
+          {
+            type: "link",
+            label: "ID Bolt Documentation",
+            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+          },
       ],
     },
     {
@@ -2056,6 +2106,11 @@ const sidebars: SidebarsConfig = {
             "sdks/net/ios/id-capture/get-started",
             "sdks/net/ios/id-capture/supported-documents",
             "sdks/net/ios/id-capture/advanced",
+          {
+            type: "link",
+            label: "ID Bolt Documentation",
+            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+          },
       ],
     },
     {
@@ -2224,6 +2279,11 @@ const sidebars: SidebarsConfig = {
             "sdks/net/android/id-capture/get-started",
             "sdks/net/android/id-capture/supported-documents",
             "sdks/net/android/id-capture/advanced",
+          {
+            type: "link",
+            label: "ID Bolt Documentation",
+            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+          },
       ],
     },
     {
