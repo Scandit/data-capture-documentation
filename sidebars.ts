@@ -64,7 +64,11 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Configuring Express',
-          items: ['hosted/express/configuration/index', 'hosted/express/configuration/express-find', 'hosted/express/configuration/inventory-count'],
+          items: [
+            'hosted/express/configuration/index',
+            'hosted/express/configuration/express-find', 'hosted/express/configuration/inventory-count',
+            'hosted/express/configuration/scan-labels',
+          ],
         },
       ],
 		},
