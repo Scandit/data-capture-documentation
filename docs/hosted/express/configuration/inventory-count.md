@@ -9,7 +9,7 @@ keywords:
 
 Scandit Express can also be used to count inventory. This will be available through the **Inventory Count** option in the Scandit Express app.
 
-<img src="/img/express/express_menu.jpg" alt="Express Menu" width="350px" />
+<img src="/img/express/express_menu.jpeg" alt="Express Menu" width="350px" />
 
 On start, you will have two options: 
 

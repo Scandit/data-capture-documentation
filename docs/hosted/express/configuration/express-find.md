@@ -5,9 +5,9 @@ keywords:
   - express
 ---
 
-# MatrixScan Find
+# Find Items
 
-[MatrixScan Find](https://www.scandit.com/products/matrixscan-find/) is a feature available in Scandit Smart Data Capture that enables you to speed up finding and picking workflows by scanning multiple items at once and highlighting the correct item(s) in real-time using an AR overlay.
+Powered by [MatrixScan Find](https://www.scandit.com/products/matrixscan-find/), a feature available in the Scandit Smart Data Capture SDK, this mode enables you to speed up finding and picking workflows by scanning multiple items at once and highlighting the correct item(s) in real-time using an AR overlay.
 
 ## Create the Find List
 
