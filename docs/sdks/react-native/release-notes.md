@@ -9,6 +9,20 @@ keywords:
   - react
 ---
 
+## 7.1.1
+
+**Released**: March 6, 2025
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a compatibility issue with React-Native 0.77.
+
+#### Core
+
+* Fixed `sc_recognition_context_release` to abort potentially still in-progress background set up of the barcode scanner if `sc_barcode_scanner_wait_for_setup_completed` was not called explicitly.
+
 ## 7.1.0
 
 **Released**: February 21, 2025
