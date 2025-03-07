@@ -11,7 +11,7 @@ keywords:
 
 ## 7.1.1
 
-**Released**: March 6, 2025
+**Released**: March 7, 2025
 
 ### Bug Fixes
 
