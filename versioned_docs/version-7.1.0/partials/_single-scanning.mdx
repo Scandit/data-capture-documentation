@@ -1,0 +1,18 @@
+Implementing single scanning of barcodes using the Scandit Data Capture SDK can be done in two ways:
+
+- **(Recommended)** Implementing SparkScan, our pre-built UI and workflow for barcode scanning.
+- Implementing the low-level Barcode Capture API.
+
+The SparkScan API provides pre-built UI elements (trigger button, camera view, camera controls), a complete scanning workflow (visual, audio, and haptic feedback, and UI transitions on scan) and offers additional functionality needed to achieve optimal scanning UX, such as:
+
+- Triggering scans via a hardware trigger (volume or dedicated hardware button)
+- UI to activate an aimer for precise scanning in crowded scenarios
+- pre-built code rejection and error handling options
+- Option to choose between single and continuous scanning, programmatically or with hold gesture
+- Battery-optimizing features such as idle timeout and camera standby
+
+<p align="center">
+  <img src="/img/sparkscan/workflow-example.gif" alt="SparkScan Workflow" /><br></br>Scanning to a list with SparkScan
+</p>
+
+All of the above functionality is available out-of-the-box, without having to create it yourself via the low-level API.
