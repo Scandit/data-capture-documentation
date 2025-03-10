@@ -227,6 +227,9 @@ const config: Config = {
             '6.28.4': {
               banner: 'none',
             },
+            '7.1.0': {
+              badge: false,
+            },
           },
         },
         blog: false,
