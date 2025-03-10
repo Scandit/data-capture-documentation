@@ -9,6 +9,32 @@ keywords:
   - web
 ---
 
+## 7.2.0-beta.1
+
+**Released**: March 10, 2025
+
+### New Features
+
+#### Barcode
+
+* The following APIs have been added for Smart Label Capture:
+  * `LabelCaptureBasicOverlay`
+  * `LabelCaptureBasicOverlayListener`
+* Added `DataCaptureContext` shared instance API.
+* Added the `isPulsing` property to circle highlights in MatrixScan Check, enabling a pulsing animation effect.
+
+#### ID
+
+* ID Capture now supports the decoding of mobile driver’s licenses (currently limited to Australian licenses).
+
+### Behavioral Changes
+
+* The default `BarcodeBatchBasicOverlay` brush when using the `BarcodeBatchBasicOverlayStyle.FRAME` style has been changed from white to Scandit blue.
+
+### Bug Fixes
+
+* Fixed an issue in `SparkScanView` that could result in duplicate trigger buttons. 
+
 ## 7.1.1
 
 **Released**: March 7, 2025

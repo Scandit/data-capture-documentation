@@ -9,6 +9,24 @@ keywords:
   - capacitor
 ---
 
+## 7.2.0-beta.1
+
+**Released**: March 10, 2025
+
+### New Features
+
+#### Barcode
+
+* We simplified the lifecycle of the out-of-the-box views for Android. Now Scandit plugins handle the lifecycle automatically.
+
+#### ID
+
+* ID Capture now supports the decoding of mobile driver’s licenses (currently limited to Australian licenses).
+
+### Behavioral Changes
+
+* The default `BarcodeBatchBasicOverlay` brush when using the `BarcodeBatchBasicOverlayStyle.FRAME` style has been changed from white to Scandit blue.
+
 ## 7.1.1
 
 **Released**: March 7, 2025

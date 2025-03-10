@@ -9,6 +9,26 @@ keywords:
   - netIos
 ---
 
+## 7.2.0-beta.1
+
+**Released**: March 10, 2025
+
+### New Features
+
+#### Barcode
+
+* MatrixScan Check is now available, offering prebuilt views designed to quickly build custom workflows with augmented reality to an existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
+* Added `DataCaptureContext` shared instance API.
+* The `MacroMode` API is now available for .NET iOS.
+
+#### ID
+
+* ID Capture now supports the decoding of mobile driver’s licenses (currently limited to Australian licenses).
+
+### Behavioral Changes
+
+* The default `BarcodeBatchBasicOverlay` brush when using the `BarcodeBatchBasicOverlayStyle.FRAME` style has been changed from white to Scandit blue.
+
 ## 7.1.1
 
 **Released**: March 7, 2025
