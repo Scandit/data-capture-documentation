@@ -11,7 +11,7 @@ keywords:
 
 ## 7.2.0-beta.1
 
-**Released**: March 10, 2025
+**Released**: March 11, 2025
 
 ### New Features
 
