@@ -9,6 +9,12 @@ keywords:
   - titanium
 ---
 
+## 7.2.0-beta.1
+
+**Released**: March 12, 2025
+
+No updates for this framework in this release.
+
 ## 7.1.1
 
 **Released**: March 7, 2025

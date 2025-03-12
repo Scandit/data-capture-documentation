@@ -109,7 +109,7 @@ title: 'Features by Framework'
 
 | Feature  | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
 |----------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|------------------|
-| | 7.1 | 7.1 | n/a  | 7.1 | n/a | n/a | n/a | 7.1 | n/a | n/a | 7.1 | n/a | n/a |
+| | 7.1 | 7.1 | n/a  | 7.1 | n/a | n/a | n/a | 7.1 | n/a | n/a | 7.1 | 7.2 | 7.2 |
 
 ## MatrixScan Count
 
@@ -192,7 +192,7 @@ title: 'Features by Framework'
 
 | Feature | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
 |-----------------|---------------------------------------------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|
-|                 | 6.0                                         | 6.0 | n/a     | 6.5     | n/a          | n/a         | n/a             | n/a           | n/a     | n/a       | n/a      | n/a  | n/a          | n/a              |
+|                 | 6.0                                         | 6.0 | n/a     | 6.5     | n/a          | n/a         | n/a             | n/a           | 7.2     | n/a       | n/a      | n/a  | n/a          | n/a              |
 
 ### UI
 
@@ -217,4 +217,4 @@ title: 'Features by Framework'
 
 | Feature  | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
 |-----------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|------------------|
-| | 6.21 | 6.21 | 7.0  | 6.24 | n/a | n/a | n/a | n/a | 7.0 | n/a | n/a | n/a | n/a |
+| | 6.21 | 6.21 | 7.0  | 6.24 | n/a | n/a | n/a | 7.2 | 7.0 | n/a | n/a | n/a | n/a |
