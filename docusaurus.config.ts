@@ -220,7 +220,7 @@ const config: Config = {
           lastVersion: "current",
           versions: {
             current: {
-              label: '7.1.0',
+              label: '7.1.2',
               banner: 'none',
               badge: false,
             },
