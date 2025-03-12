@@ -446,6 +446,12 @@ const config: Config = {
       additionalLanguages: ['javascript', 'java', 'bash', 'c', 'csharp', 'dart', 'http', 'json', 'ruby', 'objectivec', 'kotlin'],
     },
   } satisfies Preset.ThemeConfig,
+  scripts: [
+    {
+      src: 'https://js.qualified.com/qualified.js?token=1Ktf6KTuU55E4geu',
+      async: true,
+    },
+  ],
 };
 
 export default config;
