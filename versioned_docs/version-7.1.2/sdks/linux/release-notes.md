@@ -9,14 +9,6 @@ keywords:
   - linux
 ---
 
-## 7.2.0-beta.1
-
-**Released**: March 12, 2025
-
-### Bug Fixes
-
-* Removed optional dependency on OpenGL. Most configurations were already running without OpenGL prior to this release. As of 7.2, remaining configurations that depend on OpenGL were fully removed.
-
 ## 7.1.2
 
 **Released**: March 13, 2025

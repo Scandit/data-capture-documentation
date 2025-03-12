@@ -34,6 +34,12 @@ keywords:
 
 * Fixed a bug where in rare cases the DataCaptureView would capture frames in the wrong orientation.
 
+## 7.1.2
+
+**Released**: March 13, 2025
+
+No updates for this framework in this release.
+
 ## 7.1.1
 
 **Released**: March 7, 2025

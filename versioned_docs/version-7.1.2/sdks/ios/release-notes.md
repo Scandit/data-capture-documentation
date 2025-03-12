@@ -1,62 +1,28 @@
 ---
 toc_max_heading_level: 3
-displayed_sidebar: reactnativeSidebar
+displayed_sidebar: iosSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
-framework: react
+framework: ios
 keywords:
-  - react
+  - ios
 ---
-
-## 7.2.0-beta.1
-
-**Released**: March 12, 2025
-
-### New Features
-
-#### Barcode
-
-* We simplified the lifecycle of the out-of-the-box views for Android. Now Scandit plugins handle the lifecycle automatically.
-* The following APIs have been added to Smart Label Capture:
-  * `LabelDateComponentFormat (enum)`
-  * `ExpiryDateText.DataTypePatterns`
-  * `ExpiryDateText.LabelDateFormat`
-  * `LabelDateFormat`
-  * `LabelDateResult`
-  * `LabelField.AsDate()`
-  * `PackingDateText.DataTypePatterns`
-  * `PackingDateText.LabelDateFormat`
-
-#### ID
-
-* ID Capture now supports the decoding of mobile driver’s licenses (currently limited to Australian licenses).
-
-### Behavioral Changes
-
-* The default `BarcodeBatchBasicOverlay` brush when using the `BarcodeBatchBasicOverlayStyle.FRAME` style has been changed from white to Scandit blue.
-
-### Bug Fixes
-
-* Fixed a bug where the `DataCaptureView` was not showing up when opening and closing the view in a short sequence.
 
 ## 7.1.2
 
 **Released**: March 13, 2025
 
-No updates for this framework in this release.
+### Bug Fixes
+
+* Fixed an issue in SparkScan where the floating button would appear in the center as opposed to bottom-right of the screen.
+* Fixed a bug in SparkScan where the scanner would restart after tapping the close button when in hold to scan mode.
 
 ## 7.1.1
 
 **Released**: March 7, 2025
 
 ### Bug Fixes
-
-#### Barcode
-
-* Fixed a compatibility issue with React-Native 0.77.
-
-#### Core
 
 * Fixed `sc_recognition_context_release` to abort potentially still in-progress background set up of the barcode scanner if `sc_barcode_scanner_wait_for_setup_completed` was not called explicitly.
 
@@ -68,22 +34,17 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* [MatrixScan Check](/sdks/react-native/matrixscan-check/intro.md) in now available, offering prebuilt views designed to quickly build custom workflows with augmented reality for your existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
-* MatrixScan Count now includes the ability to [cluster barcodes](/sdks/react-native/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
+* [MatrixScan Check](/sdks/ios/matrixscan-check/intro.md) in now available, offering prebuilt views designed to quickly build custom workflows with augmented reality for your existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
+* MatrixScan Count now includes the ability to [cluster barcodes](/sdks/ios/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
 * MatrixScan Count now includes the concept of a `Barcode Spacial Grid`, bringing the ability to map totes in a grid-like structure. Scanned codes will be returned with their relative location and can be displayed in a map view. This allows for fast and error-free in-store picking using dedicated carts and totes. The following classes have been added:
   * `BarcodeSpatialGrid`
   * `BarcodeSpatialGridEditorView`
   * `BarcodeSpatialGridEditorViewSettings`
   * `BarcodeSpatialGridEditorViewListener`
-* Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
-* The following APIs have been added:
-  * `BarcodeFindViewSettings`
-    * `withHardwareTriggers()`
-    * `hardwareTriggerEnabled()`
-    * `hardwareTriggerKeyCode()`
-  * `BarcodeFindView`
-    * `shouldShowZoomControl`
-    * `hardwareTriggerSupported`
+* SparkScan now supports periscope devices with a new setting that adjusts the camera feed by mirroring it as needed:
+  * `sparkScanViewSettings.isPeriscopeModeEnabled()`
+* Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
+* Added a new constructor for `BarcodeFindItemSearchOptions` for receiving a Brush, allowing different barcodes to use different Brushes for rendering the dots.
 
 #### ID
 
@@ -97,7 +58,6 @@ No updates for this framework in this release.
 #### Label Capture
 
 * To simplify working with dates in Smart Label Capture (e.g., capturing an expiry date), we’ve added native support for dates in `LabelField`. Now, if a field contains a date you can retrieve it as a date object using `LabelField.asDate()`.
-* A new [sample application](/sdks/react-native/samples.md) has been created to demonstrate Smart Label Capture functionality.
 
 #### Core
 
@@ -132,7 +92,7 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* Upgraded the React sample application to React 19, providing better React strict mode handling.
+* Fix an issue where a deadlock would occur when using the `BarcodeBatchBasicOverlay` listener and setting a custom brush.
 
 #### ID
 
@@ -142,6 +102,7 @@ No updates for this framework in this release.
 * Fixed an issue where some residence permits were incorrectly identified as ID cards when scanning their Machine Readable Zone.
 * Fixed an issue where it was not possible to scan an Irish Passport Card when `ScannerType::FullDocumentScanner` was enabled.
 * Fixed an issue where the personal identification number was not correctly anonymized on certain passports.
+* When scanning German Passport or ID Card MRZs the nationality was returned as `D` instead of the three-letter ISO (3166 standard) code `DEU`.
 
 ### Deprecations
 
@@ -150,16 +111,6 @@ No updates for this framework in this release.
 * The following methods of `DataCaptureContext` have been removed:
   * `addMode`: Replaced by `setMode` as only one mode can be active at a time.
   * `removeAllModes`: Replaced by `removeCurrentMode` as only one mode can be active at a time.
-
-#### Barcode
-
-* The following APIs have been removed:
-  * `BarcodeCountSettings.enableUnrecognizedBarcodeDetection`
-  * `BarcodeCountView.getTextForUnrecognizedBarcodesDetectedHint`
-  * `BarcodeCountView.setBrushForUnrecognizedBarcode`
-  * `BarcodeCountView.setTextForUnrecognizedBarcodesDetectedHint`
-  * `BarcodeCountViewListener.brushForUnrecognizedBarcode`
-  * `BarcodeCountViewListener.onUnrecognizedBarcodeTapped`
 
 ## 7.0.2
 
@@ -170,10 +121,6 @@ No updates for this framework in this release.
 #### Core
 
 * Resolved a rare issue where a race condition during the deconstruction of MatrixScan Data Capture views could lead to invalid memory access.
-
-#### Barcode
-
-* Fixed an issue causing the SparkScanView on iOS to not be rendered on top of the host application content.
 
 #### ID
 
@@ -186,13 +133,7 @@ No updates for this framework in this release.
 
 **Released**: December 19, 2024
 
-### New Features
-
-* Added support for React Native 0.76.x, which introduces the possibility to use React Native's new architecture in apps using the Scandit plugin.
-
-### Bug Fixes
-
-* Fixed various compatibility issues when using the new architecture in 0.76.x+ releases of Reach Native.
+No updates for this framework in this release.
 
 ## 7.0.0
 
@@ -210,13 +151,17 @@ SparkScan, our flagship barcode scanning product, embodies the full potential of
 
 * SparkScan introduces a completely redesigned user interface, enhancing ergonomics with a simplified API and in-demand customization options. These updates make SparkScan even more versatile, seamlessly integrating with various use cases and blending smoothly into any existing workflow and UI. See the [migration guide](/migrate-6-to-7.md#sparkscan) for more details.
 * Added the `remove_delimiter_data` extension to the CODABAR symbology.
-* The Barcode Generator now supports the generation of Aztec codes.
-* The MatrixScan Find user interface is now optimized for 4:3 camera resolution.
+* SparkScan now provides the ability to switch between SparkScan and Smart Label Capture via a button in the toolbar. See `SparkScanView::labelCaptureButtonVisible` for more information.
+* Added the following property to `BarcodeBatchSettings`: `expectsOnlyUniqueBarcodes`.
 
 #### Core
 
 * Added the following API for fetching all Open Source Software (OSS) license text and attributions for all OSS used by the Scandit SDK.
   * `DataCaptureContext.openSourceSoftwareLicenseInfo()`
+
+#### Smart Label Capture
+
+* A new [sample application](/sdks/ios/samples.md) has been created to demonstrate Smart Label Capture functionality.
 
 #### ID
 
@@ -241,11 +186,14 @@ We’ve completely redesigned the ID Capture API to streamline document capture 
 
 ### Behavioral Changes
 
-* All sample applications now use the latest 0.75.x release of React Native.
+* The minimum supported iOS version is now iOS 14.0.
 
-### Bug Fixes
+#### Barcode
 
-* Fixed a memory leak in iOS 15 related to the `react-native-screens` dependency.
+* Smart Scan Intention is now enabled by default.
+* Updated `BarcodeCountSession` to now expose a `Barcode` list.
+* `SDCBarcodePickHighlightStyleResponse` has been renamed to `SDCBarcodePickViewHighlightStyleResponse`.
+* In `BarcodeCountSettings`, the default value of `disableModeWhenCaptureListCompleted` has been changed to false.
 
 ### Deprecations
 
@@ -254,6 +202,9 @@ In 7.0, we removed all APIs that were deprecated during the lifetime of 6.0. Bef
 #### Barcode
 
 The following SparkScan APIs have been deprecated in 7.0:
+  * `SparkScanViewHandMode`
+  * `SparkScanView.HandModeButtonVisible`
+  * `SparkScanViewSettings.DefaultHandMode`
   * `SparkScanView.TorchButtonVisible`
   * `SparkScanView.StopCapturingText`
   * `SparkScanView.StartCapturingText`
