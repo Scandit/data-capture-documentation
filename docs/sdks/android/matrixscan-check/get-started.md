@@ -96,7 +96,7 @@ barcodeCheckView.setTorchControlPosition(Anchor.BOTTOM_RIGHT);
 barcodeCheckView.setZoomControlPosition(Anchor.TOP_LEFT);
 ```
 
-Configure [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.AnnotationProvider) 
+Configure the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.AnnotationProvider).
 
 ```java
 private class AnnotationProvider implements BarcodeCheckAnnotationProvider {
@@ -118,7 +118,7 @@ private class HighlightProvider implements BarcodeCheckHighlightProvider {
 }
 ```
 
-And set them to the view
+And set them to the view:
 
 ```java
 barcodeCheckView.setHighlightProvider(new HighlightProvider());
