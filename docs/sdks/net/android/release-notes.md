@@ -32,7 +32,9 @@ keywords:
 
 **Released**: March 13, 2025
 
-No updates for this framework in this release.
+### Bug Fixes
+
+* Fixed an issue in SparkScan where the floating button would appear in the center as opposed to bottom-right of the screen.
 
 ## 7.1.1
 

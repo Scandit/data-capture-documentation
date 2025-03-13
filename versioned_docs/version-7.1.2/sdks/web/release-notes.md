@@ -16,7 +16,6 @@ keywords:
 ### Bug Fixes
 
 * Fixed a rare issue in SparkScan that would not allow for properly drawing the barcode location.
-* Fixed an issue in SparkScan where the floating button would appear in the center as opposed to bottom-right of the screen.
 * Fixed an issue where in some browsers `error 28` was shown when some internal files had names exceeding a certain number of characters.
 
 ## 7.1.1
