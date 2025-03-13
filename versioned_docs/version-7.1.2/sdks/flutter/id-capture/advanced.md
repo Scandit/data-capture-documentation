@@ -10,6 +10,26 @@ keywords:
 
 There are several advanced configurations that can be used to customize the behavior of the ID Capture SDK and enable additional features.
 
+## Configure Data Anonymization
+
+By default, data extracted from documents is anonymized according to local regulations. See [Anonymized Documents](/sdks/flutter/id-capture/supported-documents.md#anonymized-documents) for more information.
+
+That means certain data from certain fields won’t be returned, even if it’s present on a document. You control the anonymization level with the following setting:
+
+```dart
+// Default value:
+settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_ONLY);
+
+// Sensitive data is additionally covered with black boxes on returned images:
+settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_AND_IMAGES);
+
+// Only images are anonymized:
+settings.setAnyonymizationMode(IdAnonymizationMode.IMAGES_ONLY);
+
+// No anonymization:
+settings.setAnyonymizationMode(IdAnonymizationMode.NONE);
+```
+
 ## Document Capture Zones
 
 By default, a new instance of [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) creates a single-sided scanner type with no accepted or rejected documents. 

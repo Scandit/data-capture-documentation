@@ -68,6 +68,10 @@ Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/id-cap
 
 Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all the available options.
 
+:::tip
+By default, [anonymized data](./advanced.md#configure-data-anonymization) is not returned in accordance with local regulations for specific documents. This setting can be disabled for testing purposes, but be sure to comply with local laws and requirements in production.
+:::
+
 ```java
 List<DocumentType> acceptedDocuments = new ArrayList();
 List<DocumentType> rejectedDocuments = new ArrayList();
