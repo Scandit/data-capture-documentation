@@ -37,6 +37,14 @@ keywords:
 
 * Fixed `sc_recognition_context_release` to abort potentially still in-progress background set up of the barcode scanner if `sc_barcode_scanner_wait_for_setup_completed` was not called explicitly.
 
+## 7.1.2
+
+**Released**: March 13, 2025
+
+### Bug Fixes
+
+* Fixed an issue in SparkScan where the floating button would appear in the center as opposed to bottom-right of the screen.
+
 ## 7.1.0
 
 **Released**: February 21, 2025

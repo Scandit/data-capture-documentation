@@ -23,6 +23,14 @@ keywords:
 
 * The default `BarcodeBatchBasicOverlay` brush when using the `BarcodeBatchBasicOverlayStyle.FRAME` style has been changed from white to Scandit blue.
 
+## 7.1.2
+
+**Released**: March 13, 2025
+
+### Bug Fixes
+
+* Fixed an issue in SparkScan where the floating button would appear in the center as opposed to bottom-right of the screen.
+
 ## 7.1.1
 
 **Released**: March 7, 2025
