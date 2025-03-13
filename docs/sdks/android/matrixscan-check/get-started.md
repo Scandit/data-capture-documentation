@@ -47,7 +47,7 @@ import DataCaptureContextAndroid from '../../../partials/get-started/_create-dat
 
 ## Configure the Barcode Check Mode
 
-The main entry point for the Barcode Check Mode is the `BarcodeCheck` object. You can configure the supported Symbologies through its [`BarcodeCheckSettings`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-check-settings.html), and set up the list of items that you want MatrixScan Check to highlight.
+The main entry point for the Barcode Check Mode is the `BarcodeCheck` object. You can configure the supported Symbologies through its [`BarcodeCheckSettings`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-check-settings.html).
 
 Here we configure it for tracking EAN13 codes, but you should change this to the correct symbologies for your use case.
 
@@ -56,7 +56,7 @@ BarcodeCheckSettings settings = new BarcodeCheckSettings();
 settings.enableSymbology(Symbology.EAN13_UPCA, true);
 ```
 
-The create the mode with the previously created settings:
+Then create the mode with the previously created settings:
 
 ```java
 BarcodeCheck mode = new BarcodeCheck(dataCaptureContext, settings);
@@ -68,23 +68,61 @@ MatrixScan Check’s built-in AR user interface includes buttons and overlays th
 
 The `BarcodeCheckView` is where you provide the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.AnnotationProvider) to supply the highlight and annotation information for the barcodes to be checked. If *null*, a default highlight is used and no annotations are provided.
 
-The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSettings`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view-settings.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckViewSettings), and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
+The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSettings`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view-settings.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckViewSettings), properties on the`BarcodeCheckView`, and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
 
 * Audio and haptic feedback
+* Camera position
 * Torch button visibility and its position
 * Switch camera button visibility and its position
 * Zoom control visibility and its position
-* The size, colors, and styles of the highlight and annotation overlays
+* The size, colors, and styles of the highlights and annotations
 
 ```java
 BarcodeCheckViewSettings viewSettings = new BarcodeCheckViewSettings();
-// ...
+viewSettings.setHapticEnabled(false);
+viewSettings.setSoundEnabled(false);
+viewSettings.setDefaultCameraPosition(CameraPosition.USER_FACING);
 ```
 
 Next, create a `BarcodeCheckView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeCheckView` is automatically added to the provided parent view.
 
 ```java
-BarcodeCheckView barcodeCheckView = BarcodeCheckView.newInstance(parentView, dataCaptureContext, mode, viewSettings);
+BarcodeCheckView barcodeCheckView = BarcodeCheckView(parentView, barcodeCheck, dataCaptureContext, viewSettings);
+barcodeCheckView.setShouldShowCameraSwitchControl(true);
+barcodeCheckView.setShouldShowTorchControl(true);
+barcodeCheckView.setShouldShowZoomControl(true);
+barcodeCheckView.setCameraSwitchControlPosition(Anchor.TOP_RIGHT);
+barcodeCheckView.setTorchControlPosition(Anchor.BOTTOM_RIGHT);
+barcodeCheckView.setZoomControlPosition(Anchor.TOP_LEFT);
+```
+
+Configure [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.AnnotationProvider) 
+
+```java
+private class AnnotationProvider implements BarcodeCheckAnnotationProvider {
+
+    @Override
+    public void annotationForBarcode(@NonNull Context context, @NonNull Barcode barcode, @NonNull Callback callback) {
+        BarcodeCheckStatusIconAnnotation annotation = new BarcodeCheckStatusIconAnnotation(context, barcode);
+        annotation.setText("Example annotation");
+        callback.onData(annotation);
+    }
+}
+
+private class HighlightProvider implements BarcodeCheckHighlightProvider {
+
+    @Override
+    public void highlightForBarcode(@NonNull Context context, @NonNull Barcode barcode, @NonNull Callback callback) {
+        callback.onData(new BarcodeCheckRectangleHighlight(context, barcode));
+    }
+}
+```
+
+And set them to the view
+
+```java
+barcodeCheckView.setHighlightProvider(new HighlightProvider());
+barcodeCheckView.setAnnotationProvider(new AnnotationProvider());
 ```
 
 Connect the `BarcodeCheckView` to the Android lifecycle. The view is dependent on calling `BarcodeCheckView.onPause()`, `BarcodeCheckView.onResume()`, and `BarcodeCheckView.onDestroy()` to set up the camera and its overlays properly.
@@ -111,17 +149,13 @@ public void onDestroyView() {
 
 ## Register the Listener
 
-The `BarcodeCheckView` displays a **Finish** button next to its shutter button. 
-
-Register a [BarcodeCheckViewUiListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeCheckViewUiListener) to be notified what items have been found once the finish button is pressed.
-
-In this tutorial, we will then navigate back to the previous screen to finish the session.
+If you want a callback when a highlight is tapped, register a [BarcodeCheckViewUiListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-check-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeCheckViewUiListener).
 
 ```java
 barcodeCheckView.setUiListener(new BarcodeCheckViewUiListener() {
     @Override
-    public void onFinishButtonTapped(@NonNull BarcodeCheckView view) {
-        requireActivity().onBackPressed();
+    public void onHighlightForBarcodeTapped(@NonNull BarcodeCheck barcodeCheck, @NonNull Barcode barcode, @NonNull BarcodeCheckHighlight highlight, @NonNull View highlightView) {
+        // handle tap
     }
 });
 ```
