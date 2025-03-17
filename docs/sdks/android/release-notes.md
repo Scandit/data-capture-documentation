@@ -30,7 +30,7 @@ keywords:
 
 #### Barcode
 
-* To further reduce battery consumption, SparkScan now switches to FullHD (opposed to 4K) resolution when moving to Target Mode.
+* We further optimized the resources management in SparkScan, improving battery life when in Target Mode.
 * Better handling of multi-status barcodes when using clustering.
 * Refined UI of the mapping flow when using MatrixScan Count.
 

@@ -19,6 +19,12 @@ keywords:
 
 * ID Capture now supports the decoding of mobile driver’s licenses (currently limited to Australian licenses).
 
+### Performance Improvements
+
+#### Barcode
+
+* We further optimized the resources management in SparkScan, improving battery life when in Target Mode.
+
 ### Behavioral Changes
 
 * The default `BarcodeBatchBasicOverlay` brush when using the `BarcodeBatchBasicOverlayStyle.FRAME` style has been changed from white to Scandit blue.
