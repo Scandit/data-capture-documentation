@@ -9,9 +9,9 @@ keywords:
   - ios
 ---
 
-## 7.2.0-beta.1
+## 7.2.0-beta.2
 
-**Released**: March 12, 2025
+**Released**: March 19, 2025
 
 ### New Features
 
@@ -19,6 +19,8 @@ keywords:
 
 * For MatrixScan Check, updated the behavior of popover and status icon annotations near screen edges. They no longer change orientation or attachment point when near the edge and can extend offscreen. Additionally, they now expose an anchor property.
 * Added the `isPulsing` property to circle highlights in MatrixScan Check, enabling a pulsing animation effect.
+* A new [sample application](/sdks/ios/samples.md) is available for [tote mapping in MatrixScan Count](/sdks/ios/matrixscan-count/advanced/#tote-mapping).
+* The `LabelCaptureSettings` API of Smart Label Capture now allows for setting optional barcode semantic properties.
 
 #### ID
 

@@ -9,9 +9,9 @@ keywords:
   - android
 ---
 
-## 7.2.0-beta.1
+## 7.2.0-beta.2
 
-**Released**: March 12, 2025
+**Released**: March 19, 2025
 
 ### New Features
 
@@ -20,6 +20,7 @@ keywords:
 * MatrixScan Count now includes the option to set the text hint when clear screen is pressed.
 * QuadHD is now a supported resolution.
 * Added the `isPulsing` property to circle highlights in MatrixScan Check, enabling a pulsing animation effect.
+* A new [sample application](/sdks/android/samples.md) is available for [tote mapping in MatrixScan Count](/sdks/android/matrixscan-count/advanced/#tote-mapping).
 
 #### ID
 
@@ -40,6 +41,7 @@ keywords:
 ### Bug Fixes
 
 * Fixed a bug where the `DataCaptureView` was not showing up when opening and closing the view in a short sequence.
+* Fixed a crash in SparkScan when pressing certain buttons during hold-to-scan.
 
 ## 7.1.2
 

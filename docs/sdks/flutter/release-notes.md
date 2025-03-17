@@ -9,9 +9,9 @@ keywords:
   - flutter
 ---
 
-## 7.2.0-beta.1
+## 7.2.0-beta.2
 
-**Released**: March 12, 2025
+**Released**: March 19, 2025
 
 ### New Features
 
@@ -32,7 +32,8 @@ keywords:
 
 ### Bug Fixes
 
-* Fixed a bug where in rare cases the DataCaptureView would capture frames in the wrong orientation.
+* Fixed a bug where in rare cases the `DataCaptureView` would capture frames in the wrong orientation.
+* Fixed an issue where on Android viewfinder would not be shown the second time the modal screen was opened.
 
 ## 7.1.2
 
