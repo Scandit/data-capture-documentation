@@ -17,8 +17,8 @@ keywords:
 
 #### Barcode
 
-* Barcode Generator is now available.
-* Smart Label Capture is now available.
+* Added the `SDCBarcodeGenerator` class for generating Code 39, Code 128, EAN13, ITF, QR, and DataMatrix codes. More info at [Barcode Generator](/sdks/flutter/barcode-generator.md) documentation.
+* Releasing Smart Label Capture, our new product that enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.
 * We simplified the lifecycle of the out-of-the-box views for Android. Now Scandit plugins handle the lifecycle automatically.
 * Added `DataCaptureContext` shared instance API.
 

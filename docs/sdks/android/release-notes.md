@@ -18,7 +18,7 @@ keywords:
 #### Barcode
 
 * MatrixScan Count now includes the option to set the text hint when clear screen is pressed.
-* QuadHD is now a supported resolution.
+* QuadHD (Quad High Definition) is now a supported resolution. QHD is a resolution of `2560×1440` pixels, fitting between standard HD (`1920x1080`) and 4K(`3840×2160` pixels).
 * Added the `isPulsing` property to circle highlights in MatrixScan Check, enabling a pulsing animation effect.
 * A new [sample application](/sdks/android/samples.md) is available for [tote mapping in MatrixScan Count](/sdks/android/matrixscan-count/advanced/#tote-mapping).
 
