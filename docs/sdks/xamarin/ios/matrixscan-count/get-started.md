@@ -21,7 +21,17 @@ The general steps are:
 - Reset Barcode Count mode
 - List and Exit callbacks
 
-## Create A New Data Capture Context Instance
+## Prerequisites
+
+- The latest stable version of [Visual Studio](https://visualstudio.microsoft.com/).
+- A Xamarin.iOS project with minimum iOS deployment target of 14.0 or higher. Or a Xamarin.Android project with target SDK version 23 (Android 6, Marshmallow) or higher.
+- A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
+
+:::note
+Android devices running the Scandit Data Capture SDK need to have a GPU or the performance will drastically decrease.
+:::
+
+## Create a New Data Capture Context Instance
 
 The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/xamarin.ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 

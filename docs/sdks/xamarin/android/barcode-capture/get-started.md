@@ -21,6 +21,16 @@ The general steps are:
 - Display the camera preview by creating a [data capture view](https://docs.scandit.com/data-capture-sdk/xamarin.android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 - If displaying a preview, optionally create a new [overlay](https://docs.scandit.com/data-capture-sdk/xamarin.android/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) and add it to [data capture view](https://docs.scandit.com/data-capture-sdk/xamarin.android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) for a better visual feedback.
 
+## Prerequisites
+
+- The latest stable version of [Visual Studio](https://visualstudio.microsoft.com/).
+- A Xamarin.iOS project with minimum iOS deployment target of 14.0 or higher. Or a Xamarin.Android project with target SDK version 23 (Android 6, Marshmallow) or higher.
+- A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
+
+:::note
+Android devices running the Scandit Data Capture SDK need to have a GPU or the performance will drastically decrease.
+:::
+
 ## Create the Data Capture Context
 
 The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/xamarin.android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
