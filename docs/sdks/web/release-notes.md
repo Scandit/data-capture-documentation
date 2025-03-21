@@ -9,17 +9,15 @@ keywords:
   - web
 ---
 
-## 7.2.0-beta.1
+## 7.2.0-beta.2
 
-**Released**: March 12, 2025
+**Released**: March 21, 2025
 
 ### New Features
 
 #### Barcode
 
-* The following APIs have been added for Smart Label Capture:
-  * `LabelCaptureBasicOverlay`
-  * `LabelCaptureBasicOverlayListener`
+* Releasing Smart Label Capture, our new product that enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.
 * Added `DataCaptureContext` shared instance API.
 * Added the `isPulsing` property to circle highlights in MatrixScan Check, enabling a pulsing animation effect.
 

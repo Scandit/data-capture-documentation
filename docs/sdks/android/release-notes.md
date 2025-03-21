@@ -9,17 +9,18 @@ keywords:
   - android
 ---
 
-## 7.2.0-beta.1
+## 7.2.0-beta.2
 
-**Released**: March 12, 2025
+**Released**: March 21, 2025
 
 ### New Features
 
 #### Barcode
 
 * MatrixScan Count now includes the option to set the text hint when clear screen is pressed.
-* QuadHD is now a supported resolution.
+* QuadHD (Quad High Definition) is now a supported resolution. QHD is a resolution of `2560×1440` pixels, fitting between standard HD (`1920x1080`) and 4K(`3840×2160` pixels).
 * Added the `isPulsing` property to circle highlights in MatrixScan Check, enabling a pulsing animation effect.
+* A new [sample application](/sdks/android/samples.md) is available for [tote mapping in MatrixScan Count](/sdks/android/matrixscan-count/advanced/#tote-mapping).
 
 #### ID
 
@@ -29,7 +30,7 @@ keywords:
 
 #### Barcode
 
-* To further reduce battery consumption, SparkScan now switches to FullHD (opposed to 4K) resolution when moving to Target Mode.
+* We further optimized the resources management in SparkScan, improving battery life when in Target Mode.
 * Better handling of multi-status barcodes when using clustering.
 * Refined UI of the mapping flow when using MatrixScan Count.
 
@@ -40,6 +41,7 @@ keywords:
 ### Bug Fixes
 
 * Fixed a bug where the `DataCaptureView` was not showing up when opening and closing the view in a short sequence.
+* Fixed a crash in SparkScan when pressing certain buttons during hold-to-scan.
 
 ## 7.1.2
 

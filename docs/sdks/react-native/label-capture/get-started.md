@@ -263,7 +263,7 @@ Label Capture doesn’t emit feedback (sound or vibration) by default when a new
 
 However, we provide a `Feedback` class that you can use to emit feedback when a label is recognized and successfully processed.
 
-Here, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration.
+Here, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/react-native/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration.
 
 ```js
 import { Feedback } from 'scandit-react-native-datacapture-core';
