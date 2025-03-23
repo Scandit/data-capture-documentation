@@ -9,9 +9,9 @@ keywords:
   - capacitor
 ---
 
-## 7.2.0-beta.1
+## 7.2.0-beta.2
 
-**Released**: March 12, 2025
+**Released**: March 21, 2025
 
 ### New Features
 
@@ -22,6 +22,12 @@ keywords:
 #### ID
 
 * ID Capture now supports the decoding of mobile driver’s licenses (currently limited to Australian licenses).
+
+### Performance Improvements
+
+#### Barcode
+
+* We further optimized the resources management in SparkScan, improving battery life when in Target Mode.
 
 ### Behavioral Changes
 

@@ -9,16 +9,16 @@ keywords:
   - flutter
 ---
 
-## 7.2.0-beta.1
+## 7.2.0-beta.2
 
-**Released**: March 12, 2025
+**Released**: March 21, 2025
 
 ### New Features
 
 #### Barcode
 
-* Barcode Generator is now available.
-* Smart Label Capture is now available.
+* Added the `SDCBarcodeGenerator` class for generating Code 39, Code 128, EAN13, ITF, QR, and DataMatrix codes. More info at [Barcode Generator](/sdks/flutter/barcode-generator.md) documentation.
+* Releasing Smart Label Capture, our new product that enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.
 * We simplified the lifecycle of the out-of-the-box views for Android. Now Scandit plugins handle the lifecycle automatically.
 * Added `DataCaptureContext` shared instance API.
 
@@ -26,13 +26,20 @@ keywords:
 
 * ID Capture now supports the decoding of mobile driver’s licenses (currently limited to Australian licenses).
 
+### Performance Improvements
+
+#### Barcode
+
+* We further optimized the resources management in SparkScan, improving battery life when in Target Mode.
+
 ### Behavioral Changes
 
 * The default `BarcodeBatchBasicOverlay` brush when using the `BarcodeBatchBasicOverlayStyle.FRAME` style has been changed from white to Scandit blue.
 
 ### Bug Fixes
 
-* Fixed a bug where in rare cases the DataCaptureView would capture frames in the wrong orientation.
+* Fixed a bug where in rare cases the `DataCaptureView` would capture frames in the wrong orientation.
+* Fixed an issue where on Android viewfinder would not be shown the second time the modal screen was opened.
 
 ## 7.1.2
 

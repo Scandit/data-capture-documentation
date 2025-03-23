@@ -9,9 +9,9 @@ keywords:
   - netIos
 ---
 
-## 7.2.0-beta.1
+## 7.2.0-beta.2
 
-**Released**: March 12, 2025
+**Released**: March 21, 2025
 
 ### New Features
 
@@ -19,11 +19,17 @@ keywords:
 
 * MatrixScan Check is now available, offering prebuilt views designed to quickly build custom workflows with augmented reality to an existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
 * Added `DataCaptureContext` shared instance API.
-* The `MacroMode` API is now available for .NET iOS.
+* The `MacroMode` API is now available for .NET iOS, allowing developers to better control the behavior of the camera on iPhone Pro models (>13).
 
 #### ID
 
 * ID Capture now supports the decoding of mobile driver’s licenses (currently limited to Australian licenses).
+
+### Performance Improvements
+
+#### Barcode
+
+* We further optimized the resources management in SparkScan, improving battery life when in Target Mode.
 
 ### Behavioral Changes
 

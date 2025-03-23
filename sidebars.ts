@@ -600,6 +600,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/web/matrixscan-find/advanced",
               ],
             },
+            {
+              type: "category",
+              label: "Smart Label Capture",
+              items: [
+                "sdks/web/label-capture/intro",
+                "sdks/web/label-capture/get-started",
+                "sdks/web/label-capture/advanced",
+              ],
+            },
           ],
         },
         {
