@@ -9,6 +9,14 @@ keywords:
   - android
 ---
 
+## 7.1.3
+
+**Released**: March 26, 2025
+
+### Bug Fixes
+
+* Fixed a crash in SparkScan when pressing certain buttons during hold-to-scan.
+
 ## 7.1.2
 
 **Released**: March 13, 2025

@@ -11,7 +11,7 @@ keywords:
 
 ## 7.2.0-beta.2
 
-**Released**: March 21, 2025
+**Released**: March 23, 2025
 
 ### New Features
 
@@ -32,6 +32,12 @@ keywords:
 ### Bug Fixes
 
 * Fixed an issue in `SparkScanView` that could result in duplicate trigger buttons.
+
+## 7.1.3
+
+**Released**: March 26, 2025
+
+No updates for this framework in this release.
 
 ## 7.1.2
 

@@ -11,7 +11,7 @@ keywords:
 
 ## 7.2.0-beta.2
 
-**Released**: March 21, 2025
+**Released**: March 23, 2025
 
 ### New Features
 
@@ -40,6 +40,17 @@ keywords:
 
 * Fixed a bug where in rare cases the `DataCaptureView` would capture frames in the wrong orientation.
 * Fixed an issue where on Android viewfinder would not be shown the second time the modal screen was opened.
+
+#### Core
+
+* Fixed rare incorrect QR code reads of codes with a low error correction level.
+* Fixed a bug in Barcode Selection that caused inconsistent selection times for single barcodes.
+
+## 7.1.3
+
+**Released**: March 26, 2025
+
+No updates for this framework in this release.
 
 ## 7.1.2
 
