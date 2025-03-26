@@ -9,47 +9,6 @@ keywords:
   - android
 ---
 
-## 7.2.0-beta.2
-
-**Released**: March 23, 2025
-
-### New Features
-
-#### Barcode
-
-* MatrixScan Count now includes the option to set the text hint when clear screen is pressed.
-* QuadHD (Quad High Definition) is now a supported resolution. QHD is a resolution of `2560×1440` pixels, fitting between standard HD (`1920x1080`) and 4K(`3840×2160` pixels).
-* Added the `isPulsing` property to circle highlights in MatrixScan Check, enabling a pulsing animation effect.
-* A new [sample application](/sdks/android/samples.md) is available for [tote mapping in MatrixScan Count](/sdks/android/matrixscan-count/advanced/#tote-mapping).
-
-#### ID
-
-* ID Capture now supports the decoding of mobile driver’s licenses (currently limited to Australian licenses).
-
-### Performance Improvements
-
-#### Barcode
-
-* We further optimized the resources management in SparkScan, improving battery life when in Target Mode.
-* Better handling of multi-status barcodes when using clustering.
-* Refined UI of the mapping flow when using MatrixScan Count.
-
-### Behavioral Changes
-
-* The default `BarcodeBatchBasicOverlay` brush when using the `BarcodeBatchBasicOverlayStyle.FRAME` style has been changed from white to Scandit blue.
-
-### Bug Fixes
-
-#### Barcode
-
-* Fixed a bug where the `DataCaptureView` was not showing up when opening and closing the view in a short sequence.
-* Fixed a crash in SparkScan when pressing certain buttons during hold-to-scan.
-
-#### Core
-
-* Fixed rare incorrect QR code reads of codes with a low error correction level.
-* Fixed a bug in Barcode Selection that caused inconsistent selection times for single barcodes.
-
 ## 7.1.3
 
 **Released**: March 26, 2025

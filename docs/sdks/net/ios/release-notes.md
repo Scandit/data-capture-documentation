@@ -11,7 +11,7 @@ keywords:
 
 ## 7.2.0-beta.2
 
-**Released**: March 21, 2025
+**Released**: March 23, 2025
 
 ### New Features
 
@@ -35,13 +35,18 @@ keywords:
 
 * The default `BarcodeBatchBasicOverlay` brush when using the `BarcodeBatchBasicOverlayStyle.FRAME` style has been changed from white to Scandit blue.
 
-## 7.1.1
-
-**Released**: March 7, 2025
-
 ### Bug Fixes
 
-* Fixed `sc_recognition_context_release` to abort potentially still in-progress background set up of the barcode scanner if `sc_barcode_scanner_wait_for_setup_completed` was not called explicitly.
+#### Core
+
+* Fixed rare incorrect QR code reads of codes with a low error correction level.
+* Fixed a bug in Barcode Selection that caused inconsistent selection times for single barcodes.
+
+## 7.1.3
+
+**Released**: March 26, 2025
+
+No updates for this framework in this release.
 
 ## 7.1.2
 
@@ -50,6 +55,14 @@ keywords:
 ### Bug Fixes
 
 * Fixed an issue in SparkScan where the floating button would appear in the center as opposed to bottom-right of the screen.
+
+## 7.1.1
+
+**Released**: March 7, 2025
+
+### Bug Fixes
+
+* Fixed `sc_recognition_context_release` to abort potentially still in-progress background set up of the barcode scanner if `sc_barcode_scanner_wait_for_setup_completed` was not called explicitly.
 
 ## 7.1.0
 

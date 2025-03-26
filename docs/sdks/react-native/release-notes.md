@@ -11,7 +11,7 @@ keywords:
 
 ## 7.2.0-beta.2
 
-**Released**: March 21, 2025
+**Released**: March 23, 2025
 
 ### New Features
 
@@ -45,6 +45,19 @@ keywords:
 ### Bug Fixes
 
 * Fixed a bug where the `DataCaptureView` was not showing up when opening and closing the view in a short sequence.
+
+### Bug Fixes
+
+#### Core
+
+* Fixed rare incorrect QR code reads of codes with a low error correction level.
+* Fixed a bug in Barcode Selection that caused inconsistent selection times for single barcodes.
+
+## 7.1.3
+
+**Released**: March 26, 2025
+
+No updates for this framework in this release.
 
 ## 7.1.2
 

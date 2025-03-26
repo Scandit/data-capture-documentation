@@ -217,7 +217,7 @@ const config: Config = {
           },
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          lastVersion: "7.1.2",
+          lastVersion: "7.1.3",
           versions: {
             current: {
               label: '7.2.0',
@@ -227,7 +227,7 @@ const config: Config = {
             '6.28.4': {
               banner: 'none',
             },
-            '7.1.2': {
+            '7.1.3': {
               badge: false,
             },
           },
