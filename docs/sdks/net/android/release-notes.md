@@ -40,6 +40,7 @@ keywords:
 
 * Fixed rare incorrect QR code reads of codes with a low error correction level.
 * Fixed a bug in Barcode Selection that caused inconsistent selection times for single barcodes.
+* Fixed `robocopy` command to properly handle paths with spaces on Windows builds.
 
 ## 7.1.3
 

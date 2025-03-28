@@ -39,6 +39,7 @@ keywords:
 
 * Fixed rare incorrect QR code reads of codes with a low error correction level.
 * Fixed a bug in Barcode Selection that caused inconsistent selection times for single barcodes.
+* Fixed an issue where the promise to switch the camera to a desired state would never complete.
 
 ## 7.1.3
 
