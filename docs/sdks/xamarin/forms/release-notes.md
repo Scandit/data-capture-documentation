@@ -9,9 +9,9 @@ keywords:
   - xamarinForms
 ---
 
-## 7.2.0-beta.2
+## 7.2.0
 
-**Released**: March 23, 2025
+**Released**: March 31, 2025
 
 ### New Features
 
