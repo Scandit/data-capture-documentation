@@ -20,7 +20,7 @@ The fastest way to get started is by running our sample application, so we'll co
 
 Before you start, make sure you have the following:
 
-- The latest stable version of [Capacitor and other related tools and dependencies](https://capacitorjs.com/docs/getting-started).
+- Capacitor Version 5-7 [and other related tools and dependencies](https://capacitorjs.com/docs/getting-started).
 - A project with minimum iOS deployment target of 14.0 or higher. Or an Android project with target SDK version 23 (Android 6, Marshmallow) or higher.
 - A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
 
