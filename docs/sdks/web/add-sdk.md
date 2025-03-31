@@ -45,26 +45,20 @@ Devices running the Scandit Data Capture SDK need to have a GPU and run a browse
 ## Install via CDN
 
 :::warning Important considerations when using CDNs
-While using CDNs might seem convenient, there are several important considerations:
+While CDNs offer a convenient way to get started, they introduce significant dependencies into your application. Your app's functionality becomes directly tied to the CDN's availability and performance. Any CDN outages or slowdowns will immediately affect your users' experience.
 
-1. **Reliability**: Your application becomes dependent on the CDN's availability. If the CDN experiences downtime or performance issues, your application's functionality will be directly impacted.
+For production environments, we recommend:
 
-2. **Security**:
-   - CDNs introduce additional points of failure in your security chain
-   - You're trusting the CDN provider to deliver unmodified files
-   - Man-in-the-middle attacks could potentially compromise the integrity of the files
+1. **Self-hosting** the SDK files on your own infrastructure as the preferred option, where you can:
+   - Configure optimal cache headers and compression settings
+   - Set correct MIME types for .wasm, .js and .model files
+   - Control Content-Length headers for accurate loading progress
+   - Minimize request redirections and network latency
+   - Implement your own fallback mechanisms
 
-3. **Performance**:
-   - Additional DNS lookups and TLS handshakes are required
-   - No control over cache headers and compression
-   - Potential redirect chains that can slow down loading
-
-For production environments, we strongly recommend self-hosting the SDK files on your own infrastructure. This gives you:
-
-- Complete control over the availability and delivery of the files
-- Better security through your own security measures
-- Optimal performance through proper cache configuration and compression
-- Ability to implement your own fallback mechanisms
+2. If self-hosting isn't feasible, using a **paid enterprise CDN service** that provides:
+   - Guaranteed uptime and performance metrics
+   - Enterprise-grade support
 :::
 
 You can use the [jsDelivr](https://jsdelivr.com/) or [UNPKG](https://unpkg.com/) CDN to specify a certain version (or range) and include and import from our library as follows. This example imports the core and barcode capture packages:
