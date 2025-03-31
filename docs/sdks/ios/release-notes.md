@@ -21,6 +21,7 @@ keywords:
 * Added the `isPulsing` property to circle highlights in MatrixScan Check, enabling a pulsing animation effect.
 * A new [sample application](/sdks/ios/samples.md) is available for [tote mapping in MatrixScan Count](/sdks/ios/matrixscan-count/advanced/#tote-mapping).
 * The `LabelCaptureSettings` API of Smart Label Capture now allows for setting optional barcode semantic properties.
+* In MatrixScan Count, status icons can now be displayed immediately on scan without users needing to explicitly select Status mode to view them. This behavior is set via [`SDCBarcodeCountView.shouldShowStatusIconsOnScan`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.shouldShowStatusIconsOnScan).
 
 #### ID
 
