@@ -46,47 +46,67 @@ The main entry point for the Label Capture Mode is the [LabelCapture](https://do
 It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
 ```js
-import { Symbology } from "scandit-web-datacapture-barcode"
+import { Symbology } from "@scandit/web-datacapture-barcode"
 import {
-  CustomBarcode,
+  CustomBarcodeBuilder,
   LabelCapture,
   LabelCaptureSettings,
-  LabelDefinition
-} from "scandit-web-datacapture-label"
+  LabelDefinitionBuilder,
+  TotalPriceTextBuilder,
+  UnitPriceTextBuilder,
+  LabelDateFormat,
+  WeightTextBuilder,
+  ImeiOneBarcodeBuilder,
+  ImeiTwoBarcodeBuilder,
+  SerialNumberBarcodeBuilder,
+} from "@scandit/web-datacapture-label"
 
-const labelCapture = LabelCapture>(() => {
-  // Create a barcode field with the expected symbologies
-  const barcodeField = new CustomBarcode.initWithNameAndSymbologies('<your-barcode-field-name>', [Symbology.EAN13_UPCA, Symbology.CODE128]);
+const isofLabel = await new LabelDefinitionBuilder()
+  .addCustomBarcode(
+    // Create a barcode field with the expected symbologies
+    await new CustomBarcodeBuilder().isOptional(false).setSymbology(Symbology.EAN13UPCA).build("Barcode")
+  )
+  .addTotalPriceText(await new TotalPriceTextBuilder().isOptional(false).build("Total Price"))
+  .addUnitPriceText(await new UnitPriceTextBuilder().isOptional(false).build("Unit Price"))
+  .addExpiryDateText(
+    await new ExpiryDateTextBuilder()
+      .isOptional(false)
+      .setLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY))
+      .build("Expiry Date")
+  )
+  .addWeightText(await new WeightTextBuilder().isOptional(false).build("Weight"))
+  .build("ISOF Label");
 
-  // Create a expiry date text field, using the ExpiryDateText preset
-  const expiryDateField = new ExpiryDateText('<your-expiry-date-field-name>')
-  expiryDateField.optional = true 
+const smartDeviceLabel = await new LabelDefinitionBuilder()
+  .addImeiOneBarcode(
+    await new ImeiOneBarcodeBuilder().isOptional(false).setSymbology(Symbology.Code128).build("IMEI")
+  )
+  .addImeiTwoBarcode(
+    await new ImeiTwoBarcodeBuilder().isOptional(false).setSymbology(Symbology.Code128).build("IMEI2")
+  )
+  .addSerialNumberBarcode(
+    await new SerialNumberBarcodeBuilder().isOptional(false).setSymbology(Symbology.Code128).build("Serial Number")
+  )
+  .addCustomBarcode(await new CustomBarcodeBuilder().isOptional(false).setSymbology(Symbology.Code128).build("EID"))
+  .build("Smart Device Label");
 
-  // Create a label definition with the fields created above
-  const labelDefinition = new LabelDefinition('<your-label-name>');
-  labelDefinition.fields = [
-      barcodeField,
-      expiryDateField,
-  ];
-
-  const settings = LabelCaptureSettings.settingsFromLabelDefinitions([labelDefinition], {})!
-
-  // Create the label capture mode with the settings and data capture context created earlier
-  return LabelCapture.forContext(dataCaptureContext, settings)
-}, [dataCaptureContext])
+const settings = await new LabelCaptureSettingsBuilder().addLabel(isofLabel).addLabel(smartDeviceLabel).build();
+// Create the label capture mode with the settings and data capture context created earlier
+const mode = await LabelCapture.forContext(dataCaptureContext, settings);
 ```
 
 ## Implement a Listener to Handle Captured Labels
 
 To get informed whenever a new label has been recognized, add a [LabelCaptureListener](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) through [LabelCapture.addListener()](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-capture.html#method-scandit.datacapture.label.LabelCapture.AddListener) and implement the listener methods to suit your application’s needs.
 
-First conform to the `LabelCaptureListener` interface. Here is an example of how to implement a listener that processes the captured labels based on the label capture settings defined above. 
+First conform to the `LabelCaptureListener` interface. Here is an example of how to implement a listener that processes the captured labels based on the label capture settings defined above.
 
-```js
-import { CapturedLabel, LabelCaptureListener } from 'scandit-web-datacapture-label';
+```ts
+import { CapturedLabel, LabelCaptureListener } from '@scandit/web-datacapture-label';
+import type { LabelCapture, LabelCaptureSession } from '@scandit/web-datacapture-label';
 
-const labelCaptureListener = LabelCaptureListener>(() => ({
-  didUpdateSession(_, session) {
+const labelCaptureListener: LabelCaptureListener = {
+  async didUpdateSession(labelCapture: LabelCapture, session: LabelCaptureSession) {
     /* 
      * The session update callback is called for every processed frame.
      * Early return if no label has been captured.
@@ -124,7 +144,7 @@ const labelCaptureListener = LabelCaptureListener>(() => ({
      * Disable the label capture mode after all labels have been processed
      * to prevent it from capturing the same labels multiple times.
      */
-    labelCapture.isEnabled = false;
+    await labelCapture.setEnabled(false);
 
     /* 
      * You may want to communicate a successful scan with vibration and audio feedback.
@@ -132,7 +152,7 @@ const labelCaptureListener = LabelCaptureListener>(() => ({
      */
     Feedback.defaultFeedback.emit();
   }
-}), [onLabelCaptured])
+}
 ```
 
 ## Visualize the Scan Process
@@ -144,19 +164,17 @@ To visualize the results of Label Capture, you can choose between two overlays, 
 Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptureView`.
 
 ```js
-import { RectangularViewfinder, RectangularViewfinderStyle } from 'scandit-web-datacapture-core';
-import { LabelCapture, LabelCaptureBasicOverlay } from "scandit-web-datacapture-label"
+import { RectangularViewfinder, RectangularViewfinderStyle } from '@scandit/web-datacapture-core';
+import { LabelCapture, LabelCaptureBasicOverlay } from "@scandit/web-datacapture-label"
 
-const labelCaptureOverlay = LabelCaptureBasicOverlay>(() => {
-  // Create the overlay with the label capture mode created earlier
-  const labelCaptureOverlay = LabelCaptureBasicOverlay.withLabelCapture(labelCapture)
-  
-  // Add a square viewfinder to the overlay to guide users through the capture process
-  const viewfinder = new RectangularViewfinder(RectangularViewfinderStyle.Square)
-  labelCaptureOverlay.viewfinder = viewfinder
-  
-  return labelCaptureOverlay
-}, [labelCapture])
+
+// Create the overlay with the label capture mode created earlier
+const overlay = await LabelCaptureBasicOverlay.withLabelCapture(mode);
+await view.addOverlay(overlay);
+
+// Add a square viewfinder to the overlay to guide users through the capture process
+const viewfinder = new RectangularViewfinder(RectangularViewfinderStyle.Square)
+await labelCaptureOverlay.setViewfinder(viewfinder)
 ```
 
 :::tip
@@ -169,15 +187,12 @@ You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/w
 
 ```js
 const camera = Camera.default;
-context.setFrameSource(camera);
+await context.setFrameSource(camera);
 
-const cameraSettings = LabelCapture.recommendedCameraSettings;
+const cameraSettings = LabelCapture.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
-
-if (camera != null) {
-	camera.applySettings(cameraSettings);
-}
+camera?.applySettings(cameraSettings);
 ```
 
 Once the `Camera`, `DataCaptureContext`, `DataCaptureView` and `LabelCapture` are initialized, you can switch on the camera to start capturing labels.
@@ -185,7 +200,7 @@ Once the `Camera`, `DataCaptureContext`, `DataCaptureView` and `LabelCapture` ar
 Typically, this is done once the view becomes active and the user granted permission to use the camera, or once the user presses continue scanning after handling a previous scan.
 
 ```js
-camera.switchToDesiredState(FrameSourceState.ON);
+await camera.switchToDesiredState(FrameSourceState.On);
 ```
 
 Please refer to the available [sample apps](/sdks/web/samples.md) for detailed examples of camera permission handling and view lifecycle management.
@@ -199,7 +214,7 @@ However, we provide a `Feedback` class that you can use to emit feedback when a 
 Here, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/web/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration.
 
 ```js
-import { Feedback } from 'scandit-web-datacapture-core';
+import { Feedback } from '@scandit/web-datacapture-core';
 
 const feedback = Feedback.defaultFeedback();
 ```
