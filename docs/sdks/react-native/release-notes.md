@@ -9,9 +9,9 @@ keywords:
   - react
 ---
 
-## 7.2.0-beta.2
+## 7.2.0
 
-**Released**: March 23, 2025
+**Released**: March 31, 2025
 
 ### New Features
 
@@ -37,6 +37,7 @@ keywords:
 #### Barcode
 
 * We further optimized the resources management in SparkScan, improving battery life when in Target Mode.
+* Improved recognition rate of expiry dates in Smart Label Capture, with a particular focus on dot matrix fonts.
 
 ### Behavioral Changes
 

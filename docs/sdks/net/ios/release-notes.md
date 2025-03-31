@@ -9,9 +9,9 @@ keywords:
   - netIos
 ---
 
-## 7.2.0-beta.2
+## 7.2.0
 
-**Released**: March 23, 2025
+**Released**: March 31, 2025
 
 ### New Features
 
@@ -41,6 +41,7 @@ keywords:
 
 * Fixed rare incorrect QR code reads of codes with a low error correction level.
 * Fixed a bug in Barcode Selection that caused inconsistent selection times for single barcodes.
+* Fixed `robocopy` command to properly handle paths with spaces on Windows builds.
 
 ## 7.1.3
 

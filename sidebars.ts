@@ -82,6 +82,7 @@ const sidebars: SidebarsConfig = {
 				'hosted/id-bolt/overview',
 				'hosted/id-bolt/getting-started',
         'hosted/id-bolt/api',
+        'hosted/id-bolt/release-notes',
 				{
 					type: 'link',
 					label: 'Try the Demo',
@@ -2107,6 +2108,14 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
+              label: 'MatrixScan Check',
+              items: [
+                "sdks/net/ios/matrixscan-check/intro",
+                "sdks/net/ios/matrixscan-check/get-started",
+              ],
+            },
+            {
+              type: 'category',
               label: 'MatrixScan Count',
               items: [
                 "sdks/net/ios/matrixscan-count/intro",
@@ -2285,6 +2294,14 @@ const sidebars: SidebarsConfig = {
                 "sdks/net/android/matrixscan/intro",
                 "sdks/net/android/matrixscan/get-started",
                 "sdks/net/android/matrixscan/advanced",
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Check',
+              items: [
+                "sdks/net/android/matrixscan-check/intro",
+                "sdks/net/android/matrixscan-check/get-started",
               ],
             },
             {

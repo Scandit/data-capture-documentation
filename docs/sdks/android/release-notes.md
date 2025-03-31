@@ -9,9 +9,9 @@ keywords:
   - android
 ---
 
-## 7.2.0-beta.2
+## 7.2.0
 
-**Released**: March 23, 2025
+**Released**: March 31, 2025
 
 ### New Features
 
@@ -25,6 +25,7 @@ keywords:
 #### ID
 
 * ID Capture now supports the decoding of mobile driver’s licenses (currently limited to Australian licenses).
+* Improved recognition rate of expiry dates in Smart Label Capture, with a particular focus on dot matrix fonts.
 
 ### Performance Improvements
 
