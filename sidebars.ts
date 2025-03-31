@@ -82,6 +82,7 @@ const sidebars: SidebarsConfig = {
 				'hosted/id-bolt/overview',
 				'hosted/id-bolt/getting-started',
         'hosted/id-bolt/api',
+        'hosted/id-bolt/release-notes',
 				{
 					type: 'link',
 					label: 'Try the Demo',
