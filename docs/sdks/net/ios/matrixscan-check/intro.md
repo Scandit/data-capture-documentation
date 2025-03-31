@@ -1,9 +1,13 @@
 ---
 displayed_sidebar: netIosSidebar
+pagination_prev: null
+framework: netIos
+keywords:
+  - netIos
 ---
 
-# Page Unavailable
+# About MatrixScan Check
 
-This functionality is not currently supported in the selected framework.
+import AboutMatrixScanCheck from '../../../../partials/intro/_about-matrixscan-check.mdx'
 
----
+<AboutMatrixScanCheck />
