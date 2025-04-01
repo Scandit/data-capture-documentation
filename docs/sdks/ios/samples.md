@@ -42,10 +42,6 @@ Simple sample showing how to use the Barcode Capture mode to scan a single barco
 This sample is written in Swift. If you prefer Objective-C, you can find the equivalent sample [here](https://github.com/Scandit/datacapture-ios-samples/tree/master/BarcodeCaptureSimpleSampleObjC).
 :::
 
-##### [Rejection](https://github.com/Scandit/datacapture-ios-samples/tree/master/BarcodeCaptureRejectSample)
-
-Sample that uses the camera to read a single QR code that starts with “09:” but ignores/rejects all other codes.
-
 ### Batch Scanning
 
 #### MatrixScan Batch
@@ -85,6 +81,12 @@ Use a combination of [SparkScan](#sparkscan) and MatrixScan Count for a receivin
 <ReactPlayer playing controls url="/img/samples/ss-expiry.mp4" />
 
 Share scan data between MatrixScan Count and Spark Scan to show the expiration status of scanned items.
+
+#### [Tote Mapping](https://github.com/Scandit/datacapture-ios-samples/tree/master/MatrixScanCountToteMappingSample)
+
+<ReactPlayer playing controls url="/img/matrixscan-count/tote_mapping.mp4" />
+
+Map scanned barcodes to specific totes. This is useful for In-Store Order Fulfillment scenarios where you need to scan a barcode and have the system automatically assign the item to a specific tote.
 
 #### MatrixScan Find
 

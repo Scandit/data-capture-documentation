@@ -20,15 +20,11 @@ The repository with all the samples can be found [here](https://github.com/Scand
 
 #### Barcode Capture
 
-##### [Single Scan](https://github.com/Scandit/datacapture-cordova-samples/tree/master/BarcodeCaptureSimpleSample)
+##### [Single Scan](https://github.com/Scandit/datacapture-cordova-samples/tree/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low_Level_API/BarcodeCaptureSimpleSample)
 
 <ReactPlayer playing controls url="/img/samples/bc-simple.mp4" />
 
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
-
-##### [Rejection](https://github.com/Scandit/datacapture-cordova-samples/tree/master/BarcodeCaptureRejectSample)
-
-Sample that uses the camera to read a single QR code that starts with “09:” but ignores/rejects all other codes.
 
 ### Multi-Scanning
 
@@ -36,13 +32,13 @@ Sample that uses the camera to read a single QR code that starts with “09:” 
 
 Examples utilizing the low-level `BarcodeTracking` API.
 
-##### [Simple Highlight](https://github.com/Scandit/datacapture-cordova-samples/tree/master/MatrixScanSimpleSample)
+##### [Simple Highlight](https://github.com/Scandit/datacapture-cordova-samples/tree/master/03_Advanced_Batch_Scanning_Samples/01_Batch_Scanning_and_AR_Info_Lookup/MatrixScanSimpleSample)
 
 <ReactPlayer playing controls url="/img/samples/ms-simple.mp4" />
 
 Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 
-##### [Rejection](https://github.com/Scandit/datacapture-cordova-samples/tree/master/MatrixScanRejectSample)
+##### [Rejection](https://github.com/Scandit/datacapture-cordova-samples/tree/master/03_Advanced_Batch_Scanning_Samples/01_Batch_Scanning_and_AR_Info_Lookup/MatrixScanRejectSample)
 
 <ReactPlayer playing controls url="/img/samples/ms-reject.mp4" />
 
@@ -54,13 +50,13 @@ Use custom conditions to highlight and scan only the barcodes that meet the spec
 
 ### ID Capture
 
-#### [Simple ID Capture](https://github.com/Scandit/datacapture-cordova-samples/tree/master/IdCaptureSimpleSample)
+#### [Simple ID Capture](https://github.com/Scandit/datacapture-cordova-samples/tree/master/02_ID_Scanning_Samples/IdCaptureSimpleSample)
 
 <ReactPlayer playing controls url="/img/samples/id-simple.mp4" />
 
 Simple sample showing how to use the ID Capture mode to scan an ID card.
 
-#### [Extended ID Capture](https://github.com/Scandit/datacapture-cordova-samples/tree/master/IdCaptureExtendedSample)
+#### [Extended ID Capture](https://github.com/Scandit/datacapture-cordova-samples/tree/master/02_ID_Scanning_Samples/IdCaptureExtendedSample)
 
 <ReactPlayer playing controls url="/img/samples/id-extended.mp4" />
 

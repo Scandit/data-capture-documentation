@@ -20,7 +20,7 @@ The repository with all the samples can be found [here](https://github.com/Scand
 
 #### Barcode Capture
 
-##### [Single Scan](https://github.com/Scandit/datacapture-titanium-samples/tree/main/BarcodeCaptureSimpleSample)
+##### [Single Scan](https://github.com/Scandit/datacapture-titanium-samples/tree/main/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low_Level_API/BarcodeCaptureSimpleSample)
 
 <ReactPlayer playing controls url="/img/samples/bc-simple.mp4" />
 

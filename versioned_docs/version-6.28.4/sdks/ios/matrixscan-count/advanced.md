@@ -28,7 +28,7 @@ This feature is used to provide users with more details regarding the items they
 
 ![Barcode Count Status](/img/matrixscan-count/barcode_count_status.png)
 
-See the [Expiry Management Sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/ExpiryManagementSample)
+See the [Expiry Management Sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/ExpiryManagementSample)
 
 <ReactPlayer playing controls url="/img/samples/ss-expiry.mp4" /> for an example of how to use this feature.
 
