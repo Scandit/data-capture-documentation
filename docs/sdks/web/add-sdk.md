@@ -45,7 +45,7 @@ Devices running the Scandit Data Capture SDK need to have a GPU and run a browse
 ## Install via CDN
 
 :::warning Important considerations when using CDNs
-While CDNs offer a convenient way to get started, they introduce significant dependencies into your application. Your app's functionality becomes directly tied to the CDN's availability and performance. Any CDN outages or slowdowns will immediately affect your users' experience.
+CDNs offer a convenient way to get started but they introduce dependencies into your application. Your app's functionality becomes directly tied to the CDN's availability and performance. Any CDN outages or slowdowns will immediately affect your users' experience.
 
 For production environments, we recommend:
 
