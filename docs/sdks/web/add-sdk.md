@@ -56,7 +56,7 @@ For production environments, we recommend:
    - Minimize request redirections and network latency
    - Implement your own fallback mechanisms
 
-2. If self-hosting isn't feasible, using a **paid enterprise CDN service** that provides:
+2. If self-hosting isn't feasible, use a **paid enterprise CDN service** that provides:
    - Guaranteed uptime and performance metrics
    - Enterprise-grade support
 :::
