@@ -49,7 +49,7 @@ While CDNs offer a convenient way to get started, they introduce significant dep
 
 For production environments, we recommend:
 
-1. **Self-hosting** the SDK files on your own infrastructure as the preferred option, where you can:
+1. **Self-hosting** the SDK files on your own infrastructure, where you are strongly encouraged to:
    - Configure optimal cache headers and compression settings
    - Set correct MIME types for .wasm, .js and .model files
    - Control Content-Length headers for accurate loading progress
