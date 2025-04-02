@@ -44,6 +44,23 @@ Devices running the Scandit Data Capture SDK need to have a GPU and run a browse
 
 ## Install via CDN
 
+:::warning Important considerations when using CDNs
+CDNs offer a convenient way to get started but they introduce dependencies into your application. Your app's functionality becomes directly tied to the CDN's availability and performance. Any CDN outages or slowdowns will immediately affect your users' experience.
+
+For production environments, we recommend:
+
+1. **Self-hosting** the SDK files on your own infrastructure, where you are strongly encouraged to:
+   - Configure optimal cache headers and compression settings
+   - Set correct MIME types for .wasm, .js and .model files
+   - Control Content-Length headers for accurate loading progress
+   - Minimize request redirections and network latency
+   - Implement your own fallback mechanisms
+
+2. If self-hosting isn't feasible, use a **paid enterprise CDN service** that provides:
+   - Guaranteed uptime and performance metrics
+   - Enterprise-grade support
+:::
+
 You can use the [jsDelivr](https://jsdelivr.com/) or [UNPKG](https://unpkg.com/) CDN to specify a certain version (or range) and include and import from our library as follows. This example imports the core and barcode capture packages:
 
 ```html
