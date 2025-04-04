@@ -9,6 +9,16 @@ keywords:
   - cordova
 ---
 
+## 6.28.5
+
+**Released**: April 4, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed an issue issue where the promise to switch the camera to a desired state would never complete.
+
 ## 6.28.4
 
 **Released**: February 14, 2025

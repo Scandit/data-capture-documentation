@@ -9,6 +9,12 @@ keywords:
   - xamarinAndroid
 ---
 
+## 6.28.5
+
+**Released**: April 4, 2025
+
+No updates for this framework in this release.
+
 ## 6.28.4
 
 **Released**: February 14, 2025
