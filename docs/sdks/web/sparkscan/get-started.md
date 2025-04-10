@@ -80,7 +80,7 @@ See the [SparkScan Workflow Options](./intro.md#workflow-options) section for mo
 
 By adding a `SparkScanView`, the scanning interface (camera preview and scanning UI elements) will be added automatically to your application.
 
-Add a `SparkScanView` to your view hierarchy. Construct a new SparkScan view. The `SparkScan` view is automatically added to the provided parentView:
+Add a `SparkScanView` to your view hierarchy. Construct a new SparkScan view, making sure to call sure to call [SparkScanView.prepareScanning()](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.PrepareScanning). The `SparkScanView` is automatically added to the provided `parentView`:
 
 ```js
 const sparkScanView = SparkScanView.forElement(
