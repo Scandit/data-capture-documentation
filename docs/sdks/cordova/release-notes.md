@@ -156,7 +156,7 @@ No updates for this framework in this release.
 
 #### Core
 
-* Resolved a rare issue where a race condition during the deconstruction of MatrixScan Data Capture views could lead to invalid memory access.
+* Fixed an issue causing the `SparkScanView` to not be rendered on top of the host application content.
 
 #### ID
 
