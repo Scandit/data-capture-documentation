@@ -9,6 +9,16 @@ keywords:
   - web
 ---
 
+## 7.2.1
+
+**Released**: April 24, 2025
+
+### Bug Fixes
+
+* Fixed minor JavaScript errors by replacing access to unavailable API in Safari v15.4+ with available ones.
+* SparkScanView is now taking into account the parent element dimensions.
+* Fixed an issue where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
+
 ## 7.2.0
 
 **Released**: March 31, 2025

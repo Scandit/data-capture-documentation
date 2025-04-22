@@ -9,6 +9,14 @@ keywords:
   - android
 ---
 
+## 7.2.1
+
+**Released**: April 24, 2025
+
+### Bug Fixes
+
+* Fixed two distinct memory leaks in SparkScan.
+
 ## 7.2.0
 
 **Released**: March 31, 2025
