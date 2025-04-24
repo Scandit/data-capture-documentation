@@ -9,6 +9,24 @@ keywords:
   - linux
 ---
 
+## 7.2.1
+
+**Released**: April 24, 2025
+
+### New Features
+
+* Extended camera API to allow enumerating supported image layouts as well as setting preferred image layout.
+* Removed the restriction of `SC_PRESET_HIGH_EFFORT` on having a license key with tracking/multi-scan enabled.
+
+### Performance Improvements
+
+* Updated the default camera image layout choice to optimize for low latency.
+* Updated `CommandLineBarcodeScannerCameraSample.py` to allow setting desired camera format.
+
+### Bug Fixes
+
+* Fixed handling of `SC_IMAGE_LAYOUT_UYVY_8U` image description layout where luma and chroma channels were misplaced.
+
 ## 7.2.0
 
 **Released**: March 31, 2025

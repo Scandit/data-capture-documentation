@@ -9,6 +9,14 @@ keywords:
   - react
 ---
 
+## 7.2.1
+
+**Released**: April 24, 2025
+
+### Bug Fixes
+
+* Fixed a bug where some updates of the `BarcodeCountView` were not applied correctly in iOS apps.
+
 ## 7.2.0
 
 **Released**: March 31, 2025

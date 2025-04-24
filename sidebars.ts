@@ -670,6 +670,11 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "link",
+          label: "ScanditLabelCapture",
+          href: "https://docs.scandit.com/data-capture-sdk/web/label-capture/api.html",
+        },
+        {
+          type: "link",
           label: "ScanditParser",
           href: "https://docs.scandit.com/data-capture-sdk/web/parser/api.html",
         },
@@ -1200,6 +1205,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/flutter/matrixscan-pick/advanced",
               ],
             },
+            {
+              type: "category",
+              label: "Smart Label Capture",
+              items: [
+                "sdks/flutter/label-capture/intro",
+                "sdks/flutter/label-capture/get-started",
+                "sdks/flutter/label-capture/advanced",
+              ],
+            },
           ],
         },
         {
@@ -1257,6 +1271,11 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "ScanditIdCapture",
           href: "https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api.html",
+        },
+        {
+          type: "link",
+          label: "ScanditLabelCapture",
+          href: "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api.html",
         },
         {
           type: "link",
