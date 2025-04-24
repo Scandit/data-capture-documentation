@@ -1200,6 +1200,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/flutter/matrixscan-pick/advanced",
               ],
             },
+            {
+              type: "category",
+              label: "Smart Label Capture",
+              items: [
+                "sdks/flutter/label-capture/intro",
+                "sdks/flutter/label-capture/get-started",
+                "sdks/flutter/label-capture/advanced",
+              ],
+            },
           ],
         },
         {
