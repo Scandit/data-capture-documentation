@@ -44,6 +44,7 @@ The default value `app.id-scanning.com` is an alias that points to Scandit’s s
   - `workflow?: WorkflowOptions`: Options to customize the workflow. See *[`Workflow Options`](#workflow-options)*.
   - `theme?: Theme`: Options to customize the theme. See *[`Theme`](#theme)*.
   - `textOverrides?: TextOverrides`: Options to customize the text. See *[`Text Overrides`](#text-overrides)*.
+  - `keepAliveForNextSession?: boolean`: Option to keep ID-Bolt resources alive, when expecting to run multiple sessions in a row. See *[`keepAliveForNextSession`](#keep-alive)*.
   - `onCompletion: (result: CompletionResult) => void`: A callback that is called when the user has successfully scanned their ID.
   - `onCancellation?: (reason: CancellationReason) => void`: A callback that is called whenever the flow can not be completed.
 
@@ -555,6 +556,25 @@ Example:
         "texts.HELP_SUPPORTED_DOCUMENTS_EXCLUDE_LIST": "Not accepted are documents issued before 2000",
 	....
 ```
+
+## Keep Alive
+
+When expecting to run ID-Bolt multiple times in a row (e.g. scanning multiple passports), the ID-Bolt resources can be kept active between flows with the option
+
+```ts
+	... 
+	keepAliveForNextSession: true,
+	...
+```
+
+This has the advantage of faster loading times and not asking for camera permission again in subsequent flow.
+
+If this option was enabled, but it is decided that no new flow needs to be started nevertheless, the kept alive resources can be discarded with
+
+```ts
+IdBoltSession.terminate()
+```
+
 
 
 ## Supported Region Specific Documents
