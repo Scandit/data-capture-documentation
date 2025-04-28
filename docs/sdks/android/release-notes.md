@@ -9,6 +9,40 @@ keywords:
   - android
 ---
 
+## 7.3.0-beta1
+
+**Released**: April 28, 2025
+
+### New Features
+
+#### Barcode
+
+* The following APIs have been added to MatrixScan Count:
+  * A new `shouldShowStatusIconsOnScan` field has been added to `BarcodeCountView`, which makes the status icons visible as soon as a barcode is scanned.
+* Added hidden properties to enable and setup dynamic camera resolution.
+* MatrixScan AR now allows custom highlights and annotations to be used.
+* The `LaserViewfinder` is now available.
+* In MatrixScan Pick you can now specify different loading text for picking and unpicking in `BarcodePickViewSettings`.
+
+#### ID
+
+* Unify the result value when parsing the sex field, including added support for special characters used, so that it is always one of the values `female`, `male` or `unspecified`.
+
+#### Smart Label Capture
+
+* Added a new overlay for `LabelCapture`: `LabelCaptureValidationFlowOverlay`. This allows the user to follow a validation flow when scanning a label during several scans, instead of just in one go. Also includes a `LabelCaptureValidationFlowListener` to get the final results of the validation process.
+* Enabled `dataTypePatterns` for all text fields in Smart Label Capture.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue in SparkScan where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
+
+##### Smart Label Capture
+
+* Fixed an issue where `ExpiryDateTextBuilder` and `PackingDateTextBuilder` could override the patterns even when the `labelDateFormat` was set.
+
 ## 7.2.1
 
 **Released**: April 24, 2025
@@ -27,7 +61,7 @@ keywords:
 
 * MatrixScan Count now includes the option to set the text hint when clear screen is pressed.
 * QuadHD (Quad High Definition) is now a supported resolution. QHD is a resolution of `2560×1440` pixels, fitting between standard HD (`1920x1080`) and 4K(`3840×2160` pixels).
-* Added the `isPulsing` property to circle highlights in MatrixScan Check, enabling a pulsing animation effect.
+* Added the `isPulsing` property to circle highlights in MatrixScan AR, enabling a pulsing animation effect.
 * A new [sample application](/sdks/android/samples.md) is available for [tote mapping in MatrixScan Count](/sdks/android/matrixscan-count/advanced/#tote-mapping).
 
 #### ID
@@ -91,7 +125,7 @@ keywords:
 
 #### Barcode
 
-* [MatrixScan Check](/sdks/android/matrixscan-check/intro.md) in now available, offering prebuilt views designed to quickly build custom workflows with augmented reality for your existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
+* [MatrixScan AR](/sdks/android/matrixscan-check/intro.md) in now available, offering prebuilt views designed to quickly build custom workflows with augmented reality for your existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
 * MatrixScan Count now includes the ability to [cluster barcodes](/sdks/android/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
 * MatrixScan Count now includes the concept of a `Barcode Spacial Grid`, bringing the ability to map totes in a grid-like structure. Scanned codes will be returned with their relative location and can be displayed in a map view. This allows for fast and error-free in-store picking using dedicated carts and totes. The following classes have been added:
   * `BarcodeSpatialGrid`

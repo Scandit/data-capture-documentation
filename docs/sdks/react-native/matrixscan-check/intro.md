@@ -6,7 +6,7 @@ keywords:
   - react
 ---
 
-# About MatrixScan Check
+# About MatrixScan AR
 
 import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-check.mdx'
 

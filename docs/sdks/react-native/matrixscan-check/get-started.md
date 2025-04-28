@@ -7,16 +7,16 @@ keywords:
 
 # Get Started
 
-In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
+In this guide you will learn step-by-step how to add MatrixScan AR to your application. Implementing MatrixScan AR involves two primary elements:
 
-- Barcode Check: The data capture mode that is used for scan and check functionality.
-- A Barcode Check View: The pre-built UI elements used to highlight items to be checked.
+- Barcode AR: The data capture mode that is used for scan and check functionality.
+- A Barcode AR View: The pre-built UI elements used to highlight items to be checked.
 
 The general steps are:
 
 - Creating a new Data Capture Context instance
-- Configuring the Barcode Check Mode
-- Setup the Barcode Check View
+- Configuring the Barcode AR Mode
+- Setup the Barcode AR View
 - Registering the Listener to notify about found items
 
 ## Prerequisites
@@ -33,30 +33,30 @@ import DataCaptureContextReactNative from '../../../partials/get-started/_create
 
 <DataCaptureContextReactNative/>
 
-## Configure the Barcode Check Mode
+## Configure the Barcode AR Mode
 
-The main entry point for the Barcode Check Mode is the `BarcodeCheck` object. You can configure the supported Symbologies through its [`BarcodeCheckSettings`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-check-settings.html), and set up the list of items that you want MatrixScan Check to highlight.
+The main entry point for the Barcode AR Mode is the `BarcodeAr` object. You can configure the supported Symbologies through its [`BarcodeArSettings`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-ar-settings.html), and set up the list of items that you want MatrixScan AR to highlight.
 
 Here we configure it for tracking EAN13 codes, but you should change this to the correct symbologies for your use case.
 
 ```js
-const settings = BarcodeCheckSettings();
+const settings = BarcodeArSettings();
 settings.enableSymbology(Symbology.ean13Upca, true);
 ```
 
 The create the mode with the previously created settings:
 
 ```js
-const mode = new BarcodeCheck(settings);
+const mode = new BarcodeAr(settings);
 ```
 
-## Setup the `BarcodeCheckView`
+## Setup the `BarcodeArView`
 
-MatrixScan Check’s built-in AR user interface includes buttons and overlays that guide the user through the scan and check process. By adding a [`BarcodeCheckView`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-check-view.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckView), the scanning interface is added automatically to your application.
+MatrixScan AR’s built-in AR user interface includes buttons and overlays that guide the user through the scan and check process. By adding a [`BarcodeArView`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-ar-view.html#class-scandit.datacapture.barcode.check.ui.BarcodeArView), the scanning interface is added automatically to your application.
 
-The `BarcodeCheckView` is where you provide the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.AnnotationProvider) to supply the highlight and annotation information for the barcodes to be checked. If *null*, a default highlight is used and no annotations are provided.
+The `BarcodeArView` is where you provide the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.AnnotationProvider) to supply the highlight and annotation information for the barcodes to be checked. If *null*, a default highlight is used and no annotations are provided.
 
-The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSettings`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-check-view-settings.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckViewSettings), and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
+The `BarcodeArView` appearance can be customized through [`BarcodeArViewSettings`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-ar-view-settings.html#class-scandit.datacapture.barcode.check.ui.BarcodeArViewSettings), and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
 
 * Audio and haptic feedback
 * Torch button visibility and its position
@@ -65,44 +65,44 @@ The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSe
 * The size, colors, and styles of the highlight and annotation overlays
 
 ```js
-const viewSettings = new BarcodeCheckViewSettings();
+const viewSettings = new BarcodeArViewSettings();
 ```
 
-Next, create a `BarcodeCheckView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeCheckView` is automatically added to the provided parent view.
+Next, create a `BarcodeArView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeArView` is automatically added to the provided parent view.
 
 ```js
-let barcodeCheck;
-<BarcodeCheckView
-	barcodeCheck={barcodeCheck}
+let barcodeAr;
+<BarcodeArView
+	barcodeAr={barcodeAr}
 	context={dataCaptureContext}
 	viewSettings={viewSettings}
 	ref={(view) => {
-		barcodeCheckView = view;
+		barcodeArView = view;
 		// Handle the view as needed, for example
-		barcodeCheckView.startSearching();
+		barcodeArView.startSearching();
 	}}
-></BarcodeCheckView>;
+></BarcodeArView>;
 ```
 
 ## Register the Listener
 
-The `BarcodeCheckView` displays a **Finish** button next to its shutter button. 
+The `BarcodeArView` displays a **Finish** button next to its shutter button. 
 
-Register a [BarcodeCheckViewUiListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-check-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeCheckViewUiListener) to be notified what items have been found once the finish button is pressed.
+Register a [BarcodeArViewUiListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-ar-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeArViewUiListener) to be notified what items have been found once the finish button is pressed.
 
 In this tutorial, we will then navigate back to the previous screen to finish the find session.
 
 ```js
-barcodeCheckView.barcodeCheckViewUiListener = {
-	didTapFinishButton(foundItems: BarcodeCheckItem[]) {
+barcodeArView.barcodeArViewUiListener = {
+	didTapFinishButton(foundItems: BarcodeArItem[]) {
 	},
 };
 ```
 
 ## Start searching
 
-As soon as everything is set up, control the [BarcodeCheckView](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-check-view.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckView) to start the search.
+As soon as everything is set up, control the [BarcodeArView](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-ar-view.html#class-scandit.datacapture.barcode.check.ui.BarcodeArView) to start the search.
 
 ```js
-barcodeCheckView.start();
+barcodeArView.start();
 ```

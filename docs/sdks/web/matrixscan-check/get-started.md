@@ -8,16 +8,16 @@ keywords:
 
 # Get Started
 
-In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
+In this guide you will learn step-by-step how to add MatrixScan AR to your application. Implementing MatrixScan AR involves two primary elements:
 
-- Barcode Check: The data capture mode that is used for scan and check functionality.
-- A Barcode Check View: The pre-built UI elements used to highlight items to be checked.
+- Barcode AR: The data capture mode that is used for scan and check functionality.
+- A Barcode AR View: The pre-built UI elements used to highlight items to be checked.
 
 The general steps are:
 
 - Creating a new Data Capture Context instance
-- Configuring the Barcode Check Mode
-- Setup the Barcode Check View
+- Configuring the Barcode AR Mode
+- Setup the Barcode AR View
 - Registering the Listener to notify about found items
 
 ## Prerequisites
@@ -47,25 +47,25 @@ The first step to add capture capabilities to your application is to create a ne
     await dataCaptureView.setContext(context);
 ```
 
-## Configure the Barcode Check Mode
+## Configure the Barcode AR Mode
 
-The main entry point for the Barcode Check Mode is the `BarcodeCheck` object. You can configure the supported Symbologies through its [`BarcodeCheckSettings`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-check-settings.html), and set up the list of items that you want MatrixScan Check to highlight.
+The main entry point for the Barcode AR Mode is the `BarcodeAr` object. You can configure the supported Symbologies through its [`BarcodeArSettings`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-ar-settings.html), and set up the list of items that you want MatrixScan AR to highlight.
 
 Here we configure it for tracking EAN13 codes, but you should change this to the correct symbologies for your use case.
 
 ```typescript
-    const settings = new BarcodeCheckSettings();
+    const settings = new BarcodeArSettings();
     settings.enableSymbologies([Symbology.EAN13_UPCA]);
-    const barcodeCheck = await BarcodeCheck.forSettings(settings);
+    const barcodeAr = await BarcodeAr.forSettings(settings);
 ```
 
-## Setup the `BarcodeCheckView`
+## Setup the `BarcodeArView`
 
-MatrixScan Check’s built-in AR user interface includes buttons and overlays that guide the user through the scan and check process. By adding a [`BarcodeCheckView`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-check-view.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckView), the scanning interface is added automatically to your application.
+MatrixScan AR’s built-in AR user interface includes buttons and overlays that guide the user through the scan and check process. By adding a [`BarcodeArView`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-ar-view.html#class-scandit.datacapture.barcode.check.ui.BarcodeArView), the scanning interface is added automatically to your application.
 
-The `BarcodeCheckView` is where you provide the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.AnnotationProvider) to supply the highlight and annotation information for the barcodes to be checked. If *null*, a default highlight is used and no annotations are provided.
+The `BarcodeArView` is where you provide the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.AnnotationProvider) to supply the highlight and annotation information for the barcodes to be checked. If *null*, a default highlight is used and no annotations are provided.
 
-The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSettings`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-check-view-settings.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckViewSettings), and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
+The `BarcodeArView` appearance can be customized through [`BarcodeArViewSettings`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-ar-view-settings.html#class-scandit.datacapture.barcode.check.ui.BarcodeArViewSettings), and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
 
 * Audio and haptic feedback
 * Torch button visibility and its position
@@ -77,28 +77,28 @@ The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSe
 const soundEnabled = true;
 const hapticEnabled = true;
 
-const viewSettings = new BarcodeCheckViewSettings(soundEnabled, hapticEnabled);
+const viewSettings = new BarcodeArViewSettings(soundEnabled, hapticEnabled);
 ```
 
-Next, create a `BarcodeCheckView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeCheckView` is automatically added to the provided parent view.
+Next, create a `BarcodeArView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeArView` is automatically added to the provided parent view.
 
 ```typescript
-let barcodeCheckView = await BarcodeCheckView.createWithSettings(dataCaptureView, context, barcodeCheck, viewSettings);
+let barcodeArView = await BarcodeArView.createWithSettings(dataCaptureView, context, barcodeAr, viewSettings);
 
 // OR just create to use the default view settings and camera settings
 
-let barcodeCheckView = await BarcodeCheckView.create(dataCaptureView, context, barcodeCheck);
+let barcodeArView = await BarcodeArView.create(dataCaptureView, context, barcodeAr);
 ```
 
 ## Register The Listener
 
-The `BarcodeCheckView` displays a **Finish** button next to its shutter button. 
+The `BarcodeArView` displays a **Finish** button next to its shutter button. 
 
-Register a [BarcodeCheckViewUiListener](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-check-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeCheckViewUiListener) to be notified what items have been found once the finish button is pressed.
+Register a [BarcodeArViewUiListener](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-ar-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeArViewUiListener) to be notified what items have been found once the finish button is pressed.
 
 ```typescript
-barcodeCheckView.setListener({
-    didTapFinishButton: (foundItems: BarcodeCheckItem[]) => {
+barcodeArView.setListener({
+    didTapFinishButton: (foundItems: BarcodeArItem[]) => {
         // Handle the scanned items
     }
 });
@@ -106,8 +106,8 @@ barcodeCheckView.setListener({
 
 ## Start Searching
 
-With everything configured, you can now start searching for items. This is done by calling `barcodeCheckView.start()`.
+With everything configured, you can now start searching for items. This is done by calling `barcodeArView.start()`.
 
 ```typescript
-barcodeCheckView.start();
+barcodeArView.start();
 ```

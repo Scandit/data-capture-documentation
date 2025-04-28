@@ -9,6 +9,20 @@ keywords:
   - linux
 ---
 
+## 7.3.0-beta1
+
+**Released**: April 28, 2025
+
+### New Features
+
+* Added Royal Mail 4 State symbology extension `fluorescent_orange_ink` to enable scanning of codes printed with fluorescent orange ink.
+* Improved DataMatrix reader for small codes affected by perspective distortion and reduced quiet zones.
+* Added `CommandLineBarcodeScannerPillowImageSample.py` SDK sample that demonstrates scanning a code from a local image file that is loaded using pillow module.
+
+### Bug Fixes
+
+* Removed symbology extension `relaxed_sharp_quiet_zone_check` for EAN8 and EAN13/UPCA. Relaxed quiet zone rules are used by default. Strict quiet zone check is only performed in strict mode.
+
 ## 7.2.1
 
 **Released**: April 24, 2025
