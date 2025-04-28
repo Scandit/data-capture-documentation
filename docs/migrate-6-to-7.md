@@ -88,7 +88,7 @@ If your application uses of any `BarcodeTracking` APIs alongside another product
 
 The `AdvancedOverlay` API will be deprecated in version 8.x. No changes are required for version 7.0, but you should be aware of the upcoming changes.
 
-In version 7.1, a new ready-to-use solution - MatrixScan Check - will be released that enables fast and easy integration of Advanced Overlay features into your application.
+In version 7.1, a new ready-to-use solution - MatrixScan AR - will be released that enables fast and easy integration of Advanced Overlay features into your application.
 
 ## ID Capture Changes
 

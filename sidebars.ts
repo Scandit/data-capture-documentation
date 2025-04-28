@@ -172,7 +172,7 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
-              label: "MatrixScan Check",
+              label: "MatrixScan AR",
               items: [
                 "sdks/ios/matrixscan-check/intro",
                 "sdks/ios/matrixscan-check/get-started",
@@ -383,7 +383,7 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
-              label: "MatrixScan Check",
+              label: "MatrixScan AR",
               items: [
                 "sdks/android/matrixscan-check/intro",
                 "sdks/android/matrixscan-check/get-started",
@@ -586,7 +586,7 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
-              label: "MatrixScan Check",
+              label: "MatrixScan AR",
               items: [
                 "sdks/web/matrixscan-check/intro",
                 "sdks/web/matrixscan-check/get-started",
@@ -961,7 +961,7 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
-              label: "MatrixScan Check",
+              label: "MatrixScan AR",
               items: [
                 "sdks/react-native/matrixscan-check/intro",
                 "sdks/react-native/matrixscan-check/get-started",
@@ -1172,7 +1172,7 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: "category",
-              label: "MatrixScan Check",
+              label: "MatrixScan AR",
               items: [
                 "sdks/flutter/matrixscan-check/intro",
                 "sdks/flutter/matrixscan-check/get-started",
@@ -2127,7 +2127,7 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'MatrixScan Check',
+              label: 'MatrixScan AR',
               items: [
                 "sdks/net/ios/matrixscan-check/intro",
                 "sdks/net/ios/matrixscan-check/get-started",
@@ -2317,7 +2317,7 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'MatrixScan Check',
+              label: 'MatrixScan AR',
               items: [
                 "sdks/net/android/matrixscan-check/intro",
                 "sdks/net/android/matrixscan-check/get-started",

@@ -7,16 +7,16 @@ keywords:
 
 # Get Started
 
-In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
+In this guide you will learn step-by-step how to add MatrixScan AR to your application. Implementing MatrixScan AR involves two primary elements:
 
-- Barcode Check: The data capture mode that is used for scan and pick functionality.
-- A Barcode Check View: The pre-built UI elements used to highlight items to be checked.
+- Barcode AR: The data capture mode that is used for scan and pick functionality.
+- A Barcode AR View: The pre-built UI elements used to highlight items to be checked.
 
 The general steps are:
 
 - Creating a new Data Capture Context instance
-- Configuring the Barcode Check Mode
-- Setup the Barcode Check View
+- Configuring the Barcode AR Mode
+- Setup the Barcode AR View
 - Registering the Listener to notify about found items
 
 ## Prerequisites
@@ -33,14 +33,14 @@ import DataCaptureContextIos from '../../../partials/get-started/_create-data-ca
 
 <DataCaptureContextIos/>
 
-## Configure the Barcode Check Mode
+## Configure the Barcode AR Mode
 
-The main entry point for the Barcode Check Mode is the `BarcodePick` object. You can configure the supported Symbologies through its [`BarcodeCheckSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-check-settings.html), and set up the list of items that you want MatrixScan Check to highlight.
+The main entry point for the Barcode AR Mode is the `BarcodePick` object. You can configure the supported Symbologies through its [`BarcodeArSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-ar-settings.html), and set up the list of items that you want MatrixScan AR to highlight.
 
 Here we configure it for tracking EAN13 codes, but you should change this to the correct symbologies for your use case.
 
 ```swift
-let settings = BarcodeCheckSettings()
+let settings = BarcodeArSettings()
 settings.set(symbology: .ean13UPCA, enabled: true)
 ```
 
@@ -52,13 +52,13 @@ let mode = BarcodePick(context: context,
                         productProvider: productProvider)
 ```
 
-## Setup the `BarcodeCheckView`
+## Setup the `BarcodeArView`
 
-MatrixScan Check’s built-in AR user interface includes buttons and overlays that guide the user through the scan and pick process. By adding a [`BarcodeCheckView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-check-view.html#class-scandit.datacapture.barcode.pick.ui.BarcodeCheckView), the scanning interface is added automatically to your application.
+MatrixScan AR’s built-in AR user interface includes buttons and overlays that guide the user through the scan and pick process. By adding a [`BarcodeArView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-ar-view.html#class-scandit.datacapture.barcode.pick.ui.BarcodeArView), the scanning interface is added automatically to your application.
 
-The `BarcodeCheckView` is where you provide the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.AnnotationProvider) to supply the highlight and annotation information for the barcodes to be checked. If *null*, a default highlight is used and no annotations are provided.
+The `BarcodeArView` is where you provide the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.AnnotationProvider) to supply the highlight and annotation information for the barcodes to be checked. If *null*, a default highlight is used and no annotations are provided.
 
-The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-check-view-settings.html#class-scandit.datacapture.barcode.pick.ui.BarcodeCheckViewSettings), and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
+The `BarcodeArView` appearance can be customized through [`BarcodeArViewSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-ar-view-settings.html#class-scandit.datacapture.barcode.pick.ui.BarcodeArViewSettings), and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
 
 * Audio and haptic feedback
 * Torch button visibility and its position
@@ -67,38 +67,38 @@ The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSe
 * The size, colors, and styles of the highlight and annotation overlays
 
 ```swift
-let viewSettings = BarcodeCheckViewSettings()
+let viewSettings = BarcodeArViewSettings()
 // setup the desired appearance settings by updating the fields in the object above
 ```
 
-Next, create a `BarcodeCheckView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeCheckView` is automatically added to the provided parent view.
+Next, create a `BarcodeArView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeArView` is automatically added to the provided parent view.
 
 ```swift
-let BarcodeCheckView = BarcodeCheckView(parentView: view, context: context, BarcodePick: mode, settings: viewSettings)
+let BarcodeArView = BarcodeArView(parentView: view, context: context, BarcodePick: mode, settings: viewSettings)
 ```
 
-Connect the `BarcodeCheckView` to the iOS view controller lifecycle. In particular, make sure to call `BarcodeCheckView.prepareSearching()` on your UIViewController’s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) method to make sure that start up time is optimal.
+Connect the `BarcodeArView` to the iOS view controller lifecycle. In particular, make sure to call `BarcodeArView.prepareSearching()` on your UIViewController’s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) method to make sure that start up time is optimal.
 
 ```swift
 override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-    BarcodeCheckView.start()
+    BarcodeArView.start()
 }
 
 override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
-    BarcodeCheckView.pause()
+    BarcodeArView.pause()
     if isMovingFromParent {
-        BarcodeCheckView.stop()
+        BarcodeArView.stop()
     }
 }
 ```
 
-And the `BarcodeCheckViewUIDelegate`:
+And the `BarcodeArViewUIDelegate`:
 
 ```swift
-extension ViewController: BarcodeCheckViewUIDelegate {
-    func BarcodeCheckViewDidTapFinishButton(_ view: BarcodeCheckView) {
+extension ViewController: BarcodeArViewUIDelegate {
+    func BarcodeArViewDidTapFinishButton(_ view: BarcodeArView) {
         navigationController?.popViewController(animated: true)
     }
 }
@@ -106,29 +106,29 @@ extension ViewController: BarcodeCheckViewUIDelegate {
 
 ## Register the Listener
 
-The `BarcodeCheckView` displays a **Finish** button next to its shutter button. 
+The `BarcodeArView` displays a **Finish** button next to its shutter button. 
 
-Register a [BarcodeCheckViewListener](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-check-view-listener.html#interface-scandit.datacapture.barcode.pick.ui.BarcodeCheckViewListener) to be notified what items have been found once the finish button is pressed.
+Register a [BarcodeArViewListener](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-ar-view-listener.html#interface-scandit.datacapture.barcode.pick.ui.BarcodeArViewListener) to be notified what items have been found once the finish button is pressed.
 
 ```swift
-extension ViewController: BarcodeCheckViewListener {
-    func BarcodeCheckViewDidStartScanning(_ view: BarcodeCheckView) {}
+extension ViewController: BarcodeArViewListener {
+    func BarcodeArViewDidStartScanning(_ view: BarcodeArView) {}
 
-    func BarcodeCheckViewDidFreezeScanning(_ view: BarcodeCheckView) {}
+    func BarcodeArViewDidFreezeScanning(_ view: BarcodeArView) {}
 
-    func BarcodeCheckViewDidPauseScanning(_ view: BarcodeCheckView) {}
+    func BarcodeArViewDidPauseScanning(_ view: BarcodeArView) {}
 
-    func BarcodeCheckViewDidStopScanning(_ view: BarcodeCheckView) {}
+    func BarcodeArViewDidStopScanning(_ view: BarcodeArView) {}
 }
 ```
 
 ## Start Searching
 
-With everything configured, you can now start searching for items. This is done by calling `BarcodeCheckView.start()`.
+With everything configured, you can now start searching for items. This is done by calling `BarcodeArView.start()`.
 
 ```swift
 override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    BarcodeCheckView.start()
+    BarcodeArView.start()
 }
 ```

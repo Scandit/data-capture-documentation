@@ -9,6 +9,38 @@ keywords:
   - web
 ---
 
+## 7.3.0-beta1
+
+**Released**: April 28, 2025
+
+### New Features
+
+#### Barcode
+
+* For all MatrixScan products, the behavior of AR elements such as popovers and annotation has been updated to allow them to go outside the viewport.
+* The ArUco symbology is now supported in the Web SDK.
+
+#### ID
+
+* Unify the result value when parsing the sex field, including added support for special characters used, so that it is always one of the values `female`, `male` or `unspecified`.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue in SparkScan where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
+* Fixed minor JavaScript errors by replacing access to unavailable API in Safari < 15.4 with available ones.
+* Fixed error not being catchable from the `configure()` function when the WASM file fails to load.
+* Fixed an issue where `SparkScanView` did not take into account the parent element dimensions.
+
+#### ID
+
+* Fixed an issue with the partial cleanup of resources when removing the Id Capture mode.
+
+#### Smart Label Capture
+
+* Fixed an issue where `ExpiryDateTextBuilder` and `PackingDateTextBuilder` could override the patterns even when the `labelDateFormat` was set.
+
 ## 7.2.1
 
 **Released**: April 24, 2025
@@ -29,7 +61,7 @@ keywords:
 
 * Releasing Smart Label Capture, our new product that enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.
 * Added `DataCaptureContext` shared instance API.
-* Added the `isPulsing` property to circle highlights in MatrixScan Check, enabling a pulsing animation effect.
+* Added the `isPulsing` property to circle highlights in MatrixScan AR, enabling a pulsing animation effect.
 
 #### ID
 
@@ -74,7 +106,7 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* [MatrixScan Check](/sdks/web/matrixscan-check/intro.md) in now available, offering prebuilt views designed to quickly build custom workflows with augmented reality for your existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
+* [MatrixScan AR](/sdks/web/matrixscan-check/intro.md) in now available, offering prebuilt views designed to quickly build custom workflows with augmented reality for your existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
 * Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
 * User Facing Camera in SparkScan: It is now possible to switch to the user-facing camera for scanning. This is useful in specific use-cases where the rear camera is not accessible or barcodes are hard to reach otherwise. See:
   * `SparkScanView.cameraSwitchButtonVisible`

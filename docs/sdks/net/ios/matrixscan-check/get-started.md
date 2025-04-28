@@ -7,16 +7,16 @@ keywords:
 
 # Get Started
 
-In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
+In this guide you will learn step-by-step how to add MatrixScan AR to your application. Implementing MatrixScan AR involves two primary elements:
 
-- Barcode Check: The data capture mode that is used for scan and check functionality.
-- A Barcode Check View: The pre-built UI elements used to highlight items to be checked.
+- Barcode AR: The data capture mode that is used for scan and check functionality.
+- A Barcode AR View: The pre-built UI elements used to highlight items to be checked.
 
 The general steps are:
 
 - Creating a new Data Capture Context instance
-- Configuring the Barcode Check Mode
-- Setup the Barcode Check View
+- Configuring the Barcode AR Mode
+- Setup the Barcode AR View
 - Registering the Listener to notify about found items
 
 ## Prerequisites
@@ -41,30 +41,30 @@ The first step to add capture capabilities to your application is to create a ne
 DataCaptureContext dataCaptureContext = DataCaptureContext.ForLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
 
-## Configure the Barcode Check Mode
+## Configure the Barcode AR Mode
 
-The main entry point for the Barcode Check Mode is the `BarcodeCheck` object. You can configure the supported Symbologies through its [`BarcodeCheckSettings`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-check-settings.html).
+The main entry point for the Barcode AR Mode is the `BarcodeAr` object. You can configure the supported Symbologies through its [`BarcodeArSettings`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-ar-settings.html).
 
 Here we configure it for tracking EAN13 codes, but you should change this to the correct symbologies for your use case.
 
 ```csharp
-BarcodeCheckSettings settings = new BarcodeCheckSettings();
+BarcodeArSettings settings = new BarcodeArSettings();
 settings.SetSymbologyEnabled(Symbology.EAN13_UPCA, true);
 ```
 
 Then create the mode with the previously created settings:
 
 ```csharp
-BarcodeCheck mode = new BarcodeCheck(dataCaptureContext, settings);
+BarcodeAr mode = new BarcodeAr(dataCaptureContext, settings);
 ```
 
-## Setup the `BarcodeCheckView`
+## Setup the `BarcodeArView`
 
-MatrixScan Check’s built-in AR user interface includes buttons and overlays that guide the user through the scan and check process. By adding a [`BarcodeCheckView`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-check-view.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckView), the scanning interface is added automatically to your application.
+MatrixScan AR’s built-in AR user interface includes buttons and overlays that guide the user through the scan and check process. By adding a [`BarcodeArView`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-ar-view.html#class-scandit.datacapture.barcode.check.ui.BarcodeArView), the scanning interface is added automatically to your application.
 
-The `BarcodeCheckView` is where you provide the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.AnnotationProvider) to supply the highlight and annotation information for the barcodes to be checked. If *null*, a default highlight is used and no annotations are provided.
+The `BarcodeArView` is where you provide the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.AnnotationProvider) to supply the highlight and annotation information for the barcodes to be checked. If *null*, a default highlight is used and no annotations are provided.
 
-The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSettings`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-check-view-settings.html#class-scandit.datacapture.barcode.check.ui.BarcodeCheckViewSettings), properties on the`BarcodeCheckView`, and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
+The `BarcodeArView` appearance can be customized through [`BarcodeArViewSettings`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-ar-view-settings.html#class-scandit.datacapture.barcode.check.ui.BarcodeArViewSettings), properties on the`BarcodeArView`, and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
 
 * Audio and haptic feedback
 * Camera position
@@ -74,42 +74,42 @@ The `BarcodeCheckView` appearance can be customized through [`BarcodeCheckViewSe
 * The size, colors, and styles of the highlights and annotations
 
 ```csharp
-BarcodeCheckViewSettings viewSettings = new BarcodeCheckViewSettings();
+BarcodeArViewSettings viewSettings = new BarcodeArViewSettings();
 viewSettings.HapticEnabled(false);
 viewSettings.SoundEnabled(false);
 viewSettings.DefaultCameraPosition(CameraPosition.USER_FACING);
 ```
 
-Next, create a `BarcodeCheckView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeCheckView` is automatically added to the provided parent view.
+Next, create a `BarcodeArView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeArView` is automatically added to the provided parent view.
 
 ```csharp
-BarcodeCheckView barcodeCheckView = BarcodeCheckView(parentView, barcodeCheck, dataCaptureContext, viewSettings);
-barcodeCheckView.ShouldShowCameraSwitchControl(true);
-barcodeCheckView.ShouldShowTorchControl(true);
-barcodeCheckView.ShouldShowZoomControl(true);
-barcodeCheckView.CameraSwitchControlPosition(Anchor.TOP_RIGHT);
-barcodeCheckView.TorchControlPosition(Anchor.BOTTOM_RIGHT);
-barcodeCheckView.ZoomControlPosition(Anchor.TOP_LEFT);
+BarcodeArView barcodeArView = BarcodeArView(parentView, barcodeAr, dataCaptureContext, viewSettings);
+barcodeArView.ShouldShowCameraSwitchControl(true);
+barcodeArView.ShouldShowTorchControl(true);
+barcodeArView.ShouldShowZoomControl(true);
+barcodeArView.CameraSwitchControlPosition(Anchor.TOP_RIGHT);
+barcodeArView.TorchControlPosition(Anchor.BOTTOM_RIGHT);
+barcodeArView.ZoomControlPosition(Anchor.TOP_LEFT);
 ```
 
-Configure the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-check-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeCheckView.AnnotationProvider).
+Configure the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.AnnotationProvider).
 
 ```csharp
-public class AnnotationProvider : BarcodeCheckAnnotationProvider
+public class AnnotationProvider : BarcodeArAnnotationProvider
 {
     public void AnnotationForBarcode(Context context, Barcode barcode, ICallback callback)
     {
-        var annotation = new BarcodeCheckStatusIconAnnotation(context, barcode);
+        var annotation = new BarcodeArStatusIconAnnotation(context, barcode);
         annotation.Text = "Example annotation";
         callback.OnData(annotation);
     }
 }
 
-public class HighlightProvider : BarcodeCheckHighlightProvider
+public class HighlightProvider : BarcodeArHighlightProvider
 {
     public void HighlightForBarcode(Context context, Barcode barcode, ICallback callback)
     {
-        callback.OnData(new BarcodeCheckRectangleHighlight(context, barcode));
+        callback.OnData(new BarcodeArRectangleHighlight(context, barcode));
     }
 }
 ```
@@ -117,20 +117,20 @@ public class HighlightProvider : BarcodeCheckHighlightProvider
 And set them to the view:
 
 ```csharp
-barcodeCheckView.HighlightProvider(new HighlightProvider());
-barcodeCheckView.AnnotationProvider(new AnnotationProvider());
+barcodeArView.HighlightProvider(new HighlightProvider());
+barcodeArView.AnnotationProvider(new AnnotationProvider());
 ```
 
 ## Register the Listener
 
-If you want a callback when a highlight is tapped, register a [BarcodeCheckViewUiListener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-check-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeCheckViewUiListener).
+If you want a callback when a highlight is tapped, register a [BarcodeArViewUiListener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-ar-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeArViewUiListener).
 
 ```csharp
-barcodeCheckView.SetUiListener(new BarcodeCheckViewUiListener());
+barcodeArView.SetUiListener(new BarcodeArViewUiListener());
 
-public class BarcodeCheckViewUiListener : BarcodeCheckViewUiListener
+public class BarcodeArViewUiListener : BarcodeArViewUiListener
 {
-    public void OnHighlightForBarcodeTapped(BarcodeCheck barcodeCheck, Barcode barcode, BarcodeCheckHighlight highlight, View highlightView)
+    public void OnHighlightForBarcodeTapped(BarcodeAr barcodeAr, Barcode barcode, BarcodeArHighlight highlight, View highlightView)
     {
         // Handle tap
     }
@@ -142,5 +142,5 @@ public class BarcodeCheckViewUiListener : BarcodeCheckViewUiListener
 With everything configured, you can now start searching for items. This is done by calling:
 
 ```csharp
-barcodeCheckView.Start();
+barcodeArView.Start();
 ```

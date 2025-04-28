@@ -9,6 +9,22 @@ keywords:
   - xamarinIos
 ---
 
+## 7.3.0-beta1
+
+**Released**: April 28, 2025
+
+### New Features
+
+#### ID
+
+* Unify the result value when parsing the sex field, including added support for special characters used, so that it is always one of the values `female`, `male` or `unspecified`
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue in SparkScan where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
+
 ## 7.2.1
 
 **Released**: April 24, 2025

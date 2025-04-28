@@ -9,6 +9,32 @@ keywords:
   - netAndroid
 ---
 
+## 7.3.0-beta1
+
+**Released**: April 28, 2025
+
+### New Features
+
+#### Core
+
+* The Data Capture SDK and all sample applications have been updated to include support for the latest version of .NET (v9).
+* Introduced support for the `IDisposable` interface in the API for Android and iOS platforms. This enhancement allows for more efficient management of native resources, ensuring better performance and resource cleanup. 
+
+#### ID
+
+* Unify the result value when parsing the sex field, including added support for special characters used, so that it is always one of the values `female`, `male` or `unspecified`.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue in SparkScan where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
+
+### Deprecations
+
+* The following APIs have been removed:
+  * `BarcodePickIconStyle`
+
 ## 7.2.1
 
 **Released**: April 24, 2025
@@ -23,7 +49,7 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* MatrixScan Check is now available, offering prebuilt views designed to quickly build custom workflows with augmented reality to an existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
+* MatrixScan AR is now available, offering prebuilt views designed to quickly build custom workflows with augmented reality to an existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
 * Added `DataCaptureContext` shared instance API.
 
 #### ID

@@ -9,6 +9,29 @@ keywords:
   - cordova
 ---
 
+## 7.3.0-beta1
+
+**Released**: April 28, 2025
+
+### New Features
+
+#### ID
+
+* Unify the result value when parsing the sex field, including added support for special characters used, so that it is always one of the values `female`, `male` or `unspecified`.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue in SparkScan where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
+* Fixed an issue where `BarcodeFindView` events were not propagated correctly to the Javascript code.
+* Fixed an issue where the promise to switch the camera to a desired state would never complete.
+
+### Deprecations
+
+* The following APIs have been removed:
+  * `BarcodePickIconStyle`
+
 ## 7.2.1
 
 **Released**: April 24, 2025
