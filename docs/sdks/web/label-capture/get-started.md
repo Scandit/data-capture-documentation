@@ -29,7 +29,7 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 ### Module Overview
 
-import LabelCaptureModuleOverview from '../../../partials/get-started/_smart-label-capture-module-overview.mdx';
+import LabelCaptureModuleOverview from '../../../partials/get-started/_smart-label-capture-module-overview-web.mdx'; 
 
 <LabelCaptureModuleOverview/>
 
