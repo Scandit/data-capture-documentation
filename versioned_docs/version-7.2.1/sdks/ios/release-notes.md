@@ -40,6 +40,9 @@ keywords:
 #### Barcode
 
 * We further optimized the resources management in SparkScan, improving battery life when in Target Mode.
+
+#### Smart Label Capture
+
 * Improved recognition rate of expiry dates in Smart Label Capture, with a particular focus on dot matrix fonts.
 
 ### Behavioral Changes
