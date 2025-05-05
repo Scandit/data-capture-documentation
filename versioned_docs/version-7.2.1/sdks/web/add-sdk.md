@@ -50,6 +50,7 @@ CDNs offer a convenient way to get started but they introduce dependencies into 
 For production environments, we recommend:
 
 1. **Self-hosting** the SDK files on your own infrastructure, where you are strongly encouraged to:
+
    - Configure optimal cache headers and compression settings
    - Set correct MIME types for .wasm, .js and .model files
    - Control Content-Length headers for accurate loading progress
@@ -59,7 +60,7 @@ For production environments, we recommend:
 2. If self-hosting isn't feasible, use a **paid enterprise CDN service** that provides:
    - Guaranteed uptime and performance metrics
    - Enterprise-grade support
-:::
+     :::
 
 You can use the [jsDelivr](https://jsdelivr.com/) or [UNPKG](https://unpkg.com/) CDN to specify a certain version (or range) and include and import from our library as follows. This example imports the core and barcode capture packages:
 
@@ -68,41 +69,51 @@ You can use the [jsDelivr](https://jsdelivr.com/) or [UNPKG](https://unpkg.com/)
 You can optionally preload the modules. 
 More info about this feature here https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/modulepreload 
 -->
-<link 
-    rel="modulepreload"
-    href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/build/js/index.js"
+<link
+  rel="modulepreload"
+  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.2.1/build/js/index.js"
 />
 <link
-    rel="modulepreload"
-    href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/build/js/index.js"
+  rel="modulepreload"
+  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.2.1/build/js/index.js"
 />
 <!-- polyfill browsers not supporting import maps. use the latest version from here https://github.com/guybedford/es-module-shims/releases -->
-<script async src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+<script
+  async
+  src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"
+></script>
 <script type="importmap">
-    {
-      "imports": {
-        "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/build/js/index.js",
-        "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/build/js/index.js",
-        "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/",
-        "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/"
-      }
+  {
+    "imports": {
+      "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.2.1/build/js/index.js",
+      "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.2.1/build/js/index.js",
+      "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.2.1/",
+      "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.2.1/"
     }
+  }
 </script>
 
 <script type="module">
- // Import only the necessary items is recommended
- import { DataCaptureContext, Camera, configure } from '@scandit/web-datacapture-core';
- import { BarcodeCapture, barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
+  // Import only the necessary items is recommended
+  import {
+    DataCaptureContext,
+    Camera,
+    configure,
+  } from "@scandit/web-datacapture-core";
+  import {
+    BarcodeCapture,
+    barcodeCaptureLoader,
+  } from "@scandit/web-datacapture-barcode";
 
- // Insert your code here
+  // Insert your code here
 </script>
- OR
+OR
 <script type="module">
-    // OR import everything. Not recommended.
-    import * as SDCCore from '@scandit/web-datacapture-core';
-    import * as SDCBarcode from '@scandit/web-datacapture-barcode';
+  // OR import everything. Not recommended.
+  import * as SDCCore from "@scandit/web-datacapture-core";
+  import * as SDCBarcode from "@scandit/web-datacapture-barcode";
 
-    // Insert your code here
+  // Insert your code here
 </script>
 ```
 
@@ -121,92 +132,108 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Scandit CDN Simple sample</title>
     <script type="importmap">
-        {
-          "imports": {
-            "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/build/js/index.js",
-            "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/build/js/index.js",
-  
-            "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/",
-            "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/"
-          }
+      {
+        "imports": {
+          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.2.1/build/js/index.js",
+          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.2.1/build/js/index.js",
+
+          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.2.1/",
+          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.2.1/"
         }
+      }
     </script>
-    <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/build/js/index.js" />
-    <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/build/js/index.js" />
+    <link
+      rel="modulepreload"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.2.1/build/js/index.js"
+    />
+    <link
+      rel="modulepreload"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.2.1/build/js/index.js"
+    />
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-        }
-        #app {
-            height: 100%;
-        }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      #app {
+        height: 100%;
+      }
     </style>
     <!-- Check the latest version here https://github.com/guybedford/es-module-shims/releases -->
-    <script async src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+    <script
+      async
+      src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"
+    ></script>
     <script type="module">
-        import {
-            configure,
-            DataCaptureView,
-            Camera,
-            DataCaptureContext,
-            FrameSourceState
-        } from "@scandit/web-datacapture-core";
+      import {
+        configure,
+        DataCaptureView,
+        Camera,
+        DataCaptureContext,
+        FrameSourceState,
+      } from "@scandit/web-datacapture-core";
 
-        import {
-            barcodeCaptureLoader,
-            BarcodeCaptureSettings,
-            BarcodeCapture,
-            Symbology
-        } from "@scandit/web-datacapture-barcode";
+      import {
+        barcodeCaptureLoader,
+        BarcodeCaptureSettings,
+        BarcodeCapture,
+        Symbology,
+      } from "@scandit/web-datacapture-barcode";
 
-        let view = new DataCaptureView();
-        view.connectToElement(document.getElementById("app"));
-        view.showProgressBar();
-        
-        await configure({
-            licenseKey: "",
-            libraryLocation:
-                    "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/sdc-lib/",
-            moduleLoaders: [barcodeCaptureLoader()],
-        });
-        view.hideProgressBar();
+      let view = new DataCaptureView();
+      view.connectToElement(document.getElementById("app"));
+      view.showProgressBar();
 
-        const camera = Camera.default;
+      await configure({
+        licenseKey: "-- ENTER LICENSE KEY HERE --",
+        libraryLocation:
+          "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.2.1/sdc-lib/",
+        moduleLoaders: [barcodeCaptureLoader()],
+      });
+      view.hideProgressBar();
 
-        // Depending on the use case further camera settings adjustments can be made here.
-        const context = await DataCaptureContext.create();
-        await view.setContext(context);
+      const camera = Camera.default;
 
-        const cameraSettings = BarcodeCapture.recommendedCameraSettings;
-        await camera.applySettings(cameraSettings);
-        await context.setFrameSource(camera);
+      // Depending on the use case further camera settings adjustments can be made here.
+      const context = await DataCaptureContext.create();
+      await view.setContext(context);
 
-        await context.setFrameSource(camera);
-        await context.frameSource.switchToDesiredState(FrameSourceState.On);
+      const cameraSettings = BarcodeCapture.recommendedCameraSettings;
+      await camera.applySettings(cameraSettings);
 
-        const settings = new BarcodeCaptureSettings();
-        settings.enableSymbologies([Symbology.Code128, Symbology.QR]);
+      await context.setFrameSource(camera);
+      await context.frameSource.switchToDesiredState(FrameSourceState.On);
 
-        let barcodeCapture = await BarcodeCapture.forContext(
-                context,
-                settings
-        );
+      const settings = new BarcodeCaptureSettings();
+      settings.enableSymbologies([Symbology.Code128, Symbology.QR]);
 
-        await barcodeCapture.setEnabled(true);
+      let barcodeCapture = await BarcodeCapture.forContext(context, settings);
 
+      barcodeCapture.addListener({
+        didScan: async (barcodeCaptureMode, session) => {
+          const barcode = session.newlyRecognizedBarcode;
+          if (!barcode) {
+            return;
+          }
+          const symbology = new SymbologyDescription(barcode.symbology);
+          alert(`Scanned: ${barcode.data ?? ""}\n(${symbology.readableName})`);
+        },
+      });
+
+      await barcodeCapture.setEnabled(true);
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <div id="app"></div>
-</body>
-</html> 
+  </body>
+</html>
 ```
 
 ## Install via npm
@@ -225,8 +252,15 @@ Then import the package in your JavaScript/TypeScript code by using:
 
 ```js
 // Import only the necessary items is recommended
-import { DataCaptureContext, Camera, configure } from '@scandit/web-datacapture-core';
-import { BarcodeCapture, barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
+import {
+  DataCaptureContext,
+  Camera,
+  configure,
+} from "@scandit/web-datacapture-core";
+import {
+  BarcodeCapture,
+  barcodeCaptureLoader,
+} from "@scandit/web-datacapture-barcode";
 
 // Insert your code here
 ```
@@ -235,8 +269,8 @@ OR
 
 ```js
 // Import everything
-import * as SDCCore from '@scandit/web-datacapture-core';
-import * as SDCBarcode from '@scandit/web-datacapture-barcode';
+import * as SDCCore from "@scandit/web-datacapture-core";
+import * as SDCBarcode from "@scandit/web-datacapture-barcode";
 
 // Insert your code here
 ```
@@ -325,13 +359,13 @@ types {
 For Express.js, you can configure the MIME types like this:
 
 ```javascript
-const express = require('express');
+const express = require("express");
 const app = express();
 
-express.static.mime.define({'application/wasm': ['wasm']});
-express.static.mime.define({'application/octet-stream': ['model']});
-express.static.mime.define({'application/javascript': ['js']});
-app.use(express.static('self-hosted-sdc-lib')); // Serve static files from 'public' directory
+express.static.mime.define({ "application/wasm": ["wasm"] });
+express.static.mime.define({ "application/octet-stream": ["model"] });
+express.static.mime.define({ "application/javascript": ["js"] });
+app.use(express.static("self-hosted-sdc-lib")); // Serve static files from 'public' directory
 ```
 
 </TabItem>
@@ -375,18 +409,22 @@ To show some feedback to the user about the loading status you have two options:
 Let's see how to do it with the default UI first:
 
 ```ts
-import { configure, DataCaptureView, DataCaptureContext } from "@scandit/web-datacapture-core"
+import {
+  configure,
+  DataCaptureView,
+  DataCaptureContext,
+} from "@scandit/web-datacapture-core";
 
 const view = new DataCaptureView();
 
-view.connectToElement(document.getElementById('data-capture-view'));
+view.connectToElement(document.getElementById("data-capture-view"));
 view.showProgressBar();
-view.setProgressBarMessage('Loading ...');
+view.setProgressBarMessage("Loading ...");
 
 await configure({
- licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
- libraryLocation: '/self-hosted-sdc-lib/',
- moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
+  licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+  libraryLocation: "/self-hosted-sdc-lib/",
+  moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
 });
 
 view.hideProgressBar();
@@ -401,15 +439,15 @@ You can also subscribe for the [loading status](https://docs.scandit.com/data-ca
 by simply attaching a listener like this:
 
 ```ts
-import { configure, loadingStatus } from "@scandit/web-datacapture-core"
+import { configure, loadingStatus } from "@scandit/web-datacapture-core";
 loadingStatus.subscribe((info) => {
- // updateUI(info.percentage, info.loadedBytes)
+  // updateUI(info.percentage, info.loadedBytes)
 });
 
 await configure({
- licenseKey: 'SCANDIT_LICENSE_KEY',
- libraryLocation: '/self-hosted-sdc-lib/',
- moduleLoaders: [barcodeCaptureLoader()],
+  licenseKey: "SCANDIT_LICENSE_KEY",
+  libraryLocation: "/self-hosted-sdc-lib/",
+  moduleLoaders: [barcodeCaptureLoader()],
 });
 ```
 
@@ -482,8 +520,8 @@ app.on('window-all-closed', () => {
 
 ```ts
 // preload.ts
-import { ipcRenderer } from 'electron';
-import { preloadBindings } from '@scandit/web-datacapture-core/build/electron/preload';
+import { ipcRenderer } from "electron";
+import { preloadBindings } from "@scandit/web-datacapture-core/build/electron/preload";
 preloadBindings(ipcRenderer);
 ```
 
@@ -492,9 +530,9 @@ preloadBindings(ipcRenderer);
 await configure({
   // In Electron context the license will be decrypted internally.
   // The path of the encrypted file is path.join(app.getAppPath(), licenseDataPath)
-  licenseDataPath: './out/renderer/data/sdc-license.data',
-  libraryLocation: new URL('self-hosted-sdc-lib', document.baseURI).toString(),
-  moduleLoaders: [barcodeCaptureLoader()]
+  licenseDataPath: "./out/renderer/data/sdc-license.data",
+  libraryLocation: new URL("self-hosted-sdc-lib", document.baseURI).toString(),
+  moduleLoaders: [barcodeCaptureLoader()],
 });
 ```
 
@@ -503,31 +541,26 @@ You can encrypt your license key with this small Node.js script. Then you should
 You can also check the related [sample](https://github.com/Scandit/datacapture-web-samples/tree/master/ElectronBarcodeCaptureSimpleSample).
 
 ```js
-const crypto = require('node:crypto')
-const fs = require('node:fs/promises')
+const crypto = require("node:crypto");
+const fs = require("node:fs/promises");
 
-;(async function createLicenseAndPublicKey() {
-
-  const data = process.env.SDC_LICENSE_KEY
-  if (data == null || data === '') {
-    throw new Error('could not encrypt empty or null string')
+(async function createLicenseAndPublicKey() {
+  const data = process.env.SDC_LICENSE_KEY;
+  if (data == null || data === "") {
+    throw new Error("could not encrypt empty or null string");
   }
 
-  const key = crypto.randomBytes(32)
-  const iv = crypto.randomBytes(16)
-  const keyAndIV = `${key.toString('base64')}:${iv.toString('base64')}`
+  const key = crypto.randomBytes(32);
+  const iv = crypto.randomBytes(16);
+  const keyAndIV = `${key.toString("base64")}:${iv.toString("base64")}`;
 
-  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv)
-  let encryptedText = cipher.update(text, 'utf8', 'hex')
-  encryptedText += cipher.final('hex')
+  const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
+  let encryptedText = cipher.update(text, "utf8", "hex");
+  encryptedText += cipher.final("hex");
 
-  await fs.writeFile('sdc-license.data', Buffer.from(encryptedText), 'utf8')
+  await fs.writeFile("sdc-license.data", Buffer.from(encryptedText), "utf8");
   // Save the key to a file
-  await fs.writeFile(
-    'sdc-public-key',
-    keyAndIV,
-    'utf8'
-  )
+  await fs.writeFile("sdc-public-key", keyAndIV, "utf8");
 })();
 ```
 
@@ -536,6 +569,6 @@ It is recommended to NOT store the public key locally. We also recommend
 you enable [source code protection](https://electron-vite.org/guide/source-code-protection) with [bytenode](https://github.com/bytenode/bytenode).
 :::
 
-import OSSLicense from '../../partials/_third-party-licenses-js.mdx';
+import OSSLicense from '../../partials/\_third-party-licenses-js.mdx';
 
 <OSSLicense/>
