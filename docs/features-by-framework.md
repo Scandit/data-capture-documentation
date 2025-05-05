@@ -121,7 +121,7 @@ title: 'Features by Framework'
 
 | Feature  | iOS | Android | Cordova | React Native | Xamarin iOS | Xamarin Android | Xamarin Forms | Flutter | Capacitor | Titanium | Web  | .NET for iOS | .NET for Android |
 |----------|-----|---------|---------|--------------|-------------|-----------------|---------------|---------|-----------|----------|------|--------------|------------------|
-| Clustering | 7.1 | 7.1 | 7.1  | 7.1 | 7.1 | 7.1 | 7.1 | 7.1 | 7.1 | n/a | n/a | 7.1 | 7.1 |
+| Clustering | 7.1 | 7.0 | n/a  | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | Spatial Grid (Tote Mapping) | 7.1 | 7.1 | 7.1  | 7.1 | 7.1 | 7.1 | 7.1 | 7.1 | 7.1 | n/a | n/a | 7.1 | 7.1 |
 
 ## MatrixScan Find
