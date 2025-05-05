@@ -675,6 +675,11 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "link",
+          label: "ScanditLabelCapture",
+          href: "https://docs.scandit.com/data-capture-sdk/web/label-capture/api.html",
+        },
+        {
+          type: "link",
           label: "Index",
           href: "https://docs.scandit.com/data-capture-sdk/web/genindex.html",
         },
