@@ -9,6 +9,12 @@ keywords:
   - titanium
 ---
 
+## 7.3.0-beta2
+
+**Released**: May 7, 2025
+
+* Ensure support for Titanium >= 12.2.1GA.
+
 ## 7.3.0
 
 **Released**: April 28, 2025

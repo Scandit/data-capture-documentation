@@ -9,9 +9,9 @@ keywords:
   - web
 ---
 
-## 7.3.0-beta1
+## 7.3.0-beta2
 
-**Released**: April 28, 2025
+**Released**: May 7, 2025
 
 ### New Features
 
@@ -23,6 +23,7 @@ keywords:
 #### ID
 
 * Unify the result value when parsing the sex field, including added support for special characters used, so that it is always one of the values `female`, `male` or `unspecified`.
+* Added support mobile driver's license (mDL) scanning.
 
 ### Bug Fixes
 
