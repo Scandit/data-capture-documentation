@@ -1,34 +1,13 @@
 ---
 toc_max_heading_level: 3
-displayed_sidebar: capacitorSidebar
+displayed_sidebar: xamarinAndroidSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
-framework: capacitor
+framework: xamarinAndroid
 keywords:
-  - capacitor
+  - xamarinAndroid
 ---
-
-## 7.3.0-beta2
-
-**Released**: May 7, 2025
-
-### New Features
-
-#### ID
-
-* Unify the result value when parsing the sex field, including added support for special characters used, so that it is always one of the values `female`, `male` or `unspecified`.
-
-### Bug Fixes
-
-#### Barcode
-
-* Fixed an issue in SparkScan where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
-
-### Deprecations
-
-* The following APIs have been removed:
-  * `BarcodePickIconStyle`
 
 ## 7.2.2
 
@@ -49,14 +28,6 @@ No updates for this framework in this release.
 **Released**: March 31, 2025
 
 ### New Features
-
-#### Core
-
-* Capacitor `v7` is now supported.
-
-#### Barcode
-
-* We simplified the lifecycle of the out-of-the-box views for Android. Now Scandit plugins handle the lifecycle automatically.
 
 #### ID
 
@@ -109,21 +80,13 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* MatrixScan Count now includes the ability to [cluster barcodes](/sdks/capacitor/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
+* MatrixScan Count now includes the ability to [cluster barcodes](/sdks/xamarin/android/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
 * MatrixScan Count now includes the concept of a `Barcode Spacial Grid`, bringing the ability to map totes in a grid-like structure. Scanned codes will be returned with their relative location and can be displayed in a map view. This allows for fast and error-free in-store picking using dedicated carts and totes. The following classes have been added:
   * `BarcodeSpatialGrid`
   * `BarcodeSpatialGridEditorView`
   * `BarcodeSpatialGridEditorViewSettings`
   * `BarcodeSpatialGridEditorViewListener`
-* Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
-* The following APIs have been added:
-  * `BarcodeFindViewSettings`
-    * `withHardwareTriggers()`
-    * `hardwareTriggerEnabled()`
-    * `hardwareTriggerKeyCode()`
-  * `BarcodeFindView`
-    * `shouldShowZoomControl`
-    * `hardwareTriggerSupported`
+* Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/xamarin.android/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
 
 #### ID
 
@@ -160,14 +123,9 @@ No updates for this framework in this release.
 
 ### Behavioral Changes
 
-* XCode 16.1+ is now required.
 * After further improving the scanning speed on color-inverted QR and MicroQR codes, these variations can now be scanned without having to set any specific setting (as opposed to before), offering a better experience to developers.
 
 ### Bug Fixes
-
-#### Barcode
-
-* Fixed the setting of the default scanning behavior in SparkScanView.
 
 #### ID
 
@@ -196,7 +154,6 @@ No updates for this framework in this release.
   * `BarcodeCountViewListener.brushForUnrecognizedBarcode`
   * `BarcodeCountViewListener.onUnrecognizedBarcodeTapped`
 
-
 ## 7.0.2
 
 **Released**: January 20, 2025
@@ -218,9 +175,7 @@ No updates for this framework in this release.
 
 **Released**: December 19, 2024
 
-### Bug Fixes
-
-* Fixed an issue with setting the default scanning behavior in `SparkScanView`.
+No updates for this framework in this release.
 
 ## 7.0.0
 
@@ -238,10 +193,18 @@ SparkScan, our flagship barcode scanning product, embodies the full potential of
 
 * SparkScan introduces a completely redesigned user interface, enhancing ergonomics with a simplified API and in-demand customization options. These updates make SparkScan even more versatile, seamlessly integrating with various use cases and blending smoothly into any existing workflow and UI. See the [migration guide](/migrate-6-to-7.md#sparkscan) for more details.
 * Added the `remove_delimiter_data` extension to the CODABAR symbology.
-* The MatrixScan Find user interface is now optimized for 4:3 camera resolution.
-* The [Barcode Generator](/sdks/capacitor/barcode-generator.md) is now available for Capacitor.
-  * Barcode Generator now supports the generation of Aztec codes.
-
+* MatrixScan Count users can now further classify the "not in list" barcodes when scanning against a list. Tapping on them will show a popup where the barcodes can be accepted or rejected. Check `barcode.count.ui.BarcodeCountView.BarcodeNotInListActionSettings` to enable and customize the functionality. The classified barcodes will be added to `barcode.count.BarcodeCountCaptureListSession.AcceptedBarcodes` or `barcode.count.BarcodeCountCaptureListSession.RejectedBarcodes`.
+* MatrixScan Count now includes torch control. For more information, see:
+  * `BarcodeCountView.ShouldShowTorchControl`
+  * `BarcodeCountView.TorchControlPosition`
+* The following APIs have been added to MatrixScan Count:
+  * `ShouldDisableModeOnExitButtonTapped`
+  * `SetBrushForRecognizedBarcodeNotInList`
+  * `SetBrushForRecognizedBarcode`
+  * `SetBrushForUnrecognizedBarcode`
+  * `EnableHardwareTrigger`
+  * `HardwareTriggerSupported`
+  * `EnableUnrecognizedBarcodeDetection`
 
 #### Core
 

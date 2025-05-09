@@ -1,34 +1,13 @@
 ---
 toc_max_heading_level: 3
-displayed_sidebar: capacitorSidebar
+displayed_sidebar: flutterSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
-framework: capacitor
+framework: flutter
 keywords:
-  - capacitor
+  - flutter
 ---
-
-## 7.3.0-beta2
-
-**Released**: May 7, 2025
-
-### New Features
-
-#### ID
-
-* Unify the result value when parsing the sex field, including added support for special characters used, so that it is always one of the values `female`, `male` or `unspecified`.
-
-### Bug Fixes
-
-#### Barcode
-
-* Fixed an issue in SparkScan where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
-
-### Deprecations
-
-* The following APIs have been removed:
-  * `BarcodePickIconStyle`
 
 ## 7.2.2
 
@@ -50,13 +29,12 @@ No updates for this framework in this release.
 
 ### New Features
 
-#### Core
-
-* Capacitor `v7` is now supported.
-
 #### Barcode
 
+* Barcode Generation: Added the `SDCBarcodeGenerator` class, allowing the generation of Code 39, Code 128, EAN13, ITF, QR, UPCA, and DataMatrix codes directly in the SDK. See the [Barcode Generator](/sdks/flutter/barcode-generator.md) documentation.
+* Releasing Smart Label Capture, our new product that enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.
 * We simplified the lifecycle of the out-of-the-box views for Android. Now Scandit plugins handle the lifecycle automatically.
+* Added `DataCaptureContext` shared instance API.
 
 #### ID
 
@@ -73,6 +51,9 @@ No updates for this framework in this release.
 * The default `BarcodeBatchBasicOverlay` brush when using the `BarcodeBatchBasicOverlayStyle.FRAME` style has been changed from white to Scandit blue.
 
 ### Bug Fixes
+
+* Fixed a bug where in rare cases the `DataCaptureView` would capture frames in the wrong orientation.
+* Fixed an issue where on Android viewfinder would not be shown the second time the modal screen was opened.
 
 #### Core
 
@@ -109,21 +90,15 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* MatrixScan Count now includes the ability to [cluster barcodes](/sdks/capacitor/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
+* MatrixScan Count now includes the ability to [cluster barcodes](/sdks/flutter/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
+* [MatrixScan Check](/sdks/flutter/matrixscan-check/intro.md) in now available, offering prebuilt views designed to quickly build custom workflows with augmented reality for your existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
+* MatrixScan Count now includes the ability to [cluster barcodes](/sdks/flutter/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
 * MatrixScan Count now includes the concept of a `Barcode Spacial Grid`, bringing the ability to map totes in a grid-like structure. Scanned codes will be returned with their relative location and can be displayed in a map view. This allows for fast and error-free in-store picking using dedicated carts and totes. The following classes have been added:
   * `BarcodeSpatialGrid`
   * `BarcodeSpatialGridEditorView`
   * `BarcodeSpatialGridEditorViewSettings`
   * `BarcodeSpatialGridEditorViewListener`
-* Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
-* The following APIs have been added:
-  * `BarcodeFindViewSettings`
-    * `withHardwareTriggers()`
-    * `hardwareTriggerEnabled()`
-    * `hardwareTriggerKeyCode()`
-  * `BarcodeFindView`
-    * `shouldShowZoomControl`
-    * `hardwareTriggerSupported`
+* Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
 
 #### ID
 
@@ -133,6 +108,10 @@ No updates for this framework in this release.
 * Added support for scanning the Machine Readable Zone of  non-standard Indian passports, where an MRZ line consists of 42 characters instead of 44. 
 * Added support for scanning the Machine Readable Zone of the Chinese Mainland Travel Permit issued for non-Chinese citizens being residents of Hong Kong or Macau.
 * Unified the value of the sex field from VIZ and MRZ results so that it is always one of the values `female`, `male` or `unspecified`.
+
+#### Label Capture
+
+* To simplify working with dates in Smart Label Capture (e.g., capturing an expiry date), we’ve added native support for dates in `LabelField`. Now, if a field contains a date you can retrieve it as a date object using `LabelField.asDate()`.
 
 #### Core
 
@@ -167,7 +146,8 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* Fixed the setting of the default scanning behavior in SparkScanView.
+* Fixed an issue where the trigger button visibility was not being applied to `SparkScanView`.
+* Fix an issue where multiple instances of the `SparkScanView` were added to the View Tree.
 
 #### ID
 
@@ -196,7 +176,6 @@ No updates for this framework in this release.
   * `BarcodeCountViewListener.brushForUnrecognizedBarcode`
   * `BarcodeCountViewListener.onUnrecognizedBarcodeTapped`
 
-
 ## 7.0.2
 
 **Released**: January 20, 2025
@@ -218,9 +197,7 @@ No updates for this framework in this release.
 
 **Released**: December 19, 2024
 
-### Bug Fixes
-
-* Fixed an issue with setting the default scanning behavior in `SparkScanView`.
+No updates for this framework in this release.
 
 ## 7.0.0
 
@@ -238,10 +215,8 @@ SparkScan, our flagship barcode scanning product, embodies the full potential of
 
 * SparkScan introduces a completely redesigned user interface, enhancing ergonomics with a simplified API and in-demand customization options. These updates make SparkScan even more versatile, seamlessly integrating with various use cases and blending smoothly into any existing workflow and UI. See the [migration guide](/migrate-6-to-7.md#sparkscan) for more details.
 * Added the `remove_delimiter_data` extension to the CODABAR symbology.
+* Added a new feature in Barcode Count to be able to show asynchronous product information during Receiving/Inventory processes. After scanning, the worker can now tap the new “Status icon” to see for example if they need to audit that box or if the product is expired. See `barcode.count.ui.BarcodeCountView.ShouldShowStatusModeButton` and `barcode.count.ui.BarcodeCountView.SetStatusProvider`.
 * The MatrixScan Find user interface is now optimized for 4:3 camera resolution.
-* The [Barcode Generator](/sdks/capacitor/barcode-generator.md) is now available for Capacitor.
-  * Barcode Generator now supports the generation of Aztec codes.
-
 
 #### Core
 

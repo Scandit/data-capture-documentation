@@ -25,6 +25,14 @@ keywords:
 
 * Fixed an issue in SparkScan where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
 
+## 7.2.2
+
+**Released**: May 9, 2025
+
+### Bug Fixes
+
+* Fixed an issue in MatrixScan Batch occurring when Aruco marker pairs were detected in the multiscanner. The callback would return only a single marker instead of the result for marker pairs.
+
 ## 7.2.1
 
 **Released**: April 24, 2025
