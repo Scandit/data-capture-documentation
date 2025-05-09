@@ -36,7 +36,7 @@ export function createBarcodeScanningArr(framework: string) {
       ),
       link:
         framework === "linux"
-          ? `/sdks/linux/barcode-capture/get-started`
+          ? `/sdks/linux/add-sdk/`
           : `/sdks/${getFrameworkPath(frameworkData)}/single-scanning`,
     },
     {
@@ -48,7 +48,7 @@ export function createBarcodeScanningArr(framework: string) {
       ),
       link:
         framework === "linux"
-          ? `/sdks/linux/barcode-capture/get-started`
+          ? `/sdks/linux/add-sdk/`
           : `/sdks/${getFrameworkPath(frameworkData)}/batch-scanning`,
     },
     {

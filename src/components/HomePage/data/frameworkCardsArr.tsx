@@ -189,7 +189,6 @@ export const frameworkCards = [
     barcodeScanning: [
       BarcodeScanning.SingleScanning,
       BarcodeScanning.BatchScanning,
-      BarcodeScanning.ScanditExpress,
     ],
     IDScanning: [],
   },
