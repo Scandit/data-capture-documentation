@@ -9,27 +9,6 @@ keywords:
   - capacitor
 ---
 
-## 7.3.0-beta2
-
-**Released**: May 7, 2025
-
-### New Features
-
-#### ID
-
-* Unify the result value when parsing the sex field, including added support for special characters used, so that it is always one of the values `female`, `male` or `unspecified`.
-
-### Bug Fixes
-
-#### Barcode
-
-* Fixed an issue in SparkScan where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
-
-### Deprecations
-
-* The following APIs have been removed:
-  * `BarcodePickIconStyle`
-
 ## 7.2.2
 
 **Released**: May 9, 2025

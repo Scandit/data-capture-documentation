@@ -42,6 +42,14 @@ keywords:
 
 * Fixed an issue where `ExpiryDateTextBuilder` and `PackingDateTextBuilder` could override the patterns even when the `labelDateFormat` was set.
 
+## 7.2.2
+
+**Released**: May 9, 2025
+
+### Bug Fixes
+
+* Fixed an issue in MatrixScan Batch occurring when Aruco marker pairs were detected in the multiscanner. The callback would return only a single marker instead of the result for marker pairs.
+
 ## 7.2.1
 
 **Released**: April 24, 2025
