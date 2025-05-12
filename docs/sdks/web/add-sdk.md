@@ -60,7 +60,7 @@ For production environments, we recommend:
 2. If self-hosting isn't feasible, use a **paid enterprise CDN service** that provides:
    - Guaranteed uptime and performance metrics
    - Enterprise-grade support
-     :::
+:::
 
 You can use the [jsDelivr](https://jsdelivr.com/) or [UNPKG](https://unpkg.com/) CDN to specify a certain version (or range) and include and import from our library as follows. This example imports the core and barcode capture packages:
 
