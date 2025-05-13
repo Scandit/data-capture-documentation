@@ -85,3 +85,32 @@ Please refer to [SparkScanView](https://docs.scandit.com/data-capture-sdk/react-
 import Customization from '../../../partials/advanced/_sparkscan-customization.mdx';
 
 <Customization/>
+
+## React Navigation
+
+When using the `SparkScanView` component with React Navigation and `headerShown: true`, you may encounter an issue where the Buttons within your `SparkScanView` don't respond to touch events. 
+
+This is a known issue with React Navigation's header implementation. The navigation header can interfere with touch event handling for components rendered within certain custom views like `SparkScanView`. While the buttons appear to be functioning visually, their `onPress` events do not trigger when the screen includes a header.
+
+Try the following if you encounter this issue:
+
+**Use TouchableOpacity instead of Button**
+
+```jsx
+<TouchableOpacity
+  onPressIn={() => handleButtonPress()}>
+  <Text>Scan</Text>
+</TouchableOpacity>
+```
+or
+
+```jsx
+<TouchableOpacity
+  onPressOut={() => handleButtonPress()}>
+  <Text>Scan</Text>
+</TouchableOpacity>
+```
+
+**Ensure you're importing TouchableOpacity from 'react-native'**
+
+Some users have found that using the `TouchableOpacity` component from `react-native-gesture-handler` causes issues, while the one from `react-native` works correctly.
