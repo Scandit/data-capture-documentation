@@ -22,11 +22,11 @@ The repository with all the samples can be found [here](https://github.com/Scand
 
 ![SparkScan List Building](/img/samples/sparkscan_list_building.png)
 
-##### [List Building](https://github.com/Scandit/datacapture-ios-samples/tree/master/ListBuildingSample)
+##### [List Building](https://github.com/Scandit/datacapture-ios-samples/tree/master/01_Single_Scanning_Samples/01_Barcode_Scanning_with_Pre_Built_UI/ListBuildingSample)
 
 Use SparkScan to populate a list of scanned barcodes.
 
-##### [Receiving](https://github.com/Scandit/datacapture-ios-samples/tree/master/ReceivingSample)
+##### [Receiving](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/ReceivingSample)
 
 <ReactPlayer playing controls url="/img/samples/ms-receiving.mp4" />
 
@@ -34,27 +34,25 @@ Use a combination of SparkScan and [MatrixScan Count](#matrixscan-count) for a r
 
 #### Barcode Capture
 
-##### [Single Scan](https://github.com/Scandit/datacapture-ios-samples/tree/master/BarcodeCaptureSimpleSampleSwift)
+##### [Single Scan](https://github.com/Scandit/datacapture-ios-samples/tree/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low_Level_API/BarcodeCaptureSimpleSample)
+
+<ReactPlayer playing controls url="/img/samples/bc-simple.mp4" />
 
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
-
-:::tip
-This sample is written in Swift. If you prefer Objective-C, you can find the equivalent sample [here](https://github.com/Scandit/datacapture-ios-samples/tree/master/BarcodeCaptureSimpleSampleObjC).
-:::
 
 ### Batch Scanning
 
 #### MatrixScan Batch
 
-Examples utilizing the low-level [`BarcodeBatch`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-batch.html) API.
+Examples utilizing the low-level [`BarcodeBatch`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch.html) API.
 
-##### [Simple Highlight](https://github.com/Scandit/datacapture-ios-samples/tree/master/MatrixScanSimpleSample)
+##### [Simple Highlight](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/01_Batch_Scanning_and_AR_Info_Lookup/MatrixScanSimpleSample)
 
 <ReactPlayer playing controls url="/img/samples/ms-simple.mp4" />
 
 Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 
-##### [Rejection](https://github.com/Scandit/datacapture-ios-samples/tree/master/MatrixScanRejectSample)
+##### [Rejection](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/01_Batch_Scanning_and_AR_Info_Lookup/MatrixScanRejectSample)
 
 <ReactPlayer playing controls url="/img/samples/ms-reject.mp4" />
 
@@ -64,25 +62,25 @@ Use custom conditions to highlight and scan only the barcodes that meet the spec
 
 ![MatrixScan Count](/img/samples/ms_count.png)
 
-##### [Batch Scanning](https://github.com/Scandit/datacapture-ios-samples/tree/master/MatrixScanCountSimpleSample)
+##### [Batch Scanning](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/MatrixScanCountSimpleSample)
 
 <ReactPlayer playing controls url="/img/samples/ms-count-simple.mp4" />
 
 Use MatrixScan to batch scan and count the number of barcodes in a frame.
 
-##### [Receiving](https://github.com/Scandit/datacapture-ios-samples/tree/master/ReceivingSample)
+##### [Receiving](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/ReceivingSample)
 
 <ReactPlayer playing controls url="/img/samples/ms-receiving.mp4" />
 
 Use a combination of [SparkScan](#sparkscan) and MatrixScan Count for a receiving use case.
 
-##### [Expiry Management](https://github.com/Scandit/datacapture-ios-samples/tree/master/ExpiryManagementSample)
+##### [Expiry Management](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/ExpiryManagementSample)
 
 <ReactPlayer playing controls url="/img/samples/ss-expiry.mp4" />
 
 Share scan data between MatrixScan Count and Spark Scan to show the expiration status of scanned items.
 
-#### [Tote Mapping](https://github.com/Scandit/datacapture-ios-samples/tree/master/MatrixScanCountToteMappingSample)
+#### [Tote Mapping](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/MatrixScanCountToteMappingSample)
 
 <ReactPlayer playing controls url="/img/matrixscan-count/tote_mapping.mp4" />
 
@@ -90,9 +88,9 @@ Map scanned barcodes to specific totes. This is useful for In-Store Order Fulfil
 
 #### MatrixScan Find
 
-![MatrixScan Find](/img/samples/ms_find_ios.png)
+![MatrixScan Find](/img/samples/ms_find_android.png)
 
-##### [Search and Find](https://github.com/Scandit/datacapture-ios-samples/tree/master/SearchAndFindSample)
+##### [Search and Find](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/03_Search_and_Find/SearchAndFindSample)
 
 <ReactPlayer playing controls url="/img/samples/ms-find.mp4" />
 
@@ -102,7 +100,7 @@ Use barcode capture to define search criteria by scanning items, and MatrixScan 
 
 ![Smart Label Capture](/img/batch-scanning/SLC-smart-devices.jpg)
 
-##### [Price and Weight Label Capture](https://github.com/Scandit/datacapture-ios-samples/tree/master/PriceWeightLabelCaptureSample)
+##### [Price and Weight Label Capture](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/05_Smart_Label_Capture/PriceWeightLabelCaptureSample)
 
 Use Smart Label Capture to scan labels and extract price and weight information simultaneously.
 
@@ -112,19 +110,19 @@ Use Smart Label Capture to scan labels and extract price and weight information 
 
 ### ID Capture
 
-#### [Simple ID Capture](https://github.com/Scandit/datacapture-ios-samples/tree/master/IdCaptureSimpleSample)
+#### [Simple ID Capture](https://github.com/Scandit/datacapture-ios-samples/tree/master/02_ID_Scanning_Samples/IdCaptureSimpleSample)
 
 <ReactPlayer playing controls url="/img/samples/id-simple.mp4" />
 
 Simple sample showing how to use the ID Capture mode to scan an ID card.
 
-#### [Extended ID Capture](https://github.com/Scandit/datacapture-ios-samples/tree/master/IdCaptureExtendedSample)
+#### [Extended ID Capture](https://github.com/Scandit/datacapture-ios-samples/tree/master/02_ID_Scanning_Samples/IdCaptureExtendedSample)
 
 <ReactPlayer playing controls url="/img/samples/id-extended.mp4" />
 
 Sample showing how to use the ID Capture mode to scan an ID card with additional fields.
 
-#### [Settings](https://github.com/Scandit/datacapture-ios-samples/tree/master/IdCaptureSettingsSample)
+#### [Settings](https://github.com/Scandit/datacapture-ios-samples/tree/master/02_ID_Scanning_Samples/IdCaptureSettingsSample)
 
 <ReactPlayer playing controls url="/img/samples/id-settings.mp4" />
 
@@ -132,13 +130,13 @@ Demonstrates how you can adapt the ID capture settings best to your needs and ex
 
 ### ID Verification
 
-#### [Age Verification](https://github.com/Scandit/datacapture-ios-samples/tree/master/AgeVerifiedDeliverySample)
+#### [Age Verification](https://github.com/Scandit/datacapture-ios-samples/tree/master/02_ID_Scanning_Samples/AgeVerifiedDeliverySample)
 
 <ReactPlayer playing controls url="/img/samples/id-avd.mp4" />
 
 Sample showing how to use the ID Capture mode to verify age for a delivery.
 
-#### [US Driver's License](https://github.com/Scandit/datacapture-ios-samples/tree/master/USDLVerificationSample)
+#### [US Driver's License](https://github.com/Scandit/datacapture-ios-samples/tree/master/02_ID_Scanning_Samples/USDLVerificationSample)
 
 <ReactPlayer playing controls url="/img/samples/id-usdl.mp4" />
 
