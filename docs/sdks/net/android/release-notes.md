@@ -9,9 +9,9 @@ keywords:
   - netAndroid
 ---
 
-## 7.3.0-beta2
+## 7.3.0
 
-**Released**: May 7, 2025
+**Released**: May 16, 2025
 
 ### New Features
 
