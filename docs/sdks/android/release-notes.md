@@ -31,6 +31,7 @@ keywords:
 
 #### Smart Label Capture
 
+* Smart Label Capture introduces a new workflow: [Validation Flow](/sdks/android/label-capture/intro.md#validation-flow). This workflow allows users to confirm OCR results, manually correct errors, or individually capture missing fields without needing to rescan the entire label. It is designed to address common issues such as glare, occlusion, and poor lighting that lead to incomplete label reads, helping you maintain high data integrity.
 * Added a new overlay for `LabelCapture`: `LabelCaptureValidationFlowOverlay`. This allows the user to follow a validation flow when scanning a label during several scans, instead of just in one go. Also includes a `LabelCaptureValidationFlowListener` to get the final results of the validation process.
 * Enabled `dataTypePatterns` for all text fields in Smart Label Capture.
 
