@@ -9,16 +9,20 @@ keywords:
   - netIos
 ---
 
-## 7.3.0-beta2
+## 7.3.0
 
-**Released**: May 7, 2025
+**Released**: May 16, 2025
 
 ### New Features
 
 #### Core
 
 * The Data Capture SDK and all sample applications have been updated to include support for the latest version of .NET (v9).
-* Introduced support for the `IDisposable` interface in the API for Android and iOS platforms. This enhancement allows for more efficient management of native resources, ensuring better performance and resource cleanup. 
+* Introduced support for the `IDisposable` interface in the API for Android and iOS platforms. This enhancement allows for more efficient management of native resources, ensuring better performance and resource cleanup.
+
+#### Barcode
+
+* Added support for structured append QR codes in all MatrixScan modes. They are exposed over `ScObjectCountingSession` and rendered as a group. The API is identical to how structured append is used in a single barcode use case: the entire structured append data is accessible on all sub code results.
 
 #### ID
 
@@ -34,6 +38,10 @@ keywords:
 
 * The following APIs have been removed:
   * `BarcodePickIconStyle`
+
+### Behavioral Changes
+
+* MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
 
 ## 7.2.2
 

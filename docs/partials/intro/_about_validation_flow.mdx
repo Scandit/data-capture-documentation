@@ -1,0 +1,17 @@
+## Validation Flow
+
+Validation Flow is a workflow available in Smart Label Capture to improve the accuracy and completeness of scanned label data in real-world environments. This feature allows users to confirm OCR results, manually correct errors, or individually capture missing fields without needing to rescan the entire label.
+
+It addresses common issues such as glare, occlusion, and poor lighting that lead to incomplete label reads, helping you maintain high data integrity for expiry dates, lot numbers, weights, and prices.
+
+### Workflow States
+
+The Validation Flow consists of five main states:
+
+| State    | Description     |
+|--------|---------------------|
+| `Initial State` | Tries full label scan. Proceeds to validation if successful, otherwise waits. |
+| `Validation State`     | Camera paused. Users review/correct data or trigger rescans.   |
+| `Manual Input State`   | Allows keyboard input for individual fields.    |
+| `Target Scanning State`| Focused scan for a single field.  |
+| `Standby State`        | Entered after timeout or inactivity. |

@@ -9,11 +9,15 @@ keywords:
   - xamarinAndroid
 ---
 
-## 7.3.0-beta2
+## 7.3.0
 
-**Released**: May 7, 2025
+**Released**: May 16, 2025
 
 ### New Features
+
+#### Barcode
+
+* Added support for structured append QR codes in all MatrixScan modes. They are exposed over `ScObjectCountingSession` and rendered as a group. The API is identical to how structured append is used in a single barcode use case: the entire structured append data is accessible on all sub code results.
 
 #### ID
 
@@ -24,6 +28,10 @@ keywords:
 #### Barcode
 
 * Fixed an issue in SparkScan where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
+
+### Behavioral Changes
+
+* MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
 
 ## 7.2.2
 

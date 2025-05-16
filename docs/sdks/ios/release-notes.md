@@ -9,9 +9,9 @@ keywords:
   - ios
 ---
 
-## 7.3.0-beta2
+## 7.3.0
 
-**Released**: May 7, 2025
+**Released**: May 16, 2025
 
 ### New Features
 
@@ -33,6 +33,7 @@ keywords:
 
 #### Smart Label Capture
 
+* Smart Label Capture introduces a new workflow: [Validation Flow](/sdks/ios/label-capture/intro.md#validation-flow). This workflow allows users to confirm OCR results, manually correct errors, or individually capture missing fields without needing to rescan the entire label. It is designed to address common issues such as glare, occlusion, and poor lighting that lead to incomplete label reads, helping you maintain high data integrity.
 * Added a new overlay for `LabelCapture`: `LabelCaptureValidationFlowOverlay`. This allows the user to follow a validation flow when scanning a label during several scans, instead of just in one go. Also includes a `LabelCaptureValidationFlowListener` to get the final results of the validation process.
 * Enabled `dataTypePatterns` for all text fields in Smart Label Capture.
 * MacroMode is now enabled by default in the `LabelCapture.recommendedCameraSettings`.
@@ -46,6 +47,10 @@ keywords:
 ##### Smart Label Capture
 
 * Fixed an issue with the `monthString` field in `SDCLabelDateResult`.
+
+### Behavioral Changes
+
+* MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
 
 ## 7.2.2
 
@@ -76,6 +81,7 @@ keywords:
 * A new [sample application](/sdks/ios/samples.md) is available for [tote mapping in MatrixScan Count](/sdks/ios/matrixscan-count/advanced/#tote-mapping).
 * The `LabelCaptureSettings` API of Smart Label Capture now allows for setting optional barcode semantic properties.
 * In MatrixScan Count, status icons can now be displayed immediately on scan without users needing to explicitly select Status mode to view them. This behavior is set via [`SDCBarcodeCountView.shouldShowStatusIconsOnScan`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.shouldShowStatusIconsOnScan).
+* Added support for structured append QR codes in all MatrixScan modes. They are exposed over `ScObjectCountingSession` and rendered as a group. The API is identical to how structured append is used in a single barcode use case: the entire structured append data is accessible on all sub code results.
 
 #### ID
 

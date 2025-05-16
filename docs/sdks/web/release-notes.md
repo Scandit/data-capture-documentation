@@ -9,9 +9,9 @@ keywords:
   - web
 ---
 
-## 7.3.0-beta2
+## 7.3.0
 
-**Released**: May 7, 2025
+**Released**: May 16, 2025
 
 ### New Features
 
@@ -19,6 +19,7 @@ keywords:
 
 * For all MatrixScan products, the behavior of AR elements such as popovers and annotation has been updated to allow them to go outside the viewport.
 * The ArUco symbology is now supported in the Web SDK.
+* Added support for structured append QR codes in all MatrixScan modes. They are exposed over `ScObjectCountingSession` and rendered as a group. The API is identical to how structured append is used in a single barcode use case: the entire structured append data is accessible on all sub code results.
 
 #### ID
 
@@ -41,6 +42,10 @@ keywords:
 #### Smart Label Capture
 
 * Fixed an issue where `ExpiryDateTextBuilder` and `PackingDateTextBuilder` could override the patterns even when the `labelDateFormat` was set.
+
+### Behavioral Changes
+
+* MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
 
 ## 7.2.2
 
