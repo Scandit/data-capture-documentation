@@ -47,6 +47,10 @@ keywords:
 
 * Fixed an issue with the `monthString` field in `SDCLabelDateResult`.
 
+### Behavioral Changes
+
+* MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
+
 ## 7.2.2
 
 **Released**: May 9, 2025
@@ -76,6 +80,7 @@ keywords:
 * A new [sample application](/sdks/ios/samples.md) is available for [tote mapping in MatrixScan Count](/sdks/ios/matrixscan-count/advanced/#tote-mapping).
 * The `LabelCaptureSettings` API of Smart Label Capture now allows for setting optional barcode semantic properties.
 * In MatrixScan Count, status icons can now be displayed immediately on scan without users needing to explicitly select Status mode to view them. This behavior is set via [`SDCBarcodeCountView.shouldShowStatusIconsOnScan`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.shouldShowStatusIconsOnScan).
+* Added support for structured append QR codes in all MatrixScan modes. They are exposed over `ScObjectCountingSession` and rendered as a group. The API is identical to how structured append is used in a single barcode use case: the entire structured append data is accessible on all sub code results.
 
 #### ID
 

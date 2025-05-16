@@ -15,6 +15,10 @@ keywords:
 
 * Ensure support for Titanium >= 12.2.1GA.
 
+### Behavioral Changes
+
+* MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
+
 ## 7.2.2
 
 **Released**: May 9, 2025

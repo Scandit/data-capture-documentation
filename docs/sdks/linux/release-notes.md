@@ -23,6 +23,10 @@ keywords:
 
 * Removed symbology extension `relaxed_sharp_quiet_zone_check` for EAN8 and EAN13/UPCA. Relaxed quiet zone rules are used by default. Strict quiet zone check is only performed in strict mode.
 
+### Behavioral Changes
+
+* MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
+
 ## 7.2.2
 
 **Released**: May 9, 2025

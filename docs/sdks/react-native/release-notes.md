@@ -17,6 +17,10 @@ keywords:
 
 * THe SDK is now using React Native 0.79.0.
 
+#### Barcode
+
+* Added support for structured append QR codes in all MatrixScan modes. They are exposed over `ScObjectCountingSession` and rendered as a group. The API is identical to how structured append is used in a single barcode use case: the entire structured append data is accessible on all sub code results.
+
 #### ID
 
 * Unify the result value when parsing the sex field, including added support for special characters used, so that it is always one of the values `female`, `male` or `unspecified`.
@@ -33,6 +37,10 @@ keywords:
 
 * The following APIs have been removed:
   * `BarcodePickIconStyle`
+
+### Behavioral Changes
+
+* MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
 
 ## 7.2.2
 
