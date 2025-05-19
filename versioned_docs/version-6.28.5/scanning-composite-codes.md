@@ -87,17 +87,3 @@ if let compositeData = compositeData {
     // Do something with just the data.
 }
 ```
-
-## Avoiding the Scanning of Barcodes without Composite
-
-For a use-case where only barcodes with add-ons should be scanned, the same type of rejection as shown in the _BarcodeCaptureRejectSample_ (available from the Samples page of your preferred framework) can be used.
-
-If composite data is available:
-
-* Manually emit feedback
-* Change the overlay’s brush to the default
-
-If no composite data is available:
-
-* Don’t emit any feedback
-* Change the overlay’s brush to transparent

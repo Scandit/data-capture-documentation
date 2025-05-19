@@ -32,12 +32,6 @@ Use SparkScan to populate a list of scanned barcodes.
 
 <ReactPlayer playing controls url="/img/samples/bc-simple.mp4" />
 
-Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
-
-##### [Rejection](https://github.com/Scandit/datacapture-xamarin-samples/tree/master/ios/BarcodeCaptureRejectSample)
-
-Sample that uses the camera to read a single QR code that starts with “09:” but ignores/rejects all other codes.
-
 ### Multi-Scanning
 
 #### MatrixScan AR

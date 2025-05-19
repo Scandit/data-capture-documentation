@@ -22,7 +22,7 @@ The repository with all the samples can be found [here](https://github.com/Scand
 
 ![SparkScan List Building](/img/samples/sparkscan_list_building.png)
 
-##### [List Building](https://github.com/Scandit/datacapture-ios-samples/tree/master/01_Single_Scanning_Samples/01_Barcode_Scanning_with_Pre_Built_UI/ListBuildingSample)
+##### [List Building](https://github.com/Scandit/datacapture-ios-samples/tree/master/01_Single_Scanning_Samples/01_Barcode_Scanning_with_Prebuilt_UI/ListBuildingSample)
 
 Use SparkScan to populate a list of scanned barcodes.
 
@@ -34,7 +34,7 @@ Use a combination of SparkScan and [MatrixScan Count](#matrixscan-count) for a r
 
 #### Barcode Capture
 
-##### [Single Scan](https://github.com/Scandit/datacapture-ios-samples/tree/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low_Level_API/BarcodeCaptureSimpleSample)
+##### [Single Scan](https://github.com/Scandit/datacapture-ios-samples/tree/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low_Level_API/BarcodeCaptureSimpleSampleSwift)
 
 <ReactPlayer playing controls url="/img/samples/bc-simple.mp4" />
 

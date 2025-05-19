@@ -61,17 +61,3 @@ if let addOnData = addOnData {
     // Do something with just the data.
 }
 ```
-
-## Avoiding Scanning Barcodes without Add-ons
-
-For a use-case where only barcodes with add-ons should be scanned, the same type of rejection as shown in the _BarcodeCaptureRejectSample_ (available from the Samples page of your preferred framework) can be used.
-
-If add-on data is available:
-
-* Manually emit feedback
-* Change the overlay’s brush to the default
-
-If no add-on data is available:
-
-* Don’t emit any feedback
-* Change the overlay’s brush to transparent
