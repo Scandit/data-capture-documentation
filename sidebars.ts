@@ -66,10 +66,21 @@ const sidebars: SidebarsConfig = {
           label: 'Configuring Express',
           items: [
             'hosted/express/configuration/index',
-            'hosted/express/configuration/express-find', 'hosted/express/configuration/inventory-count',
+            'hosted/express/configuration/express-find',
+            'hosted/express/configuration/inventory-count',
             'hosted/express/configuration/scan-labels',
           ],
         },
+        {
+              type: 'category',
+              label: 'Device Pairing',
+              collapsed: true,
+              items: [
+                'hosted/express/configuration/device-pairing/device-pairing',
+                'hosted/express/configuration/device-pairing/bluetooth-pairing',
+                'hosted/express/configuration/device-pairing/online-connection'
+              ],
+            },
       ],
 		},
 	],
