@@ -144,7 +144,7 @@ labelCapture.addListener(object : LabelCaptureListener {
          * The expiry date field is optional. Check for null in your result handling.
          */
         val expiryDate = capturedLabel.fields
-            .find { it.name == "<your-expiry-date-field-name>" }?.text
+            .find { it.name == "<your-expiry-date-field-name>" }?.asDate()
 
         /* 
          * Disable the label capture mode after a label has been captured
@@ -243,7 +243,14 @@ public class LabelCaptureRepository implements LabelCaptureListener {
 
 The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls what UI elements such as the viewfinder, as well as the overlays that are shown to visualize captured labels.
 
-To visualize the results of Label Capture, you can choose between two overlays, [LabelCaptureBasicOverlay](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureBasicOverlay) and [LabelCaptureAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-advanced-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureAdvancedOverlay).
+To visualize the results of Label Capture you can use two overlays:
+
+- [LabelCaptureBasicOverlay](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureBasicOverlay) 
+- [LabelCaptureAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-advanced-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureAdvancedOverlay)
+
+:::tip
+The overlays can be used independently of each other, but you can also use both at the same time as each can serve to extend the functionality of the other.
+:::
 
 Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptureView`:
 
