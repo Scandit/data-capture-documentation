@@ -56,7 +56,9 @@ replacing `${VERSION}` with the version you want to download.
 
 </TabItem>
 
-<TabItem value="import" label="Import in Source Code">
+</Tabs>
+
+## Configuring the Host
 
 To use the SDK in your source code, import it as follows:
 
@@ -64,13 +66,7 @@ To use the SDK in your source code, import it as follows:
 import BLEScannerSDK
 ```
 
-</TabItem>
-
-</Tabs>
-
-## Configuring the Host
-
-You can use the `WedgeHost` initializer to set up a host:
+You can then use the `WedgeHost` initializer to set up a host:
 
 ```swift
 WedgeHost(
