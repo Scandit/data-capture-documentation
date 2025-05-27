@@ -9,11 +9,41 @@ hide_title: true
 title: Release Notes
 ---
 
-<!-- ## 1.5.0
+## 1.8.0
 
-**Released**: March 31, 2025
+**Released**: May 26, 2025
 
-### New Features -->
+### New Features
+
+* Images in the flow can now be customized.
+* Fonts used in the flow can now be customized.
+* Reduction of images throughout the flow.
+* New “connection status” indicator on the QR page.
+* When scanning a rejected document, the flow stays in the scanner screen when using newest SDK.
+
+### Bug Fixes
+
+* Fixed an edge case in the SDK that could cause a page navigation in a callback to not execute.
+* Document Type not properly extracted for residence permit and health insurance card.
+
+## 1.6.0
+
+**Released**: April 15, 2025
+
+### New Features
+
+* Large assets are now delivered compressed to speed up loading times.
+* Comprehensive data analytics collection system.
+* Raw MRZ data exposed in result.
+* Browser history is reset to the original state when closing ID-Bolt modal.
+* Error screen when loading of Scandit SDK fails.
+* Ability to keep ID-Bolt “alive” after a successful session to retain camera permission and speed up subsequent sessions.
+* Updated Scandit SDK to version 7.2.
+
+### Bug Fixes
+
+* Localization string improvements.
+* Translations not properly applied in certain cases.
 
 ## 1.4.0
 

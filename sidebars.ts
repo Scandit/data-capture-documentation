@@ -81,6 +81,12 @@ const sidebars: SidebarsConfig = {
 			items: [
 				'hosted/id-bolt/overview',
 				'hosted/id-bolt/getting-started',
+        'hosted/id-bolt/release-notes',
+				{
+					type: 'link',
+					label: 'Try the Demo',
+					href: 'https://id-travel.demos.scandit.com/',
+				},
         {
           type: 'category',
           label: 'API Reference',
@@ -96,12 +102,6 @@ const sidebars: SidebarsConfig = {
             'hosted/id-bolt/advanced',
           ],
         },
-        'hosted/id-bolt/release-notes',
-				{
-					type: 'link',
-					label: 'Try the Demo',
-					href: 'https://id-travel.demos.scandit.com/',
-				},
 			],
 		},
 	],
