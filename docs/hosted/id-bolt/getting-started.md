@@ -26,6 +26,18 @@ yarn add @scandit/web-id-bolt
 </TabItem>
 </Tabs>
 
+## Content Security Policy (CSP)
+
+If you have `Content-Security-Policy` headers (CSP) which prevent loading iframes on your page, you need to adapt the value like so:
+
+```
+frame-src 'self' https://app.id-scanning.com https://id-service.scandit.com
+```
+
+This allows ID Bolt to load the necessary iframe components for the scanning interface.
+
+## Basic Integration
+
 Once you have installed the package as a dependency, you can import the ID Bolt module and start scanning IDs.
 
 :::note
@@ -72,13 +84,19 @@ async function startIdBolt() {
 	};
 	idBoltSession.onCompletion = (result) => {
 		// the ID has been captured and validation was successful. In this example the result
-		// will contain the document data because `returnDataMode` was set to RETURN_DATA_MODE.FULL.
+		// will contain the document data because `returnDataMode` was set to ReturnDataMode.Full.
 	};
 }
 
 // open ID Bolt when some button is clicked
 const someButton = document.getElementById("someButton") as HTMLButtonElement;
 someButton.addEventListener("click", startIdBolt);
+```
+
+For completeness this is the HTML you will need for the example:
+
+```html
+<button id="someButton">Start ID Bolt</button>
 ```
 
 The above code snippet is a simple example of how to integrate ID Bolt into your application. It opens the ID Bolt pop-up when a button is clicked and listens for the completion of the scanning process.

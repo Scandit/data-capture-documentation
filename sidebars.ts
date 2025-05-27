@@ -92,13 +92,27 @@ const sidebars: SidebarsConfig = {
 			items: [
 				'hosted/id-bolt/overview',
 				'hosted/id-bolt/getting-started',
-        'hosted/id-bolt/api',
         'hosted/id-bolt/release-notes',
 				{
 					type: 'link',
 					label: 'Try the Demo',
 					href: 'https://id-travel.demos.scandit.com/',
 				},
+        {
+          type: 'category',
+          label: 'API Reference',
+          items: [
+            'hosted/id-bolt/api-overview',
+            'hosted/id-bolt/document-selection',
+            'hosted/id-bolt/validators',
+            'hosted/id-bolt/data-handling',
+            'hosted/id-bolt/callbacks',
+            'hosted/id-bolt/workflow',
+            'hosted/id-bolt/theming',
+            'hosted/id-bolt/text-overrides',
+            'hosted/id-bolt/advanced',
+          ],
+        },
 			],
 		},
 	],
@@ -1810,11 +1824,37 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
+              label: 'MatrixScan AR',
+              items: [
+                "sdks/xamarin/android/matrixscan-check/intro",
+                "sdks/xamarin/android/matrixscan-check/get-started",
+              ],
+            },
+            {
+              type: 'category',
               label: 'MatrixScan Count',
               items: [
                 "sdks/xamarin/android/matrixscan-count/intro",
                 "sdks/xamarin/android/matrixscan-count/get-started",
                 "sdks/xamarin/android/matrixscan-count/advanced",
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Find',
+              items: [
+                "sdks/xamarin/android/matrixscan-find/intro",
+                "sdks/xamarin/android/matrixscan-find/get-started",
+                "sdks/xamarin/android/matrixscan-find/advanced",
+              ],
+            },
+            {
+              type: "category",
+              label: "MatrixScan Pick",
+              items: [
+                "sdks/xamarin/android/matrixscan-pick/intro",
+                "sdks/xamarin/android/matrixscan-pick/get-started",
+                "sdks/xamarin/android/matrixscan-pick/advanced",
               ],
             },
           ],
