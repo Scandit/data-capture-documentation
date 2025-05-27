@@ -139,3 +139,95 @@ const theme = {
 - Format: WOFF2, WOFF, TTF, or OTF (must be provided as data URLs)
 - Maximum size: 100KB per font file (size of the base64 data url)
 - Data URL format: Must start with appropriate mime type prefixes (e.g., `data:font/woff2`, `data:font/woff`)
+
+## Style Overrides
+
+The `styleOverrides` object allows you to apply custom CSS to specific UI elements:
+
+```ts
+const theme = {
+  styleOverrides: {
+    button: `
+      .bolt-button {
+        display: block;
+        width: 100%;
+        padding: 12px 24px;
+        background-color: #fcb700;
+        color: #000000;
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 1.5;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        box-sizing: border-box;
+        border-radius: 0;
+        box-shadow: none;
+        transition: background-color 0.2s ease-in-out;
+      }
+
+      .bolt-button:hover,
+      .bolt-button:focus {
+        background-color: #e0a800;
+        outline: none;
+      }
+    `,
+    link: `
+      .bolt-link {
+        text-decoration: none;
+        border-bottom: 1px dotted currentColor;
+      }
+      .bolt-link:hover {
+        border-bottom: 1px solid currentColor;
+      }
+    `,
+    title: `
+      .bolt-title {
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+    `
+  }
+};
+```
+
+### Available Style Override Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `button` | `string` | CSS styles for buttons |
+| `link` | `string` | CSS styles for links |
+| `title` | `string` | CSS styles for titles |
+
+#### CSS class names
+
+Use the `.bolt-button`, `.bolt-link` and `.bolt-title` selectors for the styling rule. You can also create additional rules for pseudo-states like `.bolt-button:hover` etc. 
+When a style override is specified, the element is rendered in its own shadow-DOM, with the provided style sheet attached. 
+
+The element will have many more CSS classes attached, but since it is rendered in a shadow DOM, these don't have an effect, unless you choose to use them in the style-override.
+
+#### Shadow DOM
+
+When a style override is specified, the component is rendered in a shadow DOM. This means that none of the default styles of ID-Bolt apply to the component anymore. Therefore, make sure to specify all relevant styles.
+
+#### Used HTML elements
+
+Not all buttons use the `<button>` HTML element. Certain buttons in the UI are `<a>` links stylized as a button. Therefore, make sure to also add `display: flex` or `display: block`, as well as rules such as `text-decoration` to your style sheet. 
+
+:::tip
+Always make sure to thoroughly test the full ID-Bolt flow when you customize the styles, to make sure the result is as expected on all screens. 
+:::
+
+## Popup Container Customization
+
+You can apply additional styling to the ID Bolt popup container directly from your application's CSS. This is particularly useful for customizing the popup's outer appearance like adding a box shadow:
+
+```css
+/* In your application's CSS */
+idbolt-pop-up::part(container) {
+	box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.2);
+}
+```
+
+Note that this approach only affects the popup container itself and not elements inside the popup. For customizing the internal elements, use the Theme API described above.
