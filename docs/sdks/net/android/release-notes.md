@@ -9,6 +9,22 @@ keywords:
   - netAndroid
 ---
 
+## 7.4.0-beta.1
+
+**Released**: June 4, 2025
+
+### Performance Improvements
+
+* Updated ARM MbedTLS from 3.6.2 to 3.6.3.
+
+#### ID
+
+* Improved image conversion performance.
+
+### Bug Fixes
+
+* Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
+
 ## 7.3.0
 
 **Released**: May 16, 2025

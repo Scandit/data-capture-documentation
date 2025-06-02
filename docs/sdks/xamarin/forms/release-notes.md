@@ -9,6 +9,30 @@ keywords:
   - xamarinForms
 ---
 
+## 7.4.0-beta.1
+
+**Released**: June 4, 2025
+
+### New Features
+
+#### Barcode
+
+* Add the possibility via `BarcodeCountCaptureList.SetBarcodeDataTransformer` to set a barcode data transformer. The transformer will be applied to transform the barcode data before matching to the target barcodes.
+
+### Performance Improvements
+
+* Updated ARM MbedTLS from 3.6.2 to 3.6.3.
+
+#### ID
+
+* Improved image conversion performance.
+
+### Bug Fixes
+
+#### ID
+
+* Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
+
 ## 7.3.0
 
 **Released**: May 16, 2025

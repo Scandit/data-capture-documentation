@@ -9,6 +9,46 @@ keywords:
   - android
 ---
 
+## 7.4.0-beta.1
+
+**Released**: June 4, 2025
+
+### New Features
+
+#### Smart Label Capture
+
+* Added the following new method to `LabelCaptureSettings`: 
+  * `getSymbologySettings()`
+* Label Capture `PriceCapture` label definition factory method added.
+* VIN labels are now supported via the added creator method `createVinLabelDefinition()` to `LabelDefinition`.
+* Added landscape mode for LabelCapture validation flow.
+
+#### Barcode
+
+* OCR fallback can now be enabled for certain symbologies. Use `SymbologySettings.ocrFallbackRegex` to constrain the results. 
+* Added serialization to `BarcodeFindSession`.
+* Added APIs in MatrixScan Find to track session updates and modify the progress bar color.
+* Added data transformer to the `BarcodeCountCaptureList` feature,
+enabling matching barcodes against a regex.
+
+#### ID
+
+* The minimum Android API version is now 24.
+
+### Performance Improvements
+
+* Updated ARM MbedTLS from 3.6.2 to 3.6.3.
+
+#### ID
+
+* Improved image conversion performance.
+
+### Bug Fixes
+
+#### ID
+
+* Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
+
 ## 7.3.0
 
 **Released**: May 16, 2025
