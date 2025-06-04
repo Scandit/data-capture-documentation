@@ -69,7 +69,7 @@ SparkScanView sparkScanView = SparkScanView.Create(parentView, dataCaptureContex
 When developing on MAUI the SparkScan view should be added as the last item to [AbsoluteLayout](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/layouts/absolutelayout) or [RelativeLayout](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/layouts/relativelayout), to make sure other UI components are visible.
 
 ```xml
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
 xmlns:scandit="clr-namespace:Scandit.DataCapture.Barcode.Spark.UI.Unified;assembly=ScanditBarcodeCaptureUnified">
 <ContentPage.Content>
