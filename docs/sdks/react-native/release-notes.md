@@ -9,9 +9,9 @@ keywords:
   - react
 ---
 
-## 7.4.0-beta.1
+## 7.4.0-beta.2
 
-**Released**: June 5, 2025
+**Released**: June 6, 2025
 
 ### New Features
 
@@ -37,6 +37,10 @@ keywords:
 ### Bug Fixes
 
 * Fixed the pod files configuration for React Native sample applications in GitHub.
+
+#### Barcode
+
+* Fixed an issue where caching the barcode capture object and register/unregistering the `BarcodeCaptureListener` multiple times would result on not receiving events anymore.
 
 #### ID 
 
