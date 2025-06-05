@@ -1,7 +1,16 @@
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to create a new Data Capture Context. The SDK must be configured first with a valid Scandit Data Capture SDK license key.
 
-```js
-const context = DataCaptureContext.forLicenseKey(
-	'-- ENTER YOUR SCANDIT LICENSE KEY HERE --'
-);
+```typescript
+    await configure({
+      licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+      libraryLocation: new URL("library/engine/", document.baseURI).toString(),
+      moduleLoaders: // module for capture mode e.g. [barcodeCaptureLoader()],
+    });
+    const context = await DataCaptureContext.create();
+
+    const dataCaptureView = new DataCaptureView();
+    // #root element should be present in .html document
+    dataCaptureView.connectToElement(document.getElementById("root"));
+
+    await dataCaptureView.setContext(context);
 ```

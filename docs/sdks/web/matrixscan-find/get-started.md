@@ -26,7 +26,7 @@ The general steps are:
 
 ## Create a Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new Data Capture Context. Sdk must be configured first with a valid Scandit Data Capture SDK license key.
+The first step to add capture capabilities to your application is to create a new Data Capture Context. The SDK must be configured first with a valid Scandit Data Capture SDK license key.
 
 ```typescript
     await configure({

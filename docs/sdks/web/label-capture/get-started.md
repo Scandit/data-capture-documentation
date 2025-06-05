@@ -174,7 +174,7 @@ await view.addOverlay(overlay);
 
 // Add a square viewfinder to the overlay to guide users through the capture process
 const viewfinder = new RectangularViewfinder(RectangularViewfinderStyle.Square)
-await labelCaptureOverlay.setViewfinder(viewfinder)
+await overlay.setViewfinder(viewfinder)
 ```
 
 :::tip
