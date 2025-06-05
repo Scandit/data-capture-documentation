@@ -9,9 +9,9 @@ keywords:
   - web
 ---
 
-## 7.4.0-beta.1
+## 7.4.0-beta.2
 
-**Released**: June 5, 2025
+**Released**: June 6, 2025
 
 ### New Features
 
@@ -23,6 +23,10 @@ keywords:
 
 * Smart Label Capture introduces a new workflow: Validation Flow. This workflow allows users to confirm OCR results, manually correct errors, or individually capture missing fields without needing to rescan the entire label. It is designed to address common issues such as glare, occlusion, and poor lighting that lead to incomplete label reads, helping you maintain high data integrity.
 * Added `setDataPatterns` and `resetDataPatterns` methods to Weight, UnitPrice, and TotalPrice builders.
+
+#### ID
+
+* Added support for Spanish residence permit "Green NIE" (also called "CUE").
 
 ### Performance Improvements
 
