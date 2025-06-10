@@ -14,9 +14,9 @@ This guide shows you how to add the Scandit Data Capture SDK to your existing pr
 ## Prerequisites
 
 - The latest stable version of [Cordova](https://github.com/apache/cordova-cli#installation), [Node.js and npm](https://nodejs.org/en/download/).
-- A project with minimum:
-	- iOS deployment target _>=14.0_, or
-	- Android project with target SDK version _>=23_ (Android 6, Marshmallow)
+- A project with:
+  - minimum iOS deployment target of 14.0 or higher (15.0 or higher for ID Capture)
+  - an Android project with target SDK version 23 (Android 6, Marshmallow) or higher (version 24 or higher for ID Capture)
 - A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
 
 :::warning
