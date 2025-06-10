@@ -9,6 +9,20 @@ keywords:
   - linux
 ---
 
+## 7.4.0-beta.1
+
+**Released**: June 5, 2025
+
+### New Features
+
+* Added OCR fallback symbology extension `ocr_fallback` to Codabar, Code128, Code39 and EAN13/UPCA. It enables text recognition when other readers fail. This feature requires Smart Scan Intention which is only available in SparkScan or through the Linux settings preset `SC_PRESET_SINGLE_CODE_HAND_HELD`.
+    * Added `sc_symbology_settings_set_ocr_fallback_regex` and `sc_symbology_settings_get_ocr_fallback_regex` to configure a regular expression that OCR Fallback results should fully match for each symbology. This can also be configured with the `ocrFallbackRegex` symbology JSON settings field.
+* Improved scanning of vertical and reversed codes for all native and WebAssembly with SIMD devices.
+
+### Bug Fixes
+
+* Updated `sc_barcode_scanner_settings_new_from_json` function to return an error in case a given JSON string contains unrecognized properties.
+
 ## 7.3.0
 
 **Released**: May 16, 2025

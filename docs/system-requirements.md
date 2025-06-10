@@ -20,7 +20,7 @@ displayed_sidebar: sdcSidebar
 
 | Requirement | Version |
 | ----------- | ------- |
-| Android     | 6.0+ (API level 23) |
+| Android     | 6.0+ (API level 24) |
 | Java        | 8+     |
 | Architecture| arm64v7, arm64, x86, x86_64 |
 | Camera      | 720p+   |

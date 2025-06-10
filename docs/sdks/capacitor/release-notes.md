@@ -9,6 +9,32 @@ keywords:
   - capacitor
 ---
 
+## 7.4.0-beta.1
+
+**Released**: June 5, 2025
+
+### New Features
+
+#### Barcode
+
+* Added an API to update the width and height of the AR View.
+* Added the option to enable the `SmartLabelCapture` mode in the `SparkScanView`.
+* The `LaserViewfinder` is now available.
+
+### Performance Improvements
+
+* Updated ARM MbedTLS from 3.6.2 to 3.6.3.
+
+#### ID
+
+* Improved image conversion performance.
+
+### Bug Fixes
+
+#### ID
+
+* Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
+
 ## 7.3.0
 
 **Released**: May 16, 2025

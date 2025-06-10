@@ -9,6 +9,39 @@ keywords:
   - react
 ---
 
+## 7.4.0-beta.1
+
+**Released**: June 5, 2025
+
+### New Features
+
+#### Barcode
+
+* Added an API to update the width and height of the AR View.
+* Added APIs in MatrixScan Find to track session updates and modify the progress bar color.
+* The `LaserViewfinder` is now available.
+* Added the option to enable the `SmartLabelCapture` mode in the `SparkScanView`.
+
+#### Smart Label Capture
+
+* Added an API to set the symbology setting in the label definition.
+
+### Performance Improvements
+
+* Updated ARM MbedTLS from 3.6.2 to 3.6.3.
+
+#### ID
+
+* Improved image conversion performance.
+
+### Bug Fixes
+
+* Fixed the pod files configuration for React Native sample applications in GitHub.
+
+#### ID 
+
+* Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
+
 ## 7.3.0
 
 **Released**: May 16, 2025

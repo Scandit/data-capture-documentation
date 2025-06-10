@@ -231,3 +231,4 @@ idbolt-pop-up::part(container) {
 ```
 
 Note that this approach only affects the popup container itself and not elements inside the popup. For customizing the internal elements, use the Theme API described above.
+

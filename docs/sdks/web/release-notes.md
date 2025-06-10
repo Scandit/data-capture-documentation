@@ -9,6 +9,38 @@ keywords:
   - web
 ---
 
+## 7.4.0-beta.1
+
+**Released**: June 5, 2025
+
+### New Features
+
+#### Barcode
+
+* The `LaserViewfinder` is now available.
+
+#### Smart Label Capture
+
+* Smart Label Capture introduces a new workflow: Validation Flow. This workflow allows users to confirm OCR results, manually correct errors, or individually capture missing fields without needing to rescan the entire label. It is designed to address common issues such as glare, occlusion, and poor lighting that lead to incomplete label reads, helping you maintain high data integrity.
+* Added `setDataPatterns` and `resetDataPatterns` methods to Weight, UnitPrice, and TotalPrice builders.
+
+### Performance Improvements
+
+* Updated ARM MbedTLS from 3.6.2 to 3.6.3.
+
+#### ID
+
+* Improved image conversion performance.
+
+### Bug Fixes
+
+* Fixed an issue where the `triggerButtonCollapseTimeout` was being triggered in the wrong scenarios.
+* Accessing `localStorage` or `sessionStorage` in contexts where they're explicitly disabled now is handled correctly.
+
+#### ID
+
+* Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
+
 ## 7.3.0
 
 **Released**: May 16, 2025

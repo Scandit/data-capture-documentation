@@ -9,6 +9,14 @@ keywords:
   - titanium
 ---
 
+## 7.4.0-beta.1
+
+**Released**: June 5, 2025
+
+### Performance Improvements
+
+* Updated ARM MbedTLS from 3.6.2 to 3.6.3.
+
 ## 7.3.0
 
 **Released**: May 16, 2025

@@ -9,6 +9,43 @@ keywords:
   - ios
 ---
 
+## 7.4.0-beta.1
+
+**Released**: June 5, 2025
+
+### New Features
+
+#### Barcode
+
+* It is now possible to resume scanning after a camera timeout by tapping on the camera preview.
+* OCR fallback can now be enabled for certain symbologies. Use `SymbologySettings.ocrFallbackRegex` to constrain the results. 
+* Added APIs in MatrixScan Find to track session updates and modify the progress bar color.
+* Added serialization to `BarcodeFindSession`.
+
+#### Smart Label Capture
+
+* It is now possible to change the symbology settings in `LabelCapture`.
+* Label Capture `PriceCapture` label definition factory method added.
+* VIN labels are now supported via the added creator method `createVinLabelDefinition()` to `LabelDefinition`.
+
+### Performance Improvements
+
+* Updated ARM MbedTLS from 3.6.2 to 3.6.3.
+
+#### ID
+
+* Improved image conversion performance.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue where the order of the configuration of `BarcodeArInfoAnnotation` would change the computed layout.
+
+#### ID
+
+* Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
+
 ## 7.3.0
 
 **Released**: May 16, 2025
