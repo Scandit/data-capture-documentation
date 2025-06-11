@@ -80,7 +80,7 @@ Use a combination of [SparkScan](#sparkscan) and MatrixScan Count for a receivin
 
 Share scan data between MatrixScan Count and Spark Scan to show the expiration status of scanned items.
 
-#### [Tote Mapping](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/MatrixScanCountToteMappingSample)
+##### [Tote Mapping](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/MatrixScanCountToteMappingSample)
 
 <ReactPlayer playing controls url="/img/matrixscan-count/tote_mapping.mp4" />
 
