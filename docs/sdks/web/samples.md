@@ -40,6 +40,12 @@ This sample is also available [here](https://github.com/Scandit/datacapture-web-
 
 ### Batch Scanning
 
+#### MatrixScan AR
+
+##### [Simple Sample](https://github.com/Scandit/datacapture-web-samples/tree/master/MatrixScanARSimpleSample)
+
+Example demonstrating how to highlight barcodes and display additional information over them using augmented reality (AR) with MatrixScan AR (`BarcodeAR` API).
+
 #### MatrixScan Find
 
 ![MatrixScan Find](/img/samples/ms_find_web.png)

@@ -9,9 +9,9 @@ keywords:
   - android
 ---
 
-## 7.4.0-beta.1
+## 7.4.0-beta.2
 
-**Released**: June 5, 2025
+**Released**: June 11, 2025
 
 ### New Features
 
@@ -28,8 +28,7 @@ keywords:
 * OCR fallback can now be enabled for certain symbologies. Use `SymbologySettings.ocrFallbackRegex` to constrain the results. 
 * Added serialization to `BarcodeFindSession`.
 * Added APIs in MatrixScan Find to track session updates and modify the progress bar color.
-* Added data transformer to the `BarcodeCountCaptureList` feature,
-enabling matching barcodes against a regex.
+* Add the possibility via `BarcodeCountCaptureList.SetBarcodeDataTransformer` to set a barcode data transformer. The transformer will be applied to transform the barcode data before matching to the target barcodes.
 
 #### ID
 

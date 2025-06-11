@@ -21,6 +21,11 @@ Before you begin, make sure you have the following prerequisites in place:
 
 - Latest version of Xcode
 - iOS project with a deployment target of iOS 14.0+
+
+  :::note
+  ID Capture requires a minimum deployment target of iOS 15.0.
+  :::
+  
 - Scandit license key, sign up for a [free trial](https://www.scandit.com/trial/) if you don't already have a license key
 
 ### Internal Dependencies

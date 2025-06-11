@@ -18,6 +18,11 @@ This page describes how to integrate the Scandit Data Capture SDK into your Xama
 
 - The latest stable version of [Visual Studio](https://visualstudio.microsoft.com/).
 - A Xamarin.iOS project with minimum iOS deployment target of 14.0 or higher. Or a Xamarin.Android project with target SDK version 23 (Android 6, Marshmallow) or higher.
+
+  :::note
+  ID Capture requires a minimum iOS deployment target of 15.0 or Android SDK version of 24.
+  :::
+
 - A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
 
 :::note

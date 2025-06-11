@@ -9,9 +9,9 @@ keywords:
   - titanium
 ---
 
-## 7.4.0-beta.1
+## 7.4.0-beta.2
 
-**Released**: June 5, 2025
+**Released**: June 11, 2025
 
 ### Performance Improvements
 

@@ -36,6 +36,12 @@ Simple sample showing how to use the Barcode Capture mode to scan a single barco
 
 ### Batch Scanning
 
+#### MatrixScan AR
+
+##### [Simple Sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/01_Batch_Scanning_and_AR_Info_Lookup/MatrixScanARSimpleSample)
+
+Example demonstrating how to highlight barcodes and display additional information over them using augmented reality (AR) with MatrixScan AR (`BarcodeAR` API).
+
 #### MatrixScan Batch
 
 Examples utilizing the low-level `BarcodeBatch` API.

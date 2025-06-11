@@ -42,6 +42,12 @@ Simple sample showing how to use the Barcode Capture mode to scan a single barco
 
 ### Batch Scanning
 
+#### MatrixScan AR
+
+##### [Simple Sample](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/01_Batch_Scanning_and_AR_Info_Lookup/MatrixScanARSimpleSample)
+
+Example demonstrating how to highlight barcodes and display additional information over them using augmented reality (AR) with MatrixScan AR (`BarcodeAR` API).
+
 #### MatrixScan Batch
 
 Examples utilizing the low-level [`BarcodeBatch`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch.html) API.
@@ -80,7 +86,7 @@ Use a combination of [SparkScan](#sparkscan) and MatrixScan Count for a receivin
 
 Share scan data between MatrixScan Count and Spark Scan to show the expiration status of scanned items.
 
-#### [Tote Mapping](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/MatrixScanCountToteMappingSample)
+##### [Tote Mapping](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/MatrixScanCountToteMappingSample)
 
 <ReactPlayer playing controls url="/img/matrixscan-count/tote_mapping.mp4" />
 

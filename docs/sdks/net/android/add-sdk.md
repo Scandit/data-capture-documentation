@@ -19,6 +19,11 @@ This guide shows you how to add the Scandit Data Capture SDK to current existing
 - The latest stable version of [Visual Studio](https://visualstudio.microsoft.com/).
 - A [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0).
 - A .NET for Android project with target SDK version 23 (Android 6, Marshmallow) or higher.
+
+  :::note
+  ID Capture requires a minimum target SDK version of 24.
+  :::
+  
 - A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
 
 :::tip

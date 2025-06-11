@@ -22,6 +22,11 @@ Before you begin, make sure you have the following prerequisites in place:
 
 - Latest version of the Android SDK (for example through the latest Android Studio)
 - Android project with target SDK version 23 (Android 6, Marshmallow) or higher
+
+  :::note
+  ID Capture requires a minimum target SDK version of 24.
+  :::
+  
 - Valid Scandit Data Capture SDK license key
 
 :::tip
