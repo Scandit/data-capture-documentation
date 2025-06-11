@@ -9,6 +9,15 @@ keywords:
   - flutter
 ---
 
+## 7.3.1
+
+**Released**: June 13, 2025
+
+### Bug Fixes
+
+* Fixed a bug where parsing of `selectedBarcodes` and `newlyUnselectedBarcodes` would fail in the `BarcodeSelectionSession` due to a wrong casting.
+* Fix dependencies of the sample applications published in GitHub.
+
 ## 7.3.0
 
 **Released**: May 16, 2025

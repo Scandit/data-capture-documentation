@@ -9,6 +9,14 @@ keywords:
   - web
 ---
 
+## 7.3.1
+
+**Released**: June 13, 2025
+
+### Bug Fixes
+
+* Fixed an issue where the `triggerButtonCollapseTimeout` was being triggered in the wrong scenarios.
+
 ## 7.3.0
 
 **Released**: May 16, 2025

@@ -9,6 +9,14 @@ keywords:
   - react
 ---
 
+## 7.3.1
+
+**Released**: June 13, 2025
+
+### Bug Fixes
+
+* Fixed the pod files configuration for React Native sample applications in GitHub.
+
 ## 7.3.0
 
 **Released**: May 16, 2025
