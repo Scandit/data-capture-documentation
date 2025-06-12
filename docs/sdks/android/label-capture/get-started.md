@@ -46,40 +46,43 @@ It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-ca
 
 <Tabs groupId="language">
 <TabItem value="kotlin" label="Kotlin">
+
 ```kotlin
-import com.scandit.datacapture.label.capture.labelCaptureSettings
+import com.scandit.datacapture.label.capture.LabelCapture
+import com.scandit.datacapture.label.capture.LabelCaptureSettings
+import com.scandit.datacapture.label.data.LabelDateComponentFormat
+import com.scandit.datacapture.label.data.LabelDateFormat
+import com.scandit.datacapture.barcode.symbology.Symbology
 
-val settings = labelCaptureSettings {
-    label("<your-label-name>") {
-        /*
-         * Add a barcode field with the expected symbologies and pattern.
-         * You can omit the pattern if the content of the barcode is unknown. 
-         */
-        customBarcode("<your-barcode-field-name>") {
-            setSymbologies(Symbology.EAN13_UPCA, Symbology.CODE128)
-            setPattern("\\d{12,14}")
-        }
-        /*
-         * Add a text field for capturing expiry dates.
-         * The field is set as optional so that the capture can complete 
-         * even if the expiry date is not present or not readable.
-         */
-        expiryDateText("<your-expiry-date-field-name>") {
-            isOptional = false
-        }
-    }
-}
+// Build LabelCaptureSettings
+val settings = LabelCaptureSettings.builder()
+    .addLabel()
+        // Add a barcode field with the expected symbologies and pattern
+        .addCustomBarcode()
+            .setSymbologies(Symbology.EAN13_UPCA, Symbology.CODE128)
+            .setPattern("\\d{12,14}")
+        .buildFluent("<your-barcode-field-name>")
+        // Add a text field for capturing expiry dates
+        .addExpiryDateText()
+            .isOptional(true)
+            .setLabelDateFormat(LabelDateFormat(LabelDateComponentFormat.MDY, false))
+        .buildFluent("<your-expiry-date-field-name>")
+    .buildFluent("<your-label-name>")
+.build()
 
-/*
- * Create the label capture mode with the settings and data capture context created earlier.
- */
+// Create the label capture mode with the settings and data capture context
 val labelCapture = LabelCapture.forDataCaptureContext(dataCaptureContext, settings)
 ```
+
 </TabItem>
+
 <TabItem value="java" label="Java">
+
 ```java
 import com.scandit.datacapture.label.capture.LabelCapture;
 import com.scandit.datacapture.label.capture.LabelCaptureSettings;
+import com.scandit.datacapture.label.data.LabelDateComponentFormat;
+import com.scandit.datacapture.label.data.LabelDateFormat;
 
 LabelCaptureSettings settings = LabelCaptureSettings.builder()
     .addLabel()
@@ -97,7 +100,8 @@ LabelCaptureSettings settings = LabelCaptureSettings.builder()
          * even if the expiry date is not present or not readable.
          */
         .addExpiryDateText()
-            .isOptional(false)
+            .isOptional(true)
+            .setLabelDateFormat(LabelDateFormat(LabelDateComponentFormat.MDY,false))
         .buildFluent("<your-expiry-date-field-name>")
     .buildFluent("<your-label-name>")
 .build();
