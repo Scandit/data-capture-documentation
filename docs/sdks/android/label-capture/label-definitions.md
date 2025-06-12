@@ -1,0 +1,118 @@
+---
+framework: android
+keywords:
+  - android
+---
+
+# Label Definitions
+
+Smart Label Capture provides a [Label Definition](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#label-definition) API, enabling you to configure and extract structured data from predefined and custom labels. This feature provides a flexible way to recognize and decode fields within a specific label layout such as price tags, VIN labels, or packaging stickers without needing to write custom code for each label type.
+
+A **Label Definition** is a configuration that defines the label, and its relevant fields, that Smart Label Capture should recognize and extract during scans.
+
+There are three approaches to using label definitions:
+
+- [**Pre-built Labels**](#pre-built-labels)
+- [**Pre-built Fields**](#pre-built-fields)
+- [**Custom Labels and Fields**](#custom-labels-and-fields)
+
+## Pre-built Labels
+
+Smart Label Capture provides pre-built label definitions out of the box for the following common label types:
+
+- **Price Label**: This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `UPC` and `priceText` fields.
+- **VIN Label**: A predefined label definition for scanning Vehicle Identification Numbers (VIN). Returns `text` and/or `barcode` fields.
+
+### Example: Price label
+
+Use the `LabelCaptureSettings` builder to configure a pre-built label definition for price labels, such as those found in retail environments:
+
+![Price Label Example](/img/slc/price-label.png)
+
+```kotlin
+val settings = 
+    LabelCaptureSettings.builder()
+        .addLabel(LabelDefinition.createPriceCaptureDefinition("price-label"))
+        .build
+```
+
+## Pre-built Fields
+
+You can also configure your label by using pre-built fields. This allows more granular customization of the label definition without needing to define a complete label structure.
+
+### Example: Hard disk drive label
+
+This example demonstrates how to configure a label definition for a hard disk drive (HDD) label, which typically includes common fields like serial number and part number.
+
+![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
+
+```kotlin
+val settings = 
+    LabelCaptureSettings.builder()
+        .addLabel()
+            .addSerialNumberBarcode()
+            .buildFluent("serial-number")
+            .addPartNumberBarcode()
+            .buildFluent("part-number")
+        .buildFluent("hdd-label")
+        .build
+```
+
+## Custom Labels and Fields
+
+If your use case is unique and not covered by Smart Label Capture's predefined options for label and fields, you can define your own custom label and its fields.
+
+### Example: Fish Shipping Box
+
+This example shows how to create a custom label definition for a fish shipping box, which includes fields for barcode and batch number.
+
+![Fish Shipping Box Example](/img/slc/fish-shipping-box.png)
+
+```kotlin
+val settings = 
+    LabelCaptureSettings.builder()
+        .addLabel()
+            .addCustomBarcode()
+                .setSymbologies(Symbology.CODE128)
+            .buildFluent("barcode-field")
+            .addCustomText()
+                .setDataTypePatterns("Batch")
+                .setPatterns("FZ\\d{5,10}")
+                .isOptional(true)
+            .buildFluent("batch-number-field")
+        .buildFluent("shipping-label")
+        .build
+```
+
+## Field Types
+
+The [LabelDefinitionBuilding](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition-builder.html) API provides various field types you can use to define the structure of your label.
+
+### Barcode Fields
+
+* `SerialNumberBarcode`
+* `PartNumberBarcode`
+* `ImeiOneBarcode`
+* `ImeiTwoBarcode`
+* `CustomBarcode`
+
+### Price and Weight Fields
+
+* `UnitPriceText`
+* `TotalPriceText`
+* `WeightText`
+
+### Date and Custom Text Fields
+
+* `PackingDateText`
+* `ExpiryDateText`
+* `CustomText`
+
+### Optional Fields
+
+Fields can be marked as optional, this is helpful when certain fields may not be present on every scan.
+
+```kotlin
+LabelField field = LabelField('expiryDate')
+  ..setOptional(true);
+```

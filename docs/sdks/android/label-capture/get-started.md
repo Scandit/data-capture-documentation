@@ -44,6 +44,10 @@ The main entry point for the Label Capture Mode is the [LabelCapture](https://do
 
 It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
+:::tip
+You can use Label Definitions provided in Smart Label Capture to set pre-built label types or define your label using pre-built fields. For more information, see the [Label Definitions](label-definitions.md) section.
+:::
+
 <Tabs groupId="language">
 <TabItem value="kotlin" label="Kotlin">
 
