@@ -226,6 +226,7 @@ const config: Config = {
             },
             '7.3.1': {
               banner: 'none',
+              badge: false,
             },
             '6.28.5': {
               banner: 'none',

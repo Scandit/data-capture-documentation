@@ -9,6 +9,18 @@ hide_title: true
 title: Release Notes
 ---
 
+## 1.9.0
+
+**Released**: June 10, 2025
+
+### New Features
+
+* CSS customization of buttons, links and titles is now available.
+
+### Bug Fixes
+
+* General bug fixes and improvements.
+
 ## 1.8.0
 
 **Released**: May 26, 2025
