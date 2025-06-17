@@ -40,6 +40,24 @@ val settings =
 
 You can also configure your label by using pre-built fields. This allows more granular customization of the label definition without needing to define a complete label structure.
 
+Customization of pre-built fields is done via the `patterns` and `dataTypePatterns` methods, which allow you to specify the expected format of the field data.
+
+:::tip
+All pre-built fields come with default `patterns` and `dataTypePatterns` that are suitable for most use cases. Using either method is optional and will override the defaults.
+:::
+
+### `patterns`
+
+The `patterns` method is used to define the expected format of the field data. It accepts one or more regular expressions that the captured data must match.
+
+### `dataTypePatterns`
+
+The `dataTypePatterns` method is used to specify identifying keywords that help the system recognize the context of the field. This is particularly useful for fields like expiry dates or packing dates, where the surrounding text can vary.
+
+:::tip
+The `resetDataTypePatterns` method can be used to remove the default `dataTypePattern`, allowing you to rely solely on the `patterns` for detection.
+:::
+
 ### Example: Hard disk drive label
 
 This example demonstrates how to configure a label definition for a hard disk drive (HDD) label, which typically includes common fields like serial number and part number.
@@ -61,6 +79,22 @@ val settings =
 ## Custom Labels and Fields
 
 If your use case is unique and not covered by Smart Label Capture's predefined options for label and fields, you can define your own custom label and its fields.
+
+### `patterns`
+
+This is a **mandatory** field when creating a custom field.
+
+The `patterns` method allows you to define one or more regex-based patterns that identify the target string in the scanned content.
+
+### `dataTypePatterns`
+
+The `dataTypePatterns` method is used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present).
+
+### `symbologies`
+
+This is a **mandatory** field when creating a custom barcode field.
+
+The `symbologies` method allows you to specify which barcode symbologies are valid for the custom field. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance.
 
 ### Example: Fish Shipping Box
 
@@ -86,27 +120,27 @@ val settings =
 
 ## Field Types
 
-The [LabelDefinitionBuilding](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition-builder.html) API provides various field types you can use to define the structure of your label.
+The [LabelDefinitionBuilder](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition-builder.html) API provides various field types you can use to define the structure of your label.
 
 ### Barcode Fields
 
-* `SerialNumberBarcode`
-* `PartNumberBarcode`
-* `ImeiOneBarcode`
-* `ImeiTwoBarcode`
-* `CustomBarcode`
+* [`SerialNumberBarcode`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/serial-number-barcode.html#serial-number-barcode)
+* [`PartNumberBarcode`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/part-number-barcode.html#part-number-barcode)
+* [`ImeiOneBarcode`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/imei-one-barcode.html#imei-one-barcode)
+* [`ImeiTwoBarcode`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/imei-two-barcode.html#imei-two-barcode)
+* [`CustomBarcode`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/custom-barcode.html#custom-barcode)
 
 ### Price and Weight Fields
 
-* `UnitPriceText`
-* `TotalPriceText`
-* `WeightText`
+* [`UnitPriceText`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/unit-price-text.html#unit-price-text)
+* [`TotalPriceText`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/total-price-text.html#total-price-text)
+* [`WeightText`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/weight-text.html#weight-text)
 
 ### Date and Custom Text Fields
 
-* `PackingDateText`
-* `ExpiryDateText`
-* `CustomText`
+* [`PackingDateText`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/packing-date-text.html#packing-date-text)
+* [`ExpiryDateText`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/expiry-date-text.html#expiry-date-text)
+* [`CustomText`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/custom-text.html#custom-text)
 
 ### Optional Fields
 
