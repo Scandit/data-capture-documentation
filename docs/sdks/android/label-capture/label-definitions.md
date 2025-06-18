@@ -148,5 +148,5 @@ Fields can be marked as optional, this is helpful when certain fields may not be
 
 ```kotlin
 LabelField field = LabelField('expiryDate')
-  ..setOptional(true);
+  .setOptional(true);
 ```
