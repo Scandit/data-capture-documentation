@@ -6,9 +6,9 @@ keywords:
 
 # Label Definitions
 
-Smart Label Capture provides a [Label Definition](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#label-definition) API, enabling you to configure and extract structured data from predefined and custom labels. This feature provides a flexible way to recognize and decode fields within a specific label layout such as price tags, VIN labels, or packaging stickers without needing to write custom code for each label type.
-
 A **Label Definition** is a configuration that defines the label, and its relevant fields, that Smart Label Capture should recognize and extract during scans.
+
+Smart Label Capture provides a [Label Definition](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#label-definition) API, enabling you to configure and extract structured data from predefined and custom labels. This feature provides a flexible way to recognize and decode fields within a specific label layout such as price tags, VIN labels, or packaging stickers without needing to write custom code for each label type.
 
 There are three approaches to using label definitions:
 
@@ -20,8 +20,8 @@ There are three approaches to using label definitions:
 
 Smart Label Capture provides pre-built label definitions out of the box for the following common label types:
 
-- **Price Label**: This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `UPC` and `priceText` fields.
-- **VIN Label**: A predefined label definition for scanning Vehicle Identification Numbers (VIN). Returns `text` and/or `barcode` fields.
+- [**Price Label**](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName): This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `UPC` and `priceText` fields.
+- [**VIN Label**](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName): A predefined label definition for scanning Vehicle Identification Numbers (VIN). Returns `text` and/or `barcode` fields.
 
 ### Example: Price label
 
