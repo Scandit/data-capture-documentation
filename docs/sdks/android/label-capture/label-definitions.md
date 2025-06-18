@@ -20,7 +20,7 @@ There are three approaches to using label definitions:
 
 Smart Label Capture provides pre-built label definitions out of the box for the following common label types:
 
-- [**Price Label**](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName): This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `UPC` and `priceText` fields.
+- [**Price Label**](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName): This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `SKU` and `priceText` fields.
 - [**VIN Label**](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName): A predefined label definition for scanning Vehicle Identification Numbers (VIN). Returns `text` and/or `barcode` fields.
 
 ### Example: Price label
