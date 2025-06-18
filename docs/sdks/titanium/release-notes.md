@@ -9,13 +9,19 @@ keywords:
   - titanium
 ---
 
-## 7.4.0-beta.2
+## 7.4.0
 
-**Released**: June 11, 2025
+**Released**: June 19, 2025
 
 ### Performance Improvements
 
 * Updated ARM MbedTLS from 3.6.2 to 3.6.3.
+
+## 7.3.1
+
+**Released**: June 13, 2025
+
+No updates for this framework in this release.
 
 ## 7.3.0
 

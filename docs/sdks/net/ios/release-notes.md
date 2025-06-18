@@ -9,9 +9,9 @@ keywords:
   - netIos
 ---
 
-## 7.4.0-beta.2
+## 7.4.0
 
-**Released**: June 11, 2025
+**Released**: June 19, 2025
 
 ### Performance Improvements
 
@@ -24,6 +24,12 @@ keywords:
 ### Bug Fixes
 
 * Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
+
+## 7.3.1
+
+**Released**: June 13, 2025
+
+No updates for this framework in this release.
 
 ## 7.3.0
 

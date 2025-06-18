@@ -9,9 +9,9 @@ keywords:
   - flutter
 ---
 
-## 7.4.0-beta.2
+## 7.4.0
 
-**Released**: June 11, 2025
+**Released**: June 19, 2025
 
 ### New Features
 
@@ -43,6 +43,15 @@ keywords:
 #### ID
 
 * Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
+
+## 7.3.1
+
+**Released**: June 13, 2025
+
+### Bug Fixes
+
+* Fixed a bug where parsing of `selectedBarcodes` and `newlyUnselectedBarcodes` would fail in the `BarcodeSelectionSession` due to a wrong casting.
+* Fix dependencies of the sample applications published in GitHub.
 
 ## 7.3.0
 
