@@ -14,21 +14,21 @@ Symbologies often have different properties, such as symbol count (length of the
 
 | Symbology | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checksum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  | Symbol Count | Supports Color-Inversion | Extensions    |
 |-----------|:-----------|--------------|:------------------------:|---------------|
-| EAN-13<br/>UPC-A  | **Mandatory**: mod10 | **Default**: 12<br/>**Range**: 12 | yes| relaxed_sharp_quiet_zone_check<br/>remove_leading_upca_zero<br/>two_digit_add_on<br/>five_digit_add_on<br/>strict |
+| EAN-13<br/>UPC-A  | **Mandatory**: mod10 | **Default**: 12<br/>**Range**: 12 | yes| relaxed_sharp_quiet_zone_check<br/>remove_leading_upca_zero<br/>two_digit_add_on<br/>five_digit_add_on<br/>strict<br/>ocr_fallback |
 | EAN-8  | **Mandatory**: mod10 | **Default**: 8<br/>**Range**: 8 | yes| relaxed_sharp_quiet_zone_check<br/>two_digit_add_on<br/>five_digit_add_on<br/>strict |
 | UPC-E  | **Mandatory**: mod10 | **Default**: 6<br/>**Range**: 6 | yes| return_as_upca<br/>remove_leading_upca_zero<br/>two_digit_add_on<br/>five_digit_add_on<br/>strict |
 | Two-Digit Add-on  | **Mandatory**: mod10 | **Default**: 2<br/>**Range**: 2 | yes| strict |
 | Five-Digit Add-on  | **Mandatory**: mod10 | **Default**: 5<br/>**Range**: 5 | yes| strict |
 | MSI Plessey  | **Mandatory**: none<br/>**Supported**: mod10, mod11, mod1010, mod1110<br/>**Default**: mod10 | **Default**: 6-32<br/>**Range**: 3-32 | no| strict |
-| Code 128  | **Mandatory**: mod103 | **Default**: 6-40<br/>**Range**: 4-50 | yes| strip_leading_fnc1<br/>strict |
+| Code 128  | **Mandatory**: mod103 | **Default**: 6-40<br/>**Range**: 4-50 | yes| strip_leading_fnc1<br/>strict<br/>ocr_fallback |
 | Code 11  | **Mandatory**: none<br/>**Supported**: mod11<br/>**Default**: mod11 | **Default**: 7-20<br/>**Range**: 5-34 | no| strict |
 | Code 25  | **Mandatory**: none<br/>**Supported**: mod10 | **Default**: 7-20<br/>**Range**: 3-32 | no| strict |
 | IATA 2 of 5  | **Mandatory**: none<br/>**Supported**: mod1010 | **Default**: 7-20<br/>**Range**: 3-32 | no| strict |
 | Matrix 2 of 5  | **Mandatory**: none<br/>**Supported**: mod10 | **Default**: 7-20<br/>**Range**: 3-32 | no| strict |
 | Code 32  | **Mandatory**: mod10 | **Default**: 8<br/>**Range**: 8 | no| strict |
-| Code 39  | **Mandatory**: none<br/>**Supported**: mod43 | **Default**: 6-40<br/>**Range**: 3-50 | yes| full_ascii<br/>relaxed_sharp_quiet_zone_check<br/>strict |
+| Code 39  | **Mandatory**: none<br/>**Supported**: mod43 | **Default**: 6-40<br/>**Range**: 3-50 | yes| full_ascii<br/>relaxed_sharp_quiet_zone_check<br/>strict<br/>ocr_fallback |
 | Code 93  | **Mandatory**: mod47 | **Default**: 6-40<br/>**Range**: 5-60 | yes| full_ascii<br/>strict |
-| Codabar  | **Mandatory**: none<br/>**Supported**: mod16, mod11 | **Default**: 7-20<br/>**Range**: 3-34 | no| strict<br/>remove_delimiter_data |
+| Codabar  | **Mandatory**: none<br/>**Supported**: mod16, mod11 | **Default**: 7-20<br/>**Range**: 3-34 | no| strict<br/>remove_delimiter_data<br/>ocr_fallback |
 | GS1 DataBar 14  | **Mandatory**: mod10 | **Default**: 2<br/>**Range**: 2 | no| strict |
 | GS1 DataBar Expanded  | **Mandatory**: mod211 | **Default**: 1-11<br/>**Range**: 1-11 | no| strict |
 | GS1 DataBar Limited  | **Mandatory**: mod89 | **Default**: 1<br/>**Range**: 1 | no| relaxed_sharp_quiet_zone_check<br/>strict |
@@ -69,7 +69,7 @@ Symbologies often have different properties, such as symbol count (length of the
 | fluorescent_orange_ink                 | Enables the scanning of low contrast fluorescent orange codes. Enabling this option can have a negative impact on the scan performance of other symbologies.                                                                  |
 | force_table_c, force_table_n and decode_bar_states | For Australian Post 4-State, customer information is decoded by default with Table N, and Table C is used as a fallback. force_table_c and force_table_n respectively enforce decoding with either C or N tables, and the symbology extension decode_bar_states will return the error-corrected customer information bars as a string of the bar states, A for ascending, D for descending, T for tracker and F for full.     |
 | remove_delimiter_data                  | For Codabar, removes the start and stop characters from the code and returns only the body of the code in the result.   |
-| guess_encoding_disabled | By default QR code encoding is guessed based on the code's data. If guessing is disabled, ISO-8859-1 is reported as default (unless extension `use_utf8_as_default_encoding` is set to report UTF-8). |
+| ocr_fallback | Enables Optical Character Recognition of text as a fallback when other readers fail. This feature requires Smart Scan Intention which is only available in SparkScan or through the Linux settings preset `SC_PRESET_SINGLE_CODE_HAND_HELD`. |
 
 ## Calculating Symbol Counts for Variable-Length Symbologies
 
