@@ -36,8 +36,10 @@ Scanning modes:
 - **Default mode**: Ideal for close-range and fast paced scanning. This mode will display a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed.
 - **Target mode**: Ideal for scanning scenarios where precision is important. This mode will add an aimer to the preview, to precisely select the barcode to scan. This is useful when multiple barcodes are in view (e.g. long range scanning).
 
-:::note
-Users can enable the target mode by toggling the dedicated icon in the setting toolbar, shown by default (`SDCSparkScanView.targetModeButtonVisible`). Hiding this button will remove the possibility to toggle scanning mode for the end-user.
+:::tip
+Users can enable the target mode by toggling the dedicated icon in the setting toolbar, shown when `SparkScanView.targetModeButtonVisible` is enabled.
+
+The Settings toolbar itself is only visible if at least one of the buttons is enabled.
 :::
 
 Scanning behaviors:
