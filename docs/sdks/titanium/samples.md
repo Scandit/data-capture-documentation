@@ -12,7 +12,7 @@ keywords:
 
 This page provides a list of samples available for the Scandit Data Capture SDK for Titanium. Each sample demonstrates a specific feature or use case of the SDK.
 
-The repository with all the samples can be found [here](https://github.com/Scandit/datacapture-titamium-samples/tree/main), and each individual sample is linked below.
+The repository with all the samples can be found [here](https://github.com/Scandit/datacapture-titanium-samples), and each individual sample is linked below.
 
 ## Barcode Scanning
 
