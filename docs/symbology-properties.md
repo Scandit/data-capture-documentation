@@ -51,7 +51,7 @@ Symbologies often have different properties, such as symbol count (length of the
 | MaxiCode       | no                       |                                          |
 | MicroPDF417    | no                       |                                          |
 | PDF417         | no                       |                                          |
-| QR Code        | yes   | guess_encoding_disabled    |
+| QR Code        | yes   |     |
 | Micro QR Code  | yes                      |                                          |
 | ArUco          | yes                      |                                          |
 

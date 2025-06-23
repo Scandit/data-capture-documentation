@@ -51,7 +51,7 @@ Symbologies often have different properties, such as symbol count (length of the
 | MaxiCode       | no                       |                                          |
 | MicroPDF417    | no                       |                                          |
 | PDF417         | no                       |                                          |
-| QR Code        | yes   | guess_encoding_disabled    |
+| QR Code        | yes   |     |
 | Micro QR Code  | yes                      |                                          |
 | ArUco          | yes                      |                                          |
 
@@ -69,7 +69,7 @@ Symbologies often have different properties, such as symbol count (length of the
 | fluorescent_orange_ink                 | Enables the scanning of low contrast fluorescent orange codes. Enabling this option can have a negative impact on the scan performance of other symbologies.                                                                  |
 | force_table_c, force_table_n and decode_bar_states | For Australian Post 4-State, customer information is decoded by default with Table N, and Table C is used as a fallback. force_table_c and force_table_n respectively enforce decoding with either C or N tables, and the symbology extension decode_bar_states will return the error-corrected customer information bars as a string of the bar states, A for ascending, D for descending, T for tracker and F for full.     |
 | remove_delimiter_data                  | For Codabar, removes the start and stop characters from the code and returns only the body of the code in the result.   |
-| guess_encoding_disabled | By default QR code encoding is guessed based on the code's data. If guessing is disabled, ISO-8859-1 is reported as default (unless extension `use_utf8_as_default_encoding` is set to report UTF-8). |
+
 
 ## Calculating Symbol Counts for Variable-Length Symbologies
 
