@@ -3,7 +3,7 @@ toc_max_heading_level: 4
 pagination_prev: null
 displayed_sidebar: linuxSidebar
 framework: linux
-tags: [titanium]
+tags: []
 keywords:
   - linux
 ---
@@ -13,3 +13,4 @@ keywords:
 import SingleScanning from '../../partials/_single-scanning.mdx';
 
 <SingleScanning/>
+

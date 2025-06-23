@@ -6,7 +6,7 @@ keywords:
   - linux
 ---
 
-# Get Started
+# Configure with JSON
 
 This document describes the JSON format understood by the [`sc_barcode_scanner_settings_new_from_json()`](https://docs.scandit.com/stable/c_api/struct_sc_barcode_scanner_settings.html#a12865e80efbcf01cac8bc8c749032663) function.
 
@@ -96,10 +96,6 @@ The following options are currently supported:
 Depending on the symbology, some of these properties are ignored. See [Configure Barcode Symbologies](/sdks/linux/barcode-capture/configure-barcode-symbologies.md) for details.
 
 ## Code Location and Search Area
-
-:::tip
-These options are not available when constructing the `ScanSettings` object for a barcode picker from JSON. Use `areaSettingsPortrait`, `areaSettingsLandscape` instead.
-:::
 
 To customize the search area and code location hints, you can use the `codeLocation1d`, `codeLocation2d`, `searchArea` and `codeDirectionHint` properties.
 

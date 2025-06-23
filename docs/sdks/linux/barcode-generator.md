@@ -1,22 +1,18 @@
 ---
 displayed_sidebar: linuxSidebar
+sidebar_label: JSON Settings
 ---
 
 # Barcode Generator
 
-The Barcode Generator is a simple tool to generate barcodes directly from the Scandit SDK. This document describes the JSON format understood by the [`sc_barcode_generator_set_options()`](https://docs.scandit.com/stable/c_api/struct_sc_barcode_generator.html#a045a2b9474895067e8eb1610ae6c5fef) function.
+The Barcode Generator is a simple API to generate barcodes directly from the Scandit SDK. This document describes the JSON format understood by the [`sc_barcode_generator_set_options()`](https://docs.scandit.com/stable/c_api/struct_sc_barcode_generator.html#a045a2b9474895067e8eb1610ae6c5fef) function.
 
-## 1D Symbologies
+## General Options
 
 * `foregroundColor`: 4-tuple of integers [r, g, b, a] with `r`, `g`, `b` and `a` being in the range [0, 255]
 * `backgroundColor`: 4-tuple of integers [r, g, b, a] with `r`, `g`, `b` and `a` being in the range [0, 255]
 
 ## 2D Symbologies
-
-### General Options
-
-* `foregroundColor`: 4-tuple of integers [r, g, b, a] with `r`, `g`, `b` and `a` being in the range [0, 255]
-* `backgroundColor`: 4-tuple of integers [r, g, b, a] with `r`, `g`, `b` and `a` being in the range [0, 255]
 
 ### QR Code
 

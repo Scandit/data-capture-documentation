@@ -2496,8 +2496,18 @@ const sidebars: SidebarsConfig = {
       label: 'Barcode Scanning',
       collapsed: false,
       items: [
-        "sdks/linux/barcode-capture/get-started",
+        
         "sdks/linux/barcode-capture/configure-barcode-symbologies",
+        "sdks/linux/barcode-capture/configure-with-json",
+        "sdks/linux/barcode-capture/add-on-codes",
+        "sdks/linux/barcode-capture/composite-codes",
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Barcode Generation',
+      collapsed: false,
+      items: [
         "sdks/linux/barcode-generator",
       ],
     },

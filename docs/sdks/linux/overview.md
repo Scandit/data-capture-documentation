@@ -4,11 +4,13 @@ pagination_next: null
 framework: linux
 keywords:
   - linux
+  - debian
+  - ubuntu
 ---
 
 # Overview
 
-The Scandit C API offers a low-level interface to the Data Capture SDK. The low-level API is the default interface on Linux but it is also available for Android and iOS.
+The Scandit SDK C API offers a low-level interface to the Data Capture SDK. The low-level API is the default interface on Linux but it is also available for Android and iOS.
 
 This interface is very limited compared to the Data Capture API provided in the SDKs for all platforms. It allows you to pass image data directly to the data capture modules, such as barcode scanning. The API does not include a user interface, image or stream management, or advanced camera control. On Linux a basic camera interface for Video4Linux 2 (V4L2) cameras is provided.
 
@@ -18,7 +20,11 @@ If you are creating a mobile application for Android and/or iOS where the Scandi
 * A batch or single image processing system on an embedded system or server
 * A mobile application where multiple consumers (other vision frameworks) access the camera stream and therefore the camera control can not be done by the Scandit Data Capture API.
 
-## SDK Concepts
+## Features
+
+The low-level API offers single and multi barcode scanning, barcode tracking (MatrixScan), barcode generation and barcode data parsing.
+
+## Low-level API Concepts
 
 ### Memory Management Rules
 
@@ -44,24 +50,36 @@ By default the Scandit SDK is optimized for real-time video streaming. In genera
 
 Single image processing use-cases, for example scanning a scanned or photographed document, require a specific setup.
 
-* Use a YUV or Grayscale image input format. RGB will be converted internally.
+* Use a YUV or Grayscale image input format. RGB(A) will be converted internally.
 * Use an image resolution between 800x600 to 1920x1080. 1280x720 is recommended.
 * Make sure to have an area of at least 320x160 pixels when setting a restricted code location area for barcode localization.
-* Having a working GPU (OpenGLES 2.0) support improves the performance of the barcode localization. The CPU fallback is less accurate and slower.
 * Having SIMD CPU support (NEON or SSE) improves execution times.
 * Pre-cropping the image is not required. The SDK can find the barcodes in the image.
 * Pre-processing (filter, blur, binarize) the image is not recommended. Provide natural images.
 * Very long codes require that you setup the symbol counts that you want to scan.
 * Blurry decoding using your custom camera and camera lens will not perform as well as high-end iOS or Android devices. Please [contact us](mailto:support@scandit.com) if specific optimizations for your camera are desired.
 
-### Single Image Processing
+### Video Streaming Use-Case
 
-* Starting from SDK version 5.4 the settings preset `SC_PRESET_ENABLE_SINGLE_FRAME_MODE` can be used to improve performance.
-* The input image should be uncompressed. JPEG file sources are very bad as they contain block artifacts.
+The default barcode scanner settings (`SC_PRESET_NONE`) offer a balance speed to accuracy performance on frame sequences for single and multi-scan use-cases. To achieve comparable results as the high level Data Capture API, you have to create barcode specific camera control algorithms that adjust exposure and auto-focus. The `ScCamera` implementations currently provided do not implement this. The recommended input resolution is FullHD (1080p) or 4KUHD (2160p) for extra range.
+
+For scenarios where a hand held device is used to scan a single barcode in a static scene, the barcode scanner preset `SC_PRESET_SINGLE_CODE_HAND_HELD` should be set.
+Among other optimizations, this preset enables Smart Scan Intention, which prevents scans in the background or during fast movement.
+
+A frame sequence should only be restarted (see `sc_recognition_context_start_new_frame_sequence`) if the frame stream is discontinuous, e.g. when the camera is switched off or temporarily stopped.
+
+### Single Image Processing Use-Case
+
+There are barcode scanner presets to improve the scan robustness. For SDK versions before 7.0, `SC_PRESET_ENABLE_SINGLE_FRAME_MODE` can be set. For SDK versions 7.1 or later `SC_PRESET_HIGH_EFFORT` should be set. These presets try to achieve the best accuracy by spending more time per frame than the default preset. The settings are optimized for high power devices or non real-time requirements. They supports single or multi-code scanning and is recommended for single image or cloud processing use-cases.
+
+Recommendations:
+* The recommended input resolution is FullHD (1080p) or 4KUHD (2160p).
+* A new frame sequence should be started for every new input image by calling `sc_recognition_context_start_new_frame_sequence`.
+* The input image should be uncompressed. JPEG encoded image data is often poor as it contains block artifacts.
 * Try to acquire images that are as sharp as possible and don't contain motion blur.
 * Disable the code duplicate filter in the session configuration.
-* For SDK version 5.4 and earlier the recognition context implicitly switches between running full image localization and default scan area. To perform both strategies on an input image the process frame call has to be executed twice for each input image. This is no longer necessary for versions 5.5 or newer.
 
-### Video Processing
+### Multi-Threading
 
-To achieve comparable results as the high level Data Capture API, you have to create barcode specific camera control algorithms that adjust exposure and auto-focus. Please [contact us](mailto:support@scandit.com) if you need help with this.
+Dynamic threading is used internally to accelerate the execution if available. The functions of the SDK library are not thread-safe. All context and scanner calls have to happen in the same thread.
+

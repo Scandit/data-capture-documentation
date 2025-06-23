@@ -31,10 +31,7 @@ $ sudo dpkg -i libscandit-barcodescanner-X.Y.Z-architecture.deb
 The architecture you need to use depends on your system:
 
 - amd64 for 64bit x86 systems
-- i386 for 32bit x86 systems
-- armhf for the Raspberry Pi 2 or 3
-- armv6l for the Raspberry Pi Zero
-- arm64 for 64bit ARM systems such as the Nvidia Jetson TX2
+- arm64 for 64bit ARM systems such as the Nvidia Jetson TX2 or the Raspberry Pi 4 or 5
 
 For example, if using a 64bit x86 Ubuntu desktop the correct command would be:
 
@@ -42,8 +39,29 @@ For example, if using a 64bit x86 Ubuntu desktop the correct command would be:
 $ sudo dpkg -i libscandit-barcodescanner-5.27.1-amd64.deb
 ```
 
- Sample Applications
----------------------
+# Python API
+
+The Python bindings for the Scandit SDK are located in the zip file. To use
+them, you need to ensure that they are located in a path that Python
+searches for modules. One way to achieve this is to extend the `PYTHONPATH`
+to also list the directory that contains `scanditsdk.py`
+
+Note that the Python bindings are provided on a best-effort basis. They
+aren't an officially supported product from Scandit.
+
+# Raspberry Pi's
+
+The SDK supports the Raspberry Pi 3, 4 and 5. The camera has to support 
+Video4Linux2 (V4L2). The following steps are required to setup V4L2:
+
+```bash
+$ sudo apt-get install v4l-utils
+```
+
+Put bcm2835-v4l2 into `/etc/modules-load.d/modules.conf`.
+Reboot the device.
+
+# Sample Applications
 
 All sample applications are contained the samples directory and have the following dependencies:
 
@@ -66,55 +84,43 @@ All sample applications are contained the samples directory and have the followi
 Insert your license key to all sample source files.
 
 Compile:
+```bash
 $ cd samples
 $ make
+```
 
 Execute the image processing sample:
+```bash
 $ ./CommandLineBarcodeScannerImageProcessingSample ean13-code.png
+```
 
 Execute the camera sample:
+```bash
 $ ./CommandLineBarcodeScannerCameraSample /dev/video0 640 480
+```
 
 Execute the MatrixScan sample:
-$ ./CommandLineMatrixScanCameraSample /dev/video1 1920 1080
+```bash
+$ ./CommandLineMatrixScanCameraSample /dev/video0 1920 1080
+```
 
 Execute the barcode generator sample:
+```bash
 $ ./CommandLineBarcodeGeneratorSample
+```
 
 Execute the Python image processing sample:
-$ python3 CommandLineBarcodeScannerImageProcessingSample.py ean13-code.png
+```bash
+$ python CommandLineBarcodeScannerImageProcessingSample.py ean13-code.png
+```
 
- Raspberry Pi's
-----------------
+## Gstreamer
 
-The SDK supports the Raspberry Pi 2, 3 and Zero. The camera has to support 
-Video4Linux2 (V4L2). The following steps are required to setup V4L2:
+Refer to the documentation in `samples/gstreamer/README.md`.
 
-$ sudo apt-get install v4l-utils
+## OpenCV
 
-Put bcm2835-v4l2  into /etc/modules-load.d/modules.conf
-Reboot the device.
-
- Python
-----------------
-
-The Python bindings for the Scandit SDK are located in the zip file. To use
-them, you need to ensure that they are located in a path that Python
-searches for modules. One way to achieve this is to extend the `PYTHONPATH`
-to also list the directory that contains `scanditsdk.py`
-
-Note that the Python bindings are provided on a best-effort basis. They
-aren't an officially supported product from Scandit.
-
- Gstreamer
-----------------
-
-Refer to the documentation in samples/gstreamer/README.md
-
- OpenCV
-----------------
-
-OpenCV barcode scanner samples are in /opencv_py_demo folder.
+OpenCV barcode scanner samples are in `samples/opencv_py_demo` folder.
 
 These examples configure the SDK for a single image use case without any
 resource restrictions.

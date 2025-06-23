@@ -14,37 +14,43 @@ You might need to scan a symbology whose properties are by default disabled. Thi
 
 ## Setting Symbology Properties
 
-You can set the properties of a symbology using the methods of the `SymbologySettings` class (naming can vary slightly across platforms). For example, on Android, you can get the symbology settings of code 128 as follows:
+You can set the properties of a symbology using the methods of the `ScSymbologySettings` class. You can get the symbology settings of Code128 as follows:
 
-```java
-SymbologySettings symSettings = settings.getSymbologySettings(Barcode.SYMBOLOGY_CODE128);
+```c
+ScSymbologySettings *symbology_settings = sc_barcode_scanner_settings_get_symbology_settings(settings, SC_SYMBOLOGY_CODE128)
 ```
 
-Some symbologies have optional checksums. You can enforce it with the dedicated checksum method of the `SymbologySettings` class. On Android:
+Some symbologies have optional checksums. A specific checksum method can be set in the following way:
 
-```java
-symSettings.setChecksums(SymbologySettings.CHECKSUM_MOD_10);
+```c
+sc_symbology_settings_set_checksums(symbology_settings, SC_CHECKSUM_MOD_10);
 ```
 
-Symbologies may also have a certain length range configured by default. You can set a new range using the dedicated symbol count method on the `SymbologySettings` class. On Android:
+Symbologies may also have a certain length range configured by default. The length of a barcode can be checked using the "Any Code" mode of our demo app (Apple/Play Store). A new length range can be set by the dedicated symbol count method on the ScSymbologySettings class.
 
-```java
-short[] activeSymbolCounts = new short[] {
+```c
+uint16_t symbol_counts[] = {
     7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
 };
-symSettings.setActiveSymbolCounts(activeSymbolCounts);
+sc_symbology_settings_set_active_symbol_counts(symbology_settings, symbol_counts, sizeof(symbol_counts));
 ```
 
-When working with symbologies printed white on black (default is black on white), you can set it using the dedicated inverted color method on the `SymbologySettings` class. On Android:
+When working with symbologies printed white on black (default is black on white), you can set it using the dedicated inverted color method on the `ScSymbologySettings` class.
 
-```java
-symSettings.setColorInvertedEnabled(true);
+```c
+sc_symbology_settings_set_color_inverted_enabled(symbology_settings, SC_TRUE);
 ```
 
-Symbologies may also have optional extensions/properties, as detailed in the next section. You can enforce these properties through a generic method on the `SymbologySettings` class. On Android:
+Symbologies may also have optional extensions/properties, as detailed in the next section. You can enforce these properties through a generic method on the `ScSymbologySettings` class.
 
-```java
-symSettings.setExtensionEnabled(relaxed_sharp_quiet_zone_check, false);
+```c
+sc_symbology_settings_set_extension_enabled(symbology_settings, "relaxed_sharp_quiet_zone_check", SC_TRUE);
+```
+
+Some symbologies support Optical Character Recognition (OCR) as a fallback when scanning fails. When the extension is enabled, an optional regular expression can be used to constrain results to a specific format, using the following method on the `ScSymbologySettings` class:
+
+```c
+sc_symbology_settings_set_ocr_fallback_regex(symbology_settings, regex);
 ```
 
 ## 1D Symbology Properties
@@ -55,36 +61,36 @@ Keep the following in mind when configuring 1D symbologies:
 * Color-inverted (bright bars on dark background) decoding for symbologies that support it is disabled and must be explicitly enabled.
 * Optional checksum digits (e.g. for interleaved 2 of 5 codes, or MSI-Plessey codes) are always returned as part of the data.
 
-| Symbology                   | Mandatory Checksums | Supported Optional Checksums      | Default Optional Checksum | Default Symbol Count Range | Supported Symbol Count Range | Color-Inverted Codes | Extensions                                     | Generator Support |
-|-----------------------------|---------------------|-----------------------------------|---------------------------|----------------------------|-----------------------------|----------------------|------------------------------------------------|------------------|
-| EAN-13 / UPC-A              | mod10              | none                              | mod10                    | 12                         | 12                          | yes                  | relaxed_sharp_quiet_zone_check, remove_leading_upca_zero, strict | yes              |
-| EAN-8                       | mod10              | none                              | mod10                    | 8                          | 8                           | yes                  | relaxed_sharp_quiet_zone_check, strict           | no               |
-| UPC-E                       | mod10              | none                              | mod10                    | 6                          | 6                           | yes                  | return_as_upca, remove_leading_upca_zero, strict | no               |
-| Two-Digit Add-on            | mod10              | none                              | mod10                    | 2                          | 2                           | yes                  | strict                                         | no               |
-| Five-Digit Add-on           | mod10              | none                              | mod10                    | 5                          | 5                           | yes                  | strict                                         | no               |
-| MSI Plessey                 | none               | mod10, mod11, mod1010, mod1110    | mod10                    | 6-32                       | 3-32                        | no                   | strict                                         | no               |
-| Code 128                    | mod103             | none                              | mod103                   | 6-40 (includes 1 checksum and 2 guard symbols) | 4-50                 | yes                  | strip_leading_fnc1, strict                     | yes              |
-| Code 11                     | none               | mod11                             | mod11                    | 7-20 (includes 0-2 checksum digits) | 3-32                 | no                   | strict                                         | no               |
-| Code 25                     | none               | mod10                             | mod10                    | 7-20                       | 3-32                        | no                   | strict                                         | no               |
-| IATA 2 of 5                 | none               | mod1010                           | mod1010                  | 7-20                       | 3-32                        | no                   | strict                                         | no               |
-| Matrix 2 of 5               | none               | mod10                             | mod10                    | 7-20                       | 3-32                        | no                   | strict                                         | no               |
-| Code 32                     | mod10              | none                              | mod10                    | 8 (plus one check digit)   | -                           | no                   | strict                                         | no               |
-| Code 39                     | mod43              | none                              | mod43                    | 6-40 (includes 2 checksums and 2 guard symbols) | 3-50                 | yes                  | full_ascii, relaxed_sharp_quiet_zone_check, strict | yes              |
-| Code 93                     | mod47              | none                              | mod47                    | 6-40 (includes 2 checksums and 2 guard symbols) | 5-60                 | no                   | full_ascii, strict                              | no               |
-| Codabar                     | none               | mod16, mod11                      | mod16                    | 7-20 (includes 2 guard symbols) | 3-34                 | no                   | strict, remove_delimiter_data                  | no               |
-| GS1 DataBar 14              | mod10              | none                              | mod10                    | 2 (encoding 14 digits)     | 2                           | no                   | strict                                         | no               |
-| GS1 DataBar Expanded        | none               | mod211                            | mod211                   | 1-11 (encoding 1-74 characters) | 1-11                 | no                   | strict                                         | no               |
-| GS1 DataBar Limited         | none               | mod89                             | mod89                    | 1 (encoding 14 digits)     | 1                           | no                   | relaxed_sharp_quiet_zone_check, strict          | no               |
-| Interleaved-Two-of-Five (ITF)| none              | mod10                             | mod10                    | 6-40                       | 4-50                        | no                   | strict                                         | yes              |
-| RMS4SCC                     | mod36              | none                              | mod36                    | 7-24                       | 4-50                        | no                   | none                                          | no               |
-| KIX                         | none               | none                              | none                     | 7-24                       | 7-24                        | no                   | none                                          | no               |
-| LAPA                        | none               | none                              | none                     | 16                         | 16                          | no                   | none                                          | no               |
-| USPS Intelligent Mail       | none               | none                              | none                     | 65                         | 65                          | no                   | none                                          | no               |
-| UPU 4-State                 | none               | none                              | none                     | 19 or 25                   | 19 or 25                    | no                   | fluorescent_orange_ink, swiss_post_decoding     | no               |
-| Australian Post 4-State     | none               | none                              | none                     | 10-41 (10 digits, 0-31 customer info characters) | 10-41             | no                   | one of force_table_c, force_table_n, decode_bar_states | no               |
-| French Post                 | none               | none                              | none                     | -                          | -                           | no                   | fluorescent_orange_ink                         | no               |
+| Symbology                     | Mandatory Checksums | Supported Optional <br/>Checksums | Default Optional<br/> Checksum | Default Symbol Count Range                      | Supported Symbol Count Range | Color-Inverted <br/>Codes | Extensions                                                       | Generator Support |
+|-------------------------------|---------------------|-----------------------------------|--------------------------------|-------------------------------------------------|------------------------------|---------------------------|------------------------------------------------------------------|-------------------|
+| EAN-13 / UPC-A                | mod10               |                                   |                                | 12                                              | 12                           | yes                       | ocr_fallback, remove_leading_upca_zero, strict                   | yes               |
+| EAN-8                         | mod10               |                                   |                                | 8                                               | 8                            | yes                       | strict                                                           | no                |
+| UPC-E                         | mod10               |                                   |                                | 6                                               | 6                            | yes                       | return_as_upca, remove_leading_upca_zero, strict                 | no                |
+| Two-Digit Add-on              | mod10               |                                   |                                | 2                                               | 2                            | yes                       | strict                                                           | no                |
+| Five-Digit Add-on             | mod10               |                                   |                                | 5                                               | 5                            | yes                       | strict                                                           | no                |
+| MSI Plessey                   | none                | mod10, mod11, mod1010, mod1110    | mod10                          | 6-32                                            | 3-32                         | no                        | strict                                                           | no                |
+| Code 128                      | mod103              |                                   |                                | 6-40 (includes 1 checksum and 2 guard symbols)  | 4-50                         | yes                       | ocr_fallback, strip_leading_fnc1<sup>1</sup>, strict             | yes               |
+| Code 11                       | none                | mod11                             | mod11                          | 7-20 (includes 0-2 checksum digits)             | 3-32                         | no                        | strict                                                           | no                |
+| Code 25                       | none                | mod10                             |                                | 7-20                                            | 3-32                         | no                        | strict                                                           | no                |
+| IATA 2 of 5                   | none                | mod1010                           |                                | 7-20                                            | 3-32                         | no                        | strict                                                           | no                |
+| Matrix 2 of 5                 | none                | mod10                             |                                | 7-20                                            | 3-32                         | no                        | strict                                                           | no                |
+| Code 32                       | mod10               |                                   |                                | 8 (plus one check digit)                        | 8                            | no                        | strict                                                           | no                |
+| Code 39                       | none                | mod43                             |                                | 6-40 (includes 2 guard symbols)                 | 3-50                         | yes                       | ocr_fallback, full_ascii, relaxed_sharp_quiet_zone_check, strict | yes               |
+| Code 93                       | mod47               |                                   |                                | 6-40 (includes 2 checksums and 2 guard symbols) | 5-60                         | no                        | full_ascii<sup>2</sup>, strict                                   | no                |
+| Codabar                       | none                | mod16, mod11                      |                                | 7-20 (includes 2 guard symbols)                 | 3-34                         | no                        | ocr_fallback, strict, remove_delimiter_data                      | no                |
+| GS1 DataBar 14                | mod10               |                                   |                                | 2 (encoding 14 digits)                          | 2                            | no                        | strict                                                           | no                |
+| GS1 DataBar Expanded          | mod211              |                                   |                                | 1-11 (encoding 1-74 characters)                 | 1-11                         | no                        | strict                                                           | no                |
+| GS1 DataBar Limited           | mod89               |                                   |                                | 1 (encoding 14 digits)                          | 1                            | no                        | relaxed_sharp_quiet_zone_check, strict                           | no                |
+| Interleaved-Two-of-Five (ITF) | none                | mod10                             |                                | 6-40                                            | 4-50                         | no                        | strict                                                           | yes               |
+| Royal Mail 4-State            | mod36               |                                   |                                | 7-24                                            | 4-50                         | no                        | fluorescent_orange_ink                                           | no                |
+| KIX                           | none                |                                   |                                | 7-24                                            | 7-24                         | no                        |                                                                  | no                |
+| LAPA                          | none                |                                   |                                | 16                                              | 16                           | no                        |                                                                  | no                |
+| USPS Intelligent Mail         | none                |                                   |                                | 65                                              | 65                           | no                        |                                                                  | no                |
+| UPU 4-State                   | none                |                                   |                                | 19 or 25                                        | 19 or 25                     | no                        | fluorescent_orange_ink, swiss_post_decoding                      | no                |
+| Australian Post 4-State       | none                |                                   |                                | 10-41 (10 digits, 0-31 customer info characters)| 10-41                        | no                        | one of force_table_c, force_table_n, decode_bar_states           | no                |
+| French Post                   | none                |                                   |                                | -                                               | -                            | no                        | fluorescent_orange_ink                                           | no                |
 
-1: Enabled by default
+1: Enabled by default<br/>
 2: Always enabled
 
 ## 2D Symbology Properties
@@ -92,19 +98,21 @@ Keep the following in mind when configuring 1D symbologies:
 Keep the following in mind when configuring 2D symbologies:
 
 * All symbologies and all extensions are disabled by default when using the low-level API.
-* Color-inverted decoding for symbologies that support it is disabled and must be explicitly enabled.
+* Color-inverted decoding for symbologies that support it is disabled and must be explicitly enabled, except where mentioned.
 
-| Symbology       | Color-Inverted Codes | Extensions                                     | Generator Support |
-|------------------|----------------------|-----------------------------------------------|-------------------|
-| ArUco           | yes                  | -                                             | no                |
-| Aztec Code      | yes                  | -                                             | yes               |
-| Data Matrix     | yes                  | strip_leading_fnc1, direct_part_marking_mode  | yes               |
-| DotCode         | yes                  | -                                             | yes               |
-| MaxiCode        | no                   | -                                             | no                |
-| MicroPDF417     | no                   | -                                             | no                |
-| PDF417          | no                   | -                                             | no                |
-| QR Code         | yes                  | strict                                        | yes               |
-| Micro QR Code   | yes                  | -                                             | no                |
+| Symbology     | Color-Inverted <br/>Codes | Extensions                                               | Generator Support |
+|---------------|---------------------------|----------------------------------------------------------|-------------------|
+| ArUco         | yes                       |                                                          | no                |
+| Aztec Code    | yes                       |                                                          | yes               |
+| Data Matrix   | yes                       | strip_leading_fnc1<sup>1</sup>, direct_part_marking_mode | yes               |
+| DotCode       | yes                       |                                                          | no                |
+| MaxiCode      | no                        |                                                          | no                |
+| MicroPDF417   | no                        |                                                          | no                |
+| PDF417        | no                        |                                                          | no                |
+| QR Code       | yes<sup>1</sup>           | strict                                                   | yes               |
+| Micro QR Code | yes<sup>1</sup>           |                                                          | no                |
+
+1: Enabled by default.
 
 ## Symbology Extensions
 
@@ -123,6 +131,19 @@ Keep the following in mind when configuring 2D symbologies:
 | decode_bar_states | (For Australian Post 4-State) Returns the error-corrected customer information bars as a string of the bar states, A for ascending, D for descending, T for tracker and F for full. |
 | swiss_post_decoding | Enables scanning of proprietary Swiss Post UPU 4-State symbology. |
 | remove_delimiter_data | Removes start and stop patterns from the result of scanning a Codabar code. |
+| ocr_fallback | Enables Optical Character Recognition of text as a fallback when other readers fail. For more details, refer to section "Using OCR Fallback Symbology Extension". |
+
+## Using OCR Fallback Symbology Extension
+
+When enabled, the OCR Fallback symbology extension performs text detection and recognition next to detected codes. This extension requires Smart Scan Intention which is only available in SparkScan or through the Linux settings preset `SC_PRESET_SINGLE_CODE_HAND_HELD`. It also requires the LabelText module.
+
+OCR Fallback is triggered after 1 second of unsuccessful decoding while remaining stationary. The duration can be customized by setting the `ocr_fallback_smart_stationary_timeout` engine property with a value in milliseconds.
+
+When the scanner is configured with multiple symbologies enabled with OCR Fallback, OCR is performed for each symbology in a hard-coded sequence. As soon as a result is detected that is valid for one symbology, OCR Fallback ends and the result is returned.
+
+For some symbologies with overlapping character set and no checkum algorithms for the printed text label, this may cause unwanted results. For instance, a Code128 label may be misidentified as Code39, or vice-versa, depending on the order of execution. It is advised to configure different OCR regular expressions for each symbology when possible, so that codes are identified properly.
+
+When no OCR regular expression is configured for Code128 or Code39, results returned by OCR Fallback may only contain alpha-numerical characters to reduce false-positives. Characters detected through OCR that are non-alpha-numerical are removed from results. To scan codes containing non-alpha-numerical characters, such as spaces or dashes, it is required to configure a regular expression that matches those characters.
 
 ## Calculating Symbol Counts for Variable-Length Symbologies
 
