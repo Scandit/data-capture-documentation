@@ -634,6 +634,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/web/label-capture/intro",
                 "sdks/web/label-capture/get-started",
+                "sdks/web/label-capture/label-definitions",
                 "sdks/web/label-capture/advanced",
               ],
             },
@@ -1027,6 +1028,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/react-native/label-capture/intro",
                 "sdks/react-native/label-capture/get-started",
+                "sdks/react-native/label-capture/label-definitions",
                 "sdks/react-native/label-capture/advanced",
               ],
             },
@@ -1238,6 +1240,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/flutter/label-capture/intro",
                 "sdks/flutter/label-capture/get-started",
+                "sdks/flutter/label-capture/label-definitions",
                 "sdks/flutter/label-capture/advanced",
               ],
             },
