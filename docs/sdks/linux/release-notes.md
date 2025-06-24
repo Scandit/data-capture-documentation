@@ -47,6 +47,14 @@ No updates for this framework in this release.
 
 * MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
 
+## 7.2.3
+
+**Released**: June 24, 2025
+
+### Bug Fixes
+
+* Fixed `sc_camera_request_image_layout` to free allocated buffers before setting the format as some drivers fail with Device busy error otherwise. Take into account the possibility for the driver to auto-switch the resolution while setting image format.
+
 ## 7.2.2
 
 **Released**: May 9, 2025
