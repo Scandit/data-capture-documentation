@@ -17,6 +17,12 @@ keywords:
 
 * Updated ARM MbedTLS from 3.6.2 to 3.6.3.
 
+## 7.3.2
+
+**Released**: June 25, 2025
+
+No updates for this framework in this release.
+
 ## 7.3.1
 
 **Released**: June 13, 2025
