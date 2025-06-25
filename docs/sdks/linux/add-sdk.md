@@ -39,7 +39,7 @@ For example, if using a 64bit x86 Ubuntu desktop the correct command would be:
 $ sudo dpkg -i libscandit-barcodescanner-5.27.1-amd64.deb
 ```
 
-# Python API
+## Python API
 
 The Python bindings for the Scandit SDK are located in the zip file. To use
 them, you need to ensure that they are located in a path that Python
@@ -49,7 +49,7 @@ to also list the directory that contains `scanditsdk.py`
 Note that the Python bindings are provided on a best-effort basis. They
 aren't an officially supported product from Scandit.
 
-# Raspberry Pi's
+## Raspberry Pi's
 
 The SDK supports the Raspberry Pi 3, 4 and 5. The camera has to support 
 Video4Linux2 (V4L2). The following steps are required to setup V4L2:
@@ -61,7 +61,7 @@ $ sudo apt-get install v4l-utils
 Put bcm2835-v4l2 into `/etc/modules-load.d/modules.conf`.
 Reboot the device.
 
-# Sample Applications
+## Sample Applications
 
 All sample applications are contained the samples directory and have the following dependencies:
 
@@ -114,11 +114,11 @@ Execute the Python image processing sample:
 $ python CommandLineBarcodeScannerImageProcessingSample.py ean13-code.png
 ```
 
-## Gstreamer
+### Gstreamer
 
 Refer to the documentation in `samples/gstreamer/README.md`.
 
-## OpenCV
+### OpenCV
 
 OpenCV barcode scanner samples are in `samples/opencv_py_demo` folder.
 
