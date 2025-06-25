@@ -46,6 +46,14 @@ keywords:
 
 * Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
 
+## 7.3.2
+
+**Released**: June 25, 2025
+
+### Bug Fixes
+
+* Fixed a typo in the `labelCaptureValidationFlowOverlay:didCaptureLabelWithFields:` method.
+
 ## 7.3.1
 
 **Released**: June 13, 2025

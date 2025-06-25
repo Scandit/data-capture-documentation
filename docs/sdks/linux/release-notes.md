@@ -23,6 +23,12 @@ keywords:
 
 * Updated `sc_barcode_scanner_settings_new_from_json` function to return an error in case a given JSON string contains unrecognized properties.
 
+## 7.3.2
+
+**Released**: June 25, 2025
+
+No updates for this framework in this release.
+
 ## 7.3.1
 
 **Released**: June 13, 2025
