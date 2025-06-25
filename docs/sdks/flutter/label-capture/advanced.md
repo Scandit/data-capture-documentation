@@ -98,6 +98,7 @@ advancedOverlay.addListener(LabelCaptureAdvancedOverlayListener(
   },
 ));
 ```
+
 <!--
 
 ## Validation Flow
