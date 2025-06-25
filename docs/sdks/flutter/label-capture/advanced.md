@@ -98,7 +98,8 @@ advancedOverlay.addListener(LabelCaptureAdvancedOverlayListener(
   },
 ));
 ```
-<!-->
+<!--
+
 ## Validation Flow
 
 Implementing a validation flow in your Smart Label Capture application differs from the [Get Started](/sdks/flutter/label-capture/get-started.md) steps outlined earlier as follows:
