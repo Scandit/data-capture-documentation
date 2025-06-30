@@ -48,8 +48,8 @@ Then create the mode with the previously created settings:
 
 ```swift
 let mode = BarcodePick(context: context,
-                        settings: settings,
-                        productProvider: productProvider)
+                       settings: settings,
+                       productProvider: productProvider)
 ```
 
 ## Setup the `BarcodeArView`
