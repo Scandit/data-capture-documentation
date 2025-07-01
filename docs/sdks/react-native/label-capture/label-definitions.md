@@ -1,5 +1,6 @@
 ---
 framework: react
+toc_max_heading_level: 4
 keywords:
   - react
 ---
@@ -10,11 +11,10 @@ A **Label Definition** is a configuration that defines the label, and its releva
 
 Smart Label Capture provides a [Label Definition](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-definition.html#label-definition) API, enabling you to configure and extract structured data from predefined and custom labels. This feature provides a flexible way to recognize and decode fields within a specific label layout such as price tags, VIN labels, or packaging stickers without needing to write custom code for each label type.
 
-There are three approaches to using label definitions:
+There are two approaches to using label definitions:
 
 - [**Pre-built Labels**](#pre-built-labels)
-- [**Pre-built Fields**](#pre-built-fields)
-- [**Custom Labels and Fields**](#custom-labels-and-fields)
+- [**Custom Labels**](#custom-labels)
 
 ## Pre-built Labels
 
@@ -35,66 +35,27 @@ const settings = LabelCaptureSettings.builder()
     .build();
 ```
 
-## Pre-built Fields
+## Custom Labels
 
-You can also configure your label by using pre-built fields. This allows more granular customization of the label definition without needing to define a complete label structure.
+If your use case is unique and not covered by Smart Label Capture's pre-built labels, you can define your own custom labels. These custom labels can use any combination of fully custom fields and pre-built fields, detailed below.
 
-Customization of pre-built fields is done via the `patterns` and `dataTypePatterns` methods, which allow you to specify the expected format of the field data.
+### Custom Fields
 
-:::tip
-All pre-built fields come with default `patterns` and `dataTypePatterns` that are suitable for most use cases. Using either method is optional and will override the defaults.
-:::
+There are two types of custom fields you can define:
 
-### `patterns`
+* [`CustomBarcode`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/custom-barcode.html#custom-barcode)
+* [`CustomText`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/custom-text.html#custom-text)
 
-The `patterns` method is used to define the expected format of the field data. It accepts one or more regular expressions that the captured data must match.
+The following methods are available to configure custom fields:
 
-### `dataTypePatterns`
+| Method | Optional | Description |
+|--------|----------|-------------|
+| `patterns` | No | The regex patterns that identify the target string in the scanned content. |
+| `dataTypePatterns` | Yes | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
+| `symbologies` | No | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
+| `isOptional` | Yes | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
 
-The `dataTypePatterns` method is used to specify identifying keywords that help the system recognize the context of the field. This is particularly useful for fields like expiry dates or packing dates, where the surrounding text can vary.
-
-:::tip
-The `resetDataTypePatterns` method can be used to remove the default `dataTypePattern`, allowing you to rely solely on the `patterns` for detection.
-:::
-
-### Example: Hard disk drive label
-
-This example demonstrates how to configure a label definition for a hard disk drive (HDD) label, which typically includes common fields like serial number and part number.
-
-![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
-
-```js
-const settings = LabelCaptureSettings.builder()
-    .addLabel(LabelDefinition.builder()
-        .addSerialNumberBarcode()
-        .buildFluent("serial-number")
-        .addPartNumberBarcode()
-        .buildFluent("part-number")
-        .buildFluent("hdd-label"))
-    .build();
-```
-
-## Custom Labels and Fields
-
-If your use case is unique and not covered by Smart Label Capture's predefined options for label and fields, you can define your own custom label and its fields.
-
-### `patterns`
-
-This is a **mandatory** field when creating a custom field.
-
-The `patterns` method allows you to define one or more regex-based patterns that identify the target string in the scanned content.
-
-### `dataTypePatterns`
-
-The `dataTypePatterns` method is used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present).
-
-### `symbologies`
-
-This is a **mandatory** field when creating a custom barcode field.
-
-The `symbologies` method allows you to specify which barcode symbologies are valid for the custom field. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance.
-
-### Example: Fish Shipping Box
+#### Example: Fish Shipping Box
 
 This example shows how to create a custom label definition for a fish shipping box, which includes fields for barcode and batch number.
 
@@ -115,36 +76,58 @@ const settings = LabelCaptureSettings.builder()
     .build();
 ```
 
-## Field Types
+### Pre-built Fields
 
-The [LabelDefinitionBuilder](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-definition-builder.html) API provides various field types you can use to define the structure of your label.
+You can also configure your label by using pre-built fields. These are some common fields provided for faster integration, with all `patterns`, `dataTypePattern`, and `symbologies` already predefined.
 
-### Barcode Fields
+Customization of pre-built fields is done via the `patterns`, `dataTypePatterns`, and `isOptional` methods, which allow you to specify the expected format of the field data.
 
-* [`SerialNumberBarcode`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/serial-number-barcode.html#serial-number-barcode)
-* [`PartNumberBarcode`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/part-number-barcode.html#part-number-barcode)
-* [`ImeiOneBarcode`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/imei-one-barcode.html#imei-one-barcode)
-* [`ImeiTwoBarcode`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/imei-two-barcode.html#imei-two-barcode)
-* [`CustomBarcode`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/custom-barcode.html#custom-barcode)
+:::tip
+All pre-built fields come with default `patterns` and `dataTypePatterns` that are suitable for most use cases. **Using either method is optional and will override the defaults**.
 
-### Price and Weight Fields
+The `resetDataTypePatterns` method can be used to remove the default `dataTypePattern`, allowing you to rely solely on the `patterns` for detection.
+:::
 
-* [`UnitPriceText`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/unit-price-text.html#unit-price-text)
-* [`TotalPriceText`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/total-price-text.html#total-price-text)
-* [`WeightText`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/weight-text.html#weight-text)
+#### Barcode Fields
 
-### Date and Custom Text Fields
+* [`SerialNumberBarcode`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/serial-number-barcode.html#serial-number-barcode):
+  A barcode field for capturing serial numbers, typically used in electronics and appliances.
+* [`PartNumberBarcode`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/part-number-barcode.html#part-number-barcode):
+  A barcode field for capturing part numbers, commonly used in manufacturing and inventory management.
+* [`ImeiOneBarcode`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/imei-one-barcode.html#imei-one-barcode): 
+  A barcode field for capturing the first International Mobile Equipment Identity (IMEI) number, used in mobile devices.
+* [`ImeiTwoBarcode`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/imei-two-barcode.html#imei-two-barcode): 
+  A barcode field for capturing the second International Mobile Equipment Identity (IMEI) number, used in mobile devices.
 
-* [`PackingDateText`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/packing-date-text.html#packing-date-text)
-* [`ExpiryDateText`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/expiry-date-text.html#expiry-date-text)
-* [`CustomText`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/custom-text.html#custom-text)
+#### Price and Weight Fields
 
-### Optional Fields
+* [`UnitPriceText`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/unit-price-text.html#unit-price-text):
+  A text field for capturing the unit price of an item, often used in retail and grocery labels.
+* [`TotalPriceText`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/total-price-text.html#total-price-text):
+  A text field for capturing the total price of an item, typically used in retail and grocery labels.
+* [`WeightText`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/weight-text.html#weight-text):
+  A text field for capturing the weight of an item, commonly used in shipping and logistics.
 
-Fields can be marked as optional, this is helpful when certain fields may not be present on every scan.
+#### Date and Custom Text Fields
+
+* [`PackingDateText`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/packing-date-text.html#packing-date-text):
+  A text field for capturing the packing date of an item, often used in food and beverage labels.
+* [`ExpiryDateText`](https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/expiry-date-text.html#expiry-date-text):
+  A text field for capturing the expiry date of an item, commonly used in pharmaceuticals and food products.
+
+#### Example: Hard disk drive label
+
+This example demonstrates how to configure a label definition for a hard disk drive (HDD) label, which typically includes common fields like serial number and part number.
+
+![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
 
 ```js
-const field = LabelField.builder("expiryDate")
-  .setOptional(true)
-  .build();
+const settings = LabelCaptureSettings.builder()
+    .addLabel(LabelDefinition.builder()
+        .addSerialNumberBarcode()
+        .buildFluent("serial-number")
+        .addPartNumberBarcode()
+        .buildFluent("part-number")
+        .buildFluent("hdd-label"))
+    .build();
 ```
