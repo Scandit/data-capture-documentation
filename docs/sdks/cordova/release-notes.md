@@ -21,13 +21,18 @@ keywords:
 * Added the option to enable the `SmartLabelCapture` mode in the `SparkScanView`.
 * The `LaserViewfinder` is now available.
 
+#### ID
+
+* Added support for Spanish residence permit "Green NIE".
+* Added support for US Medical Marijuana IDs from West Virginia, Florida, Pennsylvania, Nevada, New York, and Oklahoma.
+
 ### Performance Improvements
 
 * Updated ARM MbedTLS from 3.6.2 to 3.6.3.
 
 #### ID
 
-* Improved image conversion performance.
+* Improved AAMVA Barcode Verification accuracy for Missouri documents.
 
 ### Bug Fixes
 

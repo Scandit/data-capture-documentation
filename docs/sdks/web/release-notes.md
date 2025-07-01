@@ -19,6 +19,11 @@ keywords:
 
 * The `LaserViewfinder` is now available.
 
+#### ID
+
+* Added support for Spanish residence permit "Green NIE".
+* Added support for US Medical Marijuana IDs from West Virginia, Florida, Pennsylvania, Nevada, New York, and Oklahoma.
+
 #### Smart Label Capture
 
 * Smart Label Capture introduces a new workflow: Validation Flow. This workflow allows users to confirm OCR results, manually correct errors, or individually capture missing fields without needing to rescan the entire label. It is designed to address common issues such as glare, occlusion, and poor lighting that lead to incomplete label reads, helping you maintain high data integrity.
@@ -34,7 +39,7 @@ keywords:
 
 #### ID
 
-* Improved image conversion performance.
+* Improved AAMVA Barcode Verification accuracy for Missouri documents.
 
 ### Bug Fixes
 

@@ -33,6 +33,8 @@ keywords:
 #### ID
 
 * The minimum Android API version is now 24.
+* Added support for Spanish residence permit "Green NIE".
+* Added support for US Medical Marijuana IDs from West Virginia, Florida, Pennsylvania, Nevada, New York, and Oklahoma.
 
 ### Performance Improvements
 
@@ -40,7 +42,7 @@ keywords:
 
 #### ID
 
-* Improved image conversion performance.
+* Improved AAMVA Barcode Verification accuracy for Missouri documents.
 
 ### Bug Fixes
 

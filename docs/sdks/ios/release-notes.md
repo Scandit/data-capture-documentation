@@ -22,6 +22,11 @@ keywords:
 * Added APIs in MatrixScan Find to track session updates and modify the progress bar color.
 * Added serialization to `BarcodeFindSession`.
 
+#### ID
+
+* Added support for Spanish residence permit "Green NIE".
+* Added support for US Medical Marijuana IDs from West Virginia, Florida, Pennsylvania, Nevada, New York, and Oklahoma.
+
 #### Smart Label Capture
 
 * It is now possible to change the symbology settings in `LabelCapture`.
@@ -34,7 +39,7 @@ keywords:
 
 #### ID
 
-* Improved image conversion performance.
+* Improved AAMVA Barcode Verification accuracy for Missouri documents.
 
 ### Bug Fixes
 
