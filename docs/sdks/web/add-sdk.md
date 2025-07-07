@@ -477,11 +477,28 @@ The camera permissions are handled by the browser, and can only be granted if a 
 You can configure the scanner to work offline making the web app progressive (Progressive Web App). There are some settings to consider. If you use workbox a tool that uses workbox under the hood like [Vite PWA](https://vite-pwa-org.netlify.app/) plugin, you must set also these options:
 
 ```js
-{
-  globPatterns: ["**/*.{css,html,ico,png,svg,woff2}", "**/*.{wasm,js}"], // Be sure to add also .wasm
-  maximumFileSizeToCacheInBytes: 8 * 1024 * 1024, // Increase size cache up to 8mb
-  ignoreURLParametersMatching: [/^v/], // Ignores ?v=x.x.x query string param when using importScripts inside worker
-}
+workbox: {
+  globPatterns: ["**/*.{css,html,ico,png,svg,woff2}", "**/*.{wasm,js}"],
+  maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // up to 10mb because of wasm files
+  // Don't ignore version parameters - let each version have its own cache entry
+  runtimeCaching: [
+    {
+      urlPattern: /^.*\.wasm(\?.*)?$/,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'wasm-version-cache',
+        expiration: {
+          maxEntries: 2, // Keep only 2 versions to manage storage
+          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+        },
+        // This ensures the version parameter is part of the cache key
+        matchOptions: {
+          ignoreSearch: false, // Don't ignore search parameters (like ?v=)
+        },
+      },
+    },
+  ],
+},
 ```
 
 With these settings in place and the service worker correctly configured, you will be able to have a full offline scanning experience.
