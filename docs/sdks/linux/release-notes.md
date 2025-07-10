@@ -9,6 +9,12 @@ keywords:
   - linux
 ---
 
+## 7.4.1
+
+**Released**: July 11, 2025
+
+No updates for this framework in this release.
+
 ## 7.4.0
 
 **Released**: June 19, 2025
@@ -22,6 +28,10 @@ keywords:
 ### Bug Fixes
 
 * Updated `sc_barcode_scanner_settings_new_from_json` function to return an error in case a given JSON string contains unrecognized properties.
+* Updated Linux camera implementation to disallow following symbolic links in the basename of the device paths and restrict supported devices to block and character devices.
+* Fixed typos in python bindings:
+  * Fixed `IMAGE_LAYOUT_UYVY_8U` mapping value to match C API.
+  * Fixed return type of `get_string_property` function of `PropertyCollection`.
 
 ## 7.3.2
 
