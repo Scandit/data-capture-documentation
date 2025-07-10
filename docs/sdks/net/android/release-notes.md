@@ -9,6 +9,12 @@ keywords:
   - netAndroid
 ---
 
+## 7.4.1
+
+**Released**: July 11, 2025
+
+No updates for this framework in this release.
+
 ## 7.4.0
 
 **Released**: June 19, 2025
