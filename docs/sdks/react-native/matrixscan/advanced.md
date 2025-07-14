@@ -11,6 +11,12 @@ keywords:
 
 In the previous section we covered how to vizualize the scan process using the `BarcodeBatchBasicOverlay`. In this section we will cover how to add custom AR overlays to your MatrixScan application.
 
+:::tip
+When using the new React Native architecture on iOS, ensure that your React Native version is `>= 0.79` and that your app delegate implements the `ScanditReactNativeFactoryContainer` protocol available in our React-Native core module.
+
+If you have followed the [React Native upgrade guide](https://raw.githubusercontent.com/react-native-community/rn-diff-purge/release/0.79.2/RnDiffApp/ios/RnDiffApp/AppDelegate.swift), you should already have the required property implemented.
+:::
+
 There are two ways to add custom AR overlays to your application:
 
 - Using the [`BarcodeBatchAdvancedOverlay`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay) class, our ready-to-use implementation for view-based AR overlays.

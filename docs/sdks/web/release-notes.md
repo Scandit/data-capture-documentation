@@ -9,6 +9,16 @@ keywords:
   - web
 ---
 
+## 7.4.1
+
+**Released**: July 14, 2025
+
+### Bug Fixes
+
+#### ID
+
+* Fixed an issue with missing `BirthName` on German passports. `BirthName` is now available on `additionalNameInformation` field.
+
 ## 7.4.0
 
 **Released**: June 19, 2025

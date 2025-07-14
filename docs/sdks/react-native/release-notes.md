@@ -9,6 +9,20 @@ keywords:
   - react
 ---
 
+## 7.4.1
+
+**Released**: July 14, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a compatibility issue with React-Native 0.80.
+
+#### Barcode
+
+* Fixed a crash in SparkScan when navigating away from SparkScan while holding the scan button.
+
 ## 7.4.0
 
 **Released**: June 19, 2025

@@ -9,6 +9,22 @@ keywords:
   - ios
 ---
 
+## 7.4.1
+
+**Released**: July 14, 2025
+
+### New Features
+
+#### Core
+
+* Added an API to set content description to `ZoomSwitchControl`.
+
+### Bug Fixes
+
+#### ID
+
+* Fixed an issue with missing `BirthName` on German passports. `BirthName` is now available on `additionalNameInformation` field.
+
 ## 7.4.0
 
 **Released**: June 19, 2025
