@@ -11,7 +11,7 @@ keywords:
 
 ## 7.4.1
 
-**Released**: July 11, 2025
+**Released**: July 14, 2025
 
 ### New Features
 
