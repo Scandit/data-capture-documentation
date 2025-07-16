@@ -8,6 +8,6 @@ keywords:
 
 # About MatrixScan AR
 
-import AboutMatrixScanCheck from '../../../../partials/intro/_about-matrixscan-check.mdx'
+import AboutMatrixScanCheck from '../../../../partials/intro/_about-matrixscan-ar.mdx'
 
 <AboutMatrixScanCheck />

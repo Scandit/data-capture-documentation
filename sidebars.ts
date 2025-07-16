@@ -199,8 +199,8 @@ const sidebars: SidebarsConfig = {
               type: "category",
               label: "MatrixScan AR",
               items: [
-                "sdks/ios/matrixscan-check/intro",
-                "sdks/ios/matrixscan-check/get-started",
+                "sdks/ios/matrixscan-ar/intro",
+                "sdks/ios/matrixscan-ar/get-started",
               ],
             },
             {
@@ -411,8 +411,8 @@ const sidebars: SidebarsConfig = {
               type: "category",
               label: "MatrixScan AR",
               items: [
-                "sdks/android/matrixscan-check/intro",
-                "sdks/android/matrixscan-check/get-started",
+                "sdks/android/matrixscan-ar/intro",
+                "sdks/android/matrixscan-ar/get-started",
               ],
             },
             {
@@ -615,8 +615,8 @@ const sidebars: SidebarsConfig = {
               type: "category",
               label: "MatrixScan AR",
               items: [
-                "sdks/web/matrixscan-check/intro",
-                "sdks/web/matrixscan-check/get-started",
+                "sdks/web/matrixscan-ar/intro",
+                "sdks/web/matrixscan-ar/get-started",
               ],
             },
             {
@@ -991,8 +991,8 @@ const sidebars: SidebarsConfig = {
               type: "category",
               label: "MatrixScan AR",
               items: [
-                "sdks/react-native/matrixscan-check/intro",
-                "sdks/react-native/matrixscan-check/get-started",
+                "sdks/react-native/matrixscan-ar/intro",
+                "sdks/react-native/matrixscan-ar/get-started",
               ],
             },
             {
@@ -1203,8 +1203,8 @@ const sidebars: SidebarsConfig = {
               type: "category",
               label: "MatrixScan AR",
               items: [
-                "sdks/flutter/matrixscan-check/intro",
-                "sdks/flutter/matrixscan-check/get-started",
+                "sdks/flutter/matrixscan-ar/intro",
+                "sdks/flutter/matrixscan-ar/get-started",
               ],
             },
             {
@@ -1831,8 +1831,8 @@ const sidebars: SidebarsConfig = {
               type: 'category',
               label: 'MatrixScan AR',
               items: [
-                "sdks/xamarin/android/matrixscan-check/intro",
-                "sdks/xamarin/android/matrixscan-check/get-started",
+                "sdks/xamarin/android/matrixscan-ar/intro",
+                "sdks/xamarin/android/matrixscan-ar/get-started",
               ],
             },
             {
@@ -2185,8 +2185,8 @@ const sidebars: SidebarsConfig = {
               type: 'category',
               label: 'MatrixScan AR',
               items: [
-                "sdks/net/ios/matrixscan-check/intro",
-                "sdks/net/ios/matrixscan-check/get-started",
+                "sdks/net/ios/matrixscan-ar/intro",
+                "sdks/net/ios/matrixscan-ar/get-started",
               ],
             },
             {
@@ -2375,8 +2375,8 @@ const sidebars: SidebarsConfig = {
               type: 'category',
               label: 'MatrixScan AR',
               items: [
-                "sdks/net/android/matrixscan-check/intro",
-                "sdks/net/android/matrixscan-check/get-started",
+                "sdks/net/android/matrixscan-ar/intro",
+                "sdks/net/android/matrixscan-ar/get-started",
               ],
             },
             {

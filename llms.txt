@@ -527,8 +527,8 @@
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/android/label-capture/advanced/): Customize the Overlay Appearance
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/android/label-capture/get-started/): In this guide you will learn step-by-step how to add Smart Label Capture to your application.
 - [About Smart Label Capture | Scandit Developer Documentation](https://docs.scandit.com/sdks/android/label-capture/intro/): undefined
-- [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/android/matrixscan-check/get-started/): In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
-- [About MatrixScan Check | Scandit Developer Documentation](https://docs.scandit.com/sdks/android/matrixscan-check/intro/): undefined
+- [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/android/matrixscan-ar/get-started/): In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
+- [About MatrixScan Check | Scandit Developer Documentation](https://docs.scandit.com/sdks/android/matrixscan-ar/intro/): undefined
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/android/matrixscan-count/advanced/): MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/android/matrixscan-count/get-started/): This page describes the steps to add MatrixScan Count to your application.
 - [About MatrixScan Count | Scandit Developer Documentation](https://docs.scandit.com/sdks/android/matrixscan-count/intro/): undefined
@@ -563,8 +563,8 @@
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/capacitor/label-capture/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/capacitor/label-capture/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/capacitor/label-capture/intro/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/capacitor/matrixscan-check/get-started/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/capacitor/matrixscan-check/intro/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/capacitor/matrixscan-ar/get-started/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/capacitor/matrixscan-ar/intro/): This functionality is not currently supported in the selected framework.
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/capacitor/matrixscan-count/advanced/): MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/capacitor/matrixscan-count/get-started/): In this guide you will learn step-by-step how to add MatrixScan Count to your application.
 - [About MatrixScan Count | Scandit Developer Documentation](https://docs.scandit.com/sdks/capacitor/matrixscan-count/intro/): undefined
@@ -598,8 +598,8 @@
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/cordova/label-capture/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/cordova/label-capture/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/cordova/label-capture/intro/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/cordova/matrixscan-check/get-started/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/cordova/matrixscan-check/intro/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/cordova/matrixscan-ar/get-started/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/cordova/matrixscan-ar/intro/): This functionality is not currently supported in the selected framework.
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/cordova/matrixscan-count/advanced/): MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/cordova/matrixscan-count/get-started/): In this guide you will learn step-by-step how to add MatrixScan Count to your application.
 - [About MatrixScan Count | Scandit Developer Documentation](https://docs.scandit.com/sdks/cordova/matrixscan-count/intro/): undefined
@@ -633,8 +633,8 @@
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/flutter/label-capture/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/flutter/label-capture/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/flutter/label-capture/intro/): This functionality is not currently supported in the selected framework.
-- [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/flutter/matrixscan-check/get-started/): In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
-- [About MatrixScan Check | Scandit Developer Documentation](https://docs.scandit.com/sdks/flutter/matrixscan-check/intro/): undefined
+- [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/flutter/matrixscan-ar/get-started/): In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
+- [About MatrixScan Check | Scandit Developer Documentation](https://docs.scandit.com/sdks/flutter/matrixscan-ar/intro/): undefined
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/flutter/matrixscan-count/advanced/): MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/flutter/matrixscan-count/get-started/): In this guide you will learn step-by-step how to add MatrixScan Count to your application.
 - [About MatrixScan Count | Scandit Developer Documentation](https://docs.scandit.com/sdks/flutter/matrixscan-count/intro/): undefined
@@ -668,8 +668,8 @@
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/ios/label-capture/advanced/): Customize the Overlay Appearance
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/ios/label-capture/get-started/): In this guide you will learn step-by-step how to add Smart Label Capture to your application.
 - [About Smart Label Capture | Scandit Developer Documentation](https://docs.scandit.com/sdks/ios/label-capture/intro/): undefined
-- [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/ios/matrixscan-check/get-started/): In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
-- [About MatrixScan Check | Scandit Developer Documentation](https://docs.scandit.com/sdks/ios/matrixscan-check/intro/): undefined
+- [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/ios/matrixscan-ar/get-started/): In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
+- [About MatrixScan Check | Scandit Developer Documentation](https://docs.scandit.com/sdks/ios/matrixscan-ar/intro/): undefined
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/ios/matrixscan-count/advanced/): MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/ios/matrixscan-count/get-started/): In this guide you will learn step-by-step how to add MatrixScan Count to your application.
 - [About MatrixScan Count | Scandit Developer Documentation](https://docs.scandit.com/sdks/ios/matrixscan-count/intro/): undefined
@@ -703,8 +703,8 @@
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/linux/label-capture/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/linux/label-capture/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/linux/label-capture/intro/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/linux/matrixscan-check/get-started/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/linux/matrixscan-check/intro/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/linux/matrixscan-ar/get-started/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/linux/matrixscan-ar/intro/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/linux/matrixscan-count/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/linux/matrixscan-count/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/linux/matrixscan-count/intro/): This functionality is not currently supported in the selected framework.
@@ -738,8 +738,8 @@
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/android/label-capture/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/android/label-capture/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/android/label-capture/intro/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/android/matrixscan-check/get-started/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/android/matrixscan-check/intro/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/android/matrixscan-ar/get-started/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/android/matrixscan-ar/intro/): This functionality is not currently supported in the selected framework.
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/android/matrixscan-count/advanced/): MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/android/matrixscan-count/get-started/): In this guide you will learn step-by-step how to add MatrixScan Count to your application.
 - [About MatrixScan Count | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/android/matrixscan-count/intro/): undefined
@@ -773,8 +773,8 @@
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/ios/label-capture/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/ios/label-capture/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/ios/label-capture/intro/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/ios/matrixscan-check/get-started/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/ios/matrixscan-check/intro/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/ios/matrixscan-ar/get-started/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/ios/matrixscan-ar/intro/): This functionality is not currently supported in the selected framework.
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/ios/matrixscan-count/advanced/): MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/ios/matrixscan-count/get-started/): In this guide you will learn step-by-step how to add MatrixScan Count to your application.
 - [About MatrixScan Count | Scandit Developer Documentation](https://docs.scandit.com/sdks/net/ios/matrixscan-count/intro/): undefined
@@ -808,8 +808,8 @@
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/react-native/label-capture/advanced/): Customize the Overlay Appearance
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/react-native/label-capture/get-started/): In this guide you will learn step-by-step how to add Smart Label Capture to your application.
 - [About Smart Label Capture | Scandit Developer Documentation](https://docs.scandit.com/sdks/react-native/label-capture/intro/): undefined
-- [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/react-native/matrixscan-check/get-started/): In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
-- [About MatrixScan Check | Scandit Developer Documentation](https://docs.scandit.com/sdks/react-native/matrixscan-check/intro/): undefined
+- [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/react-native/matrixscan-ar/get-started/): In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
+- [About MatrixScan Check | Scandit Developer Documentation](https://docs.scandit.com/sdks/react-native/matrixscan-ar/intro/): undefined
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/react-native/matrixscan-count/advanced/): MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/react-native/matrixscan-count/get-started/): In this guide you will learn step-by-step how to add MatrixScan Count to your application.
 - [About MatrixScan Count | Scandit Developer Documentation](https://docs.scandit.com/sdks/react-native/matrixscan-count/intro/): undefined
@@ -845,8 +845,8 @@
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/titanium/label-capture/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/titanium/label-capture/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/titanium/label-capture/intro/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/titanium/matrixscan-check/get-started/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/titanium/matrixscan-check/intro/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/titanium/matrixscan-ar/get-started/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/titanium/matrixscan-ar/intro/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/titanium/matrixscan-count/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/titanium/matrixscan-count/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/titanium/matrixscan-count/intro/): This functionality is not currently supported in the selected framework.
@@ -880,8 +880,8 @@
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/web/label-capture/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/web/label-capture/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/web/label-capture/intro/): This functionality is not currently supported in the selected framework.
-- [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/web/matrixscan-check/get-started/): In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
-- [About MatrixScan Check | Scandit Developer Documentation](https://docs.scandit.com/sdks/web/matrixscan-check/intro/): undefined
+- [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/web/matrixscan-ar/get-started/): In this guide you will learn step-by-step how to add MatrixScan Check to your application. Implementing MatrixScan Check involves two primary elements:
+- [About MatrixScan Check | Scandit Developer Documentation](https://docs.scandit.com/sdks/web/matrixscan-ar/intro/): undefined
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/web/matrixscan-count/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/web/matrixscan-count/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/web/matrixscan-count/intro/): This functionality is not currently supported in the selected framework.
@@ -915,8 +915,8 @@
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/android/label-capture/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/android/label-capture/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/android/label-capture/intro/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/android/matrixscan-check/get-started/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/android/matrixscan-check/intro/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/android/matrixscan-ar/get-started/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/android/matrixscan-ar/intro/): This functionality is not currently supported in the selected framework.
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/android/matrixscan-count/advanced/): MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/android/matrixscan-count/get-started/): In this guide you will learn step-by-step how to add MatrixScan Count to your application.
 - [About MatrixScan Count | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/android/matrixscan-count/intro/): undefined
@@ -950,8 +950,8 @@
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/forms/label-capture/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/forms/label-capture/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/forms/label-capture/intro/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/forms/matrixscan-check/get-started/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/forms/matrixscan-check/intro/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/forms/matrixscan-ar/get-started/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/forms/matrixscan-ar/intro/): This functionality is not currently supported in the selected framework.
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/forms/matrixscan-count/advanced/): MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/forms/matrixscan-count/get-started/): In this guide you will learn step-by-step how to add MatrixScan Count to your application.
 - [About MatrixScan Count | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/forms/matrixscan-count/intro/): undefined
@@ -985,8 +985,8 @@
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/ios/label-capture/advanced/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/ios/label-capture/get-started/): This functionality is not currently supported in the selected framework.
 - [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/ios/label-capture/intro/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/ios/matrixscan-check/get-started/): This functionality is not currently supported in the selected framework.
-- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/ios/matrixscan-check/intro/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/ios/matrixscan-ar/get-started/): This functionality is not currently supported in the selected framework.
+- [Page Unavailable | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/ios/matrixscan-ar/intro/): This functionality is not currently supported in the selected framework.
 - [Advanced Configurations | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/ios/matrixscan-count/advanced/): MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 - [Get Started | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/ios/matrixscan-count/get-started/): In this guide you will learn step-by-step how to add MatrixScan Count to your application.
 - [About MatrixScan Count | Scandit Developer Documentation](https://docs.scandit.com/sdks/xamarin/ios/matrixscan-count/intro/): undefined

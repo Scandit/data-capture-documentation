@@ -1,13 +1,13 @@
 ---
 sidebar_position: 1
 pagination_prev: null
-framework: ios
+framework: web
 keywords:
-  - ios
+  - web
 ---
 
 # About MatrixScan AR
 
-import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-check.mdx'
+import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.mdx'
 
 <AboutMatrixScanCheck />
