@@ -95,17 +95,21 @@ let barcodeArView = await BarcodeArView.create(dataCaptureView, context, barcode
 If you want a callback when an annotation is tapped, you can register a [BarcodeArInfoAnnotationListener](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-ar-info-annotation.html#interface-scandit.datacapture.barcode.ar.ui.IBarcodeArInfoAnnotationListener).
 
 ```typescript
-const annotationListener = {
-  onInfoAnnotationTapped: (annotation) => {
-    // Handle the tapped annotation
-  }
-};
 
-const infoAnnotation = BarcodeArInfoAnnotation.create(barcode);
-        infoAnnotation.isEntireAnnotationTappable = true;
-        //... other properties
-        infoAnnotation.listener = annotationListener;
-        callback(infoAnnotation);
+barcodeArView.annotationProvider= {
+   annotationForBarcode(barcode: Barcode, callback: (annotation: BarcodeArAnnotation) => void): void {
+   const annotationArInfoListener: BarcodeArInfoAnnotationListener = {
+      onInfoAnnotationTapped: (annotation) => {
+        // Handle the tapped annotation
+      }
+    };
+    
+    const infoAnnotation = BarcodeArInfoAnnotation.create(barcode);
+    infoAnnotation.isEntireAnnotationTappable = true;
+    //... other properties
+    infoAnnotation.listener = annotationArInfoListener;
+    callback(infoAnnotation);
+}
 ```
 
 ## Start Scanning
