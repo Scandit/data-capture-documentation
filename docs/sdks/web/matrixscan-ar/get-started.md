@@ -111,7 +111,18 @@ barcodeArView.annotationProvider= {
     callback(infoAnnotation);
 }
 ```
+## Register a listener for highlights click
 
+If you want a callback when an highlight is tapped, you can also register a `BarcodeArViewUiListener`
+
+```typescript
+const barcodeArViewUiListener: BarcodeArViewUiListener = {
+   didTapHighlightForBarcode(barcodeAr: BarcodeAr, barcode: Barcode, highlight: BarcodeArHighlight): void {
+      // handle click on highlight
+   }
+}
+
+barcodeArView.listener = barcodeArViewUiListener;
 ## Start Scanning
 
 With everything configured, you can now start scanning:
