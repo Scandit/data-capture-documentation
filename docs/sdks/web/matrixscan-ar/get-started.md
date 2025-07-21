@@ -10,8 +10,8 @@ keywords:
 
 In this guide you will learn step-by-step how to add MatrixScan AR to your application. Implementing MatrixScan AR involves two primary elements:
 
-- Barcode AR: The data capture mode that is used for scan and check functionality.
-- A Barcode AR View: The pre-built UI elements used to highlight items to be checked.
+- Barcode AR: The data capture mode that is used for scanning functionality.
+- A Barcode AR View: The pre-built UI elements used to highlight desired scanned items.
 
 The general steps are:
 
@@ -55,7 +55,7 @@ Here we configure it for tracking EAN13 codes, but you should change this to the
 
 ```typescript
     const settings = new BarcodeArSettings();
-    settings.enableSymbologies([Symbology.EAN13_UPCA]);
+    settings.enableSymbologies([Symbology.EAN13UPCA]);
     const barcodeAr = await BarcodeAr.forSettings(settings);
 ```
 
@@ -90,24 +90,43 @@ let barcodeArView = await BarcodeArView.createWithSettings(dataCaptureView, cont
 let barcodeArView = await BarcodeArView.create(dataCaptureView, context, barcodeAr);
 ```
 
-## Register The Listener
+## Register a Listener
 
-The `BarcodeArView` displays a **Finish** button next to its shutter button. 
-
-Register a [BarcodeArViewUiListener](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-ar-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeArViewUiListener) to be notified what items have been found once the finish button is pressed.
+If you want a callback when an annotation is tapped, you can register a [BarcodeArInfoAnnotationListener](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-ar-info-annotation.html#interface-scandit.datacapture.barcode.ar.ui.IBarcodeArInfoAnnotationListener).
 
 ```typescript
-barcodeArView.setListener({
-    didTapFinishButton: (foundItems: BarcodeArItem[]) => {
-        // Handle the scanned items
-    }
-});
+
+barcodeArView.annotationProvider= {
+   annotationForBarcode(barcode: Barcode, callback: (annotation: BarcodeArAnnotation) => void): void {
+   const annotationArInfoListener: BarcodeArInfoAnnotationListener = {
+      onInfoAnnotationTapped: (annotation) => {
+        // Handle the tapped annotation
+      }
+    };
+    
+    const infoAnnotation = BarcodeArInfoAnnotation.create(barcode);
+    infoAnnotation.isEntireAnnotationTappable = true;
+    //... other properties
+    infoAnnotation.listener = annotationArInfoListener;
+    callback(infoAnnotation);
+}
 ```
+## Register a listener for highlights click
 
-## Start Searching
-
-With everything configured, you can now start searching for items. This is done by calling `barcodeArView.start()`.
+If you want a callback when an highlight is tapped, you can also register a `BarcodeArViewUiListener`
 
 ```typescript
-barcodeArView.start();
+const barcodeArViewUiListener: BarcodeArViewUiListener = {
+   didTapHighlightForBarcode(barcodeAr: BarcodeAr, barcode: Barcode, highlight: BarcodeArHighlight): void {
+      // handle click on highlight
+   }
+}
+
+barcodeArView.listener = barcodeArViewUiListener;
+## Start Scanning
+
+With everything configured, you can now start scanning:
+
+```typescript
+await barcodeArView.start();
 ```
