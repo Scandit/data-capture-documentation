@@ -38,38 +38,63 @@ import IdModuleOverview from '../../../partials/get-started/_id-module-overview-
 
 <IdModuleOverview/>
 
+## Create the view as soon as possible
+
+When the scanning process is requested, it is a good practice to keep the user informed about what is happening. The SDK may still be loading, so you should display a view to the user as soon as possible.
+
+To do that, start by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) and attach it to an HTML element in the page. Let's display a progress bar while the SDK is loading:
+
+```ts
+import { DataCaptureView } from "@scandit/web-datacapture-core";
+
+const view = new DataCaptureView();
+view.connectToElement(htmlElement);
+view.showProgressBar();
+```
+
+:::tip
+You do not need to do that so early if your application loads the SDK in the background, like when it starts for example.
+:::
+
 ### Configure and Initialize the Library
 
 In addition to the configuration detailed in the [installation guide](/sdks/web/add-sdk.md#configure-the-library), there are some additional steps required for ID Capture.
 
 For ID Capture, the result of [idCaptureLoader()](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#method-scandit.datacapture.id.IdCaptureLoader) must be passed to the [ConfigureOptions.moduleLoaders](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.ModuleLoaders) option.
 
-In this example, we will scan VIZ documents, so we also need to set [IdCaptureLoaderOptions.enableVIZDocuments](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#property-scandit.datacapture.id.IIdCaptureLoaderOptions.EnableVIZDocuments) to true:
+In this example, we will scan VIZ documents, so we also need to set [IdCaptureLoaderOptions.enableVIZDocuments](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#property-scandit.datacapture.id.IIdCaptureLoaderOptions.EnableVIZDocuments) to `true`:
 
 ```ts
-import { configure } from '@scandit/web-datacapture-core';
-import { idCaptureLoader } from '@scandit/web-datacapture-id';
+import { configure } from "@scandit/web-datacapture-core";
+import { idCaptureLoader } from "@scandit/web-datacapture-id";
 
 await configure({
-	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
-	libraryLocation: '/self-hosted-sdc-lib/',
+	licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+	libraryLocation: "/self-hosted-sdc-lib/",
 	moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
 });
 ```
+
+:::tip
+Avoid enabling VIZ documents if you only scan MRZs or barcodes, as it slows down the scanning initialization because more data must be downloaded.
+:::
 
 :::warning
 You must await the returned promise as shown to be able to continue.
 :::
 
-## Create the Data Capture Context
+## Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext).
+The main conductor to add capture capabilities to your application is the [data capture context](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). Create an instance of it.
 
 ```js
 import { DataCaptureContext } from "@scandit/web-datacapture-core"
 
 // the license key used in configure() will be used
 const context = await DataCaptureContext.create();
+
+// if you already have a view, attach the new context to it
+view.setContext(context);
 ```
 
 ## Add the Camera
@@ -102,6 +127,17 @@ By default, [anonymized data](./advanced.md#configure-data-anonymization) is not
 :::
 
 ```ts
+import {
+	IdCapture,
+	IdCaptureSettings,
+	IdCard,
+	Region,
+	RegionSpecific,
+	Passport,
+	SingleSideScanner,
+	FullDocumentScanner
+} from "@scandit/web-datacapture-id";
+
 const settings = new IdCaptureSettings();
 
 // Documents from any region:
@@ -114,11 +150,12 @@ settings.acceptedDocuments.push(new RegionSpecific.ApecBusinessTravelCard());
 settings.rejectedDocuments.push(new Passport(Region.Cuba));
 
 // To scan only one-sided documents and a given zone:
-settings.scannerType = new SingleSideScanner({ barcode: true });
+// Signature: SingleSideScanner(barcode: boolean, machineReadableZone boolean, visualInspectionZone: boolean)
+settings.scannerType = new SingleSideScanner(true, false, false);
 // or
-settings.scannerType = new SingleSideScanner({ machineReadableZone: true });
+settings.scannerType = new SingleSideScanner(false, true, false);
 // or
-settings.scannerType = new SingleSideScanner({ visualInspectionZone: true });
+settings.scannerType = new SingleSideScanner(false, false, true);
 
 // To scan both sides of the document:
 settings.scannerType = new FullDocumentScanner();
@@ -127,19 +164,21 @@ settings.scannerType = new FullDocumentScanner();
 Create a new ID Capture mode with the chosen settings:
 
 ```ts
-const idCapture = IdCapture.forContext(context, settings);
+const idCapture = await IdCapture.forContext(context, settings);
 ```
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `onIdCaptured` and `onIdRejected`.
+To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two important callbacks: `didCaptureId` and `didRejectId`.
 
 ```ts
+import { type CapturedId, RejectionReason } from "@scandit/web-datacapture-id";
+
 idCapture.addListener({
-	onIdCaptured: (data) => {
+	didCaptureId: (capturedId: CapturedId) => {
 		// Success! Handle extracted data here.
 	},
-	onIdRejected: (data, reason) => {
+	didRejectId: (capturedId: CapturedId, reason: RejectionReason) => {
 		// Something went wrong. Inspect the reason to determine the follow-up action.
 	}
 });
@@ -147,18 +186,23 @@ idCapture.addListener({
 
 ### Handling Success
 
-Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
+Captured results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
+
+Note that if you scan boths sides of a document using the [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-scanner.html#full-document-scanner), this callback will only be executed once both sides have been successfully captured. If the document is known to have only one side, the callback will execute immediately after a successful scan of the first side.
 
 For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
-On a successful scan you may read the extracted data from `CapturedId`:
+On a successful scan you may read the extracted data from `capturedId`:
 
 ```ts
-onIdCaptured: (data) => {
-	const fullName = data.fullName;
-	const dateOfBirth = data.dateOfBirth;
-	const dateOfExpiry = data.dateOfExpiry;
-	const documentNumber = data.documentNumber;
+didCaptureId: async (capturedId: CapturedId) => {
+	// stop processing new frames, we have a result
+	await idCapture.setEnabled(false);
+
+	const fullName = capturedId.fullName;
+	const dateOfBirth = capturedId.dateOfBirth;
+	const dateOfExpiry = capturedId.dateOfExpiry;
+	const documentNumber = capturedId.documentNumber;
 
 	// Process data:
 	processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
@@ -173,39 +217,30 @@ All data fields are optional, so it's important to verify whether the required i
 
 The ID scanning process may fail for various reasons. Start from inspecting [RejectionReason](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) to understand the cause.
 
+Note that some data may still have been captured, you will find them in the first `capturedId` parameter of the callback.
+
 You may wish to implement the follow-up action based on the reason of failure:
 
 ```ts
-onIdRejected: (data, reason) => {
+onIdRejected: (capturedId: CapturedId, reason: RejectionReason) => {
 	if (reason === RejectionReason.Timeout) {
 		// Ask the user to retry, or offer alternative input method.
 	} else if (reason === RejectionReason.DocumentExpired) {
 		// Ask the user to provide alternative document.
-	} else if (reason === RejectionReason.HolderUnderage) {
-		// Reject the process.
+	} else if (reason === RejectionReason.NotAcceptedDocumentType) {
+		// Inform the user which documents are accepted.
 	}
 }
 ```
 
-## Set up Capture View and Overlay
+## Add an Overlay
 
-When using the built-in camera as [frameSource](https://docs.scandit.com/data-capture-sdk/web/core/api/frame-source.html#interface-scandit.datacapture.core.IFrameSource), you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process.
-
-To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
-
-```ts
-const view = await DataCaptureView.forContext(context);
-view.connectToElement(htmlElement);
-```
-
-Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
+The overlay informs and guides the user during the scanning process. Create an instance of [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) for the existing view like so:
 
 ```ts
 import { IdCaptureOverlay } from "@scandit/web-datacapture-id";
 
-// ...
-
-let overlay = await IdCaptureOverlay.withIdCaptureForView(
+const overlay = await IdCaptureOverlay.withIdCaptureForView(
 	idCapture,
 	dataCaptureView
 );
@@ -226,3 +261,5 @@ import { FrameSourceState } from "@scandit/web-datacapture-core";
 
 await camera.switchToDesiredState(FrameSourceState.On);
 ```
+
+You can also enable or disable IdCapture by using [setEnabled](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#method-scandit.datacapture.id.IdCapture.SetEnabled) whenever you need to.
