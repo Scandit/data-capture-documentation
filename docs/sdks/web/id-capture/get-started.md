@@ -38,24 +38,6 @@ import IdModuleOverview from '../../../partials/get-started/_id-module-overview-
 
 <IdModuleOverview/>
 
-## Create the view as soon as possible
-
-When the scanning process is requested, it is a good practice to keep the user informed about what is happening. The SDK may still be loading, so you should display a view to the user as soon as possible.
-
-To do that, start by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) and attach it to an HTML element in the page. Let's display a progress bar while the SDK is loading:
-
-```ts
-import { DataCaptureView } from "@scandit/web-datacapture-core";
-
-const view = new DataCaptureView();
-view.connectToElement(htmlElement);
-view.showProgressBar();
-```
-
-:::tip
-You do not need to do that so early if your application loads the SDK in the background, like when it starts for example.
-:::
-
 ### Configure and Initialize the Library
 
 In addition to the configuration detailed in the [installation guide](/sdks/web/add-sdk.md#configure-the-library), there are some additional steps required for ID Capture.
@@ -81,6 +63,24 @@ Avoid enabling VIZ documents if you only scan MRZs or barcodes, as it slows down
 
 :::warning
 You must await the returned promise as shown to be able to continue.
+:::
+
+## Create the View
+
+When the scanning process is requested, it is good practice to keep the user informed about what is happening. The SDK may still be loading so you should display a view to the user as soon as possible.
+
+To do that, start by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) and attach it to an HTML element in the page. For example, let's display a progress bar while the SDK is loading:
+
+```ts
+import { DataCaptureView } from "@scandit/web-datacapture-core";
+
+const view = new DataCaptureView();
+view.connectToElement(htmlElement);
+view.showProgressBar();
+```
+
+:::tip
+You may not need to do this so early if your application loads the SDK in the background (e.g. on startup) and the view is already available when the user requests scanning.
 :::
 
 ## Context
