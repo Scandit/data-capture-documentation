@@ -67,6 +67,16 @@ keywords:
 
 * Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
 
+## 7.3.3
+
+**Released**: July 24, 2025
+
+### Bug Fixes
+
+#### ID
+
+* Fixed an issue where preexisting OTA models on the device, if any, would be loaded instead of the latest model for the SDK version, leading to errors.
+
 ## 7.3.2
 
 **Released**: June 25, 2025

@@ -33,6 +33,12 @@ No updates for this framework in this release.
   * Fixed `IMAGE_LAYOUT_UYVY_8U` mapping value to match C API.
   * Fixed return type of `get_string_property` function of `PropertyCollection`.
 
+## 7.3.3
+
+**Released**: July 24, 2025
+
+No updates for this framework in this release.
+
 ## 7.3.2
 
 **Released**: June 25, 2025
