@@ -9,6 +9,16 @@ keywords:
   - ios
 ---
 
+## 6.28.6
+
+**Released**: July 25, 2025
+
+### Bug Fixes
+
+#### ID
+
+* Fixed an issue where preexisting OTA models on the device, if any, would be loaded instead of the latest model for the SDK version, leading to errors.
+
 ## 6.28.5
 
 **Released**: April 4, 2025

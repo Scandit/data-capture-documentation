@@ -9,6 +9,12 @@ keywords:
   - titanium
 ---
 
+## 6.28.6
+
+**Released**: July 25, 2025
+
+No updates for this framework in this release.
+
 ## 6.28.5
 
 **Released**: April 4, 2025
