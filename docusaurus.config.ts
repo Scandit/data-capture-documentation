@@ -217,7 +217,7 @@ const config: Config = {
           },
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          lastVersion: "current",
+          lastVersion: "7.4.1",
           versions: {
             current: {
               label: '7.5.0',

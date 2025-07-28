@@ -9,6 +9,20 @@ keywords:
   - linux
 ---
 
+## 7.5.0-beta.1
+
+**Released**: July 28, 2025
+
+### New Features
+
+* Improved Lapa4SC scanning performance.
+
+### Bug Fixes
+
+* Improved Code128 and EAN13/UPCA scanning performance.
+* Reduced incorrect EAN13/UPCA, EAN8 and UPCE scans in cases of low resolution and out-of-focus.
+* Added new `ScBarcode` function `sc_barcode_get_symbol_counts` to access module counts of scanned codes.
+
 ## 7.4.1
 
 **Released**: July 14, 2025
