@@ -30,7 +30,7 @@ keywords:
 #### ID
 
 * VIZ scanning now supports checking Real ID compliance for US documents.
-* Scanning of ISO-18013 compliant mobile driver licenses is now supported in select justifications (Queensland Digital License, Austria eAusweis).
+* Scanning of ISO-18013 compliant mobile driver licenses is now supported in select justifications (Queensland Digital License).
 
 ### Bug Fixes
 

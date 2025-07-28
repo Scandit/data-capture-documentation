@@ -34,7 +34,7 @@ keywords:
 
 ### ID
 
-* Scanning of ISO-18013 compliant mobile driver licenses is now supported in select justifications (Queensland Digital License, Austria eAusweis).
+* Scanning of ISO-18013 compliant mobile driver licenses is now supported in select justifications (Queensland Digital License).
 
 ### Bug Fixes
 

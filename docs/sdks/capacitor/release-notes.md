@@ -17,13 +17,13 @@ keywords:
 
 #### Barcode
 
-* Added a proper API to configure the file system caching of the Frames: `FrameDataSettings`.
+* Added a proper API to configure the file system caching of the Frames: `FrameDataSettings.IsFileSystemCacheEnabled()`. Defaults to `false`.
 * SparkScan now supports Smart Scan Selection. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Users might have to manually switch to a special, more precise scanning mode (Target Mode), which is inefficient. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.
 
 #### ID
 
 * VIZ scanning now supports checking Real ID compliance for US documents.
-* Scanning of ISO-18013 compliant mobile driver licenses is now supported in select justifications (Queensland Digital License, Austria eAusweis).
+* Scanning of ISO-18013 compliant mobile driver licenses is now supported in select justifications (Queensland Digital License).
 
 ### Bug Fixes
 
