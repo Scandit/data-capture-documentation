@@ -89,7 +89,7 @@ function DropdownNavbarItemDesktop({
 
   useEffect(() => {
     if (!currentPath) return;
-    const possibleVersions = ["/next", "/6.28.6", "7.4.1"];
+    const possibleVersions = ["/next", "/6.28.6", "/7.4.1"];
     const match = currentPath.match(/(.*)(?=\/sdks)/);
     setLinkVersion(match && match[0] ? `${match[0]}/sdks` : "/sdks");
 

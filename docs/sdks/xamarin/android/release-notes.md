@@ -9,6 +9,34 @@ keywords:
   - xamarinAndroid
 ---
 
+## 7.5.0-beta.1
+
+**Released**: July 28, 2025
+
+### New Features
+
+#### Barcode
+
+* SparkScan now supports Smart Scan Selection. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Users might have to manually switch to a special, more precise scanning mode (Target Mode), which is inefficient. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.
+
+#### Smart Label Capture
+
+* Smart Label Capture introduces a new workflow: Validation Flow. This workflow allows users to confirm OCR results, manually correct errors, or individually capture missing fields without needing to rescan the entire label. It is designed to address common issues such as glare, occlusion, and poor lighting that lead to incomplete label reads, helping you maintain high data integrity.
+
+#### ID
+
+* Scanning of ISO-18013 compliant mobile driver licenses is now supported in select justifications (Queensland Digital License).
+
+### Bug Fixes
+
+#### ID
+
+* Fixed bug in `AAMVABarcodeVerifier` that triggered error callbacks for each verification after updating from some older SDK version.
+
+### Deprecations
+
+* Deprecated `BarcodeCaptureOverlayStyle`.
+
 ## 7.4.1
 
 **Released**: July 14, 2025
