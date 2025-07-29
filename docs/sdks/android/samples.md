@@ -106,7 +106,7 @@ Use barcode capture to define search criteria by scanning items, and MatrixScan 
 
 ![Smart Label Capture](/img/batch-scanning/SLC-smart-devices.jpg)
 
-##### [Price and Weight Label Capture](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/05_Smart_Label_Capture/PriceWeightLabelCaptureSample)
+##### [Label Capture Simple Sample](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/05_Smart_Label_Capture/LabelCaptureSimpleSample)
 
 Use Smart Label Capture to scan labels and extract price and weight information simultaneously.
 

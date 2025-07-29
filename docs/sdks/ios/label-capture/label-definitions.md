@@ -20,8 +20,9 @@ There are two approaches to using label definitions:
 
 Smart Label Capture provides pre-built label definitions out of the box for the following common label types:
 
-- **Price Label**: This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `UPC` and `priceText` fields.
-- **VIN Label**: A predefined label definition for scanning Vehicle Identification Numbers (VIN). Returns `text` and/or `barcode` fields.
+- [**Price Label**](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName): This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `UPC` and `priceText` fields.
+- [**VIN Label**](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName): A predefined label definition for scanning Vehicle Identification Numbers (VIN). Returns `text` and/or `barcode` fields.
+- [**7-Segment Display**](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName): This definition is used for capturing numeric values from 7-segment displays, such as those found on digital scales or meters. Returns `text` field for weight value.
 
 ### Example: Price label
 
