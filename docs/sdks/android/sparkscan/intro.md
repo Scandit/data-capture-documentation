@@ -56,6 +56,10 @@ Camera preview behaviors:
 
 Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode ([`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode)).
 
+:::tip
+See the [Configuring Workflow Options](./workflow-configuration.md) guide for more details.
+:::
+
 ## Workflow Description
 
 When SparkScan is started, the UI presents just the trigger button, collapsed on the side. To start scanning, the user can:
