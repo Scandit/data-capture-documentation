@@ -9,15 +9,17 @@ keywords:
   - ios
 ---
 
-## 7.5.0-beta.1
+## 7.5.0-beta.2
 
-**Released**: July 28, 2025
+**Released**: August 6, 2025
 
 ### New Features
 
 #### Core
 
 * Added accessibility labels and hints to the Zoom Switch Control.
+* Improved support for non-standard GS1 AI codes.
+* The `Barcode` class now exposes a module count.
 
 #### Barcode
 
@@ -37,6 +39,10 @@ keywords:
 * Scanning of ISO-18013 compliant mobile driver licenses is now supported in select justifications (Queensland Digital License).
 
 ### Bug Fixes
+
+#### Core
+
+* Fixed crash when toggling zoom switch without an setting a frame source.
 
 #### Barcode
 

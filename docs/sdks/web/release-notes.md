@@ -9,9 +9,9 @@ keywords:
   - web
 ---
 
-## 7.5.0-beta.1
+## 7.5.0-beta.2
 
-**Released**: July 28, 2025
+**Released**: August 6, 2025
 
 ### New Features
 
@@ -21,12 +21,22 @@ keywords:
 * Barcode AR now supports customizable notifications.
 * Tappable area for `BarcodeArStatusIconAnnotation` is now at least 48px.
 * Added ARIA labels to `DataCaptureView` controls.
+* Improved support for non-standard GS1 AI codes.
+* The `Barcode` class now exposes a module count.
 
 #### ID
 
 * Scanning of ISO-18013 compliant mobile driver licenses is now supported in select justifications (Queensland Digital License).
+* Added a new listener (`didLocalizeId`) called whenever a personal identification document or its part is localized within a frame.
+* Exposed partial result after front-side scan via `IdCaptureSettings.notifyOnPartialCapture`.
 
 ### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue where `BarcodeArStatusIconAnnotation.icon` could cause an error if the icon was not ready.
+* Fixed a bug where continuous scanning in SparkScan was stopped when changing device orientation.
+* Fixed an issue where `BarcodeArStatusIconAnnotation.backgroundColor` setter and getter were not working as expected.
 
 #### ID
 

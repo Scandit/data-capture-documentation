@@ -9,11 +9,14 @@ keywords:
   - titanium
 ---
 
-## 7.5.0-beta.1
+## 7.5.0-beta.2
 
-**Released**: July 28, 2025
+**Released**: August 6, 2025
 
-No updates for this framework in this release.
+### New Features
+
+* Improved support for non-standard GS1 AI codes.
+* The `Barcode` class now exposes a module count.
 
 ## 7.4.1
 
