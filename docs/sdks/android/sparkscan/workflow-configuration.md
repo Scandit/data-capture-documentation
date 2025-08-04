@@ -17,7 +17,7 @@ The following scanning modes are available:
 
 | Mode  | Description   |
 | ----------- | --------------------------------------------------- |
-| **Default** | Optimized for close-range, fast-paced scanning. Shows a small camera preview for aiming.       |
+| **Default** | Optimized for close-range, fast-paced scanning. User can aim easily at the intended barcode.       |
 | **Target**  | Best for precise scanning when many barcodes are in view. Adds an aimer to the camera preview. |
 
 Each scanning mode can be configured to work with different scanning behaviors and preview behaviors.
