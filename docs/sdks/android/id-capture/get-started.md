@@ -42,6 +42,32 @@ import IdModuleOverview from '../../../partials/get-started/_id-module-overview.
 
 <IdModuleOverview/>
 
+### Mobile ID (mID) Scanning
+
+ID Capture allows capture of ISO mobile documents (mdoc) using Bluetooth by setting up a BLE (Bluetooth Low Energy) communication between the mdoc app and Scandit SDK.
+
+To do so, add the following feature/permissions to `AndroidManifest.xml` file. Note that Scandit SDK may act as either a Central or a Peripheral device so it must request permissions to advertise, scan, and connect to other devices (see the [Android Bluetooth permissions documentation](https://developer.android.com/develop/connectivity/bluetooth/bt-permissions)).
+
+```xml
+<uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+<!-- Legacy bluetooth permissions -->
+<uses-permission
+    android:name="android.permission.BLUETOOTH"
+    android:maxSdkVersion="30" />
+<uses-permission
+    android:name="android.permission.BLUETOOTH_ADMIN"
+    android:maxSdkVersion="30" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"
+    android:maxSdkVersion="30" />
+<!-- Bluetooth permissions for Android 12+ -->
+<uses-permission android:name="android.permission.BLUETOOTH_ADVERTISE" />
+<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+<uses-permission
+    android:name="android.permission.BLUETOOTH_SCAN"
+    android:usesPermissionFlags="neverForLocation"
+    tools:targetApi="s" />
+```
+
 ## Create a Data Capture Context
 
 import DataCaptureContextAndroid from '../../../partials/get-started/_create-data-capture-context-android.mdx';
