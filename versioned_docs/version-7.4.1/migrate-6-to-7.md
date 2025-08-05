@@ -31,7 +31,7 @@ Version 7.0 includes the removal of all APIs that were deprecated throughout the
 
 Beginning with version 7.0, [Scan Intention](https://docs.scandit.com/data-capture-sdk/android/core/api/scan-intention.html) is set to `SMART` by default.
 
-Additionally, with Smart Scan Intention enabled, default support for Composite Codes has been removed. If you need to scan Composite Codes, you must [explicitly enable them](/scanning-composite-codes/#enabling-composite-codesscanning-composite-codes/#enabling-composite-codes.md) in your capture settings.
+Additionally, with Smart Scan Intention enabled, default support for Composite Codes has been removed. If you need to scan Composite Codes, you must [explicitly enable them](/scanning-composite-codes/#enabling-composite-codes) in your capture settings.
 
 :::warning
 When using a single image frame source, you must set the scan intention to `MANUAL` to ensure correct behavior.

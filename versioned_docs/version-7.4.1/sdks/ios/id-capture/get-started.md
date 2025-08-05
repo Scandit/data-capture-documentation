@@ -32,7 +32,7 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 ### Module Overview
 
-import IdModuleOverview from '../../../partials/get-started/_id-module-overview.mdx';
+import IdModuleOverview from '../../../partials/get-started/_id-module-overview-ios.mdx';
 
 <IdModuleOverview/>
 
