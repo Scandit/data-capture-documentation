@@ -42,7 +42,7 @@ import IdModuleOverview from '../../../partials/get-started/_id-module-overview.
 
 <IdModuleOverview/>
 
-### Mobile ID (mID) Scanning
+### Mobile ID Scanning
 
 ID Capture allows capture of ISO mobile documents (mdoc) using Bluetooth by setting up a BLE (Bluetooth Low Energy) communication between the mdoc app and Scandit SDK.
 

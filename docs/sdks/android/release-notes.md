@@ -36,6 +36,9 @@ keywords:
 ### ID
 
 * Scanning of ISO-18013 compliant mobile driver licenses is now supported in select justifications (Queensland Digital License).
+  :::tip
+  Additional bluetooth permissions are required to scan mobile driver licenses. See [here](/sdks/android/id-capture/get-started.md#mobile-id-scanning) for more information.
+  :::
 
 ### Bug Fixes
 
