@@ -41,6 +41,12 @@ keywords:
   Additional bluetooth permissions are required to scan mobile driver licenses. See [here](/sdks/ios/id-capture/get-started.md#mobile-id-scanning) for more information.
   :::
 
+### Performance Improvements
+
+#### Smart Label Capture
+
+* Improved performance when extracting text from 7-segment displays.
+
 ### Bug Fixes
 
 #### Core
