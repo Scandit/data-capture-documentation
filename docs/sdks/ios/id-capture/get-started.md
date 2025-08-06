@@ -36,6 +36,17 @@ import IdModuleOverview from '../../../partials/get-started/_id-module-overview-
 
 <IdModuleOverview/>
 
+### Mobile ID Scanning
+
+ID Capture supports Bluetooth to scan mobile identity documents. The App Store requires the `NSBluetoothAlwaysUsageDescription` key to be present in your app's `Info.plist` when this module is included, even if you are not actively using this feature.
+
+To resolve this issue, add the following entry to your `Info.plist` file:
+
+```xml
+<key>NSBluetoothAlwaysUsageDescription</key>
+<string>Required to scan mobile identity documents via Bluetooth.</string>
+```
+
 ## Create a Data Capture Context
 
 import DataCaptureContextIos from '../../../partials/get-started/_create-data-capture-context-ios.mdx';

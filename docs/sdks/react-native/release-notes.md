@@ -9,9 +9,9 @@ keywords:
   - react
 ---
 
-## 7.5.0-beta.1
+## 7.5.0-beta.2
 
-**Released**: July 28, 2025
+**Released**: August 6, 2025
 
 ### New Features
 
@@ -22,6 +22,8 @@ keywords:
 * A new Restocking workflow sample application is now available, demonstrating MatrixScan Pick functionality. 
 * Added an API to automatically rotate the frame image that is getting output by the camera: `FrameDataSettings.IsAutoRotateEnabled()`. Defaults to `false`.
 * AR Overlays now work correctly also when the new architecture is enabled. To properly display AR overlays, you must use at least version `0.79.0` of React-Native. For iOS, also implement `ScanditReactNativeFactoryContainer` in your AppDelegate after following the [migration of your app delegate](https://raw.githubusercontent.com/react-native-community/rn-diff-purge/release/0.79.0/RnDiffApp/ios/RnDiffApp/AppDelegate.swift).
+* Improved support for non-standard GS1 AI codes.
+* The `Barcode` class now exposes a module count.
 
 #### Smart Label Capture
 
@@ -32,12 +34,19 @@ keywords:
 * VIZ scanning now supports checking Real ID compliance for US documents.
 * Scanning of ISO-18013 compliant mobile driver licenses is now supported in select justifications (Queensland Digital License).
 
+### Performance Improvements
+
+#### Smart Label Capture
+
+* Improved performance when extracting text from 7-segment displays.
+
 ### Bug Fixes
 
 #### Core
 
 * Opt out the edge-to-edge enforcement in Android 15 for all react-native samples.
-* Fix a compatibility issue with React-Native `0.80`.
+* Fixed a compatibility issue with React-Native `0.80`.
+* Fixed a memory leak on React-Native when running on iOS where the `DataCaptureView` was not correctly disposed.
 
 #### Barcode
 
@@ -46,6 +55,7 @@ keywords:
 #### ID
 
 * Fixed bug in `AAMVABarcodeVerifier` that triggered error callbacks for each verification after updating from some older SDK version.
+* Fixed an issue where an error was thrown on React-Native hot reload.
 
 ### Behavioral Changes
 

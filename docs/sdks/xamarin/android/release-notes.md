@@ -9,15 +9,17 @@ keywords:
   - xamarinAndroid
 ---
 
-## 7.5.0-beta.1
+## 7.5.0-beta.2
 
-**Released**: July 28, 2025
+**Released**: August 6, 2025
 
 ### New Features
 
 #### Barcode
 
 * SparkScan now supports Smart Scan Selection. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Users might have to manually switch to a special, more precise scanning mode (Target Mode), which is inefficient. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.
+* Improved support for non-standard GS1 AI codes.
+* The `Barcode` class now exposes a module count.
 
 #### Smart Label Capture
 
