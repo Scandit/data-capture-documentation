@@ -194,6 +194,16 @@ No updates for this framework in this release.
 
 * MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
 
+## 7.2.4
+
+**Released**: August 8, 2025
+
+### Bug Fixes
+
+* Fixed a crash when toggling zoom switch without an setting a frame source.
+* Fixed a crash that could occur in MatrixScan Pick when the `BarcodePickView` is deallocated but the the guidance on screen was being updated.
+* Fixed Swift naming for `SDCLabelDateResult`, it is now correctly exposed as `LabelDateResult`, resolving a naming conflict that could cause undefined behavior.
+
 ## 7.2.3
 
 **Released**: June 24, 2025
