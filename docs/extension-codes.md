@@ -4,10 +4,6 @@ displayed_sidebar: sdcSidebar
 
 # Add-on Codes
 
-:::important
-Add-on codes are only supported in `SDCBarcodeCapture`.
-:::
-
 The Scandit Data Capture SDK supports add-on codes (also known as Extension Codes) for EAN-8, EAN-13, UPC-A and UPC-E codes. These codes encode additional product data like an issue number, date or price. There is a two and a five digit version. This guide will show you how to enable and read out add-on codes.
 
 ## Enabling Add-on Codes
