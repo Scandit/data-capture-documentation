@@ -192,6 +192,7 @@ const config: Config = {
     },
   ],
   "docusaurus-plugin-sass",
+  'docusaurus-plugin-llms',
 ],
 
   presets: [
