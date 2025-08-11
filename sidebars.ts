@@ -1863,6 +1863,16 @@ const sidebars: SidebarsConfig = {
                 "sdks/xamarin/android/matrixscan-pick/advanced",
               ],
             },
+            {
+              type: "category",
+              label: "Smart Label Capture",
+              items: [
+                "sdks/xamarin/android/label-capture/intro",
+                "sdks/xamarin/android/label-capture/get-started",
+                "sdks/xamarin/android/label-capture/label-definitions",
+                "sdks/xamarin/android/label-capture/advanced",
+              ],
+            },
           ],
         },
         {

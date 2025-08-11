@@ -28,7 +28,7 @@ The general steps are:
 Android devices running the Scandit Data Capture SDK need to have a GPU or the performance will drastically decrease.
 :::
 
-## Create aData Capture Context
+## Create a Data Capture Context
 
 The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/xamarin.ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
