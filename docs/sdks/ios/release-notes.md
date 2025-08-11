@@ -9,9 +9,9 @@ keywords:
   - ios
 ---
 
-## 7.5.0-beta.2
+## 7.5.0
 
-**Released**: August 6, 2025
+**Released**: August 12, 2025
 
 ### New Features
 
@@ -52,6 +52,7 @@ keywords:
 #### Core
 
 * Fixed crash when toggling zoom switch without an setting a frame source.
+* Fixed "Unable to determine framework Swift version" error when installing via Carthage.
 
 #### Barcode
 
