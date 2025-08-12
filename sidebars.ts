@@ -244,6 +244,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/ios/label-capture/intro",
                 "sdks/ios/label-capture/get-started",
+                "sdks/ios/label-capture/get-started-with-swift-ui",
                 "sdks/ios/label-capture/label-definitions",
                 "sdks/ios/label-capture/advanced",
               ],
