@@ -78,12 +78,12 @@ distribution, unpack the `.deb` file and install the library and headers manuall
 
 | Browser                | Threads | Single thread |
 |------------------------|---------|---------------|
-| Chrome                 | 68+     | 61+           |
+| Chrome                 | 68+     | 64+           |
 | Edge                   | 79+     | 79+           |
 | Firefox                | 105+    | 105+          |
 | Opera                  | 55+     | 44+           |
 | Safari                 | 15.2+   | 13+           |
-| Chrome Android         | 89+     | 61+           |
+| Chrome Android         | 89+     | 64+           |
 | Firefox Android        | 105+    | 105+          |
 | Opera Android          | 63+     | 46+           |
 | Safari iOS / Chrome iOS (webkit) | 16.4+     | 14.6+         |
