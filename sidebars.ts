@@ -165,6 +165,7 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/ios/barcode-capture/get-started",
+                "sdks/ios/barcode-capture/get-started-with-swift-ui",
               ],
             },
             {
