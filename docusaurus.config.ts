@@ -192,6 +192,7 @@ const config: Config = {
     },
   ],
   "docusaurus-plugin-sass",
+  'docusaurus-plugin-llms',
 ],
 
   presets: [
@@ -217,15 +218,12 @@ const config: Config = {
           },
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          lastVersion: "7.4.1",
+          lastVersion: "current",
           versions: {
             current: {
               label: '7.5.0',
-              banner: 'unreleased',
-              badge: false,
-            },
-            '7.4.1': {
               banner: 'none',
+              badge: false,
             },
             '6.28.6': {
               banner: 'none',

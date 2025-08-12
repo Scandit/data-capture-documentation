@@ -1,7 +1,7 @@
 ---
-framework: flutter
+framework: xamarinAndroid
 keywords:
-  - flutter
+  - xamarinAndroid
 toc_max_heading_level: 4
 ---
 
@@ -9,7 +9,7 @@ toc_max_heading_level: 4
 
 A **Label Definition** is a configuration that defines the label, and its relevant fields, that Smart Label Capture should recognize and extract during scans.
 
-Smart Label Capture provides a [Label Definition](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#label-definition) API, enabling you to configure and extract structured data from predefined and custom labels. This feature provides a flexible way to recognize and decode fields within a specific label layout such as price tags, VIN labels, or packaging stickers without needing to write custom code for each label type.
+Smart Label Capture provides a [Label Definition](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/label-definition.html#label-definition) API, enabling you to configure and extract structured data from predefined and custom labels. This feature provides a flexible way to recognize and decode fields within a specific label layout such as price tags, VIN labels, or packaging stickers without needing to write custom code for each label type.
 
 There are two approaches to using label definitions:
 
@@ -20,8 +20,8 @@ There are two approaches to using label definitions:
 
 Smart Label Capture provides pre-built label definitions out of the box for the following common label types:
 
-- [**Price Label**](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName): This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `SKU` and `priceText` fields.
-- [**VIN Label**](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName): A predefined label definition for scanning Vehicle Identification Numbers (VIN). Returns `text` and/or `barcode` fields.
+- [**Price Label**](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName): This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `SKU` and `priceText` fields.
+- [**VIN Label**](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName): A predefined label definition for scanning Vehicle Identification Numbers (VIN). Returns `text` and/or `barcode` fields.
 
 ### Example: Price label
 
@@ -29,8 +29,8 @@ Use the `LabelCaptureSettings` builder to configure a pre-built label definition
 
 ![Price Label Example](/img/slc/price-label.png)
 
-```dart
-final settings = LabelCaptureSettingsBuilder()()
+```csharp
+var settings = LabelCaptureSettingsBuilder()()
     .addLabel(LabelDefinition.priceCaptureDefinitionWithName("price-label"))
     .build();
 ```
@@ -43,8 +43,8 @@ If your use case is unique and not covered by Smart Label Capture's pre-built la
 
 There are two types of custom fields you can define:
 
-* [`CustomBarcode`](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/custom-barcode.html#custom-barcode)
-* [`CustomText`](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/custom-text.html#custom-text)
+* [`CustomBarcode`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/custom-barcode.html#custom-barcode)
+* [`CustomText`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/custom-text.html#custom-text)
 
 The following methods are available to configure custom fields:
 
@@ -61,9 +61,9 @@ This example shows how to create a custom label definition for a fish shipping b
 
 ![Fish Shipping Box Example](/img/slc/fish-shipping-box.png)
 
-```dart
-final settings = LabelCaptureSettingsBuilder()()
-    .addLabel(LabelDefinitionBuilder()  
+```csharp
+var settings = LabelCaptureSettingsBuilder()()
+    .addLabel(LabelDefinitionBuilder()
         .addCustomBarcode()
             .setSymbologies([Symbology.code128])
             .buildFluent("barcode-field")
@@ -90,29 +90,29 @@ The `resetDataTypePatterns` method can be used to remove the default `dataTypePa
 
 #### Barcode Fields
 
-* [`SerialNumberBarcode`](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/serial-number-barcode.html#serial-number-barcode):
+* [`SerialNumberBarcode`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/serial-number-barcode.html#serial-number-barcode):
   A barcode field for capturing serial numbers, typically used in electronics and appliances.
-* [`PartNumberBarcode`](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/part-number-barcode.html#part-number-barcode):
+* [`PartNumberBarcode`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/part-number-barcode.html#part-number-barcode):
   A barcode field for capturing part numbers, commonly used in manufacturing and inventory management.
-* [`ImeiOneBarcode`](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/imei-one-barcode.html#imei-one-barcode): 
+* [`ImeiOneBarcode`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/imei-one-barcode.html#imei-one-barcode): 
   A barcode field for capturing the first International Mobile Equipment Identity (IMEI) number, used in mobile devices.
-* [`ImeiTwoBarcode`](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/imei-two-barcode.html#imei-two-barcode): 
+* [`ImeiTwoBarcode`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/imei-two-barcode.html#imei-two-barcode): 
   A barcode field for capturing the second International Mobile Equipment Identity (IMEI) number, used in mobile devices.
 
 #### Price and Weight Fields
 
-* [`UnitPriceText`](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/unit-price-text.html#unit-price-text):
+* [`UnitPriceText`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/unit-price-text.html#unit-price-text):
   A text field for capturing the unit price of an item, often used in retail and grocery labels.
-* [`TotalPriceText`](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/total-price-text.html#total-price-text):
+* [`TotalPriceText`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/total-price-text.html#total-price-text):
   A text field for capturing the total price of an item, typically used in retail and grocery labels.
-* [`WeightText`](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/weight-text.html#weight-text):
+* [`WeightText`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/weight-text.html#weight-text):
   A text field for capturing the weight of an item, commonly used in shipping and logistics.
 
 #### Date and Custom Text Fields
 
-* [`PackingDateText`](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/packing-date-text.html#packing-date-text):
+* [`PackingDateText`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/packing-date-text.html#packing-date-text):
   A text field for capturing the packing date of an item, often used in food and beverage labels.
-* [`ExpiryDateText`](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/expiry-date-text.html#expiry-date-text):
+* [`ExpiryDateText`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/expiry-date-text.html#expiry-date-text):
   A text field for capturing the expiry date of an item, commonly used in pharmaceuticals and food products.
 
 #### Example: Hard disk drive label
@@ -121,8 +121,8 @@ This example demonstrates how to configure a label definition for a hard disk dr
 
 ![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
 
-```dart
-final settings = LabelCaptureSettingsBuilder()()
+```csharp
+var settings = LabelCaptureSettingsBuilder()()
     .addLabel(LabelDefinitionBuilder()
         .addSerialNumberBarcode()
         .buildFluent("serial-number")
