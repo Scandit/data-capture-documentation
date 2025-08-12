@@ -174,6 +174,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/ios/barcode-selection/intro",
                 "sdks/ios/barcode-selection/get-started",
+                "sdks/ios/barcode-selection/get-started-with-swift-ui",
               ],
             },
           ],
