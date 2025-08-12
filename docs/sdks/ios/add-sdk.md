@@ -1,4 +1,6 @@
 ---
+description: "This page describes how to integrate the Scandit Data Capture SDK into your iOS project. The SDK can be added via:                                                                               "
+
 sidebar_position: 1
 toc_max_heading_level: 4
 framework: ios

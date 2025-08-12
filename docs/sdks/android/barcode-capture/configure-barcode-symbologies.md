@@ -1,4 +1,6 @@
 ---
+description: "import Intro from '../../../partials/configure-symbologies/_intro.mdx'                                                                                                "
+
 pagination_next: null
 framework: android
 keywords:

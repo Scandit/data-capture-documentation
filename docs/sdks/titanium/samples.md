@@ -1,4 +1,6 @@
 ---
+description: "This page provides a list of samples available for the Scandit Data Capture SDK for Titanium. Each sample demonstrates a specific feature or use case of the SDK.                                                                        "
+
 sidebar_position: 2
 toc_max_heading_level: 5
 sidebar_label: 'Samples'

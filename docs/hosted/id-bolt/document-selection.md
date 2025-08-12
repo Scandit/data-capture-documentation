@@ -1,4 +1,6 @@
 ---
+description: "ID Bolt allows you to specify which types of documents are acceptable for scanning. Documents are selected using the `DocumentSelection` class.                                                                               "
+
 sidebar_label: 'Document Selection'
 title: 'Document Selection'
 displayed_sidebar: boltSidebar

@@ -1,4 +1,6 @@
 ---
+description: "There are two ways to add advanced AR overlays to a Data Capture View:                                                                                      "
+
 sidebar_position: 3
 pagination_next: null
 framework: flutter

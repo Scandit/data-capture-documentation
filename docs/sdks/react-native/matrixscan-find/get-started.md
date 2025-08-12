@@ -1,4 +1,6 @@
 ---
+description: "In this guide you will learn step-by-step how to add MatrixScan Find to your application. Implementing MatrixScan Find involves two primary elements:                                                                              "
+
 sidebar_position: 2
 framework: react
 keywords:

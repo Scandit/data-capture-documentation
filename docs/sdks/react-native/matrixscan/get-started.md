@@ -1,4 +1,6 @@
 ---
+description: "In this guide you will learn step-by-step how to add MatrixScan to your application.                                                                                      "
+
 framework: react
 keywords:
   - react

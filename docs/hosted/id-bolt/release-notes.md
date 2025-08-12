@@ -1,4 +1,6 @@
 ---
+description: "**Released**: June 10, 2025                                                                                                "
+
 toc_max_heading_level: 3
 displayed_sidebar: boltSidebar
 framework: bolt

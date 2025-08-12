@@ -1,4 +1,6 @@
 ---
+description: "ID Bolt allows you to customize both the user interface flow and the scanning behavior to meet your specific requirements.                                                                                "
+
 sidebar_label: 'Workflow Options'
 title: 'Workflow & Scanner Options'
 displayed_sidebar: boltSidebar

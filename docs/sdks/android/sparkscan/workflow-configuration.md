@@ -1,4 +1,6 @@
 ---
+description: "SparkScan can be customized to fit a wide range of scanning workflows through the combination of **Scanning Mode**, **Scanning Behavior**, and **Preview Behavior**.                                                                             "
+
 title: Configuring Workflow Options
 framework: android
 keywords:

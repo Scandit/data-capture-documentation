@@ -1,4 +1,6 @@
 ---
+description: "Validators allow you to run checks on scanned ID documents to ensure they meet specific criteria. They are only run on documents that are on the list of accepted documents.                                                                      "
+
 sidebar_label: 'Validators'
 title: 'Validators'
 displayed_sidebar: boltSidebar

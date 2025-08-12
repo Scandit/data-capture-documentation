@@ -1,4 +1,6 @@
 ---
+description: "In this guide you will learn step-by-step how to add MatrixScan Count to your application.                                                                                     "
+
 sidebar_position: 2
 framework: cordova
 keywords:

@@ -1,4 +1,6 @@
 ---
+description: "This guide shows you how to add the Scandit Data Capture SDK to your existing project.                                                                                    "
+
 sidebar_position: 1
 toc_max_heading_level: 4
 pagination_next: null

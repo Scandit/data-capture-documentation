@@ -1,4 +1,6 @@
 ---
+description: "SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.                                                     "
+
 sidebar_position: 3
 pagination_next: null
 framework: flutter

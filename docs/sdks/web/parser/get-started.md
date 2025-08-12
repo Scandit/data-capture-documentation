@@ -1,4 +1,6 @@
 ---
+description: "The Parser parses data strings (as found in barcodes) into a set of key-value mappings. These data formats are supported:                                                                                "
+
 sidebar_position: 2
 pagination_prev: null
 pagination_next: null

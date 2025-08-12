@@ -1,4 +1,6 @@
 ---
+description: "The Barcode Generator is a simple tool to generate barcodes directly from the Scandit SDK. In this guide, we will show you how to use the Barcode Generator to generate barcodes and QR codes.                                                                  "
+
 displayed_sidebar: capacitorSidebar
 sidebar_label: Get Started
 pagination_prev: null

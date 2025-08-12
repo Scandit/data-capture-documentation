@@ -1,4 +1,6 @@
 ---
+description: "Scandit Smart Data Capture is a powerful suite of solutions designed to enable mobile devices to capture and process a wide range of barcodes and other types of data, including ID scanning and validation. You can use Smart Data Capture to easily build high-performance data capture applications that leverage the latest advancements in computer vision and machine learning.                                          "
+
 sidebar_position: 1
 toc_max_heading_level: 4
 hide_title: true

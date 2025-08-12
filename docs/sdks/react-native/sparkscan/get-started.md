@@ -1,4 +1,6 @@
 ---
+description: "In this guide you will learn step-by-step how to add SparkScan to your application. The general steps are:                                                                                  "
+
 sidebar_position: 2
 framework: react
 keywords:

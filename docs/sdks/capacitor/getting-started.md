@@ -1,4 +1,6 @@
 ---
+description: "This quick start guide will help you get up and running with SparkScan, the easiest way to get started with Scandit barcode scanning.                                                                             "
+
 toc_max_heading_level: 2
 pagination_next: null
 displayed_sidebar: capacitorSidebar

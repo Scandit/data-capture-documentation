@@ -1,4 +1,6 @@
 ---
+description: "MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.                                                                     "
+
 sidebar_position: 3
 pagination_next: null
 framework: capacitor

@@ -1,4 +1,6 @@
 ---
+description: "This page describes the steps to add Barcode Selection to your application.                                                                                        "
+
 sidebar_position: 2
 pagination_next: null
 framework: android

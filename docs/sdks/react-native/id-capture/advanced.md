@@ -1,4 +1,6 @@
 ---
+description: "There are several advanced configurations that can be used to customize the behavior of the ID Capture SDK and enable additional features.                                                                              "
+
 sidebar_position: 4
 pagination_next: null
 framework: react

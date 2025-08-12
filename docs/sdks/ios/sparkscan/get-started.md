@@ -1,4 +1,6 @@
 ---
+description: "In this guide you will learn step-by-step how to add SparkScan to your application by:                                                                                     "
+
 sidebar_position: 2
 framework: ios
 keywords:
