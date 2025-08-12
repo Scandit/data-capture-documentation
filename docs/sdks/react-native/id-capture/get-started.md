@@ -71,14 +71,16 @@ By default, [anonymized data](./advanced.md#configure-data-anonymization) is not
 
 ```js
 const settings = new IdCaptureSettings();
-settings.scannerType(
-    SingleSideScanner // To scan only one-sided documents
-    // or
-    FullDocumentScanner // To scan both sides of the document
-);
+settings.scannerType = SingleSideScanner(); // To scan only one-sided documents
+// settings.scannerType = FullDocumentScanner(); // To scan both sides of the document
 
-settings.acceptedDocuments(PASSPORT, DRIVER_LICENSE);
-settings.rejectedDocuments(ID_CARD);
+settings.acceptedDocuments.push(
+	new DriverLicense(IdCaptureRegion.Any),
+	new Passport(IdCaptureRegion.Any)
+);
+settings.rejectedDocuments.push(
+	new IdCard(IdCaptureRegion.Any)
+);
 ```
 
 ## Implement the Listener
