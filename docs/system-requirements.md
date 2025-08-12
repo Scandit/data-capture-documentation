@@ -42,7 +42,7 @@ Supported distributions:
 Most Debian/GNU Linux based systems should be supported as as long as the
 dependency requirements below are met.
 
-RedHat based systems (RPM packages) are not supported officially. The tool 'alien' can be used to convert the Debian packages to RPM packages. If you want to run the SDK on any other Linux 
+RedHat based systems (RPM packages) are not supported officially. The tool 'alien' can be used to convert the Debian packages to RPM packages. If you want to run the SDK on any other Linux
 distribution, unpack the `.deb` file and install the library and headers manually.
 :::
 
@@ -58,7 +58,6 @@ distribution, unpack the `.deb` file and install the library and headers manuall
 | NEON CPU support (armhf only)        |  -  |
 | OpenGLES (optional for GPU acceleration)    | >= 2.0  |
 | Python (optional for the Python bindings)     | >= 3.0  |
-
 
 ## Web SDK
 
@@ -78,12 +77,12 @@ distribution, unpack the `.deb` file and install the library and headers manuall
 
 | Browser                | Threads | Single thread |
 |------------------------|---------|---------------|
-| Chrome                 | 68+     | 61+           |
+| Chrome                 | 68+     | 64+          |
 | Edge                   | 79+     | 79+           |
 | Firefox                | 105+    | 105+          |
 | Opera                  | 55+     | 44+           |
 | Safari                 | 15.2+   | 13+           |
-| Chrome Android         | 89+     | 61+           |
+| Chrome Android         | 89+     | 64+           |
 | Firefox Android        | 105+    | 105+          |
 | Opera Android          | 63+     | 46+           |
 | Safari iOS / Chrome iOS (webkit) | 16.4+     | 14.6+         |
