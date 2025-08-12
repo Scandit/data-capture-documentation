@@ -157,6 +157,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/ios/sparkscan/intro",
                 "sdks/ios/sparkscan/get-started",
+                "sdks/ios/sparkscan/get-started-with-swift-ui",
                 "sdks/ios/sparkscan/advanced",
               ],
             },
