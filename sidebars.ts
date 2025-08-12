@@ -195,6 +195,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/ios/matrixscan/intro",
                 "sdks/ios/matrixscan/get-started",
+                "sdks/ios/matrixscan/get-started-with-swift-ui",
                 "sdks/ios/matrixscan/advanced",
               ],
             },
@@ -204,6 +205,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/ios/matrixscan-ar/intro",
                 "sdks/ios/matrixscan-ar/get-started",
+                "sdks/ios/matrixscan-ar/get-started-with-swift-ui",
               ],
             },
             {
@@ -212,6 +214,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/ios/matrixscan-count/intro",
                 "sdks/ios/matrixscan-count/get-started",
+                "sdks/ios/matrixscan-count/get-started-with-swift-ui",
                 "sdks/ios/matrixscan-count/advanced",
               ],
             },
@@ -221,6 +224,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/ios/matrixscan-find/intro",
                 "sdks/ios/matrixscan-find/get-started",
+                "sdks/ios/matrixscan-find/get-started-with-swift-ui",
                 "sdks/ios/matrixscan-find/advanced",
               ],
             },
@@ -230,6 +234,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/ios/matrixscan-pick/intro",
                 "sdks/ios/matrixscan-pick/get-started",
+                "sdks/ios/matrixscan-pick/get-started-with-swift-ui",
                 "sdks/ios/matrixscan-pick/advanced",
               ],
             },
