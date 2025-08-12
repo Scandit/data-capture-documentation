@@ -1,4 +1,6 @@
 ---
+description: "ID Bolt allows you to customize the text displayed in the user interface to better match your application's tone, branding, or to provide more specific instructions to users.                                                                        "
+
 sidebar_label: 'Text Overrides'
 title: 'Text Overrides'
 displayed_sidebar: boltSidebar

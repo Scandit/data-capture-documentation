@@ -1,4 +1,6 @@
 ---
+description: "This page gives an overview of the core concepts and terms used in the Scandit Data Capture SDK.                                                                                  "
+
 ---
 
 # Core Concepts

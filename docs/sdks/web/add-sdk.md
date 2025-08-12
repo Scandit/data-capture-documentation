@@ -1,4 +1,6 @@
 ---
+description: "This page describes how to integrate the Scandit Data Capture SDK into your web project. You can consume the Scandit Data Capture SDK Web packages in two ways:                                                                        "
+
 sidebar_position: 1
 toc_max_heading_level: 3
 pagination_next: null

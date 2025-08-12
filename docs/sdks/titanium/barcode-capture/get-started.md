@@ -1,4 +1,6 @@
 ---
+description: "In this guide you will learn step-by-step how to add Barcode Capture to your application.                                                                                     "
+
 sidebar_position: 2
 pagination_prev: null
 framework: titanium

@@ -1,4 +1,6 @@
 ---
+description: "This page details the different barcode symbologies and their use cases.                                                                                         "
+
 displayed_sidebar: sdcSidebar
 sidebar_position: 3
 toc_max_heading_level: 4

@@ -1,4 +1,6 @@
 ---
+description: "Follow the steps below to get started with Scandit Express.                                                                                          "
+
 sidebar_label: 'Installation'
 displayed_sidebar: expressSidebar
 sidebar_position: 1

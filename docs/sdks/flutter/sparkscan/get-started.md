@@ -1,4 +1,6 @@
 ---
+description: "This page describes the step-by-step instructions that helps you to add SparkScan to your application:                                                                                     "
+
 sidebar_position: 2
 framework: flutter
 keywords:

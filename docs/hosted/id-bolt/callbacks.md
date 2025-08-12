@@ -1,4 +1,6 @@
 ---
+description: "ID Bolt provides callbacks to handle session completion and cancellation, allowing your application to respond appropriately to user actions and scan results.                                                                              "
+
 sidebar_label: 'Callbacks'
 title: 'Callbacks'
 displayed_sidebar: boltSidebar

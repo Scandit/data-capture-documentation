@@ -1,4 +1,6 @@
 ---
+description: "Scandit Express can also be used to count inventory. This will be available through the **Inventory Count** option in the Scandit Express app.                                                                             "
+
 framework: express
 tags: [express]
 keywords:

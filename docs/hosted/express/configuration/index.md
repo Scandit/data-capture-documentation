@@ -1,4 +1,6 @@
 ---
+description: "There are many configuration options and functionalities available in Scandit Express. This section provides an overview of the different configuration options and how to set them up.                                                                         "
+
 toc_max_heading_level: 4
 framework: express
 tags: [express]
