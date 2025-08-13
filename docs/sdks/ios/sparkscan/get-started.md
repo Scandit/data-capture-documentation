@@ -14,25 +14,6 @@ In this guide you will learn step-by-step how to add SparkScan to your applicati
 - Creating the SparkScanView with the desired settings and binding it to the application’s lifecycle
 - Registering the listener to be informed when new barcodes are scanned and updating the UI accordingly
 
-:::note
-If you’re looking to integrate SparkScan into a SwiftUI view hierarchy, there are additional steps you need to follow:
-    - Create a custom `UIViewController` subclass for managing SparkScan, as described in the rest of this section.
-    - Add `import ScanditBarcodeCapture` to your SwiftUI view file.
-    - Use the `withSparkScan` view modifier to incorporate SparkScan into your SwiftUI view. Pass an instance of the SparkScan view controller as demonstrated below:
-
-    ```swift
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .withSparkScan(sparkScanViewController)
-    }
-    ```
-:::
-
 ## Prerequisites
 
 Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out this [guide](/sdks/ios/add-sdk.md).
