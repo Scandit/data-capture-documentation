@@ -1,6 +1,5 @@
 ---
-sidebar_position: 3
-pagination_prev: null
+description: Get Started With SwiftUI and Scandit MatrixScan Find.
 framework: ios
 keywords:
   - ios
@@ -12,15 +11,15 @@ In this guide you will learn step-by-step how to add MatrixScan Find to your app
 
 The general steps are:
 
-1. **Create a UIViewController** - Implement the MatrixScan Find logic following the main [Get Started guide](./get-started.md)
-2. **Create a SwiftUI wrapper** - Use `UIViewControllerRepresentable` to integrate the UIViewController
-3. **Use in your SwiftUI app** - Add the SwiftUI view to your app's view hierarchy
+1. **Create a UIViewController**: Implement the MatrixScan Find logic following the main [Get Started guide](./get-started.md)
+2. **Create a SwiftUI wrapper**: Use `UIViewControllerRepresentable` to integrate the `UIViewController`
+3. **Use in your SwiftUI app**: Add the SwiftUI view to your app's view hierarchy
 
 The core MatrixScan Find implementation (data capture context, settings, camera setup, etc.) remains the same as described in the main guide.
 
 ## Create a UIViewController for MatrixScan Find
 
-To integrate the Scandit Data Capture SDK with SwiftUI, you'll need to create a UIViewController that handles the MatrixScan Find functionality. This follows the same implementation as described in the main [Get Started guide](./get-started.md).
+To integrate the Scandit Data Capture SDK with SwiftUI, you'll need to create a `UIViewController` that handles the MatrixScan Find functionality. This follows the same implementation as described in the main [Get Started guide](./get-started.md).
 
 Create a `MatrixScanFindViewController` class that implements all the steps from the UIKit guide:
 

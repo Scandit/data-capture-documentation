@@ -1,6 +1,5 @@
 ---
-sidebar_position: 3
-pagination_prev: null
+description: Get Started With SwiftUI and Scandit Barcode Capture.
 framework: ios
 keywords:
   - ios
@@ -8,19 +7,19 @@ keywords:
 
 # Get Started With SwiftUI
 
-In this guide you will learn step-by-step how to add Barcode Capture to your application using SwiftUI.
+In this guide you will learn step-by-step how to add Barcode Capture to your application using SwiftUI.§
 
 The general steps are:
 
-1. **Create a UIViewController** - Implement the barcode scanning logic following the main [Get Started guide](./get-started.md)
-2. **Create a SwiftUI wrapper** - Use `UIViewControllerRepresentable` to integrate the UIViewController
-3. **Use in your SwiftUI app** - Add the SwiftUI view to your app's view hierarchy
+1. **Create a UIViewController**: Implement the barcode scanning logic following the main [Get Started guide](./get-started.md)
+2. **Create a SwiftUI wrapper**: Use `UIViewControllerRepresentable` to integrate the `UIViewController`
+3. **Use in your SwiftUI app**: Add the SwiftUI view to your app's view hierarchy
 
 The core barcode scanning implementation (data capture context, settings, camera setup, etc.) remains the same as described in the main guide.
 
 ## Create a UIViewController for Barcode Scanning
 
-To integrate the Scandit Data Capture SDK with SwiftUI, you'll need to create a UIViewController that handles the barcode scanning functionality. This follows the same implementation as described in the main [Get Started guide](./get-started.md).
+To integrate the Scandit Data Capture SDK with SwiftUI, you'll need to create a `UIViewController` that handles the barcode scanning functionality. This follows the same implementation as described in the main [Get Started guide](./get-started.md).
 
 Create a `BarcodeCaptureViewController` class that implements all the steps from the UIKit guide:
 
@@ -74,7 +73,7 @@ extension BarcodeCaptureViewController: BarcodeCaptureListener {
 
 ## Create a SwiftUI View using UIViewControllerRepresentable
 
-Now create a SwiftUI wrapper that integrates the UIViewController into your SwiftUI app:
+Now create a SwiftUI wrapper that integrates the `UIViewController` into your SwiftUI app:
 
 ```swift
 import SwiftUI

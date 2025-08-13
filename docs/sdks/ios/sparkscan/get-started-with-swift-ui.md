@@ -1,6 +1,5 @@
 ---
-sidebar_position: 3
-pagination_prev: null
+description: Get Started With SwiftUI and Scandit SparkScan.
 framework: ios
 keywords:
   - ios
@@ -12,15 +11,15 @@ In this guide you will learn step-by-step how to add SparkScan to your applicati
 
 The general steps are:
 
-1. **Create a UIViewController** - Implement the SparkScan logic following the main [Get Started guide](./get-started.md)
-2. **Use the withSparkScan view modifier** - Apply the SparkScan view controller to your SwiftUI views
-3. **Integrate into your SwiftUI app** - Use the view modifier in your SwiftUI view hierarchy
+1. **Create a UIViewController**: Implement the SparkScan logic following the main [Get Started guide](./get-started.md)
+2. **Use the withSparkScan view modifier**: Apply the SparkScan view controller to your SwiftUI views
+3. **Integrate into your SwiftUI app**: Use the view modifier in your SwiftUI view hierarchy
 
 The core SparkScan implementation (data capture context, settings, SparkScanView setup, etc.) remains the same as described in the main guide.
 
 ## Create a UIViewController for SparkScan
 
-To integrate the Scandit Data Capture SDK with SwiftUI, you'll need to create a UIViewController that handles the SparkScan functionality. This follows the same implementation as described in the main [Get Started guide](./get-started.md).
+To integrate the Scandit Data Capture SDK with SwiftUI, you'll need to create a `UIViewController` that handles the SparkScan functionality. This follows the same implementation as described in the main [Get Started guide](./get-started.md).
 
 Create a `SparkScanViewController` class that implements all the steps from the UIKit guide:
 
