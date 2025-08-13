@@ -46,6 +46,21 @@ keywords:
 
 * Deprecated `BarcodeCaptureOverlayStyle`.
 
+## 7.4.2
+
+**Released**: August 15, 2025
+
+### New Features
+
+#### Core
+
+* Improved support for non-standard GS1 AI codes.
+
+### Bug Fixes
+
+* Fixed a bug in SparkScan where continuous scanning was stopped when changing device orientation.
+* Fixed an issue where `BarcodeArStatusIconAnnotation.backgroundColor` setter and getter were not working as expected.
+
 ## 7.4.1
 
 **Released**: July 14, 2025

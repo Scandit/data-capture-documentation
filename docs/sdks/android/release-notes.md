@@ -65,6 +65,22 @@ keywords:
 
 * Deprecated `BarcodeCaptureOverlayStyle`.
 
+## 7.4.2
+
+**Released**: August 15, 2025
+
+### New Features
+
+#### Core
+
+* Improved support for non-standard GS1 AI codes.
+
+### Bug Fixes
+
+* Fixed an issue with the UI in sample applications that resulted in content shifting under the status bar in Android 15+.
+* Fixed a small memory leak in the `camera` object.
+* Fixed an issue resulting in a crash when setting a `ScanditIcon` in a `BarcodeArRectangleHighlight`.
+
 ## 7.4.1
 
 **Released**: July 14, 2025
