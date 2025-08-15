@@ -70,6 +70,23 @@ keywords:
 
 * Deprecated `BarcodeCaptureOverlayStyle`.
 
+## 7.4.2
+
+**Released**: August 15, 2025
+
+### New Features
+
+#### Core
+
+* Improved support for non-standard GS1 AI codes.
+
+### Bug Fixes
+
+* Fixed "Unable to determine framework Swift version" error when installing via Carthage.
+* Fixed a crash when toggling zoom switch without an setting a frame source.
+* Fixed a crash that could occur in MatrixScan Pick when the `BarcodePickView` is deallocated but the guidance on screen was being updated.
+* Fixed Swift naming for `SDCLabelDateResult`. It is now correctly exposed as `LabelDateResult`, resolving naming conflicts that could cause undefined behavior.
+
 ## 7.4.1
 
 **Released**: July 14, 2025
