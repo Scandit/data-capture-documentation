@@ -41,6 +41,10 @@ val settings =
 
 If your use case is unique and not covered by Smart Label Capture's pre-built labels, you can define your own custom labels. These custom labels can use any combination of fully custom fields and pre-built fields, detailed below.
 
+:::tip
+The following characters are recognized: `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ()-./:,$¶"`.
+:::
+
 ### Custom Fields
 
 There are two types of custom fields you can define:
