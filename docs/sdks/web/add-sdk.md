@@ -452,8 +452,8 @@ await configure({
 ```
 
 :::note
-We suggest serving the library files with the proper headers `Content-Length` and `Content-Encoding` if any compression is present.
-In case of totally missing information, we show an estimated progress.
+The library files should be served with the proper header `Content-Length`. `Content-Encoding` should also be set if any compression is used.
+In case of missing information, the progress bar tries to show an estimated value, but can also not report progress at all for a while.
 :::
 
 ## Additional Information
