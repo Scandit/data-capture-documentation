@@ -120,3 +120,102 @@ struct ContentView: View {
     }
 }
 ```
+
+## Alternative: Using UIViewRepresentable
+
+As an alternative to wrapping a `UIViewController`, you can implement the MatrixScan functionality directly using `UIViewRepresentable`. This approach creates the capture view directly without an intermediate view controller:
+
+```swift
+import ScanditBarcodeCapture
+import SwiftUI
+
+struct MatrixScanView: UIViewRepresentable {
+    private let dataCaptureContext: DataCaptureContext
+    private let barcodeBatch: BarcodeBatch
+    private let listener: Listener
+
+    init(onBarcodeBatchUpdated: @escaping ([TrackedBarcode]) -> Void) {
+        // Create the data capture context
+        DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+        dataCaptureContext = DataCaptureContext.sharedInstance
+
+        // Configure barcode batch settings
+        let settings = BarcodeBatchSettings()
+        // ...
+
+        // Create barcode batch mode
+        barcodeBatch = BarcodeBatch(context: dataCaptureContext, settings: settings)
+
+        // Create the listener instance.
+        // IMPORTANT: You must assign the listener to a strong property
+        // to prevent it from being deallocated
+        listener = Listener(onBarcodeBatchUpdated: onBarcodeBatchUpdated)
+        barcodeBatch.addListener(listener)
+    }
+
+    func makeUIView(context: Context) -> UIView {
+        if let camera = Camera.default {
+            // Apply recommended camera settings
+            let cameraSettings = BarcodeBatch.recommendedCameraSettings
+            camera.apply(cameraSettings)
+
+            // Turn on the camera
+            dataCaptureContext.setFrameSource(camera)
+            camera.switch(toDesiredState: .on)
+        } else {
+            print("Camera not available")
+        }
+
+        // Enable Barcode Batch
+        barcodeBatch.isEnabled = true
+
+        // Create the capture view
+        let captureView = DataCaptureView(context: dataCaptureContext, frame: .zero)
+        captureView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+        // Create the overlay
+        let overlay = BarcodeBatchBasicOverlay(barcodeBatch: barcodeBatch, view: captureView, style: .frame)
+        captureView.addOverlay(overlay)
+
+        return captureView
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {
+        // Update the view if needed
+    }
+}
+
+private class Listener: NSObject, BarcodeBatchListener {
+    private let onBarcodeBatchUpdated: ([TrackedBarcode]) -> Void
+
+    init(onBarcodeBatchUpdated: @escaping ([TrackedBarcode]) -> Void) {
+        self.onBarcodeBatchUpdated = onBarcodeBatchUpdated
+    }
+
+    func barcodeBatch(_ barcodeBatch: BarcodeBatch,
+                      didUpdate session: BarcodeBatchSession,
+                      frameData: FrameData) {
+        let trackedBarcodes = session.trackedBarcodes.values.map { $0 }
+        DispatchQueue.main.async {
+            self.onBarcodeBatchUpdated(trackedBarcodes)
+        }
+    }
+}
+```
+
+You can then use this view directly in your SwiftUI app:
+
+```swift
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                MatrixScanView { trackedBarcodes in
+                    // Handle the tracked barcodes
+                }
+                .navigationTitle("MatrixScan")
+            }
+        }
+    }
+}
+```
