@@ -121,3 +121,109 @@ struct ContentView: View {
     }
 }
 ```
+
+## Alternative: Using UIViewRepresentable
+
+As an alternative to wrapping a `UIViewController`, you can implement the Smart Label Capture functionality directly using `UIViewRepresentable`. This approach creates the capture view directly without an intermediate view controller:
+
+```swift
+import ScanditLabelCapture
+import SwiftUI
+
+struct LabelCaptureView: UIViewRepresentable {
+    private let dataCaptureContext: DataCaptureContext
+    private let labelCapture: LabelCapture
+    private let listener: Listener
+
+    init(labelDefinitions: [LabelDefinition],
+         onLabelCaptured: @escaping ([CapturedLabel]) -> Void) {
+        // Create the data capture context
+        DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+        dataCaptureContext = DataCaptureContext.sharedInstance
+
+        // Configure Label Capture settings
+        guard let settings = try? LabelCaptureSettings(labelDefinitions: labelDefinitions) else {
+            // Handle error here
+            // ...
+        }
+
+        // Create Label Capture mode
+        labelCapture = LabelCapture(context: dataCaptureContext, settings: settings)
+
+        // Create the listener
+        // IMPORTANT: You must assign the listener to a strong property
+        // to prevent it from being deallocated
+        listener = Listener(onLabelCaptured: onLabelCaptured)
+        labelCapture.addListener(listener)
+    }
+
+    func makeUIView(context: Context) -> UIView {
+        if let camera = Camera.default {
+            // Apply recommended camera settings
+            let cameraSettings = LabelCapture.recommendedCameraSettings
+            camera.apply(cameraSettings)
+
+            // Turn on the camera
+            dataCaptureContext.setFrameSource(camera)
+            camera.switch(toDesiredState: .on)
+        } else {
+            print("Camera not available")
+        }
+
+        // Enable Label Capture
+        labelCapture.isEnabled = true
+
+        // Create the capture view
+        let captureView = DataCaptureView(context: dataCaptureContext, frame: .zero)
+        captureView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+        // Create the overlay
+        let overlay = LabelCaptureBasicOverlay(labelCapture: labelCapture, view: captureView)
+        captureView.addOverlay(overlay)
+
+        return captureView
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {
+        // Update the view if needed
+    }
+}
+
+private class Listener: NSObject, LabelCaptureListener {
+    private let onLabelCaptured: ([CapturedLabel]) -> Void
+
+    init(onLabelCaptured: @escaping ([CapturedLabel]) -> Void) {
+        self.onLabelCaptured = onLabelCaptured
+    }
+
+    func labelCapture(_ labelCapture: LabelCapture,
+                      didUpdate session: LabelCaptureSession,
+                      frameData: FrameData) {
+        let capturedLabels = session.capturedLabels
+        guard capturedLabels.count > 0 else { return }
+        DispatchQueue.main.async {
+            self.onLabelCaptured(capturedLabels)
+        }
+    }
+}
+```
+
+You can then use this view directly in your SwiftUI app:
+
+```swift
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                LabelCaptureView(
+                    labelDefinitions: labelDefinitions,
+                    onLabelCaptured: { labels in
+                        // Handle captured labels
+                    }
+                )
+                .navigationTitle("Smart Label Capture")
+            }
+        }
+    }
+}
+```
