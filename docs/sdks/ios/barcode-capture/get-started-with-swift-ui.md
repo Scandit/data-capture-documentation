@@ -7,7 +7,7 @@ keywords:
 
 # Get Started With SwiftUI
 
-In this guide you will learn step-by-step how to add Barcode Capture to your application using SwiftUI.§
+In this guide you will learn step-by-step how to add Barcode Capture to your application using SwiftUI.
 
 The general steps are:
 
