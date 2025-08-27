@@ -96,6 +96,10 @@ No updates for this framework in this release.
 platforms.
 * Added [`BarcodeFindView.ShouldShowZoomControl`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/ui/barcode-find-view.html#property-scandit.datacapture.barcode.find.ui.BarcodeFindView.ShouldShowZoomControl) which enables the display of a button that allows switching to ultra wide lenses on supported devices for scanning at close range in narrow environments.
 
+#### Core
+
+* Added support for 16KB page sizes.
+
 #### ID
 
 * ID Capture now supports scanning:
