@@ -1,6 +1,5 @@
 ---
-description: "**Released**: August 12, 2025                                                                                                "
-
+description: "Release notes and updates for the Scandit Cordova SDK."
 toc_max_heading_level: 3
 displayed_sidebar: cordovaSidebar
 hide_title: true

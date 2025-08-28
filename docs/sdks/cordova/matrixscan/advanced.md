@@ -1,12 +1,10 @@
 ---
-description: "## Prerequisites                                                                                                  "
-
+description: "Guide to integrating and configuring advanced AR overlays using the Scandit Cordova SDK."
 sidebar_position: 3
 pagination_next: null
 framework: cordova
 keywords:
   - cordova
-
 ---
 
 # Adding AR Overlays

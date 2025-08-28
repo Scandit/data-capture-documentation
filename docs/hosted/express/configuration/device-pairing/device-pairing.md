@@ -1,6 +1,5 @@
 ---
-description: "**Device Pairing** in Scandit Express allows you to transfer scanned barcode data from one smart device (the sender) to another (the receiver) where your system application is running. This enables fast, flexible, and reliable data transfer between devices in real time—without needing to use additional hardware.                                                      "
-
+description: "Device Pairing in Scandit Express allows you to transfer scanned barcode data from one smart device (the sender) to another (the receiver) where your system application is running. This enables fast, flexible, and reliable data transfer between devices in real time—without needing to use additional hardware."
 framework: express
 tags: [express]
 sidebar_label: Overview
