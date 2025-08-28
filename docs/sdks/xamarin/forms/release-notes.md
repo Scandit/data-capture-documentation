@@ -18,7 +18,8 @@ keywords:
 #### ID
 
 * A proprietary Transaction ID can now be attached to each ID scan to enable end-to-end traceability of user transactions.
-* Improved UX when scanning Mobile Driver Licenses (mDL).
+* Better UX when scanning Mobile Driver Licenses (mDL) with new screens to handle Bluetooth device state and data transmission progress.
+* Added support for the following Canadian IDs and Driver Licenses: Newfoundland And Labrador, Northwest Territories, Prince Edward island and Yukon.
 
 #### Parser
 
