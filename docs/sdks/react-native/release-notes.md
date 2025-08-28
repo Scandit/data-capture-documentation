@@ -10,6 +10,61 @@ keywords:
   - react
 ---
 
+## 7.6.0-beta.1
+
+**Released**: August 28, 2025
+
+### New Features
+
+#### ID
+
+* A proprietary Transaction ID can now be attached to each ID scan to enable end-to-end traceability of user transactions.
+* Better UX when scanning Mobile Driver Licenses (mDL) with new screens to handle Bluetooth device state and data transmission progress.
+* Added support for the following Canadian IDs and Driver Licenses: Newfoundland And Labrador, Northwest Territories, Prince Edward island and Yukon.
+
+#### Parser
+
+* The GS1 parser now allows for dates in format `YYYYMM` also in non-strict mode if the year starts with `20XX`.
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a crash when reloading a React-Native App from the metro terminal with the `r` option.
+* Fixed a breaking change in React-Native 0.81 related to the required Kotlin accessors.
+
+#### ID
+
+* ID scanning results  for `gender` of documents that do not specify a gender are now correctly mapped as `unspecified`.
+
+### Behavioral Changes
+
+* The MRZ fields `optional` and `optional1` have been renamed to `optionalDataInLine1` and `optionalDataInLine2`, respectively.
+* Exposed public constructors for `BarcodeAr`, `BarcodeBatch`, `BarcodeCapture`, `BarcodeSelection`, `BarcodeCount`, `SparkScan`.
+
+### Deprecations
+
+* Deprecated `resultShouldContainImage`.
+* Deprecated `AamvaBarcodeVerification`.
+* Deprecated `IdCaptureSettings.decodeIsoMobileDriverLicenses` and `IdCaptureSettings.decodeMobileDriverLicenseViz`.
+* Deprecated `BarcodeCaptureOverlayStyle`.
+* Deprecated the `recommendedCameraSettings` prop in different modes in favor of the static function.
+* Deprecated `BarcodeBatch.forContext`. A new constructor has been added.
+* Deprecated `BarcodeBatchBasicOverlay.withBarcodeBatch`, `BarcodeBatchBasicOverlay.withBarcodeBatchForView` and `BarcodeBatchBasicOverlay.withBarcodeBatchForViewWithStyle`. A new public constructor has been added.
+* Deprecated `BarcodeCapture.forContext`. A new constructor has been added.
+* Deprecated `BarcodeCaptureOverlay.withBarcodeCapture`, `BarcodeCaptureOverlay.withBarcodeCaptureForView` and `BarcodeCaptureOverlay.withBarcodeCaptureForViewWithStyle`. A new public constructor has been added.
+* Deprecated `BarcodeCount.forContext`. A new constructor has been added.
+* Deprecated `BarcodeSelection.forContext`. A new constructor has been added.
+* Deprecated `BarcodeSelectionBasicOverlay.withBarcodeSelection`, `BarcodeSelectionBasicOverlay.withBarcodeSelectionForView` and `BarcodeSelectionBasicOverlay.withBarcodeSelectionForViewWithStyle`. A new public constructor has been added.
+* Deprecated `SparkScan.forSettings`. A new constructor has been added.
+* Deprecated `SparkScanView.forSettings`. A new constructor has been added.
+* Deprecated `IdCapture.forContext`. A new constructor has been added.
+* Deprecated `IdCaptureOverlay.withIdCapture` and `IdCaptureOverlay.withIdCaptureForView`. A new public constructor has been added.
+* Deprecated `AamvaBarcodeVerifier`. Replaced by IdCaptureSettings.rejectForgedAamvaBarcodes.
+* Deprecated `LabelCapture.forContext`. A new constructor has been added.
+* Deprecated `LabelCaptureBasicOverlay.withLabelCapture` and `LabelCaptureBasicOverlay.withLabelCaptureForView`. A new public constructor has been added.
+* Deprecated `LabelCaptureAdvancedOverlay.withLabelCapture` and `LabelCaptureAdvancedOverlay.withLabelCaptureForView`. A new public constructor has been added.
+
 ## 7.5.0
 
 **Released**: August 12, 2025

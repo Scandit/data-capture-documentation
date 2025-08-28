@@ -218,12 +218,15 @@ const config: Config = {
           },
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          lastVersion: "current",
+          lastVersion: "7.5.0",
           versions: {
             current: {
-              label: '7.5.0',
-              banner: 'none',
+              label: '7.6.0',
+              banner: 'unreleased',
               badge: false,
+            },
+            '7.5.0': {
+              banner: 'none',
             },
             '6.28.6': {
               banner: 'none',

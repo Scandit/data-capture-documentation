@@ -9,6 +9,48 @@ keywords:
   - netAndroid
 ---
 
+## 7.6.0-beta.1
+
+**Released**: August 28, 2025
+
+### New Features
+
+#### Barcode
+
+* Added `BarcodeArResponsiveAnnotation`, which automatically switches between close-up and far-away info annotations based on the barcode’s size on screen.
+
+#### ID
+
+* A proprietary Transaction ID can now be attached to each ID scan to enable end-to-end traceability of user transactions.
+* Better UX when scanning Mobile Driver Licenses (mDL) with new screens to handle Bluetooth device state and data transmission progress.
+* Added support for the following Canadian IDs and Driver Licenses: Newfoundland And Labrador, Northwest Territories, Prince Edward island and Yukon.
+
+#### Parser
+
+* The GS1 parser now allows for dates in format `YYYYMM` also in non-strict mode if the year starts with `20XX`.
+
+### Bug Fixes
+
+#### ID
+
+* ID scanning results  for `gender` of documents that do not specify a gender are now correctly mapped as `unspecified`.
+
+### Behavioral Changes
+
+* The MRZ fields `optional` and `optional1` have been renamed to `optionalDataInLine1` and `optionalDataInLine2`, respectively.
+
+### Deprecations
+
+#### Barcode
+
+* Deprecated `BarcodeCaptureOverlayStyle`.
+
+#### ID
+
+* Deprecated `resultShouldContainImage`.
+* Deprecated `AamvaBarcodeVerification`.
+* Deprecated `IdCaptureSettings.decodeIsoMobileDriverLicenses` and `IdCaptureSettings.decodeMobileDriverLicenseViz`.
+
 ## 7.5.0
 
 **Released**: August 12, 2025
