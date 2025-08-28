@@ -10,6 +10,14 @@ keywords:
   - titanium
 ---
 
+## 7.6.0-beta.1
+
+**Released**: August 28, 2025
+
+### Deprecations
+
+* Deprecated `BarcodeCaptureOverlayStyle`.
+
 ## 7.5.0
 
 **Released**: August 12, 2025

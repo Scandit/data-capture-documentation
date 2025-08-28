@@ -10,6 +10,61 @@ keywords:
   - android
 ---
 
+## 7.6.0-beta.1
+
+**Released**: August 28, 2025
+
+### New Features
+
+#### Core
+
+* A new setting, `MaxResolution`, has been added to the available camera resolutions. This will select the highest resolution available for the device based on total pixel count, providing the maximum possible image quality. Note that this may impact performance.
+
+#### Barcode
+
+* The `MatrixScanARSimpleSample` has been updated to now demonstrate 4 different configurations for `BarcodeAr`.
+* Added `BarcodeScan` trigger for MatrixScan AR annotations that displays immediately when a barcode is scanned and remains visible during scanning.
+
+#### Smart Label Capture
+
+* Smart Label Capture supports extracting information from purchase receipts, such as items, prices and much more. The feature is released in beta and can be tested by contacting our support.
+* Introduced a pre-built field, `DateText`, useful to match a single plain date text (as opposed to specific dates such as Packaging and Expiry) when creating Label Definitions.
+* The following parameter has been added to `LabelDefinitions`:
+  * `numberOfMandatoryInstances`
+* Smart Label Capture now includes customizable feedback configurable via `LabelCapture.feedback`. The feedback is now automatic on scan, requiring less code to set it up.
+
+#### ID
+
+* A proprietary Transaction ID can now be attached to each ID scan to enable end-to-end traceability of user transactions.
+* Improved UX when scanning Mobile Driver Licenses (mDL).
+
+#### Parser
+
+* The GS1 parser now allows for dates in format `YYYYMM` also in non-strict mode if the year starts with `20XX`.
+
+### Bug Fixes
+
+#### Core
+
+* Fixed an issue where the camera auto-exposure would stop working, resulting in a black screen.
+* Fixed a memory leak in the `Camera` object.
+
+#### ID
+
+* ID scanning results  for `gender` of documents that do not specify a gender are now correctly mapped as `unspecified`.
+
+### Behavioral Changes
+
+* The MRZ fields `optional` and `optional1` have been renamed to `optionalDataInLine1` and `optionalDataInLine2`, respectively.
+
+### Deprecations
+
+#### ID
+
+* Deprecated `resultShouldContainImage`.
+* Deprecated `AamvaBarcodeVerification`.
+* Deprecated `IdCaptureSettings.decodeIsoMobileDriverLicenses` and `IdCaptureSettings.decodeMobileDriverLicenseViz`.
+
 ## 7.5.0
 
 **Released**: August 12, 2025

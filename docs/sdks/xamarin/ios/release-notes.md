@@ -9,6 +9,39 @@ keywords:
   - xamarinIos
 ---
 
+## 7.6.0-beta.1
+
+**Released**: August 28, 2025
+
+### New Features
+
+#### ID
+
+* A proprietary Transaction ID can now be attached to each ID scan to enable end-to-end traceability of user transactions.
+* Improved UX when scanning Mobile Driver Licenses (mDL).
+
+#### Parser
+
+* The GS1 parser now allows for dates in format `YYYYMM` also in non-strict mode if the year starts with `20XX`.
+
+### Bug Fixes
+
+#### ID
+
+* ID scanning results  for `gender` of documents that do not specify a gender are now correctly mapped as `unspecified`.
+
+### Behavioral Changes
+
+* The MRZ fields `optional` and `optional1` have been renamed to `optionalDataInLine1` and `optionalDataInLine2`, respectively.
+
+### Deprecations
+
+#### ID
+
+* Deprecated `resultShouldContainImage`.
+* Deprecated `AamvaBarcodeVerification`.
+* Deprecated `IdCaptureSettings.decodeIsoMobileDriverLicenses` and `IdCaptureSettings.decodeMobileDriverLicenseViz`.
+
 ## 7.5.0
 
 **Released**: August 12, 2025

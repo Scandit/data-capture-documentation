@@ -16,7 +16,7 @@ MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless
 
 You may want more fine-grained knowledge over the different events happening during the life of the `BarcodePick` mode, such as when the search starts, pauses, and stops.
 
-To do this, you can directly register a [`BarcodePickListener`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-pick-listener.html#interface-scandit.datacapture.barcode.pick.IBarcodePickListener) on the mode itself, keeping in mind that these listeners are called from a background thread.
+To do this, you can directly register a [`BarcodePickListener`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-pick-listener.html#interface-scandit.datacapture.barcode.pick.IBarcodePickListener) on the mode itself, keeping in mind that these listeners are called from a background thread.
 
 ```javascript
 mode.addListener({

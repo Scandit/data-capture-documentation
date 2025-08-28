@@ -10,6 +10,74 @@ keywords:
   - web
 ---
 
+## 7.6.0-beta.1
+
+**Released**: August 28, 2025
+
+### New Features
+
+#### Core
+
+* It is now possible to set up the `Camera` into the Context before calling `configure()`, enabling the loading of WASM files while accessing the camera.
+* The following new methods are available in `DataCaptureContext`:
+  * `setMode`: Sets a mode to be the active mode in the context.
+  * `removeCurrentMode`: Removes the currently active mode in the context.
+  * `static sharedInstance`: Returns a singleton instance of DataCaptureContext. This instance is unusable until properly configured by calling initialize() on it.
+  * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
+  * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
+* See Deprecations, below, for methods deprecated in `DataCaptureContext`.
+
+#### Smart Label Capture
+
+* Smart Label Capture now includes customizable feedback configurable via `LabelCapture.feedback`. The feedback is now automatic on scan, requiring less code to set it up.
+
+#### ID
+
+* A proprietary Transaction ID can now be attached to each ID scan to enable end-to-end traceability of user transactions.
+* Improved UX when scanning Mobile Driver Licenses (mDL).
+
+#### Parser
+
+* The GS1 parser now allows for dates in format `YYYYMM` also in non-strict mode if the year starts with `20XX`.
+
+### Bug Fixes
+
+#### Smart Label Capture
+
+* Fixed an incorrect implementation of the `DataCaptureMode` interface in `LabelCapture` that would result in errors when calling `context.AddMode` in TypeScript projects.
+
+#### ID
+
+* ID scanning results  for `gender` of documents that do not specify a gender are now correctly mapped as `unspecified`.
+
+### Behavioral Changes
+
+#### Core
+
+* The minimum supported Chrome version is now 64+.
+
+#### ID
+
+* The MRZ fields `optional` and `optional1` have been renamed to `optionalDataInLine1` and `optionalDataInLine2`, respectively.
+
+### Deprecations
+
+#### Core
+
+* The following methods have been deprecated from `DataCaptureContext`:
+  * `addMode`: Replaced by `setMode`, since only 1 mode can be active at a time in a `DataCaptureContext`.
+  * `removeAllModes`: Replaced by `removeCurrentMode`, since only 1 mode can be active at a time in a `DataCaptureContext`.
+
+#### Barcode
+
+* Deprecated `BarcodeCaptureOverlayStyle` and `BarcodeCaptureOverlay.style`.
+
+#### ID
+
+* Deprecated `resultShouldContainImage`.
+* Deprecated `AamvaBarcodeVerification`.
+* Deprecated `IdCaptureSettings.decodeIsoMobileDriverLicenses` and `IdCaptureSettings.decodeMobileDriverLicenseViz`.
+
 ## 7.5.0
 
 **Released**: August 12, 2025
