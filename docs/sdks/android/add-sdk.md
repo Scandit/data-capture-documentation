@@ -16,7 +16,7 @@ import TabItem from '@theme/TabItem';
 
 This page describes how to integrate the Scandit Data Capture SDK into your Android project.
 
-The Scandit Data Capture SDK is distributed as [AAR libraries](https://developer.android.com/studio/projects/android-library#aar-contents) in the [official Scandit maven repository](https://s01.oss.sonatype.org/content/repositories/releases/com/scandit/datacapture/).
+The Scandit Data Capture SDK is distributed as [AAR libraries](https://developer.android.com/studio/projects/android-library#aar-contents) in the official Scandit Maven repository.
 
 ## Prerequisites
 
