@@ -1,4 +1,5 @@
 ---
+description: "Release notes and updates for the Scandit React Native SDK."
 toc_max_heading_level: 3
 displayed_sidebar: reactnativeSidebar
 hide_title: true

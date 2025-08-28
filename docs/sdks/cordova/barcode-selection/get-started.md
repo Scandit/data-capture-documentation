@@ -1,4 +1,6 @@
 ---
+description: "In this guide you will learn step by step how to add barcode selection to your application. The general step are:                                                                               "
+
 sidebar_position: 2
 pagination_next: null
 framework: cordova

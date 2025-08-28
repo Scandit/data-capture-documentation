@@ -1,4 +1,6 @@
 ---
+description: "The Scandit Data Capture SDK supports scanning of all . The specification defines three different types: A, B and C.                                                                                "
+
 sidebar_position: 2
 displayed_sidebar: sdcSidebar
 ---

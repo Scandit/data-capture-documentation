@@ -1,4 +1,6 @@
 ---
+description: "The parser parses data strings, e.g. as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: , and , , .                                                    "
+
 sidebar_position: 2
 pagination_prev: null
 pagination_next: null

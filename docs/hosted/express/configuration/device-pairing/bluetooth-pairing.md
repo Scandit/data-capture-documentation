@@ -1,4 +1,5 @@
 ---
+description: "Guide to integrating and configuring Bluetooth device pairing using the Scandit Express."
 framework: express
 tags: [express]
 keywords:

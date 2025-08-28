@@ -1,4 +1,6 @@
 ---
+description: "import Intro from '../../../partials/configure-symbologies/_intro.mdx'                                                                                                "
+
 sidebar_position: 3
 pagination_next: null
 framework: cordova

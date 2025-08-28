@@ -1,4 +1,5 @@
 ---
+description: "Release notes and updates for the Scandit Web SDK."
 toc_max_heading_level: 3
 displayed_sidebar: webSidebar
 hide_title: true

@@ -1,4 +1,6 @@
 ---
+description: "This page describes the steps to add MatrixScan Count to your application.                                                                                        "
+
 sidebar_position: 2
 framework: android
 keywords:

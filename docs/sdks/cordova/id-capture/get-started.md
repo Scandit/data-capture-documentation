@@ -1,4 +1,6 @@
 ---
+description: "This page will guide you through the process of adding ID Capture to your Cordova application. ID Capture is a mode of the Scandit Data Capture SDK that allows you to capture and extract information from personal identification documents, such as driver's licenses, passports, and ID cards.                                                     "
+
 sidebar_position: 2
 pagination_next: null
 framework: cordova

@@ -1,4 +1,6 @@
 ---
+description: "Barcode Selection enables you to increase scanning accuracy and prevent users from scanning the wrong code in scenario where there are multiple barcodes present. This includes the following:                                                                        "
+
 sidebar_position: 1
 pagination_prev: null
 framework: android

@@ -1,4 +1,6 @@
 ---
+description: "Scandit ID Capture provides various types, each designed for specific scanning workflows. These workflows can involve scanning either specific parts of a document or the entire document, including both the front and back sides. This section details the types of documents supported by each scanner type.                                                      "
+
 sidebar_label: Supported Documents
 title: Supported Documents
 hide_title: true

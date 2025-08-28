@@ -1,4 +1,6 @@
 ---
+description: "In this guide you will learn step by step how to add barcode capture to your application. The general steps are:                                                                               "
+
 sidebar_position: 2
 pagination_prev: null
 framework: cordova

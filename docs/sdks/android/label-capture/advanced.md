@@ -1,4 +1,5 @@
 ---
+description: "Guide to customizing overlays in the Scandit Android Label Capture SDK."
 sidebar_position: 3
 pagination_next: null
 framework: android

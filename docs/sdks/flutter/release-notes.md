@@ -1,4 +1,5 @@
 ---
+description: "Release notes and updates for the Scandit Flutter SDK."
 toc_max_heading_level: 3
 displayed_sidebar: flutterSidebar
 hide_title: true
