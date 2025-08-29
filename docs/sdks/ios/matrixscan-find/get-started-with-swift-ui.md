@@ -119,3 +119,95 @@ struct ContentView: View {
     }
 }
 ```
+
+## Alternative: Using UIViewRepresentable
+
+As an alternative to wrapping a `UIViewController`, you can implement the MatrixScan Find functionality directly using `UIViewRepresentable`. This approach creates the find view directly without an intermediate view controller:
+
+```swift
+import ScanditBarcodeCapture
+import SwiftUI
+
+struct MatrixScanFindView: UIViewRepresentable {
+    private let dataCaptureContext: DataCaptureContext
+    private let barcodeFind: BarcodeFind
+    private let uiDelegate: UIDelegate
+
+    init(itemsToFind: Set<BarcodeFindItem>, onFinishButtonTapped: @escaping (Set<BarcodeFindItem>) -> Void) {
+        // Create the data capture context
+        DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+        dataCaptureContext = DataCaptureContext.sharedInstance
+
+        // Configure Barcode Find settings
+        let settings = BarcodeFindSettings()
+        // ...
+
+        // Create Barcode Find mode with items to find
+        barcodeFind = BarcodeFind(settings: settings)
+        barcodeFind.setItemList(itemsToFind)
+
+        // Create the UI delegate
+        uiDelegate = UIDelegate(onFinishButtonTapped: onFinishButtonTapped)
+    }
+
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+
+        // Configure Barcode Find view settings
+        let viewSettings = BarcodeFindViewSettings()
+        // ...
+
+        // Create the Barcode Find view
+        let barcodeFindView = BarcodeFindView(parentView: view,
+                                              context: dataCaptureContext,
+                                              barcodeFind: barcodeFind,
+                                              settings: viewSettings)
+        barcodeFindView.uiDelegate = uiDelegate
+        
+        // Prepare and start searching
+        barcodeFindView.prepareSearching()
+        barcodeFindView.startSearching()
+
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {
+        // Update the view if needed
+    }
+}
+
+private class UIDelegate: NSObject, BarcodeFindViewUIDelegate {
+    private let onFinishButtonTapped: (Set<BarcodeFindItem>) -> Void
+
+    init(onFinishButtonTapped: @escaping (Set<BarcodeFindItem>) -> Void) {
+        self.onFinishButtonTapped = onFinishButtonTapped
+    }
+
+    func barcodeFindView(_ view: BarcodeFindView,
+                        didTapFinishButton foundItems: Set<BarcodeFindItem>) {
+        DispatchQueue.main.async {
+            self.onFinishButtonTapped(foundItems)
+        }
+    }
+}
+```
+
+You can then use this view directly in your SwiftUI app:
+
+```swift
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                MatrixScanFindView(
+                    itemsToFind: itemsToFind,
+                    onFinishButtonTapped: { foundItems in
+                        // Handle found items
+                    }
+                )
+                .edgesIgnoringSafeArea(.all)
+            }
+        }
+    }
+}
+```
