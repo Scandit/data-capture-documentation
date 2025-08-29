@@ -209,19 +209,17 @@ Please refer to the available [sample apps](/sdks/web/samples.md) for detailed e
 
 ## Provide Feedback
 
-Label Capture doesn’t emit feedback (sound or vibration) by default when a new label is recognized, as it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
+Smart Label Capture provides customizable feedback, emitted automatically when a label is recognized and successfully processed, configurable via [`LabelCapture.feedback`](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-capture.html#property-scandit.datacapture.label.LabelCapture.Feedback).
 
-However, we provide a `Feedback` class that you can use to emit feedback when a label is recognized and successfully processed.
+You can use the default feedback, or configure your own sound or vibration.
 
-Here, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/web/core/api/feedback.html#class-scandit.datacapture.core.Feedback), but you may configure it with your own sound or vibration.
+:::tip
+If you already have a [Feedback](https://docs.scandit.com/data-capture-sdk/web/core/api/feedback.html#class-scandit.datacapture.core.Feedback) instance implemented in your application, remove it to avoid double feedback.
+:::
 
 ```js
-import { Feedback } from '@scandit/web-datacapture-core';
-
-const feedback = Feedback.defaultFeedback();
+const feedback = LabelCaptureFeedback.default;
 ```
-
-After creating the feedback, you can emit it on successful scans with `feedback.emit()`. See the `LabelCaptureListener` implementation above for more information.
 
 :::note
 Audio feedback is only played if the device is not muted.

@@ -231,15 +231,16 @@ camera?.switch(toDesiredState: .on)
 
 ## Provide Feedback
 
-Label Capture doesn't emit any sound or vibration automatically when a new label is recognized. This is because it may be that the label is not complete and you choose to ignore it and wait for the next recognition.
-
-However, we provide a [Feedback](https://docs.scandit.com/data-capture-sdk/android/core/api/feedback.html#class-scandit.datacapture.core.Feedback) class that can be used to emit feedback when a label is recognized and successfully processed.
+Smart Label Capture provides customizable feedback, emitted automatically when a label is recognized and successfully processed, configurable via [`LabelCapture.feedback`](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture.html#property-scandit.datacapture.label.LabelCapture.Feedback).
 
 You can use the default feedback, or configure your own sound or vibration.
 
+:::tip
+If you already have a [Feedback](https://docs.scandit.com/data-capture-sdk/ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback) instance implemented in your application, remove it to avoid double feedback.
+:::
+
 ```swift
-let feedback = Feedback.defaultFeedback()
-feedback.emit()
+labelCapture.feedback = LabelCaptureFeedback.default
 ```
 
 :::note
