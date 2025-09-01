@@ -1,0 +1,60 @@
+---
+description: 
+sidebar_label: 'Safari Extension'
+displayed_sidebar: expressSidebar
+framework: express
+tags: [express]
+keywords:
+  - express
+---
+
+# Safari Browser Extension
+
+The **Safari Browser Extension** is an alternative to the Scandit Express Keyboard. It allows barcode data to be scanned and injected directly into web applications running inside Safari on iOS devices.
+
+Instead of typing from the Express Keyboard, users can trigger the scanner via a button next to text fields in a webpage. This is especially useful for workflows where scanning should be initiated directly from the application interface.
+
+## Installation & Setup
+
+The Safari Browser Extension is bundled with the **Scandit Express** app as an app extension (`.appex`), just like the custom keyboard.  
+
+- When the Scandit Express app is installed, the Safari extension is also installed.  
+- The extension must be enabled manually by the user:
+
+1. Open **Settings** on your device.  
+2. Navigate to **Safari → Extensions**.  
+3. Find **Scandit Express** and enable it.  
+
+By default, Safari will ask for permission to run the extension on websites. Users can choose:
+- **Allow Once**
+- **Always Allow**
+- **Deny**
+
+Once enabled, the extension is visible in the Safari toolbar. Both the extension icon and the pop-up UI can be customized (default icon: ⚡️).
+
+## How It Works
+
+When enabled, the extension automatically adds a **Scan** button next to input fields in Safari webpages.
+
+1. The user taps the **Scan** button next to a text field.  
+2. Safari opens a deep link to the Scandit Express app.  
+3. The Express scanner is launched, and the scanned barcode is stored in shared storage.  
+4. Safari is brought back into focus.  
+5. The extension retrieves the scan result and inserts it into the selected input field.  
+
+## Configuration
+
+### Default Behavior
+
+By default, the extension attaches a scan button next to every `<input type="text">` field on the page.
+
+### Restricting Buttons to Specific Fields
+
+Developers can limit the scan button to appear only for specific fields by providing CSS selectors.
+
+```json
+{
+  "browserExtension": {
+    "selectors": [".class", "#id"]
+  }
+}
