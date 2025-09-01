@@ -75,7 +75,11 @@ keywords:
 
 **Released**: August 29, 2025
 
-No updates for this framework in this release.
+### Bug Fixes
+
+#### Core
+
+* Fixed double-pairing in the ArUco marker pair detection for MatrixScan Pick and MatrixScan Batch.
 
 ## 7.4.2
 
