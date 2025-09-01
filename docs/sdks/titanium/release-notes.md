@@ -27,6 +27,12 @@ keywords:
 * Improved support for non-standard GS1 AI codes.
 * The `Barcode` class now exposes a module count.
 
+## 7.4.3
+
+**Released**: August 29, 2025
+
+No updates for this framework in this release.
+
 ## 7.4.2
 
 **Released**: August 15, 2025

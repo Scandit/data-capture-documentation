@@ -104,6 +104,12 @@ keywords:
 
 * Deprecated `BarcodeCaptureOverlayStyle`.
 
+## 7.4.3
+
+**Released**: August 29, 2025
+
+No updates for this framework in this release.
+
 ## 7.4.2
 
 **Released**: August 15, 2025
