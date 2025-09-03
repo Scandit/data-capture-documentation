@@ -17,19 +17,18 @@ Instead of typing from the Express Keyboard, users can trigger the scanner via a
 
 The Safari Browser Extension is bundled with the **Scandit Express** app as an extension (`.appex`).  
 
-- When the Scandit Express app is installed, the Safari extension is also installed.  
-- The extension must be enabled manually by the user:
+- When the Scandit Express app is installed, the Safari extension is also installed but must be enabled by the user.  
 
-1. Open **Settings** on your device.  
-2. Navigate to **Safari → Extensions**.  
-3. Find **Scandit Express** and enable it.  
-
-By default, Safari will ask for permission to run the extension on websites. Users can choose:
+By default, Safari will ask for permission to run the extension on websites and users can choose:
 - **Allow Once**
 - **Always Allow**
 - **Deny**
 
-Once enabled, the extension is visible in the Safari toolbar. Both the extension icon and the pop-up UI can be customized (default icon: ⚡️).
+Once enabled, the extension is visible in the Safari toolbar.
+
+:::tip
+Both the extension icon and the pop-up UI can be customized.
+:::
 
 ## How It Works
 
