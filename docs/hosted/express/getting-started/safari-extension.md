@@ -1,8 +1,7 @@
 ---
-description: 
+description: 'Integrate barcode scanning directly into Safari on iOS with the Scandit Express extension.'
 sidebar_label: 'Safari Extension'
 displayed_sidebar: expressSidebar
-framework: express
 tags: [express]
 keywords:
   - express
@@ -14,9 +13,9 @@ The **Safari Browser Extension** is an alternative to the Scandit Express Keyboa
 
 Instead of typing from the Express Keyboard, users can trigger the scanner via a button next to text fields in a webpage. This is especially useful for workflows where scanning should be initiated directly from the application interface.
 
-## Installation & Setup
+## Installation
 
-The Safari Browser Extension is bundled with the **Scandit Express** app as an app extension (`.appex`), just like the custom keyboard.  
+The Safari Browser Extension is bundled with the **Scandit Express** app as an extension (`.appex`).  
 
 - When the Scandit Express app is installed, the Safari extension is also installed.  
 - The extension must be enabled manually by the user:
