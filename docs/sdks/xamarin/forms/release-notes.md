@@ -43,6 +43,12 @@ keywords:
 * Deprecated `AamvaBarcodeVerification`.
 * Deprecated `IdCaptureSettings.decodeIsoMobileDriverLicenses` and `IdCaptureSettings.decodeMobileDriverLicenseViz`.
 
+## 7.5.1
+
+**Released**: September 4, 2025
+
+No updates for this framework in this release.
+
 ## 7.5.0
 
 **Released**: August 12, 2025

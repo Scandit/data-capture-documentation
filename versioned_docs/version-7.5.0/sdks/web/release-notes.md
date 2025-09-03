@@ -10,6 +10,17 @@ keywords:
   - web
 ---
 
+## 7.5.1
+
+**Released**: September 4, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed browser minimum support to be at least Chrome 64+.
+* Some animations may not work correctly in older browsers, such as Chrome <75. A warning has been added suggesting `web-animation-js` polyfill for better UX.
+
 ## 7.5.0
 
 **Released**: August 12, 2025
