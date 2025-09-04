@@ -63,6 +63,16 @@ keywords:
 * Deprecated `LabelCaptureBasicOverlay.withLabelCapture` and `LabelCaptureBasicOverlay.withLabelCaptureForView`. A new public constructor has been added.
 * Deprecated `LabelCaptureAdvancedOverlay.withLabelCapture` and `LabelCaptureAdvancedOverlay.withLabelCaptureForView`. A new public constructor has been added.
 
+## 7.5.1
+
+**Released**: September 4, 2025
+
+### New Features
+
+#### ID
+
+* Added `CapturedId::toJsonWithoutImages`, a more performant conversion method if images are not needed.
+
 ## 7.5.0
 
 **Released**: August 12, 2025

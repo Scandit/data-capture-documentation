@@ -65,6 +65,16 @@ keywords:
 * Deprecated `LabelCaptureBasicOverlay.withLabelCapture` and `LabelCaptureBasicOverlay.withLabelCaptureForView`. A new public constructor has been added.
 * Deprecated `LabelCaptureAdvancedOverlay.withLabelCapture` and `LabelCaptureAdvancedOverlay.withLabelCaptureForView`. A new public constructor has been added.
 
+## 7.5.1
+
+**Released**: September 4, 2025
+
+### Bug Fixes
+
+#### Core
+
+* `ScanditIDC` simulator framework no longer incorrectly uses `MinimumOSVersion` 16.6, but is now set to iOS 15.0.
+
 ## 7.5.0
 
 **Released**: August 12, 2025

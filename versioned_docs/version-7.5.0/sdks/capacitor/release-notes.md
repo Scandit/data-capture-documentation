@@ -9,6 +9,28 @@ keywords:
   - capacitor
 ---
 
+## 7.5.1
+
+**Released**: September 4, 2025
+
+### New Features
+
+#### ID
+
+* Added `CapturedId::toJsonWithoutImages`, a more performant conversion method if images are not needed.
+
+### Performance Improvements
+
+#### ID
+
+* Improved `IdImage` handling for captured IDs by implementing a FileSystem Cache.
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a runtime error.
+
 ## 7.5.0
 
 **Released**: August 12, 2025
