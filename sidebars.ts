@@ -59,7 +59,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Getting Started',
-          items: ['hosted/express/getting-started/installation', 'hosted/express/getting-started/rollout'],
+          items: ['hosted/express/getting-started/installation', 'hosted/express/getting-started/safari-extension', 'hosted/express/getting-started/rollout'],
         },
         {
           type: 'category',
@@ -79,6 +79,15 @@ const sidebars: SidebarsConfig = {
             'hosted/express/configuration/device-pairing/online-connection'
           ],
         },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Build-in Workflows',
+          items: [
+            'hosted/express/workflows/overview',
+            'hosted/express/workflows/task-management',
+            'hosted/express/workflows/markdown',
           ],
         },
       ],

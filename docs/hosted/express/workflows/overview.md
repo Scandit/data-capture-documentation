@@ -19,6 +19,8 @@ Task Management is a workflow designed to help users efficiently manage tasks re
 
 The user enters the recalled lot number(s) into Scandit Express. They then scan the item's barcode, lot number, and (optionally) the expiry date. Scandit Express analyzes the data and displays an on-screen prompt with the appropriate next steps.
 
+See [Task Management Configuration](./task-management.md) for details on how to configure this workflow.
+
 ## Markdown
 
 The Markdown workflow in Scandit Express is designed to streamline the process of marking down fresh items approaching their expiry dates.
@@ -26,6 +28,8 @@ The Markdown workflow in Scandit Express is designed to streamline the process o
 This workflow allows users to quickly and accurately capture the necessary information, reducing the time spent on manual checks.
 
 No integration is required — the markdown logic can be configured directly in the Scandit Express dashboard. Once set up, users hover the camera over an item’s barcode and expiry date and Scandit Express captures and interprets the data based on the configured logic. An AR overlay is then displayed, guiding the user on the appropriate action to take.
+
+See [Markdown Configuration](./markdown.md) for details on how to configure this workflow.
 
 ## Track and Trace
 
