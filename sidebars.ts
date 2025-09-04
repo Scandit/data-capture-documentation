@@ -69,6 +69,7 @@ const sidebars: SidebarsConfig = {
             'hosted/express/configuration/express-find',
             'hosted/express/configuration/inventory-count',
             'hosted/express/configuration/scan-labels',
+            'hosted/express/configuration/id-check',
             {
           type: 'category',
           label: 'Device Pairing',
