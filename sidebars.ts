@@ -80,6 +80,16 @@ const sidebars: SidebarsConfig = {
             'hosted/express/configuration/device-pairing/online-connection'
           ],
         },
+        {
+          type: 'category',
+          label: 'Custom Data Transfer',
+          collapsed: false,
+          items: [
+            'hosted/express/configuration/custom-data-transfer/overview',
+            'hosted/express/configuration/custom-data-transfer/input-configuration',
+            'hosted/express/configuration/custom-data-transfer/output-configuration'
+          ],
+        },
           ],
         },
         {
