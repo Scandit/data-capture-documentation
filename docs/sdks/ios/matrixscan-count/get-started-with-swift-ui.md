@@ -129,3 +129,100 @@ struct ContentView: View {
     }
 }
 ```
+
+## Alternative: Using UIViewRepresentable
+
+As an alternative to wrapping a `UIViewController`, you can implement the MatrixScan Count functionality directly using `UIViewRepresentable`. This approach creates the count view directly without an intermediate view controller:
+
+```swift
+import ScanditBarcodeCapture
+import SwiftUI
+
+struct MatrixScanCountView: UIViewRepresentable {
+    private let dataCaptureContext: DataCaptureContext
+    private let barcodeCount: BarcodeCount
+    private let listener: Listener
+
+    init(onBarcodeCountUpdated: @escaping ([Barcode]) -> Void) {
+        // Create the data capture context
+        DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+        dataCaptureContext = DataCaptureContext.sharedInstance
+
+        // Configure Barcode Count settings
+        let settings = BarcodeCountSettings()
+        // ...
+
+        // Create Barcode Count mode
+        barcodeCount = BarcodeCount(context: dataCaptureContext, settings: settings)
+
+        // Create the listener and UI delegate
+        // IMPORTANT: You must assign these to strong properties
+        // to prevent them from being deallocated
+        listener = Listener(onBarcodeCountUpdated: onBarcodeCountUpdated)
+        barcodeCount.addListener(listener)
+    }
+
+    func makeUIView(context: Context) -> UIView {
+        if let camera = Camera.default {
+            // Apply recommended camera settings
+            let cameraSettings = BarcodeCount.recommendedCameraSettings
+            camera.apply(cameraSettings)
+
+            // Turn on the camera
+            dataCaptureContext.setFrameSource(camera)
+            camera.switch(toDesiredState: .on)
+        } else {
+            print("Camera not available")
+        }
+
+        // Enable Barcode Count
+        barcodeCount.isEnabled = true
+
+        // Create the Barcode Count view
+        let barcodeCountView = BarcodeCountView(frame: .zero,
+                                                context: dataCaptureContext,
+                                                barcodeCount: barcodeCount)
+        barcodeCountView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+        return barcodeCountView
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {
+        // Update the view if needed
+    }
+}
+
+private class Listener: NSObject, BarcodeCountListener {
+    private let onBarcodeCountUpdated: ([Barcode]) -> Void
+
+    init(onBarcodeCountUpdated: @escaping ([Barcode]) -> Void) {
+        self.onBarcodeCountUpdated = onBarcodeCountUpdated
+    }
+
+    func barcodeCount(_ barcodeCount: BarcodeCount,
+                      didScanIn session: BarcodeCountSession,
+                      frameData: FrameData) {
+        let barcodes = session.recognizedBarcodes
+        DispatchQueue.main.async {
+            self.onBarcodeCountUpdated(barcodes)
+        }
+    }
+}
+```
+
+You can then use this view directly in your SwiftUI app:
+
+```swift
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                MatrixScanCountView { barcodes in
+                    // Handle recognized barcodes
+                }
+                .navigationTitle("MatrixScan Count")
+            }
+        }
+    }
+}
+```

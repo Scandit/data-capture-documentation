@@ -142,3 +142,119 @@ struct ContentView: View {
     }
 }
 ```
+
+## Alternative: Using UIViewRepresentable
+
+As an alternative to wrapping a `UIViewController`, you can implement the MatrixScan Pick functionality directly using `UIViewRepresentable`. This approach creates the pick view directly without an intermediate view controller:
+
+```swift
+import ScanditBarcodeCapture
+import SwiftUI
+
+struct MatrixScanPickView: UIViewRepresentable {
+    private let dataCaptureContext: DataCaptureContext
+    private let barcodePick: BarcodePick
+    private let productProviderDelegate: ProductProviderDelegate
+    private let uiDelegate: UIDelegate
+
+    init(products: Set<BarcodePickProduct>,
+         productMapper: @escaping ([String]) async -> [BarcodePickProductProviderCallbackItem],
+         onFinishButtonTapped: @escaping () -> Void) {
+        // Create the data capture context
+        DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+        dataCaptureContext = DataCaptureContext.sharedInstance
+
+        // Configure Barcode Pick settings
+        let settings = BarcodePickSettings()
+        // ...
+
+        // Create product provider with delegate.
+        // IMPORTANT: You must assign the delegate to a strong property
+        // to prevent it from being deallocated
+        productProviderDelegate = ProductProviderDelegate(productMapper: productMapper)
+        let productProvider = BarcodePickAsyncMapperProductProvider(products: products,
+                                                                    providerDelegate: productProviderDelegate)
+
+        // Create Barcode Pick mode with product provider
+        barcodePick = BarcodePick(context: dataCaptureContext,
+                                  settings: settings,
+                                  productProvider: productProvider)
+
+        // Create the UI delegate
+        uiDelegate = UIDelegate(onFinishButtonTapped: onFinishButtonTapped)
+    }
+
+    func makeUIView(context: Context) -> UIView {
+        // Configure Barcode Pick view settings
+        let viewSettings = BarcodePickViewSettings()
+        // ...
+
+        // Create the Barcode Pick view
+        let barcodePickView = BarcodePickView(frame: .zero,
+                                              context: dataCaptureContext,
+                                              barcodePick: barcodePick,
+                                              settings: viewSettings)
+        barcodePickView.uiDelegate = uiDelegate
+
+        // Start the pick view
+        barcodePickView.start()
+
+        return barcodePickView
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {
+        // Update the view if needed
+    }
+}
+
+private class ProductProviderDelegate: NSObject, BarcodePickAsyncMapperProductProviderDelegate {
+    private let productMapper: ([String]) async -> [BarcodePickProductProviderCallbackItem]
+
+    init(productMapper: @escaping ([String]) async -> [BarcodePickProductProviderCallbackItem]) {
+        self.productMapper = productMapper
+        super.init()
+    }
+
+    func mapItems(_ items: [String]) async -> [BarcodePickProductProviderCallbackItem] {
+        return await productMapper(items)
+    }
+}
+
+private class UIDelegate: NSObject, BarcodePickViewUIDelegate {
+    private let onFinishButtonTapped: () -> Void
+
+    init(onFinishButtonTapped: @escaping () -> Void) {
+        self.onFinishButtonTapped = onFinishButtonTapped
+    }
+
+    func barcodePickViewDidTapFinishButton(_ view: BarcodePickView) {
+        DispatchQueue.main.async {
+            self.onFinishButtonTapped()
+        }
+    }
+}
+```
+
+You can then use this view directly in your SwiftUI app:
+
+```swift
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                MatrixScanPickView(
+                    products: productsToPick,
+                    productMapper: { items in
+                        // Map scanned items to products
+                        // ...
+                    },
+                    onFinishButtonTapped: {
+                        // Handle finish button tap
+                    },
+                )
+                .navigationTitle("MatrixScan Pick")
+            }
+        }
+    }
+}
+```
