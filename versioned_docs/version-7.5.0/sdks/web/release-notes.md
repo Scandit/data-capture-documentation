@@ -19,7 +19,7 @@ keywords:
 #### Core
 
 * Fixed browser minimum support to be at least Chrome 64+.
-* Some animations may not work correctly in older browsers, such as Chrome <75. A warning has been added suggesting `web-animation-js` polyfill for better UX.
+* Some animations may not work correctly in older browsers, such as Chrome `<75`. A warning has been added suggesting `web-animation-js` polyfill for better UX.
 
 ## 7.5.0
 
