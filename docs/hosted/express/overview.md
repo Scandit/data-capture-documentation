@@ -38,7 +38,6 @@ Scandit Express offers multiple scanning modes:
 * **Accuracy**: Scans one barcode out of many in the camera’s field of view. It detects all barcodes available and provides an AR overlay to help the user select one target barcode.
 * **Speed**: Scans multiple barcodes in quick succession. It removes the need to tap the screen repeatedly.
 * **Batch**: Scans all visible barcodes and stores them in a list.
-* **Find**: Scans multiple items simultaneously and highlights the ones needed using an AR overlay.
 
 ## Security and Compliance
 

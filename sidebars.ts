@@ -59,7 +59,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'category',
           label: 'Getting Started',
-          items: ['hosted/express/getting-started/installation', 'hosted/express/getting-started/safari-extension', 'hosted/express/getting-started/rollout'],
+          items: ['hosted/express/getting-started/installation', 'hosted/express/getting-started/rollout'],
         },
         {
           type: 'category',
@@ -70,6 +70,7 @@ const sidebars: SidebarsConfig = {
             'hosted/express/configuration/inventory-count',
             'hosted/express/configuration/scan-labels',
             'hosted/express/configuration/id-check',
+            'hosted/express/getting-started/safari-extension',
             {
           type: 'category',
           label: 'Device Pairing',
@@ -94,7 +95,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Build-in Workflows',
+          label: 'Built-in Workflows',
           items: [
             'hosted/express/workflows/overview',
             'hosted/express/workflows/task-management',

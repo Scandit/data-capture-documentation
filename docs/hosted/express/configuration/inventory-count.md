@@ -44,7 +44,7 @@ On start, you will have two options:
 
 ### Scanning Modes
 
-There are two scanning modes available in Inventory Count, toggaleable in the UI:
+There are two scanning modes available in Inventory Count, toggleable in the UI:
 
 - **MatrixScan Count**: Batch scanning with progress tracking.
 - **SparkScan**: Fast, single-item scanning.

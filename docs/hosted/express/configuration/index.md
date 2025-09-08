@@ -20,7 +20,7 @@ You can configure which [barcode symbologies](/barcode-symbologies.md) Scandit E
 
 1. Login to your [Scandit Dashboard](https://ssl.scandit.com/).
 2. Click on the Project card you want to configure.
-3. For each symbology, you can enable or disable it by checking the **enabled** checkbox.
+3. For each symbology, you can enable or disable it via the corresponding toggle.
     ![Symbology Configuration](/img/express/enabled_symbology.png)
 4. [Reload the configuration](/hosted/express/getting-started/rollout.md#updating-configuration) in your app to apply the changes.
 

@@ -42,6 +42,12 @@ When enabled, the extension automatically adds a **Scan** button next to input f
 
 ## Configuration
 
+The Safari extension can be configured via the Scandit Dashboard from the **General > Browser Extension** section.
+
+<p align="center">
+  <img src="/img/express/browser-extension.png" alt="Safari Extension Dashboard" style="max-width: 800px;">
+</p>
+
 ### Default Behavior
 
 By default, the extension attaches a scan button next to every `<input type="text">` field on the page.
@@ -49,10 +55,3 @@ By default, the extension attaches a scan button next to every `<input type="tex
 ### Restricting Buttons to Specific Fields
 
 Developers can limit the scan button to appear only for specific fields by providing CSS selectors.
-
-```json
-{
-  "browserExtension": {
-    "selectors": [".class", "#id"]
-  }
-}
