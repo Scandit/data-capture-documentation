@@ -33,48 +33,6 @@
       ]
     }
   ],
-  "expressSidebar": [
-    {
-      "type": "category",
-      "label": "Scandit Express",
-      "items": [
-        "hosted/express/overview",
-        {
-          "type": "category",
-          "label": "Getting Started",
-          "items": [
-            "hosted/express/getting-started/installation",
-            "hosted/express/getting-started/rollout"
-          ]
-        },
-        {
-          "type": "category",
-          "label": "Configuring Express",
-          "items": [
-            "hosted/express/configuration/index",
-            "hosted/express/configuration/express-find",
-            "hosted/express/configuration/inventory-count"
-          ]
-        }
-      ]
-    }
-  ],
-  "boltSidebar": [
-    {
-      "type": "category",
-      "label": "ID Bolt",
-      "items": [
-        "hosted/id-bolt/overview",
-        "hosted/id-bolt/getting-started",
-        "hosted/id-bolt/api",
-        {
-          "type": "link",
-          "label": "Try the Demo",
-          "href": "https://id-travel.demos.scandit.com/"
-        }
-      ]
-    }
-  ],
   "iosSidebar": [
     {
       "type": "category",
