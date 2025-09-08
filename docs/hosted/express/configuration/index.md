@@ -43,9 +43,9 @@ You can configure Scandit Express to inject additional keystrokes after a barcod
     * `tab` for Tab.
 4. [Reload the configuration](/hosted/express/getting-started/rollout.md#updating-configuration) in your app to apply the changes.
 
-### Scanning Modes
+### Scanning Options
 
-Scandit Express supports different scanning modes to optimize the scanning experience for different use cases. There are two scanning modes available by default: Accuracy and Speed. Two additional modes, Batch and List, are available if you have purchased MatrixScan.
+Scandit Express supports different scanning options to optimize the scanning experience for different use cases. There are two options available by default: Accuracy and Speed. Two additional options, Batch and List, are available if you have purchased MatrixScan.
 
 #### Accuracy
 
