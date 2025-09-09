@@ -15,7 +15,7 @@ By combining barcode recognition with OCR and built-in intelligence, it can unde
 
 It is available via the **Scan Labels** option in the Express menu.
 
-<img src="/img/express/express_menu.jpeg" alt="Express Menu" width="350px" />
+<img src="/img/express/express_menu.png" alt="Express Menu" width="350px" />
 
 On start, you will be able to scan labels using the default configuration available out-of-the-box, however, your account administrator can customize the implementation to your specific use case, detailing the label layout, fields, and type of data to be extracted.
 

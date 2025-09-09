@@ -17,7 +17,7 @@ It is available via the **Scan Labels** option in the Express menu.
 When finished scanning, you can export the list of scanned details.
 
 <p align="center">
-  <img src="/img/express/express_menu.jpeg" alt="Express Menu" width="350px" />
+  <img src="/img/express/express_menu.png" alt="Express Menu" width="350px" />
 </p>
 
 ## Configuration
