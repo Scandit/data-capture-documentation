@@ -23,7 +23,7 @@ We recommend that you start with creating a list with the barcodes to find (Find
 
 ### Spreadsheet Find List
 
-You can also provide the Find List to your end-users as a spreadsheet. A template for such a spreadsheet can be found [here](https://docs.google.com/spreadsheets/d/1Aj0lDEaS6Kh3-8rWlxPOdnuoYcpzXH5OH4SsmvGIyaE/edit#gid=1367552303).
+You can also provide the Find List to your end-users as a spreadsheet.
 
 ### On Device
 

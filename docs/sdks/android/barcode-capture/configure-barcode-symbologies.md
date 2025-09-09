@@ -1,5 +1,5 @@
 ---
-description: "import Intro from '../../../partials/configure-symbologies/_intro.mdx'                                                                                                "
+description: "Learn about the available symbologies and the corresponding configurations and extensions available."
 
 pagination_next: null
 framework: android

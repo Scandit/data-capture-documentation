@@ -34,18 +34,15 @@
     }
   ],
   "expressSidebar": [
-    {
-      "type": "category",
-      "label": "Scandit Express",
-      "items": [
-        "hosted/express/overview",
+		{
+			"type": "category",
+			"label": "Scandit Express",
+			"items": [
+				"hosted/express/overview",
         {
           "type": "category",
           "label": "Getting Started",
-          "items": [
-            "hosted/express/getting-started/installation",
-            "hosted/express/getting-started/rollout"
-          ]
+          "items": ["hosted/express/getting-started/installation", "hosted/express/getting-started/rollout"]
         },
         {
           "type": "category",
@@ -55,21 +52,42 @@
             "hosted/express/configuration/express-find",
             "hosted/express/configuration/inventory-count",
             "hosted/express/configuration/scan-labels",
+            "hosted/express/configuration/id-check",
+            "hosted/express/getting-started/safari-extension",
             {
-              "type": "category",
-              "label": "Device Pairing",
-              "collapsed": false,
-              "items": [
-                "hosted/express/configuration/device-pairing/device-pairing",
-                "hosted/express/configuration/device-pairing/bluetooth-pairing",
-                "hosted/express/configuration/device-pairing/online-connection"
-              ]
-            }
+          "type": "category",
+          "label": "Device Pairing",
+          "collapsed": false,
+          "items": [
+            "hosted/express/configuration/device-pairing/device-pairing",
+            "hosted/express/configuration/device-pairing/bluetooth-pairing",
+            "hosted/express/configuration/device-pairing/online-connection"
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Custom Data Transfer",
+          "collapsed": false,
+          "items": [
+            "hosted/express/configuration/custom-data-transfer/overview",
+            "hosted/express/configuration/custom-data-transfer/input-configuration",
+            "hosted/express/configuration/custom-data-transfer/output-configuration"
+          ]
+        }
+          ]
+        },
+        {
+          "type": "category",
+          "label": "Built-in Workflows",
+          "items": [
+            "hosted/express/workflows/overview",
+            "hosted/express/workflows/task-management",
+            "hosted/express/workflows/markdown"
           ]
         }
       ]
-    }
-  ],
+		}
+	],
   "boltSidebar": [
     {
       "type": "category",
