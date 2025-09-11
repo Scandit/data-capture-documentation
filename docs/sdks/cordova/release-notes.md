@@ -10,9 +10,9 @@ keywords:
   - cordova
 ---
 
-## 7.6.0-beta.1
+## 7.6.0
 
-**Released**: August 28, 2025
+**Released**: September 15, 2025
 
 ### New Features
 
@@ -27,6 +27,10 @@ keywords:
 * The GS1 parser now allows for dates in format `YYYYMM` also in non-strict mode if the year starts with `20XX`.
 
 ### Bug Fixes
+
+#### Core
+
+* Fixed lifecycle events not firing properly upon initial startup.
 
 #### ID
 

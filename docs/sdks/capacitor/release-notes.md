@@ -9,9 +9,9 @@ keywords:
   - capacitor
 ---
 
-## 7.6.0-beta.1
+## 7.6.0
 
-**Released**: August 28, 2025
+**Released**: September 15, 2025
 
 ### New Features
 

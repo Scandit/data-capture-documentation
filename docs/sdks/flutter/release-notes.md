@@ -10,14 +10,15 @@ keywords:
   - flutter
 ---
 
-## 7.6.0-beta.1
+## 7.6.0
 
-**Released**: August 28, 2025
+**Released**: September 15, 2025
 
 ### New Features
 
 #### Smart Label Capture
 
+* * Smart Label Capture now includes customizable feedback configurable via `LabelCapture.feedback`. The feedback is now automatic on scan, requiring less code to set it up.
 * A new sample application, `LabelCaptureSimpleSample`, is available.
 
 #### ID
@@ -31,6 +32,15 @@ keywords:
 * The GS1 parser now allows for dates in format `YYYYMM` also in non-strict mode if the year starts with `20XX`.
 
 ### Bug Fixes
+
+#### Core
+
+* Fixed a compilation issue on iOS due to a Flutter breaking change in 3.35.0.
+* Fix a deadlock in Flutter occurring when turning off the screen of the phone while having the capture mode still capturing and camera state on.
+
+#### Barcode
+
+* Fixed an issue where the `SparkScanView` would still be visible when navigating from a screen with `SparkScanView` to another screen.
 
 #### ID
 
