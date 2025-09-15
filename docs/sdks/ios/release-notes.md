@@ -10,9 +10,9 @@ keywords:
   - ios
 ---
 
-## 7.6.0-beta.1
+## 7.6.0
 
-**Released**: August 28, 2025
+**Released**: September 15, 2025
 
 ### New Features
 
@@ -27,7 +27,7 @@ keywords:
 
 #### Smart Label Capture
 
-* Smart Label Capture supports extracting information from purchase receipts, such as items, prices and much more. The feature is released in beta and can be tested by contacting our support.
+* Smart Label Capture supports extracting information from purchase receipts, such as items, prices and much more. The feature is released in beta and can be tested by contacting our [support](mailto:support@scandit.com).
 * Introduced a pre-built field, `DateText`, useful to match a single plain date text (as opposed to specific dates such as Packaging and Expiry) when creating Label Definitions.
 * The following parameter has been added to `LabelDefinitions`:
   * `numberOfMandatoryInstances`
@@ -56,6 +56,7 @@ keywords:
 ### Behavioral Changes
 
 * The MRZ fields `optional` and `optional1` have been renamed to `optionalDataInLine1` and `optionalDataInLine2`, respectively.
+* `DataCaptureContext.sharedInstance` has been renamed to `DataCaptureContext.shared`.
 
 ### Deprecations
 

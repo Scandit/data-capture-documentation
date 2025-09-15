@@ -10,9 +10,9 @@ keywords:
   - react
 ---
 
-## 7.6.0-beta.1
+## 7.6.0
 
-**Released**: August 28, 2025
+**Released**: September 15, 2025
 
 ### New Features
 
@@ -21,6 +21,10 @@ keywords:
 * A proprietary Transaction ID can now be attached to each ID scan to enable end-to-end traceability of user transactions.
 * Better UX when scanning Mobile Driver Licenses (mDL) with new screens to handle Bluetooth device state and data transmission progress.
 * Added support for the following Canadian IDs and Driver Licenses: Newfoundland And Labrador, Northwest Territories, Prince Edward island and Yukon.
+
+#### Smart Label Capture
+
+* Smart Label Capture now includes customizable feedback configurable via `LabelCapture.feedback`. The feedback is now automatic on scan, requiring less code to set it up.
 
 #### Parser
 
@@ -32,6 +36,8 @@ keywords:
 
 * Fixed a crash when reloading a React-Native App from the metro terminal with the `r` option.
 * Fixed a breaking change in React-Native 0.81 related to the required Kotlin accessors.
+* Overhauled React Native Samples to more closely follow React best practices.
+* Fixed an issue with calling `dispose()` on the `context`.
 
 #### ID
 

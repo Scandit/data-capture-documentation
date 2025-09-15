@@ -10,9 +10,9 @@ keywords:
   - web
 ---
 
-## 7.6.0-beta.1
+## 7.6.0
 
-**Released**: August 28, 2025
+**Released**: September 15, 2025
 
 ### New Features
 
@@ -26,6 +26,7 @@ keywords:
   * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
   * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
 * See Deprecations, below, for methods deprecated in `DataCaptureContext`.
+* Added `BarcodeScan` to `BarcodeArAnnotationTrigger` for persistent annotation behavior in MatrixScan AR.
 
 #### Smart Label Capture
 
@@ -42,6 +43,11 @@ keywords:
 * The GS1 parser now allows for dates in format `YYYYMM` also in non-strict mode if the year starts with `20XX`.
 
 ### Bug Fixes
+
+#### Barcode
+
+* Fixed a bug where tapping the mini preview resize control would prevent scanning on the next switch to active state.
+* Fixed an issue in MatrixScan AR where certain code 128 were not correctly painted in the `BarcodeArView`.
 
 #### Smart Label Capture
 
@@ -68,6 +74,7 @@ keywords:
 * The following methods have been deprecated from `DataCaptureContext`:
   * `addMode`: Replaced by `setMode`, since only 1 mode can be active at a time in a `DataCaptureContext`.
   * `removeAllModes`: Replaced by `removeCurrentMode`, since only 1 mode can be active at a time in a `DataCaptureContext`.
+* Deprecated `Camera` and `CameraAccess`. Both will be replaced in version 8.0.
 
 #### Barcode
 
