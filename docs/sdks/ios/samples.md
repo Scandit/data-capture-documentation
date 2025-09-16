@@ -24,7 +24,11 @@ The repository with all the samples can be found [here](https://github.com/Scand
 
 ![SparkScan List Building](/img/samples/sparkscan_list_building.png)
 
-##### [List Building](https://github.com/Scandit/datacapture-ios-samples/tree/master/01_Single_Scanning_Samples/01_Barcode_Scanning_with_Prebuilt_UI/ListBuildingSample)
+##### [List Building](https://github.com/Scandit/datacapture-ios-samples/tree/master/01_Single_Scanning_Samples/01_Barcode_Scanning_with_Prebuilt_UI)
+
+:::tip
+There are two versions of this sample, one in [SwiftUI](https://github.com/Scandit/datacapture-ios-samples/tree/master/01_Single_Scanning_Samples/01_Barcode_Scanning_with_Prebuilt_UI/ListBuildingSampleSwiftUI) and one in [UIKit](https://github.com/Scandit/datacapture-ios-samples/tree/master/01_Single_Scanning_Samples/01_Barcode_Scanning_with_Prebuilt_UI/ListBuildingSampleUIKit).
+:::
 
 Use SparkScan to populate a list of scanned barcodes.
 
