@@ -37,7 +37,11 @@ keywords:
 
 * A proprietary Transaction ID can now be attached to each ID scan to enable end-to-end traceability of user transactions.
 * Better UX when scanning Mobile Driver Licenses (mDL) with new screens to handle Bluetooth device state and data transmission progress.
-* Added support for the following Canadian IDs and Driver Licenses: Newfoundland And Labrador, Northwest Territories, Prince Edward island and Yukon.
+* Added support for the following documents:
+  * Canadian IDs and Driver Licenses for Newfoundland And Labrador, Northwest Territories, Prince Edward island and Yukon
+  * UK Military iD (MOD 90 ID Card)
+  * New US Driver License versions in Alaska and New Hampshire
+  * Georgia Medical Marijuana Card
 
 #### Parser
 
