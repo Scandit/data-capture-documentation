@@ -9,6 +9,17 @@ keywords:
   - xamarinIos
 ---
 
+## 7.6.1
+
+**Released**: September 18, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed decoding of some ASCII-encoded DataMatrix codes ending with '254' codeword followed by padding.
+* Improved support for missing or damaged timing patterns in Aztec codes.
+
 ## 7.6.0
 
 **Released**: September 15, 2025
