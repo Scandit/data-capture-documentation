@@ -10,13 +10,30 @@ keywords:
   - titanium
 ---
 
-## 7.6.0-beta.1
+## 7.6.1
 
-**Released**: August 28, 2025
+**Released**: September 18, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed decoding of some ASCII-encoded DataMatrix codes ending with '254' codeword followed by padding.
+* Improved support for missing or damaged timing patterns in Aztec codes.
+
+## 7.6.0
+
+**Released**: September 15, 2025
 
 ### Deprecations
 
 * Deprecated `BarcodeCaptureOverlayStyle`.
+
+## 7.5.1
+
+**Released**: September 4, 2025
+
+No updates for this framework in this release.
 
 ## 7.5.0
 

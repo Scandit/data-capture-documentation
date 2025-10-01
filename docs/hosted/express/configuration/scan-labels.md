@@ -1,6 +1,5 @@
 ---
-description: "Powered by , a feature available in the Scandit Smart Data Capture SDK, this mode enables the simultaneous scanning of multiple barcodes and printed text on labels, streamlining data entry and reducing errors.                                                                   "
-
+description: "Powered by Smart Label Capture, a feature available in the Scandit Smart Data Capture SDK, this mode enables the simultaneous scanning of multiple barcodes and printed text on labels, streamlining data entry and reducing errors."
 framework: express
 tags: [express]
 keywords:
@@ -15,11 +14,25 @@ By combining barcode recognition with OCR and built-in intelligence, it can unde
 
 It is available via the **Scan Labels** option in the Express menu.
 
-<img src="/img/express/express_menu.jpeg" alt="Express Menu" width="350px" />
-
-On start, you will be able to scan labels using the default configuration available out-of-the-box, however, your account administrator can customize the implementation to your specific use case, detailing the label layout, fields, and type of data to be extracted.
-
 When finished scanning, you can export the list of scanned details.
+
+<p align="center">
+  <img src="/img/express/express_menu.png" alt="Express Menu" width="350px" />
+</p>
+
+## Configuration
+
+Label scanning can be enabled and configured in your [Scandit Dashboard](https://ssl.scandit.com/dashboard/) by navigating to the **Modes > Label Scanning** section:
+
+<p align="center">
+  <img src="/img/express/label-scanning.png" alt="Label Scanning" width="800px" />
+</p>
+
+Once enabled, you can select from a the following pre-defined label types, and the respective fields will be automatically detected when scanning:
+
+* **Smart Device**: Captures the UPC/EAN, IMEI1 and IMEI2, and Serial Number from mobile device labels.
+* **Price Weight**: This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `SKU` and `priceText` fields.
+* **VIN**: Captures the Vehicle Identification Number (VIN) from vehicle labels.
 
 :::tip
 If you need to customize the behavior of the Smart Label Capture feature, please contact [Scandit Support](mailto:support@scandit.com).

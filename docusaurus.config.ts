@@ -218,18 +218,16 @@ const config: Config = {
           },
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          lastVersion: "7.5.0",
+          lastVersion: "current",
           versions: {
             current: {
               label: '7.6.0',
-              banner: 'unreleased',
-              badge: false,
-            },
-            '7.5.0': {
               banner: 'none',
+              badge: false,
             },
             '6.28.6': {
               banner: 'none',
+              badge: false,
             },
           },
         },
@@ -442,7 +440,7 @@ const config: Config = {
            ],
          },
        ],
-      copyright: `Copyright © ${new Date().getFullYear()} Scandit`,
+      copyright: `Copyright © ${new Date().getFullYear()} Scandit<br>Scandit's products are protected under the patents listed at <a href="https://www.scandit.com/patents/" target="_blank" rel="noopener noreferrer">scandit.com/patents</a>`,
     },
     prism: {
       theme: prismThemes.github,

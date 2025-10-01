@@ -10,9 +10,20 @@ keywords:
   - android
 ---
 
-## 7.6.0-beta.1
+## 7.6.1
 
-**Released**: August 28, 2025
+**Released**: September 18, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed decoding of some ASCII-encoded DataMatrix codes ending with '254' codeword followed by padding.
+* Improved support for missing or damaged timing patterns in Aztec codes.
+
+## 7.6.0
+
+**Released**: September 15, 2025
 
 ### New Features
 
@@ -27,7 +38,7 @@ keywords:
 
 #### Smart Label Capture
 
-* Smart Label Capture supports extracting information from purchase receipts, such as items, prices and much more. The feature is released in beta and can be tested by contacting our support.
+* Smart Label Capture supports extracting information from purchase receipts, such as items, prices and much more. The feature is released in beta and can be tested by contacting our [support](mailto:support@scandit.com).
 * Introduced a pre-built field, `DateText`, useful to match a single plain date text (as opposed to specific dates such as Packaging and Expiry) when creating Label Definitions.
 * The following parameter has been added to `LabelDefinitions`:
   * `numberOfMandatoryInstances`
@@ -37,7 +48,11 @@ keywords:
 
 * A proprietary Transaction ID can now be attached to each ID scan to enable end-to-end traceability of user transactions.
 * Better UX when scanning Mobile Driver Licenses (mDL) with new screens to handle Bluetooth device state and data transmission progress.
-* Added support for the following Canadian IDs and Driver Licenses: Newfoundland And Labrador, Northwest Territories, Prince Edward island and Yukon.
+* Added support for the following documents:
+  * Canadian IDs and Driver Licenses for Newfoundland And Labrador, Northwest Territories, Prince Edward island and Yukon
+  * UK Military iD (MOD 90 ID Card)
+  * New US Driver License versions in Alaska and New Hampshire
+  * Georgia Medical Marijuana Card
 
 
 #### Parser
@@ -66,6 +81,12 @@ keywords:
 * Deprecated `resultShouldContainImage`.
 * Deprecated `AamvaBarcodeVerification`.
 * Deprecated `IdCaptureSettings.decodeIsoMobileDriverLicenses` and `IdCaptureSettings.decodeMobileDriverLicenseViz`.
+
+## 7.5.1
+
+**Released**: September 4, 2025
+
+No updates for this framework in this release.
 
 ## 7.5.0
 

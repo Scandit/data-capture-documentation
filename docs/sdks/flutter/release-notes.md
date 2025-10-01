@@ -10,27 +10,52 @@ keywords:
   - flutter
 ---
 
-## 7.6.0-beta.1
+## 7.6.1
 
-**Released**: August 28, 2025
+**Released**: September 18, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed decoding of some ASCII-encoded DataMatrix codes ending with '254' codeword followed by padding.
+* Improved support for missing or damaged timing patterns in Aztec codes.
+
+## 7.6.0
+
+**Released**: September 15, 2025
 
 ### New Features
 
 #### Smart Label Capture
 
+* * Smart Label Capture now includes customizable feedback configurable via `LabelCapture.feedback`. The feedback is now automatic on scan, requiring less code to set it up.
 * A new sample application, `LabelCaptureSimpleSample`, is available.
 
 #### ID
 
 * A proprietary Transaction ID can now be attached to each ID scan to enable end-to-end traceability of user transactions.
 * Better UX when scanning Mobile Driver Licenses (mDL) with new screens to handle Bluetooth device state and data transmission progress.
-* Added support for the following Canadian IDs and Driver Licenses: Newfoundland And Labrador, Northwest Territories, Prince Edward island and Yukon.
+* Added support for the following documents:
+  * Canadian IDs and Driver Licenses for Newfoundland And Labrador, Northwest Territories, Prince Edward island and Yukon
+  * UK Military iD (MOD 90 ID Card)
+  * New US Driver License versions in Alaska and New Hampshire
+  * Georgia Medical Marijuana Card
 
 #### Parser
 
 * The GS1 parser now allows for dates in format `YYYYMM` also in non-strict mode if the year starts with `20XX`.
 
 ### Bug Fixes
+
+#### Core
+
+* Fixed a compilation issue on iOS due to a Flutter breaking change in 3.35.0.
+* Fix a deadlock in Flutter occurring when turning off the screen of the phone while having the capture mode still capturing and camera state on.
+
+#### Barcode
+
+* Fixed an issue where the `SparkScanView` would still be visible when navigating from a screen with `SparkScanView` to another screen.
 
 #### ID
 
@@ -67,6 +92,16 @@ keywords:
 * Deprecated `LabelCapture.forContext`. A new constructor has been added.
 * Deprecated `LabelCaptureBasicOverlay.withLabelCapture` and `LabelCaptureBasicOverlay.withLabelCaptureForView`. A new public constructor has been added.
 * Deprecated `LabelCaptureAdvancedOverlay.withLabelCapture` and `LabelCaptureAdvancedOverlay.withLabelCaptureForView`. A new public constructor has been added.
+
+## 7.5.1
+
+**Released**: September 4, 2025
+
+### Bug Fixes
+
+#### Core
+
+* `ScanditIDC` simulator framework no longer incorrectly uses `MinimumOSVersion` 16.6, but is now set to iOS 15.0.
 
 ## 7.5.0
 

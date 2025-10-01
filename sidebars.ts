@@ -69,6 +69,8 @@ const sidebars: SidebarsConfig = {
             'hosted/express/configuration/express-find',
             'hosted/express/configuration/inventory-count',
             'hosted/express/configuration/scan-labels',
+            'hosted/express/configuration/id-check',
+            'hosted/express/getting-started/safari-extension',
             {
           type: 'category',
           label: 'Device Pairing',
@@ -79,6 +81,25 @@ const sidebars: SidebarsConfig = {
             'hosted/express/configuration/device-pairing/online-connection'
           ],
         },
+        {
+          type: 'category',
+          label: 'Custom Data Transfer',
+          collapsed: false,
+          items: [
+            'hosted/express/configuration/custom-data-transfer/overview',
+            'hosted/express/configuration/custom-data-transfer/input-configuration',
+            'hosted/express/configuration/custom-data-transfer/output-configuration'
+          ],
+        },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Built-in Workflows',
+          items: [
+            'hosted/express/workflows/overview',
+            'hosted/express/workflows/task-management',
+            'hosted/express/workflows/markdown',
           ],
         },
       ],

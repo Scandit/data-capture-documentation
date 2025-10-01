@@ -13,7 +13,7 @@ In this guide you will learn step-by-step how to add MatrixScan Find to your app
 - A Barcode Find View: The pre-built UI elements used to highlight found items.
 
 :::note
-MatrixScan Count is implemented via [`BarcodeFind`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind).
+MatrixScan Find is implemented via [`BarcodeFind`](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind).
 :::
 
 The general steps are:

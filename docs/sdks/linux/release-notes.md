@@ -9,9 +9,20 @@ keywords:
   - linux
 ---
 
-## 7.6.0-beta.1
+## 7.6.1
 
-**Released**: August 28, 2025
+**Released**: September 18, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed decoding of some ASCII-encoded DataMatrix codes ending with '254' codeword followed by padding.
+* Improved support for missing or damaged timing patterns in Aztec codes.
+
+## 7.6.0
+
+**Released**: September 15, 2025
 
 ### New Features
 
@@ -27,6 +38,12 @@ keywords:
 
 * Deprecated the symbology enum `SC_SYMBOLOGY_RM4SCC`, use `SC_SYMBOLOGY_ROYAL_MAIL_4STATE` instead. The same applies to the Python API (`scanditsdk.SYMBOLOGY_RM4SCC` should be used instead of  `scanditsdk.SYMBOLOGY_ROYAL_MAIL_4STATE`).
 * Deprecated camera focus mode functions `sc_barcode_scanner_settings_get_focus_mode()` and `sc_barcode_scanner_settings_set_focus_mode()`. For devices without auto-focus, set the code direction hint to `SC_CODE_DIRECTION_NONE`.
+
+## 7.5.1
+
+**Released**: September 4, 2025
+
+No updates for this framework in this release.
 
 ## 7.5.0
 

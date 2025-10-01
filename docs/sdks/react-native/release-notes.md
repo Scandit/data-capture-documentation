@@ -10,9 +10,20 @@ keywords:
   - react
 ---
 
-## 7.6.0-beta.1
+## 7.6.1
 
-**Released**: August 28, 2025
+**Released**: September 18, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed decoding of some ASCII-encoded DataMatrix codes ending with '254' codeword followed by padding.
+* Improved support for missing or damaged timing patterns in Aztec codes.
+
+## 7.6.0
+
+**Released**: September 15, 2025
 
 ### New Features
 
@@ -20,7 +31,15 @@ keywords:
 
 * A proprietary Transaction ID can now be attached to each ID scan to enable end-to-end traceability of user transactions.
 * Better UX when scanning Mobile Driver Licenses (mDL) with new screens to handle Bluetooth device state and data transmission progress.
-* Added support for the following Canadian IDs and Driver Licenses: Newfoundland And Labrador, Northwest Territories, Prince Edward island and Yukon.
+* Added support for the following documents:
+  * Canadian IDs and Driver Licenses for Newfoundland And Labrador, Northwest Territories, Prince Edward island and Yukon
+  * UK Military iD (MOD 90 ID Card)
+  * New US Driver License versions in Alaska and New Hampshire
+  * Georgia Medical Marijuana Card
+
+#### Smart Label Capture
+
+* Smart Label Capture now includes customizable feedback configurable via `LabelCapture.feedback`. The feedback is now automatic on scan, requiring less code to set it up.
 
 #### Parser
 
@@ -32,6 +51,8 @@ keywords:
 
 * Fixed a crash when reloading a React-Native App from the metro terminal with the `r` option.
 * Fixed a breaking change in React-Native 0.81 related to the required Kotlin accessors.
+* Overhauled React Native Samples to more closely follow React best practices.
+* Fixed an issue with calling `dispose()` on the `context`.
 
 #### ID
 
@@ -64,6 +85,16 @@ keywords:
 * Deprecated `LabelCapture.forContext`. A new constructor has been added.
 * Deprecated `LabelCaptureBasicOverlay.withLabelCapture` and `LabelCaptureBasicOverlay.withLabelCaptureForView`. A new public constructor has been added.
 * Deprecated `LabelCaptureAdvancedOverlay.withLabelCapture` and `LabelCaptureAdvancedOverlay.withLabelCaptureForView`. A new public constructor has been added.
+
+## 7.5.1
+
+**Released**: September 4, 2025
+
+### Bug Fixes
+
+#### Core
+
+* `ScanditIDC` simulator framework no longer incorrectly uses `MinimumOSVersion` 16.6, but is now set to iOS 15.0.
 
 ## 7.5.0
 

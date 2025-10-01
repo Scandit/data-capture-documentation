@@ -122,3 +122,104 @@ struct ContentView: View {
 }
 ```
 
+## Alternative: Using UIViewRepresentable
+
+As an alternative to wrapping a `UIViewController`, you can implement the barcode selection functionality directly using `UIViewRepresentable`. This approach creates the capture view directly without an intermediate view controller:
+
+```swift
+import ScanditBarcodeCapture
+import SwiftUI
+
+struct BarcodeSelectionView: UIViewRepresentable {
+    private let dataCaptureContext: DataCaptureContext
+    private let barcodeSelection: BarcodeSelection
+    private let listener: Listener
+
+    init(onBarcodeSelectionUpdated: @escaping ([Barcode]) -> Void) {
+        // Create the data capture context
+        DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+        dataCaptureContext = DataCaptureContext.sharedInstance
+
+        // Configure barcode selection settings
+        let settings = BarcodeSelectionSettings()
+        // ...
+
+        // Create barcode selection mode
+        barcodeSelection = BarcodeSelection(context: dataCaptureContext, settings: settings)
+
+        // Create the listener instance.
+        // IMPORTANT: You must assign the listener to a strong property
+        // to prevent it from being deallocated
+        listener = Listener(onBarcodeSelectionUpdated: onBarcodeSelectionUpdated)
+        barcodeSelection.addListener(listener)
+    }
+
+    func makeUIView(context: Context) -> UIView {
+        if let camera = Camera.default {
+            // Apply recommended camera settings
+            let cameraSettings = BarcodeSelection.recommendedCameraSettings
+            camera.apply(cameraSettings)
+
+            // Turn on the camera
+            dataCaptureContext.setFrameSource(camera)
+            camera.switch(toDesiredState: .on)
+        } else {
+            print("Camera not available")
+        }
+
+        // Enable barcode selection
+        barcodeSelection.isEnabled = true
+
+        // Create the capture view
+        let captureView = DataCaptureView(context: dataCaptureContext, frame: .zero)
+        captureView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+        // Create the overlay
+        let overlay = BarcodeSelectionBasicOverlay(barcodeSelection: barcodeSelection,
+                                                   view: captureView,
+                                                   style: .frame)
+        captureView.addOverlay(overlay)
+
+        return captureView
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {
+        // Update the view if needed
+    }
+}
+
+private class Listener: NSObject, BarcodeSelectionListener {
+    private let onBarcodeSelectionUpdated: ([Barcode]) -> Void
+
+    init(onBarcodeSelectionUpdated: @escaping ([Barcode]) -> Void) {
+        self.onBarcodeSelectionUpdated = onBarcodeSelectionUpdated
+    }
+
+    func barcodeSelection(_ barcodeSelection: BarcodeSelection,
+                          didUpdateSelection session: BarcodeSelectionSession,
+                          frameData: FrameData?) {
+        let selectedBarcodes = session.selectedBarcodes
+        DispatchQueue.main.async {
+            self.onBarcodeSelectionUpdated(selectedBarcodes)
+        }
+    }
+}
+```
+
+You can then use this view directly in your SwiftUI app:
+
+```swift
+struct ContentView: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                BarcodeSelectionView { barcodes in
+                    // Handle the selected barcodes
+                }
+                .navigationTitle("Barcode Selection")
+            }
+        }
+    }
+}
+```
+
