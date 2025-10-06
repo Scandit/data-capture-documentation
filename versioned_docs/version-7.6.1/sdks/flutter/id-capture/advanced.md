@@ -20,16 +20,16 @@ That means certain data from certain fields won’t be returned, even if it’s 
 
 ```dart
 // Default value:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_ONLY);
+settings.anonymizationMode = IdAnonymizationMode.FIELDS_ONLY;
 
 // Sensitive data is additionally covered with black boxes on returned images:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_AND_IMAGES);
+settings.anonymizationMode = IdAnonymizationMode.FIELDS_AND_IMAGES;
 
 // Only images are anonymized:
-settings.setAnyonymizationMode(IdAnonymizationMode.IMAGES_ONLY);
+settings.anonymizationMode = IdAnonymizationMode.IMAGES_ONLY;
 
 // No anonymization:
-settings.setAnyonymizationMode(IdAnonymizationMode.NONE);
+settings.anonymizationMode = IdAnonymizationMode.NONE;
 ```
 
 ## Document Capture Zones
