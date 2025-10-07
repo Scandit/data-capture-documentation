@@ -100,7 +100,8 @@ The `CapturedId` object contains the extracted data from the scanned document. T
 | `documentType` | `DocumentType` | Type of document (`"Passport"`, `"IDCard"`, or `"DriverLicense"`) |
 | `capturedResultTypes` | `string[]` | Types of data that were captured |
 | `images` | `ImageData` | Object containing base64 encoded images (if requested) |
-| `mrzResult` | `{capturedMrz: string \| null} \| null` | Captured MRZ raw data |
+| `mrzResult` | `object \| null` | Raw extracted data from Machine Readable Zone (MRZ) |
+| `vizResult` | `object \| null` | Raw extracted data from Visual Inspection Zone (VIZ) |
 
 ### DateResult Object
 

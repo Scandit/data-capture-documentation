@@ -75,7 +75,10 @@ const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   scanner: new SingleSideScanner(
     true, // Enable reading of barcode ID-documents
     true, // Enable reading of machine readable zone (MRZ) documents
-    true  // Enable reading of visual inspection zone (VIZ) documents
+    true, // Enable reading of visual inspection zone (VIZ) documents
+    {
+      enforceVizForPassportScan: false // Optional: require VIZ for passport acceptance
+    }
   )
 });
 ```
@@ -99,6 +102,23 @@ const barcodeOnlyScanner = new SingleSideScanner(
   false  // Disable VIZ reading
 );
 ```
+
+#### Passport VIZ Enforcement
+
+By default, passports can be accepted when only the Machine Readable Zone (MRZ) has been successfully scanned. You can require both MRZ and Visual Inspection Zone (VIZ) to be scanned:
+
+```ts
+const strictPassportScanner = new SingleSideScanner(
+  true, // Enable barcode reading
+  true, // Enable MRZ reading
+  true, // Enable VIZ reading
+  {
+    enforceVizForPassportScan: true // Require both MRZ and VIZ for passports
+  }
+);
+```
+
+**Important:** Enabling `enforceVizForPassportScan` may reduce global passport support coverage, as it requires successful scanning of both zones. Use this option when you need higher data quality or additional fields from the VIZ.
 
 ### Full Document Scanner
 
