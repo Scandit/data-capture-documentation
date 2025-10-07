@@ -86,6 +86,8 @@ The following options can be configured when creating an ID Bolt session:
 | `theme` | `Theme` | No | Customizes visual appearance | [Theming](../theming) |
 | `textOverrides` | `TextOverrides` | No | Customizes displayed text | [Text Overrides](../text-overrides) |
 | `keepAliveForNextSession` | `boolean` | No | Keeps resources for multiple sessions | [Advanced Options](../advanced) |
+| `disableCloseOnBrowserBack` | `boolean` | No | Prevents closing on browser back | [Advanced Options](../advanced) |
+| `externalTransactionId` | `string` | No | Your tracking ID for analytics | [Advanced Options](../advanced) |
 | `onCompletion` | `Function` | Yes | Completion callback | [Callbacks](../callbacks) |
 | `onCancellation` | `Function` | No | Cancellation callback | [Callbacks](../callbacks) |
 
