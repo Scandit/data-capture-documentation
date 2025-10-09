@@ -72,7 +72,7 @@ var filterSettings = settings.filterSettings;
 filterSettings.excludedCodesRegex("^1234.*");
 ```
 
-By default the filters applied to the relevant barcodes are transparent, but you can use [`BarcodeFilterHighlightSettings`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-filter-highlight-settings.html#barcode-filter-highlight-settings) to change the color and level of transparency.
+By default the filters applied to the relevant barcodes are transparent, but you can use [`BarcodeFilterHighlightSettings`](https://docs.scandit.com/7.6/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-filter-highlight-settings.html#barcode-filter-highlight-settings) to change the color and level of transparency.
 
 ![Different Filters in MatrixScan Count](/img/matrixscan-count/filtering_styles.png)
 
@@ -89,7 +89,7 @@ barcodeCountView.shouldShowClearHighlightsButton = true;
 
 ## Customize Overlay Colors
 
-MatrixScan Count comes with recommended and user-tested AR overlays. However, if you wish to customize the overlay colors, once the overlay has been added, you can conform to the [BarcodeCountViewListener](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view-listener.html#interface-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener) interface. The methods [BarcodeCountViewListener.brushForRecognizedBarcode()](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.BrushForRecognizedBarcode) and [BarcodeCountViewListener.brushForUnrecognizedBarcode()](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.BrushForUnrecognizedBarcode) are invoked every time a new recognized or unrecognized barcode appears. These can be used to set a brush that will be used to highlight that specific barcode in the overlay. Keep in mind that these methods are relevant only when using the style [BarcodeCountViewStyle.dot](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view.html#value-scandit.datacapture.barcode.count.ui.BarcodeCountViewStyle.Dot).
+MatrixScan Count comes with recommended and user-tested AR overlays. However, if you wish to customize the overlay colors, once the overlay has been added, you can conform to the [BarcodeCountViewListener](https://docs.scandit.com/7.6/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view-listener.html#interface-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener) interface. The methods [BarcodeCountViewListener.brushForRecognizedBarcode()](https://docs.scandit.com/7.6/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.BrushForRecognizedBarcode) and [BarcodeCountViewListener.brushForUnrecognizedBarcode()](https://docs.scandit.com/7.6/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.BrushForUnrecognizedBarcode) are invoked every time a new recognized or unrecognized barcode appears. These can be used to set a brush that will be used to highlight that specific barcode in the overlay. Keep in mind that these methods are relevant only when using the style [BarcodeCountViewStyle.dot](https://docs.scandit.com/7.6/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view.html#value-scandit.datacapture.barcode.count.ui.BarcodeCountViewStyle.Dot).
 
 ```dart
 @override
@@ -105,7 +105,7 @@ Brush? brushForUnrecognizedBarcode(BarcodeCountView view, TrackedBarcode tracked
 
 ## Notifications
 
-If you want to be notified when a user taps on an overlay, you need to implement the[BarcodeCountViewListener.didTapRecognizedBarcode()](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.OnRecognizedBarcodeTapped) and [BarcodeCountViewListener.didTapUnrecognizedBarcode()](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.OnUnrecognizedBarcodeTapped) methods.
+If you want to be notified when a user taps on an overlay, you need to implement the[BarcodeCountViewListener.didTapRecognizedBarcode()](https://docs.scandit.com/7.6/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.OnRecognizedBarcodeTapped) and [BarcodeCountViewListener.didTapUnrecognizedBarcode()](https://docs.scandit.com/7.6/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.OnUnrecognizedBarcodeTapped) methods.
 
 ```dart
 @override

@@ -52,7 +52,7 @@ Example demonstrating how to highlight barcodes and display additional informati
 
 #### MatrixScan Batch
 
-Examples utilizing the low-level [`BarcodeBatch`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-batch.html) API.
+Examples utilizing the low-level [`BarcodeBatch`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-batch.html) API.
 
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/01_Batch_Scanning_and_AR_Info_Lookup/MatrixScanSimpleSample)
 

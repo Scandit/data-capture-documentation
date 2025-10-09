@@ -63,7 +63,7 @@ binary "https://ssl.scandit.com/sdk/download/carthage/ScanditCaptureCore.json"
 
 You also need to add the corresponding binaries based on the features you need as detailed above in [Internal Dependencies](#internal-dependencies).
 
-For example, if you want to add the [`ScanditBarcodeCapture`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api.html) API, you need to add the following Carthage binary:
+For example, if you want to add the [`ScanditBarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api.html) API, you need to add the following Carthage binary:
 
 ```ruby
 binary "https://ssl.scandit.com/sdk/download/carthage/ScanditBarcodeCapture.json"

@@ -13,11 +13,11 @@ keywords:
 
 The Parser parses data strings (as found in barcodes) into a set of key-value mappings. These data formats are supported: 
 
-- [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/web/parser/hibc.html)
-- [GS1 Application Identifier system](https://docs.scandit.com/data-capture-sdk/web/parser/gs1ai.html)
-- [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/web/parser/swissqr.html)
-- [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/web/parser/vin.html)
-- [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/web/parser/iata-bcbp.html)
+- [Health Industry Bar Code (HIBC)](https://docs.scandit.com/7.6/data-capture-sdk/web/parser/hibc.html)
+- [GS1 Application Identifier system](https://docs.scandit.com/7.6/data-capture-sdk/web/parser/gs1ai.html)
+- [Swiss QR Codes](https://docs.scandit.com/7.6/data-capture-sdk/web/parser/swissqr.html)
+- [VIN Vehicle Identification Number](https://docs.scandit.com/7.6/data-capture-sdk/web/parser/vin.html)
+- [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/7.6/data-capture-sdk/web/parser/iata-bcbp.html)
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 

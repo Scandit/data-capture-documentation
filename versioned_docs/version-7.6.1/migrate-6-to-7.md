@@ -29,7 +29,7 @@ Version 7.0 includes the removal of all APIs that were deprecated throughout the
 
 ### Smart Scan Intention
 
-Beginning with version 7.0, [Scan Intention](https://docs.scandit.com/data-capture-sdk/android/core/api/scan-intention.html) is set to `SMART` by default.
+Beginning with version 7.0, [Scan Intention](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/scan-intention.html) is set to `SMART` by default.
 
 Additionally, with Smart Scan Intention enabled, default support for Composite Codes has been removed. If you need to scan Composite Codes, you must [explicitly enable them](/scanning-composite-codes/#enabling-composite-codes) in your capture settings.
 
@@ -110,8 +110,8 @@ Previously you would need to configure the `supportedSides` for your desired doc
 
 | Version 6.x | Version 7.0 |
 |---|---|
-| `FRONT_ONLY` | [`SingleSideScanner`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-scanner.html#single-side-scanner) |
-| `FRONT_AND_BACK` | [`FullDocumentScanner`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-scanner.html#full-document-scanner) |
+| `FRONT_ONLY` | [`SingleSideScanner`](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-scanner.html#single-side-scanner) |
+| `FRONT_AND_BACK` | [`FullDocumentScanner`](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-scanner.html#full-document-scanner) |
 
 #### Document Type Selection
 
@@ -132,7 +132,7 @@ If you need to scan certain documents in full, and others only a specific zone, 
 
 Where previously there were separate document types for a given region and ID type (e.g. Colombia Driver's License, and Colombia ID), in version 7.0 you can select the document category and region to capture (or exclude).
 
-See [ID Capture Document](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-document.html#id-capture-document) for more information on **acceptedDocuments**.
+See [ID Capture Document](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-document.html#id-capture-document) for more information on **acceptedDocuments**.
 
 | 6.x API    | 7.x API    |
 |----------------------------|---------------------|
@@ -163,13 +163,13 @@ See [ID Capture Document](https://docs.scandit.com/data-capture-sdk/android/id-c
 
 Previously you would need to create your own logic for which documents to accept or reject after the capture process.
 
-In version 7.0, you can now specify the documents you want to capture or exclude based on the document category and region directly in the [`IDCaptureSettings`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#id-capture-settings).
+In version 7.0, you can now specify the documents you want to capture or exclude based on the document category and region directly in the [`IDCaptureSettings`](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-settings.html#id-capture-settings).
 
 You can accept or reject a given subset of documents based on the document category and region. For example, you can accept only Passports but not IDs, or reject anything except Drivers License.
 
-Setting the [`acceptedDocuments`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.AcceptedDocuments) will automatically reject any documents not specified in the list.
+Setting the [`acceptedDocuments`](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.AcceptedDocuments) will automatically reject any documents not specified in the list.
 
-Setting the [`rejectedDocuments`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectedDocuments) will automatically reject any documents specified in the list.
+Setting the [`rejectedDocuments`](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectedDocuments) will automatically reject any documents specified in the list.
 
 ### Document Images
 
@@ -183,11 +183,11 @@ If you need to receive images of the captured document, you must migrate the `Id
 
 There is no distinction between front and back. If using `SingleSideScanner`, you will receive the front, if using `FullDocumentScanner`, you will receive the front and back.
 
-For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult).
+For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult).
 
 ### Callbacks
 
-There are now only two callbacks used: [`onIdCaptured`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-listener.html#method-scandit.datacapture.id.IIdCaptureListener.OnIdCaptured) and [`onIdRejected`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-listener.html#method-scandit.datacapture.id.IIdCaptureListener.OnIdRejected).
+There are now only two callbacks used: [`onIdCaptured`](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-listener.html#method-scandit.datacapture.id.IIdCaptureListener.OnIdCaptured) and [`onIdRejected`](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-listener.html#method-scandit.datacapture.id.IIdCaptureListener.OnIdRejected).
 
 :::tip
 For `FullDocumentScanner`, `onIdCaptured` will be called only when all sides are captured. The ID Capture UI automatically guides the user through the process.
@@ -202,7 +202,7 @@ If you rely on `SingleImageUploader`, `onIdCaptured` is now delivered if data fr
 
 ### Capture Result
 
-The structure of [`CapturedId`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html) has been simplified and improved. Some of the changes include:
+The structure of [`CapturedId`](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/captured-id.html) has been simplified and improved. Some of the changes include:
 
 - The `issuingCountry` field is now a `Region` type instead of a `String`.
 - `CapturedId::viz::capturedSides` type is now named `CapturedSides` not `SupportedSides`.

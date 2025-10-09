@@ -279,11 +279,11 @@ import * as SDCBarcode from "@scandit/web-datacapture-barcode";
 
 ## Configure the Library
 
-The library needs to be configured and initialized before it can be used, this is done via the [`configure`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#) function.
+The library needs to be configured and initialized before it can be used, this is done via the [`configure`](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/web/configure.html#) function.
 Note that the configuration expects a valid license key as part of the options.
 
 :::tip
-We recommended to call [`configure`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#) as soon as possible in your application so that the files are already downloaded and initialized when the capture process is started.
+We recommended to call [`configure`](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/web/configure.html#) as soon as possible in your application so that the files are already downloaded and initialized when the capture process is started.
 :::
 
 The `LibraryLocation` configuration option must be provided and point to the location of the Scandit Data Capture `sdc-lib` location (external WebAssembly files): `scandit-datacapture-sdk\*.js` and `scandit-datacapture-sdk\*.wasm`.
@@ -437,7 +437,7 @@ await view.setContext(context);
 
 ## Show loading status with custom UI
 
-You can also subscribe for the [loading status](https://docs.scandit.com/data-capture-sdk/web/core/api/web/loading-status.html) of the library
+You can also subscribe for the [loading status](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/web/loading-status.html) of the library
 by simply attaching a listener like this:
 
 ```ts
@@ -513,7 +513,7 @@ if you experience similar issues.
 
 ### Electron
 
-You can configure the Scandit SDK to work into an Electron app. The register method must be called inside the `main.ts` file passing down some dependencies and the `publicKey`. The `publicKey` will be used to decrypt the encrypted license key file that must be placed into the [`ConfigureOptions.licenseDataPath`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.LicenseDataPath) option:
+You can configure the Scandit SDK to work into an Electron app. The register method must be called inside the `main.ts` file passing down some dependencies and the `publicKey`. The `publicKey` will be used to decrypt the encrypted license key file that must be placed into the [`ConfigureOptions.licenseDataPath`](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.LicenseDataPath) option:
 
 ```ts
 // electron main.ts

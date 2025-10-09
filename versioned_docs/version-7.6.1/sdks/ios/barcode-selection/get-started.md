@@ -38,7 +38,7 @@ import DataCaptureContextIos from '../../../partials/get-started/_create-data-ca
 
 ## Configure the Barcode Selection Mode
 
-Barcode selection is orchestrated by the [`SDCBarcodeSelection`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) data capture mode. It is configured via [`SDCBarcodeSelectionSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-settings.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionSettings) and allows you to register one or more listeners for when new codes have been selected.
+Barcode selection is orchestrated by the [`SDCBarcodeSelection`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) data capture mode. It is configured via [`SDCBarcodeSelectionSettings`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection-settings.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionSettings) and allows you to register one or more listeners for when new codes have been selected.
 
 Here we setup barcode scanning for the desired barcode [symbologies](../../../barcode-symbologies.md). The list of symbologies to enable is highly application specific, and we recommend that you **only enable the list of symbologies your application requires**:
 
@@ -58,27 +58,27 @@ let barcodeSelection = BarcodeSelection(context: context, settings: settings)
 
 ### Selection Types
 
-The behavior of Barcode Selection can be changed by using a different [selection type](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-type.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionType). This defines the method used by `SDCBarcodeSelection` to select codes. There are two types:
+The behavior of Barcode Selection can be changed by using a different [selection type](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection-type.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionType). This defines the method used by `SDCBarcodeSelection` to select codes. There are two types:
 
-- [`SDCBarcodeSelectionTapSelection`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-tap-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionTapSelection): Allows the user to select barcodes by tapping on them. Requires the MatrixScan add-on.
-- [`SDCBarcodeSelectionAimerSelection`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-aimer-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionAimerSelection): Allows the user to select barcodes by aiming at them.
+- [`SDCBarcodeSelectionTapSelection`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection-tap-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionTapSelection): Allows the user to select barcodes by tapping on them. Requires the MatrixScan add-on.
+- [`SDCBarcodeSelectionAimerSelection`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection-aimer-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionAimerSelection): Allows the user to select barcodes by aiming at them.
 
 #### `SDCBarcodeSelectionTapSelection`
 
-You can select to automatically freeze the camera preview to make the selection easier via [`SDCBarcodeSelectionTapSelection.freezeBehavior`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-tap-selection.html#property-scandit.datacapture.barcode.selection.BarcodeSelectionTapSelection.FreezeBehavior).
+You can select to automatically freeze the camera preview to make the selection easier via [`SDCBarcodeSelectionTapSelection.freezeBehavior`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection-tap-selection.html#property-scandit.datacapture.barcode.selection.BarcodeSelectionTapSelection.FreezeBehavior).
 
-Using [`SDCBarcodeSelectionTapSelection.tapBehavior`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-tap-selection.html#property-scandit.datacapture.barcode.selection.BarcodeSelectionTapSelection.TapBehavior) you can further decide if a second tap on a barcode means that the barcode is unselected or if it is selected another time (increasing the counter).
+Using [`SDCBarcodeSelectionTapSelection.tapBehavior`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection-tap-selection.html#property-scandit.datacapture.barcode.selection.BarcodeSelectionTapSelection.TapBehavior) you can further decide if a second tap on a barcode means that the barcode is unselected or if it is selected another time (increasing the counter).
 
 #### `SDCBarcodeSelectionAimerSelection`
 
-With this selection mode it is possible to choose between two different [selection strategies](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-strategy.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionStrategy):
+With this selection mode it is possible to choose between two different [selection strategies](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection-strategy.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionStrategy):
 
-- [`SDCBarcodeSelectionAutoSelectionStrategy`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-strategy.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionAutoSelectionStrategy): Barcodes are selected automatically when aiming at them.
-- [`SDCBarcodeSelectionManualSelectionStrategy`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-strategy.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionManualSelectionStrategy): Barcodes are selected when aiming at them and tapping anywhere on the screen.
+- [`SDCBarcodeSelectionAutoSelectionStrategy`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection-strategy.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionAutoSelectionStrategy): Barcodes are selected automatically when aiming at them.
+- [`SDCBarcodeSelectionManualSelectionStrategy`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection-strategy.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionManualSelectionStrategy): Barcodes are selected when aiming at them and tapping anywhere on the screen.
 
 ### Single Barcode Selection
 
-If you want to automatically select a barcode when it is the only one on screen, turn on [`SDCBarcodeSelectionSettings.singleBarcodeAutoDetection`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-settings.html#property-scandit.datacapture.barcode.selection.BarcodeSelectionSettings.SingleBarcodeAutoDetection):
+If you want to automatically select a barcode when it is the only one on screen, turn on [`SDCBarcodeSelectionSettings.singleBarcodeAutoDetection`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection-settings.html#property-scandit.datacapture.barcode.selection.BarcodeSelectionSettings.SingleBarcodeAutoDetection):
 
 ```swift
 settings.singleBarcodeAutoDetection = true
@@ -86,7 +86,7 @@ settings.singleBarcodeAutoDetection = true
 
 ## Registering the Listener
 
-To get informed whenever a new code has been recognized, add a [`SDCBarcodeSelectionListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener), implementing the listener methods to suit your application’s needs.
+To get informed whenever a new code has been recognized, add a [`SDCBarcodeSelectionListener`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener), implementing the listener methods to suit your application’s needs.
 
 First conform to the `SDCBarcodeSelectionListener` protocol. For example:
 
@@ -126,7 +126,7 @@ let camera = Camera.default
 camera?.apply(cameraSettings)
 ```
 
-Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [`SDCDataCaptureContext.setFrameSource:completionHandler:`](https://docs.scandit.com/data-capture-sdk/ios/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
+Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [`SDCDataCaptureContext.setFrameSource:completionHandler:`](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
 ```swift
 context.setFrameSource(camera)
@@ -140,7 +140,7 @@ camera?.switch(toDesiredState: .on)
 
 ## Disabling Barcode Selection
 
-To disable barcode selection, for instance when the selection is complete, set [`SDCBarcodeSelection.enabled`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection.html#property-scandit.datacapture.barcode.selection.BarcodeSelection.IsEnabled) to `NO`.
+To disable barcode selection, for instance when the selection is complete, set [`SDCBarcodeSelection.enabled`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-selection.html#property-scandit.datacapture.barcode.selection.BarcodeSelection.IsEnabled) to `NO`.
 
 The effect is immediate, no more frames will be processed after the change. However, if a frame is currently being processed, this frame will be completely processed and deliver any results/callbacks to the registered listeners.
 

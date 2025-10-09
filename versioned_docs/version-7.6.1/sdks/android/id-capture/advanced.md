@@ -46,14 +46,14 @@ settings.setAnyonymizationMode(IdAnonymizationMode.NONE);
 
 ## ID Images
 
-Your use can may require that you capture and extract images of the ID document. Use the [IdImageType](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-image-type.html#enum-scandit.datacapture.id.IdImageType) enum to specify the images you want to extract from the `CapturedId` object.
+Your use can may require that you capture and extract images of the ID document. Use the [IdImageType](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-image-type.html#enum-scandit.datacapture.id.IdImageType) enum to specify the images you want to extract from the `CapturedId` object.
 
 :::tip
 Face and Cropped Document can be extracted only by either `SingleSideScanner` with `visualInspectionZone` enabled or by `FullDocumentScanner`.
 In the case of `FullDocumentScanner`, if the front & the back side of a document are scanned, Cropped Document and Full Frame are returned for both sides.
 :::
 
-For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult) when creating the `IdCaptureSettings` object. This will pass the image type to the result, which you can then access in the `CapturedId` object.
+For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult) when creating the `IdCaptureSettings` object. This will pass the image type to the result, which you can then access in the `CapturedId` object.
 
 ```java
 // Holder's picture as printed on a document:
@@ -72,7 +72,7 @@ The ID Capture Listener provides two callbacks: `onIdCaptured` and `onIdRejected
 
 For a successful capture, the `onIdCaptured` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
 
-For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
+For a rejected document, a [RejectionReason](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
 
 * NOT_ACCEPTED_DOCUMENT_TYPE: The document is not in the list of accepted documents. In this scenario, you could direct the user to scan a different document.
 * INVALID_FORMAT: The document is in the list of accepted documents, but the format is invalid. In this scenario, you could direct the user to scan the document again.
@@ -85,11 +85,11 @@ For a rejected document, a [RejectionReason](https://docs.scandit.com/data-captu
 
 The following verifiers are available:
 
-* [AAMVABarcodeVerifier](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by scanning the barcode on the back.
-* [DataConsistencyVerifier](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/data-consistency-verifier.html): Compares the human-readable data of a document with that encoded in the MRZ or barcode, checking for inconsistencies.
+* [AAMVABarcodeVerifier](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by scanning the barcode on the back.
+* [DataConsistencyVerifier](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/data-consistency-verifier.html): Compares the human-readable data of a document with that encoded in the MRZ or barcode, checking for inconsistencies.
 
 :::tip
-Instead of instantiating the verifiers manually, the result can be performed automatically by enabling [`IdCaptureSettings.rejectInconsistentData`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectInconsistentData) and/or [`IdCaptureSettings.rejectForgedAamvaBarcodes`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectInconsistentData).
+Instead of instantiating the verifiers manually, the result can be performed automatically by enabling [`IdCaptureSettings.rejectInconsistentData`](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectInconsistentData) and/or [`IdCaptureSettings.rejectForgedAamvaBarcodes`](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectInconsistentData).
 :::
 
 To enable ID validation for your subscription, please reach out to [Scandit Support](mailto:support@scandit.com).

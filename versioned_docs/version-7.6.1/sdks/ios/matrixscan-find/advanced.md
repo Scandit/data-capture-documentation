@@ -16,7 +16,7 @@ MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless
 
 You may want more fine-grained knowledge over the different events happening during the life of the `BarcodeFind` mode, such as when the search starts, pauses, and stops.
 
-To do this, you can directly register a [`SDCBarcodeFindListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find-listener.html#interface-scandit.datacapture.barcode.find.IBarcodeFindListener) on the mode itself, keeping in mind that these listeners are called from a background thread.
+To do this, you can directly register a [`SDCBarcodeFindListener`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-find-listener.html#interface-scandit.datacapture.barcode.find.IBarcodeFindListener) on the mode itself, keeping in mind that these listeners are called from a background thread.
 
 ```swift
 mode.addListener(self)
@@ -42,7 +42,7 @@ extension PlaygroundViewController: BarcodeFindListener {
 
 Sometimes the barcode data needs to be transformed. For example, if the barcode contains the product identifier and other information, when a product is scanned, the barcode data is first parsed (via a transformation) and then the input list is checked.
 
-First conform to the [`SDCBarcodeFindTransformer`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find-transformer.html#interface-scandit.datacapture.barcode.find.IBarcodeFindTransformer) protocol. For example, if you want to only consider the first 5 characters:
+First conform to the [`SDCBarcodeFindTransformer`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-find-transformer.html#interface-scandit.datacapture.barcode.find.IBarcodeFindTransformer) protocol. For example, if you want to only consider the first 5 characters:
 
 ```swift
 class Transformer: NSObject, BarcodeFindTransformer {
@@ -60,7 +60,7 @@ barcodeFind.setBarcodeTransformer(Transformer())
 
 ## UI Customization
 
-The [`SDCBarcodeFindView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) by default shows a set of UI elements, any of which can be optionally hidden:
+The [`SDCBarcodeFindView`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) by default shows a set of UI elements, any of which can be optionally hidden:
 
 - Play/Pause button
 - Finish button

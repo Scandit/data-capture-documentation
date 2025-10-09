@@ -28,7 +28,7 @@ Devices running the Scandit Data Capture SDK need to have a GPU or the performan
 
 ## Create a New Data Capture Context Instance
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```js
 import { configure, DataCaptureContext } from "@scandit/web-datacapture-core";
@@ -52,7 +52,7 @@ const dataCaptureContext = await DataCaptureContext.create();
 
 ## Configure the SparkScan Mode
 
-The SparkScan Mode is configured through [`SparkScanSettings`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#class-scandit.datacapture.barcode.spark.SparkScanSettings) and allows you to register one or more listeners that are informed whenever a new barcode is scanned.
+The SparkScan Mode is configured through [`SparkScanSettings`](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#class-scandit.datacapture.barcode.spark.SparkScanSettings) and allows you to register one or more listeners that are informed whenever a new barcode is scanned.
 
 For this tutorial, we will set up SparkScan for scanning EAN13 codes. Change this to the correct symbologies for your use case (for example, Code 128, Code 39…).
 
@@ -71,7 +71,7 @@ const sparkScan = SparkScan.forSettings(this.sparkScanSettings);
 
 The SparkScan built-in user interface includes the camera preview and scanning UI elements. These guide the user through the scanning process.
 
-The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings).
+The [`SparkScanView`](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings).
 
 ```js
 const sparkScanViewSettings = new SparkScanViewSettings();
@@ -82,7 +82,7 @@ See the [SparkScan Workflow Options](./intro.md#workflow-options) section for mo
 
 By adding a `SparkScanView`, the scanning interface (camera preview and scanning UI elements) will be added automatically to your application.
 
-Add a `SparkScanView` to your view hierarchy. Construct a new SparkScan view, making sure to call sure to call [SparkScanView.prepareScanning()](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.PrepareScanning). The `SparkScanView` is automatically added to the provided `parentView`:
+Add a `SparkScanView` to your view hierarchy. Construct a new SparkScan view, making sure to call sure to call [SparkScanView.prepareScanning()](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.PrepareScanning). The `SparkScanView` is automatically added to the provided `parentView`:
 
 ```js
 const sparkScanView = SparkScanView.forElement(
@@ -94,8 +94,8 @@ const sparkScanView = SparkScanView.forElement(
 await sparkScanView.prepareScanning();
 ```
 
-Additionally, make sure to call [SparkScanView.stopScanning()](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your app state handling logic. You have to call this for the correct functioning of the
-[SparkScanView](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView).
+Additionally, make sure to call [SparkScanView.stopScanning()](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your app state handling logic. You have to call this for the correct functioning of the
+[SparkScanView](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView).
 
 ```js
 disconnectedCallback() {
@@ -112,7 +112,7 @@ handleAppStateChange = async (nextAppState) => {
 ## Register the Listener
 
 To keep track of the barcodes that have been scanned, implement the
-[SparkScanListener](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface and register the listener to the SparkScan mode.
+[SparkScanListener](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface and register the listener to the SparkScan mode.
 
 ```js
 // Register a listener object to monitor the spark scan session.
@@ -130,8 +130,8 @@ const listener = {
 sparkScan.addListener(listener);
 ```
 
-[SparkScanListener.didScan()](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list:
-[SparkScanSession.newlyRecognizedBarcode](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode). Please note that this list only contains one barcode entry.
+[SparkScanListener.didScan()](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list:
+[SparkScanSession.newlyRecognizedBarcode](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode). Please note that this list only contains one barcode entry.
 
 ## Scan Some Barcodes
 

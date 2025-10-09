@@ -105,7 +105,7 @@ In this example, we're:
 
 - Enabling both EAN-13 and Code 128 symbologies
 - Setting the code duplicate filter to 0, meaning the same code can be reported multiple times
-- Using the Smart [scan intention](https://docs.scandit.com/data-capture-sdk/web/core/api/scan-intention.html#enum-scandit.datacapture.core.ScanIntention) algorithm, to reduce the likelihood of unintended scans
+- Using the Smart [scan intention](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/scan-intention.html#enum-scandit.datacapture.core.ScanIntention) algorithm, to reduce the likelihood of unintended scans
 
 Lastly, we apply the settings to the SparkScan instance.
 
@@ -154,7 +154,7 @@ sparkScanComponent.stopScanning();
 
 ### 5. Implement the Listener
 
-Lastly, you need to implement the listener to handle the scanned data. This is done by creating an instance of the [`SparkScanListener`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) class:
+Lastly, you need to implement the listener to handle the scanned data. This is done by creating an instance of the [`SparkScanListener`](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) class:
 
 ```typescript
 const listener = {
@@ -173,6 +173,6 @@ Here, `didScan()` is called when a barcode is recognized. You can access the rec
 
 ### 6. Next Steps
 
-This guide provides a basic overview of how to integrate SparkScan into your application. For more detailed information, check out the [SparkScan documentation](/sdks/web/sparkscan/intro.md) and [SparkScan API Reference](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan.html).
+This guide provides a basic overview of how to integrate SparkScan into your application. For more detailed information, check out the [SparkScan documentation](/sdks/web/sparkscan/intro.md) and [SparkScan API Reference](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/spark-scan.html).
 
 If you have any questions or need help, feel free to reach out to [Scandit Support](mailto:support@scandit.com).

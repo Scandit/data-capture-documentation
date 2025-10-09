@@ -42,9 +42,9 @@ import DataCaptureContextAndroid from '../../../partials/get-started/_create-dat
 
 ## Configure the Label Capture Mode
 
-The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object.
+The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/7.6/data-capture-sdk/android/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object.
 
-It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
+It is configured through [LabelCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/android/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/7.6/data-capture-sdk/android/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
 :::tip
 You can use Label Definitions provided in Smart Label Capture to set pre-built label types or define your label using pre-built fields. For more information, see the [Label Definitions](label-definitions.md) section.
@@ -122,7 +122,7 @@ LabelCapture labelCapture = LabelCapture.forDataCaptureContext(dataCaptureContex
 
 ## Define a Listener to Handle Captured Labels
 
-To get informed whenever a new label has been recognized, add a [LabelCaptureListener](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) through [LabelCapture.addListener()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture.html#method-scandit.datacapture.label.LabelCapture.AddListener) and implement the listener methods to suit your application’s needs.
+To get informed whenever a new label has been recognized, add a [LabelCaptureListener](https://docs.scandit.com/7.6/data-capture-sdk/android/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) through [LabelCapture.addListener()](https://docs.scandit.com/7.6/data-capture-sdk/android/label-capture/api/label-capture.html#method-scandit.datacapture.label.LabelCapture.AddListener) and implement the listener methods to suit your application’s needs.
 
 First conform to the `LabelCaptureListener` interface. Here is an example of how to implement a listener that processes the captured labels based on the label capture settings defined above:
 
@@ -251,12 +251,12 @@ public class LabelCaptureRepository implements LabelCaptureListener {
 
 ## Visualize the Scan Process
 
-The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls what UI elements such as the viewfinder, as well as the overlays that are shown to visualize captured labels.
+The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls what UI elements such as the viewfinder, as well as the overlays that are shown to visualize captured labels.
 
 To visualize the results of Label Capture you can use two overlays:
 
-- [LabelCaptureBasicOverlay](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureBasicOverlay) 
-- [LabelCaptureAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-advanced-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureAdvancedOverlay)
+- [LabelCaptureBasicOverlay](https://docs.scandit.com/7.6/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureBasicOverlay) 
+- [LabelCaptureAdvancedOverlay](https://docs.scandit.com/7.6/data-capture-sdk/android/label-capture/api/ui/label-capture-advanced-overlay.html#class-scandit.datacapture.label.ui.LabelCaptureAdvancedOverlay)
 
 :::tip
 The overlays can be used independently of each other, but you can also use both at the same time as each can serve to extend the functionality of the other.
@@ -324,7 +324,7 @@ See the [Advanced Configurations](advanced.md) section for more information abou
 
 ## Start the Camera
 
-Next, you need to create a new instance of the [Camera](https://docs.scandit.com/data-capture-sdk/android/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera to stream previews and to capture images.
+Next, you need to create a new instance of the [Camera](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera to stream previews and to capture images.
 
 When initializing the camera, you can pass the recommended camera settings for Label Capture.
 
@@ -345,12 +345,12 @@ camera.switchToDesiredState(FrameSourceState.ON);
 
 ## Provide Feedback
 
-Smart Label Capture provides customizable feedback, emitted automatically when a label is recognized and successfully processed, configurable via [`LabelCapture.feedback`](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-capture.html#property-scandit.datacapture.label.LabelCapture.Feedback).
+Smart Label Capture provides customizable feedback, emitted automatically when a label is recognized and successfully processed, configurable via [`LabelCapture.feedback`](https://docs.scandit.com/7.6/data-capture-sdk/android/label-capture/api/label-capture.html#property-scandit.datacapture.label.LabelCapture.Feedback).
 
 You can use the default feedback, or configure your own sound or vibration.
 
 :::tip
-If you already have a [Feedback](https://docs.scandit.com/data-capture-sdk/android/core/api/feedback.html#class-scandit.datacapture.core.Feedback) instance implemented in your application, remove it to avoid double feedback.
+If you already have a [Feedback](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/feedback.html#class-scandit.datacapture.core.Feedback) instance implemented in your application, remove it to avoid double feedback.
 :::
 
 <Tabs groupId="language">

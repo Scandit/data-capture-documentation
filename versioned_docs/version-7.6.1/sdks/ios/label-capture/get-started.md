@@ -74,9 +74,9 @@ import DataCaptureContextIos from '../../../partials/get-started/_create-data-ca
 
 ## Initialize the Label Capture Mode
 
-The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object.
+The main entry point for the Label Capture Mode is the [LabelCapture](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/label-capture.html#class-scandit.datacapture.label.LabelCapture) object.
 
-It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
+It is configured through [LabelCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
 ```swift
 let labelDefinition: LabelDefinition {
@@ -131,7 +131,7 @@ labelCapture.addListener(self)
 
 ## Implement a Listener to Handle Captured Labels
 
-To get informed whenever a new label has been recognized, add a [LabelCaptureListener](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) through [LabelCapture.addListener()](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture.html#method-scandit.datacapture.label.LabelCapture.AddListener) and implement the listener methods to suit your application’s needs.
+To get informed whenever a new label has been recognized, add a [LabelCaptureListener](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) through [LabelCapture.addListener()](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/label-capture.html#method-scandit.datacapture.label.LabelCapture.AddListener) and implement the listener methods to suit your application’s needs.
 
 First conform to the `LabelCaptureListener` interface. Here is an example of how to implement a listener that processes the captured labels based on the label capture settings defined above:
 
@@ -178,9 +178,9 @@ extension YourScanViewController: LabelCaptureListener {
 ```
 ## Visualize the Scan Process
 
-The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls the UI elements, such as the viewfinder and overlays, that are shown to visualize captured labels.
+The capture process can be visualized by adding a [DataCaptureView](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy. The view controls the UI elements, such as the viewfinder and overlays, that are shown to visualize captured labels.
 
-To visualize the results of Label Capture, you can choose between two overlays, [LabelCaptureBasicOverlay](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay.html#label-capture-basic-overlay) and [LabelCaptureAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-advanced-overlay.html#label-capture-advanced-overlay).
+To visualize the results of Label Capture, you can choose between two overlays, [LabelCaptureBasicOverlay](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay.html#label-capture-basic-overlay) and [LabelCaptureAdvancedOverlay](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/ui/label-capture-advanced-overlay.html#label-capture-advanced-overlay).
 
 Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptureView`:
 
@@ -209,7 +209,7 @@ See the [Advanced Configurations](advanced.md) section for more information abou
 
 ## Start the Camera
 
-Next, you need to create a new instance of the [`SDCCamera`](https://docs.scandit.com/data-capture-sdk/ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera that will be used to stream previews and capture images. 
+Next, you need to create a new instance of the [`SDCCamera`](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera that will be used to stream previews and capture images. 
 
 You can initialize the camera with the recommended settings for Label Capture:
 
@@ -231,12 +231,12 @@ camera?.switch(toDesiredState: .on)
 
 ## Provide Feedback
 
-Smart Label Capture provides customizable feedback, emitted automatically when a label is recognized and successfully processed, configurable via [`LabelCapture.feedback`](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture.html#property-scandit.datacapture.label.LabelCapture.Feedback).
+Smart Label Capture provides customizable feedback, emitted automatically when a label is recognized and successfully processed, configurable via [`LabelCapture.feedback`](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/label-capture.html#property-scandit.datacapture.label.LabelCapture.Feedback).
 
 You can use the default feedback, or configure your own sound or vibration.
 
 :::tip
-If you already have a [Feedback](https://docs.scandit.com/data-capture-sdk/ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback) instance implemented in your application, remove it to avoid double feedback.
+If you already have a [Feedback](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback) instance implemented in your application, remove it to avoid double feedback.
 :::
 
 ```swift

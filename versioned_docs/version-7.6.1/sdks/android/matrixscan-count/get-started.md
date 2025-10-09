@@ -12,7 +12,7 @@ keywords:
 This page describes the steps to add MatrixScan Count to your application.
 
 :::note
-MatrixScan Count is implemented via [BarcodeCount](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount).
+MatrixScan Count is implemented via [BarcodeCount](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount).
 :::
 
 The general steps are:
@@ -55,7 +55,7 @@ import DataCaptureContextAndroid from '../../../partials/get-started/_create-dat
 
 ## Configure the Barcode Count Mode
 
-The main entry point for the Barcode Count Mode is the `BarcodeCount` object. It is configured through [BarcodeCountSettings](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-count-settings.html) and allows you to register one or more listeners that are informed whenever a scan phase has finished.
+The main entry point for the Barcode Count Mode is the `BarcodeCount` object. It is configured through [BarcodeCountSettings](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-count-settings.html) and allows you to register one or more listeners that are informed whenever a scan phase has finished.
 
 Here we set up Barcode Count for tracking EAN13 codes, however you must change this to the appropriate symbologies for your use case. If you are sure that your environment has only unique barcodes, you can also enable `BarcodeCountSettings.expectsOnlyUniqueBarcodes`. This option improves scanning performance as long as you are sure that no duplicates are present.
 
@@ -81,7 +81,7 @@ Camera camera = Camera.getDefaultCamera();
 camera.applySettings(cameraSettings);
 ```
 
-Because the frame source is configurable the data capture context must be told which frame source to use. This is done with a call to [`DataCaptureContext.setFrameSource()`](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
+Because the frame source is configurable the data capture context must be told which frame source to use. This is done with a call to [`DataCaptureContext.setFrameSource()`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
 ```java
 dataCaptureContext.setFrameSource(camera);
@@ -89,18 +89,18 @@ dataCaptureContext.setFrameSource(camera);
 
 ## Registering the Listener
 
-To keep track of the barcodes that have been scanned, implement the [BarcodeCountListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-count-listener.html#interface-scandit.datacapture.barcode.count.IBarcodeCountListener) interface and register the listener.
+To keep track of the barcodes that have been scanned, implement the [BarcodeCountListener](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-count-listener.html#interface-scandit.datacapture.barcode.count.IBarcodeCountListener) interface and register the listener.
 
 ```java
 // Register self as a listener to monitor the barcode count session.
 barcodeCount.addListener(this);
 ```
 
-[`BarcodeCountListener.onScan()`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-count-listener.html#method-scandit.datacapture.barcode.count.IBarcodeCountListener.OnScan) is called when the scan phase has finished and results can be retrieved from [`BarcodeCountSession`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-count-session.html#class-scandit.datacapture.barcode.count.BarcodeCountSession).
+[`BarcodeCountListener.onScan()`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-count-listener.html#method-scandit.datacapture.barcode.count.IBarcodeCountListener.OnScan) is called when the scan phase has finished and results can be retrieved from [`BarcodeCountSession`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-count-session.html#class-scandit.datacapture.barcode.count.BarcodeCountSession).
 
 ## Setting the Capture View and AR Overlays
 
-MatrixScan Count’s built-in AR user interface includes buttons and overlays that guide the user through the capturing process. By adding a [`BarcodeCountView`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-count-view.html#class-scandit.datacapture.barcode.count.ui.BarcodeCountView) the scanning interface will be added automatically to your application.
+MatrixScan Count’s built-in AR user interface includes buttons and overlays that guide the user through the capturing process. By adding a [`BarcodeCountView`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/ui/barcode-count-view.html#class-scandit.datacapture.barcode.count.ui.BarcodeCountView) the scanning interface will be added automatically to your application.
 
 Add a `BarcodeCountView` to your view hierarchy:
 
@@ -130,9 +130,9 @@ protected void onResume() {
 
 ## Store And Retrieve Scanned Barcodes
 
-The values captured as part of the scanning process are part of the session, and the session is not accessible outside [`BarcodeCountListener.onScan`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-count-listener.html#method-scandit.datacapture.barcode.count.IBarcodeCountListener.OnScan).
+The values captured as part of the scanning process are part of the session, and the session is not accessible outside [`BarcodeCountListener.onScan`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-count-listener.html#method-scandit.datacapture.barcode.count.IBarcodeCountListener.OnScan).
 
-We recommend you store the values to present a list, for example when the user taps the list icon. To do this, make a copy of [`BarcodeCountSession.recognizedBarcodes`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-count-session.html#property-scandit.datacapture.barcode.count.BarcodeCountSession.RecognizedBarcodes):
+We recommend you store the values to present a list, for example when the user taps the list icon. To do this, make a copy of [`BarcodeCountSession.recognizedBarcodes`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-count-session.html#property-scandit.datacapture.barcode.count.BarcodeCountSession.RecognizedBarcodes):
 
 ```java
 @Override

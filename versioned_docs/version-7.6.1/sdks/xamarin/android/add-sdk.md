@@ -43,8 +43,8 @@ The Scandit Data Capture SDK is distributed as [NuGet packages](https://www.nuge
 
 You will always need to add the Scandit.DataCapture.Core.Xamarin package, which contains the core functionality used by the other data capture packages. In addition, depending on the data capture task, you will need a reference to:
 
-- Scandit.DataCapture.Barcode.Xamarin ([ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/xamarin.android/barcode-capture/api.html)) if you want to use barcode-related functionality such as barcode capture or MatrixScan.
-- Scandit.DataCapture.Parser.Xamarin ([ScanditParser API](https://docs.scandit.com/data-capture-sdk/xamarin.android/parser/api.html)) if you want to parse data strings, e.g. as found in barcodes, into a set of key-value mappings.
+- Scandit.DataCapture.Barcode.Xamarin ([ScanditBarcodeCapture API](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/barcode-capture/api.html)) if you want to use barcode-related functionality such as barcode capture or MatrixScan.
+- Scandit.DataCapture.Parser.Xamarin ([ScanditParser API](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/parser/api.html)) if you want to parse data strings, e.g. as found in barcodes, into a set of key-value mappings.
 
 
 You can safely remove `Scandit.DataCapture.Barcode.Xamarin`, `Scandit.DataCapture.Parser.Xamarin` dependencies if you are not going to use their features.

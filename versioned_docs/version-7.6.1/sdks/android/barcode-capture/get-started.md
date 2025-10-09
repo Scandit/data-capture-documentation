@@ -15,14 +15,14 @@ This page describes the step-by-step instructions that helps you to add Barcode 
 The general steps are:
 
 - Include the *ScanditBarcodeCapture* library and its dependencies to your project, if any
-- Create a new [data capture context](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) instance, initialized with your license key
-- Create your [barcode capture settings](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture-settings.html#class-scandit.datacapture.barcode.BarcodeCaptureSettings) and enable the [barcode symbologies](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology) you want to read
-- Create a new [barcode capture mode](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance and initialize it
-- Register a [barcode capture listener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) to receive scan events
+- Create a new [data capture context](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) instance, initialized with your license key
+- Create your [barcode capture settings](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-capture-settings.html#class-scandit.datacapture.barcode.BarcodeCaptureSettings) and enable the [barcode symbologies](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology) you want to read
+- Create a new [barcode capture mode](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance and initialize it
+- Register a [barcode capture listener](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) to receive scan events
 - Process successful scans according to your application’s needs and decide whether more codes will be scanned or the scanning process should be stopped
-- Obtain a [camera](https://docs.scandit.com/data-capture-sdk/android/core/api/camera.html#class-scandit.datacapture.core.Camera) instance and set it as the frame source on the data capture context
-- Display the camera preview by creating a [data capture view](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView)
-- If displaying a preview, optionally create a new [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) and add it to [data capture view](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) for better visual feedback
+- Obtain a [camera](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/camera.html#class-scandit.datacapture.core.Camera) instance and set it as the frame source on the data capture context
+- Display the camera preview by creating a [data capture view](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView)
+- If displaying a preview, optionally create a new [overlay](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) and add it to [data capture view](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) for better visual feedback
 
 ## Prerequisites
 
@@ -52,9 +52,9 @@ import DataCaptureContextAndroid from '../../../partials/get-started/_create-dat
 
 ## Configure Barcode Scanning Settings
 
-Barcode scanning is orchestrated by the [BarcodeCapture data capture mode](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-mode.html#interface-scandit.datacapture.core.IDataCaptureMode). This class is the main entry point for scanning barcodes. It is configured through [BarcodeCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture-settings.html#class-scandit.datacapture.barcode.BarcodeCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) that will get informed whenever new codes have been recognized.
+Barcode scanning is orchestrated by the [BarcodeCapture data capture mode](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/data-capture-mode.html#interface-scandit.datacapture.core.IDataCaptureMode). This class is the main entry point for scanning barcodes. It is configured through [BarcodeCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-capture-settings.html#class-scandit.datacapture.barcode.BarcodeCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) that will get informed whenever new codes have been recognized.
 
-For this task, we setup barcode scanning for a small list of barcode types, called [symbologies](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology). The list of symbologies to enable is application specific. We recommend that you only enable the symbologies your application requires. If you are not familiar with the symbologies that are relevant for your use case, you can use [capture presets](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/capture-preset.html#enum-scandit.datacapture.barcode.CapturePreset) that are tailored for different verticals (for instance, retail, logistics, and so on).
+For this task, we setup barcode scanning for a small list of barcode types, called [symbologies](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology). The list of symbologies to enable is application specific. We recommend that you only enable the symbologies your application requires. If you are not familiar with the symbologies that are relevant for your use case, you can use [capture presets](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/capture-preset.html#enum-scandit.datacapture.barcode.CapturePreset) that are tailored for different verticals (for instance, retail, logistics, and so on).
 
 ```java
 BarcodeCaptureSettings settings = new BarcodeCaptureSettings();
@@ -67,10 +67,10 @@ settings.enableSymbology(Symbology.EAN13_UPCA, true);
 ```
 
 :::note
-If you are not disabling barcode capture immediately after having scanned the first code, consider setting the [BarcodeCaptureSettings.codeDuplicateFilter](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) to around `500` or even `-1` if you do not want codes to be scanned more than once.
+If you are not disabling barcode capture immediately after having scanned the first code, consider setting the [BarcodeCaptureSettings.codeDuplicateFilter](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) to around `500` or even `-1` if you do not want codes to be scanned more than once.
 :::
 
-Next, create a [BarcodeCapture](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance with the settings initialized in the previous step:
+Next, create a [BarcodeCapture](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance with the settings initialized in the previous step:
 
 ```java
 barcodeCapture = BarcodeCapture.forDataCaptureContext(dataCaptureContext, settings);
@@ -78,7 +78,7 @@ barcodeCapture = BarcodeCapture.forDataCaptureContext(dataCaptureContext, settin
 
 ## Register the Barcode Capture Listener
 
-To get informed whenever a new code has been recognized, add a [BarcodeCaptureListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) through [BarcodeCapture.addListener()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#method-scandit.datacapture.barcode.BarcodeCapture.AddListener) and implement the listener methods to suit your application’s needs.
+To get informed whenever a new code has been recognized, add a [BarcodeCaptureListener](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) through [BarcodeCapture.addListener()](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#method-scandit.datacapture.barcode.BarcodeCapture.AddListener) and implement the listener methods to suit your application’s needs.
 
 First conform to the `BarcodeCaptureListener` interface. For example:
 
@@ -137,13 +137,13 @@ if (camera != null) {
 }
 ```
 
-Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync)
+Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync)
 
 ```java
 dataCaptureContext.setFrameSource(camera);
 ```
 
-The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.ON](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
+The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.ON](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
 ```java
 if (camera != null) {
@@ -159,14 +159,14 @@ On Android, the Scandit Data Capture SDK is not lifecycle aware which means it i
 
 When using the built-in camera as frame source, you may want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. 
 
-To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
+To do that, add a [DataCaptureView](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```java
 DataCaptureView dataCaptureView = DataCaptureView.newInstance(this, dataCaptureContext);
 setContentView(dataCaptureView);
 ```
 
-To visualize the results of barcode scanning, the following [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) can be added:
+To visualize the results of barcode scanning, the following [overlay](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) can be added:
 
 ```java
 BarcodeCaptureOverlay overlay = BarcodeCaptureOverlay.newInstance(barcodeCapture, dataCaptureView);
@@ -174,6 +174,6 @@ BarcodeCaptureOverlay overlay = BarcodeCaptureOverlay.newInstance(barcodeCapture
 
 ## Disabling Barcode Capture
 
-To disable barcode capture, for instance as a consequence of a barcode being recognized, set [BarcodeCapture.isEnabled](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#property-scandit.datacapture.barcode.BarcodeCapture.IsEnabled) to `FALSE`.
+To disable barcode capture, for instance as a consequence of a barcode being recognized, set [BarcodeCapture.isEnabled](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#property-scandit.datacapture.barcode.BarcodeCapture.IsEnabled) to `FALSE`.
 
 The effect is immediate: no more frames are processed after the change. However, if a frame is currently being processed, this frame is completely processed and deliver any results/callbacks to the registered listeners. Note that disabling the capture mode does not stop the camera, the camera continues to stream frames until it is turned off.

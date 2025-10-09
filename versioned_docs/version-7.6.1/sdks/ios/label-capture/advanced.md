@@ -12,9 +12,9 @@ keywords:
 
 ## Customize the Overlay Appearance
 
-To customize the appearance of the overlay, you can implement a [LabelCaptureBasicOverlayDelegate](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#label-capture-basic-overlay-delegate).
+To customize the appearance of the overlay, you can implement a [LabelCaptureBasicOverlayDelegate](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#label-capture-basic-overlay-delegate).
 
-The method [brushForLabel](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [brushForField](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
+The method [brushForLabel](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [brushForField](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
 ```swift
 import ScanditLabelCapture
@@ -76,7 +76,7 @@ Validation Flow is a workflow available in Smart Label Capture to improve the ac
 | `validationErrorText`   | `Invalid input.`                       | Appears on incorrect manual input.          |
 | `manualInputButtonText` | `Input manually`                       | Label for the manual input button.          |
 
-See the [LabelCaptureValidationFlowSettings](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-validation-flow-settings.html) API reference for more details.
+See the [LabelCaptureValidationFlowSettings](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/ui/label-capture-validation-flow-settings.html) API reference for more details.
 
 ### Viewfinder and Layout
 
@@ -89,4 +89,4 @@ See the [LabelCaptureValidationFlowSettings](https://docs.scandit.com/data-captu
 | `target_viewfinder` | `RectangularViewfinderStyleLight` | Used in Target Scanning State.              |
 | `target_margins`    | 90% width, 15% height             | Focused scan margins for individual fields. |
 
-See the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/ui/label-capture-validation-flow-overlay.html) API reference for more details.
+See the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/ui/label-capture-validation-flow-overlay.html) API reference for more details.

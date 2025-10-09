@@ -35,7 +35,7 @@ import CapturePresents from '../../../partials/configure-symbologies/_capture-pr
 
 Barcode symbologies such as Code 128, Code 39, Code 93 or Interleaved Two of Five can store variable-length data. As an example, Code 39 can be used to store a string anywhere from 1 to 40-50 symbols. There is no fixed upper limit, though there are practical limitations to the code’s length for it to still be conveniently readable by barcode scanners.
 
-For performance reasons, the Scandit Data Capture SDK limits the [possible symbol range](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.ActiveSymbolCounts) for variable-length symbologies. If you want to read codes that are shorter/longer than the specified default range or you want to tailor your app to only read codes of a certain length, you need to change the active symbol count of the symbology to accommodate the data length you want to use in your application.
+For performance reasons, the Scandit Data Capture SDK limits the [possible symbol range](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.ActiveSymbolCounts) for variable-length symbologies. If you want to read codes that are shorter/longer than the specified default range or you want to tailor your app to only read codes of a certain length, you need to change the active symbol count of the symbology to accommodate the data length you want to use in your application.
 
 The below code shows how to change the active symbol count for Code 128 to read codes with 6, 7 and 8 symbols.
 
@@ -56,7 +56,7 @@ Most barcodes are printed using dark ink on a bright background. Some symbologie
 This is not possible for all symbologies as it could lead to false reads when the symbology is not designed for this use case. See [symbology properties](/symbology-properties.md) to learn which symbologies allow color inversion.
 
 
-When you enable a symbology as described above, only dark-on-bright codes are enabled (see [`SDCSymbologySettings.enabled`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.IsEnabled)). When you also want to read bright-on-dark codes, color-inverted reading for that symbology must also be enabled (see [`SDCSymbologySettings.colorInvertedEnabled:`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.IsColorInvertedEnabled)).
+When you enable a symbology as described above, only dark-on-bright codes are enabled (see [`SDCSymbologySettings.enabled`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.IsEnabled)). When you also want to read bright-on-dark codes, color-inverted reading for that symbology must also be enabled (see [`SDCSymbologySettings.colorInvertedEnabled:`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.IsColorInvertedEnabled)).
 
 The following code shows how to enable color-inverted reading for Code 128:
 
@@ -68,11 +68,11 @@ symbologySettings.isColorInvertedEnabled = true
 
 ## Enforce Checksums
 
-Some symbologies have a mandatory checksum that always gets enforced while others only have optional [checksums](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/checksum.html#enum-scandit.datacapture.barcode.Checksum).Enforcing an optional checksum reduces false positives as an additional check can be performed.
+Some symbologies have a mandatory checksum that always gets enforced while others only have optional [checksums](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/checksum.html#enum-scandit.datacapture.barcode.Checksum).Enforcing an optional checksum reduces false positives as an additional check can be performed.
 
 When enabling a checksum you have to make sure that the data of your codes contains the calculated checksum otherwise the codes get discarded as the checksum doesn’t match. All available checksums per symbology can be found in [symbology properties](/symbology-properties.md).
 
-You can enforce a specific checksum by setting it through [`SDCSymbologySettings.checksums`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.Checksums):
+You can enforce a specific checksum by setting it through [`SDCSymbologySettings.checksums`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.Checksums):
 
 ```swift
 let settings = BarcodeCaptureSettings()
@@ -86,7 +86,7 @@ Some symbologies allow further configuration. These configuration options are av
 
 Some extensions affect how the data in the code is formatted, others allow for more relaxed recognition modes that are disabled by default to eliminate false reads. All available extensions per symbology and a description of what they do can be found in the documentation on [symbology properties](/symbology-properties.md).
 
-To enable/disable a symbology extension, use [`SDCSymbologySettings.setExtension:enabled:`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/symbology-settings.html#method-scandit.datacapture.barcode.SymbologySettings.SetExtensionEnabled).
+To enable/disable a symbology extension, use [`SDCSymbologySettings.setExtension:enabled:`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/symbology-settings.html#method-scandit.datacapture.barcode.SymbologySettings.SetExtensionEnabled).
 
 The following code shows how to enable the full ASCII extension for Code 39. 
 

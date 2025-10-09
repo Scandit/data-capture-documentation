@@ -27,7 +27,7 @@ Android devices running the Scandit Data Capture SDK need to have a GPU or the p
 ## Create a New Data Capture Context Instance
 
 The first step to add capture capabilities to your application is to create a new [Data Capture
-Context](https://docs.scandit.com/data-capture-sdk/xamarin.forms/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext 'Data Capture Context
+Context](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext 'Data Capture Context
 class'). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 DataCaptureContext dataCaptureContext = DataCaptureContext.ForLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE
@@ -58,7 +58,7 @@ SparkScan sparkScan = new SparkScan(settings);
 
 The SparkScan built-in user interface includes the camera preview and scanning UI elements. These guide the user through the scanning process.
 
-The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/ui/spark-scan-view.html) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/ui/spark-scan-view-settings.html).
+The [`SparkScanView`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api/ui/spark-scan-view.html) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api/ui/spark-scan-view-settings.html).
 
 ```csharp
 SparkScanViewSettings viewSettings = new SparkScanViewSettings();
@@ -67,9 +67,9 @@ SparkScanViewSettings viewSettings = new SparkScanViewSettings();
 
 See the [SparkScan Workflow Options](./intro.md#workflow-options) section for more information.
 
-By adding a [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/ui/spark-scan-view.html), the scanning interface (camera preview and scanning UI elements) will be added automatically to your application.
+By adding a [`SparkScanView`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api/ui/spark-scan-view.html), the scanning interface (camera preview and scanning UI elements) will be added automatically to your application.
 
-Add a [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/ui/spark-scan-view.html) to your view hierarchy:
+Add a [`SparkScanView`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api/ui/spark-scan-view.html) to your view hierarchy:
 
 Construct a new SparkScan view. The SparkScan view should be added as the last item to [AbsoluteLayout](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/layouts/absolutelayout) or [RelativeLayout](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/layouts/relativelayout) layouts, to make sure other UI components are visible.
 
@@ -89,7 +89,7 @@ SparkScan="{Binding SparkScan}" SparkScanViewSettings="{Binding ViewSettings}">
 </ContentPage>
 ```
 
-Additionally, make sure to call [SparkScanView.OnAppearing()](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.OnAppearing) and [SparkScanView.OnDisappearing()](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.OnDisappearing) in your [Page.OnAppearing](https://learn.microsoft.com/en-us/dotnet/api/xamarin.forms.page.onappearing) and [Page.OnDisappearing](https://learn.microsoft.com/en-us/dotnet/api/xamarin.forms.page.ondisappearing) callbacks, to make sure that start up time is optimal and scanning is stopped when the app is going in the background.
+Additionally, make sure to call [SparkScanView.OnAppearing()](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.OnAppearing) and [SparkScanView.OnDisappearing()](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.OnDisappearing) in your [Page.OnAppearing](https://learn.microsoft.com/en-us/dotnet/api/xamarin.forms.page.onappearing) and [Page.OnDisappearing](https://learn.microsoft.com/en-us/dotnet/api/xamarin.forms.page.ondisappearing) callbacks, to make sure that start up time is optimal and scanning is stopped when the app is going in the background.
 
 ```csharp
 protected override void OnAppearing()
@@ -107,14 +107,14 @@ this.SparkScanView.OnDisappearing();
 
 ## Register the Listener
 
-To keep track of the barcodes that have been scanned, implement the [ISparkScanListener](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface and register the listener to the SparkScan mode.
+To keep track of the barcodes that have been scanned, implement the [ISparkScanListener](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface and register the listener to the SparkScan mode.
 
 ```csharp
 // Register self as a listener to monitor the spark scan session.
 sparkScan.AddListener(this);
 ```
 
-[ISparkScanListener.OnBarcodeScanned()](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list: [SparkScanSession.NewlyRecognizedBarcode](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode). Please note that this list only contains one barcode entry.
+[ISparkScanListener.OnBarcodeScanned()](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list: [SparkScanSession.NewlyRecognizedBarcode](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode). Please note that this list only contains one barcode entry.
 
 ```csharp
 public void OnBarcodeScanned(SparkScan sparkScan, SparkScanSession session, IFrameData? data)
@@ -137,7 +137,7 @@ this.latestBarcode = barcode;
 }
 ```
 
-Alternatively to register [ISparkScanListener](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface it is possible to subscribe to corresponding events. For example:
+Alternatively to register [ISparkScanListener](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface it is possible to subscribe to corresponding events. For example:
 
 ```csharp
 sparkScan.BarcodeScanned += (object sender, SparkScanEventArgs args) =>

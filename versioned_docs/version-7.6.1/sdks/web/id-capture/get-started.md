@@ -13,12 +13,12 @@ This page will guide you through the process of adding ID Capture to your Web ap
 
 The general steps are:
 
-- Create a [DataCaptureContext](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext).
-- Access a [Camera](https://docs.scandit.com/data-capture-sdk/web/core/api/camera.html#class-scandit.datacapture.core.Camera).
-- Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scan process.
-- Implement an [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener) to receive scan results.
-- Set up [DataCaptureView](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) and [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) to see the camera feed and the scan UI.
-- Begin the scanning by adding an [IdCapture](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#class-scandit.datacapture.id.IdCapture) to [DataCaptureContext](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) and starting a camera.
+- Create a [DataCaptureContext](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext).
+- Access a [Camera](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/camera.html#class-scandit.datacapture.core.Camera).
+- Use [IdCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scan process.
+- Implement an [IdCaptureListener](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener) to receive scan results.
+- Set up [DataCaptureView](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) and [IdCaptureOverlay](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) to see the camera feed and the scan UI.
+- Begin the scanning by adding an [IdCapture](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/id-capture.html#class-scandit.datacapture.id.IdCapture) to [DataCaptureContext](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) and starting a camera.
 
 :::warning
 Using ID Capture at the same time as other modes (e.g. Barcode Capture) is not supported.
@@ -44,9 +44,9 @@ import IdModuleOverview from '../../../partials/get-started/_id-module-overview-
 
 In addition to the configuration detailed in the [installation guide](/sdks/web/add-sdk.md#configure-the-library), there are some additional steps required for ID Capture.
 
-For ID Capture, the result of [idCaptureLoader()](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#method-scandit.datacapture.id.IdCaptureLoader) must be passed to the [ConfigureOptions.moduleLoaders](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.ModuleLoaders) option.
+For ID Capture, the result of [idCaptureLoader()](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/id-capture.html#method-scandit.datacapture.id.IdCaptureLoader) must be passed to the [ConfigureOptions.moduleLoaders](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.ModuleLoaders) option.
 
-In this example, we will scan VIZ documents, so we also need to set [IdCaptureLoaderOptions.enableVIZDocuments](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#property-scandit.datacapture.id.IIdCaptureLoaderOptions.EnableVIZDocuments) to `true`:
+In this example, we will scan VIZ documents, so we also need to set [IdCaptureLoaderOptions.enableVIZDocuments](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/id-capture.html#property-scandit.datacapture.id.IIdCaptureLoaderOptions.EnableVIZDocuments) to `true`:
 
 ```ts
 import { configure } from "@scandit/web-datacapture-core";
@@ -71,7 +71,7 @@ You must await the returned promise as shown to be able to continue.
 
 When the scanning process is requested, it is good practice to keep the user informed about what is happening. The SDK may still be loading so you should display a view to the user as soon as possible.
 
-To do that, start by adding a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) and attach it to an HTML element in the page. For example, let's display a progress bar while the SDK is loading:
+To do that, start by adding a [DataCaptureView](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) and attach it to an HTML element in the page. For example, let's display a progress bar while the SDK is loading:
 
 ```ts
 import { DataCaptureView } from "@scandit/web-datacapture-core";
@@ -87,7 +87,7 @@ You may not need to do this so early if your application loads the SDK in the ba
 
 ## Context
 
-The main conductor to add capture capabilities to your application is the [data capture context](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). Create an instance of it.
+The main conductor to add capture capabilities to your application is the [data capture context](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). Create an instance of it.
 
 ```js
 import { DataCaptureContext } from "@scandit/web-datacapture-core"
@@ -101,7 +101,7 @@ view.setContext(context);
 
 ## Add the Camera
 
-You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/web/core/api/camera.html#class-scandit.datacapture.core.Camera 'Camera class'):
+You need to also create the [Camera](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/camera.html#class-scandit.datacapture.core.Camera 'Camera class'):
 
 ```ts
 import { Camera } from "@scandit/web-datacapture-core";
@@ -120,9 +120,9 @@ await camera.applySettings(cameraSettings);
 
 ## Create ID Capture Settings
 
-Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scanner type to use and the documents that should be accepted and/or rejected.
+Use [IdCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scanner type to use and the documents that should be accepted and/or rejected.
 
-Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all available options.
+Check [IdCaptureDocumentType](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all available options.
 
 :::tip
 By default, [anonymized data](./advanced.md#configure-data-anonymization) is not returned in accordance with local regulations for specific documents. This setting can be disabled for testing purposes, but be sure to comply with local laws and requirements in production.
@@ -171,7 +171,7 @@ const idCapture = await IdCapture.forContext(context, settings);
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two important callbacks: `didCaptureId` and `didRejectId`.
+To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two important callbacks: `didCaptureId` and `didRejectId`.
 
 ```ts
 import { type CapturedId, RejectionReason } from "@scandit/web-datacapture-id";
@@ -188,11 +188,11 @@ idCapture.addListener({
 
 ### Handling Success
 
-Captured results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
+Captured results are delivered as a [CapturedId](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-Note that if you scan boths sides of a document using the [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-scanner.html#full-document-scanner), this callback will only be executed once both sides have been successfully captured. If the document is known to have only one side, the callback will execute immediately after a successful scan of the first side.
+Note that if you scan boths sides of a document using the [FullDocumentScanner](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/id-capture-scanner.html#full-document-scanner), this callback will only be executed once both sides have been successfully captured. If the document is known to have only one side, the callback will execute immediately after a successful scan of the first side.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 On a successful scan you may read the extracted data from `capturedId`:
 
@@ -217,7 +217,7 @@ All data fields are optional, so it's important to verify whether the required i
 
 ### Handling Rejection
 
-The ID scanning process may fail for various reasons. Start from inspecting [RejectionReason](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) to understand the cause.
+The ID scanning process may fail for various reasons. Start from inspecting [RejectionReason](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) to understand the cause.
 
 Note that some data may still have been captured, you will find them in the first `capturedId` parameter of the callback.
 
@@ -237,7 +237,7 @@ onIdRejected: (capturedId: CapturedId, reason: RejectionReason) => {
 
 ## Add an Overlay
 
-The overlay informs and guides the user during the scanning process. Create an instance of [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) for the existing view like so:
+The overlay informs and guides the user during the scanning process. Create an instance of [IdCaptureOverlay](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) for the existing view like so:
 
 ```ts
 import { IdCaptureOverlay } from "@scandit/web-datacapture-id";
@@ -248,9 +248,9 @@ const overlay = await IdCaptureOverlay.withIdCaptureForView(
 );
 ```
 
-The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
+The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
 
-If you prefer to show a different UI or to temporarily hide it, set the appropriate [IdCaptureOverlay.idLayout](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/ui/id-capture-overlay.html#property-scandit.datacapture.id.ui.IdCaptureOverlay.IdLayout).
+If you prefer to show a different UI or to temporarily hide it, set the appropriate [IdCaptureOverlay.idLayout](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/ui/id-capture-overlay.html#property-scandit.datacapture.id.ui.IdCaptureOverlay.IdLayout).
 
 ## Start the Capture Process
 
@@ -264,4 +264,4 @@ import { FrameSourceState } from "@scandit/web-datacapture-core";
 await camera.switchToDesiredState(FrameSourceState.On);
 ```
 
-You can also enable or disable IdCapture by using [setEnabled](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#method-scandit.datacapture.id.IdCapture.SetEnabled) whenever you need to.
+You can also enable or disable IdCapture by using [setEnabled](https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api/id-capture.html#method-scandit.datacapture.id.IdCapture.SetEnabled) whenever you need to.

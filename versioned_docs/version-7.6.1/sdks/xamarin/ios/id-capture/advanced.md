@@ -32,9 +32,9 @@ settings.setAnyonymizationMode(IdAnonymizationMode.NONE);
 
 ## Document Capture Zones
 
-By default, a new instance of [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) creates a single-sided scanner type with no accepted or rejected documents. 
+By default, a new instance of [IdCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) creates a single-sided scanner type with no accepted or rejected documents. 
 
-To change this, use the `scannerType` method to set the scanner type to either [SingleSideScanner](https://docs.scandit.com/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-scanner.html#single-side-scanner) or [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-scanner.html#full-document-scanner).
+To change this, use the `scannerType` method to set the scanner type to either [SingleSideScanner](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-scanner.html#single-side-scanner) or [FullDocumentScanner](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-scanner.html#full-document-scanner).
 
 
 The `FullDocumentScanner` extracts all document information by default. If using the `SingleSideScanner`, you can specify the document zones to extract:
@@ -52,7 +52,7 @@ SingleSideScanner.machineReadableZone(true);
 
 To configure the documents that should be accepted and/or rejected, use the `acceptedDocuments` and `rejectedDocuments` methods in `IdCaptureSettings`.
 
-These methods are used in conjunction with the [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) and [IdCaptureRegion](https://docs.scandit.com/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enums to enable highly flexible document filtering as may be desired in your application.
+These methods are used in conjunction with the [IdCaptureDocumentType](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) and [IdCaptureRegion](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enums to enable highly flexible document filtering as may be desired in your application.
 
 For example, to accept only US Driver Licenses:
 
@@ -69,9 +69,9 @@ settings.RejectedDocuments = IdDocumentType.Region.US;
 
 ## ID Images
 
-Your use can may require that you capture and extract images of the ID document. Use the [IdImageType](https://docs.scandit.com/data-capture-sdk/xamarin.ios/id-capture/api/id-image-type.html#enum-scandit.datacapture.id.IdImageType) enum to specify the images you want to extract from the `CapturedId` object
+Your use can may require that you capture and extract images of the ID document. Use the [IdImageType](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/id-capture/api/id-image-type.html#enum-scandit.datacapture.id.IdImageType) enum to specify the images you want to extract from the `CapturedId` object
 
-For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult) when creating the `IdCaptureSettings` object. This will pass the image type to the result, which you can then access in the `CapturedId` object.
+For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult) when creating the `IdCaptureSettings` object. This will pass the image type to the result, which you can then access in the `CapturedId` object.
 
 ## Callbacks and Scanning Workflows
 
@@ -79,7 +79,7 @@ The ID Capture Listener provides two callbacks: `onIdCaptured` and `onIdRejected
 
 For a successful capture, the `onIdCaptured` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
 
-For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/xamarin.ios/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
+For a rejected document, a [RejectionReason](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
 
 * NOT_ACCEPTED_DOCUMENT_TYPE: The document is not in the list of accepted documents. In this scenario, you could direct the user to scan a different document.
 * INVALID_FORMAT: The document is in the list of accepted documents, but the format is invalid. In this scenario, you could direct the user to scan the document again.
@@ -92,6 +92,6 @@ For a rejected document, a [RejectionReason](https://docs.scandit.com/data-captu
 
 The following verifier is available:
 
-* [AAMVABarcodeVerifier](https://docs.scandit.com/data-capture-sdk/xamarin.ios/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by scanning the barcode on the back.
+* [AAMVABarcodeVerifier](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by scanning the barcode on the back.
 
 To enable ID validation for your subscription, please reach out to [Scandit Support](mailto:support@scandit.com).

@@ -46,7 +46,7 @@ import DataCaptureContextReactNative from '../../../partials/get-started/_create
 
 ## Add the Camera
 
-You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/react-native/core/api/camera.html#class-scandit.datacapture.core.Camera):
+You need to also create the [Camera](https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api/camera.html#class-scandit.datacapture.core.Camera):
 
 ```js
 const camera = Camera.default;
@@ -63,9 +63,9 @@ if (camera != null) {
 
 ## Configure the Capture Settings
 
-Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scanner type to use and the documents that should be accepted and/or rejected.
+Use [IdCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/react-native/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scanner type to use and the documents that should be accepted and/or rejected.
 
-Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all the available options.
+Check [IdCaptureDocumentType](https://docs.scandit.com/7.6/data-capture-sdk/react-native/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all the available options.
 
 :::tip
 By default, [anonymized data](./advanced.md#configure-data-anonymization) is not returned in accordance with local regulations for specific documents. This setting can be disabled for testing purposes, but be sure to comply with local laws and requirements in production.
@@ -87,11 +87,11 @@ settings.rejectedDocuments.push(
 
 ## Implement the Listener
 
-To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
+To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/7.6/data-capture-sdk/react-native/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
 
-Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
+Capture results are delivered as a [CapturedId](https://docs.scandit.com/7.6/data-capture-sdk/react-native/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/7.6/data-capture-sdk/react-native/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 ```js
 const listener = {
@@ -119,13 +119,13 @@ idCapture.addListener(listener);
 
 When using the built-in camera as frame source, you may typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process.
 
-To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
+To do that, add a [DataCaptureView](https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```js
 <DataCaptureView context={this.dataCaptureContext} ref={this.viewRef}>
 ```
 
-Then, add an instance of [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) to the view:
+Then, add an instance of [IdCaptureOverlay](https://docs.scandit.com/7.6/data-capture-sdk/react-native/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) to the view:
 
 ```js
 let overlay = IdCaptureOverlay.withIdCaptureForView(
@@ -134,9 +134,9 @@ let overlay = IdCaptureOverlay.withIdCaptureForView(
 );
 ```
 
-The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
+The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/react-native/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
 
-If you prefer to show a different UI or to temporarily hide it, set the appropriate [IdCaptureOverlay.idLayout](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/ui/id-capture-overlay.html#property-scandit.datacapture.id.ui.IdCaptureOverlay.IdLayout).
+If you prefer to show a different UI or to temporarily hide it, set the appropriate [IdCaptureOverlay.idLayout](https://docs.scandit.com/7.6/data-capture-sdk/react-native/id-capture/api/ui/id-capture-overlay.html#property-scandit.datacapture.id.ui.IdCaptureOverlay.IdLayout).
 
 ## Start the Capture Process
 

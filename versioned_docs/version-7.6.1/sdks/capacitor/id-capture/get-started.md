@@ -42,7 +42,7 @@ import IdModuleOverview from '../../../partials/get-started/_id-module-overview-
 
 ## Create the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```js
 const context = Scandit.DataCaptureContext.forLicenseKey(
@@ -52,7 +52,7 @@ const context = Scandit.DataCaptureContext.forLicenseKey(
 
 ## Add the Camera
 
-You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/camera.html#class-scandit.datacapture.core.Camera):
+You need to also create the [Camera](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/core/api/camera.html#class-scandit.datacapture.core.Camera):
 
 ```js
 const camera = Scandit.Camera.default;
@@ -69,9 +69,9 @@ if (camera != null) {
 
 ## Create ID Capture Settings
 
-Use [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scanner type to use and the documents that should be accepted and/or rejected.
+Use [IdCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) to configure the scanner type to use and the documents that should be accepted and/or rejected.
 
-Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all available options.
+Check [IdCaptureDocumentType](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) for all available options.
 
 :::tip
 By default, [anonymized data](./advanced.md#configure-data-anonymization) is not returned in accordance with local regulations for specific documents. This setting can be disabled for testing purposes, but be sure to comply with local laws and requirements in production.
@@ -108,7 +108,7 @@ const idCapture = Scandit.IdCapture.forContext(context, settings);
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `onIdCaptured` and `onIdRejected`.
+To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `onIdCaptured` and `onIdRejected`.
 
 ```ts
 idCapture.addListener({
@@ -123,9 +123,9 @@ idCapture.addListener({
 
 ### Handling Success
 
-Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
+Capture results are delivered as a [CapturedId](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 On a successful scan you may read the extracted data from `CapturedId`:
 
@@ -147,7 +147,7 @@ All data fields are optional, so it's important to verify whether the required i
 
 ### Handling Rejection
 
-The ID scanning process may fail for various reasons. Start from inspecting [RejectionReason](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) to understand the cause.
+The ID scanning process may fail for various reasons. Start from inspecting [RejectionReason](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) to understand the cause.
 
 You may wish to implement the follow-up action based on the reason of failure:
 
@@ -165,16 +165,16 @@ onIdRejected: (data, reason) => {
 
 ## Set up Capture View and Overlay
 
-When using the built-in camera as [frameSource](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/frame-source.html#interface-scandit.datacapture.core.IFrameSource), you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process.
+When using the built-in camera as [frameSource](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/core/api/frame-source.html#interface-scandit.datacapture.core.IFrameSource), you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process.
 
-To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
+To do that, add a [DataCaptureView](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```js
 const view = Scandit.DataCaptureView.forContext(context);
 view.connectToElement(htmlElement);
 ```
 
-Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
+Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
 
 ```js
 let overlay = Scandit.IdCaptureOverlay.withTextCaptureForView(
@@ -183,9 +183,9 @@ let overlay = Scandit.IdCaptureOverlay.withTextCaptureForView(
 );
 ```
 
-The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
+The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
 
-If you prefer to show a different UI or to temporarily hide it, set the appropriate [IdCaptureOverlay.idLayout](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/ui/id-capture-overlay.html#property-scandit.datacapture.id.ui.IdCaptureOverlay.IdLayout).
+If you prefer to show a different UI or to temporarily hide it, set the appropriate [IdCaptureOverlay.idLayout](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/id-capture/api/ui/id-capture-overlay.html#property-scandit.datacapture.id.ui.IdCaptureOverlay.IdLayout).
 
 ## Start the Capture Process
 

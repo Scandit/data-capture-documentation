@@ -30,9 +30,9 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 ## Generating Barcodes
 
-To generate barcodes, you need to create a [`SDCDataCaptureContext`](https://docs.scandit.com/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). 
+To generate barcodes, you need to create a [`SDCDataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). 
 
-With the context you can then instantiate a [`SDCBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.BarcodeGeneratorBuilder), and use the method of [`SDCBarcodeGenerator`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator.html#class-scandit.datacapture.barcode.generator.BarcodeGenerator) for the symbology you are interested in, in this example Code 128.
+With the context you can then instantiate a [`SDCBarcodeGeneratorBuilder`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.BarcodeGeneratorBuilder), and use the method of [`SDCBarcodeGenerator`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-generator.html#class-scandit.datacapture.barcode.generator.BarcodeGenerator) for the symbology you are interested in, in this example Code 128.
 
 ```swift
 let context = DataCaptureContext(licenseKey: licenseKey)
@@ -59,13 +59,13 @@ do {
 }
 ```
 
-See the complete [API reference](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator.html) for more information.
+See the complete [API reference](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-generator.html) for more information.
 
 ## Generating QR Codes
 
-To generate barcodes, you need to create a [`SDCDataCaptureContext`](https://docs.scandit.com/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). 
+To generate barcodes, you need to create a [`SDCDataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). 
 
-With the context you can then instantiate a [`SDCQRCodeBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder) using the method of [`SDCBarcodeGenerator`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator.html#class-scandit.datacapture.barcode.generator.BarcodeGenerator) specific for QR codes.
+With the context you can then instantiate a [`SDCQRCodeBarcodeGeneratorBuilder`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder) using the method of [`SDCBarcodeGenerator`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-generator.html#class-scandit.datacapture.barcode.generator.BarcodeGenerator) specific for QR codes.
 
 ```swift
 let context = DataCaptureContext(licenseKey: licenseKey)
@@ -79,7 +79,7 @@ builder.foregroundColor = .black
 builder.backgroundColor = .white
 ```
 
-There are two settings that can be configured for QR codes: [`SDCQRCodeBarcodeGeneratorBuilder.errorCorrectionLevel`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#method-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder.WithErrorCorrectionLevel) and [`SDCQRCodeBarcodeGeneratorBuilder.versionNumber`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#method-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder.WithVersionNumber).
+There are two settings that can be configured for QR codes: [`SDCQRCodeBarcodeGeneratorBuilder.errorCorrectionLevel`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#method-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder.WithErrorCorrectionLevel) and [`SDCQRCodeBarcodeGeneratorBuilder.versionNumber`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#method-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder.WithVersionNumber).
 
 ```swift
 builder.errorCorrectionLevel = .medium
@@ -99,4 +99,4 @@ do {
 }
 ```
 
-See the complete [API reference](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator.html) for more information.
+See the complete [API reference](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-generator.html) for more information.

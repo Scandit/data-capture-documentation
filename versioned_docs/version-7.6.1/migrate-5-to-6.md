@@ -18,10 +18,10 @@ In 5.x, the BarcodePicker (SBSBarcodePicker on iOS) was the central class that m
 
 <TabItem value="android" label="Android">
 
-* The [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
-* The [`Camera`](https://docs.scandit.com/data-capture-sdk/android/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
-* The [`ui.DataCaptureView`](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
-* The [`barcode.BarcodeCapture`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
+* The [`DataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
+* The [`Camera`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
+* The [`ui.DataCaptureView`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
+* The [`barcode.BarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
 
 In your app you will need to use all of these classes to implement the functionality offered by the BarcodePicker. The following sample code shows you how to do this:
 
@@ -52,10 +52,10 @@ setContentView(dataCaptureView);
 
 <TabItem value="ios" label="iOS">
 
-* The [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
-* The [`Camera`](https://docs.scandit.com/data-capture-sdk/ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
-* The [`ui.DataCaptureView`](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
-* The [`barcode.BarcodeCapture`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
+* The [`DataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
+* The [`Camera`](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
+* The [`ui.DataCaptureView`](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
+* The [`barcode.BarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
 
 In your app you will need to use all of these classes to implement the functionality offered by the BarcodePicker. The following sample code shows you how to do this:
 
@@ -90,10 +90,10 @@ captureView.addOverlay(overlay)
 
 <TabItem value="web" label="Web">
 
-* The [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
-* The [`Camera`](https://docs.scandit.com/data-capture-sdk/web/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
-* The [`ui.DataCaptureView`](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
-* The [`barcode.BarcodeCapture`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
+* The [`DataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
+* The [`Camera`](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
+* The [`ui.DataCaptureView`](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
+* The [`barcode.BarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
 
 In your app you will need to use all of these classes to implement the functionality offered by the BarcodePicker. The following sample code shows you how to do this:
 
@@ -126,10 +126,10 @@ view.connectToElement(element);
 
 <TabItem value="cordova" label="Cordova">
 
-* The [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/cordova/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
-* The [`Camera`](https://docs.scandit.com/data-capture-sdk/cordova/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
-* The [`ui.DataCaptureView`](https://docs.scandit.com/data-capture-sdk/cordova/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
-* The [`barcode.BarcodeCapture`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
+* The [`DataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/cordova/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
+* The [`Camera`](https://docs.scandit.com/7.6/data-capture-sdk/cordova/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
+* The [`ui.DataCaptureView`](https://docs.scandit.com/7.6/data-capture-sdk/cordova/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
+* The [`barcode.BarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/cordova/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/7.6/data-capture-sdk/cordova/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
 
 In your app you will need to use all of these classes to implement the functionality offered by the BarcodePicker. The following sample code shows you how to do this:
 
@@ -159,10 +159,10 @@ view.connectToElement(element);
 
 <TabItem value="reactNative" label="React Native">
 
-* The [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
-* The [`Camera`](https://docs.scandit.com/data-capture-sdk/react-native/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
-* The [`ui.DataCaptureView`](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
-* The [`barcode.BarcodeCapture`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
+* The [`DataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
+* The [`Camera`](https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
+* The [`ui.DataCaptureView`](https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
+* The [`barcode.BarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/react-native/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/7.6/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
 
 In your app you will need to use all of these classes to implement the functionality offered by the BarcodePicker. The following sample code shows you how to do this:
 
@@ -196,10 +196,10 @@ this.viewRef.current.addOverlay(overlay);
 
 <TabItem value="flutter" label="Flutter">
 
-* The [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
-* The [`Camera`](https://docs.scandit.com/data-capture-sdk/flutter/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
-* The [`ui.DataCaptureView`](https://docs.scandit.com/data-capture-sdk/flutter/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
-* The [`barcode.BarcodeCapture`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
+* The [`DataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
+* The [`Camera`](https://docs.scandit.com/7.6/data-capture-sdk/flutter/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
+* The [`ui.DataCaptureView`](https://docs.scandit.com/7.6/data-capture-sdk/flutter/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
+* The [`barcode.BarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/flutter/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/7.6/data-capture-sdk/flutter/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
 
 In your app you will need to use all of these classes to implement the functionality offered by the BarcodePicker. The following sample code shows you how to do this:
 
@@ -229,10 +229,10 @@ var dataCaptureView = DataCaptureView.forContext(dataCaptureContext)
 
 <TabItem value="xamarinIos" label="Xamarin iOS">
 
-* The [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/xamarin.ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
-* The [`Camera`](https://docs.scandit.com/data-capture-sdk/xamarin.ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
-* The [`ui.DataCaptureView`](https://docs.scandit.com/data-capture-sdk/xamarin.ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
-* The [`barcode.BarcodeCapture`](https://docs.scandit.com/data-capture-sdk/xamarin.ios/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/data-capture-sdk/xamarin.ios/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
+* The [`DataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
+* The [`Camera`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
+* The [`ui.DataCaptureView`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
+* The [`barcode.BarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
 
 In your app you will need to use all of these classes to implement the functionality offered by the BarcodePicker. The following sample code shows you how to do this:
 
@@ -260,10 +260,10 @@ View.AddSubview(dataCaptureView);
 
 <TabItem value="xamarinAndroid" label="Xamarin Android">
 
-* The [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/xamarin.android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
-* The [`Camera`](https://docs.scandit.com/data-capture-sdk/xamarin.android/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
-* The [`ui.DataCaptureView`](https://docs.scandit.com/data-capture-sdk/xamarin.android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
-* The [`barcode.BarcodeCapture`](https://docs.scandit.com/data-capture-sdk/xamarin.android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/data-capture-sdk/xamarin.android/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
+* The [`DataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
+* The [`Camera`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
+* The [`ui.DataCaptureView`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
+* The [`barcode.BarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
 
 In your app you will need to use all of these classes to implement the functionality offered by the BarcodePicker. The following sample code shows you how to do this:
 
@@ -289,10 +289,10 @@ SetContentView(dataCaptureView);
 
 <TabItem value="xamarinForms" label="Xamarin Forms">
 
-* The [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
-* The [`Camera`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
-* The [`ui.DataCaptureView`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
-* The [`barcode.BarcodeCapture`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
+* The [`DataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
+* The [`Camera`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
+* The [`ui.DataCaptureView`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
+* The [`barcode.BarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
 
 In your app you will need to use all of these classes to implement the functionality offered by the BarcodePicker. The following sample code shows you how to do this:
 
@@ -322,10 +322,10 @@ containerView.Children.Add(dataCaptureView);
 
 <TabItem value="dotnetIos" label=".NET iOS">
 
-* The [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
-* The [`Camera`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
-* The [`ui.DataCaptureView`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
-* The [`barcode.BarcodeCapture`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
+* The [`DataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
+* The [`Camera`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
+* The [`ui.DataCaptureView`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
+* The [`barcode.BarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
 
 In your app you will need to use all of these classes to implement the functionality offered by the BarcodePicker. The following sample code shows you how to do this:
 
@@ -353,10 +353,10 @@ View.AddSubview(dataCaptureView);
 
 <TabItem value="dotnetAndroid" label=".NET Android">
 
-* The [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
-* The [`Camera`](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
-* The [`ui.DataCaptureView`](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
-* The [`barcode.BarcodeCapture`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
+* The [`DataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
+* The [`Camera`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
+* The [`ui.DataCaptureView`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
+* The [`barcode.BarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
 
 In your app you will need to use all of these classes to implement the functionality offered by the BarcodePicker. The following sample code shows you how to do this:
 
@@ -382,10 +382,10 @@ SetContentView(dataCaptureView);
 
 <TabItem value="titanium" label="Titanium">
 
-* The [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/titanium/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
-* The [`Camera`](https://docs.scandit.com/data-capture-sdk/titanium/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
-* The [`ui.DataCaptureView`](https://docs.scandit.com/data-capture-sdk/titanium/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
-* The [`barcode.BarcodeCapture`](https://docs.scandit.com/data-capture-sdk/titanium/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/data-capture-sdk/titanium/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
+* The [`DataCaptureContext`](https://docs.scandit.com/7.6/data-capture-sdk/titanium/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) is the central object that manages the data capture/recognition process.
+* The [`Camera`](https://docs.scandit.com/7.6/data-capture-sdk/titanium/core/api/camera.html#class-scandit.datacapture.core.Camera) class wraps the native camera on |platform|.
+* The [`ui.DataCaptureView`](https://docs.scandit.com/7.6/data-capture-sdk/titanium/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) displays the camera preview as well as augmentations on top of the camera preview.
+* The [`barcode.BarcodeCapture`](https://docs.scandit.com/7.6/data-capture-sdk/titanium/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) manages the barcode scanning/capturing process, exposes [`listeners<barcode.IBarcodeCaptureListener>`](https://docs.scandit.com/7.6/data-capture-sdk/titanium/barcode-capture/api/barcode-capture-listener.html) and ways to configure-barcodes.
 
 In your app you will need to use all of these classes to implement the functionality offered by the BarcodePicker. The following sample code shows you how to do this:
 
@@ -421,7 +421,7 @@ view.addToContainer(window);
 
 <TabItem value="android" label="Android">
 
-In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
+In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
 
 Capture modes are enabled by default, the first line to enable the capture mode is only required when you are reusing a previously disabled data capture mode.
 
@@ -443,7 +443,7 @@ camera.switchToDesiredState(FrameSourceState.OFF, null);
 
 <TabItem value="ios" label="iOS">
 
-In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/data-capture-sdk/ios/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/data-capture-sdk/ios/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
+In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
 
 Capture modes are enabled by default, the first line to enable the capture mode is only required when you are reusing a previously disabled data capture mode.
 
@@ -465,7 +465,7 @@ camera?.switch(toDesiredState: .off)
 
 <TabItem value="web" label="Web">
 
-In 5.x the scan process was started by calling resumeScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/data-capture-sdk/web/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
+In 5.x the scan process was started by calling resumeScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
 
 Capture modes are enabled by default, the first line to enable the capture mode is only required when you are reusing a previously disabled data capture mode.
 
@@ -487,7 +487,7 @@ await camera.switchToDesiredState(SDCCore.FrameSourceState.Off);
 
 <TabItem value="cordova" label="Cordova">
 
-In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/data-capture-sdk/cordova/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/data-capture-sdk/cordova/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
+In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/cordova/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/7.6/data-capture-sdk/cordova/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
 
 Capture modes are enabled by default, the first line to enable the capture mode is only required when you are reusing a previously disabled data capture mode.
 
@@ -509,7 +509,7 @@ camera.switchToDesiredState(Scandit.FrameSourceState.Off);
 
 <TabItem value="reactNative" label="React Native">
 
-In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/data-capture-sdk/react-native/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
+In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
 
 Capture modes are enabled by default, the first line to enable the capture mode is only required when you are reusing a previously disabled data capture mode.
 
@@ -530,7 +530,7 @@ camera.switchToDesiredState(FrameSourceState.Off);
 
 <TabItem value="flutter" label="Flutter">
 
-In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/data-capture-sdk/flutter/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
+In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/flutter/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/7.6/data-capture-sdk/flutter/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
 
 Capture modes are enabled by default, the first line to enable the capture mode is only required when you are reusing a previously disabled data capture mode.
 
@@ -552,7 +552,7 @@ camera.switchToDesiredState(FrameSourceState.off);
 
 <TabItem value="xamarinIos" label="Xamarin iOS">
 
-In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/data-capture-sdk/xamarin.ios/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/data-capture-sdk/xamarin.ios/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
+In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
 
 Capture modes are enabled by default, the first line to enable the capture mode is only required when you are reusing a previously disabled data capture mode.
 
@@ -574,7 +574,7 @@ camera?.SwitchToDesiredStateAsync(FrameSourceState.Off);
 
 <TabItem value="xamarinAndroid" label="Xamarin Android">
 
-In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/data-capture-sdk/xamarin.android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/data-capture-sdk/xamarin.android/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
+In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
 
 Capture modes are enabled by default, the first line to enable the capture mode is only required when you are reusing a previously disabled data capture mode.
 
@@ -596,7 +596,7 @@ camera?.SwitchToDesiredStateAsync(FrameSourceState.Off);
 
 <TabItem value="xamarinForms" label="Xamarin Forms">
 
-In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
+In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
 
 Capture modes are enabled by default, the first line to enable the capture mode is only required when you are reusing a previously disabled data capture mode.
 
@@ -618,7 +618,7 @@ camera?.SwitchToDesiredStateAsync(FrameSourceState.Off);
 
 <TabItem value="dotnetIos" label=".NET iOS">
 
-In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
+In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
 
 Capture modes are enabled by default, the first line to enable the capture mode is only required when you are reusing a previously disabled data capture mode.
 
@@ -640,7 +640,7 @@ camera?.SwitchToDesiredStateAsync(FrameSourceState.Off);
 
 <TabItem value="dotnetAndroid" label=".NET Android">
 
-In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
+In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
 
 Capture modes are enabled by default, the first line to enable the capture mode is only required when you are reusing a previously disabled data capture mode.
 
@@ -662,7 +662,7 @@ camera?.SwitchToDesiredStateAsync(FrameSourceState.Off);
 
 <TabItem value="titanium" label="Titanium">
 
-In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/data-capture-sdk/titanium/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/data-capture-sdk/titanium/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
+In 5.x the scan process was started by calling startScanning on the BarcodePicker. In 6.0+, the equivalent functionality is to [`switch the frame source from off to on<IFrameSource.SwitchToDesiredStateAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/titanium/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) and to [`enable the capture mode<IDataCaptureMode.IsEnabled>`](https://docs.scandit.com/7.6/data-capture-sdk/titanium/core/api/data-capture-mode.html#property-scandit.datacapture.core.IDataCaptureMode.IsEnabled).
 
 Capture modes are enabled by default, the first line to enable the capture mode is only required when you are reusing a previously disabled data capture mode.
 
@@ -700,7 +700,7 @@ settings.getSymbologySettings(Symbology.EAN13_UPCA)
 ```
 
 * The API to configure the active scan area has been overhauled and simplified. If you were changing the active scan area to match the visible part of the preview, the good news is that the active scan area is now automatically restricted to the visible part of the preview.
-* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/data-capture-sdk/android/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/data-capture-sdk/android/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
+* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
 
 </TabItem>
 
@@ -711,7 +711,7 @@ settings.settings(for: .ean13UPCA)?.set(extension: "remove_leading_upca_zero", e
 ```
 
 * The API to configure the active scan area has been overhauled and simplified. If you were changing the active scan area to match the visible part of the preview, the good news is that the active scan area is now automatically restricted to the visible part of the preview.
-* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/data-capture-sdk/ios/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/data-capture-sdk/ios/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
+* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
 
 </TabItem>
 
@@ -732,7 +732,7 @@ settings.settingsForSymbology(Scandit.Symbology.EAN13UPCA).setExtensionEnabled("
 ```
 
 * The API to configure the active scan area has been overhauled and simplified. If you were changing the active scan area to match the visible part of the preview, the good news is that the active scan area is now automatically restricted to the visible part of the preview.
-* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/data-capture-sdk/cordova/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/data-capture-sdk/cordova/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
+* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/7.6/data-capture-sdk/cordova/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/cordova/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
 
 </TabItem>
 
@@ -743,7 +743,7 @@ settings.settingsForSymbology(Symbology.EAN13UPCA).setExtensionEnabled("remove_l
 ```
 
 * The API to configure the active scan area has been overhauled and simplified. If you were changing the active scan area to match the visible part of the preview, the good news is that the active scan area is now automatically restricted to the visible part of the preview.
-* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/data-capture-sdk/react-native/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/data-capture-sdk/react-native/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
+* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
 
 </TabItem>
 
@@ -755,7 +755,7 @@ settings.settingsForSymbology(Symbology.ean13Upca)
 ```
 
 * The API to configure the active scan area has been overhauled and simplified. If you were changing the active scan area to match the visible part of the preview, the good news is that the active scan area is now automatically restricted to the visible part of the preview.
-* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/data-capture-sdk/flutter/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/data-capture-sdk/flutter/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
+* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/7.6/data-capture-sdk/flutter/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/flutter/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
 
 </TabItem>
 
@@ -767,7 +767,7 @@ barcodeCaptureSettings.GetSymbologySettings(Symbology.Ean13Upca)
 ```
 
 * The API to configure the active scan area has been overhauled and simplified. If you were changing the active scan area to match the visible part of the preview, the good news is that the active scan area is now automatically restricted to the visible part of the preview.
-* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/data-capture-sdk/xamarin.ios/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/data-capture-sdk/xamarin.ios/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
+* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
 
 </TabItem>
 
@@ -779,7 +779,7 @@ barcodeCaptureSettings.GetSymbologySettings(Symbology.Ean13Upca)
 ```
 
 * The API to configure the active scan area has been overhauled and simplified. If you were changing the active scan area to match the visible part of the preview, the good news is that the active scan area is now automatically restricted to the visible part of the preview.
-* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/data-capture-sdk/xamarin.android/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/data-capture-sdk/xamarin.android/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
+* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
 
 </TabItem>
 
@@ -791,7 +791,7 @@ barcodeCaptureSettings.GetSymbologySettings(Symbology.Ean13Upca)
 ```
 
 * The API to configure the active scan area has been overhauled and simplified. If you were changing the active scan area to match the visible part of the preview, the good news is that the active scan area is now automatically restricted to the visible part of the preview.
-* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/data-capture-sdk/xamarin.forms/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
+* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
 
 </TabItem>
 
@@ -803,7 +803,7 @@ barcodeCaptureSettings.GetSymbologySettings(Symbology.Ean13Upca)
 ```
 
 * The API to configure the active scan area has been overhauled and simplified. If you were changing the active scan area to match the visible part of the preview, the good news is that the active scan area is now automatically restricted to the visible part of the preview.
-* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
+* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
 
 </TabItem>
 
@@ -815,7 +815,7 @@ barcodeCaptureSettings.GetSymbologySettings(Symbology.Ean13Upca)
 ```
 
 * The API to configure the active scan area has been overhauled and simplified. If you were changing the active scan area to match the visible part of the preview, the good news is that the active scan area is now automatically restricted to the visible part of the preview.
-* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
+* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
 
 </TabItem>
 
@@ -826,7 +826,7 @@ settings.settingsForSymbology(ScanditBarcode.Symbology.EAN13UPCA).setExtensionEn
 ```
 
 * The API to configure the active scan area has been overhauled and simplified. If you were changing the active scan area to match the visible part of the preview, the good news is that the active scan area is now automatically restricted to the visible part of the preview.
-* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/data-capture-sdk/titanium/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/data-capture-sdk/titanium/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
+* The camera-related settings have been moved from `ScanSettings` to [`CameraSettings`](https://docs.scandit.com/7.6/data-capture-sdk/titanium/core/api/camera-settings.html). For example, if you want to change the preview resolution from 720p to 1080p, set the `CameraSettings.PreferredResolution` to `VideoResolution.FullHd` and [`apply the new settings<Camera.ApplySettingsAsync>`](https://docs.scandit.com/7.6/data-capture-sdk/titanium/core/api/camera.html#method-scandit.datacapture.core.Camera.ApplySettingsAsync) to the camera.
 
 </TabItem>
 
@@ -856,7 +856,7 @@ This functionality is only available for barcode capture, but not barcode tracki
 
 <TabItem value="android" label="Android">
 
-To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
+To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
 
 ```java
 BarcodeCaptureOverlay overlay = new BarcodeCaptureOverlay(barcodeCapture);
@@ -871,7 +871,7 @@ dataCaptureView.addOverlay(overlay);
 
 <TabItem value="ios" label="iOS">
 
-To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/data-capture-sdk/ios/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
+To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
 
 ```swift
 let overlay = BarcodeCaptureOverlay(barcodeCapture: barcodeCapture)
@@ -884,7 +884,7 @@ captureView.addOverlay(overlay)
 
 <TabItem value="web" label="Web">
 
-To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/data-capture-sdk/web/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
+To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
 
 ```javascript
 const overlay = await SDCBarcode.BarcodeCaptureOverlay.withBarcodeCaptureForView(barcodeCapture, view);
@@ -897,7 +897,7 @@ await view.addOverlay(overlay);
 
 <TabItem value="cordova" label="Cordova">
 
-To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
+To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
 
 ```javascript
 const overlay = Scandit.BarcodeCaptureOverlay.withBarcodeCaptureForView(barcodeCapture, view);
@@ -909,7 +909,7 @@ overlay.viewfinder = viewfinder;
 
 <TabItem value="reactNative" label="React Native">
 
-To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
+To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
 
 ```javascript
 const overlay = BarcodeCaptureOverlay.withBarcodeCaptureForView(barcodeCapture, view);
@@ -922,7 +922,7 @@ view.addOverlay(overlay);
 
 <TabItem value="flutter" label="Flutter">
 
-To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
+To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
 
 ```dart
 var overlay = BarcodeCaptureOverlay.withBarcodeCaptureForView(barcodeCapture, view)
@@ -934,7 +934,7 @@ view.addOverlay(overlay);
 
 <TabItem value="xamarinIos" label="Xamarin iOS">
 
-To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
+To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
 
 ```csharp
 BarcodeCaptureOverlay overlay = BarcodeCaptureOverlay.Create(barcodeCapture, dataCaptureView);
@@ -946,7 +946,7 @@ overlay.Viewfinder = viewfinder;
 
 <TabItem value="xamarinAndroid" label="Xamarin Android">
 
-To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
+To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
 
 ```csharp
 BarcodeCaptureOverlay overlay = BarcodeCaptureOverlay.Create(barcodeCapture, dataCaptureView);
@@ -958,7 +958,7 @@ overlay.Viewfinder = viewfinder;
 
 <TabItem value="xamarinForms" label="Xamarin Forms">
 
-To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
+To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
 
 ```csharp
 BarcodeCaptureOverlay overlay = BarcodeCaptureOverlay.Create(barcodeCapture, dataCaptureView);
@@ -970,7 +970,7 @@ overlay.Viewfinder = viewfinder;
 
 <TabItem value="dotnetIos" label=".NET iOS">
 
-To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
+To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
 
 ```csharp
 BarcodeCaptureOverlay overlay = BarcodeCaptureOverlay.Create(barcodeCapture, dataCaptureView);
@@ -982,7 +982,7 @@ overlay.Viewfinder = viewfinder;
 
 <TabItem value="dotnetAndroid" label=".NET Android">
 
-To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
+To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
 
 ```csharp
 BarcodeCaptureOverlay overlay = BarcodeCaptureOverlay.Create(barcodeCapture, dataCaptureView);
@@ -994,7 +994,7 @@ overlay.Viewfinder = viewfinder;
 
 <TabItem value="titanium" label="Titanium">
 
-To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
+To enable the [`rectangular viewfinder<ui.RectangularViewfinder>`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder) (previously called the default viewfinder), use the following lines of code:
 
 ```javascript
 const overlay = Scandit.BarcodeCaptureOverlay.withBarcodeCaptureForView(barcodeCapture, view);
