@@ -250,13 +250,13 @@ const config: Config = {
   ],
 
   themeConfig: {
-    announcementBar: {
-      id: 'new_version',
-      content: 'Scandit Smart Data Capture SDK Version 7 is now available! See the <a href="/migrate-6-to-7">Migration Guide</a> to get started today.',
-      backgroundColor: '#065db8',
-      textColor: '#f0f0f0',
-      isCloseable: false,
-    },
+    // announcementBar: {
+    //  id: 'new_version',
+    //  content: 'Scandit Smart Data Capture SDK Version 8 is now available! See the <a href="/migrate-7-to-8">Migration Guide</a> to get started today.',
+    //  backgroundColor: '#065db8',
+    //  textColor: '#f0f0f0',
+    //  isCloseable: false,
+    // },
     algolia: {
       appId: "RYKD97E6SH",
       apiKey: "8372250579ef3ea82cc637a28e50f73f",
