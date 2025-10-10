@@ -38,6 +38,28 @@ extension PlaygroundViewController: BarcodeFindListener {
 }
 ```
 
+## Multiple criteria
+
+You can assign different brushes to each BarcodeFindItem, so they appear visually different to the end user. This can be used to make some items stand out more, or to help the user mentally group certain items together.
+
+```swift
+let availableBrush = Brush(fill: .green.withAlphaComponent(0.2), stroke: .green, strokeWidth: 1)
+let expiredBrush = Brush(fill: .red.withAlphaComponent(0.2), stroke: .red, strokeWidth: 1)
+
+var items = Set<BarcodeFindItem>()
+items.insert(BarcodeFindItem(
+    searchOptions: BarcodeFindItemSearchOptions(barcodeData: "9783598215438", brush: availableBrush),
+    content: BarcodeFindItemContent(
+        info: "Mini Screwdriver Set",
+        additionalInfo: "(6-Piece)",
+        image: nil)
+))
+items.insert(BarcodeFindItem(
+    searchOptions: BarcodeFindItemSearchOptions(barcodeData: "9783598215414", brush: expiredBrush),
+    content: nil
+))
+```
+
 ## Set Up a Transformation
 
 Sometimes the barcode data needs to be transformed. For example, if the barcode contains the product identifier and other information, when a product is scanned, the barcode data is first parsed (via a transformation) and then the input list is checked.
