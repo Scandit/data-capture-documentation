@@ -25,6 +25,78 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
   * Understands not just what is being scanned, but also what you want to scan and why you’re scanning it
   * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.
 
+#### Core
+
+* The `Camera` API has been completely redesigned for this release. See the API reference for complete details.
+* The minimum Chrome version supported is now 85+.
+
+#### Barcode
+
+* Smart Scan Selection is now available in SparkScan for the Web SDK.
+* Adapted `SparkScanView` to now be usable as a web component. Also added a `SparkScanReactSample` to demonstrate this usage.
+* The following have been added to MatrixScan AR:
+  * `BarcodeArView.getHighlightForBarcode`
+  * `BarcodeAirView.getAnnotationForBarcode`
+
+#### Smart Label Capture
+
+* We’re introducing an enhancement that makes Smart Label Capture more robust and scalable by complementing its on-device model with a larger, more capable model. When the on-device model can’t capture certain labels, the SDK automatically escalates to this enhancement to handle complex or unforeseen cases with high accuracy and reliability. This capability is currently available in `beta`. If you’re interested in trying it, please contact Scandit Support. For configuration details, see `labelDefinition.adaptiveRecognitionEngine`.
+
+#### ID
+
+* ID Capture now supports full-frame anonymization.
+* Added `CapturedId::isCitizenPassport`, which indicates whether the passport was issued to a citizen of the issuing country. Returns `false` for travel documents such as refugee, stateless, or alien passports, and for any passports issued by organizations rather than states.
+* The following Chinese travel permits now extract VIZ + MIZ data during double-sided scanning flows:
+  * CT - Taiwan Residents Mainland Travel Permit
+  * W - Mainland Residents Exit-Entry Permit to and from Hong Kong and Macao
+  * CD - Mainland Residents Entry-Exit Permit to and from Taiwan
+
+### Behavioral Changes
+
+#### Barcode
+
+* Symbology `RM4SCC` has been renamed to `ROYAL_MAIL_4STATE`.
+* Changed the default highlight brush in SparkScan and Barcode Capture.
+
+#### Label
+
+* The `LabelFieldDefinition` API has been updated with the following changes:
+  * Renamed property: `patterns` → `valueRegex`
+  * Renamed property: `dataTypePatterns` → `anchorRegex`
+* Receipt Scanning API has been updated with the following changes:
+  * `ReceiptScanningResult`:
+    * Removed properties: `storeNumber`, `storeStreet`, `storeZip`, `storeState`, `storePhone`, `paymentMethod`, and `paymentCurrency`.
+    * Added property: `storeAddress` - Full address of the store (Street Number, Street, City, State, NPA).
+    * Renamed property: `paymentSubtotal` → `paymentPreTaxTotal` - Total balance before taxes are applied.
+  * `ReceiptScanningLineItem`:
+    * Removed property: `category`.
+    * Renamed properties: `price` → `unitPrice` (Price for a single unit of the item), `total` → `totalPrice` (Total price for a specific product, quantity × unitPrice).
+
+#### ID
+
+* The configuration for the following documents has been changed as detailed below:
+  * Australian mobile driver licenses (mDL) are now treated as normal documents, with no separate mode.
+  * US Green Cards are now treated as residence permits.
+* Removed the deprecated API `DateResult::toDate`. Use `DateResult::toLocalDate` or `DateResult::toUtcDate` instead.
+
+### Bug Fixes
+
+#### ID
+
+* Fixed a bug that could get the scanner stuck when scanning a US passport card.
+* Fixed an issue where unavailable dates would not be properly set to `null` in an ID scan result.
+
+### Deprecations
+
+#### Core
+
+* `VideoResolution::Auto` is now deprecated. Please use the capture mode's `recommendedCameraSettings` for the best results.
+
+#### Barcode
+
+* All previously deprecated APIs have been removed in this release.
+* `DataCaptureContext.create`, `createWithOptions` and `configure` have been removed in favor of the `forLicenseKey` method.
+
 ## 7.6.1
 
 **Released**: September 18, 2025

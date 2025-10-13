@@ -58,7 +58,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * The `LabelFieldDefinition` API has been updated with the following changes:
   * Renamed property: `patterns` → `valueRegex`
   * Renamed property: `dataTypePatterns` → `anchorRegex`
-* Receipt Scanning API has been updated with the following changes:
+* Our Receipt Scanning Capture feature, available in beta (contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out), has been updated to improve performance and the API:
   * `ReceiptScanningResult`:
     * Removed properties: `storeNumber`, `storeStreet`, `storeZip`, `storeState`, `storePhone`, `paymentMethod`, and `paymentCurrency`.
     * Added property: `storeAddress` - Full address of the store (Street Number, Street, City, State, NPA).
