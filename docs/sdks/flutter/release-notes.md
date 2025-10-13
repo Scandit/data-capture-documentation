@@ -25,6 +25,56 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
   * Understands not just what is being scanned, but also what you want to scan and why you’re scanning it
   * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.
 
+#### Core
+
+* Upgraded all sample applications to build correctly with Flutter 3.35.3.
+
+#### Barcode
+
+* Updated the Gradle version for all sample applications to 8.14.3.
+* `BarcodeBatchBasicOverlay` and `BarcodeBatchBasicOverlayListener` now allow for nullable brushes.
+* MatrixScan AR now allows for the use of custom highlights and annotations.
+
+#### Smart Label Capture
+
+* We’re introducing an enhancement that makes Smart Label Capture more robust and scalable by complementing its on-device model with a larger, more capable model. When the on-device model can’t capture certain labels, the SDK automatically escalates to this enhancement to handle complex or unforeseen cases with high accuracy and reliability. This capability is currently available in `beta`. If you’re interested in trying it, please contact Scandit Support. For configuration details, see `labelDefinition.adaptiveRecognitionEngine`.
+
+#### ID
+
+* ID Capture now supports full-frame anonymization.
+* Added `CapturedId::isCitizenPassport`, which indicates whether the passport was issued to a citizen of the issuing country. Returns `false` for travel documents such as refugee, stateless, or alien passports, and for any passports issued by organizations rather than states.
+* The following Chinese travel permits now extract VIZ + MIZ data during double-sided scanning flows:
+  * CT - Taiwan Residents Mainland Travel Permit
+  * W - Mainland Residents Exit-Entry Permit to and from Hong Kong and Macao
+  * CD - Mainland Residents Entry-Exit Permit to and from Taiwan
+
+### Behavioral Changes
+
+#### Barcode
+
+* Symbology `RM4SCC` has been renamed to `ROYAL_MAIL_4STATE`.
+* Changed the default highlight brush in SparkScan and Barcode Capture.
+* Removed the `ExtendedSparkScanViewUiListener` as the same functionality is offered by `SparkScanViewUiListener`.
+
+#### ID
+
+* The configuration for the following documents has been changed as detailed below:
+  * Australian mobile driver licenses (mDL) are now treated as normal documents, with no separate mode.
+  * US Green Cards are now treated as residence permits.
+* Removed the deprecated API `DateResult::toDate`. Use `DateResult::toLocalDate` or `DateResult::toUtcDate` instead.
+
+### Bug Fixes
+
+#### ID
+
+* Fixed a bug that could get the scanner stuck when scanning a US passport card.
+
+### Deprecations
+
+#### Core
+
+* `VideoResolution::Auto` is now deprecated. Please use the capture mode's `recommendedCameraSettings` for the best results.
+
 ## 7.6.1
 
 **Released**: September 18, 2025
