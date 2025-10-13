@@ -25,6 +25,25 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
   * Understands not just what is being scanned, but also what you want to scan and why you’re scanning it
   * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.
 
+#### Barcode
+
+* Updated the Gradle version for all sample applications to 8.14.3.
+
+### Behavioral Changes
+
+#### Barcode
+
+* Symbology `RM4SCC` has been renamed to `ROYAL_MAIL_4STATE`.
+* Changed the default highlight brush in Barcode Capture.
+
+### Bug Fixes
+
+### Deprecations
+
+#### Core
+
+* `VideoResolution::Auto` is now deprecated. Please use the capture mode's `recommendedCameraSettings` for the best results.
+
 ## 7.6.1
 
 **Released**: September 18, 2025
