@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scandit CDN Simple sample</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js",
+          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js",
+
+          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/",
+          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/"
+        }
+      }
+    </script>
+    <link
+      rel="modulepreload"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js"
+    />
+    <link
+      rel="modulepreload"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      #app {
+        height: 100%;
+      }
+    </style>
+    <!-- Check the latest version here https://github.com/guybedford/es-module-shims/releases -->
+    <script
+      async
+      src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js"
+    ></script>
+    <script type="module">
+      import {
+        DataCaptureView,
+        Camera,
+        DataCaptureContext,
+        FrameSourceState,
+      } from "@scandit/web-datacapture-core";
+
+      import {
+        barcodeCaptureLoader,
+        BarcodeCaptureSettings,
+        BarcodeCapture,
+        Symbology,
+      } from "@scandit/web-datacapture-barcode";
+
+      let view = new DataCaptureView();
+      view.connectToElement(document.getElementById("app"));
+      view.showProgressBar();
+
+      await DataCaptureContext.forLicenseKey("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", {
+        libraryLocation:
+          "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/",
+        moduleLoaders: [barcodeCaptureLoader()],
+      });
+      view.hideProgressBar();
+
+      const camera = Camera.default;
+
+      // Depending on the use case further camera settings adjustments can be made here.
+      const context = await DataCaptureContext.create();
+      await view.setContext(context);
+
+      const cameraSettings = BarcodeCapture.recommendedCameraSettings;
+      await camera.applySettings(cameraSettings);
+
+      await context.setFrameSource(camera);
+      await context.frameSource.switchToDesiredState(FrameSourceState.On);
+
+      const settings = new BarcodeCaptureSettings();
+      settings.enableSymbologies([Symbology.Code128, Symbology.QR]);
+
+      let barcodeCapture = await BarcodeCapture.forContext(context, settings);
+
+      barcodeCapture.addListener({
+        didScan: async (barcodeCaptureMode, session) => {
+          const barcode = session.newlyRecognizedBarcode;
+          if (!barcode) {
+            return;
+          }
+          const symbology = new SymbologyDescription(barcode.symbology);
+          alert(`Scanned: ${barcode.data ?? ""}\n(${symbology.readableName})`);
+        },
+      });
+
+      await barcodeCapture.setEnabled(true);
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+</html>
