@@ -28,15 +28,13 @@ The general steps are:
 
 ## Create a Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new Data Capture Context. The SDK must be configured first with a valid Scandit Data Capture SDK license key.
+The first step to add capture capabilities to your application is to create a new Data Capture Context with a valid Scandit Data Capture SDK license key.
 
 ```typescript
-    await configure({
-      licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+    const context = await DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --", {
       libraryLocation: new URL("library/engine/", document.baseURI).toString(),
       moduleLoaders: [barcodeCaptureLoader({ highEndBlurryRecognition: false })],
     });
-    const context = await DataCaptureContext.create();
 
     const dataCaptureView = new DataCaptureView();
     // #root element should be present in .html document
@@ -105,7 +103,7 @@ await barcodeFind.setItemList(items);
 
 ## Register The Listener
 
-The `BarcodeFindView` displays a **Finish** button next to its shutter button. 
+The `BarcodeFindView` displays a **Finish** button next to its shutter button.
 
 Register a [BarcodeFindViewUiListener](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-find-view.html#interface-scandit.datacapture.barcode.find.ui.IBarcodeFindViewUiListener) to be notified what items have been found once the finish button is pressed.
 

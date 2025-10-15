@@ -73,34 +73,33 @@ More info about this feature here https://developer.mozilla.org/en-US/docs/Web/H
 -->
 <link
   rel="modulepreload"
-  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/build/js/index.js"
+  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js"
 />
 <link
   rel="modulepreload"
-  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/build/js/index.js"
+  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js"
 />
 <!-- polyfill browsers not supporting import maps. use the latest version from here https://github.com/guybedford/es-module-shims/releases -->
 <script
   async
-  src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"
+  src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js"
 ></script>
 <script type="importmap">
   {
     "imports": {
-      "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/build/js/index.js",
-      "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/build/js/index.js",
-      "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/",
-      "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/"
+      "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js",
+      "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js",
+      "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/",
+      "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/"
     }
   }
 </script>
 
 <script type="module">
-  // Import only the necessary items is recommended
+  // Importing only the necessary items is recommended
   import {
     DataCaptureContext,
     Camera,
-    configure,
   } from "@scandit/web-datacapture-core";
   import {
     BarcodeCapture,
@@ -120,7 +119,11 @@ OR
 ```
 
 :::note
-The alternative link(s) for UNPKG are [here](https://unpkg.com/@scandit/web-datacapture-core@7.x) for Core and [here](https://unpkg.com/@scandit/web-datacapture-barcode@7.x) for Barcode.
+In alternative to jsdeliver unpkg can be used as alternative:
+
+- [UNPKG Core](https://unpkg.com/@scandit/web-datacapture-core@8.x)
+- [UNPKG Barcode](https://unpkg.com/@scandit/web-datacapture-barcode@8.x)
+
 :::
 
 Alternatively, you can also put the same JavaScript/TypeScript code in a separate file via:
@@ -141,21 +144,21 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
     <script type="importmap">
       {
         "imports": {
-          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/build/js/index.js",
-          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/build/js/index.js",
+          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js",
+          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js",
 
-          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/",
-          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/"
+          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/",
+          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/"
         }
       }
     </script>
     <link
       rel="modulepreload"
-      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/build/js/index.js"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js"
     />
     <link
       rel="modulepreload"
-      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/build/js/index.js"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js"
     />
     <style>
       html,
@@ -171,11 +174,10 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
     <!-- Check the latest version here https://github.com/guybedford/es-module-shims/releases -->
     <script
       async
-      src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"
+      src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js"
     ></script>
     <script type="module">
       import {
-        configure,
         DataCaptureView,
         Camera,
         DataCaptureContext,
@@ -193,20 +195,18 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
       view.connectToElement(document.getElementById("app"));
       view.showProgressBar();
 
-      await configure({
-        licenseKey: "-- ENTER LICENSE KEY HERE --",
+      const context = await DataCaptureContext.forLicenseKey("-- ENTER LICENSE KEY HERE --", {
         libraryLocation:
-          "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/sdc-lib/",
+          "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/",
         moduleLoaders: [barcodeCaptureLoader()],
       });
       view.hideProgressBar();
 
-      const camera = Camera.default;
+      const camera = Camera.pickBestGuess();
 
-      // Depending on the use case further camera settings adjustments can be made here.
-      const context = await DataCaptureContext.create();
       await view.setContext(context);
 
+      // Depending on the use case further camera settings adjustments can be made here.
       const cameraSettings = BarcodeCapture.recommendedCameraSettings;
       await camera.applySettings(cameraSettings);
 
@@ -253,11 +253,10 @@ You can also specify a version @`<version>`.
 Then import the package in your JavaScript/TypeScript code by using:
 
 ```js
-// Import only the necessary items is recommended
+// Importing only the necessary items is recommended
 import {
   DataCaptureContext,
   Camera,
-  configure,
 } from "@scandit/web-datacapture-core";
 import {
   BarcodeCapture,
@@ -279,18 +278,18 @@ import * as SDCBarcode from "@scandit/web-datacapture-barcode";
 
 ## Configure the Library
 
-The library needs to be configured and initialized before it can be used, this is done via the [`configure`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#) function.
-Note that the configuration expects a valid license key as part of the options.
+The library needs to be configured and initialized before it can be used, this is done via the DataCaptureContext [`forLicenseKey`](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) function.
+Note that the configuration expects a valid license key as first argument.
 
 :::tip
-We recommended to call [`configure`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#) as soon as possible in your application so that the files are already downloaded and initialized when the capture process is started.
+We recommend calling [`forLicenseKey`](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) as soon as possible in your application so that the files can be downloaded and the [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) initialized before the capture process starts.
 :::
 
 The `LibraryLocation` configuration option must be provided and point to the location of the Scandit Data Capture `sdc-lib` location (external WebAssembly files): `scandit-datacapture-sdk\*.js` and `scandit-datacapture-sdk\*.wasm`.
 
 WebAssembly requires these separate files which are loaded by our main library at runtime.
-They can be found inside the `sdc-lib` folder in the library you either added and installed via npm or access via a CDN.
-If you installed the library through npm, **these files should be copied and served correctly in a path that will be accessible by the sdk in the configure phase**.
+They can be found inside the `sdc-lib` folder you either added and installed via npm or access via a CDN.
+If you installed the library through npm, **these files should be copied and served correctly in a path that will be accessible by the SDK during initialization**.
 
 The configuration option that you provide should then point to the folder containing these files, either as a path of your website or an absolute URL (like the CDN one). **By default the library will look at the root of your website**.
 
@@ -412,7 +411,6 @@ Let's see how to do it with the default UI first:
 
 ```ts
 import {
-  configure,
   DataCaptureView,
   DataCaptureContext,
 } from "@scandit/web-datacapture-core";
@@ -423,15 +421,13 @@ view.connectToElement(document.getElementById("data-capture-view"));
 view.showProgressBar();
 view.setProgressBarMessage("Loading ...");
 
-await configure({
-  licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+const context = await DataCaptureContext.forLicenseKey("-- ENTER LICENSE KEY HERE --", {
   libraryLocation: "/self-hosted-sdc-lib/",
   moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
 });
 
 view.hideProgressBar();
 
-const context: DataCaptureContext = await DataCaptureContext.create();
 await view.setContext(context);
 ```
 
@@ -441,13 +437,12 @@ You can also subscribe for the [loading status](https://docs.scandit.com/data-ca
 by simply attaching a listener like this:
 
 ```ts
-import { configure, loadingStatus } from "@scandit/web-datacapture-core";
+import { loadingStatus, DataCaptureContext } from "@scandit/web-datacapture-core";
 loadingStatus.subscribe((info) => {
   // updateUI(info.percentage, info.loadedBytes)
 });
 
-await configure({
-  licenseKey: "SCANDIT_LICENSE_KEY",
+const context = await DataCaptureContext.forLicenseKey("SCANDIT_LICENSE_KEY", {
   libraryLocation: "/self-hosted-sdc-lib/",
   moduleLoaders: [barcodeCaptureLoader()],
 });
@@ -462,7 +457,7 @@ In case of missing information, the progress bar tries to show an estimated valu
 
 ### Server Side Rendering and Server Side Generation
 
-If you use a web framework that renders also on the server (SSR or SSG) it's recommended to execute the library only on the client turning off the rendering on the server.
+If you use a web framework that also renders on the server (SSR or SSG) it's recommended to execute the library only on the client turning off the rendering on the server.
 
 For more information:
 
@@ -476,7 +471,7 @@ The camera permissions are handled by the browser, and can only be granted if a 
 
 ### Progressive Web App (PWA)
 
-You can configure the scanner to work offline making the web app progressive (Progressive Web App). There are some settings to consider. If you use workbox a tool that uses workbox under the hood like [Vite PWA](https://vite-pwa-org.netlify.app/) plugin, you must set also these options:
+You can configure the scanner to work offline making the web app progressive (Progressive Web App). There are some settings to consider. If you use Workbox, a tool that uses workbox under the hood like [Vite PWA](https://vite-pwa-org.netlify.app/) plugin, you must also set these options:
 
 ```js
 workbox: {
@@ -486,20 +481,38 @@ workbox: {
   runtimeCaching: [
     {
       urlPattern: /^.*\.wasm(\?.*)?$/,
-      handler: 'CacheFirst',
+      handler: "NetworkFirst",
       options: {
-        cacheName: 'wasm-version-cache',
+        cacheName: "wasm-version-cache",
         expiration: {
           maxEntries: 2, // Keep only 2 versions to manage storage
           maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
         },
         // This ensures the version parameter is part of the cache key
         matchOptions: {
-          ignoreSearch: false, // Don't ignore search parameters (like ?v=)
+          ignoreSearch: false, // Don't ignore search parameters (like ?v=) as part of the cache key
         },
+        networkTimeoutSeconds: 5, // Fallback to cache if network is slow
+      },
+    },
+    {
+      // Cache all other assets with NetworkFirst for example
+      urlPattern: /^.*\.(js|css|html|png|jpg|jpeg|svg|ico|woff2)(\?.*)?$/,
+      handler: "NetworkFirst",
+      options: {
+        cacheName: "app-assets-cache",
+        expiration: {
+          maxEntries: 100,
+          maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
+        },
+        networkTimeoutSeconds: 3, // Fallback to cache if network is slow
       },
     },
   ],
+  cleanupOutdatedCaches: true,
+  // Skip waiting to activate new service worker immediately
+  skipWaiting: true,
+  clientsClaim: true,
 },
 ```
 
@@ -513,7 +526,7 @@ if you experience similar issues.
 
 ### Electron
 
-You can configure the Scandit SDK to work into an Electron app. The register method must be called inside the `main.ts` file passing down some dependencies and the `publicKey`. The `publicKey` will be used to decrypt the encrypted license key file that must be placed into the [`ConfigureOptions.licenseDataPath`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.LicenseDataPath) option:
+You can configure the Scandit SDK to work in an Electron app. The register method must be called inside the `main.ts` file passing down some dependencies and the `publicKey`. The `publicKey` will be used to decrypt the encrypted license key file that must be placed into the [`ConfigureOptions.licenseDataPath`](https://docs.scandit.com/data-capture-sdk/web/core/api/web/configure.html#property-scandit.datacapture.core.IConfigureOptions.LicenseDataPath) option:
 
 ```ts
 // electron main.ts
@@ -546,16 +559,18 @@ preloadBindings(ipcRenderer);
 
 ```ts
 // renderer.ts
-await configure({
+import { DataCaptureContext } from "@scandit/web-datacapture-core";
+import { barcodeCaptureLoader } from "@scandit/web-datacapture-barcode";
+
+const context = await DataCaptureContext.forLicenseKeyInElectronPath("./out/renderer/data/sdc-license.data", {
   // In Electron context the license will be decrypted internally.
   // The path of the encrypted file is path.join(app.getAppPath(), licenseDataPath)
-  licenseDataPath: "./out/renderer/data/sdc-license.data",
   libraryLocation: new URL("self-hosted-sdc-lib", document.baseURI).toString(),
   moduleLoaders: [barcodeCaptureLoader()],
 });
 ```
 
-You can encrypt your license key with this small Node.js script. Then you should copy the `sdc-license.data` file in the `licenseDataPath` in order to be correctly read at runtime in the configure phase.
+You can encrypt your license key with this small Node.js script. Then you should copy the `sdc-license.data` file in the `licenseDataPath` in order to be correctly read at runtime during initialization.
 
 You can also check the related [sample](https://github.com/Scandit/datacapture-web-samples/tree/master/ElectronBarcodeCaptureSimpleSample).
 

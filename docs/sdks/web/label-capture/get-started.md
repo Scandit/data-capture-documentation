@@ -187,13 +187,15 @@ See the [Advanced Configurations](advanced.md) section for more information abou
 You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/web/core/api/camera.html#class-scandit.datacapture.core.Camera):
 
 ```js
-const camera = Camera.default;
+import { Camera } from "@scandit/web-datacapture-core";
+
+const camera = Camera.pickBestGuess();
 await context.setFrameSource(camera);
 
 const cameraSettings = LabelCapture.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
-camera?.applySettings(cameraSettings);
+await camera.applySettings(cameraSettings);
 ```
 
 Once the `Camera`, `DataCaptureContext`, `DataCaptureView` and `LabelCapture` are initialized, you can switch on the camera to start capturing labels.
