@@ -35,7 +35,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 #### Smart Label Capture
 
-* Smart Label Capture is now available for Capacitor. It enables the capture of any label, regardless of its layout or format, and extracts the relevant information automatically. This is achieved through a combination of AI-based text recognition and barcode scanning, allowing users to capture all necessary data in a single scan. Smart Label Capture is ideal for applications such as inventory management, asset tracking, and logistics, where labels can vary widely in design and content.
+* [Smart Label Capture](/sdks/capacitor/label-capture/intro.md) is now available for Capacitor. It enables the capture of any label, regardless of its layout or format, and extracts the relevant information automatically. This is achieved through a combination of AI-based text recognition and barcode scanning, allowing users to capture all necessary data in a single scan. Smart Label Capture is ideal for applications such as inventory management, asset tracking, and logistics, where labels can vary widely in design and content.
 * We’re introducing an enhancement that makes Smart Label Capture more robust and scalable by complementing its on-device model with a larger, more capable model. When the on-device model can’t capture certain labels, the SDK automatically escalates to this enhancement to handle complex or unforeseen cases with high accuracy and reliability. This capability is currently available in `beta`. If you’re interested in trying it, please contact Scandit Support. For configuration details, see `labelDefinition.adaptiveRecognitionEngine`.
 
 #### ID

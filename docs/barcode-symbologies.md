@@ -357,20 +357,20 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 
 ## Postal Codes
 
-### Royal Mail 4 State Customer Code (RM4SCC)
+### Royal Mail 4 State Customer Code
 
 ![RM4SCC](/img/symbologies/rm4scc.png)
 
 * Postal code symbology used by Royal Mail and Singapore Post for encoding the destination address.
 * It enables UK postcodes as well as Delivery Point Suffixes (DPSs) to be easily read by a machine at high speed.
 * Uses a checksum digit for verifying data.
-* Relevant enum value: `SDCSymbologyRM4SCC`.
+* Relevant enum value: `ROYAL_MAIL_4STATE`.
 
 ### KIX (Klant index)
 
 ![KIX](/img/symbologies/kix.png)
 
-* Uses the same symbol alphabet as RM4SCC.
+* Uses the same symbol alphabet as `ROYAL_MAIL_4STATE`.
 * Does not use a checksum for data verification, nor does it have a start/end pattern.
 * KIX codes can be read from left-to-right or right-to-left. Depending on the reading direction, the data is completely different. To determine which of the two orientations is correct, the Scandit Data Capture SDK matches the data against a set of encoding rules and returns the data that matches the rule.
 * Relevant enum value: `SDCSymbologyKIX`.
@@ -379,10 +379,10 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 
 ![Posi LAPA 4 State Code](/img/symbologies/posi_lapa_4state.png)
 
-* Uses the same symbol alphabet as RM4SCC
+* Uses the same symbol alphabet as `ROYAL_MAIL_4STATE`
 * Uses Reed-Solomon error correction. It can correct up to 8 erasures or 4 errors.
 * LAPA can be read from left-to-right or right-to-left. The direction can be determined by reading the leftmost or the rightmost bar.
-* Thanks to its fixed length and error correction, it offers better robustness than RM4SCC.
+* Thanks to its fixed length and error correction, it offers better robustness than `ROYAL_MAIL_4STATE`.
 * Relevant enum value: `SDCSymbologyLapa4SC`.
 
 ### USPS Intelligent Mail

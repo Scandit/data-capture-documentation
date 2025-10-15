@@ -1,6 +1,5 @@
 ---
-description: "In this guide you will learn step-by-step how to add Smart Label Capture to your application.                                                                                    "
-
+description: "In this guide you will learn step-by-step how to add Smart Label Capture to your application."
 sidebar_position: 2
 framework: web
 keywords:

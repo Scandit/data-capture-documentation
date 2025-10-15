@@ -1462,6 +1462,16 @@ const sidebars: SidebarsConfig = {
                 "sdks/capacitor/matrixscan-pick/advanced",
               ],
             },
+            {
+              type: "category",
+              label: "Smart Label Capture",
+              items: [
+                "sdks/capacitor/label-capture/intro",
+                "sdks/capacitor/label-capture/get-started",
+                "sdks/capacitor/label-capture/label-definitions",
+                "sdks/capacitor/label-capture/advanced",
+              ],
+            },
           ],
         },
         {
