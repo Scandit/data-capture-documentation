@@ -30,24 +30,376 @@ Before starting with adding a capture mode, make sure that you have a valid Scan
 You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-### Enable browser multithreading
+### Improve runtime performance by enabling browser multithreading
 
 You can achieve better performance by enabling multithreading in any browser that supports it. Check the [Requirements Page](../../../system-requirements.md) to know the minimum versions that can take advantage of multithreading.
 
-To enable multithreading you must set your site to be [crossOriginIsolated](https://developer.mozilla.org/en-US/docs/Web/API/crossOriginIsolated/). This will enable the SDK to use multithreading and significantly boost performance. If the environment supports it the SDK will automatically use multithreading. You can programmatically check for multithreading supports using [BrowserHelper.checkMultithreadingSupport()](https://docs.scandit.com/data-capture-sdk/web/core/api/web/browser-compatibility.html#method-scandit.datacapture.core.BrowserHelper.CheckMultithreadingSupport).
+To enable multithreading you must set your site to be [crossOriginIsolated](https://developer.mozilla.org/en-US/docs/Web/API/crossOriginIsolated/). This will enable the SDK to use multithreading and significantly boost performance. If the environment supports it the SDK will automatically use multithreading. You can programmatically check for multithreading support using [BrowserHelper.checkMultithreadingSupport()](https://docs.scandit.com/data-capture-sdk/web/core/api/web/browser-compatibility.html#method-scandit.datacapture.core.BrowserHelper.CheckMultithreadingSupport).
 
 :::important
-Multithreading is particularly critical for MatrixScan so be sure to configure it correctly following this [tutorial](https://web.dev/coop-coep/). You can also check this [guide to enable cross-origin isolation](https://web.dev/cross-origin-isolation-guide/) and [safely reviving shared memory](https://hacks.mozilla.org/2020/07/safely-reviving-shared-memory/).
+Multithreading is particularly critical for MatrixScan as it significantly improves frame processing speed and tracking accuracy. Be sure to configure it correctly following this [tutorial](https://web.dev/coop-coep/). You can also check this [guide to enable cross-origin isolation](https://web.dev/cross-origin-isolation-guide/) and [safely reviving shared memory](https://hacks.mozilla.org/2020/07/safely-reviving-shared-memory/).
 :::
 
-An example of how headers could be set:
+#### Verify multithreading is enabled
+
+You can verify that multithreading is working correctly by checking the cross-origin isolation status:
+
+```js
+import { BrowserHelper } from "@scandit/web-datacapture-core";
+
+// Whether or not the browser supports SharedArrayBuffer, the page is served to be crossOriginIsolated and has support for nested web workers.
+const supportsMultithreading = await BrowserHelper.checkMultithreadingSupport();
+
+if (supportsMultithreading) {
+  console.log("Multithreading is enabled and working!");
+} else {
+  console.warn("Multithreading is not available. Check your cross-origin headers.");
+}
+
+```
+
+#### Configure cross-origin headers
+
+To enable cross-origin isolation, you need to set specific HTTP headers **on your HTML page** (not on the SDK files). The headers you need depend on whether you're self-hosting or using a CDN:
+
+:::warning CDN vs Self-Hosting
+If you're loading the SDK from a CDN (jsDelivr, UNPKG, etc.), you should use `Cross-Origin-Embedder-Policy: credentialless` instead of `require-corp` to avoid blocking cross-origin resources. Alternatively, **we strongly recommend self-hosting the SDK files** when using multithreading for better reliability and to avoid potential CDN CORS/CORP issues.
+:::
+
+**Choose the appropriate header configuration:**
+
+- **If self-hosting the SDK**: Use `Cross-Origin-Embedder-Policy: require-corp`
+- **If using a CDN**: Use `Cross-Origin-Embedder-Policy: credentialless` (requires modern browsers)
+
+Below are examples for common server setups:
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs groupId="cross-origin-headers">
+
+<TabItem value="Nginx" label="Nginx">
+
+Add these headers to your Nginx configuration file (usually in `/etc/nginx/sites-available/` or within a `server` block):
+
+**For self-hosted SDK:**
+
+```nginx
+server {
+    # ... other configuration ...
+
+    location / {
+        add_header Cross-Origin-Embedder-Policy "require-corp" always;
+        add_header Cross-Origin-Opener-Policy "same-origin" always;
+
+        # ... other directives ...
+    }
+}
+```
+
+**For CDN-hosted SDK:**
+
+```nginx
+server {
+    # ... other configuration ...
+
+    location / {
+        add_header Cross-Origin-Embedder-Policy "credentialless" always;
+        add_header Cross-Origin-Opener-Policy "same-origin" always;
+
+        # ... other directives ...
+    }
+}
+```
+
+After making changes, reload Nginx:
 
 ```sh
-Cross-Origin-Embedder-Policy: require-corp;
-Cross-Origin-Opener-Policy: same-origin;
-Cross-Origin-Resource-Policy: cross-origin allow-credentials; require-corp origin https://example.com
-https://example.net;
+sudo nginx -t && sudo nginx -s reload
 ```
+
+</TabItem>
+
+<TabItem value="Apache" label="Apache">
+
+Add these headers to your `.htaccess` file or Apache configuration:
+
+**For self-hosted SDK:**
+
+```apache
+<IfModule mod_headers.c>
+    Header set Cross-Origin-Embedder-Policy "require-corp"
+    Header set Cross-Origin-Opener-Policy "same-origin"
+</IfModule>
+```
+
+**For CDN-hosted SDK:**
+
+```apache
+<IfModule mod_headers.c>
+    Header set Cross-Origin-Embedder-Policy "credentialless"
+    Header set Cross-Origin-Opener-Policy "same-origin"
+</IfModule>
+```
+
+Make sure `mod_headers` is enabled:
+
+```sh
+sudo a2enmod headers
+sudo systemctl restart apache2
+```
+
+</TabItem>
+
+<TabItem value="Express.js" label="Express.js">
+
+For Express.js applications, add the headers using middleware:
+
+**For self-hosted SDK:**
+
+```javascript
+const express = require("express");
+const app = express();
+
+// Add cross-origin isolation headers
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  next();
+});
+
+// ... rest of your app configuration ...
+
+app.listen(3000);
+```
+
+**For CDN-hosted SDK:**
+
+```javascript
+const express = require("express");
+const app = express();
+
+// Add cross-origin isolation headers
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Embedder-Policy", "credentialless");
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  next();
+});
+
+// ... rest of your app configuration ...
+
+app.listen(3000);
+```
+
+</TabItem>
+
+<TabItem value="Vite" label="Vite">
+
+For Vite projects, create a custom plugin in your `vite.config.ts`:
+
+**For self-hosted SDK:**
+
+```typescript
+import { defineConfig, type PluginOption } from 'vite';
+
+function crossOriginIsolation(): PluginOption {
+  return {
+    name: 'vite-plugin-cross-origin-isolation',
+    configureServer: (server) => {
+      server.middlewares.use((_req, res, next) => {
+        res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+        next();
+      });
+    },
+    configurePreviewServer: (server) => {
+      server.middlewares.use((_req, res, next) => {
+        res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+        next();
+      });
+    },
+  };
+}
+
+export default defineConfig({
+  plugins: [crossOriginIsolation()],
+  // ... other config
+});
+```
+
+**For CDN-hosted SDK:**
+
+```typescript
+import { defineConfig, type PluginOption } from 'vite';
+
+function crossOriginIsolation(): PluginOption {
+  return {
+    name: 'vite-plugin-cross-origin-isolation',
+    configureServer: (server) => {
+      server.middlewares.use((_req, res, next) => {
+        res.setHeader('Cross-Origin-Embedder-Policy', 'credentialless');
+        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+        next();
+      });
+    },
+    configurePreviewServer: (server) => {
+      server.middlewares.use((_req, res, next) => {
+        res.setHeader('Cross-Origin-Embedder-Policy', 'credentialless');
+        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+        next();
+      });
+    },
+  };
+}
+
+export default defineConfig({
+  plugins: [crossOriginIsolation()],
+  // ... other config
+});
+```
+
+This plugin configures headers for both `vite dev` (development) and `vite preview` (production preview) modes.
+
+</TabItem>
+
+<TabItem value="Netlify" label="Netlify">
+
+Create a `_headers` file in your publish directory (usually `public/` or `dist/`):
+
+**For self-hosted SDK:**
+
+```
+/*
+  Cross-Origin-Embedder-Policy: require-corp
+  Cross-Origin-Opener-Policy: same-origin
+```
+
+**For CDN-hosted SDK:**
+
+```
+/*
+  Cross-Origin-Embedder-Policy: credentialless
+  Cross-Origin-Opener-Policy: same-origin
+```
+
+</TabItem>
+
+<TabItem value="Vercel" label="Vercel">
+
+Add the headers to your `vercel.json` configuration file:
+
+**For self-hosted SDK:**
+
+```json
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "require-corp"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        }
+      ]
+    }
+  ]
+}
+```
+
+**For CDN-hosted SDK:**
+
+```json
+{
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Cross-Origin-Embedder-Policy",
+          "value": "credentialless"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        }
+      ]
+    }
+  ]
+}
+```
+
+</TabItem>
+
+<TabItem value="ASP.NET Core" label="ASP.NET Core">
+
+Add the headers in your `Program.cs` or `Startup.cs`:
+
+**For self-hosted SDK:**
+
+```csharp
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("Cross-Origin-Embedder-Policy", "require-corp");
+    context.Response.Headers.Add("Cross-Origin-Opener-Policy", "same-origin");
+    await next();
+});
+```
+
+**For CDN-hosted SDK:**
+
+```csharp
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Add("Cross-Origin-Embedder-Policy", "credentialless");
+    context.Response.Headers.Add("Cross-Origin-Opener-Policy", "same-origin");
+    await next();
+});
+```
+
+Or use middleware in `Program.cs` (change the COEP value as needed):
+
+```csharp
+app.UseMiddleware<CrossOriginIsolationMiddleware>();
+
+// Middleware class:
+public class CrossOriginIsolationMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly string _coepValue; // "require-corp" or "credentialless"
+
+    public CrossOriginIsolationMiddleware(RequestDelegate next, string coepValue = "require-corp")
+    {
+        _next = next;
+        _coepValue = coepValue;
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        context.Response.Headers.Add("Cross-Origin-Embedder-Policy", _coepValue);
+        context.Response.Headers.Add("Cross-Origin-Opener-Policy", "same-origin");
+        await _next(context);
+    }
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+:::note
+**Important notes:**
+
+- After configuring the headers, clear your browser cache and restart your development server to ensure the new headers take effect.
+- `Cross-Origin-Embedder-Policy: credentialless` requires Chrome 96+, Edge 96+, or other Chromium-based browsers. For older browser support, self-hosting with `require-corp` is more reliable.
+- Verify your configuration using `BrowserHelper.checkMultithreadingSupport()` - it should return `true` if multithreading is properly enabled (see [Verify multithreading is enabled](#verify-multithreading-is-enabled) above).
+- If you see CORS errors after enabling these headers, verify that all external resources (fonts, analytics, etc.) either use CORS or are self-hosted.
+
+:::
 
 ### Internal dependencies
 
@@ -206,5 +558,5 @@ MatrixScan does not support the following symbologies:
 - All postal codes (KIX, RM4SCC)
 
 :::important
-Barcode Batch needs browser multithreading to run. Check the minimum browser support in the [Requirements Page](../../../system-requirements.md) and how to enable it [Enable Multithreading](#enable-browser-multithreading), above.
+Barcode Batch needs browser multithreading to run. Check the minimum browser support in the [Requirements Page](../../../system-requirements.md) and how to enable it in [Improve runtime performance by enabling browser multithreading](#improve-runtime-performance-by-enabling-browser-multithreading), above.
 :::
