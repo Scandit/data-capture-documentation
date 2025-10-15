@@ -20,7 +20,7 @@ displayed_sidebar: sdcSidebar
 
 | Requirement | Version |
 | ----------- | ------- |
-| Android     | 6.0+ (API level 24) |
+| Android     | 7.0+ (API level 24) |
 | Java        | 8+     |
 | Architecture| arm64v7, arm64, x86, x86_64 |
 | Camera      | 720p+   |
@@ -96,13 +96,20 @@ These platforms are based on the native platforms and therefore the requirements
 
 | Platform        | Requirements                                        |
 |-----------------|-----------------------------------------------------|
-| Capacitor       | - Capacitor 2.0.0<br/>- Swift 4.0+                   |
-| Cordova         | - cordova 8.0.0<br/>- cordova-android 7.0.0<br/>- cordova-ios 4.5.5<br/>- Swift 4.0+ |
+| Capacitor       | - Capacitor 5.0.0<br/>- Swift 4.0+                   |
+| Cordova         | - cordova 12.0.0<br/>- cordova-android 10.0.0<br/>- cordova-ios 6.3.0<br/>- Swift 4.0+ |
 | Flutter         | - Flutter 3.22.0+ (Dart 3.4.0+)<br/>- Swift 4.0+      |
 | Xamarin.Android | - Xamarin.Android 13.2.2<br/>- Kotlin 1.9.25           |
 | Xamarin.iOS     | - Xamarin.iOS 16.4.0.23                             |
 | Xamarin.Forms   | - Xamarin.Forms 4.8<br/>- Kotlin 1.9.25              |
-| React Native    | - react-native 0.60 (0.63 if using Fast Refresh)<br/>- Kotlin 1.9.25<br/>- Swift 4.0+ |
-| Titanium        | - Titanium 12.2.1.GA                                |
+| React Native    | - react-native 0.70+ (0.72+ recommended for modern toolchain support)<br/>- Kotlin 1.9.25<br/>- Swift 4.0+ |
+| Titanium        | - Titanium 13.0.0+                                |
 | .NET for iOS    | - .NET SDK 6.0.403+                                 |
 | .NET for Android| - .NET SDK 6.0.403+<br/>- Kotlin 1.9.25              |
+
+:::warning
+**React Native Known Issues:** While Our SDK integrates perfectly with React Native 0.70.x, this version has known build toolchain compatibility issues with modern development environments (unrelated to the Scandit SDK). These are React Native framework limitations and not caused by the Scandit SDK. We recommend using React Native 0.72+ to avoid these issues.:
+    * Android Gradle Plugin version conflicts
+    * Kotlin version incompatibilities
+    * AndroidX dependency version matrix issues
+:::
