@@ -119,7 +119,11 @@ OR
 ```
 
 :::note
-The alternative link(s) [UNPKG Core](https://unpkg.com/@scandit/web-datacapture-core@8.x) link for Core and [UNPKG Barcode](https://unpkg.com/@scandit/web-datacapture-barcode@8.x) for Barcode.
+In alternative to jsdeliver unpkg can be used as alternative:
+
+- [UNPKG Core](https://unpkg.com/@scandit/web-datacapture-core@8.x)
+- [UNPKG Barcode](https://unpkg.com/@scandit/web-datacapture-barcode@8.x)
+
 :::
 
 Alternatively, you can also put the same JavaScript/TypeScript code in a separate file via:
@@ -284,7 +288,7 @@ We recommend calling [`forLicenseKey`](https://docs.scandit.com/data-capture-sdk
 The `LibraryLocation` configuration option must be provided and point to the location of the Scandit Data Capture `sdc-lib` location (external WebAssembly files): `scandit-datacapture-sdk\*.js` and `scandit-datacapture-sdk\*.wasm`.
 
 WebAssembly requires these separate files which are loaded by our main library at runtime.
-They can be found inside the `sdc-lib` folder in the library you either added and installed via npm or access via a CDN.
+They can be found inside the `sdc-lib` folder you either added and installed via npm or access via a CDN.
 If you installed the library through npm, **these files should be copied and served correctly in a path that will be accessible by the SDK during initialization**.
 
 The configuration option that you provide should then point to the folder containing these files, either as a path of your website or an absolute URL (like the CDN one). **By default the library will look at the root of your website**.
