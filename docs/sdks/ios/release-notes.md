@@ -31,7 +31,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 #### Barcode
 
-* `SparkScanSession` now exposes items scanned through new item-based APIs.
+* SparkScan is not limited to only barcodes anymore, but can also scan items - in other words any combinations of barcodes and text present on a target to be scanned. The feature is available in beta at the moment, please contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out.
 
 #### Smart Label Capture
 

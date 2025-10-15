@@ -33,10 +33,11 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 * Updated the Gradle version for all sample applications to 8.14.3. 
 * A new version of the SparkScan sample application implemented in Jetpack Compose is now available.
+* SparkScan is not limited to only barcodes anymore, but can also scan items - in other words any combinations of barcodes and text present on a target to be scanned. The feature is available in beta at the moment, please contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out.
 
 #### Smart Label Capture
 
-* We’re introducing an enhancement that makes Smart Label Capture more robust and scalable by complementing its on-device model with a larger, more capable model. When the on-device model can’t capture certain labels, the SDK automatically escalates to this enhancement to handle complex or unforeseen cases with high accuracy and reliability. This capability is currently available in `beta`. If you’re interested in trying it, please contact Scandit Support. For configuration details, see `labelDefinition.adaptiveRecognitionEngine`.
+* We’re introducing an enhancement that makes Smart Label Capture more robust and scalable by complementing its on-device model with a larger, more capable model. When the on-device model can’t capture certain labels, the SDK automatically escalates to this enhancement to handle complex or unforeseen cases with high accuracy and reliability. This capability is currently available in `beta`. If you’re interested in trying it, please contact [Scandit Support](mailto:support@scandit.com). For configuration details, see `labelDefinition.adaptiveRecognitionEngine`.
 
 #### ID
 
@@ -59,7 +60,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * The `LabelFieldDefinition` API has been updated with the following changes:
   * Renamed property: `patterns` → `valueRegex`
   * Renamed property: `dataTypePatterns` → `anchorRegex`
-* Receipt Scanning API has been updated with the following changes:
+* Our Receipt Scanning Capture feature, available in beta (contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out), has been updated to improve performance and the API:
   * `ReceiptScanningResult`:
     * Removed properties: `storeNumber`, `storeStreet`, `storeZip`, `storeState`, `storePhone`, `paymentMethod`, and `paymentCurrency`.
     * Added property: `storeAddress` - Full address of the store (Street Number, Street, City, State, NPA).
