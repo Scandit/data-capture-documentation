@@ -444,7 +444,7 @@ const config: Config = {
            ],
          },
        ],
-      copyright: `Copyright © ${new Date().getFullYear()} Scandit<br>Scandit's products are patent protected. Details at <a href="https://www.scandit.com/patents/" target="_blank" rel="noopener noreferrer">scandit.com/patents</a>`,
+      copyright: `Copyright © Scandit AG<br>Scandit's products are patent protected. Details at <a href="https://www.scandit.com/patents/" target="_blank" rel="noopener noreferrer">scandit.com/patents</a>`,
     },
     prism: {
       theme: prismThemes.github,
