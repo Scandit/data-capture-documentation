@@ -12,7 +12,7 @@ keywords:
 
 ## 8.0.0-beta.1
 
-**Released**: October 15, 2025
+**Released**: October 16, 2025
 
 ### New Features
 
