@@ -37,6 +37,29 @@ mode.addListener(new BarcodeFindListener() {
 });
 ```
 
+## Multiple criteria
+
+You can assign different brushes to each BarcodeFindItem, so they appear visually different to the end user. This can be used to make some items stand out more, or to help the user mentally group certain items together.
+
+```java
+Brush availableBrush = new Brush(Color.GREEN, Color.GREEN, 1f);
+Brush expiredBrush = new Brush(Color.RED, Color.RED, 1f);
+
+Set<BarcodeFindItem> items = new HashSet<>();
+items.add(
+    new BarcodeFindItem(
+        new BarcodeFindItemSearchOptions("9783598215438", availableBrush),
+        new BarcodeFindItemContent("Mini Screwdriver Set", "(6-Piece)", null)
+    )
+);
+items.add(
+    new BarcodeFindItem(
+        new BarcodeFindItemSearchOptions("9783598215414", expiredBrush),
+        null
+    )
+);
+```
+
 ## Set up a transformation
 
 Sometimes, the barcode data needs to be transformed. For example, if the barcode contains the product identifier and other information, when a product is scanned, the barcode data is first parsed (via a transformation) and then the input list is checked.
