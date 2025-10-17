@@ -11,7 +11,7 @@ keywords:
 
 # Get Started
 
-The Parser parses data strings (as found in barcodes) into a set of key-value mappings. These data formats are supported: 
+The Parser parses data strings (as found in barcodes) into a set of key-value mappings. These data formats are supported:
 
 - [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/web/parser/hibc.html)
 - [GS1 Application Identifier system](https://docs.scandit.com/data-capture-sdk/web/parser/gs1ai.html)
@@ -20,7 +20,6 @@ The Parser parses data strings (as found in barcodes) into a set of key-value ma
 - [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/web/parser/iata-bcbp.html)
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
-
 
 ## Prerequisites
 
@@ -52,26 +51,26 @@ Or consume it in your `.html` page through a CDN like [JSdelivr](https://www.jsd
 <script type="importmap">
     {
       "imports": {
-        "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/build/js/index.js",
-        "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/build/js/index.js",
+        "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js",
+        "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js",
 
-        "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/",
-        "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/",
+        "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/",
+        "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/",
         
-        "@scandit/web-datacapture-parser": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@7.0.0/build/js/index.js",
-        "@scandit/web-datacapture-parser/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@7.0.0/",
+        "@scandit/web-datacapture-parser": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/build/js/index.js",
+        "@scandit/web-datacapture-parser/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/",
         
       }
     }
 </script>
-<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/build/js/index.js" />
-<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/build/js/index.js" />
-<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@7.0.0/build/js/index.js" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/build/js/index.js" />
 
 <!-- Check the latest version here https://github.com/guybedford/es-module-shims/releases -->
-<script async src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+<script async src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js"></script>
 <script type="module">
-    import { configure, DataCaptureContext } from '@scandit/web-datacapture-core';
+    import { DataCaptureContext } from '@scandit/web-datacapture-core';
     import { barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
     import { parserLoader, Parser, ParserDataFormat } from "@scandit/web-datacapture-parser";
     // ...
@@ -81,17 +80,14 @@ Or consume it in your `.html` page through a CDN like [JSdelivr](https://www.jsd
 ## Basic Sample
 
 ```ts
-import { configure, DataCaptureContext } from '@scandit/web-datacapture-core';
+import { DataCaptureContext } from '@scandit/web-datacapture-core';
 import { barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
 import { parserLoader, Parser, ParserDataFormat } from "@scandit/web-datacapture-parser";
 
-await configure({
-	licenseKey: '-- ENTER YOUR SCANDIT LICENSE KEY HERE --',
-	libraryLocation: new URL('library/engine/', document.baseURI).toString(),
-	moduleLoaders: [barcodeCaptureLoader(), parserLoader()],
+const context: DataCaptureContext = await DataCaptureContext.forLicenseKey('-- ENTER YOUR SCANDIT LICENSE KEY HERE --', {
+ libraryLocation: new URL('library/engine/', document.baseURI).toString(),
+ moduleLoaders: [barcodeCaptureLoader(), parserLoader()],
 });
-
-const context: DataCaptureContext = await DataCaptureContext.create();
 
 const parserIata = await Parser.forFormat(context, ParserDataFormat.IATA_BCBP);
 

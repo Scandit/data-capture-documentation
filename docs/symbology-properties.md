@@ -33,7 +33,7 @@ Symbologies often have different properties, such as symbol count (length of the
 | GS1 DataBar Expanded  | **Mandatory**: mod211 | **Default**: 1-11<br/>**Range**: 1-11 | no| strict |
 | GS1 DataBar Limited  | **Mandatory**: mod89 | **Default**: 1<br/>**Range**: 1 | no| relaxed_sharp_quiet_zone_check<br/>strict |
 | ITF  | **Mandatory**: none<br/>**Supported**: mod10 | **Default**: 6-40<br/>**Range**: 4-50 | no| strict |
-| RM4SCC  | **Mandatory**: mod103 | **Default**: 7-24<br/>**Range**: 4-50 | no|  |
+| ROYAL_MAIL_4STATE  | **Mandatory**: mod103 | **Default**: 7-24<br/>**Range**: 4-50 | no|  |
 | KIX  | **Mandatory**: none | **Default**: 7-24<br/>**Range**: 4-50 | no|  |
 | LAPA  | **Mandatory**: none | **Default**: 16<br/>**Range**: 16 | no|  |
 | USPS Intelligent Mail  | **Mandatory**: none | **Default**: 65<br/>**Range**: 65 | no|  |
@@ -131,7 +131,7 @@ The symbol count corresponds to the number of finder patterns in the code. Each 
 
 The symbol count cannot be changed.  All lengths defined by the standard are supported.
 
-### RM4SCC
+### ROYAL_MAIL_4STATE
 
 The number of symbols corresponds to the number of characters in the code, including the checksum character.
 

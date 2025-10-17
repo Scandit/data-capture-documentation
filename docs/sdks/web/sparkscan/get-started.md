@@ -31,7 +31,7 @@ Devices running the Scandit Data Capture SDK need to have a GPU or the performan
 The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```js
-import { configure, DataCaptureContext } from "@scandit/web-datacapture-core";
+import { DataCaptureContext } from "@scandit/web-datacapture-core";
 import { 
   barcodeCaptureLoader,
   SparkScanSettings, 
@@ -39,11 +39,9 @@ import {
   SparkScanViewSettings 
 } from "@scandit/web-datacapture-barcode";
 
-
-await configure({
+await DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --", {
   libraryLocation: new URL("sdc-lib-self-hosted-path", document.baseURI).toString(),
-  // or use the cdn https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/sdc-lib/
-  licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+  // or use the cdn https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/
   moduleLoaders: [barcodeCaptureLoader()],
 });
 
@@ -58,7 +56,7 @@ For this tutorial, we will set up SparkScan for scanning EAN13 codes. Change thi
 
 ```js
 const sparkScanSettings = new SparkScanSettings();
-const sparkScanSettings.enableSymbologies([Symbology.EAN13UPCA]);
+sparkScanSettings.enableSymbologies([Symbology.EAN13UPCA]);
 ```
 
 Next, create a SparkScan instance with the settings initialized in the previous step:

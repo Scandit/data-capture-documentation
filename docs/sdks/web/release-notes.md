@@ -10,6 +10,96 @@ keywords:
   - web
 ---
 
+## 8.0.0-beta.1
+
+**Released**: October 16, 2025
+
+### New Features
+
+Scandit's SDK 8.0 marks the evolution of data capture from a high-performing scanning tool into an intelligent AI-powered workflow enabler. As frontline operations face mounting pressures with more data points to capture, increasingly complex workflows to navigate, and tighter resource constraints, SDK 8.0 delivers a set of innovations that:
+
+* Adapt its scanning settings and UI to context by analyzing the scanning environment and user intent;
+* Automate the capture of any data format, barcode clustering, task handling or camera settings;
+* Accelerate critical use cases to maximize ROI through intuitive, streamlined scanning workflows, using interactive AR-guidance, adaptive UI and out-of-the-box custom-branded passenger experiences.
+
+With SDK 8.0 businesses can transform data capture from a basic function to a strategic advantage. It enables intelligent scanning that:
+
+* Understands not just what is being scanned, but also what you want to scan and why you’re scanning it
+* Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.
+
+#### Core
+
+* The `Camera` API has been completely redesigned for this release. See the API reference for complete details.
+* The minimum Chrome version supported is now 85+.
+* The `configure` method has been remove in favour of `DataCaptureContext.forLicenseKey`
+
+#### Barcode
+
+* Smart Scan Selection is now available in SparkScan for the Web SDK.
+* Adapted `SparkScanView` to now be usable as a web component. Also added a `SparkScanReactSample` to demonstrate this usage.
+* The following have been added to MatrixScan AR:
+  * `BarcodeArView.getHighlightForBarcode`
+  * `BarcodeAirView.getAnnotationForBarcode`
+
+#### Smart Label Capture
+
+* We’re introducing an enhancement that makes Smart Label Capture more robust and scalable by complementing its on-device model with a larger, more capable model. When the on-device model can’t capture certain labels, the SDK automatically escalates to this enhancement to handle complex or unforeseen cases with high accuracy and reliability. This capability is currently available in `beta`. If you’re interested in trying it, please contact Scandit Support. For configuration details, see `labelDefinition.adaptiveRecognitionEngine`.
+
+#### ID
+
+* ID Capture now supports full-frame anonymization.
+* Added `CapturedId::isCitizenPassport`, which indicates whether the passport was issued to a citizen of the issuing country. Returns `false` for travel documents such as refugee, stateless, or alien passports, and for any passports issued by organizations rather than states.
+* The following Chinese travel permits now extract VIZ + MIZ data during double-sided scanning flows:
+  * CT - Taiwan Residents Mainland Travel Permit
+  * W - Mainland Residents Exit-Entry Permit to and from Hong Kong and Macao
+  * CD - Mainland Residents Entry-Exit Permit to and from Taiwan
+
+### Behavioral Changes
+
+#### Barcode
+
+* Symbology `RM4SCC` has been renamed to `ROYAL_MAIL_4STATE`.
+* Changed the default highlight brush in SparkScan and Barcode Capture.
+
+#### Label
+
+* The `LabelFieldDefinition` API has been updated with the following changes:
+  * Renamed property: `patterns` → `valueRegex`
+  * Renamed property: `dataTypePatterns` → `anchorRegex`
+* Receipt Scanning API has been updated with the following changes:
+  * `ReceiptScanningResult`:
+    * Removed properties: `storeNumber`, `storeStreet`, `storeZip`, `storeState`, `storePhone`, `paymentMethod`, and `paymentCurrency`.
+    * Added property: `storeAddress` - Full address of the store (Street Number, Street, City, State, NPA).
+    * Renamed property: `paymentSubtotal` → `paymentPreTaxTotal` - Total balance before taxes are applied.
+  * `ReceiptScanningLineItem`:
+    * Removed property: `category`.
+    * Renamed properties: `price` → `unitPrice` (Price for a single unit of the item), `total` → `totalPrice` (Total price for a specific product, quantity × unitPrice).
+
+#### ID
+
+* The configuration for the following documents has been changed as detailed below:
+  * Australian mobile driver licenses (mDL) are now treated as normal documents, with no separate mode.
+  * US Green Cards are now treated as residence permits.
+* Removed the deprecated API `DateResult::toDate`. Use `DateResult::toLocalDate` or `DateResult::toUtcDate` instead.
+
+### Bug Fixes
+
+#### ID
+
+* Fixed a bug that could get the scanner stuck when scanning a US passport card.
+* Fixed an issue where unavailable dates would not be properly set to `null` in an ID scan result.
+
+### Deprecations
+
+#### Core
+
+* `VideoResolution::Auto` is now deprecated. Please use the capture mode's `recommendedCameraSettings` for the best results.
+
+#### Barcode
+
+* All previously deprecated APIs have been removed in this release.
+* `DataCaptureContext.create`, `createWithOptions` and `configure` have been removed in favor of the `forLicenseKey` method.
+
 ## 7.6.1
 
 **Released**: September 18, 2025
@@ -378,7 +468,7 @@ No updates for this framework in this release.
 * Launched DataConsistency Verification, which identifies suspicious documents by verifying the consistency of data encoded in various parts of the document. This helps detect potential tampering or anomalies.
 * Launched a Rejection API to reject documents based on predefined criteria, streamlining validation processes. Examples include rejecting expired documents or those belonging to underage holders.
 * Enhanced the scanning capabilities for specific document types. When `ScannerType::FullDocument` is enabled, seamless scanning is now supported even for documents where the Scandit DataCapture SDK offers only Machine Readable Zone (MRZ) scanning.
-* Added support for scanning the Machine Readable Zone of  non-standard Indian passports, where an MRZ line consists of 42 characters instead of 44. 
+* Added support for scanning the Machine Readable Zone of  non-standard Indian passports, where an MRZ line consists of 42 characters instead of 44.
 * Added support for scanning the Machine Readable Zone of the Chinese Mainland Travel Permit issued for non-Chinese citizens being residents of Hong Kong or Macau.
 * Unified the value of the sex field from VIZ and MRZ results so that it is always one of the values `female`, `male` or `unspecified`.
 * Added `UsRealIdStatus`.
@@ -405,7 +495,7 @@ No updates for this framework in this release.
 
 #### ID
 
-* Fixed an issue where it was not possible to scan the Visual Inspection Zone of passports if a license included the Visual Inspection Zone flag, but no Machine Readable Zone flag. 
+* Fixed an issue where it was not possible to scan the Visual Inspection Zone of passports if a license included the Visual Inspection Zone flag, but no Machine Readable Zone flag.
 * Fixed an issue where the scanning would become unresponsive when scanning certain passports.
 * Fixed an issue where the scanning would become unresponsive when scanning the back side of Romanian IDs.
 * Fixed an issue where some residence permits were incorrectly identified as ID cards when scanning their Machine Readable Zone.
@@ -493,8 +583,8 @@ We’ve completely redesigned the ID Capture API to streamline document capture 
 
 * The NPM package scope for all Scandit packages has been changed to `@scandit/web-datacapture-*`.
 * The Parser is now a standalone NPM package as opposed to being bundled with the Barcode package.
-*  Model files now have the file extension set to .model for easier web serving.
-*  The engine library location has been changed from `build/engine` to `sdc-lib`.
+* Model files now have the file extension set to .model for easier web serving.
+* The engine library location has been changed from `build/engine` to `sdc-lib`.
 * Feedback resources (e.g. audio files for beep) are now only loaded when needed. Additionally, the asset sizes have been optimized.
 * The CSS templates bundled are now minified.
 
@@ -509,14 +599,15 @@ In 7.0, we removed all APIs that were deprecated during the lifetime of 6.0. Bef
 #### Barcode
 
 The following SparkScan APIs have been deprecated in 7.0:
-  * `SparkScanView.TorchButtonVisible`
-  * `SparkScanView.StopCapturingText`
-  * `SparkScanView.StartCapturingText`
-  * `SparkScanView.ResumeCapturingText`
-  * `SparkScanView.ScanningCapturingText`
-  * `SparkScanView.CaptureButtonBackgroundColor`
-  * `SparkScanView.CaptureButtonActiveBackgroundColor`
-  * `SparkScanView.CaptureButtonTintColor`
+
+* `SparkScanView.TorchButtonVisible`
+* `SparkScanView.StopCapturingText`
+* `SparkScanView.StartCapturingText`
+* `SparkScanView.ResumeCapturingText`
+* `SparkScanView.ScanningCapturingText`
+* `SparkScanView.CaptureButtonBackgroundColor`
+* `SparkScanView.CaptureButtonActiveBackgroundColor`
+* `SparkScanView.CaptureButtonTintColor`
 
 #### ID
 

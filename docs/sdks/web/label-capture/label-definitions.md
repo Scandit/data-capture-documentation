@@ -1,6 +1,5 @@
 ---
-description: "A **Label Definition** is a configuration that defines the label, and its relevant fields, that Smart Label Capture should recognize and extract during scans.                                                                            "
-
+description: "A **Label Definition** is a configuration that defines the label, and its relevant fields, that Smart Label Capture should recognize and extract during scans."
 framework: web
 toc_max_heading_level: 4
 keywords:

@@ -218,10 +218,14 @@ const config: Config = {
           },
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          lastVersion: "current",
+          lastVersion: "7.6.1",
           versions: {
             current: {
-              label: '7.6.0',
+              label: '8.0.0',
+              banner: 'unreleased',
+              badge: false,
+            },
+            '7.6.1': {
               banner: 'none',
               badge: false,
             },
@@ -246,13 +250,13 @@ const config: Config = {
   ],
 
   themeConfig: {
-    announcementBar: {
-      id: 'new_version',
-      content: 'Scandit Smart Data Capture SDK Version 7 is now available! See the <a href="/migrate-6-to-7">Migration Guide</a> to get started today.',
-      backgroundColor: '#065db8',
-      textColor: '#f0f0f0',
-      isCloseable: false,
-    },
+    // announcementBar: {
+    //  id: 'new_version',
+    //  content: 'Scandit Smart Data Capture SDK Version 8 is now available! See the <a href="/migrate-7-to-8">Migration Guide</a> to get started today.',
+    //  backgroundColor: '#065db8',
+    //  textColor: '#f0f0f0',
+    //  isCloseable: false,
+    // },
     algolia: {
       appId: "RYKD97E6SH",
       apiKey: "8372250579ef3ea82cc637a28e50f73f",
@@ -440,7 +444,7 @@ const config: Config = {
            ],
          },
        ],
-      copyright: `Copyright © ${new Date().getFullYear()} Scandit<br>Scandit's products are patent protected. Details at <a href="https://www.scandit.com/patents/" target="_blank" rel="noopener noreferrer">scandit.com/patents</a>`,
+      copyright: `Copyright © Scandit AG<br>Scandit's products are patent protected. Details at <a href="https://www.scandit.com/patents/" target="_blank" rel="noopener noreferrer">scandit.com/patents</a>`,
     },
     prism: {
       theme: prismThemes.github,

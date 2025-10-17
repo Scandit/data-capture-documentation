@@ -49,13 +49,12 @@ For ID Capture, the result of [idCaptureLoader()](https://docs.scandit.com/data-
 In this example, we will scan VIZ documents, so we also need to set [IdCaptureLoaderOptions.enableVIZDocuments](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#property-scandit.datacapture.id.IIdCaptureLoaderOptions.EnableVIZDocuments) to `true`:
 
 ```ts
-import { configure } from "@scandit/web-datacapture-core";
+import { DataCaptureContext } from "@scandit/web-datacapture-core";
 import { idCaptureLoader } from "@scandit/web-datacapture-id";
 
-await configure({
-	licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
-	libraryLocation: "/self-hosted-sdc-lib/",
-	moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
+const context = await DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --", {
+ libraryLocation: "/self-hosted-sdc-lib/",
+ moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
 });
 ```
 
@@ -85,18 +84,12 @@ view.showProgressBar();
 You may not need to do this so early if your application loads the SDK in the background (e.g. on startup) and the view is already available when the user requests scanning.
 :::
 
-## Context
+## Attach Context to View
 
-The main conductor to add capture capabilities to your application is the [data capture context](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). Create an instance of it.
+If you already created a view earlier (as shown in the "Create the View" section), you should now attach the context to it:
 
 ```js
-import { DataCaptureContext } from "@scandit/web-datacapture-core"
-
-// the license key used in configure() will be used
-const context = await DataCaptureContext.create();
-
-// if you already have a view, attach the new context to it
-view.setContext(context);
+await view.setContext(context);
 ```
 
 ## Add the Camera
@@ -108,7 +101,7 @@ import { Camera } from "@scandit/web-datacapture-core";
 import { IdCapture } from "@scandit/web-datacapture-id";
 
 
-const camera = Camera.default;
+const camera = Camera.pickBestGuess();
 await context.setFrameSource(camera);
 
 const cameraSettings = IdCapture.recommendedCameraSettings;
@@ -130,14 +123,14 @@ By default, [anonymized data](./advanced.md#configure-data-anonymization) is not
 
 ```ts
 import {
-	IdCapture,
-	IdCaptureSettings,
-	IdCard,
-	Region,
-	RegionSpecific,
-	Passport,
-	SingleSideScanner,
-	FullDocumentScanner
+ IdCapture,
+ IdCaptureSettings,
+ IdCard,
+ Region,
+ RegionSpecific,
+ Passport,
+ SingleSideScanner,
+ FullDocumentScanner
 } from "@scandit/web-datacapture-id";
 
 const settings = new IdCaptureSettings();
@@ -177,12 +170,12 @@ To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/
 import { type CapturedId, RejectionReason } from "@scandit/web-datacapture-id";
 
 idCapture.addListener({
-	didCaptureId: (capturedId: CapturedId) => {
-		// Success! Handle extracted data here.
-	},
-	didRejectId: (capturedId: CapturedId, reason: RejectionReason) => {
-		// Something went wrong. Inspect the reason to determine the follow-up action.
-	}
+ didCaptureId: (capturedId: CapturedId) => {
+  // Success! Handle extracted data here.
+ },
+ didRejectId: (capturedId: CapturedId, reason: RejectionReason) => {
+  // Something went wrong. Inspect the reason to determine the follow-up action.
+ }
 });
 ```
 
@@ -198,16 +191,16 @@ On a successful scan you may read the extracted data from `capturedId`:
 
 ```ts
 didCaptureId: async (capturedId: CapturedId) => {
-	// stop processing new frames, we have a result
-	await idCapture.setEnabled(false);
+ // stop processing new frames, we have a result
+ await idCapture.setEnabled(false);
 
-	const fullName = capturedId.fullName;
-	const dateOfBirth = capturedId.dateOfBirth;
-	const dateOfExpiry = capturedId.dateOfExpiry;
-	const documentNumber = capturedId.documentNumber;
+ const fullName = capturedId.fullName;
+ const dateOfBirth = capturedId.dateOfBirth;
+ const dateOfExpiry = capturedId.dateOfExpiry;
+ const documentNumber = capturedId.documentNumber;
 
-	// Process data:
-	processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
+ // Process data:
+ processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
 }
 ```
 
@@ -225,13 +218,13 @@ You may wish to implement the follow-up action based on the reason of failure:
 
 ```ts
 onIdRejected: (capturedId: CapturedId, reason: RejectionReason) => {
-	if (reason === RejectionReason.Timeout) {
-		// Ask the user to retry, or offer alternative input method.
-	} else if (reason === RejectionReason.DocumentExpired) {
-		// Ask the user to provide alternative document.
-	} else if (reason === RejectionReason.NotAcceptedDocumentType) {
-		// Inform the user which documents are accepted.
-	}
+ if (reason === RejectionReason.Timeout) {
+  // Ask the user to retry, or offer alternative input method.
+ } else if (reason === RejectionReason.DocumentExpired) {
+  // Ask the user to provide alternative document.
+ } else if (reason === RejectionReason.NotAcceptedDocumentType) {
+  // Inform the user which documents are accepted.
+ }
 }
 ```
 
@@ -243,8 +236,8 @@ The overlay informs and guides the user during the scanning process. Create an i
 import { IdCaptureOverlay } from "@scandit/web-datacapture-id";
 
 const overlay = await IdCaptureOverlay.withIdCaptureForView(
-	idCapture,
-	dataCaptureView
+ idCapture,
+ dataCaptureView
 );
 ```
 

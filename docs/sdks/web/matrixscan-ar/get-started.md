@@ -35,12 +35,10 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to [you
 The first step to add capture capabilities to your application is to create a new Data Capture Context. Sdk must be configured first with a valid Scandit Data Capture SDK license key.
 
 ```typescript
-    await configure({
-      licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+    const context = await DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
       libraryLocation: new URL("library/engine/", document.baseURI).toString(),
       moduleLoaders: [barcodeCaptureLoader({ highEndBlurryRecognition: false })],
     });
-    const context = await DataCaptureContext.create();
 
     const dataCaptureView = new DataCaptureView();
     // #root element should be present in .html document
@@ -69,11 +67,11 @@ The `BarcodeArView` is where you provide the [`highlightProvider`](https://docs.
 
 The `BarcodeArView` appearance can be customized through [`BarcodeArViewSettings`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-ar-view-settings.html#class-scandit.datacapture.barcode.check.ui.BarcodeArViewSettings), and the corresponding settings for your desired highlights and/or annotations, to match your application’s look and feel. The following settings can be customized:
 
-* Audio and haptic feedback
-* Torch button visibility and its position
-* Switch camera button visibility and its position
-* Zoom control visibility and its position
-* The size, colors, and styles of the highlight and annotation overlays
+- Audio and haptic feedback
+- Torch button visibility and its position
+- Switch camera button visibility and its position
+- Zoom control visibility and its position
+- The size, colors, and styles of the highlight and annotation overlays
 
 ```typescript
 const soundEnabled = true;
@@ -113,6 +111,7 @@ barcodeArView.annotationProvider= {
     callback(infoAnnotation);
 }
 ```
+
 ## Register a listener for highlights click
 
 If you want a callback when an highlight is tapped, you can also register a `BarcodeArViewUiListener`
