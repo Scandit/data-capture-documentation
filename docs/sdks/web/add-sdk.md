@@ -238,13 +238,53 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
 </html>
 ```
 
-## Install via npm
+## Install via package manager
 
-To add the packages via npm, you run the following command from your project's root folder:
+To add the packages via your preferred package manager, run the following command from your project's root folder:
+
+<Tabs groupId="packageManager">
+
+<TabItem value="npm" label="npm">
 
 ```sh
 npm install --save @scandit/web-datacapture-core @scandit/web-datacapture-barcode
 ```
+
+</TabItem>
+
+<TabItem value="yarn" label="yarn">
+
+```sh
+yarn add @scandit/web-datacapture-core @scandit/web-datacapture-barcode
+```
+
+</TabItem>
+
+<TabItem value="pnpm" label="pnpm">
+
+```sh
+pnpm add @scandit/web-datacapture-core @scandit/web-datacapture-barcode
+```
+
+</TabItem>
+
+<TabItem value="bun" label="bun">
+
+```sh
+bun add @scandit/web-datacapture-core @scandit/web-datacapture-barcode
+```
+
+</TabItem>
+
+<TabItem value="deno" label="deno">
+
+```sh
+deno add npm:@scandit/web-datacapture-core npm:@scandit/web-datacapture-barcode
+```
+
+</TabItem>
+
+</Tabs>
 
 :::note
 You can also specify a version @`<version>`.
@@ -293,8 +333,9 @@ If you installed the library through npm, **these files should be copied and ser
 
 The configuration option that you provide should then point to the folder containing these files, either as a path of your website or an absolute URL (like the CDN one). **By default the library will look at the root of your website**.
 
-Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the `libraryLocation` option,
-either by ensuring the served files are up-to-date or the path/URL specifies a specific version.
+:::caution Version Matching Required
+The npm package version and the `sdc-lib` files must be from the exact same SDK version. For example, if you have `@scandit/web-datacapture-barcode@8.0.0` in your `package.json`, you must serve the `sdc-lib` folder from `node_modules/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/`. Mismatched versions will cause runtime errors and unexpected behavior.
+:::
 
 In case a common CDN is used (jsDelivr or UNPKG) the library will automatically, internally set up the correct URLs pointing to the files needed for the matching library version.
 **It is highly recommended to handle the serving of these files yourself on your website/server, ensuring optimal compression, correct WASM files MIME type, no request redirections, and correct caching headers usage.**
@@ -304,7 +345,13 @@ This will aid in faster loading.
 
 We recommend serving the `sdc-lib` folder yourself.
 
-When doing so, be sure to copy the entire folder and serve the files correctly by setting up the correct MIME type for the `.wasm`, `.model`, and `.js` files. Some common examples are provided below:
+:::caution Important: Full Folder Copy and Version Matching
+You must copy the **entire `sdc-lib` folder recursively** from the installed Scandit package to your server. This includes all subdirectories and files. The `sdc-lib` folder must come from a package version that exactly matches your npm package version. For example, if you have `@scandit/web-datacapture-barcode@8.0.0`, you must copy the `sdc-lib` from `node_modules/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/`.
+
+Additionally, you should copy `sdc-lib` from all installed Scandit packages (`@scandit/web-datacapture-core`, `@scandit/web-datacapture-barcode`, `@scandit/web-datacapture-id`, etc.) to the same location.
+:::
+
+Once copied, be sure to serve the files correctly by setting up the correct MIME type for the `.wasm`, `.model`, and `.js` files. Some common examples are provided below:
 
 <Tabs groupId="selfhost">
 
