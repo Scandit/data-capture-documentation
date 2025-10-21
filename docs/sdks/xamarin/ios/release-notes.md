@@ -17,6 +17,12 @@ keywords:
 
 Starting this release we are no longer upgrading Xamarin and Forms solutions for the Data Capture SDK. Microsoft ended support for these frameworks on the 1st of May 2024, which locks them into discontinued tooling. Customers may continue to use the latest releases of SDK version 7.x as per our support policy.
 
+## 7.6.2
+
+**Released**: October 20, 2025
+
+No updates for this framework in this release.
+
 ## 7.6.1
 
 **Released**: September 18, 2025

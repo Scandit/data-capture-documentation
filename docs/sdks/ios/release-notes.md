@@ -94,6 +94,16 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 * All previously deprecated APIs have been removed in this release.
 
+## 7.6.2
+
+**Released**: October 20, 2025
+
+### Bug Fixes
+
+#### Smart Label Capture
+
+* A new method for `ReceiptScanningListener` was added. This is being invoked when a connection error occurs while trying to recognize a document.
+
 ## 7.6.1
 
 **Released**: September 18, 2025

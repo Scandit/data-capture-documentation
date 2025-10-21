@@ -69,6 +69,12 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 * All previously deprecated APIs have been removed in this release.
 
+## 7.6.2
+
+**Released**: October 20, 2025
+
+No updates for this framework in this release.
+
 ## 7.6.1
 
 **Released**: September 18, 2025

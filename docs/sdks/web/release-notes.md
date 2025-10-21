@@ -100,6 +100,24 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * All previously deprecated APIs have been removed in this release.
 * `DataCaptureContext.create`, `createWithOptions` and `configure` have been removed in favor of the `forLicenseKey` method.
 
+## 7.6.2
+
+**Released**: October 20, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a bug where the scanner wasn't working in Firefox for Android.
+
+#### Barcode
+
+* `BarcodeFind` cards now renders the default icon instead of the gray box.
+
+#### Smart Label Capture
+
+* A new method for `ReceiptScanningListener` was added. This is being invoked when a connection error occurs while trying to recognize a document.
+
 ## 7.6.1
 
 **Released**: September 18, 2025

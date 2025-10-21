@@ -122,6 +122,37 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
   * SparkScanViewDefaults.DefaultCaptureButtonBackgroundColor property
   * SparkScanViewDefaults.DefaultCaptureButtonTintColorProperty 
 
+## 7.6.2
+
+**Released**: October 20, 2025
+
+### New Features
+
+#### Core
+
+* Added support for XCover 7 hardware button as scan trigger.
+
+#### Barcode
+
+* Added a new `stopScanning` method to `SparkScanView` that moves the `SparkScanView` to idle state and turns off camera.
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a class duplication build error caused by embedding `snapchat-djinni` sources.
+* Fixed CWE-117 vulnerability.
+* Fixed a flickering camera preview issue on some devices.
+
+#### Barcode
+
+* Fixed nullability of `BarcodeArResponsiveAnnotation` constructor.
+
+#### Smart Label Capture
+
+* Fixed timing issue that might cause overlays to get stuck on screen in `LabelCaptureAdvancedOverlay`.
+* A new method for `ReceiptScanningListener` was added. This is being invoked when a connection error occurs while trying to recognize a document.
+
 ## 7.6.1
 
 **Released**: September 18, 2025

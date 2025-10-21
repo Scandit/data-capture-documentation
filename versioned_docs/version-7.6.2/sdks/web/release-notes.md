@@ -1,27 +1,32 @@
 ---
+description: "Release notes and updates for the Scandit Web SDK."
 toc_max_heading_level: 3
-displayed_sidebar: xamarinFormsSidebar
+displayed_sidebar: webSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
-framework: xamarinForms
+framework: web
 keywords:
-  - xamarinForms
+  - web
 ---
-
-## 8.0.0-beta.1
-
-**Released**: October 16, 2025
-
-### Deprecation of Xamarin and Forms Plugins
-
-Starting this release we are no longer upgrading Xamarin and Forms solutions for the Data Capture SDK. Microsoft ended support for these frameworks on the 1st of May 2024, which locks them into discontinued tooling. Customers may continue to use the latest releases of SDK version 7.x as per our support policy.
 
 ## 7.6.2
 
 **Released**: October 20, 2025
 
-No updates for this framework in this release.
+### Bug Fixes
+
+#### Core
+
+* Fixed a bug where the scanner wasn't working in Firefox for Android.
+
+#### Barcode
+
+* `BarcodeFind` cards now renders the default icon instead of the gray box.
+
+#### Smart Label Capture
+
+* A new method for `ReceiptScanningListener` was added. This is being invoked when a connection error occurs while trying to recognize a document.
 
 ## 7.6.1
 
@@ -34,11 +39,31 @@ No updates for this framework in this release.
 * Fixed decoding of some ASCII-encoded DataMatrix codes ending with '254' codeword followed by padding.
 * Improved support for missing or damaged timing patterns in Aztec codes.
 
+#### Barcode
+
+* Fixed an issue where `BarcodeFindItemContent` was not correctly rendering the information.
+
 ## 7.6.0
 
 **Released**: September 15, 2025
 
 ### New Features
+
+#### Core
+
+* It is now possible to set up the `Camera` into the Context before calling `configure()`, enabling the loading of WASM files while accessing the camera.
+* The following new methods are available in `DataCaptureContext`:
+  * `setMode`: Sets a mode to be the active mode in the context.
+  * `removeCurrentMode`: Removes the currently active mode in the context.
+  * `static sharedInstance`: Returns a singleton instance of DataCaptureContext. This instance is unusable until properly configured by calling initialize() on it.
+  * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
+  * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
+* See Deprecations, below, for methods deprecated in `DataCaptureContext`.
+* Added `BarcodeScan` to `BarcodeArAnnotationTrigger` for persistent annotation behavior in MatrixScan AR.
+
+#### Smart Label Capture
+
+* Smart Label Capture now includes customizable feedback configurable via `LabelCapture.feedback`. The feedback is now automatic on scan, requiring less code to set it up.
 
 #### ID
 
@@ -56,15 +81,41 @@ No updates for this framework in this release.
 
 ### Bug Fixes
 
+#### Barcode
+
+* Fixed a bug where tapping the mini preview resize control would prevent scanning on the next switch to active state.
+* Fixed an issue in MatrixScan AR where certain code 128 were not correctly painted in the `BarcodeArView`.
+
+#### Smart Label Capture
+
+* Fixed an incorrect implementation of the `DataCaptureMode` interface in `LabelCapture` that would result in errors when calling `context.AddMode` in TypeScript projects.
+
 #### ID
 
 * ID scanning results  for `gender` of documents that do not specify a gender are now correctly mapped as `unspecified`.
 
 ### Behavioral Changes
 
+#### Core
+
+* The minimum supported Chrome version is now 64+.
+
+#### ID
+
 * The MRZ fields `optional` and `optional1` have been renamed to `optionalDataInLine1` and `optionalDataInLine2`, respectively.
 
 ### Deprecations
+
+#### Core
+
+* The following methods have been deprecated from `DataCaptureContext`:
+  * `addMode`: Replaced by `setMode`, since only 1 mode can be active at a time in a `DataCaptureContext`.
+  * `removeAllModes`: Replaced by `removeCurrentMode`, since only 1 mode can be active at a time in a `DataCaptureContext`.
+* Deprecated `Camera` and `CameraAccess`. Both will be replaced in version 8.0.
+
+#### Barcode
+
+* Deprecated `BarcodeCaptureOverlayStyle` and `BarcodeCaptureOverlay.style`.
 
 #### ID
 
@@ -76,7 +127,12 @@ No updates for this framework in this release.
 
 **Released**: September 4, 2025
 
-No updates for this framework in this release.
+### Bug Fixes
+
+#### Core
+
+* Fixed browser minimum support to be at least Chrome 64+.
+* Some animations may not work correctly in older browsers, such as Chrome `<75`. A warning has been added suggesting `web-animation-js` polyfill for better UX.
 
 ## 7.5.0
 
@@ -87,22 +143,29 @@ No updates for this framework in this release.
 #### Barcode
 
 * SparkScan now supports Smart Scan Selection. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Users might have to manually switch to a special, more precise scanning mode (Target Mode), which is inefficient. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.
+* Barcode AR now supports customizable notifications.
+* Tappable area for `BarcodeArStatusIconAnnotation` is now at least 48px.
+* Added ARIA labels to `DataCaptureView` controls.
 * Improved support for non-standard GS1 AI codes.
 * The `Barcode` class now exposes a module count.
 
 #### ID
 
 * Scanning of ISO-18013 compliant mobile driver licenses is now supported in select justifications (Queensland Digital License).
+* Added a new listener (`didLocalizeId`) called whenever a personal identification document or its part is localized within a frame.
+* Exposed partial result after front-side scan via `IdCaptureSettings.notifyOnPartialCapture`.
 
 ### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue where `BarcodeArStatusIconAnnotation.icon` could cause an error if the icon was not ready.
+* Fixed a bug where continuous scanning in SparkScan was stopped when changing device orientation.
+* Fixed an issue where `BarcodeArStatusIconAnnotation.backgroundColor` setter and getter were not working as expected.
 
 #### ID
 
 * Fixed bug in `AAMVABarcodeVerifier` that triggered error callbacks for each verification after updating from some older SDK version.
-
-### Behavioral Changes
-
-* Sample applications now use `https` to access the DataCapture SPM repository instead of `ssh`.
 
 ### Deprecations
 
@@ -118,13 +181,26 @@ No updates for this framework in this release.
 
 **Released**: August 15, 2025
 
-No updates for this framework in this release.
+### New Features
+
+#### Core
+
+* Improved support for non-standard GS1 AI codes.
+
+### Bug Fixes
+
+* Fixed a bug in SparkScan where continuous scanning was stopped when changing device orientation.
+* Fixed an issue where `BarcodeArStatusIconAnnotation.backgroundColor` setter and getter were not working as expected.
 
 ## 7.4.1
 
 **Released**: July 14, 2025
 
-No updates for this framework in this release.
+### Bug Fixes
+
+#### ID
+
+* Fixed an issue with missing `BirthName` on German passports. `BirthName` is now available on `additionalNameInformation` field.
 
 ## 7.4.0
 
@@ -134,12 +210,17 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* Add the possibility via `BarcodeCountCaptureList.SetBarcodeDataTransformer` to set a barcode data transformer. The transformer will be applied to transform the barcode data before matching to the target barcodes.
+* The `LaserViewfinder` is now available.
 
 #### ID
 
 * Added support for Spanish residence permit "Green NIE".
 * Added support for US Medical Marijuana IDs from West Virginia, Florida, Pennsylvania, Nevada, New York, and Oklahoma.
+
+#### Smart Label Capture
+
+* Smart Label Capture introduces a new workflow: Validation Flow. This workflow allows users to confirm OCR results, manually correct errors, or individually capture missing fields without needing to rescan the entire label. It is designed to address common issues such as glare, occlusion, and poor lighting that lead to incomplete label reads, helping you maintain high data integrity.
+* Added `setDataPatterns` and `resetDataPatterns` methods to Weight, UnitPrice, and TotalPrice builders.
 
 ### Performance Improvements
 
@@ -150,6 +231,9 @@ No updates for this framework in this release.
 * Improved AAMVA Barcode Verification accuracy for Missouri documents.
 
 ### Bug Fixes
+
+* Fixed an issue where the `triggerButtonCollapseTimeout` was being triggered in the wrong scenarios.
+* Accessing `localStorage` or `sessionStorage` in contexts where they're explicitly disabled now is handled correctly.
 
 #### ID
 
@@ -175,7 +259,9 @@ No updates for this framework in this release.
 
 **Released**: June 13, 2025
 
-No updates for this framework in this release.
+### Bug Fixes
+
+* Fixed an issue where the `triggerButtonCollapseTimeout` was being triggered in the wrong scenarios.
 
 ## 7.3.0
 
@@ -185,17 +271,31 @@ No updates for this framework in this release.
 
 #### Barcode
 
+* For all MatrixScan products, the behavior of AR elements such as popovers and annotation has been updated to allow them to go outside the viewport.
+* The ArUco symbology is now supported in the Web SDK.
 * Added support for structured append QR codes in all MatrixScan modes. They are exposed over `ScObjectCountingSession` and rendered as a group. The API is identical to how structured append is used in a single barcode use case: the entire structured append data is accessible on all sub code results.
 
 #### ID
 
-* Unify the result value when parsing the sex field, including added support for special characters used, so that it is always one of the values `female`, `male` or `unspecified`
+* Unify the result value when parsing the sex field, including added support for special characters used, so that it is always one of the values `female`, `male` or `unspecified`.
+* Added support mobile driver's license (mDL) scanning.
 
 ### Bug Fixes
 
 #### Barcode
 
 * Fixed an issue in SparkScan where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
+* Fixed minor JavaScript errors by replacing access to unavailable API in Safari < 15.4 with available ones.
+* Fixed error not being catchable from the `configure()` function when the WASM file fails to load.
+* Fixed an issue where `SparkScanView` did not take into account the parent element dimensions.
+
+#### ID
+
+* Fixed an issue with the partial cleanup of resources when removing the Id Capture mode.
+
+#### Smart Label Capture
+
+* Fixed an issue where `ExpiryDateTextBuilder` and `PackingDateTextBuilder` could override the patterns even when the `labelDateFormat` was set.
 
 ### Behavioral Changes
 
@@ -225,7 +325,11 @@ No updates for this framework in this release.
 
 **Released**: April 24, 2025
 
-No updates for this framework in this release.
+### Bug Fixes
+
+* Fixed minor JavaScript errors by replacing access to unavailable API in Safari v15.4+ with available ones.
+* SparkScanView is now taking into account the parent element dimensions.
+* Fixed an issue where the mini preview was closed after a scan, even if the preview behavior was set to `Persistent`.
 
 ## 7.2.0
 
@@ -233,15 +337,15 @@ No updates for this framework in this release.
 
 ### New Features
 
+#### Barcode
+
+* Releasing Smart Label Capture, our new product that enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.
+* Added `DataCaptureContext` shared instance API.
+* Added the `isPulsing` property to circle highlights in MatrixScan AR, enabling a pulsing animation effect.
+
 #### ID
 
 * ID Capture now supports the decoding of mobile driver’s licenses (currently limited to Australian licenses).
-
-### Performance Improvements
-
-#### Barcode
-
-* We further optimized the resources management in SparkScan, improving battery life when in Target Mode.
 
 ### Behavioral Changes
 
@@ -249,10 +353,7 @@ No updates for this framework in this release.
 
 ### Bug Fixes
 
-#### Core
-
-* Fixed rare incorrect QR code reads of codes with a low error correction level.
-* Fixed a bug in Barcode Selection that caused inconsistent selection times for single barcodes.
+* Fixed an issue in `SparkScanView` that could result in duplicate trigger buttons.
 
 ## 7.1.3
 
@@ -266,7 +367,8 @@ No updates for this framework in this release.
 
 ### Bug Fixes
 
-* Fixed an issue in SparkScan where the floating button would appear in the center as opposed to bottom-right of the screen.
+* Fixed a rare issue in SparkScan that would not allow for properly drawing the barcode location.
+* Fixed an issue where in some browsers `error 28` was shown when some internal files had names exceeding a certain number of characters.
 
 ## 7.1.1
 
@@ -284,13 +386,10 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* MatrixScan Count now includes the ability to [cluster barcodes](/sdks/xamarin/forms/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
-* MatrixScan Count now includes the concept of a `Barcode Spacial Grid`, bringing the ability to map totes in a grid-like structure. Scanned codes will be returned with their relative location and can be displayed in a map view. This allows for fast and error-free in-store picking using dedicated carts and totes. The following classes have been added:
-  * `BarcodeSpatialGrid`
-  * `BarcodeSpatialGridEditorView`
-  * `BarcodeSpatialGridEditorViewSettings`
-  * `BarcodeSpatialGridEditorViewListener`
-* Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/xamarin.forms/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
+* [MatrixScan AR](/sdks/web/matrixscan-ar/intro.md) in now available, offering prebuilt views designed to quickly build custom workflows with augmented reality for your existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
+* Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
+* User Facing Camera in SparkScan: It is now possible to switch to the user-facing camera for scanning. This is useful in specific use-cases where the rear camera is not accessible or barcodes are hard to reach otherwise. See:
+  * `SparkScanView.cameraSwitchButtonVisible`
 
 #### ID
 
@@ -300,20 +399,7 @@ No updates for this framework in this release.
 * Added support for scanning the Machine Readable Zone of  non-standard Indian passports, where an MRZ line consists of 42 characters instead of 44. 
 * Added support for scanning the Machine Readable Zone of the Chinese Mainland Travel Permit issued for non-Chinese citizens being residents of Hong Kong or Macau.
 * Unified the value of the sex field from VIZ and MRZ results so that it is always one of the values `female`, `male` or `unspecified`.
-
-#### Core
-
-* DataCaptureContext can be used as a singleton through `DataCaptureContext.SharedInstance`.
-  * The license key must be set using `DataCaptureContext.Initialize`. This step is only required once. Once initialized, the context can be used as before.
-  * It is important to call `DataCaptureContext.RemoveCurrentMode()` when the active mode is no longer needed, such as when navigating away from a screen used for scanning.
-  * The following methods have been added (also see Deprecations, below, for removed methods):
-    * `setMode`: Sets a mode to be the active mode in the context.
-    * `removeCurrentMode`: Removes the currently active mode in the context.
-    * `static sharedInstance`: Returns a singleton instance of `DataCaptureContext`. This instance is unusable until properly configured by calling initialize() on it.
-    * `initialize(string licenseKey)`: Reinitializes the context by configuring it with a license key.
-    * `initialize(string licenseKey, string? frameworkName, string? frameworkVersion, string? deviceName, string? externalId, DataCaptureContextSettings settings)`: Reinitializes the context by configuring it with new settings.
-  * Calling `DataCaptureContext.addMode()` or `DataCaptureContext.setMode()` now replaces the current mode with the new one, so it’s no longer needed to remove a mode when adding a new one.
-  * The old non-singleton API is still available.
+* Added `UsRealIdStatus`.
 
 ### Performance Improvements
 
@@ -331,6 +417,10 @@ No updates for this framework in this release.
 
 ### Bug Fixes
 
+#### Barcode
+
+* If using Safari, the browser would become stuck while opening `IndexedDB`.
+
 #### ID
 
 * Fixed an issue where it was not possible to scan the Visual Inspection Zone of passports if a license included the Visual Inspection Zone flag, but no Machine Readable Zone flag. 
@@ -339,6 +429,7 @@ No updates for this framework in this release.
 * Fixed an issue where some residence permits were incorrectly identified as ID cards when scanning their Machine Readable Zone.
 * Fixed an issue where it was not possible to scan an Irish Passport Card when `ScannerType::FullDocumentScanner` was enabled.
 * Fixed an issue where the personal identification number was not correctly anonymized on certain passports.
+* When scanning German Passport or ID Card MRZs the nationality was returned as `D` instead of the three-letter ISO (3166 standard) code `DEU`.
 
 ### Deprecations
 
@@ -347,16 +438,6 @@ No updates for this framework in this release.
 * The following methods of `DataCaptureContext` have been removed:
   * `addMode`: Replaced by `setMode` as only one mode can be active at a time.
   * `removeAllModes`: Replaced by `removeCurrentMode` as only one mode can be active at a time.
-
-#### Barcode
-
-* The following APIs have been removed:
-  * `BarcodeCountSettings.enableUnrecognizedBarcodeDetection`
-  * `BarcodeCountView.getTextForUnrecognizedBarcodesDetectedHint`
-  * `BarcodeCountView.setBrushForUnrecognizedBarcode`
-  * `BarcodeCountView.setTextForUnrecognizedBarcodesDetectedHint`
-  * `BarcodeCountViewListener.brushForUnrecognizedBarcode`
-  * `BarcodeCountViewListener.onUnrecognizedBarcodeTapped`
 
 ## 7.0.2
 
@@ -379,7 +460,9 @@ No updates for this framework in this release.
 
 **Released**: December 19, 2024
 
-No updates for this framework in this release.
+### Bug Fixes
+
+* Fixed an issue in ID Capture where no more frame would be processed after a frame source change.
 
 ## 7.0.0
 
@@ -397,18 +480,6 @@ SparkScan, our flagship barcode scanning product, embodies the full potential of
 
 * SparkScan introduces a completely redesigned user interface, enhancing ergonomics with a simplified API and in-demand customization options. These updates make SparkScan even more versatile, seamlessly integrating with various use cases and blending smoothly into any existing workflow and UI. See the [migration guide](/migrate-6-to-7.md#sparkscan) for more details.
 * Added the `remove_delimiter_data` extension to the CODABAR symbology.
-* MatrixScan Count users can now further classify the "not in list" barcodes when scanning against a list. Tapping on them will show a popup where the barcodes can be accepted or rejected. Check `barcode.count.ui.BarcodeCountView.BarcodeNotInListActionSettings` to enable and customize the functionality. The classified barcodes will be added to `barcode.count.BarcodeCountCaptureListSession.AcceptedBarcodes` or `barcode.count.BarcodeCountCaptureListSession.RejectedBarcodes`.
-* MatrixScan Count now includes torch control. For more information, see:
-  * `BarcodeCountView.ShouldShowTorchControl`
-  * `BarcodeCountView.TorchControlPosition`
-* The following APIs have been added to MatrixScan Count:
-  * `ShouldDisableModeOnExitButtonTapped`
-  * `SetBrushForRecognizedBarcodeNotInList`
-  * `SetBrushForRecognizedBarcode`
-  * `SetBrushForUnrecognizedBarcode`
-  * `EnableHardwareTrigger`
-  * `HardwareTriggerSupported`
-  * `EnableUnrecognizedBarcodeDetection`
 
 #### Core
 
@@ -436,6 +507,19 @@ We’ve completely redesigned the ID Capture API to streamline document capture 
 
 * The MatrixScan API (`BarcodeTracking`) has been renamed to `BarcodeBatch`. All classes have been renamed accordingly (e.g. `BarcodeTrackingListener` → `BarcodeBatchListener`).
 
+### Behavioral Changes
+
+* The NPM package scope for all Scandit packages has been changed to `@scandit/web-datacapture-*`.
+* The Parser is now a standalone NPM package as opposed to being bundled with the Barcode package.
+*  Model files now have the file extension set to .model for easier web serving.
+*  The engine library location has been changed from `build/engine` to `sdc-lib`.
+* Feedback resources (e.g. audio files for beep) are now only loaded when needed. Additionally, the asset sizes have been optimized.
+* The CSS templates bundled are now minified.
+
+### Bug Fixes
+
+* Fixed an issue with the camera switch control widget when switching to/from Standby mode.
+
 ### Deprecations
 
 In 7.0, we removed all APIs that were deprecated during the lifetime of 6.0. Before [migrating to 7.0](/migrate-6-to-7.md), we suggest upgrading to 6.28, fixing all deprecation warnings and then upgrading to 7.0.
@@ -451,10 +535,6 @@ The following SparkScan APIs have been deprecated in 7.0:
   * `SparkScanView.CaptureButtonBackgroundColor`
   * `SparkScanView.CaptureButtonActiveBackgroundColor`
   * `SparkScanView.CaptureButtonTintColor`
-
-#### Text Capture
-
-Text Capture functionality has been deprecated in 7.0. If your use case requires text recognition, we recommend using Smart Label Capture instead.
 
 #### ID
 
