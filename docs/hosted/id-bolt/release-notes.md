@@ -10,6 +10,88 @@ hide_title: true
 title: Release Notes
 ---
 
+## 1.18.0
+
+**Released**: October 21, 2025
+
+### New Features
+
+* New configurator to be included in the customer dashboard.
+
+
+## 1.17.0
+
+**Released**: October 6, 2025
+
+### New Features
+
+* Add option to enforce VIZ being scanned when scanning passports.
+* Support for UK Military ID and UAE ESAAD card.
+* Support for supplying an external transaction ID to ID-Bolt, for better analytics and tracking.
+
+### Bug Fixes
+
+* Wrong help text being shown when scanning on mobile device with low resolution camera.
+* Show personal id number instead of document number in result screen, when document number is not available.
+* Fix incorrect caching issue during new version deployments of ID-Bolt service.
+
+## 1.16.0
+
+**Released**: September 18, 2025
+
+### New Features
+
+* Update of Scandit Data Capture Engine to 7.6.
+
+### Bug Fixes
+
+* Correctly differentiate between "unknown" and "unspecified" gender.
+* Fixes case when user could end up with an infinite loading screen.
+* Fixes issue with camera switch icon disappearing after changing pages.
+
+## 1.14.0
+
+**Released**: August 11, 2025
+
+### New Features
+
+* Add option to disable closing of ID-Bolt with the browser back button.
+
+## 1.13.0
+
+**Released**: July 21, 2025
+
+### New Features
+
+* Result from ID-Bolt now contains full MRZ and VIZ result sections.
+* Update to Scandit Data Capture 7.4.0.
+
+### Bug Fixes
+
+* Fixed issue where camera would not be correctly stopped after a scan end.
+
+## 1.11.0
+
+**Released**: July 4, 2025
+
+### New Features
+
+* Issuing Authority exposed in the scan result.
+
+## 1.10.0
+
+**Released**: June 17, 2025
+
+### New Features
+
+* SDC updated to 7.3.0.
+
+### Bug Fixes
+
+* "Remote scan session expired" shows an improper error message.
+* "ID scanned" image not showing when imaged disabled.
+* Fix issues caused with very strict browser data security settings.
+
 ## 1.9.0
 
 **Released**: June 10, 2025
@@ -91,3 +173,38 @@ title: Release Notes
 * Fixed an issue where mobile flows were reported as desktop in analytics dashboard.
 * Disable auto-capitalization of headers.
 * Excluded document text override not shown when no documents excluded.
+
+## 1.2.0
+
+**Released**: February 5, 2025
+
+### New Features
+
+* Added support for new document types from WebSDK 7.x.
+* Support for 2-letter country codes.
+* Added accessibility labels to all elements of ID Bolt service.
+* Allow customers to provide their own translations (new languages or different strings).
+* Updated WebSDK to latest 7.x.
+
+### Bug Fixes
+
+* Fixed vertical scroll bar issue in handover flow result screen.
+* Fixed issue with US RealID validation settings.
+* Fixed issue where scanner stops responding after scanning ID card/DL/Resident permit with full scanner type in handover flow.
+
+## 1.1.0
+
+**Released**: October 11, 2024
+
+### New Features
+
+* Added support for scanning ICAO Visas.
+* Provide more language support out of the box.
+* Configurability of colors of text, background and icons.
+* Make start guidance and result display optional.
+* Attribution page for OSS components.
+
+### Bug Fixes
+
+* Fixed issue where welcome screen is still flashed once before proceeding even when disabled.
+* Fixed issue where welcome text is wrong when multiple same document types selected.
