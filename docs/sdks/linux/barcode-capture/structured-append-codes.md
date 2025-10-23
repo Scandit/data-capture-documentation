@@ -43,7 +43,7 @@ Settings setup for structured append QR codes on Linux:
 The structured append codes are returned as four separate codes and they need to be combined from the scan session. A possible implementation of the result collection can look like this:
 
 ```c
-    char const *structured_append_sequence_id = 0;
+    char const *structured_append_sequence_id = NULL;
     char const *structured_append_sequence[32] = {0};
     int structured_append_sequence_expected_segments_count = -1;
     int structured_append_sequence_found_segments_count = 0;
