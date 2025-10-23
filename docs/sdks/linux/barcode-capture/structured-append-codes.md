@@ -13,7 +13,7 @@ it wouldn't fit a single code capabilities.
 Since version 7.6, the Scandit SDK supports structured append mode (also known as Extension Codes) for QR, DataMatrix, Aztec, PDF417/MicroPDF417 - we have added a number of functions to `ScBarcode` API to allow querying whether given scanned code belongs to a structured append codes sequence and which place in the sequence it occupies:
 
 - `char const *sc_barcode_get_file_id(ScBarcode const *barcode)` function returns structured append sequence id which should match across all codes belonging to the same sequence.
-- `int32_t sc_barcode_get_segment_index(ScBarcode const *barcode)` function returns a codes absolute position within a sequence.
+- `int32_t sc_barcode_get_segment_index(ScBarcode const *barcode)` function returns a code's absolute position within a sequence.
 - `int32_t sc_barcode_get_segment_count(ScBarcode const *barcode)` function returns an expected number of codes within a sequence.
 
 For more details see `include/Scandit/ScBarcode.h`.
