@@ -16,7 +16,7 @@ If the app uses only a single scanning mode, create a single `DataCaptureContext
 	<TabItem value="ts">
 	```ts
 	const context = useMemo(() => {
-		return DataCaptureContext.forLicenseKey(
+		return DataCaptureContext.initialize(
 			'-- ENTER YOUR SCANDIT LICENSE KEY HERE --'
 		);
 	}, []);
@@ -25,7 +25,7 @@ If the app uses only a single scanning mode, create a single `DataCaptureContext
 	<TabItem value="js">
 	```js
 	const context = useMemo(() => {
-		return DataCaptureContext.forLicenseKey(
+		return DataCaptureContext.initialize(
 			'-- ENTER YOUR SCANDIT LICENSE KEY HERE --'
 		);
 	}, []);
