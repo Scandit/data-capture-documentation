@@ -89,10 +89,10 @@ Each `taskField` object must include the following properties:
                   {
                     "fieldType": "customText",
                     "name": "Lot Number",
-                    "dataTypePatterns": [
+                    "anchorRegexes": [
                       "Lot"
                     ],
-                    "patterns": [
+                    "valueRegexes": [
                       "\\d{5,15}"
                     ],
                     "optional": true
