@@ -79,51 +79,45 @@ The main entry point for the Label Capture Mode is the [LabelCapture](https://do
 It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
 ```swift
-let labelDefinition: LabelDefinition {
+let labelDefinition = LabelDefinition("<your-label-name>") {
     /*
      * Add a barcode field with the expected symbologies and pattern.
-     * You can omit the pattern if the content of the barcode is unknown. 
+     * You can omit the valueRegexes if the content of the barcode is unknown.
      */
-    let barcodeField = CustomBarcode(
+    CustomBarcode(
         name: "<your-barcode-field-name>",
         symbologies: [
             NSNumber(value: Symbology.ean13UPCA.rawValue),
             NSNumber(value: Symbology.code128.rawValue)
         ]
     )
-    barcodeField.patterns = ["\\d{12,14}"]
+    .valueRegexes(["\\d{12,14}"])
 
     /*
      * Add a text field for capturing expiry dates.
-     * The field is set as optional so that the capture can complete 
-     * even if the expiry date is not present or not readable.
+     * The field is set as mandatory by default.
      */
-    let expiryDateField = ExpiryDateText(name: "<your-expiry-date-field-name>")
-    expiryDateField.optional = false
-
-    return LabelDefinition(
-      name: "<your-label-name>", 
-      fields: [barcodeField, expiryDateField]
-    )
+    ExpiryDateText(name: "<your-expiry-date-field-name>")
 }
 
 guard let labelCaptureSettings = try? LabelCaptureSettings(
     labelDefinitions: [labelDefinition]
 ) else {
     /*
-    * Creating label capture settings can fail if the label definitions are invalid. 
+    * Creating label capture settings can fail if the label definitions are invalid.
     * You can handle the error here.
     */
+    return
 }
 
 /*
-* Create the label capture mode with the settings 
+* Create the label capture mode with the settings
 * and data capture context created earlier
 */
 labelCapture = LabelCapture(context: context, settings: labelCaptureSettings)
 
 /*
-* Add a listener to the label capture mode, see the following section 
+* Add a listener to the label capture mode, see the following section
 * for more information on implementing the listener
 */
 labelCapture.addListener(self)
@@ -193,7 +187,6 @@ dataCaptureView = DataCaptureView(context: dataCaptureContext, frame: .zero)
 /* 
 * Add the data capture view to your view hierarchy, e.g. with insertSubview.
 */
-@IBOutlet weak var containerView: UIView!
 containerView.insertSubview(dataCaptureView, at: 0)
 
 /* 

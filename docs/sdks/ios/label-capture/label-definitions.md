@@ -28,14 +28,14 @@ Smart Label Capture provides pre-built label definitions out of the box for the 
 
 ### Example: Price label
 
-Use the `LabelCaptureSettings` builder to configure a pre-built label definition for price labels, such as those found in retail environments:
+Configure a pre-built label definition for price labels, such as those found in retail environments:
 
 ![Price Label Example](/img/slc/price-label.png)
 
 ```swift
-let settings = LabelCaptureSettings.builder()
-    .addLabel(LabelDefinition.createPriceCaptureDefinition(name: "price-label"))
-    .build()
+let settings = try LabelCaptureSettings {
+    LabelDefinition.priceCapture(withName: "price-label")
+}
 ```
 
 ## Custom Labels
@@ -53,14 +53,14 @@ There are two types of custom fields you can define:
 * [`CustomBarcode`](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/custom-barcode.html#custom-barcode)
 * [`CustomText`](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/custom-text.html#custom-text)
 
-The following methods are available to configure custom fields:
+The following fluent methods are available to configure custom fields:
 
 | Method | Optional | Description |
 |--------|----------|-------------|
-| `patterns` | No | The regex patterns that identify the target string in the scanned content. |
-| `dataTypePatterns` | Yes | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
-| `symbologies` | No | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
-| `isOptional` | Yes | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
+| `valueRegex()` / `valueRegexes()` | No | The regex patterns that identify the target string in the scanned content. |
+| `anchorRegex()` / `anchorRegexes()` | Yes | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
+| `symbologies` (init param) | No | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
+| `optional()` | Yes | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
 
 #### Example: Fish Shipping Box
 
@@ -69,30 +69,31 @@ This example shows how to create a custom label definition for a fish shipping b
 ![Fish Shipping Box Example](/img/slc/fish-shipping-box.png)
 
 ```swift
-let settings = LabelCaptureSettings.builder()
-    .addLabel()
-        .addCustomBarcode()
-            .setSymbologies([.code128])
-        .buildFluent(name: "barcode-field")
-        .addCustomText()
-            .setDataTypePatterns(["Batch"])
-            .setPatterns(["FZ\\d{5,10}"])
-            .isOptional(true)
-        .buildFluent(name: "batch-number-field")
-    .buildFluent(name: "shipping-label")
-    .build()
+let settings = try LabelCaptureSettings {
+    LabelDefinition("shipping-label") {
+        CustomBarcode(
+            name: "barcode-field",
+            symbologies: [NSNumber(value: Symbology.code128.rawValue)]
+        )
+
+        CustomText(name: "batch-number-field")
+            .anchorRegexes(["Batch"])
+            .valueRegexes(["FZ\\d{5,10}"])
+            .optional(true)
+    }
+}
 ```
 
 ### Pre-built Fields
 
-You can also configure your label by using pre-built fields. These are some common fields provided for faster integration, with all `patterns`, `dataTypePattern`, and `symbologies` already predefined.
+You can also configure your label by using pre-built fields. These are some common fields provided for faster integration, with all value regex patterns and anchor regex patterns already predefined.
 
-Customization of pre-built fields is done via the `patterns`, `dataTypePatterns`, and `isOptional` methods, which allow you to specify the expected format of the field data.
+Customization of pre-built fields is done via the `valueRegex()`, `valueRegexes()`, `anchorRegex()`, `anchorRegexes()`, and `optional()` fluent methods, which allow you to specify the expected format of the field data.
 
 :::tip
-All pre-built fields come with default `patterns` and `dataTypePatterns` that are suitable for most use cases. **Using either method is optional and will override the defaults**.
+All pre-built fields come with default value and anchor regex patterns that are suitable for most use cases. **Using these methods is optional and will override the defaults**.
 
-The `resetDataTypePatterns` method can be used to remove the default `dataTypePattern`, allowing you to rely solely on the `patterns` for detection.
+The `resetAnchorRegexes()` method can be used to remove the default anchor regexes, allowing you to rely solely on the value patterns for detection.
 :::
 
 #### Barcode Fields
@@ -129,13 +130,11 @@ This example demonstrates how to configure a label definition for a hard disk dr
 ![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
 
 ```swift
-let settings = LabelCaptureSettings.builder()
-    .addLabel()
-        .addSerialNumberBarcode()
-        .buildFluent(name: "serial-number")
-        .addPartNumberBarcode()
-        .buildFluent(name: "part-number")
-    .buildFluent(name: "hdd-label")
-    .build()
+let settings = try LabelCaptureSettings {
+    LabelDefinition("hdd-label") {
+        SerialNumberBarcode(name: "serial-number")
+        PartNumberBarcode(name: "part-number")
+    }
+}
 ```
 
