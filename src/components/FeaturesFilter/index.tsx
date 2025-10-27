@@ -123,32 +123,6 @@ const FeaturesFilter: React.FC = () => {
   // Pre-defined data structure with only the requested product tabs
   const featuresData: Section[] = [
     {
-      title: 'Barcode Capture',
-      description: 'The foundational, fully customizable SDK for integrating high-performance single barcode scanning. Offers complete control over UI and scanning experience with unparalleled performance in difficult conditions. Supports 20,000+ smart device models and all major development frameworks.',
-      integrationPaths: [
-        { type: 'Custom SDK', label: 'Custom SDK Integration' }
-      ],
-      features: [
-        {
-          name: 'Barcode Capture SDK',
-          description: 'Main SDK for barcode scanning with camera integration',
-          category: 'Barcode Capture',
-          frameworks: {
-            'iOS': { version: '6.0', apiUrl: '/sdks/ios/barcode-capture/get-started' },
-            'Android': { version: '6.0', apiUrl: '/sdks/android/barcode-capture/get-started' },
-            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/barcode-capture/get-started' },
-            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/barcode-capture/get-started' },
-            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/barcode-capture/get-started' },
-            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/barcode-capture/get-started' },
-            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/barcode-capture/get-started' },
-            'Web': { version: '6.13', apiUrl: '/sdks/web/barcode-capture/get-started' },
-            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/ios/barcode-capture/get-started' },
-            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/android/barcode-capture/get-started' }
-          }
-        },
-      ]
-    },
-    {
       title: 'SparkScan',
       description: 'Pre-built, high-performance barcode scanning component with minimalistic floating UI. Integrates in minutes with just a few lines of code. Features pre-optimized ergonomic UX with continuous scanning, tap-to-scan, and target/selection modes. Includes pre-built buttons to switch to advanced modes like Barcode Count, Find, and Smart Label Capture.',
       integrationPaths: [
@@ -172,6 +146,32 @@ const FeaturesFilter: React.FC = () => {
             '.NET Android': { version: '6.22', apiUrl: '/sdks/net/android/sparkscan/intro' }
           }
         }
+      ]
+    },
+    {
+      title: 'Barcode Capture',
+      description: 'The foundational, fully customizable SDK for integrating high-performance single barcode scanning. Offers complete control over UI and scanning experience with unparalleled performance in difficult conditions. Supports 20,000+ smart device models and all major development frameworks.',
+      integrationPaths: [
+        { type: 'Custom SDK', label: 'Custom SDK Integration' }
+      ],
+      features: [
+        {
+          name: 'Barcode Capture SDK',
+          description: 'Main SDK for barcode scanning with camera integration',
+          category: 'Barcode Capture',
+          frameworks: {
+            'iOS': { version: '6.0', apiUrl: '/sdks/ios/barcode-capture/get-started' },
+            'Android': { version: '6.0', apiUrl: '/sdks/android/barcode-capture/get-started' },
+            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/barcode-capture/get-started' },
+            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/barcode-capture/get-started' },
+            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/barcode-capture/get-started' },
+            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/barcode-capture/get-started' },
+            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/barcode-capture/get-started' },
+            'Web': { version: '6.13', apiUrl: '/sdks/web/barcode-capture/get-started' },
+            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/ios/barcode-capture/get-started' },
+            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/android/barcode-capture/get-started' }
+          }
+        },
       ]
     },
     {
