@@ -365,6 +365,33 @@ const FeaturesFilter: React.FC = () => {
       ]
     },
     {
+      title: 'ID Capture',
+      description: 'Scan and validate identity documents including passports, driver\'s licenses, and national IDs. Extract personal information with OCR and perform verification checks for secure identity validation in onboarding and access control workflows.',
+      integrationPaths: [
+        { type: 'Custom SDK', label: 'Custom SDK' }
+      ],
+      isCollapsed: false,
+      features: [
+        {
+          name: 'ID Capture SDK',
+          description: 'Capture and process identity documents with OCR and verification',
+          category: 'ID Capture',
+          frameworks: {
+            'iOS': { version: '6.5', apiUrl: '/sdks/ios/id-capture/intro' },
+            'Android': { version: '6.5', apiUrl: '/sdks/android/id-capture/intro' },
+            'Cordova': { version: '6.6', apiUrl: '/sdks/cordova/id-capture/intro' },
+            'React Native': { version: '6.8', apiUrl: '/sdks/react-native/id-capture/intro' },
+            'Flutter': { version: '6.11', apiUrl: '/sdks/flutter/id-capture/intro' },
+            'Capacitor': { version: '6.14', apiUrl: '/sdks/capacitor/id-capture/intro' },
+            'Titanium': { version: 'n/a' },
+            'Web': { version: '6.13', apiUrl: '/sdks/web/id-capture/intro' },
+            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/ios/id-capture/intro' },
+            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/android/id-capture/intro' }
+          }
+        }
+      ]
+    },
+    {
       title: 'Parser',
       description: 'Extract structured data from encoded barcodes including GS1, AAMVA, HIBC, and other industry-standard formats. Automatically parse complex barcode data into easily usable fields without manual string manipulation.',
       integrationPaths: [
@@ -414,33 +441,6 @@ const FeaturesFilter: React.FC = () => {
             'Web': { version: 'n/a' },
             '.NET iOS': { version: 'n/a' },
             '.NET Android': { version: 'n/a' }
-          }
-        }
-      ]
-    },
-    {
-      title: 'ID Capture',
-      description: 'Scan and validate identity documents including passports, driver\'s licenses, and national IDs. Extract personal information with OCR and perform verification checks for secure identity validation in onboarding and access control workflows.',
-      integrationPaths: [
-        { type: 'Custom SDK', label: 'Custom SDK' }
-      ],
-      isCollapsed: false,
-      features: [
-        {
-          name: 'ID Capture SDK',
-          description: 'Capture and process identity documents with OCR and verification',
-          category: 'ID Capture',
-          frameworks: {
-            'iOS': { version: '6.5', apiUrl: '/sdks/ios/id-capture/intro' },
-            'Android': { version: '6.5', apiUrl: '/sdks/android/id-capture/intro' },
-            'Cordova': { version: '6.6', apiUrl: '/sdks/cordova/id-capture/intro' },
-            'React Native': { version: '6.8', apiUrl: '/sdks/react-native/id-capture/intro' },
-            'Flutter': { version: '6.11', apiUrl: '/sdks/flutter/id-capture/intro' },
-            'Capacitor': { version: '6.14', apiUrl: '/sdks/capacitor/id-capture/intro' },
-            'Titanium': { version: 'n/a' },
-            'Web': { version: '6.13', apiUrl: '/sdks/web/id-capture/intro' },
-            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/ios/id-capture/intro' },
-            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/android/id-capture/intro' }
           }
         }
       ]
@@ -675,8 +675,36 @@ const FeaturesFilter: React.FC = () => {
         // Remaining features are additional features
         const additionalFeatures = filteredFeatures.slice(1);
 
+        // Add section headings based on product type
+        const getSectionHeading = (sectionTitle: string) => {
+          if (sectionTitle === 'SparkScan' || sectionTitle === 'Barcode Capture') {
+            return { showHeading: index === 0, heading: 'Single Barcode Scanning' };
+          } else if (sectionTitle.includes('MatrixScan')) {
+            const matrixScanProducts = ['MatrixScan Batch', 'MatrixScan AR', 'MatrixScan Count', 'MatrixScan Find', 'MatrixScan Pick'];
+            const currentIndex = matrixScanProducts.indexOf(sectionTitle);
+            return { showHeading: currentIndex === 0, heading: 'Multi Barcode Scanning (MatrixScan)' };
+          } else if (sectionTitle === 'Smart Label Capture' || sectionTitle === 'ID Capture') {
+            const advancedFeatures = ['Smart Label Capture', 'ID Capture'];
+            const currentIndex = advancedFeatures.indexOf(sectionTitle);
+            return { showHeading: currentIndex === 0, heading: 'OCR Capable Scanning' };
+          } else if (sectionTitle === 'Parser' || sectionTitle === 'Barcode Generator') {
+            const productComponents = ['Parser', 'Barcode Generator'];
+            const currentIndex = productComponents.indexOf(sectionTitle);
+            return { showHeading: currentIndex === 0, heading: 'Components' };
+          }
+          return { showHeading: false, heading: '' };
+        };
+
+        const { showHeading, heading } = getSectionHeading(section.title);
+
         return (
-          <div key={index} className={styles.productSection}>
+          <div key={index}>
+            {showHeading && (
+              <div className={styles.sectionHeading}>
+                <h2 className={styles.sectionHeadingTitle}>{heading}</h2>
+              </div>
+            )}
+            <div className={styles.productSection}>
             <div className={`${styles.sectionHeader} ${collapsedSections[section.title] ? styles.collapsed : ''} ${additionalFeatures.length === 0 ? styles.noCollapseButton : ''}`}>
               <div className={styles.sectionContent}>
                 <h2 className={styles.sectionTitle}>{section.title}</h2>
@@ -748,9 +776,6 @@ const FeaturesFilter: React.FC = () => {
                                   rel="noopener noreferrer"
                                 >
                                   <span className={styles.frameworkName}>{framework.name}</span>
-                                  <span className={`${styles.version} ${styles.versionLink}`}>
-                                    {frameworkData.version}
-                                  </span>
                                 </a>
                               );
                             }
@@ -758,9 +783,6 @@ const FeaturesFilter: React.FC = () => {
                             return (
                               <div key={framework.key} className={styles.frameworkItem}>
                                 <span className={styles.frameworkName}>{framework.name}</span>
-                                <span className={styles.version}>
-                                  {frameworkData.version}
-                                </span>
                               </div>
                             );
                           })}
@@ -830,9 +852,6 @@ const FeaturesFilter: React.FC = () => {
                                     rel="noopener noreferrer"
                                   >
                                     <span className={styles.frameworkName}>{framework.name}</span>
-                                    <span className={`${styles.version} ${styles.versionLink}`}>
-                                      {frameworkData.version}
-                                    </span>
                                   </a>
                                 );
                               }
@@ -840,9 +859,6 @@ const FeaturesFilter: React.FC = () => {
                               return (
                                 <div key={framework.key} className={styles.frameworkItem}>
                                   <span className={styles.frameworkName}>{framework.name}</span>
-                                  <span className={styles.version}>
-                                    {frameworkData.version}
-                                  </span>
                                 </div>
                               );
                             })}
@@ -855,6 +871,7 @@ const FeaturesFilter: React.FC = () => {
                 })}
               </div>
             )}
+            </div>
           </div>
         );
       })}
