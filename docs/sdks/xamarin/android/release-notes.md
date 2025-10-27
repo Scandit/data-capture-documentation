@@ -9,9 +9,9 @@ keywords:
   - xamarinAndroid
 ---
 
-## 8.0.0-beta.1
+## 8.0.0-beta.2
 
-**Released**: October 16, 2025
+**Released**: October 27, 2025
 
 ### Deprecation of Xamarin and Forms Plugins
 

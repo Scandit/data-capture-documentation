@@ -10,9 +10,9 @@ keywords:
   - react
 ---
 
-## 8.0.0-beta.1
+## 8.0.0-beta.2
 
-**Released**: October 16, 2025
+**Released**: October 27, 2025
 
 ### New Features
 
@@ -42,7 +42,9 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 #### ID
 
+* Added `ElementsToRetain` to `MobileDocumentScanner`: The set of data elements that the application intends to retain from scanned mobile documents. This information is used to set the `IntentToRetain` flag in ISO 18013-5 mdoc requests, which is required for legal compliance with data protection standards. An empty set indicates no elements will be retained, and `IntentToRetain` will be set to `false` for all fields.
 * ID Capture now supports full-frame anonymization.
+* The result of `decodeMobileDriverLicenseViz`, which is currently returned as part of the `VizResult` within `CapturedId`, will now be provided through a new field named `mobileDocumentOcr`.
 * Added `CapturedId::isCitizenPassport`, which indicates whether the passport was issued to a citizen of the issuing country. Returns `false` for travel documents such as refugee, stateless, or alien passports, and for any passports issued by organizations rather than states.
 * The following Chinese travel permits now extract VIZ + MIZ data during double-sided scanning flows:
   * CT - Taiwan Residents Mainland Travel Permit
@@ -59,8 +61,8 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 #### Label
 
 * The `LabelFieldDefinition` API has been updated with the following changes:
-  * Renamed property: `patterns` → `valueRegex`
-  * Renamed property: `dataTypePatterns` → `anchorRegex`
+  * Renamed property: `pattern` → `valueRegex`, `patterns` → `valueRegexes`
+  * Renamed property: `dataTypePattern` → `anchorRegex`, `dataTypePatterns` → `anchorRegexes`
 * Receipt Scanning API has been updated with the following changes:
   * `ReceiptScanningResult`:
     * Removed properties: `storeNumber`, `storeStreet`, `storeZip`, `storeState`, `storePhone`, `paymentMethod`, and `paymentCurrency`.
@@ -76,6 +78,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
   * Australian mobile driver licenses (mDL) are now treated as normal documents, with no separate mode.
   * US Green Cards are now treated as residence permits.
 * Removed the deprecated API `DateResult::toDate`. Use `DateResult::toLocalDate` or `DateResult::toUtcDate` instead.
+* `fullName` now an optional field on all `IdCapture` result types and `capturedMrz` now an optional field on `MrzResult`.
 
 ### Bug Fixes
 
