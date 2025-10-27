@@ -55,8 +55,8 @@ The following methods are available to configure custom fields:
 
 | Method | Optional | Description |
 |--------|----------|-------------|
-| `patterns` | No | The regex patterns that identify the target string in the scanned content. |
-| `dataTypePatterns` | Yes | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
+| `valueRegexes` | No | The regex patterns that identify the target string in the scanned content. |
+| `anchorRegexes` | Yes | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
 | `symbologies` | No | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
 | `isOptional` | Yes | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
 
@@ -73,8 +73,8 @@ const settings = LabelCaptureSettings.builder()
             .setSymbologies([Symbology.code128])
             .buildFluent("barcode-field")
         .addCustomText()
-            .setDataTypePatterns(["Batch"])
-            .setPatterns(["FZ\\d{5,10}"])
+            .setAnchorRegexes(["Batch"])
+            .setValueRegexes(["FZ\\d{5,10}"])
             .setOptional(true)
             .buildFluent("batch-number-field")
         .buildFluent("shipping-label"))
@@ -83,14 +83,14 @@ const settings = LabelCaptureSettings.builder()
 
 ### Pre-built Fields
 
-You can also configure your label by using pre-built fields. These are some common fields provided for faster integration, with all `patterns`, `dataTypePattern`, and `symbologies` already predefined.
+You can also configure your label by using pre-built fields. These are some common fields provided for faster integration, with all `valueRegexes`, `anchorRegexes`, and `symbologies` already predefined.
 
-Customization of pre-built fields is done via the `patterns`, `dataTypePatterns`, and `isOptional` methods, which allow you to specify the expected format of the field data.
+Customization of pre-built fields is done via the `valueRegexes`, `anchorRegexes`, and `isOptional` methods, which allow you to specify the expected format of the field data.
 
 :::tip
-All pre-built fields come with default `patterns` and `dataTypePatterns` that are suitable for most use cases. **Using either method is optional and will override the defaults**.
+All pre-built fields come with default `valueRegexes` and `anchorRegexes` that are suitable for most use cases. **Using either method is optional and will override the defaults**.
 
-The `resetDataTypePatterns` method can be used to remove the default `dataTypePattern`, allowing you to rely solely on the `patterns` for detection.
+The `resetAnchorRegexes` method can be used to remove the default `anchorRegexes`, allowing you to rely solely on the `valueRegexes` for detection.
 :::
 
 #### Barcode Fields
