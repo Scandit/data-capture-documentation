@@ -65,6 +65,25 @@
   border-color: var(--ifm-color-emphasis-500);
 }
 
+/* Section Headings */
+.sectionHeading {
+  margin: 32px 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--ifm-color-primary);
+}
+
+.sectionHeading:first-child {
+  margin-top: 0;
+}
+
+.sectionHeadingTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ifm-color-primary);
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
 /* Product Sections */
 .productSection {
   background-color: var(--ifm-background-color);
@@ -527,6 +546,10 @@ a.frameworkItem:hover {
 
   .sectionTitle {
     font-size: 20px;
+  }
+
+  .sectionHeadingTitle {
+    font-size: 24px;
   }
 
   .featureItem {
