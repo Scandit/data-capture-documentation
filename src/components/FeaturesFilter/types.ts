@@ -1,15 +1,20 @@
 export interface Feature {
   name: string;
+  description: string;
   category: string;
   frameworks: {
-    [key: string]: string; // version or 'n/a'
+    [key: string]: {
+      version: string;
+      apiUrl?: string;
+    };
   };
 }
 
 export interface Section {
   title: string;
+  description: string;
   features: Feature[];
-  isCollapsed: boolean;
+  isCollapsed?: boolean;
 }
 
 export interface Framework {
