@@ -238,11 +238,17 @@
   font-size: 13px;
   border: 1px solid var(--ifm-color-emphasis-200);
   transition: all 0.2s;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .frameworkItem:hover {
   background-color: var(--ifm-color-emphasis-200);
   border-color: var(--ifm-color-primary);
+}
+
+a.frameworkItem:hover {
+  text-decoration: none;
 }
 
 .frameworkName {
