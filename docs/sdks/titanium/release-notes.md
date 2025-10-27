@@ -10,9 +10,9 @@ keywords:
   - titanium
 ---
 
-## 8.0.0-beta.1
+## 8.0.0-beta.2
 
-**Released**: October 16, 2025
+**Released**: October 27, 2025
 
 ### New Features
 
@@ -24,6 +24,10 @@ Scandit's SDK 8.0 marks the evolution of data capture from a high-performing sca
 With SDK 8.0 businesses can transform data capture from a basic function to a strategic advantage. It enables intelligent scanning that:
   * Understands not just what is being scanned, but also what you want to scan and why you’re scanning it
   * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.
+
+#### Core
+
+* Upgraded minimum Titanium SDK to `12.7.0.GA` and build modules with Titanium `13.0.0.GA` to enable 16 KB page size support.
 
 #### Barcode
 
