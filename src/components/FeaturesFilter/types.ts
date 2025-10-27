@@ -83,8 +83,8 @@ export const PRODUCTS: Product[] = [
 ];
 
 export const INTEGRATION_PATHS = [
-  { key: 'custom-sdk', name: 'Custom SDK' },
-  { key: 'pre-built', name: 'Pre-built Component' },
+  { key: 'custom-sdk', name: 'SDK without prebuild components' },
+  { key: 'pre-built', name: 'SDK with prebuild components' },
   { key: 'no-code', name: 'No-Code' }
 ];
 

@@ -126,7 +126,7 @@ const FeaturesFilter: React.FC = () => {
       title: 'SparkScan',
       description: 'Pre-built, high-performance barcode scanning component with minimalistic floating UI. Integrates in minutes with just a few lines of code. Features pre-optimized ergonomic UX with continuous scanning, tap-to-scan, and target/selection modes. Includes pre-built buttons to switch to advanced modes like Barcode Count, Find, and Smart Label Capture.',
       integrationPaths: [
-        { type: 'Pre-built Component', label: 'Pre-built Component' }
+        { type: 'SDK with prebuild components', label: 'SDK with prebuild components' }
       ],
       features: [
         {
@@ -152,7 +152,7 @@ const FeaturesFilter: React.FC = () => {
       title: 'Barcode Capture',
       description: 'The foundational, fully customizable SDK for integrating high-performance single barcode scanning. Offers complete control over UI and scanning experience with unparalleled performance in difficult conditions. Supports 20,000+ smart device models and all major development frameworks.',
       integrationPaths: [
-        { type: 'Custom SDK', label: 'Custom SDK Integration' }
+        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' }
       ],
       features: [
         {
@@ -178,7 +178,7 @@ const FeaturesFilter: React.FC = () => {
       title: 'MatrixScan Batch',
       description: 'Locate, track, and decode multiple barcodes simultaneously in the camera view. Ideal for scan-intensive workflows where the goal is to capture a list of all items present—perfect for proof of delivery, high-volume receiving, and accelerating packing processes. Massively accelerates workflows compared to single scanning.',
       integrationPaths: [
-        { type: 'Custom SDK', label: 'Custom SDK' },
+        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' },
         { type: 'No-Code', label: 'Scandit Express (No-Code)', url: 'https://docs.scandit.com/hosted/express/overview/' }
       ],
       features: [
@@ -205,7 +205,7 @@ const FeaturesFilter: React.FC = () => {
       title: 'MatrixScan AR',
       description: 'Highly customizable SDK combining high-speed multiple barcode scanning with custom AR overlays. Display real-time contextual information, graphics, or interactive elements on physical items in the live camera view. Ideal for stock levels, sorting instructions, or creating interactive experiences. Offers maximum flexibility and customization.',
       integrationPaths: [
-        { type: 'Custom SDK', label: 'Custom SDK' }
+        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' }
       ],
       features: [
         {
@@ -231,7 +231,7 @@ const FeaturesFilter: React.FC = () => {
       title: 'MatrixScan Count',
       description: 'Pre-built scan-and-count solution that scans multiple items at once and verifies against expected lists or manifests. Speeds up counting workflows by up to 10x with intuitive AR feedback that makes accuracy effortless. Perfect for automating inventory management, receiving goods, cycle counting, and full stock takes.',
       integrationPaths: [
-        { type: 'Pre-built Component', label: 'Pre-built Component' },
+        { type: 'SDK with prebuild components', label: 'SDK with prebuild components' },
         { type: 'No-Code', label: 'Scandit Express (No-Code)', url: 'https://docs.scandit.com/hosted/express/overview/' }
       ],
       features: [
@@ -258,7 +258,7 @@ const FeaturesFilter: React.FC = () => {
       title: 'MatrixScan Find',
       description: 'Pre-built AR component that helps users instantly locate specific items from a predefined list in visually crowded environments. Perfect for in-store order picking (click-and-collect), finding customer parcels at PUDO points, or locating specific baggage. The fastest way to deploy a "search and find" feature with an out-of-the-box UI.',
       integrationPaths: [
-        { type: 'Pre-built Component', label: 'Pre-built Component' },
+        { type: 'SDK with prebuild components', label: 'SDK with prebuild components' },
         { type: 'No-Code', label: 'Scandit Express (No-Code)', url: 'https://docs.scandit.com/hosted/express/overview/' }
       ],
       features: [
@@ -285,7 +285,7 @@ const FeaturesFilter: React.FC = () => {
       title: 'MatrixScan Pick',
       description: 'AR-guided workflow solution that transforms complex multi-item tasks into visual, interactive checklists. Uses distinct AR icons to assign tasks and track completion. Eliminates errors and guesswork by visually guiding users through bulk tasks like receiving with exception handling, guided restocking, and staging area audits.',
       integrationPaths: [
-        { type: 'Pre-built Component', label: 'Pre-built Component' }
+        { type: 'SDK with prebuild components', label: 'SDK with prebuild components' }
       ],
       isCollapsed: false,
       features: [
@@ -312,7 +312,7 @@ const FeaturesFilter: React.FC = () => {
       title: 'Barcode Selection',
       description: 'Precisely select one specific barcode among densely packed codes with high accuracy. Perfect when you need to capture a single barcode from labels tightly packed together, such as on shipping manifests or shelves with many item labels.',
       integrationPaths: [
-        { type: 'Custom SDK', label: 'Custom SDK' }
+        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' }
       ],
       isCollapsed: false,
       features: [
@@ -339,15 +339,15 @@ const FeaturesFilter: React.FC = () => {
       title: 'Smart Label Capture',
       description: 'The ONLY Scandit product with OCR functionality. Simultaneously captures multiple barcodes AND printed text fields (expiry dates, serial/lot numbers, unit prices, weights) from labels in a single scan. Uses a semantic approach—just define what you\'re looking for (e.g., "expiry date") and it works across many label layouts. Drastically reduces manual data entry errors.',
       integrationPaths: [
-        { type: 'Custom SDK', label: 'Custom SDK' },
-        { type: 'Pre-built Component', label: 'Pre-built Validation Flow' },
+        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' },
+        { type: 'SDK with prebuild components', label: 'Pre-built Validation Flow' },
         { type: 'No-Code', label: 'Scandit Express (No-Code)', url: 'https://docs.scandit.com/hosted/express/overview/' }
       ],
       isCollapsed: false,
       features: [
         {
           name: 'Smart Label Capture SDK',
-          description: 'Custom SDK for building fully customized label capture experiences, or use the pre-built Validation Flow for rapid deployment',
+          description: 'SDK without prebuild components for building fully customized label capture experiences, or use the pre-built Validation Flow for rapid deployment',
           category: 'Smart Label Capture',
           frameworks: {
             'iOS': { version: '6.0', apiUrl: '/sdks/ios/label-capture/intro' },
@@ -368,7 +368,7 @@ const FeaturesFilter: React.FC = () => {
       title: 'ID Capture',
       description: 'Scan and validate identity documents including passports, driver\'s licenses, and national IDs. Extract personal information with OCR and perform verification checks for secure identity validation in onboarding and access control workflows.',
       integrationPaths: [
-        { type: 'Custom SDK', label: 'Custom SDK' }
+        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' }
       ],
       isCollapsed: false,
       features: [
@@ -395,7 +395,7 @@ const FeaturesFilter: React.FC = () => {
       title: 'Parser',
       description: 'Extract structured data from encoded barcodes including GS1, AAMVA, HIBC, and other industry-standard formats. Automatically parse complex barcode data into easily usable fields without manual string manipulation.',
       integrationPaths: [
-        { type: 'Custom SDK', label: 'Custom SDK' }
+        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' }
       ],
       isCollapsed: false,
       features: [
@@ -422,7 +422,7 @@ const FeaturesFilter: React.FC = () => {
       title: 'Barcode Generator',
       description: 'Programmatically generate high-quality barcodes for various symbologies directly within your application. Create barcodes for printing, display, or digital use without external dependencies.',
       integrationPaths: [
-        { type: 'Custom SDK', label: 'Custom SDK' }
+        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' }
       ],
       isCollapsed: false,
       features: [
