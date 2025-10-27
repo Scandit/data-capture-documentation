@@ -13,188 +13,196 @@ const FeaturesFilter: React.FC = () => {
   const featuresData: Section[] = [
     {
       title: 'Barcode Capture',
-      isCollapsed: false,
+      description: 'Core barcode scanning functionality for all platforms',
       features: [
         {
           name: 'Barcode Capture SDK',
+          description: 'Main SDK for barcode scanning with camera integration',
           category: 'Barcode Capture',
           frameworks: {
-            'iOS': '6.0',
-            'Android': '6.0',
-            'Cordova': '6.1',
-            'React Native': '6.5',
-            'Xamarin iOS': '6.2',
-            'Xamarin Android': '6.2',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: '6.0', apiUrl: '/sdks/ios/barcode-capture/' },
+            'Android': { version: '6.0', apiUrl: '/sdks/android/barcode-capture/' },
+            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/barcode-capture/' },
+            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/barcode-capture/' },
+            'Xamarin iOS': { version: '6.2', apiUrl: '/sdks/xamarin/barcode-capture/' },
+            'Xamarin Android': { version: '6.2', apiUrl: '/sdks/xamarin/barcode-capture/' },
+            'Xamarin Forms': { version: '6.8', apiUrl: '/sdks/xamarin/barcode-capture/' },
+            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/barcode-capture/' },
+            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/barcode-capture/' },
+            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/barcode-capture/' },
+            'Web': { version: '6.13', apiUrl: '/sdks/web/barcode-capture/' },
+            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/barcode-capture/' },
+            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/barcode-capture/' }
           }
         },
         {
           name: 'Extension Codes',
+          description: 'Support for additional barcode symbologies and extensions',
           category: 'Barcode Capture',
           frameworks: {
-            'iOS': '6.5',
-            'Android': '6.5',
-            'Cordova': '6.5',
-            'React Native': '6.5',
-            'Xamarin iOS': '6.5',
-            'Xamarin Android': '6.5',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: '6.5', apiUrl: '/sdks/ios/extension-codes/' },
+            'Android': { version: '6.5', apiUrl: '/sdks/android/extension-codes/' },
+            'Cordova': { version: '6.5', apiUrl: '/sdks/cordova/extension-codes/' },
+            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/extension-codes/' },
+            'Xamarin iOS': { version: '6.5', apiUrl: '/sdks/xamarin/extension-codes/' },
+            'Xamarin Android': { version: '6.5', apiUrl: '/sdks/xamarin/extension-codes/' },
+            'Xamarin Forms': { version: '6.8', apiUrl: '/sdks/xamarin/extension-codes/' },
+            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/extension-codes/' },
+            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/extension-codes/' },
+            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/extension-codes/' },
+            'Web': { version: '6.13', apiUrl: '/sdks/web/extension-codes/' },
+            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/extension-codes/' },
+            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/extension-codes/' }
           }
         },
         {
           name: 'Composite Codes',
+          description: 'Support for composite barcode scanning (GS1 DataBar, etc.)',
           category: 'Barcode Capture',
           frameworks: {
-            'iOS': '6.6',
-            'Android': '6.6',
-            'Cordova': '6.6',
-            'React Native': '6.6',
-            'Xamarin iOS': '6.6',
-            'Xamarin Android': '6.6',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: '6.6', apiUrl: '/sdks/ios/composite-codes/' },
+            'Android': { version: '6.6', apiUrl: '/sdks/android/composite-codes/' },
+            'Cordova': { version: '6.6', apiUrl: '/sdks/cordova/composite-codes/' },
+            'React Native': { version: '6.6', apiUrl: '/sdks/react-native/composite-codes/' },
+            'Xamarin iOS': { version: '6.6', apiUrl: '/sdks/xamarin/composite-codes/' },
+            'Xamarin Android': { version: '6.6', apiUrl: '/sdks/xamarin/composite-codes/' },
+            'Xamarin Forms': { version: '6.8', apiUrl: '/sdks/xamarin/composite-codes/' },
+            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/composite-codes/' },
+            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/composite-codes/' },
+            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/composite-codes/' },
+            'Web': { version: '6.13', apiUrl: '/sdks/web/composite-codes/' },
+            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/composite-codes/' },
+            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/composite-codes/' }
           }
         }
       ]
     },
     {
       title: 'SparkScan',
-      isCollapsed: false,
+      description: 'Ready-to-use barcode scanning UI component',
       features: [
         {
-          name: 'SparkScan Core',
+          name: 'SparkScan SDK',
+          description: 'Pre-built scanning interface with customizable UI',
           category: 'SparkScan',
           frameworks: {
-            'iOS': '6.15',
-            'Android': '6.15',
-            'Cordova': '6.23',
-            'React Native': '6.16',
-            'Xamarin iOS': '6.16',
-            'Xamarin Android': '6.16',
-            'Xamarin Forms': '6.17',
-            'Flutter': '6.20',
-            'Capacitor': '6.22',
-            'Titanium': 'n/a',
-            'Web': '6.21',
-            '.NET iOS': '6.22',
-            '.NET Android': '6.22'
+            'iOS': { version: '6.15', apiUrl: '/sdks/ios/sparkscan/' },
+            'Android': { version: '6.15', apiUrl: '/sdks/android/sparkscan/' },
+            'Cordova': { version: '6.23', apiUrl: '/sdks/cordova/sparkscan/' },
+            'React Native': { version: '6.16', apiUrl: '/sdks/react-native/sparkscan/' },
+            'Xamarin iOS': { version: '6.16', apiUrl: '/sdks/xamarin/sparkscan/' },
+            'Xamarin Android': { version: '6.16', apiUrl: '/sdks/xamarin/sparkscan/' },
+            'Xamarin Forms': { version: '6.17', apiUrl: '/sdks/xamarin/sparkscan/' },
+            'Flutter': { version: '6.20', apiUrl: '/sdks/flutter/sparkscan/' },
+            'Capacitor': { version: '6.22', apiUrl: '/sdks/capacitor/sparkscan/' },
+            'Titanium': { version: 'n/a' },
+            'Web': { version: '6.21', apiUrl: '/sdks/web/sparkscan/' },
+            '.NET iOS': { version: '6.22', apiUrl: '/sdks/net/sparkscan/' },
+            '.NET Android': { version: '6.22', apiUrl: '/sdks/net/sparkscan/' }
           }
         }
       ]
     },
     {
       title: 'MatrixScan Batch',
-      isCollapsed: false,
+      description: 'Batch scanning for multiple barcodes in a single frame',
       features: [
         {
           name: 'MatrixScan Batch SDK',
+          description: 'Scan multiple barcodes simultaneously with batch processing',
           category: 'MatrixScan Batch',
           frameworks: {
-            'iOS': '6.0',
-            'Android': '6.0',
-            'Cordova': '6.1',
-            'React Native': '6.5',
-            'Xamarin iOS': '6.2',
-            'Xamarin Android': '6.2',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: '6.0', apiUrl: '/sdks/ios/matrixscan-batch/' },
+            'Android': { version: '6.0', apiUrl: '/sdks/android/matrixscan-batch/' },
+            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/matrixscan-batch/' },
+            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/matrixscan-batch/' },
+            'Xamarin iOS': { version: '6.2', apiUrl: '/sdks/xamarin/matrixscan-batch/' },
+            'Xamarin Android': { version: '6.2', apiUrl: '/sdks/xamarin/matrixscan-batch/' },
+            'Xamarin Forms': { version: '6.8', apiUrl: '/sdks/xamarin/matrixscan-batch/' },
+            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/matrixscan-batch/' },
+            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/matrixscan-batch/' },
+            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/matrixscan-batch/' },
+            'Web': { version: '6.13', apiUrl: '/sdks/web/matrixscan-batch/' },
+            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/matrixscan-batch/' },
+            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/matrixscan-batch/' }
           }
         }
       ]
     },
     {
       title: 'MatrixScan AR',
-      isCollapsed: false,
+      description: 'Augmented reality barcode scanning with visual overlays',
       features: [
         {
           name: 'MatrixScan AR SDK',
+          description: 'AR-powered scanning with real-time visual feedback',
           category: 'MatrixScan AR',
           frameworks: {
-            'iOS': '6.0',
-            'Android': '6.0',
-            'Cordova': '6.1',
-            'React Native': '6.5',
-            'Xamarin iOS': '6.2',
-            'Xamarin Android': '6.2',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: 'n/a' },
+            'Android': { version: 'n/a' },
+            'Cordova': { version: 'n/a' },
+            'React Native': { version: 'n/a' },
+            'Xamarin iOS': { version: 'n/a' },
+            'Xamarin Android': { version: 'n/a' },
+            'Xamarin Forms': { version: 'n/a' },
+            'Flutter': { version: 'n/a' },
+            'Capacitor': { version: 'n/a' },
+            'Titanium': { version: 'n/a' },
+            'Web': { version: 'n/a' },
+            '.NET iOS': { version: 'n/a' },
+            '.NET Android': { version: 'n/a' }
           }
         }
       ]
     },
     {
       title: 'MatrixScan Count',
-      isCollapsed: false,
+      description: 'Count multiple barcodes with visual feedback',
       features: [
         {
           name: 'MatrixScan Count SDK',
+          description: 'Count and track multiple barcodes in real-time',
           category: 'MatrixScan Count',
           frameworks: {
-            'iOS': '6.0',
-            'Android': '6.0',
-            'Cordova': '6.1',
-            'React Native': '6.5',
-            'Xamarin iOS': '6.2',
-            'Xamarin Android': '6.2',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: 'n/a' },
+            'Android': { version: 'n/a' },
+            'Cordova': { version: 'n/a' },
+            'React Native': { version: 'n/a' },
+            'Xamarin iOS': { version: 'n/a' },
+            'Xamarin Android': { version: 'n/a' },
+            'Xamarin Forms': { version: 'n/a' },
+            'Flutter': { version: 'n/a' },
+            'Capacitor': { version: 'n/a' },
+            'Titanium': { version: 'n/a' },
+            'Web': { version: 'n/a' },
+            '.NET iOS': { version: 'n/a' },
+            '.NET Android': { version: 'n/a' }
           }
         }
       ]
     },
     {
       title: 'MatrixScan Find',
-      isCollapsed: false,
+      description: 'Find specific barcodes in a field of view',
       features: [
         {
           name: 'MatrixScan Find SDK',
+          description: 'Locate and highlight specific barcodes',
           category: 'MatrixScan Find',
           frameworks: {
-            'iOS': '6.0',
-            'Android': '6.0',
-            'Cordova': '6.1',
-            'React Native': '6.5',
-            'Xamarin iOS': '6.2',
-            'Xamarin Android': '6.2',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: 'n/a' },
+            'Android': { version: 'n/a' },
+            'Cordova': { version: 'n/a' },
+            'React Native': { version: 'n/a' },
+            'Xamarin iOS': { version: 'n/a' },
+            'Xamarin Android': { version: 'n/a' },
+            'Xamarin Forms': { version: 'n/a' },
+            'Flutter': { version: 'n/a' },
+            'Capacitor': { version: 'n/a' },
+            'Titanium': { version: 'n/a' },
+            'Web': { version: 'n/a' },
+            '.NET iOS': { version: 'n/a' },
+            '.NET Android': { version: 'n/a' }
           }
         }
       ]
@@ -205,21 +213,22 @@ const FeaturesFilter: React.FC = () => {
       features: [
         {
           name: 'MatrixScan Pick SDK',
+          description: 'Pick and select specific barcodes from multiple detected codes',
           category: 'MatrixScan Pick',
           frameworks: {
-            'iOS': '6.0',
-            'Android': '6.0',
-            'Cordova': '6.1',
-            'React Native': '6.5',
-            'Xamarin iOS': '6.2',
-            'Xamarin Android': '6.2',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: '6.0', apiUrl: '/sdks/ios/matrixscan-pick/' },
+            'Android': { version: '6.0', apiUrl: '/sdks/android/matrixscan-pick/' },
+            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/matrixscan-pick/' },
+            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/matrixscan-pick/' },
+            'Xamarin iOS': { version: '6.2', apiUrl: '/sdks/xamarin/matrixscan-pick/' },
+            'Xamarin Android': { version: '6.2', apiUrl: '/sdks/xamarin/matrixscan-pick/' },
+            'Xamarin Forms': { version: '6.8', apiUrl: '/sdks/xamarin/matrixscan-pick/' },
+            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/matrixscan-pick/' },
+            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/matrixscan-pick/' },
+            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/matrixscan-pick/' },
+            'Web': { version: '6.13', apiUrl: '/sdks/web/matrixscan-pick/' },
+            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/matrixscan-pick/' },
+            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/matrixscan-pick/' }
           }
         }
       ]
@@ -230,21 +239,22 @@ const FeaturesFilter: React.FC = () => {
       features: [
         {
           name: 'Barcode Selection SDK',
+          description: 'Select and manage barcode scanning sessions with user interaction',
           category: 'Barcode Selection',
           frameworks: {
-            'iOS': '6.0',
-            'Android': '6.0',
-            'Cordova': '6.1',
-            'React Native': '6.5',
-            'Xamarin iOS': '6.2',
-            'Xamarin Android': '6.2',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: '6.0', apiUrl: '/sdks/ios/barcode-selection/' },
+            'Android': { version: '6.0', apiUrl: '/sdks/android/barcode-selection/' },
+            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/barcode-selection/' },
+            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/barcode-selection/' },
+            'Xamarin iOS': { version: '6.2', apiUrl: '/sdks/xamarin/barcode-selection/' },
+            'Xamarin Android': { version: '6.2', apiUrl: '/sdks/xamarin/barcode-selection/' },
+            'Xamarin Forms': { version: '6.8', apiUrl: '/sdks/xamarin/barcode-selection/' },
+            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/barcode-selection/' },
+            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/barcode-selection/' },
+            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/barcode-selection/' },
+            'Web': { version: '6.13', apiUrl: '/sdks/web/barcode-selection/' },
+            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/barcode-selection/' },
+            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/barcode-selection/' }
           }
         }
       ]
@@ -255,21 +265,22 @@ const FeaturesFilter: React.FC = () => {
       features: [
         {
           name: 'Smart Label Capture SDK',
+          description: 'Capture and process label data with intelligent recognition',
           category: 'Smart Label Capture',
           frameworks: {
-            'iOS': '6.0',
-            'Android': '6.0',
-            'Cordova': '6.1',
-            'React Native': '6.5',
-            'Xamarin iOS': '6.2',
-            'Xamarin Android': '6.2',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: '6.0', apiUrl: '/sdks/ios/smart-label-capture/' },
+            'Android': { version: '6.0', apiUrl: '/sdks/android/smart-label-capture/' },
+            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/smart-label-capture/' },
+            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/smart-label-capture/' },
+            'Xamarin iOS': { version: '6.2', apiUrl: '/sdks/xamarin/smart-label-capture/' },
+            'Xamarin Android': { version: '6.2', apiUrl: '/sdks/xamarin/smart-label-capture/' },
+            'Xamarin Forms': { version: '6.8', apiUrl: '/sdks/xamarin/smart-label-capture/' },
+            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/smart-label-capture/' },
+            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/smart-label-capture/' },
+            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/smart-label-capture/' },
+            'Web': { version: '6.13', apiUrl: '/sdks/web/smart-label-capture/' },
+            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/smart-label-capture/' },
+            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/smart-label-capture/' }
           }
         }
       ]
@@ -280,21 +291,22 @@ const FeaturesFilter: React.FC = () => {
       features: [
         {
           name: 'Parser SDK',
+          description: 'Parse and extract structured data from barcodes',
           category: 'Parser',
           frameworks: {
-            'iOS': '6.0',
-            'Android': '6.0',
-            'Cordova': '6.1',
-            'React Native': '6.5',
-            'Xamarin iOS': '6.2',
-            'Xamarin Android': '6.2',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: '6.0', apiUrl: '/sdks/ios/parser/' },
+            'Android': { version: '6.0', apiUrl: '/sdks/android/parser/' },
+            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/parser/' },
+            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/parser/' },
+            'Xamarin iOS': { version: '6.2', apiUrl: '/sdks/xamarin/parser/' },
+            'Xamarin Android': { version: '6.2', apiUrl: '/sdks/xamarin/parser/' },
+            'Xamarin Forms': { version: '6.8', apiUrl: '/sdks/xamarin/parser/' },
+            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/parser/' },
+            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/parser/' },
+            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/parser/' },
+            'Web': { version: '6.13', apiUrl: '/sdks/web/parser/' },
+            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/parser/' },
+            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/parser/' }
           }
         }
       ]
@@ -305,21 +317,22 @@ const FeaturesFilter: React.FC = () => {
       features: [
         {
           name: 'Barcode Generator SDK',
+          description: 'Generate barcodes programmatically for various symbologies',
           category: 'Barcode Generator',
           frameworks: {
-            'iOS': '6.0',
-            'Android': '6.0',
-            'Cordova': '6.1',
-            'React Native': '6.5',
-            'Xamarin iOS': '6.2',
-            'Xamarin Android': '6.2',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: '6.0', apiUrl: '/sdks/ios/barcode-generator/' },
+            'Android': { version: '6.0', apiUrl: '/sdks/android/barcode-generator/' },
+            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/barcode-generator/' },
+            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/barcode-generator/' },
+            'Xamarin iOS': { version: '6.2', apiUrl: '/sdks/xamarin/barcode-generator/' },
+            'Xamarin Android': { version: '6.2', apiUrl: '/sdks/xamarin/barcode-generator/' },
+            'Xamarin Forms': { version: '6.8', apiUrl: '/sdks/xamarin/barcode-generator/' },
+            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/barcode-generator/' },
+            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/barcode-generator/' },
+            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/barcode-generator/' },
+            'Web': { version: '6.13', apiUrl: '/sdks/web/barcode-generator/' },
+            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/barcode-generator/' },
+            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/barcode-generator/' }
           }
         }
       ]
@@ -330,21 +343,22 @@ const FeaturesFilter: React.FC = () => {
       features: [
         {
           name: 'ID Capture SDK',
+          description: 'Capture and process identity documents with OCR and verification',
           category: 'ID Capture',
           frameworks: {
-            'iOS': '6.0',
-            'Android': '6.0',
-            'Cordova': '6.1',
-            'React Native': '6.5',
-            'Xamarin iOS': '6.2',
-            'Xamarin Android': '6.2',
-            'Xamarin Forms': '6.8',
-            'Flutter': '6.7',
-            'Capacitor': '6.8',
-            'Titanium': '6.8',
-            'Web': '6.13',
-            '.NET iOS': '6.16',
-            '.NET Android': '6.16'
+            'iOS': { version: '6.0', apiUrl: '/sdks/ios/id-capture/' },
+            'Android': { version: '6.0', apiUrl: '/sdks/android/id-capture/' },
+            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/id-capture/' },
+            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/id-capture/' },
+            'Xamarin iOS': { version: '6.2', apiUrl: '/sdks/xamarin/id-capture/' },
+            'Xamarin Android': { version: '6.2', apiUrl: '/sdks/xamarin/id-capture/' },
+            'Xamarin Forms': { version: '6.8', apiUrl: '/sdks/xamarin/id-capture/' },
+            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/id-capture/' },
+            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/id-capture/' },
+            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/id-capture/' },
+            'Web': { version: '6.13', apiUrl: '/sdks/web/id-capture/' },
+            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/id-capture/' },
+            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/id-capture/' }
           }
         }
       ]
@@ -370,7 +384,8 @@ const FeaturesFilter: React.FC = () => {
     // Search filter
     if (searchQuery) {
       const hasMatchingFeature = section.features.some(feature =>
-        feature.name.toLowerCase().includes(searchQuery.toLowerCase())
+        feature.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (feature.description && feature.description.toLowerCase().includes(searchQuery.toLowerCase()))
       );
       if (!hasMatchingFeature) return false;
     }
@@ -380,8 +395,8 @@ const FeaturesFilter: React.FC = () => {
       const hasFramework = section.features.some(feature => {
         const frameworkName = FRAMEWORKS.find(f => f.key === frameworkFilter)?.name;
         if (!frameworkName) return false;
-        const version = feature.frameworks[frameworkName];
-        return version && version !== 'n/a';
+        const frameworkData = feature.frameworks[frameworkName];
+        return frameworkData && frameworkData.version !== 'n/a';
       });
       if (!hasFramework) return false;
     }
@@ -393,7 +408,9 @@ const FeaturesFilter: React.FC = () => {
   const getFilteredFeatures = (features: Feature[]) => {
     return features.filter(feature => {
       // Search filter
-      if (searchQuery && !feature.name.toLowerCase().includes(searchQuery.toLowerCase())) {
+      if (searchQuery && 
+          !feature.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          !(feature.description && feature.description.toLowerCase().includes(searchQuery.toLowerCase()))) {
         return false;
       }
 
@@ -401,18 +418,12 @@ const FeaturesFilter: React.FC = () => {
       if (frameworkFilter) {
         const frameworkName = FRAMEWORKS.find(f => f.key === frameworkFilter)?.name;
         if (!frameworkName) return false;
-        const version = feature.frameworks[frameworkName];
-        return version && version !== 'n/a';
+        const frameworkData = feature.frameworks[frameworkName];
+        return frameworkData && frameworkData.version !== 'n/a';
       }
 
       return true;
     });
-  };
-
-  const toggleSection = (index: number) => {
-    setSections(prev => prev.map((section, i) => 
-      i === index ? { ...section, isCollapsed: !section.isCollapsed } : section
-    ));
   };
 
   const clearFilters = () => {
@@ -420,6 +431,7 @@ const FeaturesFilter: React.FC = () => {
     setProductFilter('');
     setSearchQuery('');
   };
+
 
   if (isLoading) {
     return <div className={styles.loading}></div>;
@@ -500,30 +512,47 @@ const FeaturesFilter: React.FC = () => {
 
         return (
           <div key={index} className={styles.productSection}>
-            <div
-              className={`${styles.sectionHeader} ${section.isCollapsed ? styles.collapsed : ''}`}
-              onClick={() => toggleSection(index)}
-            >
-              <h2 className={styles.sectionTitle}>{section.title}</h2>
-              <span className={styles.sectionToggle}>▼</span>
+            <div className={styles.sectionHeader}>
+              <div className={styles.sectionContent}>
+                <h2 className={styles.sectionTitle}>{section.title}</h2>
+                <p className={styles.sectionDescription}>{section.description}</p>
+              </div>
             </div>
             
-            <div className={`${styles.featureGrid} ${section.isCollapsed ? styles.collapsed : ''}`}>
+            <div className={styles.featureList}>
               {filteredFeatures.map((feature, featureIndex) => (
-                <div key={featureIndex} className={styles.featureCard}>
-                  <h3 className={styles.featureName}>{feature.name}</h3>
-                  <div className={styles.frameworkGrid}>
-                    {FRAMEWORKS.map(framework => {
-                      const version = feature.frameworks[framework.name];
-                      return (
-                        <div key={framework.key} className={styles.frameworkItem}>
-                          <span className={styles.frameworkName}>{framework.name}</span>
-                          <span className={`${styles.version} ${version === 'n/a' ? styles.na : styles.available}`}>
-                            {version || 'n/a'}
-                          </span>
-                        </div>
-                      );
-                    })}
+                <div key={featureIndex} className={styles.featureItem}>
+                  <div className={styles.featureContent}>
+                    <h3 className={styles.featureName}>{feature.name}</h3>
+                    <p className={styles.featureDescription}>{feature.description}</p>
+                  </div>
+                  <div className={styles.frameworkList}>
+                    {FRAMEWORKS
+                      .filter(framework => !frameworkFilter || framework.key === frameworkFilter)
+                      .map(framework => {
+                        const frameworkData = feature.frameworks[framework.name];
+                        const isAvailable = frameworkData && frameworkData.version !== 'n/a';
+                        
+                        return (
+                          <div key={framework.key} className={styles.frameworkItem}>
+                            <span className={styles.frameworkName}>{framework.name}</span>
+                            {isAvailable && frameworkData.apiUrl ? (
+                              <a 
+                                href={frameworkData.apiUrl} 
+                                className={`${styles.version} ${styles.versionLink}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {frameworkData.version}
+                              </a>
+                            ) : (
+                              <span className={`${styles.version} ${styles.na}`}>
+                                {frameworkData?.version || 'n/a'}
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
               ))}
