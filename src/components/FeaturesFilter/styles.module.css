@@ -195,11 +195,11 @@
 .integrationPathItem {
   display: inline-flex;
   align-items: center;
-  padding: 6px 12px;
+  padding: 4px 10px;
   background-color: var(--ifm-color-emphasis-100);
   border: 1px solid var(--ifm-color-emphasis-200);
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--ifm-color-emphasis-700);
   text-decoration: none;
