@@ -10,11 +10,38 @@ export interface Feature {
   };
 }
 
+export interface IntegrationPath {
+  type: 'Custom SDK' | 'Pre-built Component' | 'No-Code';
+  label: string;
+  url?: string;
+}
+
 export interface Section {
   title: string;
   description: string;
   features: Feature[];
+  integrationPaths?: IntegrationPath[];
   isCollapsed?: boolean;
+}
+
+export type FeatureCategory = 'Smart Features' | 'Label Support';
+
+export interface ProductAvailability {
+  productKey: string;
+  notes?: string;
+}
+
+export interface CrossProductFeature {
+  name: string;
+  description: string;
+  category: FeatureCategory;
+  availableInProducts: ProductAvailability[];
+  frameworks: {
+    [key: string]: {
+      version: string;
+      apiUrl?: string;
+    };
+  };
 }
 
 export interface Framework {
@@ -32,9 +59,6 @@ export const FRAMEWORKS: Framework[] = [
   { key: 'android', name: 'Android' },
   { key: 'cordova', name: 'Cordova' },
   { key: 'react-native', name: 'React Native' },
-  { key: 'xamarin-ios', name: 'Xamarin iOS' },
-  { key: 'xamarin-android', name: 'Xamarin Android' },
-  { key: 'xamarin-forms', name: 'Xamarin Forms' },
   { key: 'flutter', name: 'Flutter' },
   { key: 'capacitor', name: 'Capacitor' },
   { key: 'titanium', name: 'Titanium' },
@@ -58,5 +82,12 @@ export const PRODUCTS: Product[] = [
   { key: 'id-capture', name: 'ID Capture' }
 ];
 
+export const INTEGRATION_PATHS = [
+  { key: 'custom-sdk', name: 'Custom SDK' },
+  { key: 'pre-built', name: 'Pre-built Component' },
+  { key: 'no-code', name: 'No-Code' }
+];
+
 export const FRAMEWORK_KEYS = FRAMEWORKS.map(f => f.key);
 export const PRODUCT_KEYS = PRODUCTS.map(p => p.key);
+export const INTEGRATION_PATH_KEYS = INTEGRATION_PATHS.map(i => i.key);
