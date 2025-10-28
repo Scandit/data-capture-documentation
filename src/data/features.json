@@ -1,0 +1,212 @@
+[
+  {
+    "name": "SerialNumberBarcode",
+    "description": "A barcode field for capturing serial numbers, typically used in electronics and appliances.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Fields",
+    "tag": "Barcode Fields",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
+      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/serial-number-barcode.html#serial-number-barcode" }
+    }
+  },
+  {
+    "name": "PartNumberBarcode",
+    "description": "A barcode field for capturing part numbers, commonly used in manufacturing and inventory management.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Fields",
+    "tag": "Barcode Fields",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/part-number-barcode.html#part-number-barcode" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/part-number-barcode.html#part-number-barcode" },
+      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/part-number-barcode.html#part-number-barcode" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/part-number-barcode.html#part-number-barcode" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/part-number-barcode.html#part-number-barcode" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/part-number-barcode.html#part-number-barcode" }
+    }
+  },
+  {
+    "name": "ImeiOneBarcode",
+    "description": "A barcode field for capturing the first International Mobile Equipment Identity (IMEI) number, used in mobile devices.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Fields",
+    "tag": "Barcode Fields",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
+      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/imei-one-barcode.html#imei-one-barcode" }
+    }
+  },
+  {
+    "name": "ImeiTwoBarcode",
+    "description": "A barcode field for capturing the second International Mobile Equipment Identity (IMEI) number, used in mobile devices.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Fields",
+    "tag": "Barcode Fields",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
+      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/imei-two-barcode.html#imei-two-barcode" }
+    }
+  },
+  {
+    "name": "UnitPriceText",
+    "description": "A text field for capturing the unit price of an item, often used in retail and grocery labels.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Fields",
+    "tag": "Price and Weight Fields",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/unit-price-text.html#unit-price-text" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/unit-price-text.html#unit-price-text" },
+      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/unit-price-text.html#unit-price-text" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/unit-price-text.html#unit-price-text" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/unit-price-text.html#unit-price-text" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/unit-price-text.html#unit-price-text" }
+    }
+  },
+  {
+    "name": "TotalPriceText",
+    "description": "A text field for capturing the total price of an item, typically used in retail and grocery labels.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Fields",
+    "tag": "Price and Weight Fields",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/total-price-text.html#total-price-text" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/total-price-text.html#total-price-text" },
+      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/total-price-text.html#total-price-text" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/total-price-text.html#total-price-text" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/total-price-text.html#total-price-text" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/total-price-text.html#total-price-text" }
+    }
+  },
+  {
+    "name": "WeightText",
+    "description": "A text field for capturing the weight of an item, commonly used in shipping and logistics.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Fields",
+    "tag": "Price and Weight Fields",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/weight-text.html#weight-text" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/weight-text.html#weight-text" },
+      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/weight-text.html#weight-text" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/weight-text.html#weight-text" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/weight-text.html#weight-text" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/weight-text.html#weight-text" }
+    }
+  },
+  {
+    "name": "PackingDateText",
+    "description": "A text field for capturing the packing date of an item, often used in food and beverage labels.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Fields",
+    "tag": "Date and Custom Text Fields",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/packing-date-text.html#packing-date-text" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/packing-date-text.html#packing-date-text" },
+      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/packing-date-text.html#packing-date-text" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/packing-date-text.html#packing-date-text" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/packing-date-text.html#packing-date-text" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/packing-date-text.html#packing-date-text" }
+    }
+  },
+  {
+    "name": "ExpiryDateText",
+    "description": "A text field for capturing the expiry date of an item, commonly used in pharmaceuticals and food products.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Fields",
+    "tag": "Date and Custom Text Fields",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/expiry-date-text.html#expiry-date-text" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/expiry-date-text.html#expiry-date-text" },
+      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/expiry-date-text.html#expiry-date-text" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/expiry-date-text.html#expiry-date-text" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/expiry-date-text.html#expiry-date-text" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/expiry-date-text.html#expiry-date-text" }
+    }
+  },
+  {
+    "name": "Price Label",
+    "description": "This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `SKU` and `priceText` fields.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Labels",
+    "tag": "Label Definitions",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
+      "Web": { "version": "7.4", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" }
+    }
+  },
+  {
+    "name": "VIN Label",
+    "description": "A predefined label definition for scanning Vehicle Identification Numbers (VIN). Returns `text` and/or `barcode` fields.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Labels",
+    "tag": "Label Definitions",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
+      "Web": { "version": "7.4", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" }
+    }
+  },
+  {
+    "name": "7-Segment Display",
+    "description": "This definition is used for capturing numeric values from 7-segment displays, such as those found on digital scales or meters. Returns `text` field for weight value.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Labels",
+    "tag": "Label Definitions",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
+      "Web": { "version": "n/a" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" }
+    }
+  },
+  {
+    "name": "CustomBarcode",
+    "description": "A custom barcode field that allows you to define your own barcode field with specific symbologies and regex patterns for capturing custom barcode data.",
+    "product": "smart-label-capture",
+    "category": "Custom Fields",
+    "tag": "Field Types",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/custom-barcode.html#custom-barcode" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/custom-barcode.html#custom-barcode" },
+      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/custom-barcode.html#custom-barcode" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/custom-barcode.html#custom-barcode" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/custom-barcode.html#custom-barcode" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/custom-barcode.html#custom-barcode" }
+    }
+  },
+  {
+    "name": "CustomText",
+    "description": "A custom text field that allows you to define your own text field with specific regex patterns for capturing custom text data from labels.",
+    "product": "smart-label-capture",
+    "category": "Custom Fields",
+    "tag": "Field Types",
+    "frameworks": {
+      "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/custom-text.html#custom-text" },
+      "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/custom-text.html#custom-text" },
+      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/custom-text.html#custom-text" },
+      "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/custom-text.html#custom-text" },
+      "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/custom-text.html#custom-text" },
+      "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/custom-text.html#custom-text" }
+    }
+  }
+]

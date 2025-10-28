@@ -67,3 +67,7 @@ useEffect(() => {
 :::tip
 Use brush colors with transparency (alpha < 100%) to not occlude the captured barcodes or texts.
 :::
+
+## Validation Flow
+
+Validation Flow is a workflow available in Smart Label Capture to improve the accuracy and completeness of scanned label data in real-world environments. See the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-validation-flow-overlay.html) and [LabelCaptureValidationFlowSettings](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-validation-flow-settings.html) API references for implementation details.
