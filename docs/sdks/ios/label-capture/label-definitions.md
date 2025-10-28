@@ -20,7 +20,7 @@ There are two approaches to using label definitions:
 
 ## Pre-built Labels
 
-Smart Label Capture provides pre-built label definitions out of the box for the following common label types:
+Smart Label Capture includes ready-made label definitions for common use cases. These pre-built options let you recognize and extract information from standard label types without creating custom configurations:
 
 <FeatureList 
   product="smart-label-capture" 
@@ -43,7 +43,7 @@ let settings = try LabelCaptureSettings {
 
 ## Custom Labels
 
-If your use case is unique and not covered by Smart Label Capture's pre-built labels, you can define your own custom labels. These custom labels can use any combination of fully custom fields and pre-built fields, detailed below.
+If Smart Label Capture’s pre-built options don’t fit your needs, define a custom label instead. Custom labels can combine your own fields with any of the available pre-built ones.
 
 :::tip
 The following characters are recognized: `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ()-./:,$¶"`.

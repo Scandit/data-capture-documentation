@@ -20,7 +20,7 @@ There are two approaches to using label definitions:
 
 ## Pre-built Labels
 
-Smart Label Capture provides pre-built label definitions out of the box for the following common label types:
+Smart Label Capture includes ready-made label definitions for common use cases. These pre-built options let you recognize and extract information from standard label types without creating custom configurations:
 
 <FeatureList 
   product="smart-label-capture" 
@@ -44,7 +44,7 @@ val settings =
 
 ## Custom Labels
 
-If your use case is unique and not covered by Smart Label Capture's pre-built labels, you can define your own custom labels. These custom labels can use any combination of fully custom fields and pre-built fields, detailed below.
+If Smart Label Capture’s pre-built options don’t fit your needs, define a custom label instead. Custom labels can combine your own fields with any of the available pre-built ones.
 
 :::tip
 The following characters are recognized: `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ()-./:,$¶"`.
@@ -94,7 +94,7 @@ val settings =
 
 ### Pre-built Fields
 
-You can also configure your label by using pre-built fields. These are some common fields provided for faster integration, with all `valueRegexes`, `anchorRegexes`, and `symbologies` already predefined.
+You can also build your label using pre-built fields. These common fields speed up integration because their `valueRegexes`, `anchorRegexes`, and `symbologies` are already predefined.
 
 Customization of pre-built fields is done via the `valueRegexes`, `anchorRegexes`, and `isOptional` methods, which allow you to specify the expected format of the field data.
 
