@@ -15,69 +15,59 @@ To customize the appearance of the overlay, you can implement a [LabelCaptureBas
 
 The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label captured and [brushForField()](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
-```ts
-import { Color, DataCaptureView } from "@scandit/web-datacapture-core";
-import type { 
-  LabelCaptureBasicOverlayListener, 
-  LabelCaptureBasicOverlay, 
-  LabelField,
-  CapturedLabel 
-} from "@scandit/web-datacapture-label";
-
-const dataCaptureView = await DataCaptureView.forContext(DataCaptureContext.sharedInstance);
-
-const transparentColor = Color.fromRGBA(0,0,0,0);
-const overlayListener: LabelCaptureBasicOverlayListener = {
-    brushForField(overlay: LabelCaptureBasicOverlay,
-        field: LabelField,
-        label: CapturedLabel): Brush | null => {
+```js
+const overlayListener = LabelCaptureBasicOverlayListener>(() => ({
+    brushForFieldOfLabel: (_, field) => {
       switch (field.name) {
       case "<your-barcode-field-name>":
         return new Brush(
-          Color.fromRGBA(0, 255, 255, 0.5),
-          Color.fromRGBA(0, 255, 255, 0.5),
-          0
-        )
-        break;
+          "rgba(0, 255, 255, 0.5)",
+          "rgba(0, 255, 255, 0.5)",
+          0)
       case "<your-expiry-date-field-name>":
         return new Brush(
-          Color.fromRGBA(255, 165, 0, 0.5),
-          Color.fromRGBA(255, 165, 0, 0.5),
-          0);
-        break;
+          "rgba(255, 165, 0, 0.5)",
+          "rgba(255, 165, 0, 0.5)",
+          0)
       default:
         return new Brush(
-          transparentColor,
-          transparentColor,
-          0);
+          Colors.transparentColor,
+          Colors.transparentColor,
+          0)
     },
-    brushForLabel(overlay: LabelCaptureBasicOverlay,
-        label: CapturedLabel): Brush | null {
-      return new Brush(transparentColor, transparentColor, 0)
+    brushForLabel() {
+      return new Brush(Colors.transparentColor, Colors.transparentColor, 0)
     },
-    onLabelTapped(overlay: LabelCaptureBasicOverlay, label: CapturedLabel) {
+    didTapLabel() {
       /*
        * Handle user tap gestures on the label.
        */
     }
-  }
-};
+  }), [])
 
-/*
-  * Assign the overlay listener to the overlay
-  * before adding it to the data capture view.
-  */
-overlay.listener = overlayListener;
-await dataCaptureView.addOverlay(overlay);
-
-/*
-  * Unassign the overlay listener from the overlay
-  * before removing it from the data capture view.
-  */
-overlay.listener = null;
-await dataCaptureView.removeOverlay(overlay);
+useEffect(() => {
+    /*
+     * Assign the overlay listener to the overlay
+     * before adding it to the data capture view.
+     */
+    overlay.listener = overlayListener
+    const dataCaptureView = dataCaptureViewRef.current
+    dataCaptureView.addOverlay(overlay)
+    return () => {
+        /*
+         * Unassign the overlay listener from the overlay
+         * before removing it from the data capture view.
+         */
+        overlay.listener = null
+        dataCaptureView?.removeOverlay(overlay)
+    }
+}, [])
 ```
 
 :::tip
 Use brush colors with transparency (alpha < 100%) to not occlude the captured barcodes or texts.
 :::
+
+## Validation Flow
+
+Validation Flow is a workflow available in Smart Label Capture to improve the accuracy and completeness of scanned label data in real-world environments. See the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/ui/label-capture-validation-flow-overlay.html) and [LabelCaptureValidationFlowSettings](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/ui/label-capture-validation-flow-settings.html) API references for implementation details.
