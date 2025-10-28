@@ -21,8 +21,12 @@ There are two approaches to using label definitions:
 
 Smart Label Capture provides pre-built label definitions out of the box for the following common label types:
 
-- [**Price Label**](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName): This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `SKU` and `priceText` fields.
-- [**VIN Label**](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName): A predefined label definition for scanning Vehicle Identification Numbers (VIN). Returns `text` and/or `barcode` fields.
+<FeatureList 
+  product="smart-label-capture" 
+  category="Pre-built Labels" 
+  tag="Label Definitions" 
+  displayMode="compact"
+/>
 
 ### Example: Price label
 
@@ -48,8 +52,12 @@ The following characters are recognized: `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZab
 
 There are two types of custom fields you can define:
 
-* [`CustomBarcode`](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/custom-barcode.html#custom-barcode)
-* [`CustomText`](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/custom-text.html#custom-text)
+<FeatureList 
+  product="smart-label-capture" 
+  category="Custom Fields" 
+  tag="Field Types" 
+  displayMode="compact"
+/>
 
 The following methods are available to configure custom fields:
 
@@ -93,32 +101,34 @@ All pre-built fields come with default `valueRegexes` and `anchorRegexes` that a
 The `resetAnchorRegexes` method can be used to remove the default `anchorRegexes`, allowing you to rely solely on the `valueRegexes` for detection.
 :::
 
+import FeatureList from '@site/src/components/FeatureList';
+
 #### Barcode Fields
 
-* [`SerialNumberBarcode`](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/serial-number-barcode.html#serial-number-barcode):
-  A barcode field for capturing serial numbers, typically used in electronics and appliances.
-* [`PartNumberBarcode`](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/part-number-barcode.html#part-number-barcode):
-  A barcode field for capturing part numbers, commonly used in manufacturing and inventory management.
-* [`ImeiOneBarcode`](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/imei-one-barcode.html#imei-one-barcode): 
-  A barcode field for capturing the first International Mobile Equipment Identity (IMEI) number, used in mobile devices.
-* [`ImeiTwoBarcode`](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/imei-two-barcode.html#imei-two-barcode): 
-  A barcode field for capturing the second International Mobile Equipment Identity (IMEI) number, used in mobile devices.
+<FeatureList 
+  product="smart-label-capture" 
+  category="Pre-built Fields" 
+  tag="Barcode Fields" 
+  displayMode="compact"
+/>
 
 #### Price and Weight Fields
 
-* [`UnitPriceText`](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/unit-price-text.html#unit-price-text):
-  A text field for capturing the unit price of an item, often used in retail and grocery labels.
-* [`TotalPriceText`](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/total-price-text.html#total-price-text):
-  A text field for capturing the total price of an item, typically used in retail and grocery labels.
-* [`WeightText`](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/weight-text.html#weight-text):
-  A text field for capturing the weight of an item, commonly used in shipping and logistics.
+<FeatureList 
+  product="smart-label-capture" 
+  category="Pre-built Fields" 
+  tag="Price and Weight Fields" 
+  displayMode="compact"
+/>
 
 #### Date and Custom Text Fields
 
-* [`PackingDateText`](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/packing-date-text.html#packing-date-text):
-  A text field for capturing the packing date of an item, often used in food and beverage labels.
-* [`ExpiryDateText`](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/expiry-date-text.html#expiry-date-text):
-  A text field for capturing the expiry date of an item, commonly used in pharmaceuticals and food products.
+<FeatureList 
+  product="smart-label-capture" 
+  category="Pre-built Fields" 
+  tag="Date and Custom Text Fields" 
+  displayMode="compact"
+/>
 
 #### Example: Hard disk drive label
 
