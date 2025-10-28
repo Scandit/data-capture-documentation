@@ -21,8 +21,12 @@ There are two approaches to using label definitions:
 
 Smart Label Capture provides pre-built label definitions out of the box for the following common label types:
 
-- [**Price Label**](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName): This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `SKU` and `priceText` fields.
-- [**VIN Label**](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName): A predefined label definition for scanning Vehicle Identification Numbers (VIN). Returns `text` and/or `barcode` fields.
+<FeatureList 
+  product="smart-label-capture" 
+  category="Pre-built Labels" 
+  tag="Label Definitions" 
+  displayMode="compact"
+/>
 
 ### Example: Price label
 
@@ -48,8 +52,12 @@ The following characters are recognized: `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZab
 
 There are two types of custom fields you can define:
 
-* [`CustomBarcode`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/custom-barcode.html#custom-barcode)
-* [`CustomText`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/custom-text.html#custom-text)
+<FeatureList 
+  product="smart-label-capture" 
+  category="Custom Fields" 
+  tag="Field Types" 
+  displayMode="compact"
+/>
 
 The following methods are available to configure custom fields:
 

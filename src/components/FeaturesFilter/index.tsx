@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles.module.css';
 import { Feature, Section, IntegrationPath, CrossProductFeature, FRAMEWORKS, PRODUCTS, INTEGRATION_PATHS, FRAMEWORK_KEYS, PRODUCT_KEYS, INTEGRATION_PATH_KEYS } from './types';
+import productsData from '@site/src/data/products.json';
+import featuresData from '@site/src/data/features.json';
 
 const FeaturesFilter: React.FC = () => {
   const [sections, setSections] = useState<Section[]>([]);
@@ -120,339 +122,63 @@ const FeaturesFilter: React.FC = () => {
     }
   ];
 
-  // Pre-defined data structure with only the requested product tabs
-  const featuresData: Section[] = [
-    {
-      title: 'SparkScan',
-      description: 'Pre-built, high-performance barcode scanning component with minimalistic floating UI. Integrates in minutes with just a few lines of code. Features pre-optimized ergonomic UX with continuous scanning, tap-to-scan, and target/selection modes. Includes pre-built buttons to switch to advanced modes like Barcode Count, Find, and Smart Label Capture.',
-      integrationPaths: [
-        { type: 'SDK with prebuild components', label: 'SDK with prebuild components' }
-      ],
-      features: [
-        {
-          name: 'SparkScan SDK',
-          description: 'Pre-built scanning interface with customizable UI',
-          category: 'SparkScan',
-          frameworks: {
-            'iOS': { version: '6.15', apiUrl: '/sdks/ios/sparkscan/intro' },
-            'Android': { version: '6.15', apiUrl: '/sdks/android/sparkscan/intro' },
-            'Cordova': { version: '6.23', apiUrl: '/sdks/cordova/sparkscan/intro' },
-            'React Native': { version: '6.16', apiUrl: '/sdks/react-native/sparkscan/intro' },
-            'Flutter': { version: '6.20', apiUrl: '/sdks/flutter/sparkscan/intro' },
-            'Capacitor': { version: '6.22', apiUrl: '/sdks/capacitor/sparkscan/intro' },
-            'Titanium': { version: 'n/a' },
-            'Web': { version: '6.21', apiUrl: '/sdks/web/sparkscan/intro' },
-            '.NET iOS': { version: '6.22', apiUrl: '/sdks/net/ios/sparkscan/intro' },
-            '.NET Android': { version: '6.22', apiUrl: '/sdks/net/android/sparkscan/intro' }
-          }
-        }
-      ]
-    },
-    {
-      title: 'Barcode Capture',
-      description: 'The foundational, fully customizable SDK for integrating high-performance single barcode scanning. Offers complete control over UI and scanning experience with unparalleled performance in difficult conditions. Supports 20,000+ smart device models and all major development frameworks.',
-      integrationPaths: [
-        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' }
-      ],
-      features: [
-        {
-          name: 'Barcode Capture SDK',
-          description: 'Main SDK for barcode scanning with camera integration',
-          category: 'Barcode Capture',
-          frameworks: {
-            'iOS': { version: '6.0', apiUrl: '/sdks/ios/barcode-capture/get-started' },
-            'Android': { version: '6.0', apiUrl: '/sdks/android/barcode-capture/get-started' },
-            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/barcode-capture/get-started' },
-            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/barcode-capture/get-started' },
-            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/barcode-capture/get-started' },
-            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/barcode-capture/get-started' },
-            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/barcode-capture/get-started' },
-            'Web': { version: '6.13', apiUrl: '/sdks/web/barcode-capture/get-started' },
-            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/ios/barcode-capture/get-started' },
-            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/android/barcode-capture/get-started' }
-          }
-        },
-      ]
-    },
-    {
-      title: 'MatrixScan Batch',
-      description: 'Locate, track, and decode multiple barcodes simultaneously in the camera view. Ideal for scan-intensive workflows where the goal is to capture a list of all items present—perfect for proof of delivery, high-volume receiving, and accelerating packing processes. Massively accelerates workflows compared to single scanning.',
-      integrationPaths: [
-        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' },
-        { type: 'No-Code', label: 'Scandit Express (No-Code)', url: 'https://docs.scandit.com/hosted/express/overview/' }
-      ],
-      features: [
-        {
-          name: 'MatrixScan Batch SDK',
-          description: 'Scan multiple barcodes simultaneously with batch processing',
-          category: 'MatrixScan Batch',
-          frameworks: {
-            'iOS': { version: '6.0', apiUrl: '/sdks/ios/matrixscan/intro' },
-            'Android': { version: '6.0', apiUrl: '/sdks/android/matrixscan/intro' },
-            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/matrixscan/intro' },
-            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/matrixscan/intro' },
-            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/matrixscan/intro' },
-            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/matrixscan/intro' },
-            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/matrixscan/intro' },
-            'Web': { version: '6.13', apiUrl: '/sdks/web/matrixscan/intro' },
-            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/ios/matrixscan/intro' },
-            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/android/matrixscan/intro' }
-          }
-        }
-      ]
-    },
-    {
-      title: 'MatrixScan AR',
-      description: 'Highly customizable SDK combining high-speed multiple barcode scanning with custom AR overlays. Display real-time contextual information, graphics, or interactive elements on physical items in the live camera view. Ideal for stock levels, sorting instructions, or creating interactive experiences. Offers maximum flexibility and customization.',
-      integrationPaths: [
-        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' }
-      ],
-      features: [
-        {
-          name: 'MatrixScan AR SDK',
-          description: 'AR-powered scanning with real-time visual feedback',
-          category: 'MatrixScan AR',
-          frameworks: {
-            'iOS': { version: '7.1', apiUrl: '/sdks/ios/matrixscan-ar/intro' },
-            'Android': { version: '7.1', apiUrl: '/sdks/android/matrixscan-ar/intro' },
-            'Cordova': { version: 'n/a' },
-            'React Native': { version: '7.1', apiUrl: '/sdks/react-native/matrixscan-ar/intro' },
-            'Flutter': { version: '7.1', apiUrl: '/sdks/flutter/matrixscan-ar/intro' },
-            'Capacitor': { version: 'n/a' },
-            'Titanium': { version: 'n/a' },
-            'Web': { version: '7.1', apiUrl: '/sdks/web/matrixscan-ar/intro' },
-            '.NET iOS': { version: '7.1', apiUrl: '/sdks/net/ios/matrixscan-ar/intro' },
-            '.NET Android': { version: '7.1', apiUrl: '/sdks/net/android/matrixscan-ar/intro' }
-          }
-        }
-      ]
-    },
-    {
-      title: 'MatrixScan Count',
-      description: 'Pre-built scan-and-count solution that scans multiple items at once and verifies against expected lists or manifests. Speeds up counting workflows by up to 10x with intuitive AR feedback that makes accuracy effortless. Perfect for automating inventory management, receiving goods, cycle counting, and full stock takes.',
-      integrationPaths: [
-        { type: 'SDK with prebuild components', label: 'SDK with prebuild components' },
-        { type: 'No-Code', label: 'Scandit Express (No-Code)', url: 'https://docs.scandit.com/hosted/express/overview/' }
-      ],
-      features: [
-        {
-          name: 'MatrixScan Count SDK',
-          description: 'Count and track multiple barcodes in real-time',
-          category: 'MatrixScan Count',
-          frameworks: {
-            'iOS': { version: '6.9', apiUrl: '/sdks/ios/matrixscan-count/intro' },
-            'Android': { version: '6.9', apiUrl: '/sdks/android/matrixscan-count/intro' },
-            'Cordova': { version: '6.10', apiUrl: '/sdks/cordova/matrixscan-count/intro' },
-            'React Native': { version: '6.10', apiUrl: '/sdks/react-native/matrixscan-count/intro' },
-            'Flutter': { version: '6.10', apiUrl: '/sdks/flutter/matrixscan-count/intro' },
-            'Capacitor': { version: '6.12', apiUrl: '/sdks/capacitor/matrixscan-count/intro' },
-            'Titanium': { version: 'n/a' },
-            'Web': { version: 'n/a' },
-            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/ios/matrixscan-count/intro' },
-            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/android/matrixscan-count/intro' }
-          }
-        }
-      ]
-    },
-    {
-      title: 'MatrixScan Find',
-      description: 'Pre-built AR component that helps users instantly locate specific items from a predefined list in visually crowded environments. Perfect for in-store order picking (click-and-collect), finding customer parcels at PUDO points, or locating specific baggage. The fastest way to deploy a "search and find" feature with an out-of-the-box UI.',
-      integrationPaths: [
-        { type: 'SDK with prebuild components', label: 'SDK with prebuild components' },
-        { type: 'No-Code', label: 'Scandit Express (No-Code)', url: 'https://docs.scandit.com/hosted/express/overview/' }
-      ],
-      features: [
-        {
-          name: 'MatrixScan Find SDK',
-          description: 'Locate and highlight specific barcodes',
-          category: 'MatrixScan Find',
-          frameworks: {
-            'iOS': { version: '6.9', apiUrl: '/sdks/ios/matrixscan-find/intro' },
-            'Android': { version: '6.9', apiUrl: '/sdks/android/matrixscan-find/intro' },
-            'Cordova': { version: '6.10', apiUrl: '/sdks/cordova/matrixscan-find/intro' },
-            'React Native': { version: '6.10', apiUrl: '/sdks/react-native/matrixscan-find/intro' },
-            'Flutter': { version: '6.10', apiUrl: '/sdks/flutter/matrixscan-find/intro' },
-            'Capacitor': { version: '6.12', apiUrl: '/sdks/capacitor/matrixscan-find/intro' },
-            'Titanium': { version: 'n/a' },
-            'Web': { version: 'n/a' },
-            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/ios/matrixscan-find/intro' },
-            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/android/matrixscan-find/intro' }
-          }
-        }
-      ]
-    },
-    {
-      title: 'MatrixScan Pick',
-      description: 'AR-guided workflow solution that transforms complex multi-item tasks into visual, interactive checklists. Uses distinct AR icons to assign tasks and track completion. Eliminates errors and guesswork by visually guiding users through bulk tasks like receiving with exception handling, guided restocking, and staging area audits.',
-      integrationPaths: [
-        { type: 'SDK with prebuild components', label: 'SDK with prebuild components' }
-      ],
-      isCollapsed: false,
-      features: [
-        {
-          name: 'MatrixScan Pick SDK',
-          description: 'Pre-built but highly customizable UI for sophisticated AR-guided workflows',
-          category: 'MatrixScan Pick',
-          frameworks: {
-            'iOS': { version: '6.9', apiUrl: '/sdks/ios/matrixscan-pick/intro' },
-            'Android': { version: '6.9', apiUrl: '/sdks/android/matrixscan-pick/intro' },
-            'Cordova': { version: '6.10', apiUrl: '/sdks/cordova/matrixscan-pick/intro' },
-            'React Native': { version: '6.10', apiUrl: '/sdks/react-native/matrixscan-pick/intro' },
-            'Flutter': { version: '6.10', apiUrl: '/sdks/flutter/matrixscan-pick/intro' },
-            'Capacitor': { version: '6.12', apiUrl: '/sdks/capacitor/matrixscan-pick/intro' },
-            'Titanium': { version: 'n/a' },
-            'Web': { version: 'n/a' },
-            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/ios/matrixscan-pick/intro' },
-            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/android/matrixscan-pick/intro' }
-          }
-        }
-      ]
-    },
-    {
-      title: 'Barcode Selection',
-      description: 'Precisely select one specific barcode among densely packed codes with high accuracy. Perfect when you need to capture a single barcode from labels tightly packed together, such as on shipping manifests or shelves with many item labels.',
-      integrationPaths: [
-        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' }
-      ],
-      isCollapsed: false,
-      features: [
-        {
-          name: 'Barcode Selection SDK',
-          description: 'Select specific barcodes with precision from densely packed areas',
-          category: 'Barcode Selection',
-          frameworks: {
-            'iOS': { version: '6.0', apiUrl: '/sdks/ios/barcode-selection/intro' },
-            'Android': { version: '6.0', apiUrl: '/sdks/android/barcode-selection/intro' },
-            'Cordova': { version: '6.1', apiUrl: '/sdks/cordova/barcode-selection/intro' },
-            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/barcode-selection/intro' },
-            'Flutter': { version: '6.7', apiUrl: '/sdks/flutter/barcode-selection/intro' },
-            'Capacitor': { version: '6.8', apiUrl: '/sdks/capacitor/barcode-selection/intro' },
-            'Titanium': { version: '6.8', apiUrl: '/sdks/titanium/barcode-selection/intro' },
-            'Web': { version: '6.13', apiUrl: '/sdks/web/barcode-selection/intro' },
-            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/ios/barcode-selection/intro' },
-            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/android/barcode-selection/intro' }
-          }
-        }
-      ]
-    },
-    {
-      title: 'Smart Label Capture',
-      description: 'The ONLY Scandit product with OCR functionality. Simultaneously captures multiple barcodes AND printed text fields (expiry dates, serial/lot numbers, unit prices, weights) from labels in a single scan. Uses a semantic approach—just define what you\'re looking for (e.g., "expiry date") and it works across many label layouts. Drastically reduces manual data entry errors.',
-      integrationPaths: [
-        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' },
-        { type: 'SDK with prebuild components', label: 'Pre-built Validation Flow' },
-        { type: 'No-Code', label: 'Scandit Express (No-Code)', url: 'https://docs.scandit.com/hosted/express/overview/' }
-      ],
-      isCollapsed: false,
-      features: [
-        {
-          name: 'Smart Label Capture SDK',
-          description: 'SDK without prebuild components for building fully customized label capture experiences, or use the pre-built Validation Flow for rapid deployment',
-          category: 'Smart Label Capture',
-          frameworks: {
-            'iOS': { version: '6.0', apiUrl: '/sdks/ios/label-capture/intro' },
-            'Android': { version: '6.0', apiUrl: '/sdks/android/label-capture/intro' },
-            'Cordova': { version: 'n/a' },
-            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/label-capture/intro' },
-            'Flutter': { version: '7.2', apiUrl: '/sdks/flutter/label-capture/intro' },
-            'Capacitor': { version: 'n/a' },
-            'Titanium': { version: 'n/a' },
-            'Web': { version: '7.2', apiUrl: '/sdks/web/label-capture/intro' },
-            '.NET iOS': { version: 'n/a' },
-            '.NET Android': { version: 'n/a' }
-          }
-        }
-      ]
-    },
-    {
-      title: 'ID Capture',
-      description: 'Scan and validate identity documents including passports, driver\'s licenses, and national IDs. Extract personal information with OCR and perform verification checks for secure identity validation in onboarding and access control workflows.',
-      integrationPaths: [
-        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' }
-      ],
-      isCollapsed: false,
-      features: [
-        {
-          name: 'ID Capture SDK',
-          description: 'Capture and process identity documents with OCR and verification',
-          category: 'ID Capture',
-          frameworks: {
-            'iOS': { version: '6.5', apiUrl: '/sdks/ios/id-capture/intro' },
-            'Android': { version: '6.5', apiUrl: '/sdks/android/id-capture/intro' },
-            'Cordova': { version: '6.6', apiUrl: '/sdks/cordova/id-capture/intro' },
-            'React Native': { version: '6.8', apiUrl: '/sdks/react-native/id-capture/intro' },
-            'Flutter': { version: '6.11', apiUrl: '/sdks/flutter/id-capture/intro' },
-            'Capacitor': { version: '6.14', apiUrl: '/sdks/capacitor/id-capture/intro' },
-            'Titanium': { version: 'n/a' },
-            'Web': { version: '6.13', apiUrl: '/sdks/web/id-capture/intro' },
-            '.NET iOS': { version: '6.16', apiUrl: '/sdks/net/ios/id-capture/intro' },
-            '.NET Android': { version: '6.16', apiUrl: '/sdks/net/android/id-capture/intro' }
-          }
-        }
-      ]
-    },
-    {
-      title: 'Parser',
-      description: 'Extract structured data from encoded barcodes including GS1, AAMVA, HIBC, and other industry-standard formats. Automatically parse complex barcode data into easily usable fields without manual string manipulation.',
-      integrationPaths: [
-        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' }
-      ],
-      isCollapsed: false,
-      features: [
-        {
-          name: 'Parser SDK',
-          description: 'Parse and extract structured data from barcodes',
-          category: 'Parser',
-          frameworks: {
-            'iOS': { version: '6.1', apiUrl: '/sdks/ios/parser/get-started' },
-            'Android': { version: '6.1', apiUrl: '/sdks/android/parser/get-started' },
-            'Cordova': { version: '6.3', apiUrl: '/sdks/cordova/parser/get-started' },
-            'React Native': { version: '6.5', apiUrl: '/sdks/react-native/parser/get-started' },
-            'Flutter': { version: '6.10', apiUrl: '/sdks/flutter/parser/get-started' },
-            'Capacitor': { version: '6.10', apiUrl: '/sdks/capacitor/parser/get-started' },
-            'Titanium': { version: 'n/a' },
-            'Web': { version: '6.25', apiUrl: '/sdks/web/parser/get-started' },
-            '.NET iOS': { version: '6.22', apiUrl: '/sdks/net/ios/parser/get-started' },
-            '.NET Android': { version: '6.21', apiUrl: '/sdks/net/android/parser/get-started' }
-          }
-        }
-      ]
-    },
-    {
-      title: 'Barcode Generator',
-      description: 'Programmatically generate high-quality barcodes for various symbologies directly within your application. Create barcodes for printing, display, or digital use without external dependencies.',
-      integrationPaths: [
-        { type: 'SDK without prebuild components', label: 'SDK without prebuild components' }
-      ],
-      isCollapsed: false,
-      features: [
-        {
-          name: 'Barcode Generator SDK',
-          description: 'Generate barcodes programmatically for various symbologies',
-          category: 'Barcode Generator',
-          frameworks: {
-            'iOS': { version: '6.21', apiUrl: '/sdks/ios/barcode-generator/' },
-            'Android': { version: '6.21', apiUrl: '/sdks/android/barcode-generator/' },
-            'Cordova': { version: '7.0', apiUrl: '/sdks/cordova/barcode-generator/' },
-            'React Native': { version: '6.24', apiUrl: '/sdks/react-native/barcode-generator/' },
-            'Flutter': { version: '7.2', apiUrl: '/sdks/flutter/barcode-generator/' },
-            'Capacitor': { version: '7.0', apiUrl: '/sdks/capacitor/barcode-generator/' },
-            'Titanium': { version: 'n/a' },
-            'Web': { version: 'n/a' },
-            '.NET iOS': { version: 'n/a' },
-            '.NET Android': { version: 'n/a' }
-          }
-        }
-      ]
-    }
-  ];
+  // Load product data from JSON and convert to sections
+  const loadProductSections = (): Section[] => {
+    return productsData.map((product: any) => {
+      // Define integration paths based on product
+      const integrationPaths: IntegrationPath[] = [];
+      
+      if (product.key === 'sparkscan') {
+        integrationPaths.push({ type: 'Pre-built Component', label: 'SDK with prebuild components' });
+      } else if (product.key === 'matrixscan-count' || product.key === 'matrixscan-find') {
+        integrationPaths.push(
+          { type: 'Pre-built Component', label: 'SDK with prebuild components' },
+          { type: 'No-Code', label: 'Scandit Express (No-Code)', url: 'https://docs.scandit.com/hosted/express/overview/' }
+        );
+      } else if (product.key === 'smart-label-capture') {
+        integrationPaths.push(
+          { type: 'Custom SDK', label: 'SDK without prebuild components' },
+          { type: 'Pre-built Component', label: 'Pre-built Validation Flow' },
+          { type: 'No-Code', label: 'Scandit Express (No-Code)', url: 'https://docs.scandit.com/hosted/express/overview/' }
+        );
+      } else if (product.key === 'matrixscan-batch') {
+        integrationPaths.push(
+          { type: 'Custom SDK', label: 'SDK without prebuild components' },
+          { type: 'No-Code', label: 'Scandit Express (No-Code)', url: 'https://docs.scandit.com/hosted/express/overview/' }
+        );
+      } else {
+        integrationPaths.push({ type: 'Custom SDK', label: 'SDK without prebuild components' });
+      }
+
+      // Create main SDK feature
+      const mainFeature: Feature = {
+        name: `${product.name} SDK`,
+        description: product.key === 'sparkscan' 
+          ? 'Pre-built scanning interface with customizable UI'
+          : product.key === 'smart-label-capture'
+          ? 'SDK without prebuild components for building fully customized label capture experiences, or use the pre-built Validation Flow for rapid deployment'
+          : `Main SDK for ${product.name.toLowerCase()}`,
+        category: product.name,
+        frameworks: product.frameworks
+      };
+
+      return {
+        title: product.name,
+        description: product.description,
+        integrationPaths,
+        features: [mainFeature],
+        isCollapsed: false
+      };
+    });
+  };
 
   // Transform cross-product features into product sections
   const transformFeaturesToSections = (): Section[] => {
     const sectionsMap = new Map<string, Section>();
     
-    // Initialize with existing product sections
-    featuresData.forEach(section => {
+    // Initialize with product sections from JSON
+    const productSections = loadProductSections();
+    productSections.forEach(section => {
       const productKey = PRODUCTS.find(p => p.name === section.title)?.key;
       if (productKey) {
         sectionsMap.set(productKey, { ...section, features: [...section.features] });
