@@ -143,7 +143,7 @@
     "frameworks": {
       "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
       "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
-      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
+      "Web": { "version": "7.4", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" }
@@ -158,7 +158,7 @@
     "frameworks": {
       "iOS": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
       "Android": { "version": "6.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
-      "Web": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
+      "Web": { "version": "7.4", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" }
