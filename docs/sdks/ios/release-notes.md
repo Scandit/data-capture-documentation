@@ -97,6 +97,16 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 * All previously deprecated APIs have been removed in this release.
 
+## 7.6.3
+
+**Released**: October 29, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed an issue where macro mode would not be maintained when resuming the app from background, causing the camera to switch unexpectedly.
+
 ## 7.6.2
 
 **Released**: October 20, 2025
