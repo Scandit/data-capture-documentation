@@ -68,6 +68,16 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 * `VideoResolution::Auto` is now deprecated. Please use the capture mode's `recommendedCameraSettings` for the best results.
 
+## 7.6.3
+
+**Released**: October 29, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Resolved a bug in the `DataCaptureContextListener` that prevented the native error payload for denied camera permissions from being correctly propagated. Users will now see the intended, actionable error message when camera access is required but denied.
+
 ## 7.6.2
 
 **Released**: October 20, 2025

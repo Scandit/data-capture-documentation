@@ -9,6 +9,12 @@ keywords:
   - capacitor
 ---
 
+## 7.6.3
+
+**Released**: October 29, 2025
+
+No updates for this framework in this release.
+
 ## 7.6.2
 
 **Released**: October 20, 2025

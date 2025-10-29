@@ -10,6 +10,16 @@ keywords:
   - ios
 ---
 
+## 7.6.3
+
+**Released**: October 29, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed an issue where macro mode would not be maintained when resuming the app from background, causing the camera to switch unexpectedly.
+
 ## 7.6.2
 
 **Released**: October 20, 2025
