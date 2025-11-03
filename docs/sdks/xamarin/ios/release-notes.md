@@ -9,6 +9,10 @@ keywords:
   - xamarinIos
 ---
 
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
 ## 8.0.0
 
 **Released**: November 4, 2025

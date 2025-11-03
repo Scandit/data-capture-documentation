@@ -1,6 +1,5 @@
 ---
-description: "Scandit Smart Data Capture is a powerful suite of solutions designed to enable mobile devices to capture and process a wide range of barcodes and other types of data, including ID scanning and validation.                                                                  "
-
+description: "Scandit Smart Data Capture is a powerful suite of solutions designed to enable mobile devices to capture and process a wide range of barcodes and other types of data, including ID scanning and validation."
 sidebar_position: 1
 toc_max_heading_level: 4
 sidebar_label: 'ID Scanning and Validation'

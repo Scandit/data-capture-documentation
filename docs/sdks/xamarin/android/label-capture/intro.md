@@ -8,6 +8,10 @@ keywords:
   - xamarinAndroid
 ---
 
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
 import AboutLabelCapture from '../../../../partials/intro/_about-smart-label-capture.mdx';
 
 <AboutLabelCapture/>

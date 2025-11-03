@@ -6,6 +6,10 @@ keywords:
   - xamarinAndroid
 ---
 
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
 # Configure Barcode Symbologies
 
 import Intro from '../../../../partials/configure-symbologies/_intro.mdx'

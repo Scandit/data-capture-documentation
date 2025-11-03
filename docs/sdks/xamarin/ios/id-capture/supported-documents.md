@@ -10,6 +10,10 @@ keywords:
   - xamarinIos
 ---
 
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
 ## ID Scanning Supported Documents
 
 Scandit ID Capture provides various [IdCaptureScanner](https://docs.scandit.com/data-capture-sdk/xamarin.ios/id-capture/api/id-capture-scanner.html#id-capture-scanner) types, each designed for specific scanning workflows. These workflows can involve scanning either specific parts of a document or the entire document, including both the front and back sides. This section details the types of documents supported by each scanner type.

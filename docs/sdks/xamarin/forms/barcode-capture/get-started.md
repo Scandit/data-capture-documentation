@@ -6,6 +6,10 @@ keywords:
   - xamarinForms
 ---
 
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
 # Get Started
 
 In this guide you will learn step-by-step how to add Barcode Capture to your application.

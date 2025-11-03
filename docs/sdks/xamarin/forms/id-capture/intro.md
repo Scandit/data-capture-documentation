@@ -9,6 +9,10 @@ keywords:
   - xamarinForms
 ---
 
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
 import AboutIdCapture from '../../../../partials/intro/_about-id-capture.mdx';
 
 <AboutIdCapture/>

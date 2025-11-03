@@ -7,6 +7,10 @@ keywords:
   - xamarinForms
 ---
 
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
 # Single Scanning
 
 import SingleScanning from '../../../partials/_single-scanning.mdx';
