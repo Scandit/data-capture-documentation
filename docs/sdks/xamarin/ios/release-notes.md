@@ -9,9 +9,9 @@ keywords:
   - xamarinIos
 ---
 
-## 8.0.0-beta.2
+## 8.0.0
 
-**Released**: October 27, 2025
+**Released**: November 4, 2025
 
 ### Deprecation of Xamarin and Forms Plugins
 

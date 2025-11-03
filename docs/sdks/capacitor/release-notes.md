@@ -9,9 +9,9 @@ keywords:
   - capacitor
 ---
 
-## 8.0.0-beta.2
+## 8.0.0
 
-**Released**: October 27, 2025
+**Released**: November 4, 2025
 
 ### New Features
 
