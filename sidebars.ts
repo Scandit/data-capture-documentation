@@ -42,6 +42,7 @@ const sidebars: SidebarsConfig = {
 					label: 'Migration Guides',
           collapsed: false,
 					items: [
+            'migrate-7-to-8',
             'migrate-6-to-7',
             'migrate-5-to-6',
           ]

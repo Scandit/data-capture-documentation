@@ -29,7 +29,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 #### Core
 
-* The `Camera` API has been completely redesigned for this release. See the API reference for complete details.
+* The `Camera` API has been completely redesigned for this release. See the [API reference](https://docs.scandit.com/data-capture-sdk/web/core/api/camera.html#camera) for complete details.
 * The minimum Chrome version supported is now 85+.
 * The `DataCaptureContext.create`, `createWithOptions` and `configure` methods have been removed in favor of `DataCaptureContext.forLicenseKey`.
 
