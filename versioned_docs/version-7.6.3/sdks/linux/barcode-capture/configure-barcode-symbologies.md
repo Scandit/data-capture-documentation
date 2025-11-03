@@ -135,7 +135,7 @@ Keep the following in mind when configuring 2D symbologies:
 
 ## Using OCR Fallback Symbology Extension
 
-When enabled, the OCR Fallback symbology extension performs text detection and recognition next to detected codes. This extension requires Smart Scan Intention which is only available in SparkScan or through the Linux settings preset `SC_PRESET_SINGLE_CODE_HAND_HELD`. It also requires the LabelText module.
+When enabled, the OCR Fallback symbology extension performs text detection and recognition next to detected codes. This extension requires Smart Scan Intention which is available in SparkScan, Barcode Capture, or through the Linux settings preset `SC_PRESET_SINGLE_CODE_HAND_HELD`. It also requires the LabelText module.
 
 OCR Fallback is triggered after 1 second of unsuccessful decoding while remaining stationary. The duration can be customized by setting the `ocr_fallback_smart_stationary_timeout` engine property with a value in milliseconds.
 
