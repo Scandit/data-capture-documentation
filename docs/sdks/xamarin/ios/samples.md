@@ -8,6 +8,10 @@ keywords:
   - xamarinIos
 ---
 
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
 # Xamarin iOS SDK Samples
 
 This page provides a list of samples available for the Scandit Data Capture SDK for Xamarin iOS. Each sample demonstrates a specific feature or use case of the SDK.

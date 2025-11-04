@@ -6,6 +6,10 @@ keywords:
   - xamarinAndroid
 ---
 
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
 # Adding AR Overlays
 
 There are two ways to add advanced AR overlays to a Data Capture View:

@@ -9,9 +9,13 @@ keywords:
   - xamarinForms
 ---
 
-## 8.0.0-beta.2
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
 
-**Released**: October 27, 2025
+<DeprecationNotice/>
+
+## 8.0.0
+
+**Released**: November 4, 2025
 
 ### Deprecation of Xamarin and Forms Plugins
 

@@ -5,6 +5,10 @@ keywords:
   - xamarinAndroid
 ---
 
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
 # Get Started
 
 In this guide you will learn step-by-step how to add MatrixScan to your application.

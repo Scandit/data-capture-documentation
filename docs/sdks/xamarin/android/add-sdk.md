@@ -7,6 +7,10 @@ keywords:
   - xamarinAndroid
 ---
 
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 

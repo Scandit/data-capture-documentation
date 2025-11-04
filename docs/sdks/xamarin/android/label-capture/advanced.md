@@ -5,6 +5,10 @@ keywords:
   - xamarinAndroid
 ---
 
+import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
 # Advanced Configurations
 
 ## Customization of the Overlays
