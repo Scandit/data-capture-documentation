@@ -10,6 +10,16 @@ keywords:
   - web
 ---
 
+## 7.6.4
+
+**Released**: November 5, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed an issue where the camera would not be visible sometimes.
+
 ## 7.6.3
 
 **Released**: October 29, 2025

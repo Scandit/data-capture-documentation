@@ -53,6 +53,12 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * Removed deprecated constant `SC_SYMBOLOGY_RM4SCC` (use `SC_SYMBOLOGY_ROYAL_MAIL_4STATE` instead).
 * In the public API, changed all `_retain` and `_release` functions on opaque pointers to accept const pointers.
 
+## 7.6.4
+
+**Released**: November 5, 2025
+
+No updates for this framework in this release.
+
 ## 7.6.3
 
 **Released**: October 29, 2025

@@ -10,6 +10,16 @@ keywords:
   - react
 ---
 
+## 7.6.4
+
+**Released**: November 5, 2025
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue where touches were not going through when components where placed inside the `SparkScanView`.
+
 ## 7.6.3
 
 **Released**: October 29, 2025

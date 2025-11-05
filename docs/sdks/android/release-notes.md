@@ -126,6 +126,12 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
   * SparkScanViewDefaults.DefaultCaptureButtonBackgroundColor property
   * SparkScanViewDefaults.DefaultCaptureButtonTintColorProperty 
 
+## 7.6.4
+
+**Released**: November 5, 2025
+
+No updates for this framework in this release.
+
 ## 7.6.3
 
 **Released**: October 29, 2025
