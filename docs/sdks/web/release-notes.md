@@ -103,6 +103,16 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * All previously deprecated APIs have been removed in this release.
 * `DataCaptureContext.create`, `createWithOptions` and `configure` have been removed in favor of the `forLicenseKey` method.
 
+## 7.6.4
+
+**Released**: November 5, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed an issue where the camera would not be visible sometimes.
+
 ## 7.6.3
 
 **Released**: October 29, 2025
@@ -399,6 +409,16 @@ No updates for this framework in this release.
 ### Behavioral Changes
 
 * MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
+
+## 7.2.5
+
+**Released**: November 5, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a memory leak.
 
 ## 7.2.4
 

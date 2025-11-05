@@ -21,6 +21,12 @@ import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
 
 Starting this release we are no longer upgrading Xamarin and Forms solutions for the Data Capture SDK. Microsoft ended support for these frameworks on the 1st of May 2024, which locks them into discontinued tooling. Customers may continue to use the latest releases of SDK version 7.x as per our support policy.
 
+## 7.6.4
+
+**Released**: November 5, 2025
+
+No updates for this framework in this release.
+
 ## 7.6.3
 
 **Released**: October 29, 2025
@@ -210,6 +216,16 @@ No updates for this framework in this release.
 ### Behavioral Changes
 
 * MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
+
+## 7.2.5
+
+**Released**: November 5, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a memory leak.
 
 ## 7.2.4
 

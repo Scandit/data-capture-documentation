@@ -1,76 +1,13 @@
 ---
 toc_max_heading_level: 3
-displayed_sidebar: netIosSidebar
+displayed_sidebar: netAndroidSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
-framework: netIos
+framework: netAndroid
 keywords:
-  - netIos
+  - netAndroid
 ---
-
-## 8.0.0
-
-**Released**: November 4, 2025
-
-### New Features
-
-Scandit's SDK 8.0 marks the evolution of data capture from a high-performing scanning tool into an intelligent AI-powered workflow enabler. As frontline operations face mounting pressures with more data points to capture, increasingly complex workflows to navigate, and tighter resource constraints, SDK 8.0 delivers a set of innovations that: 
-  * Adapt its scanning settings and UI to context by analyzing the scanning environment and user intent;
-  * Automate the capture of any data format, barcode clustering, task handling or camera settings;
-  * Accelerate critical use cases to maximize ROI through intuitive, streamlined scanning workflows, using interactive AR-guidance, adaptive UI and out-of-the-box custom-branded passenger experiences.
-
-With SDK 8.0 businesses can transform data capture from a basic function to a strategic advantage. It enables intelligent scanning that:
-  * Understands not just what is being scanned, but also what you want to scan and why you’re scanning it
-  * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.
-
-#### Core
-
-* We've fundamentally redesigned our .NET SDK's architecture to better align with the modern .NET ecosystem!
-  * **Platform-Agnostic .net8.0 and net9.0 Targets**: The SDK now includes generic net8.0 and .net9.0 targets. This allows you to reference `Scandit.DataCapture.Core` and related packages directly from non-UI projects, such as class libraries or unit test projects. This makes it significantly easier to build modular, testable applications following principles like Clean Architecture.
-* **Mandatory SDK Initialization**: Due to the architectural changes, the SDK now requires explicit initialization at application startup. The public API has not changed, but you must add the corresponding initialization code to your application for the SDK to function correctly.
-
-#### ID
-
-* Added `ElementsToRetain` to `MobileDocumentScanner`: The set of data elements that the application intends to retain from scanned mobile documents. This information is used to set the `IntentToRetain` flag in ISO 18013-5 mdoc requests, which is required for legal compliance with data protection standards. An empty set indicates no elements will be retained, and `IntentToRetain` will be set to `false` for all fields.
-* ID Capture now supports full-frame anonymization.
-* The result of `decodeMobileDriverLicenseViz`, which is currently returned as part of the `VizResult` within `CapturedId`, will now be provided through a new field named `mobileDocumentOcr`.
-* Added `CapturedId::isCitizenPassport`, which indicates whether the passport was issued to a citizen of the issuing country. Returns `false` for travel documents such as refugee, stateless, or alien passports, and for any passports issued by organizations rather than states.
-* The following Chinese travel permits now extract VIZ + MIZ data during double-sided scanning flows:
-  * CT - Taiwan Residents Mainland Travel Permit
-  * W - Mainland Residents Exit-Entry Permit to and from Hong Kong and Macao
-  * CD - Mainland Residents Entry-Exit Permit to and from Taiwan
-
-### Behavioral Changes
-
-#### Barcode
-
-* Symbology `RM4SCC` has been renamed to `ROYAL_MAIL_4STATE`.
-* Changed the default highlight brush in SparkScan and Barcode Capture.
-
-#### ID
-
-* The configuration for the following documents has been changed as detailed below:
-  * Australian mobile driver licenses (mDL) are now treated as normal documents, with no separate mode.
-  * US Green Cards are now treated as residence permits.
-* Removed the deprecated API `DateResult::toDate`. Use `DateResult::toLocalDate` or `DateResult::toUtcDate` instead.
-* `fullName` now an optional field on all `IdCapture` result types and `capturedMrz` now an optional field on `MrzResult`.
-
-### Bug Fixes
-
-#### ID
-
-* Fixed a bug that could get the scanner stuck when scanning a US passport card.
-
-### Deprecations
-
-#### Core
-
-* `VideoResolution::Auto` is now deprecated. Please use the capture mode's `recommendedCameraSettings` for the best results.
-
-#### Barcode
-
-* All previously deprecated APIs have been removed in this release.
 
 ## 7.6.4
 
@@ -126,10 +63,6 @@ No updates for this framework in this release.
 * The GS1 parser now allows for dates in format `YYYYMM` also in non-strict mode if the year starts with `20XX`.
 
 ### Bug Fixes
-
-#### Core
-
-* Fixed misinterpreted destination path in `robocopy` command to restore native library copying for iOS builds on Windows.
 
 #### ID
 
@@ -335,7 +268,6 @@ No updates for this framework in this release.
 
 * MatrixScan AR is now available, offering prebuilt views designed to quickly build custom workflows with augmented reality to an existing app. By highlighting barcodes and displaying additional information or user interaction elements over them, any process can be enhanced with state-of-the-art augmented reality overlays.
 * Added `DataCaptureContext` shared instance API.
-* The `MacroMode` API is now available for .NET iOS, allowing developers to better control the behavior of the camera on iPhone Pro models (>13).
 
 #### ID
 
@@ -389,13 +321,13 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* MatrixScan Count now includes the ability to [cluster barcodes](/sdks/net/ios/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
+* MatrixScan Count now includes the ability to [cluster barcodes](/sdks/net/android/matrixscan-count/advanced.md#clustering) that belong together. Barcodes can be auto-clustered based on their visual context, or manually grouped by the user by circling them on screen.
 * MatrixScan Count now includes the concept of a `Barcode Spacial Grid`, bringing the ability to map totes in a grid-like structure. Scanned codes will be returned with their relative location and can be displayed in a map view. This allows for fast and error-free in-store picking using dedicated carts and totes. The following classes have been added:
   * `BarcodeSpatialGrid`
   * `BarcodeSpatialGridEditorView`
   * `BarcodeSpatialGridEditorViewSettings`
   * `BarcodeSpatialGridEditorViewListener`
-* Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
+* Introducing the Smart Duplicate Filter: unlike traditional time-based filters, this intelligent solution prevents re-scanning the same barcode unless intended, eliminating delays and improving accuracy. In user testing, it boosted task completion speeds by 10% and reduced unintentional barcode scans by 5% in workflows requiring intentional duplicate scans. Enable this new behavior by setting the existing `codeDuplicateFilter` property to the special value `-2` — now the default for both Barcode Capture and SparkScan. See the [documentation](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) for details.
 * The following APIs have been added:
   * `ImageFrameSource`
   * `BarcodeFindFeedback`
