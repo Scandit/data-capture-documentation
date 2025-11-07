@@ -22,7 +22,7 @@ The repository with all the samples can be found [here](https://github.com/Scand
 
 #### SparkScan
 
-![SparkScan List Building](/img/samples/sparkscan_list_building.png)
+![SparkScan List Building](/static/img/samples/sparkscan_list_building.png)
 
 ##### [List Building](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/01_Single_Scanning_Samples/01_Barcode_Scanning_with_Pre_Built_UI/ListBuildingSample)
 
@@ -32,7 +32,7 @@ Use SparkScan to populate a list of scanned barcodes.
 
 ##### [Single Scan](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low_Level_API/BarcodeCaptureSimpleSample)
 
-<ReactPlayer playing controls url="/img/samples/bc-simple.mp4" />
+<ReactPlayer playing controls url="/static/img/samples/bc-simple.mp4" />
 
 Simple sample showing how to use the Barcode Capture mode to scan a single barcode.
 
@@ -48,19 +48,19 @@ Examples utilizing the low-level `BarcodeBatch` API.
 
 ##### [Simple Highlight](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/03_Advanced_Batch_Scanning_Samples/01_Batch_Scanning_and_AR_Info_Lookup/MatrixScanSimpleSample)
 
-<ReactPlayer playing controls url="/img/samples/ms-simple.mp4" />
+<ReactPlayer playing controls url="/static/img/samples/ms-simple.mp4" />
 
 Simple sample showing how to use MatrixScan to highlight barcodes in a frame.
 
 ## ID Scanning
 
-![ID Scanning](/img/samples/id_scanning.png)
+![ID Scanning](/static/img/samples/id_scanning.png)
 
 ### ID Capture
 
 #### [Simple ID Capture](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/02_ID_Scanning_Samples/IdCaptureSimpleSample)
 
-<ReactPlayer playing controls url="/img/samples/id-simple.mp4" />
+<ReactPlayer playing controls url="/static/img/samples/id-simple.mp4" />
 
 Simple sample showing how to use the ID Capture mode to scan an ID card.
 
@@ -68,6 +68,6 @@ Simple sample showing how to use the ID Capture mode to scan an ID card.
 
 #### [US Driver's License](https://github.com/Scandit/datacapture-capacitor-samples/tree/master/02_ID_Scanning_Samples/USDLVerificationSample)
 
-<ReactPlayer playing controls url="/img/samples/id-usdl.mp4" />
+<ReactPlayer playing controls url="/static/img/samples/id-usdl.mp4" />
 
 Sample showing how to use the ID Capture mode to verify a US driver's license.

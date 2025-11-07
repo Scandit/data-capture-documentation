@@ -14,7 +14,7 @@ robust, and flexible item counting. This mode leverages **MatrixScan Count** and
 It can be launched directly from the home screen of Scandit Express.
 
 <p align="center">
-  <img src="/img/express/express_menu.png" alt="Express Menu" width="350px" />
+  <img src="/static/img/express/express_menu.png" alt="Express Menu" width="350px" />
 </p>
 
 **Inventory Count** provides:
@@ -39,7 +39,7 @@ On start, you will have two options:
     - From **multiple QR codes** (for very large lists)
 
 <p align="center">
-  <img src="/img/express/inventory_count.jpg" alt="Express Menu" width="350px" />
+  <img src="/static/img/express/inventory_count.jpg" alt="Express Menu" width="350px" />
 </p>
 
 ### Scanning Modes

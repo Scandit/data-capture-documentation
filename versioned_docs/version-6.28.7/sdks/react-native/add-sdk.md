@@ -103,7 +103,7 @@ Check [the official `<provider>` documentation](https://developer.android.com/gu
 
 When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. You need to set the “Privacy - Camera Usage Description” field in the Info.plist file for iOS.
 
-![Info file](./img/info-file.png)
+![Info file](img/info-file.png)
 
 ### Camera Permissions
 

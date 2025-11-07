@@ -70,8 +70,8 @@ When the scanner is active the mini preview is shown. Depending on the scanning 
 
 Upon completing the scanning process (or to interact with the customer app layer), the user can tap in any area outside the trigger button and the mini preview. This collapses the scanner button back to the side, going back to the initial state.
 
-![SparkScan Workflow](/img/sparkscan/workflow-example.gif)
+![SparkScan Workflow](/static/img/sparkscan/workflow-example.gif)
 
 ## Supported Symbologies
 
-SparkScan supports all of the major symbologies listed here: [Barcode Symbologies](/barcode-symbologies.md).
+SparkScan supports all of the major symbologies listed here: [Barcode Symbologies](/docs/barcode-symbologies.md).

@@ -52,7 +52,7 @@ const sparkScanFeedbackDelegate = {
 
 You can have different error states triggered by different logic conditions. These errors can show different colors and have different timeouts. For example:
 
-![SparkScan Error State](../../../img/errors.png)
+![SparkScan Error State](/static/img/sparkscan/error-wrong.png)
 
 ### Reject Barcodes
 
@@ -72,7 +72,7 @@ sparkScanView.barcodeCountButtonVisible = true;
 sparkScanView.barcodeFindButtonVisible = true;
 ```
 
-![SparkScan Advanced Scanning Modes](../../../img/toolbars.png)
+![SparkScan Advanced Scanning Modes](/static/img/sparkscan/toolbars.png)
 
 ## Customization
 

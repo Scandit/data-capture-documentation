@@ -174,11 +174,11 @@ html[data-theme="dark"] .navbar {
             left: 50%;
             transform: translate(-50%, -50%);
             transition: 0.3s all ease;
-            background-image: url("/img/github-light.svg");
+            background-image: url("/static/img/github-light.svg");
             background-repeat: no-repeat;
 
             html[data-theme="dark"] & {
-              background-image: url("/img/github-dark.svg");
+              background-image: url("/static/img/github-dark.svg");
             }
           }
         }

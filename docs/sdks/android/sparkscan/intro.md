@@ -20,7 +20,7 @@ The UI elements in SparkScan are intentionally minimalistic, meant to be overlay
 
 Two main elements compose the UI:
 
-![SparkScan UI](/img/sparkscan/features_web.png)
+![SparkScan UI](/static/img/sparkscan/features_web.png)
 
 - **Camera preview**: A small camera preview helps with aiming and shows scan feedback. When not in use, the camera preview is hidden.
 - **Trigger button**: A large-sized, transparent, floating button that users can drag to position it in the most ergonomic position. When not in use, the trigger button collapses to occupy less space.
@@ -75,9 +75,9 @@ When the scanner is active the mini preview is shown. Depending on the scanning 
 Upon completing the scanning process (or to interact with the customer app layer), the user can tap in any area outside the trigger button and the mini preview. This collapses the scanner button back to the side, going back to the initial state.
 
 <p align="center">
-  <img src="/img/sparkscan/workflow-example.gif" alt="SparkScan Workflow" /><br></br>List building use case using SparkScan.
+  <img src="/static/img/sparkscan/workflow-example.gif" alt="SparkScan Workflow" /><br></br>List building use case using SparkScan.
 </p>
 
 ## Supported Symbologies
 
-SparkScan supports all of the major symbologies listed here: [Barcode Symbologies](/barcode-symbologies.md).
+SparkScan supports all of the major symbologies listed here: [Barcode Symbologies](/docs/barcode-symbologies.md).

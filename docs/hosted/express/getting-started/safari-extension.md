@@ -45,7 +45,7 @@ When enabled, the extension automatically adds a **Scan** button next to input f
 The Safari extension can be configured via the Scandit Dashboard from the **General > Browser Extension** section.
 
 <p align="center">
-  <img src="/img/express/browser-extension.png" alt="Safari Extension Dashboard" />
+  <img src="/static/img/express/browser-extension.png" alt="Safari Extension Dashboard" />
 </p>
 
 ### Default Behavior

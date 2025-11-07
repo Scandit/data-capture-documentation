@@ -19,7 +19,7 @@ Using the Find mode in Scandit Express requires providing a list of barcodes to 
 
 We recommend that you start with creating a list with the barcodes to find (Find List) using our [Find List generator](https://express.scandit.com/find/list/generator/). Here is how it works:
 
-![Find List Generator](/img/express/find-list-generator.png)
+![Find List Generator](/static/img/express/find-list-generator.png)
 
 ### Spreadsheet Find List
 

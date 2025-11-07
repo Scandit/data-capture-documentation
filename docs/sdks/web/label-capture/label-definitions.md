@@ -28,7 +28,7 @@ Smart Label Capture provides pre-built label definitions out of the box for the 
 
 Use the `LabelCaptureSettings` builder to configure a pre-built label definition for price labels, such as those found in retail environments:
 
-![Price Label Example](/img/slc/price-label.png)
+![Price Label Example](/static/img/slc/price-label.png)
 
 ```js
 const settings = LabelCaptureSettings.builder()
@@ -64,7 +64,7 @@ The following methods are available to configure custom fields:
 
 This example shows how to create a custom label definition for a fish shipping box, which includes fields for barcode and batch number.
 
-![Fish Shipping Box Example](/img/slc/fish-shipping-box.png)
+![Fish Shipping Box Example](/static/img/slc/fish-shipping-box.png)
 
 ```js
 const settings = LabelCaptureSettings.builder()
@@ -124,7 +124,7 @@ The `resetAnchorRegexes` method can be used to remove the default `anchorRegexes
 
 This example demonstrates how to configure a label definition for a hard disk drive (HDD) label, which typically includes common fields like serial number and part number.
 
-![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
+![Hard Disk Drive Label Example](/static/img/slc/hdd-label.png)
 
 ```js
 const settings = LabelCaptureSettings.builder()

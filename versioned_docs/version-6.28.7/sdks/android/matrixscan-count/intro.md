@@ -35,11 +35,11 @@ MatrixScan Count is conformed through functionality provided by [BarcodeCount](h
 
 ## Prerequisites
 
-- [Installed the Scandit Data Capture SDK](/sdks/android/add-sdk.md).
+- [Installed the Scandit Data Capture SDK](/docs/sdks/android/add-sdk.md).
 - A valid Scandit Data Capture SDK license key including MatrixScan AR add-on. You can sign up for a [free test account](https://www.scandit.com/trial/).
 
 ## Supported Symbologies
 
-MatrixScan Count supports all [symbologies](../../../barcode-symbologies.md) **except** DotCode, MaxiCode and postal codes (KIX, RM4SCC).
+MatrixScan Count supports all [symbologies](/docs/barcode-symbologies.md) **except** DotCode, MaxiCode and postal codes (KIX, RM4SCC).
 
 If you are not familiar with the symbologies that are relevant for your use case, you can use capture presets that are tailored for different verticals. For instance, retail, logistics, and so on.

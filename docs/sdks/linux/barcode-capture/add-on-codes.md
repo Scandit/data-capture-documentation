@@ -12,8 +12,8 @@ The Scandit SDK supports add-on codes (also known as Extension Codes) for EAN-8,
 These codes encode additional product data like an issue number, date or price. There is a two (EAN-2/two-digit add-on) and a
 five digit (EAN-5/five-digit add-on) version.
 
-![EAN13 with two digit add-on code](/img/symbologies/ean13_with_addon2.png)
-![EAN13 with five digit add-on code](/img/symbologies/ean13_with_addon5.png)
+![EAN13 with two digit add-on code](/static/img/symbologies/ean13_with_addon2.png)
+![EAN13 with five digit add-on code](/static/img/symbologies/ean13_with_addon5.png)
 
 ## Enable add-on codes in the SDK
 

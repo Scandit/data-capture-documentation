@@ -28,11 +28,11 @@ barcodeCount.setCaptureList(captureList)
 
 This feature is used to provide users with more details regarding the items they’re scanning in order to aid effective handling. The icons appear as an AR overlay after tapping the “Status Mode” button and can be used to highlight the following:
 
-![Barcode Count Status](/img/matrixscan-count/barcode_count_status.png)
+![Barcode Count Status](/static/img/matrixscan-count/barcode_count_status.png)
 
 See the [Expiry Management Sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/ExpiryManagementSample)
 
-<ReactPlayer playing controls url="/img/samples/ss-expiry.mp4" /> for an example of how to use this feature.
+<ReactPlayer playing controls url="/static/img/samples/ss-expiry.mp4" /> for an example of how to use this feature.
 
 ## Clustering
 
@@ -84,7 +84,7 @@ barcodeCountSettings.filterSettings = filterSettings
 
 By default the filters applied to the relevant barcodes are transparent, but you can use [`BarcodeFilterHighlightSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-filter-highlight-settings.html#barcode-filter-highlight-settings) to change the color and level of transparency.
 
-![Different Filters in MatrixScan Count](/img/matrixscan-count/filtering_styles.png)
+![Different Filters in MatrixScan Count](/static/img/matrixscan-count/filtering_styles.png)
 
 ## Clear Screen Button
 

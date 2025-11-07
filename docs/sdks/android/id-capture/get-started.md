@@ -26,7 +26,7 @@ Using ID Capture at the same time as other modes (e.g. Barcode Capture) is not s
 
 ## Prerequisites
 
-Before starting with your integration, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. See the [installation guide](/sdks/android/add-sdk.md) for details.
+Before starting with your integration, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. See the [installation guide](/docs/sdks/android/add-sdk.md) for details.
 
 :::tip
 You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).

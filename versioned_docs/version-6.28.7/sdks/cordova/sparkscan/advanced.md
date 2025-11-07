@@ -37,7 +37,7 @@ resumeCapturingDelay: 6, visualFeedbackColor: UIColor.red))
 You can have different error states triggered by different logic conditions. For example you can trigger an error state when a wrong barcode is scanned, and another one when a duplicate barcode is scanned. These errors can show different colors and have different timeouts.
 :::
 
-![SparkScan Error State](../../../img/errors.png)
+![SparkScan Error State](/static/img/sparkscan/error-wrong.png)
 
 A high timeout (e.g. `10`+ seconds) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow, for example when a wrong barcode is scanned and some actions need to be performed.
 
@@ -61,7 +61,7 @@ sparkScanView.barcodeCountButtonVisible = true;
 sparkScanView.barcodeFindButtonVisible = true;
 ```
 
-![SparkScan Advanced Scanning Modes](../../../img/toolbars.png)
+![SparkScan Advanced Scanning Modes](/static/img/sparkscan/toolbar.png)
 
 ## Customization
 

@@ -24,7 +24,7 @@ The general steps are:
 
 ## Prerequisites
 
-Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, refer this [guide](/sdks/android/add-sdk.md) for more details.
+Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, refer this [guide](/docs/sdks/android/add-sdk.md) for more details.
 
 ## Create a Data Capture Context
 
@@ -38,7 +38,7 @@ DataCaptureContext dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENT
 
 Barcode selection is orchestrated by the [BarcodeSelection](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) [data capture mode](https://docs.scandit.com/6.28/data-capture-sdk/android/core/api/data-capture-mode.html#interface-scandit.datacapture.core.IDataCaptureMode). It is configured via [BarcodeSelectionSettings](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection-settings.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionSettings) and allows you to register one or more [listeners](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) for when new codes have been selected.
 
-For this task, we setup barcode scanning for a small list of different barcode types, called [symbologies](/barcode-symbologies.md). The list of symbologies to enable is highly application specific. It is recommended that you **only enable the list of symbologies your application requires**.
+For this task, we setup barcode scanning for a small list of different barcode types, called [symbologies](/docs/barcode-symbologies.md). The list of symbologies to enable is highly application specific. It is recommended that you **only enable the list of symbologies your application requires**.
 
 ```java
 BarcodeSelectionSettings settings = new BarcodeSelectionSettings();

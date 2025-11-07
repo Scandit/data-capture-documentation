@@ -1,5 +1,5 @@
 import style from "./Header.module.css";
-import logo from "../../../../static/img/logo-dark.svg";
+import logo from "/static/img/logo-dark.svg";
 import { GitHub, Logo } from "../../IconComponents";
 import Link from "@docusaurus/Link";
 import ThemeBtn from "../../ThemeBtn/ThemeBtn";

@@ -16,7 +16,7 @@ This page details the different barcode symbologies and their use cases.
 
 #### European Article Number (EAN)
 
-![EAN-13](/img/symbologies/ean13.png)
+![EAN-13](/static/img/symbologies/ean13.png)
 
 * Also known as Japanese Article Number (JAN).
 * Encodes a Global Trade Identification Number (GTIN).
@@ -28,16 +28,16 @@ This page details the different barcode symbologies and their use cases.
 
 #### EAN-2 / EAN-5 Add-On
 
-![EAN-2](/img/symbologies/ean13_with_addon2.png)
+![EAN-2](/static/img/symbologies/ean13_with_addon2.png)
 
 * Encode additional product data like issue number, date or price.
 * Can only be used in combination with an EAN-8, EAN-13, UPC-A or UPC-E code.
 * EAN-2 encodes two digits, EAN-5 encodes five digits.
-* Additional information can be found on the [Scan Add-On/Extension Codes](/extension-codes.md).
+* Additional information can be found on the [Scan Add-On/Extension Codes](extension-codes.md).
 
 #### Universal Product Code (UPC)
 
-![UPC-A](/img/symbologies/upca.png)
+![UPC-A](/static/img/symbologies/upca.png)
 
 * Encodes a Global Trade Identification Number (GTIN).
 * Contains 6 (UPC-E) or 12 (UPC-A) numerical digits.
@@ -49,7 +49,7 @@ This page details the different barcode symbologies and their use cases.
 
 #### GS1 DataBar
 
-![GS1 DataBar](/img/symbologies/gs1databar_expanded_stacked.png)
+![GS1 DataBar](/static/img/symbologies/gs1databar_expanded_stacked.png)
 
 * Used to encode a Global Trade Identification Numbers (GTIN) along with variable additional information defined by application identifiers (AI). Examples are price, weight or expiry date.
 * Valid application identifiers (AI) are defined in the GS1 specification.
@@ -64,7 +64,7 @@ This page details the different barcode symbologies and their use cases.
 
 #### Code 128
 
-![Code 128](/img/symbologies/code128.png)
+![Code 128](/static/img/symbologies/code128.png)
 
 Used in a wide range of applications.
 
@@ -78,7 +78,7 @@ Used in a wide range of applications.
 
 #### Code 32
 
-![Code 32](/img/symbologies/code32.png)
+![Code 32](/static/img/symbologies/code32.png)
 
 * It is used for labelling pharmaceutical products in Italy.
 * Also known as Italian Pharmacode, IMH, Codice 32 Pharmacode, Codice Farmaceutico Italiano and Radix 32.
@@ -91,7 +91,7 @@ Used in a wide range of applications.
 
 #### Code 39
 
-![Code 39](/img/symbologies/code39.png)
+![Code 39](/static/img/symbologies/code39.png)
 
 * Mostly used in logistics to encode application specific identifiers.
 * The standard version can encode numbers 0-9, capital letters A-Z, symbols -.$/+% and space.
@@ -105,7 +105,7 @@ Used in a wide range of applications.
 
 #### Code 93
 
-![Code 93](/img/symbologies/code93.png)
+![Code 93](/static/img/symbologies/code93.png)
 
 * Mostly used in logistics to encode application specific identifiers.
 * Data in standard encoding (numbers 0-9, capital letters A-Z, symbols -.$/+% and space) and Full ASCII mode (including control characters) are supported.
@@ -115,7 +115,7 @@ Used in a wide range of applications.
 
 #### ITF (Interleaved Two of Five)
 
-![ITF](/img/symbologies/itf.png)
+![ITF](/static/img/symbologies/itf.png)
 
 * It is used primarily in the distribution and warehouse industry.
 * Encodes an even number of numerical characters.
@@ -129,7 +129,7 @@ Used in a wide range of applications.
 
 #### Codabar
 
-![Codabar](/img/symbologies/codabar.png)
+![Codabar](/static/img/symbologies/codabar.png)
 
 * This symbology is used by U.S. blood banks, photo labs, libraries, on FedEx airbills and in Japanese Logistics (where it is known as NW-7).
 * Encodes numbers and the characters –$:/.+
@@ -144,7 +144,7 @@ Used in a wide range of applications.
 
 #### Code 11
 
-![Code 11](/img/symbologies/code11.png)
+![Code 11](/static/img/symbologies/code11.png)
 
 * Primarily used for labelling telecommunication equipment. Also known as USD-8.
 * The barcode data can be encode numerical data, the dash and dot character.
@@ -154,7 +154,7 @@ Used in a wide range of applications.
 
 #### Code 25
 
-![Code 25](/img/symbologies/code25.png)
+![Code 25](/static/img/symbologies/code25.png)
 
 * Also known as Standard 2 of 5, Industrial 2 of 5 or Discrete 2 of 5.
 * Legacy numerical barcode format with a low data density.
@@ -165,7 +165,7 @@ Used in a wide range of applications.
 
 #### IATA 2 of 5
 
-![IATA 2 of 5](/img/symbologies/iata2of5.png)
+![IATA 2 of 5](/static/img/symbologies/iata2of5.png)
 
 * Also known as Computer Identics 2 of 5.
 * Used by International Air Transport Association (IATA) for managing air cargo.
@@ -176,7 +176,7 @@ Used in a wide range of applications.
 
 #### Matrix 2 of 5
 
-![Matrix 2 of 5](/img/symbologies/matrix2of5.png)
+![Matrix 2 of 5](/static/img/symbologies/matrix2of5.png)
 
 From the same family as Code 25 and IATA 2 of 5
 ~30% more dense than Code 25 or IATA 2 of 5
@@ -188,7 +188,7 @@ Relevant enum value: `SDCSymbologyMatrixTwoOfFive`.
 
 #### MSI Plessey
 
-![MSI Plessey](/img/symbologies/msi.png)
+![MSI Plessey](/static/img/symbologies/msi.png)
 
 * MSI is used primarily for inventory control, marking storage containers and shelves in warehouse environments.
 * Encodes any number of numerical characters.
@@ -201,7 +201,7 @@ Relevant enum value: `SDCSymbologyMatrixTwoOfFive`.
 
 ### QR Code
 
-![QR Code](/img/symbologies/qr.png)
+![QR Code](/static/img/symbologies/qr.png)
 
 * Supports variable length data content.
 * Data encoding modes support numeric, alphanumeric, binary data and kanji characters.
@@ -213,7 +213,7 @@ Relevant enum value: `SDCSymbologyMatrixTwoOfFive`.
 
 #### Micro QR Code
 
-![Micro QR Code](/img/symbologies/microqr.png)
+![Micro QR Code](/static/img/symbologies/microqr.png)
 
 * Miniature version of the standard QR code that supports variable length data content up to 35 characters.
 * Different error correction levels can be defined with a data recovery rate of up to 25%.
@@ -223,7 +223,7 @@ Relevant enum value: `SDCSymbologyMatrixTwoOfFive`.
 
 #### Rectangular Micro QR Code
 
-![Rectangular Micro QR Code](/img/symbologies/rmqr.png)
+![Rectangular Micro QR Code](/static/img/symbologies/rmqr.png)
 
 * Rectangular version of Micro QR code (described in ISO/IEC 23941), supports variable length data content up to 361 numbers, 219 alphanumeric characters, 150 byte, 92 Kanji.
 * Two different error correction levels can be defined with a data recovery rate of up to 30%.
@@ -232,7 +232,7 @@ Relevant enum value: `SDCSymbologyMatrixTwoOfFive`.
 
 ### Data Matrix
 
-![Data Matrix](/img/symbologies/datamatrix.png)
+![Data Matrix](/static/img/symbologies/datamatrix.png)
 
 * Supports variable length data content.
 * Encodings and sizes defined in the Data Matrix ECC 200 standard are supported.
@@ -243,7 +243,7 @@ Relevant enum value: `SDCSymbologyMatrixTwoOfFive`.
 
 #### Data Matrix Rectangular Extension
 
-![Data Matrix Rectangular Extension](/img/symbologies/dmre.png)
+![Data Matrix Rectangular Extension](/static/img/symbologies/dmre.png)
 
 * The decoder supports the Data Matrix Rectangular Extension (DMRE) as defined in the AIM-D Symbology Specification Revision 1.01.
 * Includes support for GS1 encoded data (GS1 Data Matrix).
@@ -251,7 +251,7 @@ Relevant enum value: `SDCSymbologyMatrixTwoOfFive`.
 
 #### Data Matrix Direct Part Marking (DPM)
 
-![Data Matrix Direct Part Marking](/img/symbologies/dpm.png)
+![Data Matrix Direct Part Marking](/static/img/symbologies/dpm.png)
 
 * Data Matrix codes are frequently used for direct part marking (DPM) where the codes are edged directly into the material instead of being printed.
 * Includes support for GS1 encoded data (GS1 Data Matrix).
@@ -260,7 +260,7 @@ Relevant enum value: `SDCSymbologyMatrixTwoOfFive`.
 
 ### PDF417
 
-![PDF417](/img/symbologies/pdf417.png)
+![PDF417](/static/img/symbologies/pdf417.png)
 
 * Used in a wide range of applications such as transport tickets and document processing.
 * Supports variable length data content.
@@ -272,7 +272,7 @@ Relevant enum value: `SDCSymbologyMatrixTwoOfFive`.
 
 #### Micro PDF417
 
-![Micro PDF417](/img/symbologies/micropdf417.png)
+![Micro PDF417](/static/img/symbologies/micropdf417.png)
 
 * More space efficient version of PDF417 without start and end patterns.
 * Used in GS1 Composite Codes type A (CC-A) and B (CC-B).
@@ -283,7 +283,7 @@ Relevant enum value: `SDCSymbologyMatrixTwoOfFive`.
 
 ### Aztec Code
 
-![Aztec Code](/img/symbologies/aztec.png)
+![Aztec Code](/static/img/symbologies/aztec.png)
 
 * Used for tickets in the transport industries, e.g. railway companies.
 * Data can be encoded in ASCII or extended ASCII.
@@ -294,7 +294,7 @@ Relevant enum value: `SDCSymbologyMatrixTwoOfFive`.
 
 ### MaxiCode
 
-![MaxiCode](/img/symbologies/maxicode.png)
+![MaxiCode](/static/img/symbologies/maxicode.png)
 
 * Fixed size 2d symbology originally created by UPS in 1992.
 * Used for tracking and managing shipments of packages.
@@ -306,7 +306,7 @@ Relevant enum value: `SDCSymbologyMatrixTwoOfFive`.
 
 ### DotCode
 
-![DotCode](/img/symbologies/dotcode.png)
+![DotCode](/static/img/symbologies/dotcode.png)
 
 * Public Domain optical data carrier designed to be printed reliably at very high speed.
 * Flexible code shape: rectangular codes of virtually any size and width/height proportion can be used.
@@ -317,7 +317,7 @@ Relevant enum value: `SDCSymbologyDotCode`.
 
 ### ArUco
 
-![ArUco](/img/symbologies/aruco.png)
+![ArUco](/static/img/symbologies/aruco.png)
 
 * Used mainly for camera pose estimation in augmented reality and robotics, developed at the University of Cordoba.
 * Consists of an n x n bit matrix (n can be any integer value, most commonly used are values ranging from 4 to 7) and a one element wide black border.
@@ -327,11 +327,11 @@ Relevant enum value: `SDCSymbologyDotCode`.
 
 ## GS1 Composite Codes
 
-GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D code. See [Scanning Composite Codes](/scanning-composite-codes.md) for more information.
+GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D code. See [Scanning Composite Codes](scanning-composite-codes.md) for more information.
 
 ### GS1 Composite Code A (CC-A)
 
-![GS1 Composite Code A](/img/symbologies/composite_type_a.png)
+![GS1 Composite Code A](/static/img/symbologies/composite_type_a.png)
 
 * Extends a linear GS1 barcode using an additional MicroPDF417 code.
 * Optimized to use as little space as possible.
@@ -341,7 +341,7 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 
 ### GS1 Composite Code B (CC-B)
 
-![GS1 Composite Code B](/img/symbologies/composite_type_b.png)
+![GS1 Composite Code B](/static/img/symbologies/composite_type_b.png)
 
 * Extends a linear GS1 barcode using an additional MicroPDF417 code.
 * A subset of the MicroPDF417 column and row combinations can be used.
@@ -350,7 +350,7 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 
 ### GS1 Composite Code C (CC-C)
 
-![GS1 Composite Code C](/img/symbologies/composite_type_c.png)
+![GS1 Composite Code C](/static/img/symbologies/composite_type_c.png)
 
 * Extends a GS1-128 (Code 128) barcode using an additional PDF417 code.
 * Same encoding as CC-B.
@@ -359,7 +359,7 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 
 ### Royal Mail 4 State Customer Code
 
-![RM4SCC](/img/symbologies/rm4scc.png)
+![RM4SCC](/static/img/symbologies/rm4scc.png)
 
 * Postal code symbology used by Royal Mail and Singapore Post for encoding the destination address.
 * It enables UK postcodes as well as Delivery Point Suffixes (DPSs) to be easily read by a machine at high speed.
@@ -368,7 +368,7 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 
 ### KIX (Klant index)
 
-![KIX](/img/symbologies/kix.png)
+![KIX](/static/img/symbologies/kix.png)
 
 * Uses the same symbol alphabet as `ROYAL_MAIL_4STATE`.
 * Does not use a checksum for data verification, nor does it have a start/end pattern.
@@ -377,7 +377,7 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 
 ### Posi LAPA 4 State Code
 
-![Posi LAPA 4 State Code](/img/symbologies/posi_lapa_4state.png)
+![Posi LAPA 4 State Code](/static/img/symbologies/posi_lapa_4state.png)
 
 * Uses the same symbol alphabet as `ROYAL_MAIL_4STATE`
 * Uses Reed-Solomon error correction. It can correct up to 8 erasures or 4 errors.
@@ -387,7 +387,7 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 
 ### USPS Intelligent Mail
 
-![USPS Intelligent Mail](/img/symbologies/usps_intelligent_mail.png)
+![USPS Intelligent Mail](/static/img/symbologies/usps_intelligent_mail.png)
 
 * Postal code symbology used by the United States Postal Service (USPS) to sort and track letters and flats.
 * Height-modulated barcode with 4-state symbology.
@@ -397,7 +397,7 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 
 ### UPU (Universal Postal Union) S18 4 State Code
 
-![UPU S18 4 State Code](/img/symbologies/upu_s18.png)
+![UPU S18 4 State Code](/static/img/symbologies/upu_s18.png)
 
 * UPU 4-state is a variable-length and alphanumeric barcode.
 * It is used to add identifier tags to UPU postal items.
@@ -409,7 +409,7 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 
 ### Australia Post
 
-![Australia Post](/img/symbologies/australian_postal_code.png)
+![Australia Post](/static/img/symbologies/australian_postal_code.png)
 
 * This symbology is used by Australia Post for Postal code and automatic mail sorting.
 * The Australian Post 4-State barcode specifies three formats. Each format corresponds to a fixed length barcode of a unique number of bars.
@@ -424,7 +424,7 @@ GS1 Composite Codes as defined in ISO/IEC 24723:2010 are made up of a 1D and 2D 
 
 ### French Postal Code (La Poste)
 
-![French Postal Code](/img/symbologies/french_postal_code.png)
+![French Postal Code](/static/img/symbologies/french_postal_code.png)
 
 * This symbology is used by La Poste (France).
 * The French Post symbology consists of a two codes: a Chronomark and a Routing code. The two codes are printed side by side.
@@ -449,7 +449,7 @@ GS1 encoded data cannot be displayed directly to the user. The application ident
 
 Example of a correctly encoded GS1 Code128 (also known as GS1-128) barcode:
 
-![GS1 Code128](/img/symbologies/gs1_code128.png)
+![GS1 Code128](/static/img/symbologies/gs1_code128.png)
 
 The machine readable data that gets scanned from the code above, where \<GS\> represents the non-printable group separator character:
 
@@ -501,4 +501,4 @@ The same data parsed into its application identifiers by the Scandit parser:
 
 There are many incorrectly encoded GS1 codes in the wild. The following image depicts two common error cases: The first incorrect code uses a leading group separator instead of the DataMatrix specific encoding scheme. The second error case encodes the human readable GS1 data representation in a normal DataMatrix code.
 
-![GS1 Codes](/img/symbologies/gs1_data_matrix_examples.png)
+![GS1 Codes](/static/img/symbologies/gs1_data_matrix_examples.png)

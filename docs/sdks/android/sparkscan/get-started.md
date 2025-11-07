@@ -26,7 +26,7 @@ Monitor the view lifecycle so you can call the view lifecycle methods in `SparkS
 
 ## Prerequisites
 
-Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out this [guide](/sdks/android/add-sdk).
+Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out this [guide](/docs/sdks/android/add-sdk.md).
 
 :::tip
 You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).

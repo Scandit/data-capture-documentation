@@ -16,19 +16,19 @@ There are many configuration options and functionalities available in Scandit Ex
 
 ### Recognized Symbologies
 
-You can configure which [barcode symbologies](/barcode-symbologies.md) Scandit Express should recognize. By default, all symbologies are enabled. You can disable symbologies that are not needed to improve scanning performance.
+You can configure which [barcode symbologies](/docs/barcode-symbologies.md) Scandit Express should recognize. By default, all symbologies are enabled. You can disable symbologies that are not needed to improve scanning performance.
 
 1. Login to your [Scandit Dashboard](https://ssl.scandit.com/).
 2. Click on the Project card you want to configure.
 3. For each symbology, you can enable or disable it via the corresponding toggle.
-    ![Symbology Configuration](/img/express/enabled_symbology.png)
+    ![Symbology Configuration](/static/img/express/enabled_symbology.png)
 4. [Reload the configuration](/hosted/express/getting-started/rollout.md#updating-configuration) in your app to apply the changes.
 
 If you want to further restrict what barcodes are accepted by Scandit Express, you can define a specific match as a regular expression. Only barcode data matching the specified regular expression will be accepted.
 
 The corresponding field is in the `barcodeRegexValidation` section.
 
-![Barcode Regex Validation](/img/express/regex_validation.png)
+![Barcode Regex Validation](/static/img/express/regex_validation.png)
 
 ### Keystroke Injection
 
@@ -55,13 +55,13 @@ Use this mode to select one barcode out of many. This mode detects all barcodes 
 
 Use this mode to scan barcodes consecutively at high speed. This mode scans successive items at high speed without the need to keep tapping on the screen.
 
-<img src="/img/express/speed.gif" alt="Speed Mode" width="250px" />
+<img src="/static/img/express/speed.gif" alt="Speed Mode" width="250px" />
 
 #### Batch
 
 Use this mode to scan a batch of barcodes all at once. This mode scans all visible barcodes instantly. It’s perfect when all barcodes are visible and the volume is high.
 
-<img src="/img/express/batch.gif" alt="Batch Mode" width="250px" />
+<img src="/static/img/express/batch.gif" alt="Batch Mode" width="250px" />
 
 #### List
 

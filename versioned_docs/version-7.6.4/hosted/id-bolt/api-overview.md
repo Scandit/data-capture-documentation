@@ -76,20 +76,20 @@ The following options can be configured when creating an ID Bolt session:
 | Option | Type | Required | Description | Details |
 |--------|------|----------|-------------|---------|
 | `licenseKey` | `string` | Yes | Your Scandit license key | |
-| `documentSelection` | `DocumentSelection` | Yes | Defines acceptable documents | [Document Selection](../document-selection) |
-| `returnDataMode` | `ReturnDataMode` | Yes | Controls what data is returned | [Data Handling](../data-handling) |
-| `anonymizationMode` | `AnonymizationMode` | No | Controls data anonymization | [Data Handling](../data-handling) |
-| `scanner` | `Scanner` | No | Customizes scanner behavior | [Workflow Options](../workflow) |
-| `validation` | `Validators[]` | No | Validators to verify ID | [Validators](../validators) |
+| `documentSelection` | `DocumentSelection` | Yes | Defines acceptable documents | [Document Selection](document-selection.md) |
+| `returnDataMode` | `ReturnDataMode` | Yes | Controls what data is returned | [Data Handling](data-handling.md) |
+| `anonymizationMode` | `AnonymizationMode` | No | Controls data anonymization | [Data Handling](data-handling.md) |
+| `scanner` | `Scanner` | No | Customizes scanner behavior | [Workflow Options](workflow.md) |
+| `validation` | `Validators[]` | No | Validators to verify ID | [Validators](validators.md) |
 | `locale` | `string` | No | Interface language | [Supported Locales](#supported-locales) |
-| `workflow` | `WorkflowOptions` | No | Customizes workflow UI | [Workflow Options](../workflow) |
-| `theme` | `Theme` | No | Customizes visual appearance | [Theming](../theming) |
-| `textOverrides` | `TextOverrides` | No | Customizes displayed text | [Text Overrides](../text-overrides) |
-| `keepAliveForNextSession` | `boolean` | No | Keeps resources for multiple sessions | [Advanced Options](../advanced) |
-| `disableCloseOnBrowserBack` | `boolean` | No | Prevents closing on browser back | [Advanced Options](../advanced) |
-| `externalTransactionId` | `string` | No | Your tracking ID for analytics | [Advanced Options](../advanced) |
-| `onCompletion` | `Function` | Yes | Completion callback | [Callbacks](../callbacks) |
-| `onCancellation` | `Function` | No | Cancellation callback | [Callbacks](../callbacks) |
+| `workflow` | `WorkflowOptions` | No | Customizes workflow UI | [Workflow Options](workflow.md) |
+| `theme` | `Theme` | No | Customizes visual appearance | [Theming](theming.md) |
+| `textOverrides` | `TextOverrides` | No | Customizes displayed text | [Text Overrides](text-overrides.md) |
+| `keepAliveForNextSession` | `boolean` | No | Keeps resources for multiple sessions | [Advanced Options](advanced.md) |
+| `disableCloseOnBrowserBack` | `boolean` | No | Prevents closing on browser back | [Advanced Options](advanced.md) |
+| `externalTransactionId` | `string` | No | Your tracking ID for analytics | [Advanced Options](advanced.md) |
+| `onCompletion` | `Function` | Yes | Completion callback | [Callbacks](callbacks.md) |
+| `onCancellation` | `Function` | No | Cancellation callback | [Callbacks](callbacks.md) |
 
 
 ## Supported Locales

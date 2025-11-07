@@ -24,7 +24,7 @@ The screenshots in this guide are from MobileIron Cloud. However, these instruct
 
 You can distribute Scandit Express directly from the Apple App Store. Search for "Scandit Express" in the admin console of your EMM/MDM solution and add it to your app catalog.
 
-![Add Express to App Catalog](/img/express/rollout_ios_1.png)
+![Add Express to App Catalog](/static/img/express/rollout_ios_1.png)
 
 ### Set the Project Code
 
@@ -38,7 +38,7 @@ To automatically synchronize your Scandit Express configuration with Scandit, yo
 
 4. In your MDM system, paste this value in the **iOS Managed App Configuration** section.
 
-![Add Project Code](/img/express/rollout_ios_2.png)
+![Add Project Code](/static/img/express/rollout_ios_2.png)
 
 :::note
 If your MDM system requires an AppConfig configuration, you can generate one [here](https://appconfig.jamfresearch.com/generator) by selecting Scandit Express as: `com.scandit.KeyboardWedge2/current`.
@@ -65,7 +65,7 @@ Scandit recommends setting Android devices as either ["fully managed"](https://s
 
 You can distribute Scandit Express directly from the Google Play Store. Search for "Scandit Express" in the admin console for your EMM/MDM solution and add it to your app catalog.
 
-![Add Express to App Catalog](/img/express/rollout_android_1.png)
+![Add Express to App Catalog](/static/img/express/rollout_android_1.png)
 
 ### Set the Project Code
 
@@ -94,7 +94,7 @@ To automatically synchronize your Scandit Express configuration with Scandit, yo
 
 5. In your MDM system, paste this value in the **Manage Configurations** section.
 
-![Add Project Code](/img/express/rollout_android_2.png)
+![Add Project Code](/static/img/express/rollout_android_2.png)
 
 ### 3rd-Party Instructions
 
@@ -115,8 +115,8 @@ Scandit Express automatically updates the license and configuration when restart
 
 1. Open the user menu in the top right corner of the Scandit Express app.
 
-![Open User Menu](/img/express/user_menu.png)
+![Open User Menu](/static/img/express/user_menu.png)
 
 2. Tap on **Refresh Project**.
 
-![Refresh Project](/img/express/refresh_project.png)
+![Refresh Project](/static/img/express/refresh_project.png)

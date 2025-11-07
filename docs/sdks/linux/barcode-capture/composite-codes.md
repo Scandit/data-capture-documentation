@@ -38,7 +38,7 @@ Concatenate the results from the linear and the 2d code into one valid GS1 encod
 
 ## GS1 Composite Code A (CC-A)
 
-![DataBar Limited Composite Code](/img/symbologies/composite_type_a.png)
+![DataBar Limited Composite Code](/static/img/symbologies/composite_type_a.png)
 
 * Extends a linear GS1 barcode using an additional MicroPDF417 code.
 * Optimized to use as little space as possible.
@@ -48,7 +48,7 @@ Concatenate the results from the linear and the 2d code into one valid GS1 encod
 
 ## GS1 Composite Code B (CC-B)
 
-![DataBar-14 Composite Code](/img/symbologies/composite_type_b.png)
+![DataBar-14 Composite Code](/static/img/symbologies/composite_type_b.png)
 
 * Extends a linear GS1 barcode using an additional MicroPDF417 code.
 * A subset of the MicroPDF417 column and row combinations can be used.
@@ -57,7 +57,7 @@ Concatenate the results from the linear and the 2d code into one valid GS1 encod
 
 ## GS1 Composite Code C (CC-C)
 
-![GS1 128 Composite Code](/img/symbologies/composite_type_c.png)
+![GS1 128 Composite Code](/static/img/symbologies/composite_type_c.png)
 
 * Extends a GS1-128 (Code 128) barcode using an additional PDF417 code.
 * Same encoding as CC-B.

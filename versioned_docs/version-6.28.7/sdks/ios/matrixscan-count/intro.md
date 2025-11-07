@@ -38,4 +38,4 @@ MatrixScan Count does not include a UI for reviewing the scan list, but a recomm
 
 ## Supported Symbologies
 
-MatrixScan Count supports all [symbologies](../../../barcode-symbologies.md) **except** DotCode, MaxiCode and postal codes (KIX, RM4SCC).
+MatrixScan Count supports all [symbologies](/docs/barcode-symbologies.md) **except** DotCode, MaxiCode and postal codes (KIX, RM4SCC).

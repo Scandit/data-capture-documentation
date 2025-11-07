@@ -18,7 +18,7 @@ MatrixScan Find includes pre-built and pre-tested user interface (UI) elements a
 
 The UI workflow is designed to be as simple and ergonomic as possible, and includes the following elements:
 
-![MatrixScan Find UI](/img/matrixscan-find/ui-overview.png)
+![MatrixScan Find UI](/static/img/matrixscan-find/ui-overview.png)
 
 - A **shutter button** the user operates in order to initiate scanning and searching for items.
 - **Feedback** is overlaid as to highlight items with obvious and colorful visual dots on screen.
@@ -29,6 +29,6 @@ Upon completing the scanning process, if all items have been successfully scanne
 
 ## Supported Symbologies
 
-MatrixScan Find supports all [symbologies](../../../barcode-symbologies.md) **except** DotCode, MaxiCode and postal codes (KIX, RM4SCC).
+MatrixScan Find supports all [symbologies](/docs/barcode-symbologies.md) **except** DotCode, MaxiCode and postal codes (KIX, RM4SCC).
 
 If you are not familiar with the symbologies that are relevant for your use case, you can use capture presets that are tailored for different verticals (e.g. retail, logistics, etc.).

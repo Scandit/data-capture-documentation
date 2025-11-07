@@ -31,7 +31,7 @@ The camera stream pauses automatically after 30 seconds of inactivity to save ba
 
 - **ID Validation**: Detects whether an ID is valid, expired, or forged.  
 - **Age Verification**: Compares the document’s date of birth against a configurable age limit.
-- **Configurable Document Types**: Supports a wide range of IDs (Driver Licenses, Passports, National IDs, Military IDs, etc.). See [Supported Documents](docs/sdks/android/id-capture/supported-documents.md).
+- **Configurable Document Types**: Supports a wide range of IDs (Driver Licenses, Passports, National IDs, Military IDs, etc.). See [Supported Documents](/docs/sdks/android/id-capture/supported-documents.md).
 - **Persistence**: Optionally keep scanned IDs available across app sessions until cleared or exported.
 - **Export to CSV**: Scanned IDs can be exported as a CSV file with customizable columns.
 
@@ -47,7 +47,7 @@ ID Check is configured via the **Advanced** section of the Scandit Express setti
 |-----------------|-----------------|----------|
 | **enabled**  | `true`, `false`   | Whether ID Check is enabled and selected from the main menu or not. |
 | **idScanningMode** | `front and back`, `MRZ`, `PDF417`, `VIZ` | Specifies the scanning mode to use for ID documents and the area(s) of the documents to focus on. |
-| **supportedDocuments** | See [Supported Documents](docs/sdks/android/id-capture/supported-documents.md). | List of supported documents which can be scanned. By default all documents are enabled. |
+| **supportedDocuments** | See [Supported Documents](/docs/sdks/android/id-capture/supported-documents.md). | List of supported documents which can be scanned. By default all documents are enabled. |
 | **scanToFile** | See [Captured ID](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html) for a full list of all the possible fields. | | If this field is present it will be used to customize the output of this mode, i.e. `tableType` can be `custom` (choose which columns to export) or `full` (returns all fields). |
 | **enabledRejections** | See [ID Capture Settings](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectedDocuments) for more information. | Specifies any documents that should be automatically rejected, for example enforcing age limits or regional restrictions. |
 | **scannedBarcodePersistenceEnabled** | `true`, `false` |  If true, save scanned ID(s) when exiting the mode. Next time the user is shown a dialog asking whether to continue with persisted IDs or start fresh. Clear persisted data after every successful export or when the app is closed. |

@@ -54,7 +54,7 @@ extension ViewController: SparkScanFeedbackDelegate {
 You can have different error states triggered by different logic conditions. For example you can trigger an error state when a wrong barcode is scanned, and another one when a duplicate barcode is scanned. These errors can show different colors and have different timeouts.
 :::
 
-![SparkScan Error State](../../../img/errors.png)
+![SparkScan Error State](/static/img/sparkscan/error-wrong.png)
 
 A high timeout (e.g. `10`+ seconds) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow, for example when a wrong barcode is scanned and some actions need to be performed.
 
@@ -78,7 +78,7 @@ sparkScanView.isBarcodeCountButtonVisible = true
 sparkScanView.isBarcodeFindButtonVisible = true
 ```
 
-![SparkScan Setting Toolbar](../../../img/toolbars.png)
+![SparkScan Setting Toolbar](/static/img/sparkscan/toolbar.png)
 
 In addition you have to add a listener to the [`SDCSparkScanView`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) via [`SDCSparkScanView.UIDelegate`](https://docs.scandit.com/6.28/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.UiListener). You will then receive callbacks when the **Barcode Find** button or **Barcode Count** button is tapped from the toolbar.
 

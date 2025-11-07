@@ -75,7 +75,7 @@ binary "https://ssl.scandit.com/sdk/download/carthage/ScanditBarcodeCapture.json
 
 To integrate the Scandit Data Capture SDK into your Xcode project using Swift Package Manager, add the frameworks you want to add in the _Package Dependencies_ section of your project.
 
-![Add Package Dependencies](./img/spm.png)
+![Add Package Dependencies](img/spm.png)
 
 Add our SPM package repository:
 
@@ -102,7 +102,7 @@ All you need to do is drag the frameworks into the _Frameworks, Libraries, and E
 
 Please note that you will always need at least `ScanditCaptureCore.xcframework` which contains the shared functionality used by the other data capture modules.
 
-![Add Frameworks Manually](./img/embedded-binaries.png)
+![Add Frameworks Manually](img/embedded-binaries.png)
 
 :::note
 When building the project, by default Xcode will look for the frameworks in the root folder of the project.

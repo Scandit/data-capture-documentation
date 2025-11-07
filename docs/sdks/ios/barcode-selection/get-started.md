@@ -40,7 +40,7 @@ import DataCaptureContextIos from '../../../partials/get-started/_create-data-ca
 
 Barcode selection is orchestrated by the [`SDCBarcodeSelection`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) data capture mode. It is configured via [`SDCBarcodeSelectionSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-settings.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionSettings) and allows you to register one or more listeners for when new codes have been selected.
 
-Here we setup barcode scanning for the desired barcode [symbologies](../../../barcode-symbologies.md). The list of symbologies to enable is highly application specific, and we recommend that you **only enable the list of symbologies your application requires**:
+Here we setup barcode scanning for the desired barcode [symbologies](/docs/barcode-symbologies.md). The list of symbologies to enable is highly application specific, and we recommend that you **only enable the list of symbologies your application requires**:
 
 ```swift
 let settings = BarcodeSelectionSettings()

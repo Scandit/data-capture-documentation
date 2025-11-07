@@ -14,7 +14,7 @@ Configure the Task Management workflow in the Scandit Express dashboard to help 
 The configuration can only be done via the Code Editor in the **Advanced** section of the dashboard:
 
 <p align="center">
-  <img src="/img/express/code-editor.png" alt="Code Editor" width="800px" />
+  <img src="/static/img/express/code-editor.png" alt="Code Editor" width="800px" />
 </p>
 
 ## Configuration Options

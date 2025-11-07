@@ -14,7 +14,7 @@ This page describes the stesps to configure a barcode based capture mode ([Barco
 
 To get the most out of this guide, it is recommended that you have read the following:
 
-- [Add the SDK to Your App](/sdks/android/add-sdk)
+- [Add the SDK to Your App](/docs/sdks/android/add-sdk.md)
 - [Get Started With Barcode Capture](/sdks/android/barcode-capture/get-started)
 - [Barcode Symbologies](/barcode-symbologies)
 

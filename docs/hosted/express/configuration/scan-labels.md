@@ -17,7 +17,7 @@ It is available via the **Scan Labels** option in the Express menu.
 When finished scanning, you can export the list of scanned details.
 
 <p align="center">
-  <img src="/img/express/express_menu.png" alt="Express Menu" width="350px" />
+  <img src="/static/img/express/express_menu.png" alt="Express Menu" width="350px" />
 </p>
 
 ## Configuration
@@ -25,7 +25,7 @@ When finished scanning, you can export the list of scanned details.
 Label scanning can be enabled and configured in your [Scandit Dashboard](https://ssl.scandit.com/dashboard/) by navigating to the **Modes > Label Scanning** section:
 
 <p align="center">
-  <img src="/img/express/label-scanning.png" alt="Label Scanning" width="800px" />
+  <img src="/static/img/express/label-scanning.png" alt="Label Scanning" width="800px" />
 </p>
 
 Once enabled, you can select from a the following pre-defined label types, and the respective fields will be automatically detected when scanning:

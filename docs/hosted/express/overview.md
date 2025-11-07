@@ -27,7 +27,7 @@ Scandit Express is built for enterprise use and supports distribution through mo
 
 The Scandit Express user interface (UI) is designed to resemble a smartphone camera. It also includes features to reduce user workload and frustration, such as aiming assist, batch scanning, and visual, sound, and haptic feedback. There is also an advanced _Find_ mode that helps frontline workers and customers instantly locate items using an augmented-reality (AR) interface.
 
-![Scandit Express](/img/express/express_ui.png)
+![Scandit Express](/static/img/express/express_ui.png)
 
 Depending on the mode selected, the user has a choice of scanning barcodes one by one or batch scanning many codes simultaneously. For batch scanning, users can scan as many barcodes as they want and verify them in a list, before inputting them into the desired field.
 
