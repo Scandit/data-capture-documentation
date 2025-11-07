@@ -24,6 +24,16 @@ If you are creating a mobile application for Android and/or iOS where the Scandi
 
 The low-level API offers single and multi barcode scanning, barcode tracking (MatrixScan), barcode generation and barcode data parsing.
 
+### Single Barcodes Scanning
+
+Scanning one barcode or one group of barcodes is the default behavior of the low-level API. Valid groups are EAN/UPC with [add-on codes](barcode-capture/add-on-codes.md) or [composite codes](barcode-capture/composite-codes.md). If you implement a hand held use-case, we recommend using the `SC_PRESET_SINGLE_CODE_HAND_HELD` barcode scanner settings preset. The single scan preset provides some of the SparkScan features on the mobile API, such as smart scan intention and OCR fallback.
+
+### Multi Barcode Scanning and Tracking
+
+Scanning multiple barcodes in an image can be implemented in two ways; by enabling multi-scan in the barcode scanner settings (see `sc_barcode_scanner_settings_set_multi_scan_enabled`) or by using the tracking API (see `ScObjectTracker`). A license key with the `tracking` feature enabled is required for both approaches. Please [contact Scandit support](mailto:support@scandit.com) if you need such a license.
+
+Barcode tracking identifies and follows multiple codes over time. It can be used to count objects or anchor augmented reality (AR) markers on objects, similar to the functionality of MatrixScan on the mobile API.
+
 ## Low-level API Concepts
 
 ### Memory Management Rules
