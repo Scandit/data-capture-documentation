@@ -24,7 +24,8 @@ There is nothing special required from the user in order to enable structured ap
 
 ### Example
 
-Given the following four QR codes 
+Given the following four QR codes
+
 ![QR structured append code #1](/static/img/symbologies/qr_sa_04_01.png)
 ![QR structured append code #2](/static/img/symbologies/qr_sa_04_02.png)
 ![QR structured append code #3](/static/img/symbologies/qr_sa_04_03.png)
@@ -43,41 +44,39 @@ Settings setup for structured append QR codes on Linux:
 The structured append codes are returned as four separate codes and they need to be combined from the scan session. A possible implementation of the result collection can look like this:
 
 ```c
-    char const *structured_append_sequence_id = NULL;
-    char const *structured_append_sequence[32] = {0};
-    int structured_append_sequence_expected_segments_count = -1;
-    int structured_append_sequence_found_segments_count = 0;
+char const *structured_append_sequence_id = NULL;
+char const *structured_append_sequence[32] = {0};
+int structured_append_sequence_expected_segments_count = -1;
 
-    void extract_new_structured_append_codes(ScBarcodeScannerSession const *session) {
-        ScBarcodeArray *codes = sc_barcode_scanner_session_get_newly_recognized_codes(session);
-        // will contain 0 to 4 codes.
-        uint32_t const count = sc_barcode_array_get_size(codes);
-        for (uint32_t i = 0; i < count; i++) {
-            ScBarcode *code = sc_barcode_array_get_item_at(codes, i);
-            char const *code_file_id = sc_barcode_get_file_id(code);
-            if (code_file_id) {
-                if (!structured_append_sequence_id) {
-                    structured_append_sequence_id = code_file_id;
-                    structured_append_sequence_expected_segments_count = sc_barcode_get_segment_count(code)
-                    structured_append_sequence_found_segments_count++;
+void extract_new_structured_append_codes(ScBarcodeScannerSession const *session) {
+    ScBarcodeArray *codes = sc_barcode_scanner_session_get_newly_recognized_codes(session);
+    // will contain 0 to 4 codes.
+    uint32_t const count = sc_barcode_array_get_size(codes);
+    for (uint32_t i = 0; i < count; i++) {
+        ScBarcode *code = sc_barcode_array_get_item_at(codes, i);
+        char const *code_file_id = sc_barcode_get_file_id(code);
+        if (code_file_id) {
+            if (!structured_append_sequence_id) {
+                structured_append_sequence_id = code_file_id;
+                structured_append_sequence_expected_segments_count = sc_barcode_get_segment_count(code)
 
-                    int segment_index = sc_barcode_get_segment_index(code);
-                    ScByteArray segment_data = sc_barcode_get_data(code);
-                    if (segment_data.size > 0) {
-                        char *segment_data_copy = (char *)malloc(segment_data.size);
-                        memcpy(segment_data_copy, segment_data.str, segment_data.size);
-                        structured_append_sequence[segment_index] = segment_data_copy;
-                    }
-                    sc_byte_array_free(segment_data);
-                } else if (std::strcmp(structured_append_sequence_id, code_file_id) != 0) {
-                    // found different structured append sequences
-                    break;
+                int segment_index = sc_barcode_get_segment_index(code);
+                ScByteArray segment_data = sc_barcode_get_data(code);
+                if (segment_data.size > 0) {
+                    char *segment_data_copy = (char *)malloc(segment_data.size);
+                    memcpy(segment_data_copy, segment_data.str, segment_data.size);
+                    structured_append_sequence[segment_index] = segment_data_copy;
                 }
-            } else {
-                // code does not belong to a sequence
+                sc_byte_array_free(segment_data);
+            } else if (std::strcmp(structured_append_sequence_id, code_file_id) != 0) {
+                // found different structured append sequences
+                break;
             }
+        } else {
+            // code does not belong to a sequence
         }
-
-        sc_barcode_array_release(codes);
     }
+
+    sc_barcode_array_release(codes);
+}
 ```
