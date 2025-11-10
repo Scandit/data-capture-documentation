@@ -285,6 +285,16 @@ No updates for this framework in this release.
 
 * MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
 
+## 7.2.6
+
+**Released**: November 10, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a memory leak.
+
 ## 7.2.5
 
 **Released**: November 5, 2025
