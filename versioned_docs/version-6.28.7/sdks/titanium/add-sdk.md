@@ -70,7 +70,7 @@ You need to declare the modules you want to use in the app’s tiapp.xml file, e
 </modules>
 ```
 
-After you download the archive containing all the modules at [ssl.scandit.com/dashboard/downloads](https://ssl.scandit.com/dashboard/downloads), unzip the archive. It includes the available Titanium modules, including the scandit-titanium-datacapture-core module that all other modules depend on. Now you need to copy the the reqired modules to the root folder of the application. Sticking with the current example, it means that you need to copy:
+After you download the archive containing all the modules, unzip the archive. It includes the available Titanium modules, including the `scandit-titanium-datacapture-core` module that all other modules depend on. Now you need to copy the the required modules to the root folder of the application. Sticking with the current example, it means that you need to copy:
 
 - The barcode module for Android.
 - The core module for Android.

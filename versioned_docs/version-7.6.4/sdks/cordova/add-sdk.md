@@ -96,7 +96,7 @@ For GitHub dependencies, you can specify the version using `#<version>`.
 
 ### Add the Scandit Data Capture SDK manually
 
-After you download the [archive containing all the plugins](https://ssl.scandit.com/dashboard/downloads), unzip the archive. It includes the available Cordova plugins, including the `scandit-cordova-datacapture-core` plugin that all other plugins depend on.
+After you download the archive containing all the plugins, unzip the archive. It includes the available Cordova plugins, including the `scandit-cordova-datacapture-core` plugin that all other plugins depend on.
 
 ### Add the plugin to your project
 

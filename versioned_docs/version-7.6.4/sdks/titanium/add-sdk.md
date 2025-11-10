@@ -72,7 +72,7 @@ You need to declare the modules you want to use in the app’s `tiapp.xml` file:
 </modules>
 ```
 
-After you download the archive containing all the modules from the [Scandit Dashboard](https://ssl.scandit.com/dashboard/downloads), unzip the archive.
+After you download the archive containing all the modules, unzip the archive.
 
 It includes the available Titanium modules, including the `scandit-titanium-datacapture-core` module that all other modules depend on. Now you need to copy the the required modules to the root folder of the application.
 
