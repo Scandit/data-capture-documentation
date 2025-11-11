@@ -26,10 +26,10 @@ There is nothing special required from the user in order to enable structured ap
 
 Given the following four QR codes
 
-![QR structured append code #1](/static/img/symbologies/qr_sa_04_01.png)
-![QR structured append code #2](/static/img/symbologies/qr_sa_04_02.png)
-![QR structured append code #3](/static/img/symbologies/qr_sa_04_03.png)
-![QR structured append code #4](/static/img/symbologies/qr_sa_04_04.png)
+![QR structured append code #1](/img/symbologies/qr_sa_04_01.png)
+![QR structured append code #2](/img/symbologies/qr_sa_04_02.png)
+![QR structured append code #3](/img/symbologies/qr_sa_04_03.png)
+![QR structured append code #4](/img/symbologies/qr_sa_04_04.png)
 
 Settings setup for structured append QR codes on Linux:
 
