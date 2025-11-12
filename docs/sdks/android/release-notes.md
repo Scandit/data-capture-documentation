@@ -126,6 +126,22 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
   * SparkScanViewDefaults.DefaultCaptureButtonBackgroundColor property
   * SparkScanViewDefaults.DefaultCaptureButtonTintColorProperty 
 
+## 7.6.5
+
+**Released**: November 12, 2025
+
+### New Features
+
+#### Barcode
+
+* Added a new API for filtering barcodes in MatrixScan AR, `BarcodeArFilter`.
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a memory leak.
+
 ## 7.6.4
 
 **Released**: November 5, 2025

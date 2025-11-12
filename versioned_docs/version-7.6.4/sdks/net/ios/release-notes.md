@@ -9,6 +9,16 @@ keywords:
   - netIos
 ---
 
+## 7.6.5
+
+**Released**: November 12, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a memory leak.
+
 ## 7.6.4
 
 **Released**: November 5, 2025

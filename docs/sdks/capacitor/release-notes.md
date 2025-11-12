@@ -76,6 +76,16 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 * `VideoResolution::Auto` is now deprecated. Please use the capture mode's `recommendedCameraSettings` for the best results.
 
+## 7.6.5
+
+**Released**: November 12, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a memory leak.
+
 ## 7.6.4
 
 **Released**: November 5, 2025
