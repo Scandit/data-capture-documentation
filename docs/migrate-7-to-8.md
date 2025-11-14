@@ -67,6 +67,106 @@ Starting with version 8.0, there are some critical changes in the Web SDK that y
 - The `Camera` API has been completely redesigned, see the [API reference](https://docs.scandit.com/data-capture-sdk/web/core/api/camera.html#camera) for complete details.
 - The `DataCaptureContext.create`, `createWithOptions` and `configure` methods have been removed in favor of [`DataCaptureContext.forLicenseKey`](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.ForLicenseKey). See the Web SDK [installation guide](/sdks/web/add-sdk.md) for more information.
 
+## .NET SDK Changes
+
+In version 8.0 we have fundamentally redesigned the Scandit .NET SDK's architecture to better align with the modern .NET ecosystem. This redesign brings several key benefits:
+
+The SDK now includes generic `.net8.0` and `.net9.0` targets. This allows you to reference `Scandit.DataCapture.Core` and related packages directly from non-UI projects, such as class libraries or unit test projects, making it significantly easier to build modular, testable applications following principles like Clean Architecture.
+
+Due to the architectural changes, the SDK now requires explicit initialization at application startup. The public API has not changed, but you must add the corresponding initialization code to your application for the SDK to function correctly.
+
+<Tabs groupId="frameworks">
+
+<TabItem value="android" label="Android">
+
+In your `MainApplication.cs`, add the initialization calls within the `OnCreate` method.
+
+```csharp
+[Application]
+public class MainApplication(IntPtr handle, JniHandleOwnership ownership) : Application(handle, ownership)
+{
+    public override void OnCreate()
+    {
+        base.OnCreate();
+
+        // Initialize Scandit libraries
+        ScanditCaptureCore.Initialize();
+        ScanditBarcodeCapture.Initialize();
+    }
+}
+```
+
+:::tip
+When using additional components like `ScanditIdCapture` or `ScanditParser` in your MAUI application, you must initialize them as well. Please add the required `Initialize()` call within your startup file following the pattern shown in the example above.
+:::
+
+</TabItem>
+
+<TabItem value="ios" label="iOS">
+
+In your `AppDelegate.cs`, add the initialization calls within the `FinishedLaunching` method.
+
+```csharp
+[Register("AppDelegate")]
+public class AppDelegate : UIApplicationDelegate
+{
+    public override UIWindow Window { get; set; }
+
+    public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
+    {
+        // Initialize Scandit libraries
+        ScanditCaptureCore.Initialize();
+        ScanditBarcodeCapture.Initialize();
+        
+        // Your existing window setup code
+        (...)
+
+        return true;
+    }
+}
+```
+
+:::tip
+When using additional components like `ScanditIdCapture` or `ScanditParser` in your MAUI application, you must initialize them as well. Please add the required `Initialize()` call within your startup file following the pattern shown in the example above.
+:::
+
+</TabItem>
+
+<TabItem value="maui" label="MAUI">
+
+In your `MauiProgram.cs`, chain the new `UseScanditCore()` and `UseScanditBarcodeCapture()` extension methods to the `MauiApp` builder.
+
+```csharp
+public static class MauiProgram
+{
+    public static MauiApp CreateMauiApp()
+    {
+        var builder = MauiApp.CreateBuilder();
+        builder.UseMauiApp<App>()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            })
+            // Add the Scandit Core and Barcode Capture initializers
+            .UseScanditCore(configure =>
+            {
+                configure.AddDataCaptureView();
+            })
+            .UseScanditBarcode();
+
+        return builder.Build();
+    }
+}
+```
+
+:::tip
+When using additional components like `ScanditIdCapture` or `ScanditParser` in your MAUI application, you must initialize them as well. Please add the required `Initialize()` call within your startup file following the pattern shown in the example above.
+:::
+
+</TabItem>
+
+</Tabs>
+
 ## Xamarin SDK Changes
 
 Starting this release we are no longer upgrading Xamarin and Forms solutions for the Data Capture SDK. Microsoft ended support for these frameworks on the 1st of May 2024, which locks them into discontinued tooling. You may continue to use the latest releases of SDK version 7.x as per our support policy.
