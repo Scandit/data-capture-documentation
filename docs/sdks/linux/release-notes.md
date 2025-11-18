@@ -218,11 +218,7 @@ No updates for this framework in this release.
 
 **Released**: November 5, 2025
 
-### Bug Fixes
-
-#### Core
-
-* Fixed a memory leak.
+No updates for this framework in this release.
 
 ## 7.2.4
 
