@@ -79,6 +79,8 @@ Recommendations:
 * Try to acquire images that are as sharp as possible and don't contain motion blur.
 * Disable the code duplicate filter in the session configuration.
 
+Despite following above recommendations your single image processing will not perform the same as a mobile app based solution. The Data Capture API on mobile uses a video stream to scan. Scanning from a single image will never perform as well as scanning from a video stream, as the probability of getting a good picture of a code is much lower with just one image. In addition, the SDK can't control the camera based on previous frames if a single image is used. Real-time adjustment of auto-focus and exposure which is optimized for barcode scanning make a significant difference.
+
 ### Multi-Threading
 
 Dynamic threading is used internally to accelerate the execution if available. The functions of the SDK library are not thread-safe. All context and scanner calls have to happen in the same thread.
