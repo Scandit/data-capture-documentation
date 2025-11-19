@@ -42,10 +42,10 @@ make sure to also add the:
 - `@scandit/web-datacapture-barcode` package, and/or
 - `@scandit/web-datacapture-parser` package
 
-`@scandit/web-datacapture-parser` package needs `@scandit/web-datacapture-barcode` as dependency. 
+`@scandit/web-datacapture-parser` package needs `@scandit/web-datacapture-barcode` as dependency.
 See the [Parser documentation](/sdks/web/parser/get-started.md) to learn more.
 
-If you want to scan personal identification documents, such as identity cards, passports or visas you need to add `@scandit/web-datacapture-id`. 
+If you want to scan personal identification documents, such as identity cards, passports or visas you need to add `@scandit/web-datacapture-id`.
 See the [ID Capture documentation](/sdks/web/id-capture/get-started.md) to learn more.
 
 :::tip
@@ -143,7 +143,7 @@ For production environments, we recommend:
 You can use the [jsDelivr](https://jsdelivr.com/) or [UNPKG](https://unpkg.com/) CDN to specify a certain version (or range) and include and import from our library as follows.
 
 :::note
-In alternative to jsdeliver, unpkg can be used as alternative:
+In alternative to jsdeliver, unpkg can be used:
 
 - [UNPKG Core](https://unpkg.com/@scandit/web-datacapture-core@8.x)
 - [UNPKG Barcode](https://unpkg.com/@scandit/web-datacapture-barcode@8.x)

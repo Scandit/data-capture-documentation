@@ -28,7 +28,7 @@ const dataCaptureView = await DataCaptureView.forContext(DataCaptureContext.shar
 
 const transparentColor = Color.fromRGBA(0,0,0,0);
 const overlayListener: LabelCaptureBasicOverlayListener = {
-    brushForField?(overlay: LabelCaptureBasicOverlay,
+    brushForField(overlay: LabelCaptureBasicOverlay,
         field: LabelField,
         label: CapturedLabel): Brush | null => {
       switch (field.name) {
