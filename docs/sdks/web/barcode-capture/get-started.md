@@ -13,8 +13,7 @@ In this guide you will learn step-by-step how to add Barcode Capture to your app
 
 The general steps are:
 
-- Include the ScanditBarcodeCapture library and its dependencies to your project, if any.
-- [Configure and initialize](#configure-and-initialize-the-datacapturecontext) the library.
+- Include the ScanditBarcodeCapture library and its dependencies to your project, if any. See the [Installation guide](../add-sdk.md) for details.
 - Create a new [data capture context](#create-the-data-capture-context) instance, initialized with your license key.
 - Create a [barcode capture settings](#configure-the-barcode-scanning-behavior) and enable the [barcode symbologies](../../../barcode-symbologies.md) you want to read in your application.
 - Create a new [barcode capture mode](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance and initialize it with the settings created above.
@@ -37,100 +36,24 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 <InternalDependencies/>
 
-### Configure and Initialize the DataCaptureContext
+## Create the Data Capture Context
 
-The context needs to be initialized before it can be used, this is done via the [forLicenseKey](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html) function.
+To initialize the library and create a data capture context, see the [Installation guide](../add-sdk.md#configure-the-library) for detailed information about configuration options, hosting the `sdc-lib` files, and loading status handling.
 
-The first argument expects a valid Scandit Data Capture SDK license key.
+For barcode capture, create the context like this:
 
-The [DataCaptureContextCreationOptions.libraryLocation](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#) option must be provided and point to the location of the Data Capture library/engine files (external WebAssembly files): _scandit-datacapture-sdk*.min.js_ and _scandit-datacapture-sdk*.wasm_.
-
-WebAssembly requires these separate files which are loaded by our main library at runtime. They can be found inside the _sdc-lib_ folder in the library you either added and installed via npm or access via a CDN.
-
-If you added and installed the library, these files should be put in a path that’s accessible to be downloaded by the running library script. The configuration option that you provide should then point to the folder containing these files, either as a path of your website or an absolute URL (like the CDN one).
-
-By default, the library will look at the root of your website.
-If you use a CDN to access the library, you will want to set this to the following values depending on the data capture mode you are using:
-
-- for barcode capture: `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/`, `https://unpkg.com/browse/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/`, or similar.
-
-- for ID capture: `https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@8.0.0/sdc-lib/`, `https://unpkg.com/browse/@scandit/web-datacapture-id@8.0.0/sdc-lib/`, or similar.
-
-:::note
-Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the `libraryLocation` option, either by ensuring the served files are up-to-date or the path/URL specifies a specific version.
-
-In case a common CDN is used here (jsDelivr or UNPKG) the library will automatically internally set up the correct URLs pointing directly at the files needed for the matching library version.
-
-It is highly recommended to handle the serving of these files yourself on your website/server, ensuring optimal compression, correct wasm files MIME type, no request redirections and correct caching headers usage, thus resulting in faster loading.
-:::
-
-We recommend calling [forLicenseKey](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html) as soon as possible in your application so that the files are already downloaded and initialized when the capture process is started.
-
-```js
+```ts
 import { DataCaptureContext } from '@scandit/web-datacapture-core';
 import { barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
-
-await DataCaptureContext.forLicenseKey('-- ENTER YOUR SCANDIT LICENSE KEY HERE --', {
- libraryLocation: new URL('self-hosted-sdc-lib/', document.baseURI).toString(),
- moduleLoaders: [barcodeCaptureLoader()],
-});
-```
-
-:::note
-You must _await_ the returned promise as shown to be able to continue.
-:::
-
-### Server side rendering and Server side generation
-
-If you use a web framework that also renders on the server (SSR or SSG) it's recommended to execute the library only on the client turning off the rendering on the server.
-
-**For more information:**
-
-- [GatsbyJS - Using client side only packages](https://www.gatsbyjs.com/docs/using-client-side-only-packages/).
-- [NextJS - Lazy Loading with no ssr](https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading#with-no-ssr).
-
-## Show loading status with default UI
-
-To show some feedback to the user about the loading status you have two options: use the default UI provided with the SDK or subscribe to the loading status and update your own custom UI. Let's see how you can show the default UI first:
-
-```js
-import { DataCaptureView, DataCaptureContext } from '@scandit/web-datacapture-core';
-const view = new DataCaptureView();
-
-view.connectToElement(document.getElementById('data-capture-view'));
-view.showProgressBar();
-view.setProgressBarMessage('Loading ...');
 
 const context = await DataCaptureContext.forLicenseKey('-- ENTER YOUR SCANDIT LICENSE KEY HERE --', {
  libraryLocation: new URL('self-hosted-sdc-lib/', document.baseURI).toString(),
  moduleLoaders: [barcodeCaptureLoader()],
 });
-
-view.hideProgressBar();
-
-await view.setContext(context);
-```
-
-## Create the Data Capture Context while showing loading status with custom UI
-
-You can also just subscribe for the [loading status](https://docs.scandit.com/data-capture-sdk/web/core/api/web/loading-status.html) of the library by simply attaching a listener like this:
-
-```js
-import { loadingStatus, DataCaptureContext } from '@scandit/web-datacapture-core';
-
-loadingStatus.subscribe((info) => {
- // updateUI(info.percentage, info.loadedBytes)
-});
-
-await DataCaptureContext.forLicenseKey('-- ENTER YOUR SCANDIT LICENSE KEY HERE --', {
- libraryLocation: '/self-hosted-sdc-lib/',
- moduleLoaders: [barcodeCaptureLoader()],
-});
 ```
 
 :::note
-We suggest serving the library files with the proper headers Content-Length and Content-Encoding if any compression is present.
-In case of totally missing information, we show estimated progress.
+You must _await_ the returned promise as shown to be able to continue. For information about showing loading status and handling server-side rendering, see the [Installation guide](../add-sdk.md).
 :::
 
 ## Configure the Barcode Scanning Behavior
@@ -139,7 +62,7 @@ Barcode scanning is orchestrated by the [BarcodeCapture](https://docs.scandit.co
 
 For this tutorial, we will setup barcode scanning for a small list of different barcode types, called symbologies. The list of symbologies to enable is highly application specific. We recommend that you only enable the list of symbologies your application requires.
 
-```js
+```ts
 import { BarcodeCaptureSettings, Symbology } from '@scandit/web-datacapture-barcode';
 
 const settings = new BarcodeCaptureSettings();
@@ -157,7 +80,7 @@ If you are not disabling barcode capture immediately after having scanned the fi
 
 Next, create a [BarcodeCapture](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance with the settings initialized in the previous step:
 
-```js
+```ts
 import { BarcodeCapture } from '@scandit/web-datacapture-barcode';
 
 const barcodeCapture = await BarcodeCapture.forContext(
@@ -172,18 +95,16 @@ To get informed whenever a new code has been recognized, add a [BarcodeCaptureLi
 
 First implement the [BarcodeCaptureListener](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) interface. For example:
 
-```js
-const listener = {
- didScan: (barcodeCapture, session) => {
-  const recognizedBarcodes = session.newlyRecognizedBarcode;
-  // Do something with the barcodes
+```ts
+import type { BarcodeCaptureListener, BarcodeCapture, BarcodeCaptureSession, Barcode } from '@scandit/web-datacapture-barcode';
+
+const listener: BarcodeCaptureListener = {
+ didScan: (barcodeCapture: BarcodeCapture, session: BarcodeCaptureSession) => {
+  const recognizedBarcode: Barcode = session.newlyRecognizedBarcode;
+  // Do something with the barcode
  },
 };
-```
 
-Then add the listener:
-
-```js
 barcodeCapture.addListener(listener);
 ```
 
@@ -193,13 +114,15 @@ To prevent scanning unwanted codes, you can reject them by adding the desired lo
 
 The example below will only scan barcodes beginning with the digits `09` and ignore all others, using a transparent brush to distinguish a rejected barcode from a recognized one:
 
-```js
-...
+```ts
+import { Brush } from '@scandit/web-datacapture-core';
+
+// ...
 if (!barcode.data || !barcode.data.startsWith('09:')) {
- window.overlay.brush = Scandit.Brush.transparent;
+    overlay.brush = Brush.transparent;
     return;
 }
-...
+// ...
 ```
 
 ## Use the Built-in Camera
@@ -208,7 +131,7 @@ The data capture context supports using different frame sources to perform recog
 
 When using the built-in camera, there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
 
-```js
+```ts
 import { Camera } from '@scandit/web-datacapture-core';
 import { BarcodeCapture } from '@scandit/web-datacapture-barcode';
 
@@ -222,14 +145,16 @@ await camera.applySettings(cameraSettings);
 
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
-```js
+```ts
 await context.setFrameSource(camera);
 ```
 
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/web/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.On](https://docs.scandit.com/data-capture-sdk/web/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
-```js
-await context.frameSource.switchToDesiredState(Scandit.FrameSourceState.On);
+```ts
+import { FrameSourceState } from '@scandit/web-datacapture-core';
+
+await context.frameSource.switchToDesiredState(FrameSourceState.On);
 ```
 
 ## Use a Capture View to Visualize the Scan Process
@@ -238,7 +163,7 @@ When using the built-in camera as frameSource, you will typically want to displa
 
 To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
-```js
+```ts
 import { DataCaptureView } from '@scandit/web-datacapture-core';
 
 const view = await DataCaptureView.forContext(context);
@@ -247,19 +172,18 @@ view.connectToElement(document.querySelector("#the-element-where-to-attach-the-v
 
 To visualize the results of barcode scanning, the following [overlay](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) can be added:
 
-```js
+```ts
 import { BarcodeCaptureOverlay } from '@scandit/web-datacapture-barcode';
 
-const overlay =
- await BarcodeCaptureOverlay.withBarcodeCaptureForView(
+const overlay = await BarcodeCaptureOverlay.withBarcodeCaptureForView(
   barcodeCapture,
   view
- );
+);
 ```
 
 ## Disabling Barcode Capture
 
-```js
+```ts
 await barcodeCapture.setEnabled(false);
 ```
 

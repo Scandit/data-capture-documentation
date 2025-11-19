@@ -17,6 +17,21 @@ You can consume the Scandit Data Capture SDK Web packages in two ways:
 - as an external resource from a CDN in HTML
 - as package dependency via npm.
 
+## Prerequisites
+
+Before you begin, make sure you have the following prerequisites in place:
+
+- The latest stable version of Node.js and npm (required only if including and building the SDK as part of an app, instead of just including it as an external resource from a CDN in HTML).
+- Valid Scandit Data Capture SDK license, sign up for a [free trial](https://www.scandit.com/trial/) if you don't already have a license key
+
+For detailed information about system requirements, see [System Requirements](/system-requirements/#web-sdk).
+
+:::warning
+Devices running the Scandit Data Capture SDK need to have a GPU and run a browser capable of making it available (requires [WebGL - current support?](https://caniuse.com/#feat=webgl) and [OffscreenCanvas - current support?](https://caniuse.com/#feat=offscreencanvas)) or the performance will drastically decrease.
+:::
+
+## Package Information
+
 Scandit Data Capture SDKs [npm packages](https://www.npmjs.com/search?q=@scandit) are distributed under `@scandit/` scope.
 
 You need to add the `@scandit/web-datacapture-core` package, which contains the shared functionality used by the other data capture packages.
@@ -25,24 +40,85 @@ If you're using `barcodecapture`-related functionalities,
 make sure to also add the:
 
 - `@scandit/web-datacapture-barcode` package, and/or
-- `@scandit/web-datacapture-parser`
+- `@scandit/web-datacapture-parser` package
 
-In addition, you need to add `@scandit/web-datacapture-id` if you want to scan personal identification documents, such as identity cards, passports or visas. See the [ID Capture documentation](/sdks/web/id-capture/get-started.md) to learn more.
+`@scandit/web-datacapture-parser` package needs `@scandit/web-datacapture-barcode` as dependency.
+See the [Parser documentation](/sdks/web/parser/get-started.md) to learn more.
+
+If you want to scan personal identification documents, such as identity cards, passports or visas you need to add `@scandit/web-datacapture-id`.
+See the [ID Capture documentation](/sdks/web/id-capture/get-started.md) to learn more.
 
 :::tip
 You can safely remove _barcode_ or _id_ dependencies if you are not going to use their features.
 :::
 
-## Prerequisites
+## Install via package manager
 
-Before you begin, make sure you have the following prerequisites in place:
+To add the packages via your preferred package manager, run the following command from your project's root folder:
 
-- The latest stable version of Node.js and npm (required only if including and building the SDK as part of an app, instead of just including it as an external resource from a CDN in HTML).
-- Valid Scandit Data Capture SDK license, sign up for a [free trial](https://www.scandit.com/trial/) if you don't already have a license key
+<Tabs groupId="packageManager">
 
-:::warning
-Devices running the Scandit Data Capture SDK need to have a GPU and run a browser capable of making it available (requires [WebGL - current support?](https://caniuse.com/#feat=webgl) and [OffscreenCanvas - current support?](https://caniuse.com/#feat=offscreencanvas)) or the performance will drastically decrease.
+<TabItem value="npm" label="npm">
+
+```sh
+npm install --save @scandit/web-datacapture-core @scandit/web-datacapture-barcode
+```
+
+</TabItem>
+
+<TabItem value="yarn" label="yarn">
+
+```sh
+yarn add @scandit/web-datacapture-core @scandit/web-datacapture-barcode
+```
+
+</TabItem>
+
+<TabItem value="pnpm" label="pnpm">
+
+```sh
+pnpm add @scandit/web-datacapture-core @scandit/web-datacapture-barcode
+```
+
+</TabItem>
+
+<TabItem value="bun" label="bun">
+
+```sh
+bun add @scandit/web-datacapture-core @scandit/web-datacapture-barcode
+```
+
+</TabItem>
+
+<TabItem value="deno" label="deno">
+
+```sh
+deno add npm:@scandit/web-datacapture-core npm:@scandit/web-datacapture-barcode
+```
+
+</TabItem>
+
+</Tabs>
+
+:::note
+You can also specify a version @`<version>`.
 :::
+
+Then import the package in your JavaScript/TypeScript code by using:
+
+```js
+// Importing only the necessary items is recommended to allow bundler to optimize the code through tree-shaking
+import {
+  DataCaptureContext,
+  Camera,
+} from "@scandit/web-datacapture-core";
+import {
+  BarcodeCapture,
+  barcodeCaptureLoader,
+} from "@scandit/web-datacapture-barcode";
+
+// Insert your code here
+```
 
 ## Install via CDN
 
@@ -64,75 +140,17 @@ For production environments, we recommend:
    - Enterprise-grade support
 :::
 
-You can use the [jsDelivr](https://jsdelivr.com/) or [UNPKG](https://unpkg.com/) CDN to specify a certain version (or range) and include and import from our library as follows. This example imports the core and barcode capture packages:
-
-```html
-<!-- 
-You can optionally preload the modules. 
-More info about this feature here https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/modulepreload 
--->
-<link
-  rel="modulepreload"
-  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js"
-/>
-<link
-  rel="modulepreload"
-  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js"
-/>
-<!-- polyfill browsers not supporting import maps. use the latest version from here https://github.com/guybedford/es-module-shims/releases -->
-<script
-  async
-  src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js"
-></script>
-<script type="importmap">
-  {
-    "imports": {
-      "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js",
-      "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js",
-      "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/",
-      "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/"
-    }
-  }
-</script>
-
-<script type="module">
-  // Importing only the necessary items is recommended
-  import {
-    DataCaptureContext,
-    Camera,
-  } from "@scandit/web-datacapture-core";
-  import {
-    BarcodeCapture,
-    barcodeCaptureLoader,
-  } from "@scandit/web-datacapture-barcode";
-
-  // Insert your code here
-</script>
-OR
-<script type="module">
-  // OR import everything. Not recommended.
-  import * as SDCCore from "@scandit/web-datacapture-core";
-  import * as SDCBarcode from "@scandit/web-datacapture-barcode";
-
-  // Insert your code here
-</script>
-```
+You can use the [jsDelivr](https://jsdelivr.com/) or [UNPKG](https://unpkg.com/) CDN to specify a certain version (or range) and include and import from our library as follows.
 
 :::note
-In alternative to jsdeliver unpkg can be used as alternative:
+In alternative to jsdeliver, unpkg can be used:
 
 - [UNPKG Core](https://unpkg.com/@scandit/web-datacapture-core@8.x)
 - [UNPKG Barcode](https://unpkg.com/@scandit/web-datacapture-barcode@8.x)
 
 :::
 
-Alternatively, you can also put the same JavaScript/TypeScript code in a separate file via:
-
-```html
-<script type="module" src="script.js"></script>
-```
-
-### Complete Example
+### Complete CDN Example
 
 ```html
 <!DOCTYPE html>
@@ -146,12 +164,18 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
         "imports": {
           "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js",
           "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js",
+          "@scandit/web-datacapture-parser": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/build/js/index.js",
 
           "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/",
-          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/"
+          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/",
+          "@scandit/web-datacapture-parser/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/"
         }
       }
     </script>
+    <!-- 
+    You can optionally preload the modules. 
+    More info about this feature here https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/modulepreload 
+    -->
     <link
       rel="modulepreload"
       href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js"
@@ -159,6 +183,10 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
     <link
       rel="modulepreload"
       href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js"
+    />
+    <link
+      rel="modulepreload"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/build/js/index.js"
     />
     <style>
       html,
@@ -238,84 +266,6 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
 </html>
 ```
 
-## Install via package manager
-
-To add the packages via your preferred package manager, run the following command from your project's root folder:
-
-<Tabs groupId="packageManager">
-
-<TabItem value="npm" label="npm">
-
-```sh
-npm install --save @scandit/web-datacapture-core @scandit/web-datacapture-barcode
-```
-
-</TabItem>
-
-<TabItem value="yarn" label="yarn">
-
-```sh
-yarn add @scandit/web-datacapture-core @scandit/web-datacapture-barcode
-```
-
-</TabItem>
-
-<TabItem value="pnpm" label="pnpm">
-
-```sh
-pnpm add @scandit/web-datacapture-core @scandit/web-datacapture-barcode
-```
-
-</TabItem>
-
-<TabItem value="bun" label="bun">
-
-```sh
-bun add @scandit/web-datacapture-core @scandit/web-datacapture-barcode
-```
-
-</TabItem>
-
-<TabItem value="deno" label="deno">
-
-```sh
-deno add npm:@scandit/web-datacapture-core npm:@scandit/web-datacapture-barcode
-```
-
-</TabItem>
-
-</Tabs>
-
-:::note
-You can also specify a version @`<version>`.
-:::
-
-Then import the package in your JavaScript/TypeScript code by using:
-
-```js
-// Importing only the necessary items is recommended
-import {
-  DataCaptureContext,
-  Camera,
-} from "@scandit/web-datacapture-core";
-import {
-  BarcodeCapture,
-  barcodeCaptureLoader,
-} from "@scandit/web-datacapture-barcode";
-
-// Insert your code here
-```
-
-OR
-
-```js
-// Import everything
-import * as SDCCore from "@scandit/web-datacapture-core";
-import * as SDCBarcode from "@scandit/web-datacapture-barcode";
-
-// Insert your code here
-```
-
 ## Configure the Library
 
 The library needs to be configured and initialized before it can be used, this is done via the DataCaptureContext [`forLicenseKey`](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) function.
@@ -334,7 +284,7 @@ If you installed the library through npm, **these files should be copied and ser
 The configuration option that you provide should then point to the folder containing these files, either as a path of your website or an absolute URL (like the CDN one). **By default the library will look at the root of your website**.
 
 :::caution Version Matching Required
-The npm package version and the `sdc-lib` files must be from the exact same SDK version. For example, if you have `@scandit/web-datacapture-barcode@8.0.0` in your `package.json`, you must serve the `sdc-lib` folder from `node_modules/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/`. Mismatched versions will cause runtime errors and unexpected behavior.
+The npm package version and the `sdc-lib` files must be from the exact same SDK version. For example, if you have `@scandit/web-datacapture-barcode@8.0.0` in your `package.json`, you must serve the `sdc-lib` folder from `node_modules/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/`. **Mismatched versions will cause runtime errors and unexpected behavior.**
 :::
 
 In case a common CDN is used (jsDelivr or UNPKG) the library will automatically, internally set up the correct URLs pointing to the files needed for the matching library version.
@@ -348,7 +298,7 @@ We recommend serving the `sdc-lib` folder yourself.
 :::caution Important: Full Folder Copy and Version Matching
 You must copy the **entire `sdc-lib` folder recursively** from the installed Scandit package to your server. This includes all subdirectories and files. The `sdc-lib` folder must come from a package version that exactly matches your npm package version. For example, if you have `@scandit/web-datacapture-barcode@8.0.0`, you must copy the `sdc-lib` from `node_modules/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/`.
 
-Additionally, you should copy `sdc-lib` from all installed Scandit packages (`@scandit/web-datacapture-core`, `@scandit/web-datacapture-barcode`, `@scandit/web-datacapture-id`, etc.) to the same location.
+Additionally, you should copy `sdc-lib` from all installed Scandit packages (`@scandit/web-datacapture-core`, `@scandit/web-datacapture-barcode`, `@scandit/web-datacapture-id`, `@scandit/web-datacapture-parser`, etc.) to the same location.
 :::
 
 Once copied, be sure to serve the files correctly by setting up the correct MIME type for the `.wasm`, `.model`, and `.js` files. Some common examples are provided below:
@@ -449,7 +399,7 @@ def serve_file(filename):
 ## Show loading status with default UI
 
 It could take a while the very first time to download the .wasm files.
-To show some feedback to the user about the loading status you have two options:
+To show some visual feedback to the user about the loading status you have two options:
 
 - use the default UI provided with the SDK
 - subscribe to the loading status and update your own custom UI.
@@ -461,6 +411,7 @@ import {
   DataCaptureView,
   DataCaptureContext,
 } from "@scandit/web-datacapture-core";
+import { idCaptureLoader } from "@scandit/web-datacapture-id";
 
 const view = new DataCaptureView();
 
@@ -484,8 +435,11 @@ You can also subscribe for the [loading status](https://docs.scandit.com/data-ca
 by simply attaching a listener like this:
 
 ```ts
+import type { ProgressInfo } from "@scandit/web-datacapture-core";
 import { loadingStatus, DataCaptureContext } from "@scandit/web-datacapture-core";
-loadingStatus.subscribe((info) => {
+import { barcodeCaptureLoader } from "@scandit/web-datacapture-barcode";
+
+loadingStatus.subscribe((info: ProgressInfo) => {
   // updateUI(info.percentage, info.loadedBytes)
 });
 
@@ -510,6 +464,10 @@ For more information:
 
 - [GatsbyJS - Using client side only packages](https://www.gatsbyjs.com/docs/using-client-side-only-packages/).
 - [NextJS - Lazy Loading with no ssr](https://nextjs.org/docs/pages/building-your-application/optimizing/lazy-loading#with-no-ssr).
+
+### Performance Optimization
+
+For information on how to improve runtime performance, see [Improve Runtime Performance by Enabling Browser Multithreading](/sdks/web/matrixscan/get-started/#improve-runtime-performance-by-enabling-browser-multithreading).
 
 ### Camera Permissions
 

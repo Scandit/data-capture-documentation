@@ -39,60 +39,185 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Installation
 
-Install from npm it by running:
+### Install via package manager
+
+To add the packages via your preferred package manager, run the following command from your project's root folder:
+
+<Tabs groupId="packageManager">
+
+<TabItem value="npm" label="npm">
 
 ```sh
 npm install --save @scandit/web-datacapture-core @scandit/web-datacapture-barcode @scandit/web-datacapture-parser
 ```
 
-Or consume it in your `.html` page through a CDN like [JSdelivr](https://www.jsdelivr.com/?query=%40scandit%2Fweb-datacapture-):
+</TabItem>
 
-```html
-<script type="importmap">
-    {
-      "imports": {
-        "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js",
-        "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js",
+<TabItem value="yarn" label="yarn">
 
-        "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/",
-        "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/",
-        
-        "@scandit/web-datacapture-parser": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/build/js/index.js",
-        "@scandit/web-datacapture-parser/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/",
-        
-      }
-    }
-</script>
-<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js" />
-<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js" />
-<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/build/js/index.js" />
-
-<!-- Check the latest version here https://github.com/guybedford/es-module-shims/releases -->
-<script async src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js"></script>
-<script type="module">
-    import { DataCaptureContext } from '@scandit/web-datacapture-core';
-    import { barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
-    import { parserLoader, Parser, ParserDataFormat } from "@scandit/web-datacapture-parser";
-    // ...
-</script>
+```sh
+yarn add @scandit/web-datacapture-core @scandit/web-datacapture-barcode @scandit/web-datacapture-parser
 ```
 
-## Basic Sample
+</TabItem>
 
-```ts
-import { DataCaptureContext } from '@scandit/web-datacapture-core';
-import { barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
-import { parserLoader, Parser, ParserDataFormat } from "@scandit/web-datacapture-parser";
+<TabItem value="pnpm" label="pnpm">
 
-const context: DataCaptureContext = await DataCaptureContext.forLicenseKey('-- ENTER YOUR SCANDIT LICENSE KEY HERE --', {
- libraryLocation: new URL('library/engine/', document.baseURI).toString(),
- moduleLoaders: [barcodeCaptureLoader(), parserLoader()],
-});
+```sh
+pnpm add @scandit/web-datacapture-core @scandit/web-datacapture-barcode @scandit/web-datacapture-parser
+```
 
-const parserIata = await Parser.forFormat(context, ParserDataFormat.IATA_BCBP);
+</TabItem>
 
-const encodedData =
-    "M1BLEAH/ZZZZZZ        EU3TAVO LCAZRHCY 0350 259Y009A0131 348>5180      BCY              2A07824010159820 CY                        N";
+<TabItem value="bun" label="bun">
 
-const parsed = await parserIata.parseStringToJson(encodedData);
+```sh
+bun add @scandit/web-datacapture-core @scandit/web-datacapture-barcode @scandit/web-datacapture-parser
+```
+
+</TabItem>
+
+<TabItem value="deno" label="deno">
+
+```sh
+deno add npm:@scandit/web-datacapture-core npm:@scandit/web-datacapture-barcode npm:@scandit/web-datacapture-parser
+```
+
+</TabItem>
+
+</Tabs>
+
+:::note
+You can also specify a version @`<version>`.
+:::
+
+### Install via CDN
+
+You can consume the packages through a CDN like [JSDelivr](https://www.jsdelivr.com/?query=%40scandit%2Fweb-datacapture-).
+
+:::warning Important considerations when using CDNs
+For important information about CDN risks and recommendations for production environments, see [Install via CDN](/sdks/web/add-sdk/#install-via-cdn).
+:::
+
+## Basic CDN Example
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scandit Parser CDN Sample</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js",
+          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js",
+          "@scandit/web-datacapture-parser": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/build/js/index.js",
+
+          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/",
+          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/",
+          "@scandit/web-datacapture-parser/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/"
+        }
+      }
+    </script>
+    <link
+      rel="modulepreload"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js"
+    />
+    <link
+      rel="modulepreload"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js"
+    />
+    <link
+      rel="modulepreload"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/build/js/index.js"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      #app {
+        height: 100%;
+      }
+      #resultDialog {
+        max-width: 600px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      #resultDialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      #resultDialog pre {
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 16px;
+        overflow-x: auto;
+        max-height: 400px;
+        font-size: 12px;
+        margin: 0;
+      }
+      #resultDialog h2 {
+        margin-top: 0;
+      }
+      #resultDialog button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 16px;
+      }
+      #resultDialog button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+    <!-- Check the latest version here https://github.com/guybedford/es-module-shims/releases -->
+    <script
+      async
+      src="https://ga.jspm.io/npm:es-module-shims@2.6.2/dist/es-module-shims.js"
+    ></script>
+    <script type="module">
+     import { DataCaptureContext, Logger } from '@scandit/web-datacapture-core';
+     import { barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
+     import { parserLoader, Parser, ParserDataFormat } from "@scandit/web-datacapture-parser";
+
+     const context = await DataCaptureContext.forLicenseKey('-- ENTER LICENSE KEY HERE --', {
+      libraryLocation: "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/",
+      moduleLoaders: [
+        barcodeCaptureLoader({ libraryLocation: "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/" }),
+        parserLoader({ libraryLocation: "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/sdc-lib/" })],
+      logLevel: Logger.Level.Quiet,
+     });
+
+     const parserIata = await Parser.forFormat(context, ParserDataFormat.IATA_BCBP);
+
+     const encodedData =
+         "M1BLEAH/ZZZZZZ        EU3TAVO LCAZRHCY 0350 259Y009A0131 348>5180      BCY              2A07824010159820 CY                        N";
+
+     const parsed = await parserIata.parseStringToJson(encodedData);
+     console.log("the parsed data", parsed);
+
+     // Display the parsed data in a dialog
+     const dialog = document.getElementById('resultDialog');
+     const resultsContent = document.getElementById('resultsContent');
+     resultsContent.textContent = JSON.stringify(parsed, null, 2);
+     dialog.showModal();
+
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <dialog id="resultDialog">
+      <h2>Parsed Data</h2>
+      <pre id="resultsContent"></pre>
+      <button onclick="document.getElementById('resultDialog').close()">Close</button>
+    </dialog>
+  </body>
+</html>
 ```
