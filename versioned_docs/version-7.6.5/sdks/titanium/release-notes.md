@@ -126,6 +126,16 @@ No updates for this framework in this release.
 
 * MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
 
+## 7.2.6
+
+**Released**: November 10, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a memory leak.
+
 ## 7.2.5
 
 **Released**: November 5, 2025
@@ -246,3 +256,8 @@ Version 7.0 also offers increased versatility by supporting multiple input forma
 ### Deprecations
 
 In 7.0, we removed several APIs that were deprecated during the lifetime of 6.0. Before [migrating to 7.0](/migrate-6-to-7.md), we suggest upgrading to 6.28, fixing all deprecation warnings and then upgrading to 7.0.
+
+
+## 6.28.7
+
+Find earlier versions in the [release notes section of version 6](/6.28.7/sdks/titanium/release-notes)
