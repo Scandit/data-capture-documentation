@@ -215,6 +215,16 @@ No updates for this framework in this release.
 
 * MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
 
+## 7.2.6
+
+**Released**: November 10, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a memory leak.
+
 ## 7.2.5
 
 **Released**: November 5, 2025
@@ -483,3 +493,8 @@ Text Capture functionality has been deprecated in 7.0. If your use case requires
 #### ID
 
 The legacy ID Capture UI has been removed in 7.0. If you are using the legacy UI, you must migrate to the new ID Capture API.
+
+
+## 6.28.7
+
+Find earlier versions in the [release notes section of version 6](/6.28.7/sdks/xamarin/forms/release-notes)

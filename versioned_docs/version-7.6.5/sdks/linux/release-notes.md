@@ -160,15 +160,21 @@ No updates for this framework in this release.
 
 * MatrixScan Check has been renamed to MatrixScan AR, including in the naming of all relevant APIs.
 
-## 7.2.5
+## 7.2.6
 
-**Released**: November 5, 2025
+**Released**: November 10, 2025
 
 ### Bug Fixes
 
 #### Core
 
 * Fixed a memory leak.
+
+## 7.2.5
+
+**Released**: November 5, 2025
+
+No updates for this framework in this release.
 
 ## 7.2.4
 
@@ -343,3 +349,8 @@ The C API has been cleaned up and streamlined. If you migrate your code from ver
 * Fixed `ScCamera` python bindings querying stepwise camera mode resolutions.
 * Fixed `sc_camera_get_frame` to not hang after restarting camera stream.
 * Fixed Shift-JIS encoding classification for raw byte data in 2d barcodes
+
+
+## 6.28.7
+
+Find earlier versions in the [release notes section of version 6](/6.28.7/sdks/linux/release-notes)
