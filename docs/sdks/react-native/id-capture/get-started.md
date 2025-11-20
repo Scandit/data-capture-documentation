@@ -111,7 +111,8 @@ const listener = {
 Create a new ID Capture mode with the chosen settings. Then register the listener:
 
 ```js
-const idCapture = IdCapture.forContext(context, settings);
+const idCapture = new IdCapture(settings);
+context.addMode(idCapture);
 idCapture.addListener(listener);
 ```
 

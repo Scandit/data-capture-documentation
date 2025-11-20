@@ -46,7 +46,8 @@ If you are sure that your environment will only have unique barcodes (i.e. no du
 [BarcodeCount](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount) instance with the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) and the settings initialized in the previous step:
 
 ```dart
-var barcodeCount = BarcodeCount.forContext(dataCaptureContext, settings);
+var barcodeCount = BarcodeCount(settings);
+dataCaptureContext.addMode(barcodeCount);
 ```
 
 ## Obtain Camera Instance And Set Frame Source Used

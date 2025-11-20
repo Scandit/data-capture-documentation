@@ -44,7 +44,8 @@ var settings = BarcodeBatchSettings()
 Next, create a [BarcodeBatch](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-batch.html#class-scandit.datacapture.barcode.batch.BarcodeBatch) instance with the data capture context and the settings initialized in the previous steps:
 
 ```dart
-var barcodeBatch = BarcodeBatch.forContext(dataCaptureContext, settings);
+var barcodeBatch = BarcodeBatch(settings);
+dataCaptureContext.addMode(barcodeBatch);
 ```
 
 ## Use the Built-in Camera

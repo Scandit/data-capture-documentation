@@ -75,7 +75,8 @@ _Creating the mode_
 Next, create a [BarcodeSelection](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) instance with the settings initialized in the previous step:
 
 ```js
-const barcodeSelection = BarcodeSelection.forContext(context, settings);
+const barcodeSelection = new BarcodeSelection(settings);
+context.addMode(barcodeSelection);
 ```
 
 ## Register the Barcode Selection Listener

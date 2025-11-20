@@ -98,7 +98,8 @@ Each additional Symbology may reduce recognition speed, therefore only enable th
 	]);
 
 	// Create a BarcodeCapture instance with the BarcodeCaptureSettings applied.
-	const barcodeCapture = BarcodeCapture.forContext(context, settings);
+	const barcodeCapture = new BarcodeCapture(settings);
+	context.addMode(barcodeCapture);
 	```
 	</TabItem>
 	<TabItem value="js">
@@ -115,7 +116,8 @@ Each additional Symbology may reduce recognition speed, therefore only enable th
 	]);
 
 	// Create a BarcodeCapture instance with the BarcodeCaptureSettings applied.
-  const barcodeCapture = BarcodeCapture.forContext(context, settings);
+  const barcodeCapture = new BarcodeCapture(settings);
+context.addMode(barcodeCapture);
 	```
 	</TabItem>
 </Tabs>

@@ -93,7 +93,8 @@ const smartDeviceLabel = await new LabelDefinitionBuilder()
 
 const settings = await new LabelCaptureSettingsBuilder().addLabel(isofLabel).addLabel(smartDeviceLabel).build();
 // Create the label capture mode with the settings and data capture context created earlier
-const mode = await LabelCapture.forContext(dataCaptureContext, settings);
+const mode = new LabelCapture(settings);
+dataCaptureContext.addMode(mode);
 ```
 
 ## Implement a Listener to Handle Captured Labels

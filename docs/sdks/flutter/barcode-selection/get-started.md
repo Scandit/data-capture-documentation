@@ -80,7 +80,8 @@ _Creating the mode_
 Next, create a [BarcodeSelection](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) instance with the settings initialized in the previous step:
 
 ```dart
-var barcodeSelection = BarcodeSelection.forContext(context, settings);
+var barcodeSelection = BarcodeSelection(settings);
+context.addMode(barcodeSelection);
 ```
 
 ## Register the Barcode Selection Listener

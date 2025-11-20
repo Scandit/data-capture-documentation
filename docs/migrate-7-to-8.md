@@ -50,6 +50,36 @@ As part of these changes, there have been various deprecations, modifications, a
 
 Building on the second generation of SparkScan, version 8.0 expands SparkScan beyond barcode scanning to include support for scanning any combination of barcodes and text present on a target. The feature is available in beta at the moment, please contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out.
 
+### Cross-Platform Frameworks (Capacitor, Cordova, React Native, Flutter)
+
+In version 8.0, the `forContext` factory method has been deprecated in favor of using constructor initialization for all capture modes. This change affects Capacitor, Cordova, React Native, and Flutter frameworks.
+
+**Before (deprecated):**
+
+```js
+const barcodeCapture = BarcodeCapture.forContext(context, settings);
+```
+
+**After:**
+
+```js
+const barcodeCapture = new BarcodeCapture(settings);
+context.addMode(barcodeCapture);
+```
+
+:::note
+
+This change applies to all capture modes (e.g., `BarcodeCapture`, `TextCapture`, `IdCapture`, `LabelCapture`, etc.), not just `BarcodeCapture`. Replace `forContext` calls with the constructor pattern for all modes you use in your application.
+
+For Flutter (Dart), use the constructor syntax without the `new` keyword:
+
+```dart
+var barcodeCapture = BarcodeCapture(settings);
+context.addMode(barcodeCapture);
+```
+
+:::
+
 ## ID Capture Changes
 
 The ID Capture and Validation API was completely redesigned in version 7.0, and version 8.0 builds on those changes with the following improvements:
@@ -166,6 +196,8 @@ When using additional components like `ScanditIdCapture` or `ScanditParser` in y
 </TabItem>
 
 </Tabs>
+
+
 
 ## Xamarin SDK Changes
 
