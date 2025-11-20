@@ -67,6 +67,13 @@ const barcodeCapture = new BarcodeCapture(settings);
 context.addMode(barcodeCapture);
 ```
 
+Alternatively, you can use the new `setMode` API, which automatically removes all existing modes from the context before adding the new mode:
+
+```js
+const barcodeCapture = new BarcodeCapture(settings);
+context.setMode(barcodeCapture);
+```
+
 :::note
 
 This change applies to all capture modes (e.g., `BarcodeCapture`, `TextCapture`, `IdCapture`, `LabelCapture`, etc.), not just `BarcodeCapture`. Replace `forContext` calls with the constructor pattern for all modes you use in your application.
@@ -76,6 +83,13 @@ For Flutter (Dart), use the constructor syntax without the `new` keyword:
 ```dart
 var barcodeCapture = BarcodeCapture(settings);
 context.addMode(barcodeCapture);
+```
+
+Or using `setMode`:
+
+```dart
+var barcodeCapture = BarcodeCapture(settings);
+context.setMode(barcodeCapture);
 ```
 
 :::
