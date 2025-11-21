@@ -70,7 +70,8 @@ final label = LabelBuilder('<your-label-name>')
 settings.addLabel(label.build());
 
 // Assuming you have a DataCaptureContext instance
-final labelCapture = LabelCapture.forContext(dataCaptureContext, settings);
+final labelCapture = LabelCapture(settings);
+dataCaptureContext.addMode(labelCapture);
 ```
 
 ## Define a Listener to Handle Captured Labels
@@ -104,7 +105,7 @@ class LabelCaptureRepository {
   late final LabelCaptureListener _listener;
 
   LabelCaptureRepository(DataCaptureContext context, LabelCaptureSettings settings) {
-    labelCapture = LabelCapture.forContext(context, settings);
+    labelCapture = LabelCapture(settings);
     _listener = _LabelCaptureListener(this);
     labelCapture.addListener(_listener);
   }

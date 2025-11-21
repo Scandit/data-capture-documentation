@@ -47,7 +47,8 @@ settings.enableSymbologies([Symbology.EAN13UPCA]);
 If you are sure that your environment will only have unique barcodes (i.e. no duplicated values), you can also enable [BarcodeCountSettings.expectsOnlyUniqueBarcodes](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-count-settings.html#property-scandit.datacapture.barcode.count.BarcodeCountSettings.ExpectsOnlyUniqueBarcodes). This option improves scanning performance as long as you are sure that no duplicates will be present. Next, create a [BarcodeCount](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount) instance with the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) and the settings initialized in the previous step:
 
 ```js
-const barcodeCount = BarcodeCount.forContext(context, settings);
+const barcodeCount = new BarcodeCount(settings);
+context.addMode(barcodeCount);
 ```
 
 ## Obtain Camera Instance And Set Frame Source Used

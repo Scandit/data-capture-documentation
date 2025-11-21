@@ -41,7 +41,8 @@ settings.enableSymbology(Symbology.QR, true);
 Next, create a [BarcodeBatch](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-batch.html#class-scandit.datacapture.barcode.batch.BarcodeBatch) instance with the data capture context and the settings initialized in the previous steps:
 
 ```js
-const barcodeBatch = BarcodeBatch.forContext(context, settings);
+const barcodeBatch = new BarcodeBatch(settings);
+context.addMode(barcodeBatch);
 ```
 
 ## Use the Built-in Camera

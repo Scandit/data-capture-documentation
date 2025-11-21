@@ -139,7 +139,11 @@ const labelCapture = useMemo<LabelCapture>(() => {
   const settings = LabelCaptureSettings.settingsFromLabelDefinitions([labelDefinition], {})!
 
   // Create the label capture mode with the settings and data capture context created earlier
-  return LabelCapture.forContext(dataCaptureContext, settings)
+  const labelCapture = new LabelCapture(settings);
+  dataCaptureContext.addMode(labelCapture);
+  
+  return labelCapture;
+  
 }, [dataCaptureContext])
 ```
 

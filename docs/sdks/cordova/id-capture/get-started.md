@@ -104,7 +104,8 @@ settings.scannerType = new Scandit.FullDocumentScanner();
 Create a new ID Capture mode with the chosen settings:
 
 ```ts
-const idCapture = Scandit.IdCapture.forContext(context, settings);
+const idCapture = new Scandit.IdCapture(settings);
+context.addMode(idCapture);
 ```
 
 ## Implement the Listener

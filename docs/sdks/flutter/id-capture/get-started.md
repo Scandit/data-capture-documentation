@@ -116,8 +116,9 @@ CapturedId? capturedId = session.newlyCapturedId;
 Create a new ID Capture mode with the chosen settings. Then register the listener:
 
 ```dart
-idCapture = IdCapture.forContext(context, settings);
+idCapture = IdCapture(settings);
 idCapture.addListener(this)
+context.addMode(idCapture);
 ```
 
 ## Set up Capture View and Overlay

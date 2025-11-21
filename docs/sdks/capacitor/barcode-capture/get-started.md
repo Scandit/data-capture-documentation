@@ -56,7 +56,8 @@ If you are not disabling barcode capture immediately after having scanned the fi
 Next, create a [BarcodeCapture](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance with the settings initialized in the previous step:
 
 ```js
-const barcodeCapture = Scandit.BarcodeCapture.forContext(context, settings);
+const barcodeCapture = new Scandit.BarcodeCapture(settings);
+context.addMode(barcodeCapture);
 ```
 
 ## Register the Barcode Capture Listener

@@ -44,7 +44,8 @@ settings.enableSymbology(Scandit.Symbology.QR, true);
 Next, create a [BarcodeBatch](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-batch.html#class-scandit.datacapture.barcode.batch.BarcodeBatch) instance with the data capture context and the settings initialized in the previous steps:
 
 ```js
-const barcodeBatch = Scandit.BarcodeBatch.forContext(context, settings);
+const barcodeBatch = new Scandit.BarcodeBatch(settings);
+context.addMode(barcodeBatch);
 ```
 
 ## Use the Built-in Camera

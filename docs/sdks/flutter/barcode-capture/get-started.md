@@ -70,7 +70,8 @@ If you are not disabling barcode capture immediately after having scanned the fi
 Next, create a [BarcodeCapture](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance with the settings initialized in the previous step:
 
 ```dart
-var barcodeCapture = BarcodeCapture.forContext(context, settings);
+var barcodeCapture = BarcodeCapture(settings);
+context.addMode(barcodeCapture);
 ```
 
 ## Register the Barcode Capture Listener
