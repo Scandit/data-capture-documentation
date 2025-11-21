@@ -72,6 +72,16 @@ No updates for this framework in this release.
 * Improved support for non-standard GS1 AI codes.
 * The `Barcode` class now exposes a module count.
 
+## 7.4.4
+
+**Released**: November 21, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a rare crash in the EAN/UPC reader.
+
 ## 7.4.3
 
 **Released**: August 29, 2025
