@@ -208,7 +208,7 @@ keywords:
 
 ## 7.4.4
 
-**Released**: November 21, 2025
+**Released**: November 22, 2025
 
 ### Bug Fixes
 
