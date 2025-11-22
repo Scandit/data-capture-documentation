@@ -139,6 +139,17 @@ No updates for this framework in this release.
 
 * Deprecated `BarcodeCaptureOverlayStyle`.
 
+## 7.4.4
+
+**Released**: November 22, 2025
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a rare crash in the EAN/UPC reader.
+* Fixed a memory leak.
+
 ## 7.4.3
 
 **Released**: August 29, 2025
