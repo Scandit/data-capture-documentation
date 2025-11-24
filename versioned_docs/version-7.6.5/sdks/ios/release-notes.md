@@ -198,6 +198,12 @@ No updates for this framework in this release.
 
 **Released**: November 22, 2025
 
+### New Features
+
+#### ID
+
+* Added `IdCaptureLite` to CocoaPods that is equal to IdCapture but without the dependency on ScanditIDC which reduces the app size for customers that do not require VIZ scanning capabilities.
+
 ### Bug Fixes
 
 #### Core
