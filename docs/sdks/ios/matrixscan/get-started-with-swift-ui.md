@@ -137,7 +137,7 @@ struct MatrixScanView: UIViewRepresentable {
     init(onBarcodeBatchUpdated: @escaping ([TrackedBarcode]) -> Void) {
         // Create the data capture context
         DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-        dataCaptureContext = DataCaptureContext.sharedInstance
+        dataCaptureContext = DataCaptureContext.shared
 
         // Configure barcode batch settings
         let settings = BarcodeBatchSettings()

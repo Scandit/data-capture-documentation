@@ -138,7 +138,7 @@ struct BarcodeSelectionView: UIViewRepresentable {
     init(onBarcodeSelectionUpdated: @escaping ([Barcode]) -> Void) {
         // Create the data capture context
         DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-        dataCaptureContext = DataCaptureContext.sharedInstance
+        dataCaptureContext = DataCaptureContext.shared
 
         // Configure barcode selection settings
         let settings = BarcodeSelectionSettings()

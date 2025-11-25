@@ -136,7 +136,7 @@ struct MatrixScanFindView: UIViewRepresentable {
     init(itemsToFind: Set<BarcodeFindItem>, onFinishButtonTapped: @escaping (Set<BarcodeFindItem>) -> Void) {
         // Create the data capture context
         DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-        dataCaptureContext = DataCaptureContext.sharedInstance
+        dataCaptureContext = DataCaptureContext.shared
 
         // Configure Barcode Find settings
         let settings = BarcodeFindSettings()
