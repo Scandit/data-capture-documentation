@@ -34,12 +34,6 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to [you
 
 Please note that your license may support only a subset of ID Capture features. If you would like to use additional features please contact us at [Scandit Support](mailto:support@scandit.com).
 
-### Module Overview
-
-import IdModuleOverview from '../../../partials/get-started/_id-module-overview-no-eu-dl.mdx';
-
-<IdModuleOverview/>
-
 ### Configure and Initialize the Library
 
 In addition to the configuration detailed in the [installation guide](/sdks/web/add-sdk.md#configure-the-library), there are some additional steps required for ID Capture.
@@ -100,15 +94,11 @@ You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/w
 import { Camera } from "@scandit/web-datacapture-core";
 import { IdCapture } from "@scandit/web-datacapture-id";
 
-
+# let the SDK pick the best camera for ID Capture
 const camera = Camera.pickBestGuess();
+# apply the optimized camera settings from ID Capture
+await camera.applySettings(IdCapture.recommendedCameraSettings);
 await context.setFrameSource(camera);
-
-const cameraSettings = IdCapture.recommendedCameraSettings;
-
-// Depending on the use case further camera settings adjustments can be made here.
-
-await camera.applySettings(cameraSettings);
 ```
 
 ## Create ID Capture Settings
@@ -136,24 +126,22 @@ import {
 const settings = new IdCaptureSettings();
 
 // Documents from any region:
-settings.acceptedDocuments.push(new IdCard(Region.AnyRegion));
+settings.acceptedDocuments.push(new Passport(Region.Any));
 // Only documents issued by a specific country:
 settings.acceptedDocuments.push(new IdCard(Region.Germany));
 // Regional documents:
 settings.acceptedDocuments.push(new RegionSpecific.ApecBusinessTravelCard());
-// Reject passports from certain regions:
+
+// If we added passports for all regions like above, we can exclude some specific regions
 settings.rejectedDocuments.push(new Passport(Region.Cuba));
 
 // To scan only one-sided documents and a given zone:
 // Signature: SingleSideScanner(barcode: boolean, machineReadableZone boolean, visualInspectionZone: boolean)
-settings.scannerType = new SingleSideScanner(true, false, false);
-// or
-settings.scannerType = new SingleSideScanner(false, true, false);
-// or
-settings.scannerType = new SingleSideScanner(false, false, true);
+// This would only scan a single side document having an MRZ:
+settings.scanner = new IdCaptureScanner({ physicalDocument: new SingleSideScanner(true, false, false) });
 
 // To scan both sides of the document:
-settings.scannerType = new FullDocumentScanner();
+settings.scanner = new IdCaptureScanner({ physicalDocument: new FullDocumentScanner() });
 ```
 
 Create a new ID Capture mode with the chosen settings:
@@ -162,7 +150,7 @@ Create a new ID Capture mode with the chosen settings:
 const idCapture = await IdCapture.forContext(context, settings);
 ```
 
-## Implement the Listener
+## Implement the listener
 
 To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two important callbacks: `didCaptureId` and `didRejectId`.
 
@@ -179,13 +167,15 @@ idCapture.addListener({
 });
 ```
 
+When `didCaptureId` or `didRejectId` are called, IdCapture is automatically [reset](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#method-scandit.datacapture.id.IdCapture.Reset) except when the rejection is due to a timeout (see [rejection reason](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/rejection-reason.html)).
+
+Note that the camera is still running, you may want to switch it off at this point.
+
 ### Handling Success
 
 Captured results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-Note that if you scan boths sides of a document using the [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-scanner.html#full-document-scanner), this callback will only be executed once both sides have been successfully captured. If the document is known to have only one side, the callback will execute immediately after a successful scan of the first side.
-
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+Note that if you scan boths sides of a document using the [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-scanner.html#full-document-scanner), this callback will only be executed once both sides have been successfully captured. If the document is known to have only one side, the callback will execute immediately after a successful scan of the first side. This behaviour can be modified with the setting [notifyOnSideCapture](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture).
 
 On a successful scan you may read the extracted data from `capturedId`:
 
@@ -217,14 +207,14 @@ Note that some data may still have been captured, you will find them in the firs
 You may wish to implement the follow-up action based on the reason of failure:
 
 ```ts
-onIdRejected: (capturedId: CapturedId, reason: RejectionReason) => {
+didRejectId: (capturedId: CapturedId, reason: RejectionReason) => {
  if (reason === RejectionReason.Timeout) {
   // Ask the user to retry, or offer alternative input method.
  } else if (reason === RejectionReason.DocumentExpired) {
   // Ask the user to provide alternative document.
  } else if (reason === RejectionReason.NotAcceptedDocumentType) {
   // Inform the user which documents are accepted.
- }
+ } ...
 }
 ```
 
@@ -237,7 +227,7 @@ import { IdCaptureOverlay } from "@scandit/web-datacapture-id";
 
 const overlay = await IdCaptureOverlay.withIdCaptureForView(
  idCapture,
- dataCaptureView
+ view
 );
 ```
 
