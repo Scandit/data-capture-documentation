@@ -139,7 +139,7 @@ struct LabelCaptureView: UIViewRepresentable {
          onLabelCaptured: @escaping ([CapturedLabel]) -> Void) {
         // Create the data capture context
         DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-        dataCaptureContext = DataCaptureContext.sharedInstance
+        dataCaptureContext = DataCaptureContext.shared
 
         // Configure Label Capture settings
         guard let settings = try? LabelCaptureSettings(labelDefinitions: labelDefinitions) else {

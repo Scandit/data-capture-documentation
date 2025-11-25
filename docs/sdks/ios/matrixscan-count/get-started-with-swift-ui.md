@@ -146,7 +146,7 @@ struct MatrixScanCountView: UIViewRepresentable {
     init(onBarcodeCountUpdated: @escaping ([Barcode]) -> Void) {
         // Create the data capture context
         DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-        dataCaptureContext = DataCaptureContext.sharedInstance
+        dataCaptureContext = DataCaptureContext.shared
 
         // Configure Barcode Count settings
         let settings = BarcodeCountSettings()

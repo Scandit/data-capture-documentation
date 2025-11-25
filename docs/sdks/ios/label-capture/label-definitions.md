@@ -73,7 +73,7 @@ let settings = try LabelCaptureSettings {
     LabelDefinition("shipping-label") {
         CustomBarcode(
             name: "barcode-field",
-            symbologies: [NSNumber(value: Symbology.code128.rawValue)]
+            symbologies: [.code128]
         )
 
         CustomText(name: "batch-number-field")

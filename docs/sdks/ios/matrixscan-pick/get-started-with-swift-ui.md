@@ -162,7 +162,7 @@ struct MatrixScanPickView: UIViewRepresentable {
          onFinishButtonTapped: @escaping () -> Void) {
         // Create the data capture context
         DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-        dataCaptureContext = DataCaptureContext.sharedInstance
+        dataCaptureContext = DataCaptureContext.shared
 
         // Configure Barcode Pick settings
         let settings = BarcodePickSettings()

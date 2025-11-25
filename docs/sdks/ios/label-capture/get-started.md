@@ -79,35 +79,24 @@ The main entry point for the Label Capture Mode is the [LabelCapture](https://do
 It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
 ```swift
-let labelDefinition = LabelDefinition("<your-label-name>") {
-    /*
-     * Add a barcode field with the expected symbologies and pattern.
-     * You can omit the valueRegexes if the content of the barcode is unknown.
-     */
-    CustomBarcode(
-        name: "<your-barcode-field-name>",
-        symbologies: [
-            NSNumber(value: Symbology.ean13UPCA.rawValue),
-            NSNumber(value: Symbology.code128.rawValue)
-        ]
-    )
-    .valueRegexes(["\\d{12,14}"])
+let labelCaptureSettings = try LabelCaptureSettings {
+    LabelDefinition("<your-label-name>") {
+        /*
+        * Add a barcode field with the expected symbologies and pattern.
+        * You can omit the valueRegexes if the content of the barcode is unknown.
+        */
+        CustomBarcode(
+            name: "<your-barcode-field-name>",
+            symbologies: [.ean13UPCA, .code128]
+        )
+        .valueRegexes(["\\d{12,14}"])
 
-    /*
-     * Add a text field for capturing expiry dates.
-     * The field is set as mandatory by default.
-     */
-    ExpiryDateText(name: "<your-expiry-date-field-name>")
-}
-
-guard let labelCaptureSettings = try? LabelCaptureSettings(
-    labelDefinitions: [labelDefinition]
-) else {
-    /*
-    * Creating label capture settings can fail if the label definitions are invalid.
-    * You can handle the error here.
-    */
-    return
+        /*
+        * Add a text field for capturing expiry dates.
+        * The field is set as mandatory by default.
+        */
+        ExpiryDateText(name: "<your-expiry-date-field-name>")
+    }
 }
 
 /*

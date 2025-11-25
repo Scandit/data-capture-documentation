@@ -149,7 +149,7 @@ struct MatrixScanArView: UIViewRepresentable {
     init() {
         // Create the data capture context
         DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-        dataCaptureContext = DataCaptureContext.sharedInstance
+        dataCaptureContext = DataCaptureContext.shared
 
         // Configure Barcode AR settings
         let settings = BarcodeArSettings()
