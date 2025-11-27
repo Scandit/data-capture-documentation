@@ -1,4 +1,5 @@
 ---
+title: Get Started
 sidebar_position: 2
 pagination_prev: null
 framework: xamarinIos

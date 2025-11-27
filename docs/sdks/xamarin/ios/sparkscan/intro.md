@@ -1,4 +1,5 @@
 ---
+title: About SparkScan
 sidebar_position: 1
 pagination_prev: null
 framework: xamarinIos
