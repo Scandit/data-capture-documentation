@@ -6,6 +6,11 @@ toc_max_heading_level: 4
 title: Label Definitions
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 # Label Definitions
 
 A **Label Definition** is a configuration that defines the label, and its relevant fields, that Smart Label Capture should recognize and extract during scans.

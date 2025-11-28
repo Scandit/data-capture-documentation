@@ -7,6 +7,11 @@ keywords:
 title: Advanced Configurations
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 # Advanced Configurations
 
 MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.

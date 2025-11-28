@@ -87,6 +87,13 @@ function DropdownNavbarItemDesktop({
     }
   }, [currentPath]);
 
+  // Detect if we're on an older version that still has Xamarin
+  const isXamarinAvailable = useMemo(() => {
+    if (!currentPath) return false;
+    // Xamarin is only available in versions 7.6.x and 6.28.x
+    return currentPath.includes("/7.6.") || currentPath.includes("/6.28.");
+  }, [currentPath]);
+
   useEffect(() => {
     if (!currentPath) return;
     const possibleVersions = ["/next", "/6.28.7", "/7.6.5"];
@@ -213,9 +220,19 @@ function DropdownNavbarItemDesktop({
     },
   ];
 
+  // Filter out Xamarin items for versions where Xamarin is deprecated (8.0+)
+  const filteredItems = useMemo(() => {
+    if (!isXamarinAvailable) {
+      return newItems.filter(
+        (item) => !item.label.startsWith("Xamarin")
+      );
+    }
+    return newItems;
+  }, [newItems, isXamarinAvailable]);
+
   const combinedItems =
     items && items.some((item) => item.type === "docsVersion")
-      ? newItems
+      ? filteredItems
       : items;
 
   const hasDocsVersionItems =

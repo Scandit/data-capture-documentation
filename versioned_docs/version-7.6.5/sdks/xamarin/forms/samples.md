@@ -9,6 +9,11 @@ keywords:
 title: Xamarin Forms SDK Samples
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 # Xamarin Forms SDK Samples
 
 This page provides a list of samples available for the Scandit Data Capture SDK for Xamarin Forms. Each sample demonstrates a specific feature or use case of the SDK.

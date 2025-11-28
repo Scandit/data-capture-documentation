@@ -6,6 +6,11 @@ keywords:
 title: Advanced Configurations
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 # Advanced Configurations
 
 ## Customization of the Overlays
