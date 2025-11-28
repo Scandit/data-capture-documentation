@@ -4,6 +4,7 @@ pagination_prev: null
 framework: xamarinForms
 keywords:
   - xamarinForms
+title: About MatrixScan Count
 ---
 
 # About MatrixScan Count

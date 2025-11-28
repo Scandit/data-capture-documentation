@@ -3,6 +3,7 @@ framework: xamarinAndroid
 keywords:
   - xamarinAndroid
 toc_max_heading_level: 4
+title: Label Definitions
 ---
 
 # Label Definitions

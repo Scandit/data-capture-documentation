@@ -4,6 +4,7 @@ pagination_next: null
 framework: xamarinAndroid
 keywords:
   - xamarinAndroid
+title: Adding AR Overlays
 ---
 
 # Adding AR Overlays

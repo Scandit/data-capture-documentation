@@ -6,6 +6,7 @@ pagination_next: null
 framework: xamarinAndroid
 keywords:
   - xamarinAndroid
+title: Xamarin Android SDK Samples
 ---
 
 import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';

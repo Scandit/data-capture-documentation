@@ -3,6 +3,7 @@ sidebar_position: 2
 framework: xamarinIos
 keywords:
   - xamarinIos
+title: Get Started
 ---
 
 # Get Started

@@ -4,6 +4,7 @@ framework: xamarinIos
 tags: [xamarinIos]
 keywords:
   - xamarinIos
+title: Batch Scanning
 ---
 
 # Batch Scanning

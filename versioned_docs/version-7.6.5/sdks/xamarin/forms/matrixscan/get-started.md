@@ -3,6 +3,7 @@ sidebar_position: 2
 framework: xamarinForms
 keywords:
   - xamarinForms
+title: Get Started
 ---
 
 # Get Started

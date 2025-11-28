@@ -6,6 +6,7 @@ pagination_next: null
 framework: xamarinIos
 keywords:
   - xamarinIos
+title: Xamarin iOS SDK Samples
 ---
 
 import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';

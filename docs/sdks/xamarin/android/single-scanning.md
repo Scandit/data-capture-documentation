@@ -5,6 +5,7 @@ framework: xamarinAndroid
 tags: [xamarinAndroid]
 keywords:
   - xamarinAndroid
+title: Single Scanning
 ---
 
 import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';

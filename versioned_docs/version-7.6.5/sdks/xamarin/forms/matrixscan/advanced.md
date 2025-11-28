@@ -4,6 +4,7 @@ pagination_next: null
 framework: xamarinForms
 keywords:
   - xamarinForms
+title: Adding AR Overlays
 ---
 
 # Adding AR Overlays

@@ -4,6 +4,7 @@ pagination_next: null
 framework: xamarinIos
 keywords:
   - xamarinIos
+title: Advanced Configurations
 ---
 
 # Advanced Configurations

@@ -5,6 +5,7 @@ pagination_prev: null
 framework: xamarinAndroid
 keywords:
   - xamarinAndroid
+title: Get Started
 ---
 
 # Get Started

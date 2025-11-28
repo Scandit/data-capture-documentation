@@ -4,6 +4,7 @@ pagination_prev: null
 framework: xamarinAndroid
 keywords:
   - xamarinAndroid
+title: About MatrixScan Count
 ---
 
 # About MatrixScan Count

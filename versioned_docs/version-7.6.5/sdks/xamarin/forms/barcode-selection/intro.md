@@ -4,6 +4,7 @@ pagination_prev: null
 framework: xamarinForms
 keywords:
   - xamarinForms
+title: About Barcode Selection
 ---
 
 # About Barcode Selection

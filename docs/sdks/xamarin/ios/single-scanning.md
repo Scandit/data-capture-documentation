@@ -5,6 +5,7 @@ framework: xamarinIos
 tags: [xamarinIos]
 keywords:
   - xamarinIos
+title: Single Scanning
 ---
 
 import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';
