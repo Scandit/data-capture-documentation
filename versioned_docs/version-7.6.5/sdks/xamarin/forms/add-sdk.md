@@ -5,6 +5,7 @@ pagination_next: null
 framework: xamarinForms
 keywords:
   - xamarinForms
+title: Installation
 ---
 
 import Tabs from '@theme/Tabs';

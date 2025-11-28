@@ -6,6 +6,7 @@ pagination_next: null
 framework: xamarinAndroid
 keywords:
   - xamarinAndroid
+title: Xamarin Android SDK Samples
 ---
 
 # Xamarin Android SDK Samples

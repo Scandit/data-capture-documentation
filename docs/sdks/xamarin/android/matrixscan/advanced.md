@@ -1,4 +1,5 @@
 ---
+title: Adding AR Overlays
 sidebar_position: 3
 pagination_next: null
 framework: xamarinAndroid

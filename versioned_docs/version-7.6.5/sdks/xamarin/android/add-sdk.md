@@ -5,6 +5,7 @@ pagination_next: null
 framework: xamarinAndroid
 keywords:
   - xamarinAndroid
+title: Installation
 ---
 
 import Tabs from '@theme/Tabs';

@@ -1871,37 +1871,11 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'MatrixScan AR',
-              items: [
-                "sdks/xamarin/android/matrixscan-ar/intro",
-                "sdks/xamarin/android/matrixscan-ar/get-started",
-              ],
-            },
-            {
-              type: 'category',
               label: 'MatrixScan Count',
               items: [
                 "sdks/xamarin/android/matrixscan-count/intro",
                 "sdks/xamarin/android/matrixscan-count/get-started",
                 "sdks/xamarin/android/matrixscan-count/advanced",
-              ],
-            },
-            {
-              type: 'category',
-              label: 'MatrixScan Find',
-              items: [
-                "sdks/xamarin/android/matrixscan-find/intro",
-                "sdks/xamarin/android/matrixscan-find/get-started",
-                "sdks/xamarin/android/matrixscan-find/advanced",
-              ],
-            },
-            {
-              type: "category",
-              label: "MatrixScan Pick",
-              items: [
-                "sdks/xamarin/android/matrixscan-pick/intro",
-                "sdks/xamarin/android/matrixscan-pick/get-started",
-                "sdks/xamarin/android/matrixscan-pick/advanced",
               ],
             },
             {

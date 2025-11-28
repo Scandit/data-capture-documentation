@@ -5,6 +5,7 @@ pagination_next: null
 framework: xamarinForms
 keywords:
   - xamarinForms
+title: Installation
 ---
 
 import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';

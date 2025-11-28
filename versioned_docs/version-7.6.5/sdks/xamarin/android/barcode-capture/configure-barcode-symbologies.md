@@ -4,6 +4,7 @@ pagination_next: null
 framework: xamarinAndroid
 keywords:
   - xamarinAndroid
+title: Configure Barcode Symbologies
 ---
 
 # Configure Barcode Symbologies

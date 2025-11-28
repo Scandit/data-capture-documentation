@@ -4,6 +4,7 @@ framework: xamarinForms
 tags: [xamarinForms]
 keywords:
   - xamarinForms
+title: Batch Scanning
 ---
 
 import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';

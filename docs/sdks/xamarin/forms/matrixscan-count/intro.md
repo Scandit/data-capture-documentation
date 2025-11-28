@@ -1,4 +1,5 @@
 ---
+title: About MatrixScan Count
 sidebar_position: 1
 pagination_prev: null
 framework: xamarinForms

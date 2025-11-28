@@ -1,4 +1,5 @@
 ---
+title: Advanced Configurations
 sidebar_position: 4
 pagination_next: null
 framework: xamarinIos

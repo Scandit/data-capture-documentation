@@ -4,6 +4,7 @@ pagination_next: null
 framework: xamarinForms
 keywords:
   - xamarinForms
+title: Get Started
 ---
 
 # Get Started

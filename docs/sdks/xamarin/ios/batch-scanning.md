@@ -4,6 +4,7 @@ framework: xamarinIos
 tags: [xamarinIos]
 keywords:
   - xamarinIos
+title: Batch Scanning
 ---
 
 import DeprecationNotice from '/docs/partials/_xamarin-deprecation-notice.mdx';

@@ -5,6 +5,7 @@ framework: xamarinAndroid
 tags: [xamarinAndroid]
 keywords:
   - xamarinAndroid
+title: Single Scanning
 ---
 
 # Single Scanning

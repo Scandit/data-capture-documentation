@@ -5,6 +5,7 @@ framework: xamarinIos
 tags: [xamarinIos]
 keywords:
   - xamarinIos
+title: Single Scanning
 ---
 
 # Single Scanning

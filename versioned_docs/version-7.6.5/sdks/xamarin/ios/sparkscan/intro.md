@@ -4,6 +4,7 @@ pagination_prev: null
 framework: xamarinIos
 keywords:
   - xamarinIos
+title: About SparkScan
 ---
 
 # About SparkScan

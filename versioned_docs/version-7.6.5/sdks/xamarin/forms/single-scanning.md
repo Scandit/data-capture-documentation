@@ -5,6 +5,7 @@ framework: xamarinForms
 tags: [xamarinForms]
 keywords:
   - xamarinForms
+title: Single Scanning
 ---
 
 # Single Scanning

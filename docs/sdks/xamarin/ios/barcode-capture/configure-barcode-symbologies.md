@@ -1,4 +1,5 @@
 ---
+title: Configure Barcode Symbologies
 sidebar_position: 3
 pagination_next: null
 framework: xamarinIos

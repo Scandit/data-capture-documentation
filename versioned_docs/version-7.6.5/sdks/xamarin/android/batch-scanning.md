@@ -4,6 +4,7 @@ framework: xamarinAndroid
 tags: [xamarinAndroid]
 keywords:
   - xamarinAndroid
+title: Batch Scanning
 ---
 
 # Batch Scanning

@@ -6,6 +6,7 @@ pagination_next: null
 framework: xamarinForms
 keywords:
   - xamarinForms
+title: Xamarin Forms SDK Samples
 ---
 
 # Xamarin Forms SDK Samples
