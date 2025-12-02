@@ -129,29 +129,27 @@ import ScanditBarcodeCapture
 import SwiftUI
 
 struct MatrixScanFindView: UIViewRepresentable {
-    private let dataCaptureContext: DataCaptureContext
-    private let barcodeFind: BarcodeFind
-    private let uiDelegate: UIDelegate
+
+    let itemsToFind: Set<BarcodeFindItem>
+    let onFinishButtonTapped: (Set<BarcodeFindItem>) -> Void
 
     init(itemsToFind: Set<BarcodeFindItem>, onFinishButtonTapped: @escaping (Set<BarcodeFindItem>) -> Void) {
-        // Create the data capture context
-        DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-        dataCaptureContext = DataCaptureContext.shared
+        self.itemsToFind = itemsToFind
+        self.onFinishButtonTapped = onFinishButtonTapped
+    }
 
-        // Configure Barcode Find settings
-        let settings = BarcodeFindSettings()
-        // ...
-
-        // Create Barcode Find mode with items to find
-        barcodeFind = BarcodeFind(settings: settings)
-        barcodeFind.setItemList(itemsToFind)
-
-        // Create the UI delegate
-        uiDelegate = UIDelegate(onFinishButtonTapped: onFinishButtonTapped)
+    func makeCoordinator() -> Coordinator {
+        return Coordinator()
     }
 
     func makeUIView(context: Context) -> UIView {
         let view = UIView()
+
+        // Set the callback on the coordinator
+        context.coordinator.onFinishButtonTapped = onFinishButtonTapped
+
+        // Set the items to find on the mode
+        context.coordinator.barcodeFind.setItemList(itemsToFind)
 
         // Configure Barcode Find view settings
         let viewSettings = BarcodeFindViewSettings()
@@ -159,11 +157,11 @@ struct MatrixScanFindView: UIViewRepresentable {
 
         // Create the Barcode Find view
         let barcodeFindView = BarcodeFindView(parentView: view,
-                                              context: dataCaptureContext,
-                                              barcodeFind: barcodeFind,
+                                              context: context.coordinator.dataCaptureContext,
+                                              barcodeFind: context.coordinator.barcodeFind,
                                               settings: viewSettings)
-        barcodeFindView.uiDelegate = uiDelegate
-        
+        barcodeFindView.uiDelegate = context.coordinator
+
         // Prepare and start searching
         barcodeFindView.prepareSearching()
         barcodeFindView.startSearching()
@@ -172,21 +170,38 @@ struct MatrixScanFindView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
-        // Update the view if needed
-    }
-}
+        // Update callback
+        context.coordinator.onFinishButtonTapped = onFinishButtonTapped
 
-private class UIDelegate: NSObject, BarcodeFindViewUIDelegate {
-    private let onFinishButtonTapped: (Set<BarcodeFindItem>) -> Void
-
-    init(onFinishButtonTapped: @escaping (Set<BarcodeFindItem>) -> Void) {
-        self.onFinishButtonTapped = onFinishButtonTapped
+        // Update items
+        context.coordinator.barcodeFind.setItemList(itemsToFind)
     }
 
-    func barcodeFindView(_ view: BarcodeFindView,
-                        didTapFinishButton foundItems: Set<BarcodeFindItem>) {
-        DispatchQueue.main.async {
-            self.onFinishButtonTapped(foundItems)
+    class Coordinator: NSObject, BarcodeFindViewUIDelegate {
+        let dataCaptureContext: DataCaptureContext
+        let barcodeFind: BarcodeFind
+        var onFinishButtonTapped: ((Set<BarcodeFindItem>) -> Void)?
+
+        override init() {
+            // Create the data capture context
+            DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+            dataCaptureContext = DataCaptureContext.shared
+
+            // Configure Barcode Find settings
+            let settings = BarcodeFindSettings()
+            settings.set(symbology: .ean13UPCA, enabled: true)
+
+            // Create Barcode Find mode (items will be set later)
+            barcodeFind = BarcodeFind(settings: settings)
+
+            super.init()
+        }
+
+        func barcodeFindView(_ view: BarcodeFindView,
+                            didTapFinishButton foundItems: Set<BarcodeFindItem>) {
+            DispatchQueue.main.async {
+                self.onFinishButtonTapped?(foundItems)
+            }
         }
     }
 }
