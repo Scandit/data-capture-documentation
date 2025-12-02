@@ -101,6 +101,8 @@ All pre-built fields come with default `valueRegexes` and `anchorRegexes` that a
 The `resetAnchorRegexes` method can be used to remove the default `anchorRegexes`, allowing you to rely solely on the `valueRegexes` for detection.
 :::
 
+import FeatureList from '@site/src/components/FeatureList';
+
 #### Barcode Fields
 
 * [`SerialNumberBarcode`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/serial-number-barcode.html#serial-number-barcode):
