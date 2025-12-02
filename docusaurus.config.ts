@@ -218,13 +218,17 @@ const config: Config = {
           },
           showLastUpdateTime: true,
           includeCurrentVersion: true,
-          lastVersion: "current",
+          lastVersion: "8.0.0",
           versions: {
             current: {
-              label: '8.0.0',
-              banner: 'none',
+              label: '8.1.0',
+              banner: 'unreleased',
               badge: false,
             },
+          '8.0.0': {
+            banner: 'none',
+            badge: false,
+          },
             '7.6.5': {
               banner: 'none',
               badge: false,
