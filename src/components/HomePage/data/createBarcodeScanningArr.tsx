@@ -26,6 +26,16 @@ export function createBarcodeScanningArr(framework: string) {
     return frameworkData?.link ? frameworkData.link : framework;
   }
 
+  function buildLink(basePath: string): string {
+    const path = getFrameworkPath(frameworkData);
+    // If path starts with a version (e.g., "/7.6.5/"), use it as-is
+    if (path && path.startsWith('/')) {
+      return `${path}${basePath}`;
+    }
+    // Otherwise prepend /sdks/
+    return `/sdks/${path}${basePath}`;
+  }
+
   const allCardsArray = [
     {
       name: BarcodeScanning.SingleScanning,
@@ -37,7 +47,7 @@ export function createBarcodeScanningArr(framework: string) {
       link:
         framework === "linux"
           ? `/sdks/linux/add-sdk/`
-          : `/sdks/${getFrameworkPath(frameworkData)}/single-scanning`,
+          : buildLink('/single-scanning'),
     },
     {
       name: BarcodeScanning.BatchScanning,
@@ -49,7 +59,7 @@ export function createBarcodeScanningArr(framework: string) {
       link:
         framework === "linux"
           ? `/sdks/linux/add-sdk/`
-          : `/sdks/${getFrameworkPath(frameworkData)}/batch-scanning`,
+          : buildLink('/batch-scanning'),
     },
     {
       name: BarcodeScanning.ScanditExpress,

@@ -38,18 +38,6 @@ titanium:
   permalink: '/sdks/titanium/'
   description: 'Scandit Barcode Scanner SDK for Titanium'
 
-xamarinIos:
-  permalink: '/sdks/xamarin/ios/'
-  description: 'Scandit Barcode Scanner SDK for Xamarin for iOS'
-
-xamarinAndroid:
-  permalink: '/sdks/xamarin/android/'
-  description: 'Scandit Barcode Scanner SDK for Xamarin for Android'
-
-xamarinForms:
-  permalink: '/sdks/xamarin/forms/'
-  description: 'Scandit Barcode Scanner SDK for Xamarin.Forms'
-
 express:
   permalink: '/hosted/express/'
   description: 'No-code Smart Data Capture App'

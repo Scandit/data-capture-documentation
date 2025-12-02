@@ -24,6 +24,17 @@ export function createIdScanningArr(framework: string) {
   function getFrameworkPath(frameworkData: FrameworkCardType): string {
     return frameworkData?.link ? frameworkData.link : framework;
   }
+
+  function buildLink(basePath: string): string {
+    const path = getFrameworkPath(frameworkData);
+    // If path starts with a version (e.g., "/7.6.5/"), use it as-is
+    if (path && path.startsWith('/')) {
+      return `${path}${basePath}`;
+    }
+    // Otherwise prepend /sdks/
+    return `/sdks/${path}${basePath}`;
+  }
+
   return [
     {
       name: IDScanning.IDCaptureValidation,
@@ -32,7 +43,7 @@ export function createIdScanningArr(framework: string) {
       isActive: frameworkData.IDScanning.includes(
         IDScanning.IDCaptureValidation
       ),
-      link: `/sdks/${getFrameworkPath(frameworkData)}/id-capture/intro`,
+      link: buildLink('/id-capture/intro'),
     },
     {
       name: IDScanning.IdBolt,

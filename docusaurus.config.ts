@@ -34,6 +34,50 @@ const config: Config = {
       '@docusaurus/plugin-client-redirects',
       {
         fromExtensions: ['html'],
+        createRedirects(existingPath) {
+          // Redirect all /sdks/xamarin/* paths to the migration guide
+          if (existingPath.includes('/migrate-7-to-8')) {
+            const xamarinPaths = [];
+            const platforms = ['ios', 'android', 'forms'];
+            const commonPages = [
+              '',
+              '/add-sdk',
+              '/samples',
+              '/barcode-capture/get-started',
+              '/barcode-capture/configure-barcode-symbologies',
+              '/barcode-selection/intro',
+              '/barcode-selection/get-started',
+              '/id-capture/intro',
+              '/id-capture/get-started',
+              '/id-capture/advanced',
+              '/id-capture/supported-documents',
+              '/label-capture/intro',
+              '/label-capture/get-started',
+              '/label-capture/advanced',
+              '/label-capture/label-definitions',
+              '/matrixscan/intro',
+              '/matrixscan/get-started',
+              '/matrixscan/advanced',
+              '/matrixscan-count/intro',
+              '/matrixscan-count/get-started',
+              '/matrixscan-count/advanced',
+              '/sparkscan/intro',
+              '/sparkscan/get-started',
+              '/sparkscan/advanced',
+              '/parser/get-started',
+              '/single-scanning',
+              '/batch-scanning',
+              '/release-notes'
+            ];
+            platforms.forEach(platform => {
+              commonPages.forEach(page => {
+                xamarinPaths.push(`/sdks/xamarin/${platform}${page}`);
+              });
+            });
+            return xamarinPaths;
+          }
+          return undefined; // Return undefined when no redirects should be created
+        },
         redirects: [
           {
             to: '/sdks/ios/add-sdk',
@@ -100,28 +144,18 @@ const config: Config = {
             from: '/data-capture-sdk/titanium/samples/run-samples.html'
           },
           {
-            to: '/sdks/xamarin/ios/add-sdk',
-            from: ['/data-capture-sdk/xamarin.ios', '/data-capture-sdk/xamarin.ios/add-sdk.html'],
-          },
-          {
-            to: '/sdks/xamarin/ios/samples',
-            from: '/data-capture-sdk/xamarin.ios/samples/run-samples.html'
-          },
-          {
-            to: '/sdks/xamarin/android/add-sdk',
-            from: ['/data-capture-sdk/xamarin.android', '/data-capture-sdk/xamarin.android/add-sdk.html'],
-          },
-          {
-            to: '/sdks/xamarin/android/samples',
-            from: '/data-capture-sdk/xamarin.android/samples/run-samples.html'
-          },
-          {
-            to: '/sdks/xamarin/forms/add-sdk',
-            from: ['/data-capture-sdk/xamarin.forms', '/data-capture-sdk/xamarin.forms/add-sdk.html'],
-          },
-          {
-            to: '/sdks/xamarin/forms/samples',
-            from: '/data-capture-sdk/xamarin.forms/samples/run-samples.html'
+            to: '/migrate-7-to-8#xamarin-sdk-changes',
+            from: [
+              '/data-capture-sdk/xamarin.ios',
+              '/data-capture-sdk/xamarin.ios/add-sdk.html',
+              '/data-capture-sdk/xamarin.ios/samples/run-samples.html',
+              '/data-capture-sdk/xamarin.android',
+              '/data-capture-sdk/xamarin.android/add-sdk.html',
+              '/data-capture-sdk/xamarin.android/samples/run-samples.html',
+              '/data-capture-sdk/xamarin.forms',
+              '/data-capture-sdk/xamarin.forms/add-sdk.html',
+              '/data-capture-sdk/xamarin.forms/samples/run-samples.html'
+            ],
           },
           {
             to: '/sdks/net/ios/add-sdk',
@@ -331,24 +365,6 @@ const config: Config = {
               label: "Titanium",
               sidebarId: "titaniumSidebar",
               to: "sdks/titanium/add-sdk",
-            },
-            {
-              type: "docsVersion",
-              label: "Xamarin iOS",
-              sidebarId: "xamarinIosSidebar",
-              to: "sdks/xamarin/ios/add-sdk",
-            },
-            {
-              type: "docsVersion",
-              label: "Xamarin Android",
-              sidebarId: "xamarinAndroidSidebar",
-              to: "sdks/xamarin/android/add-sdk",
-            },
-            {
-              type: "docsVersion",
-              label: "Xamarin Forms",
-              sidebarId: "xamarinFormsSidebar",
-              to: "sdks/xamarin/forms/add-sdk",
             },
             {
               type: "docsVersion",

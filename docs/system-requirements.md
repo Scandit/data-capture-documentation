@@ -99,9 +99,6 @@ These platforms are based on the native platforms and therefore the requirements
 | Capacitor       | - Capacitor 5.0.0<br/>- Swift 4.0+                   |
 | Cordova         | - cordova 12.0.0<br/>- cordova-android 10.0.0<br/>- cordova-ios 6.3.0<br/>- Swift 4.0+ |
 | Flutter         | - Flutter 3.22.0+ (Dart 3.4.0+)<br/>- Swift 4.0+      |
-| Xamarin.Android | - Xamarin.Android 13.2.2<br/>- Kotlin 1.9.25           |
-| Xamarin.iOS     | - Xamarin.iOS 16.4.0.23                             |
-| Xamarin.Forms   | - Xamarin.Forms 4.8<br/>- Kotlin 1.9.25              |
 | React Native    | - react-native 0.70+ (0.72+ recommended for modern toolchain support)<br/>- Kotlin 1.9.25<br/>- Swift 4.0+ |
 | Titanium        | - Titanium 13.0.0+                                |
 | .NET for iOS    | - .NET SDK 6.0.403+                                 |
