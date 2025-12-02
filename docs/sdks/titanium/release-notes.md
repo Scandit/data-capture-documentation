@@ -10,6 +10,47 @@ keywords:
   - titanium
 ---
 
+## 8.1.0
+
+**Released**: December 3, 2025
+
+### New Features
+
+#### Barcode
+
+* Extended Aztec codes reader to support scanning mirrored codes.
+* Added support for square DataMatrix codes with one-sided damage or occlusion. This feature is only enabled in Barcode Capture and SparkScan.
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved MicroQR detector tolerance to quiet zone violations
+* Improved suppression of incorrect Codabar recognitions when using the [“strict" symbology extension](/symbology-properties.md#symbology-extension-descriptions)
+
+### Behavioral Changes
+
+#### Barcode
+
+* Enabling the [“ocr_fallback" symbology extension](/symbology-properties.md#symbology-extension-descriptions) with missing OCR model resources now triggers the context error 28 (“Missing Resource”)
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a rare crash in the EAN/UPC reader
+* Fixed a bug in the default color of BarcodeCapture highlights
+* Fixed an issue where popover annotations with HIGHLIGHT_TAP_AND_BARCODE_SCAN trigger could not be opened again
+* Fixed an issue in BarcodeSequence where camera would not be ON in portrait
+* Fixed an issue where SparkScan mini preview would sometimes stay in regular when entering target mode
+* Fixed the app becoming unresponsive after being in the background for extended periods
+
+#### Core
+
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+* Fixed a small memory leak that affected fresh install runs only
+* Fixed an issue where barcode scanning would permanently stop after the app returned from background, particularly when camera permission dialogs were shown during initialization
+
 ## 8.0.0
 
 **Released**: November 4, 2025

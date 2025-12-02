@@ -9,6 +9,62 @@ keywords:
   - netIos
 ---
 
+## 8.1.0
+
+**Released**: December 3, 2025
+
+### New Features
+
+#### Barcode
+
+* Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.
+* Extended Aztec codes reader to support scanning mirrored codes.
+* Added support for square DataMatrix codes with one-sided damage or occlusion. This feature is only enabled in Barcode Capture and SparkScan.
+* Added, in `BarcodeAr`, a new annotation type (`BarcodeArResponsiveAnnotation`), which automatically switches between close-up and far-away info annotations based on the barcode's size on screen
+
+#### Id
+
+* Added NationalityISO property that maps results from Nationality field to country ISO code
+* Added RejectionDiagnosticJSON property to CapturedId to report debug info during Timeout rejections
+* Added support for new California DL, new South Carolina DL, Arizona Medical Marijuana Card, Kuwait Civil card, and new Texas DL
+* Our SDK can now scan the following documents both in single-side and double-side mode:
+  - All Mexican DLs
+  - Mexican Voter Cards
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved MicroQR detector tolerance to quiet zone violations
+* Improved suppression of incorrect Codabar recognitions when using the [“strict" symbology extension](/symbology-properties.md#symbology-extension-descriptions)
+
+### Behavioral Changes
+
+#### Barcode
+
+* Enabling the [“ocr_fallback" symbology extension](/symbology-properties.md#symbology-extension-descriptions) with missing OCR model resources now triggers the context error 28 (“Missing Resource”)
+
+#### Core
+
+* Added the `CodeDuplicate` class to simplify setting special sentinel values for the CodeDuplicateFilter property across barcode scanning modes.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a rare crash in the EAN/UPC reader
+
+#### Id
+
+* Fixed an issue where front expiry date anonymization rectangle is erroneously drawn on front and back
+* Fixed a bug that prevented VizResult anonymization of the following fields: additionalAddressInformation, bloodType, employer, fathersName, issuingAuthority, maritalStatus, mothersName, placeOfBirth, profession, race, residentialStatus
+* Fixed a bug concerning return complete instead of cropped images on the back of EU driving licenses
+
+#### Core
+
+* Fixed a small memory leak that affected fresh install runs only
+* Fixed an issue where barcode scanning would permanently stop after the app returned from background, particularly when camera permission dialogs were shown during initialization
+
 ## 8.0.0
 
 **Released**: November 4, 2025
