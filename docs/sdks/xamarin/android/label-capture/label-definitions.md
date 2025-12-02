@@ -19,10 +19,14 @@ There are two approaches to using label definitions:
 
 ## Pre-built Labels
 
-Smart Label Capture provides pre-built label definitions out of the box for the following common label types:
+Smart Label Capture includes ready-made label definitions for common use cases. These pre-built options let you recognize and extract information from standard label types without creating custom configurations:
 
-- [**Price Label**](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName): This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `SKU` and `priceText` fields.
-- [**VIN Label**](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName): A predefined label definition for scanning Vehicle Identification Numbers (VIN). Returns `text` and/or `barcode` fields.
+<FeatureList 
+  product="smart-label-capture" 
+  category="Pre-built Labels" 
+  tag="Label Definitions" 
+  displayMode="compact"
+/>
 
 ### Example: Price label
 
@@ -38,7 +42,7 @@ var settings = LabelCaptureSettingsBuilder()()
 
 ## Custom Labels
 
-If your use case is unique and not covered by Smart Label Capture's pre-built labels, you can define your own custom labels. These custom labels can use any combination of fully custom fields and pre-built fields, detailed below.
+If Smart Label Capture’s pre-built options don’t fit your needs, define a custom label instead. Custom labels can combine your own fields with any of the available pre-built ones.
 
 :::tip
 The following characters are recognized: `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ()-./:,$¶"`.
@@ -48,8 +52,12 @@ The following characters are recognized: `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZab
 
 There are two types of custom fields you can define:
 
-* [`CustomBarcode`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/custom-barcode.html#custom-barcode)
-* [`CustomText`](https://docs.scandit.com/data-capture-sdk/xamarin.android/label-capture/api/custom-text.html#custom-text)
+<FeatureList 
+  product="smart-label-capture" 
+  category="Custom Fields" 
+  tag="Field Types" 
+  displayMode="compact"
+/>
 
 The following methods are available to configure custom fields:
 
@@ -83,7 +91,7 @@ var settings = LabelCaptureSettingsBuilder()()
 
 ### Pre-built Fields
 
-You can also configure your label by using pre-built fields. These are some common fields provided for faster integration, with all `valueRegexes`, `anchorRegexes`, and `symbologies` already predefined.
+You can also build your label using pre-built fields. These common fields speed up integration because their `valueRegexes`, `anchorRegexes`, and `symbologies` are already predefined.
 
 Customization of pre-built fields is done via the `valueRegexes`, `anchorRegexes`, and `isOptional` methods, which allow you to specify the expected format of the field data.
 
@@ -92,6 +100,8 @@ All pre-built fields come with default `valueRegexes` and `anchorRegexes` that a
 
 The `resetAnchorRegexes` method can be used to remove the default `anchorRegexes`, allowing you to rely solely on the `valueRegexes` for detection.
 :::
+
+import FeatureList from '@site/src/components/FeatureList';
 
 #### Barcode Fields
 
