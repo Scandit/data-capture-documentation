@@ -1,0 +1,113 @@
+Scandit's unparalleled batch scanning capabilities, comprised of the MatrixScan suite of products and Smart Label Capture, are available as a low-level API as well as use-case optimized workflows with built-in camera controls, dialed-in performance and extensively tested UX.
+
+## MatrixScan
+
+Scandit's **MatrixScan** technology enables scanning and tracking of multiple barcodes at once, often enhanced with **augmented-reality (AR) overlays** to provide real-time feedback, guidance, and task support. Depending on your use case, you can choose between **prebuilt workflows** for faster integration or **low-level APIs** for full customization.
+
+The sections below provide an overview of the features and capabilities of each MatrixScan variant.
+
+
+
+| Feature / Capability      | MatrixScan Find | MatrixScan Count | MatrixScan Pick | MatrixScan Batch | MatrixScan AR |
+|---------------------------|-----------------|------------------|-----------------|------------------|---------------|
+| **AR overlays**           | ✅ Yes (highlights) | ✅ Yes (persistent) | ✅ Yes (task picking) | ❌ No | ✅ Yes (configurable) |
+| **Duplicate barcode handling** | ❌ | ✅ | ❌ | ✅ | ✅ |
+| **Prebuilt workflow**     | ✅ | ✅ | ✅ | ❌ | ❌ |
+| **Customization level**   | Limited | Limited | Limited | Moderate | Full |
+| **Ease of integration**   | High | High | High | Medium | Low → High (depending on workflow) |
+| **Typical use cases**     | Locate items quickly | Stocktaking, receiving | Order picking | Fast batch scanning | Custom AR-enabled workflows |
+
+### Low-level API
+
+#### MatrixScan Batch
+
+MatrixScan Batch, implemented via the `BarcodeBatch` API, enables you to build applications and workflows for capturing and interacting with multiple barcodes simultaneously.
+
+- **Function:** Multi-barcode scanning **without AR overlays**.  
+- **Intended Use:** Lightweight, high-performance batch scanning.
+
+<ReactPlayer playing controls width='800' url="/img/batch-scanning/MatrixScanBatch.mp4" />
+
+**Available For:** [iOS](/sdks/ios/matrixscan/intro.md), [Android](/sdks/android/matrixscan/intro.md), [React Native](/sdks/react-native/matrixscan/intro.md), [Flutter](/sdks/flutter/matrixscan/intro.md), [Web](/sdks/web/matrixscan/intro.md), [Cordova](/sdks/cordova/matrixscan/intro.md), [Capacitor](/sdks/capacitor/matrixscan/intro.md), Xamarin ([iOS](/sdks/xamarin/ios/matrixscan/intro.md), [Android](/sdks/xamarin/android/matrixscan/intro.md), [Forms](/sdks/xamarin/forms/matrixscan/intro.md)), .NET ([iOS](/sdks/net/ios/matrixscan/intro.md), [Android](/sdks/net/android/matrixscan/intro.md))
+
+#### MatrixScan AR
+
+MatrixScan AR, implemented via the `BarcodeAR` API, is the most advanced and flexible option for building custom augmented reality workflows that leverage multi-barcode scanning.
+
+- **Function:** AR-enabled scanning of multiple barcodes simultaneously.   
+  - Superset of MatrixScan Batch  
+  - Supports **custom AR workflows**  
+  - Provides **prebuilt AR overlays** for quick implementation  
+- **Intended Use:** Use this as the **go-to AR API** for new projects requiring custom, advanced AR capabilities.
+
+<ReactPlayer playing controls width='800' url="/img/batch-scanning/MatrixScanCheck.mp4" />
+
+**Available For:** [iOS](/sdks/ios/matrixscan-ar/intro.md), [Android](/sdks/android/matrixscan-ar/intro.md), [React Native](/sdks/react-native/matrixscan-ar/intro.md), [Flutter](/sdks/flutter/matrixscan-ar/intro.md), [Web](/sdks/web/matrixscan-ar/intro.md), .NET ([iOS](/sdks/net/ios/matrixscan-ar/intro.md), [Android](/sdks/net/android/matrixscan-ar/intro.md))
+
+### Purpose-built Workflows
+
+Scandit provides ready-to-use implementations of MatrixScan for the following workflows and use-cases:
+
+#### MatrixScan Count
+
+MatrixScan Count, implemented via the `BarcodeCount` API, is designed for applications that require accurate item counting and tracking.
+
+- **Function:** Count and persistently track items.  
+- **Key Differentiators:**  
+  - Provides **persistent AR overlays** that remain visible outside scan range.  
+  - Can **accurately count duplicates** (non-unique barcodes).  
+- **Special Capabilities:**  
+  - **Barcode Clustering**: Group barcodes for bulk actions.  
+  - **Tote Mapping**: Map scanned items to specific containers.  
+- **Use cases:**  
+  - Stocktaking and cycle counting  
+  - Receiving goods with duplicate barcodes
+
+<ReactPlayer playing controls width='800' url="/img/batch-scanning/MatrixScanCount.mp4" />
+
+**Available For:** [iOS](/sdks/ios/matrixscan-count/intro.md), [Android](/sdks/android/matrixscan-count/intro.md), [React Native](/sdks/react-native/matrixscan-count/intro.md), [Flutter](/sdks/flutter/matrixscan-count/intro.md), [Capacitor](/sdks/capacitor/matrixscan-count/intro.md), Xamarin ([iOS](/sdks/xamarin/ios/matrixscan-count/intro.md), [Android](/sdks/xamarin/android/matrixscan-count/intro.md), [Forms](/sdks/xamarin/forms/matrixscan-count/intro.md)), .NET ([iOS](/sdks/net/ios/matrixscan-count/intro.md), [Android](/sdks/net/android/matrixscan-count/intro.md))
+
+#### MatrixScan Pick
+
+MatrixScan Pick, implemented via the `BarcodePick` API, is designed for applications that require efficient item picking and task management.
+
+- **Function:** AR-based task picking workflow.  
+- **Special Features:** Predefined item states
+  - `toPick → Picked`  
+  - `Ignore`  
+  - Tap interaction logic prioritizes items marked `toPick`.  
+  - **Freeze mode**: Hold the camera still to comfortably select items.  
+- **Use cases:**  
+  - Order picking in warehouses  
+  - Task assignment and confirmation workflows
+
+<ReactPlayer playing controls width='800' url="/img/batch-scanning/MatrixScanPick.mp4" />
+
+**Available For:** [iOS](/sdks/ios/matrixscan-pick/intro.md), [Android](/sdks/android/matrixscan-pick/intro.md), [React Native](/sdks/react-native/matrixscan-pick/intro.md), [Flutter](/sdks/flutter/matrixscan-pick/intro.md), [Cordova](/sdks/cordova/matrixscan-pick/intro.md), [Capacitor](/sdks/capacitor/matrixscan-pick/intro.md), .NET ([iOS](/sdks/net/ios/matrixscan-pick/intro.md), [Android](/sdks/net/android/matrixscan-pick/intro.md))
+
+#### MatrixScan Find
+
+MatrixScan Find, implemented via the `BarcodeFind` API, is designed for applications that require quick item location and retrieval.
+
+- **Function:** Locate specific items visually with AR.  
+- **Workflow:** Highlights target items within the camera view.  
+- **Use cases:**  
+  - Locating products in retail stockrooms  
+  - Finding a parcel in a delivery vehicle  
+  - Warehouse inventory search 
+
+<ReactPlayer playing controls width='800' url="/img/batch-scanning/MatrixScanFind.mp4" />
+
+**Available For:** [iOS](/sdks/ios/matrixscan-find/intro.md), [Android](/sdks/android/matrixscan-find/intro.md), [React Native](/sdks/react-native/matrixscan-find/intro.md), [Flutter](/sdks/flutter/matrixscan-find/intro.md), [Web](/sdks/web/matrixscan-find/intro.md), [Cordova](/sdks/cordova/matrixscan-find/intro.md), [Capacitor](/sdks/capacitor/matrixscan-find/intro.md), .NET ([iOS](/sdks/net/ios/matrixscan-find/intro.md), [Android](/sdks/net/android/matrixscan-find/intro.md))
+
+## Smart Label Capture
+
+Smart Label Capture, implemented via the `LabelCapture` API, is designed for applications that require efficient data extraction from labels.
+
+<p align="center">
+  <img src="/img/batch-scanning/SLC-smart-devices.gif" alt="Smart Label Capture Workflow" />
+  <br/>Capturing multiple barcodes and text data from labels in a single scan
+</p>
+
+**Available For:** [Android](/sdks/android/label-capture/get-started.md), [iOS](/sdks/ios/label-capture/get-started.md), [React Native](/sdks/react-native/label-capture/get-started.md), [Flutter](/sdks/flutter/label-capture/get-started.md), and [Web](/sdks/web/label-capture/get-started.md)
+

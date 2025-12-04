@@ -10,6 +10,74 @@ keywords:
   - react
 ---
 
+## 8.1.0-beta.1
+
+**Released**: December 4, 2025
+
+### New Features
+
+#### Barcode
+
+* Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.
+* [SparkScan](/sdks/react-native/sparkscan/intro.md) is not limited to only barcodes anymore, but can also scan items - in other words any combinations of barcodes and text present on a target to be scanned. The feature is available in beta at the moment, please contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out.
+* Extended Aztec codes reader to support scanning mirrored codes.
+* Added support for square DataMatrix codes with one-sided damage or occlusion. This feature is only enabled in Barcode Capture and SparkScan.
+* Added, in `BarcodeAr`, new classes to create custom highlights (via `BarcodeArCustomHighlight`) and custom annotations (via `BarcodeArCustomAnnotation`).
+
+#### Id
+
+* Added NationalityISO property that maps results from Nationality field to country ISO code
+* Added RejectionDiagnosticJSON property to CapturedId to report debug info during Timeout rejections
+* Added support for new California DL, new South Carolina DL, Arizona Medical Marijuana Card, Kuwait Civil card, and new Texas DL
+* Our SDK can now scan the following documents both in single-side and double-side mode:
+  - All Mexican DLs
+  - Mexican Voter Cards
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved MicroQR detector tolerance to quiet zone violations
+* Improved suppression of incorrect Codabar recognitions when using the [“strict" symbology extension](/symbology-properties.md#symbology-extension-descriptions)
+
+#### Smart Label Capture
+
+* Improved the OCR model for Label Capture
+
+### Behavioral Changes
+
+#### Barcode
+
+* Enabling the [“ocr_fallback" symbology extension](/symbology-properties.md#symbology-extension-descriptions) with missing OCR model resources now triggers the context error 28 (“Missing Resource”)
+
+#### Smart Label Capture
+
+* Validation Flow: Manually input values for barcodes will go through a stricter validation. Some values may no longer be accepted if they do not match the symbology specs for the symbology’s definition
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a rare crash in the EAN/UPC reader
+* Fixed a bug in the default color of BarcodeCapture highlights
+* Fixed an issue where popover annotations with HIGHLIGHT_TAP_AND_BARCODE_SCAN trigger could not be opened again
+* Fixed an issue in BarcodeSequence where camera would not be ON in portrait
+* Fixed an issue where SparkScan mini preview would sometimes stay in regular when entering target mode
+* Fixed the app becoming unresponsive after being in the background for extended periods
+
+#### Id
+
+* Fixed an issue where front expiry date anonymization rectangle is erroneously drawn on front and back
+* Fixed a bug that prevented VizResult anonymization of the following fields: additionalAddressInformation, bloodType, employer, fathersName, issuingAuthority, maritalStatus, mothersName, placeOfBirth, profession, race, residentialStatus
+* Fixed a bug concerning return complete instead of cropped images on the back of EU driving licenses
+
+#### Core
+
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+* Fixed a small memory leak that affected fresh install runs only
+* Fixed an issue where barcode scanning would permanently stop after the app returned from background, particularly when camera permission dialogs were shown during initialization
+* Fixed a bug where getIsTorchAvailable() would return null on Android
+
 ## 8.0.0
 
 **Released**: November 4, 2025

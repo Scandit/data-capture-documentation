@@ -10,6 +10,78 @@ keywords:
   - android
 ---
 
+## 8.1.0-beta.1
+
+**Released**: December 4, 2025
+
+### New Features
+
+#### Barcode
+
+* Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.
+* Extended Aztec codes reader to support scanning mirrored codes.
+* Added support for square DataMatrix codes with one-sided damage or occlusion. This feature is only enabled in Barcode Capture and SparkScan.
+* Added, in `BarcodeAr`, a `BarcodeArFilter` interface to selectively control which barcodes are displayed in the AR overlay based on custom filtering logic. You can set a filter via `BarcodeAr.SetBarcodeFilter`.
+* Added `ScanditIconType.Slash` which can be used in `BarcodeArStatusIconAnnotationAnchor`.
+* BarcodeCountView now supports cameras with different aspect ratios.
+
+#### Id
+
+* Added NationalityISO property that maps results from Nationality field to country ISO code
+* Added RejectionDiagnosticJSON property to CapturedId to report debug info during Timeout rejections
+* Added rejectionTimeoutSeconds to IdCaptureSettings allowing customers to use timeout other than default (6s). Minimum timeout is 1s.
+* Added support for new California DL, new South Carolina DL, Arizona Medical Marijuana Card, Kuwait Civil card, and new Texas DL
+* Our SDK can now scan the following documents both in single-side and double-side mode:
+  - All Mexican DLs
+  - Mexican Voter Cards
+
+#### Core
+
+* Added support for QuadHD resolution to provide improved performance and extended range for MatrixScan modes on slower devices
+* Added Electronic Product Code (EPC) parser
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved MicroQR detector tolerance to quiet zone violations
+* Improved suppression of incorrect Codabar recognitions when using the [“strict" symbology extension](/symbology-properties.md#symbology-extension-descriptions)
+
+#### Smart Label Capture
+
+* Improved the OCR model for Label Capture
+* The Receipt Scanning API (in beta) has been simplified:
+
+### Behavioral Changes
+
+#### Barcode
+
+* Enabling the [“ocr_fallback" symbology extension](/symbology-properties.md#symbology-extension-descriptions) with missing OCR model resources now triggers the context error 28 (“Missing Resource”)
+
+#### Smart Label Capture
+
+* Validation Flow: Manually input values for barcodes will go through a stricter validation. Some values may no longer be accepted if they do not match the symbology specs for the symbology’s definition
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a rare crash in the EAN/UPC reader
+* Fixed a bug in the default color of BarcodeCapture highlights
+* Fixed an issue where popover annotations with HIGHLIGHT_TAP_AND_BARCODE_SCAN trigger could not be opened again
+* Fixed an issue in BarcodeSequence where camera would not be ON in portrait
+* Fixed an issue where SparkScan mini preview would sometimes stay in regular when entering target mode
+* Fixed the app becoming unresponsive after being in the background for extended periods
+
+#### Id
+
+* Fixed a bug concerning return complete instead of cropped images on the back of EU driving licenses
+
+#### Core
+
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+* Fixed a small memory leak that affected fresh install runs only
+
 ## 8.0.0
 
 **Released**: November 4, 2025
