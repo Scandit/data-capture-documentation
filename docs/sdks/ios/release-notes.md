@@ -10,9 +10,9 @@ keywords:
   - ios
 ---
 
-## 8.1.0
+## 8.1.0-beta.1
 
-**Released**: December 3, 2025
+**Released**: December 4, 2025
 
 ### New Features
 
