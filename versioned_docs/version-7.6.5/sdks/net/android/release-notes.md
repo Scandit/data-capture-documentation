@@ -94,6 +94,17 @@ No updates for this framework in this release.
 * Deprecated `AamvaBarcodeVerification`.
 * Deprecated `IdCaptureSettings.decodeIsoMobileDriverLicenses` and `IdCaptureSettings.decodeMobileDriverLicenseViz`.
 
+## 7.5.2
+
+**Released**: December 4, 2025
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
+* Fixed a crash that occurred when scanning barcodes encoded with non-UTF-8 data.
+
 ## 7.5.1
 
 **Released**: September 4, 2025

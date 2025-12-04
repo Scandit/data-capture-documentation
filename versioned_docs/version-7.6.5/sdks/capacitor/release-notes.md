@@ -114,6 +114,21 @@ No updates for this framework in this release.
 * Deprecated `LabelCaptureBasicOverlay.withLabelCapture` and `LabelCaptureBasicOverlay.withLabelCaptureForView`. A new public constructor has been added.
 * Deprecated `LabelCaptureAdvancedOverlay.withLabelCapture` and `LabelCaptureAdvancedOverlay.withLabelCaptureForView`. A new public constructor has been added.
 
+## 7.5.2
+
+**Released**: December 4, 2025
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
+* Fixed a crash that occurred when scanning barcodes encoded with non-UTF-8 data.
+
+#### Smart Label Capture
+
+* Fixed a timing issue that might cause overlays to get stuck on screen in the `LabelCaptureAdvancedOverlay`
+
 ## 7.5.1
 
 **Released**: September 4, 2025

@@ -63,6 +63,16 @@ No updates for this framework in this release.
 * Deprecated the symbology enum `SC_SYMBOLOGY_RM4SCC`, use `SC_SYMBOLOGY_ROYAL_MAIL_4STATE` instead. The same applies to the Python API (`scanditsdk.SYMBOLOGY_RM4SCC` should be used instead of  `scanditsdk.SYMBOLOGY_ROYAL_MAIL_4STATE`).
 * Deprecated camera focus mode functions `sc_barcode_scanner_settings_get_focus_mode()` and `sc_barcode_scanner_settings_set_focus_mode()`. For devices without auto-focus, set the code direction hint to `SC_CODE_DIRECTION_NONE`.
 
+## 7.5.2
+
+**Released**: December 4, 2025
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
+
 ## 7.5.1
 
 **Released**: September 4, 2025
