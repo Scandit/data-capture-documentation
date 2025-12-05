@@ -8,6 +8,11 @@ keywords:
 title: Get Started
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 # Get Started
 
 The parser parses data strings, e.g. as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/parser/hibc.html), [GS1 Application Identifier (parser/AI) system](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/parser/iata-bcbp.html).

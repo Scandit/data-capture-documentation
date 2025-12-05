@@ -6,6 +6,11 @@ keywords:
 title: Get Started
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 # Get Started
 
 This page will guide you through the process of adding ID Capture to your Xamarin application. ID Capture is a mode of the Scandit Data Capture SDK that allows you to capture and extract information from personal identification documents, such as driver's licenses, passports, and ID cards.

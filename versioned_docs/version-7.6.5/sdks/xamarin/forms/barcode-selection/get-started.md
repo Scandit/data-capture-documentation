@@ -7,6 +7,11 @@ keywords:
 title: Get Started
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 # Get Started
 
 In this guide you will learn step-by-step how to add Barcode Selection to your application.

@@ -9,6 +9,11 @@ keywords:
   - xamarinAndroid
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 import AboutIdCapture from '../../../../partials/intro/_about-id-capture.mdx';
 
 <AboutIdCapture/>

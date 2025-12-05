@@ -9,6 +9,11 @@ keywords:
   - xamarinAndroid
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 ## 7.6.5
 
 **Released**: November 12, 2025

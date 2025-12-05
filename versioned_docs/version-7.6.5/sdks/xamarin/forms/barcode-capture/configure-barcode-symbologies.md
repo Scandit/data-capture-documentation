@@ -7,6 +7,11 @@ keywords:
 title: Configure Barcode Symbologies
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 # Configure Barcode Symbologies
 
 import Intro from '../../../../partials/configure-symbologies/_intro.mdx'

@@ -33,11 +33,11 @@ To experience Scandit scanning and verification capabilities firsthand, check ou
 
 <CustomDocCard title="Capacitor" description="Integrate ID Scanning in Capacitor" link="../sdks/capacitor/id-capture/intro" smallIcon ><Capacitor/></CustomDocCard>
 
-<CustomDocCard title="Xamarin iOS" description="Integrate ID Scanning in Xamarin iOS" link="../sdks/xamarin/ios/id-capture/intro" smallIcon ><XamarinIos/></CustomDocCard>
+<CustomDocCard title="Xamarin iOS" description="Integrate ID Scanning in Xamarin iOS" link="/7.6.5/sdks/xamarin/ios/id-capture/intro" smallIcon ><XamarinIos/></CustomDocCard>
 
-<CustomDocCard title="Xamarin Android" description="Integrate ID Scanning for Xamarin Android" link="../sdks/xamarin/android/id-capture/intro" smallIcon ><XamarinAndroid/></CustomDocCard>
+<CustomDocCard title="Xamarin Android" description="Integrate ID Scanning for Xamarin Android" link="/7.6.5/sdks/xamarin/android/id-capture/intro" smallIcon ><XamarinAndroid/></CustomDocCard>
 
-<CustomDocCard title="Xamarin Forms" description="Integrate ID Scanning in Xamarin Forms" link="../sdks/xamarin/forms/id-capture/intro" smallIcon ><XamarinForms/></CustomDocCard>
+<CustomDocCard title="Xamarin Forms" description="Integrate ID Scanning in Xamarin Forms" link="/7.6.5/sdks/xamarin/forms/id-capture/intro" smallIcon ><XamarinForms/></CustomDocCard>
 
 <CustomDocCard title=".NET iOS" description="Integrate ID Scanning in .NET iOS" link="../sdks/net/ios/id-capture/intro" smallIcon ><NetIos/></CustomDocCard>
 

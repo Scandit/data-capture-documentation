@@ -7,6 +7,11 @@ keywords:
 title: About Barcode Selection
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 # About Barcode Selection
 
 Barcode Selection enables you to increase scanning accuracy and prevent users from scanning the wrong code in scenarios where there are multiple barcodes present, such as a crowded shelf, an order catalog with barcodes printed closely together, or a label with multiple barcodes.
