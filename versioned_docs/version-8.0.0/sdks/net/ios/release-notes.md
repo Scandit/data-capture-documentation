@@ -9,7 +9,7 @@ keywords:
   - netIos
 ---
 
-## 8.1.0
+## 8.1.0-beta.1
 
 **Released**: December 3, 2025
 

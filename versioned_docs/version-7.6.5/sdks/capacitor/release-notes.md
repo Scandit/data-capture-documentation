@@ -56,6 +56,10 @@ No updates for this framework in this release.
 * Fixed decoding of some ASCII-encoded DataMatrix codes ending with '254' codeword followed by padding.
 * Improved support for missing or damaged timing patterns in Aztec codes.
 
+#### Barcode
+
+* Fixed a crash that occurred when scanning barcodes encoded with non-UTF-8 data.
+
 ## 7.6.0
 
 **Released**: September 15, 2025
