@@ -68,6 +68,7 @@ No updates for this framework in this release.
 #### Barcode
 
 * Fixed an issue where `BarcodeFindItemContent` was not correctly rendering the information.
+* Fixed a crash that occurred when scanning barcodes encoded with non-UTF-8 data.
 
 ## 7.6.0
 
