@@ -7,6 +7,11 @@ keywords:
 title: Advanced Configurations
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 # Advanced Configurations
 
 There are several advanced configurations that can be used to customize the behavior of the ID Capture SDK and enable additional features.

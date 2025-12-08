@@ -16,12 +16,20 @@ export default function FrameworkExploreCard({
   link,
 }: FrameworkExploreCardProps) {
   function getFrameworkPath(): string {
+    if (framework === "linux") {
+      return `/sdks/linux/add-sdk`;
+    }
+
+    // If link starts with "/" (e.g., versioned path like "/7.6.5/sdks/xamarin/ios"), use it directly
+    if (link && link.startsWith('/')) {
+      return `${link}/add-sdk`;
+    }
+
+    // Otherwise construct the path normally
     const basePath = link
       ? `/sdks/${link}/add-sdk`
       : `/sdks/${framework}/add-sdk`;
-    return framework === "linux"
-      ? `/sdks/linux/add-sdk`
-      : basePath;
+    return basePath;
   }
 
   return (

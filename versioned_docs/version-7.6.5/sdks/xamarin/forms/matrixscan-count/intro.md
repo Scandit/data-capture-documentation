@@ -7,6 +7,11 @@ keywords:
 title: About MatrixScan Count
 ---
 
+import DeprecationNotice from '/versioned_docs/version-7.6.5/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
 # About MatrixScan Count
 
 import AboutMatrixScanCount from '../../../../partials/intro/_about-matrixscan-count.mdx'
