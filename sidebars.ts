@@ -260,17 +260,22 @@ const sidebars: SidebarsConfig = {
                 "sdks/ios/matrixscan-pick/advanced",
               ],
             },
-            {
-              type: "category",
-              label: "Smart Label Capture",
-              items: [
-                "sdks/ios/label-capture/intro",
-                "sdks/ios/label-capture/get-started",
-                "sdks/ios/label-capture/get-started-with-swift-ui",
-                "sdks/ios/label-capture/label-definitions",
-                "sdks/ios/label-capture/advanced",
-              ],
-            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/ios/label-scanning',
+          },
+          collapsed: false,
+          items: [
+            "sdks/ios/label-capture/intro",
+            "sdks/ios/label-capture/get-started",
+            "sdks/ios/label-capture/get-started-with-swift-ui",
+            "sdks/ios/label-capture/label-definitions",
+            "sdks/ios/label-capture/advanced",
           ],
         },
         {
@@ -474,16 +479,21 @@ const sidebars: SidebarsConfig = {
                 "sdks/android/matrixscan-pick/advanced",
               ],
             },
-            {
-              type: "category",
-              label: "Smart Label Capture",
-              items: [
-                "sdks/android/label-capture/intro",
-                "sdks/android/label-capture/get-started",
-                "sdks/android/label-capture/label-definitions",
-                "sdks/android/label-capture/advanced",
-              ],
-            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/android/label-scanning',
+          },
+          collapsed: false,
+          items: [
+            "sdks/android/label-capture/intro",
+            "sdks/android/label-capture/get-started",
+            "sdks/android/label-capture/label-definitions",
+            "sdks/android/label-capture/advanced",
           ],
         },
         {
@@ -660,16 +670,21 @@ const sidebars: SidebarsConfig = {
                 "sdks/web/matrixscan-find/advanced",
               ],
             },
-            {
-              type: "category",
-              label: "Smart Label Capture",
-              items: [
-                "sdks/web/label-capture/intro",
-                "sdks/web/label-capture/get-started",
-                "sdks/web/label-capture/label-definitions",
-                "sdks/web/label-capture/advanced",
-              ],
-            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/web/label-scanning',
+          },
+          collapsed: false,
+          items: [
+            "sdks/web/label-capture/intro",
+            "sdks/web/label-capture/get-started",
+            "sdks/web/label-capture/label-definitions",
+            "sdks/web/label-capture/advanced",
           ],
         },
         {
@@ -1054,16 +1069,21 @@ const sidebars: SidebarsConfig = {
                 "sdks/react-native/matrixscan-pick/advanced",
               ],
             },
-            {
-              type: "category",
-              label: "Smart Label Capture",
-              items: [
-                "sdks/react-native/label-capture/intro",
-                "sdks/react-native/label-capture/get-started",
-                "sdks/react-native/label-capture/label-definitions",
-                "sdks/react-native/label-capture/advanced",
-              ],
-            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/react-native/label-scanning',
+          },
+          collapsed: false,
+          items: [
+            "sdks/react-native/label-capture/intro",
+            "sdks/react-native/label-capture/get-started",
+            "sdks/react-native/label-capture/label-definitions",
+            "sdks/react-native/label-capture/advanced",
           ],
         },
         {
@@ -1266,16 +1286,21 @@ const sidebars: SidebarsConfig = {
                 "sdks/flutter/matrixscan-pick/advanced",
               ],
             },
-            {
-              type: "category",
-              label: "Smart Label Capture",
-              items: [
-                "sdks/flutter/label-capture/intro",
-                "sdks/flutter/label-capture/get-started",
-                "sdks/flutter/label-capture/label-definitions",
-                "sdks/flutter/label-capture/advanced",
-              ],
-            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/flutter/label-scanning',
+          },
+          collapsed: false,
+          items: [
+            "sdks/flutter/label-capture/intro",
+            "sdks/flutter/label-capture/get-started",
+            "sdks/flutter/label-capture/label-definitions",
+            "sdks/flutter/label-capture/advanced",
           ],
         },
         {
@@ -1463,16 +1488,21 @@ const sidebars: SidebarsConfig = {
                 "sdks/capacitor/matrixscan-pick/advanced",
               ],
             },
-            {
-              type: "category",
-              label: "Smart Label Capture",
-              items: [
-                "sdks/capacitor/label-capture/intro",
-                "sdks/capacitor/label-capture/get-started",
-                "sdks/capacitor/label-capture/label-definitions",
-                "sdks/capacitor/label-capture/advanced",
-              ],
-            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/capacitor/label-scanning',
+          },
+          collapsed: false,
+          items: [
+            "sdks/capacitor/label-capture/intro",
+            "sdks/capacitor/label-capture/get-started",
+            "sdks/capacitor/label-capture/label-definitions",
+            "sdks/capacitor/label-capture/advanced",
           ],
         },
         {

@@ -1,9 +1,9 @@
-import { BarcodeScanning, LabelScanning } from "../../constants/scanningEnums";
+import { LabelScanning } from "../../constants/scanningEnums";
 import { frameworkCards } from "./frameworkCardsArr";
-import { BarcodeCapture, Express, Ms, LabelCapture } from "../../IconComponents";
+import { LabelCapture } from "../../IconComponents";
 import { FrameworkCardType } from "../../constants/types";
 
-export function createBarcodeScanningArr(framework: string) {
+export function createLabelScanningArr(framework: string) {
   function findFrameworkData() {
     const frameworkData: FrameworkCardType = frameworkCards.find(
       (item) => item.framework === framework
@@ -38,30 +38,6 @@ export function createBarcodeScanningArr(framework: string) {
 
   const allCardsArray = [
     {
-      name: BarcodeScanning.SingleScanning,
-      text: "Ready-to-Use Workflows and APIs",
-      icon: <BarcodeCapture />,
-      isActive: frameworkData?.barcodeScanning.includes(
-        BarcodeScanning.SingleScanning
-      ),
-      link:
-        framework === "linux"
-          ? `/sdks/linux/add-sdk/`
-          : buildLink('/single-scanning'),
-    },
-    {
-      name: BarcodeScanning.BatchScanning,
-      text: "MatrixScan Workflows and APIs",
-      icon: <Ms />,
-      isActive: frameworkData?.barcodeScanning.includes(
-        BarcodeScanning.BatchScanning
-      ),
-      link:
-        framework === "linux"
-          ? `/sdks/linux/add-sdk/`
-          : buildLink('/batch-scanning'),
-    },
-    {
       name: LabelScanning.LabelScanning,
       text: "Capture Multiple Barcodes and Text from Labels",
       icon: <LabelCapture />,
@@ -70,16 +46,8 @@ export function createBarcodeScanningArr(framework: string) {
       ),
       link: buildLink('/label-capture/intro'),
     },
-    {
-      name: BarcodeScanning.ScanditExpress,
-      text: "No-Code Scanning in Any App",
-      icon: <Express />,
-      isActive: frameworkData?.barcodeScanning.includes(
-        BarcodeScanning.ScanditExpress
-      ),
-      link: `/hosted/express/overview`,
-    },
   ];
 
   return allCardsArray;
 }
+

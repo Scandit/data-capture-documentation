@@ -108,6 +108,8 @@ Map scanned barcodes to specific totes. This is useful for In-Store Order Fulfil
 
 Use barcode capture to define search criteria by scanning items, and MatrixScan Find can then be launched to find the pre-defined item.
 
+### Label Scanning
+
 #### Smart Label Capture
 
 ![Smart Label Capture](/img/batch-scanning/SLC-smart-devices.jpg)

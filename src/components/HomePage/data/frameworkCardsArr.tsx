@@ -16,7 +16,7 @@ import {
   XamarinIosFramework,
 } from "../../IconComponents";
 import style from "../Frameworks/FrameworkCard.module.css";
-import { BarcodeScanning, IDScanning } from "../../constants/scanningEnums";
+import { BarcodeScanning, IDScanning, LabelScanning } from "../../constants/scanningEnums";
 
 //the framework name in this array is used exactly as it appears in the FrameworksName enum
 //The framework key of the object in the frameworkCards array is also used to form the link.
@@ -31,6 +31,7 @@ export const frameworkCards = [
       BarcodeScanning.BatchScanning,
     ],
     IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
+    labelScanning: [LabelScanning.LabelScanning],
   },
   {
     framework: "android",
@@ -41,6 +42,7 @@ export const frameworkCards = [
       BarcodeScanning.BatchScanning,
     ],
     IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
+    labelScanning: [LabelScanning.LabelScanning],
   },
   {
     framework: "web",
@@ -51,6 +53,7 @@ export const frameworkCards = [
       BarcodeScanning.ScanditExpress,
     ],
     IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
+    labelScanning: [LabelScanning.LabelScanning],
   },
   {
     framework: "react",
@@ -62,6 +65,7 @@ export const frameworkCards = [
       BarcodeScanning.ScanditExpress,
     ],
     IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
+    labelScanning: [LabelScanning.LabelScanning],
   },
   {
     framework: "cordova",
@@ -128,6 +132,7 @@ export const frameworkCards = [
       BarcodeScanning.ScanditExpress,
     ],
     IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
+    labelScanning: [LabelScanning.LabelScanning],
   },
   {
     framework: "net",
@@ -173,6 +178,7 @@ export const frameworkCards = [
       BarcodeScanning.ScanditExpress,
     ],
     IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
+    labelScanning: [LabelScanning.LabelScanning],
   },
   {
     framework: "titanium",

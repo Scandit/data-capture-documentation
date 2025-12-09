@@ -8,3 +8,7 @@ export enum IDScanning {
   IDCaptureValidation = "ID Capture & Validation",
   IdBolt = "ID Bolt",
 }
+
+export enum LabelScanning {
+  LabelScanning = "Label Scanning",
+}
