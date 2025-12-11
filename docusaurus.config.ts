@@ -236,9 +236,6 @@ const config: Config = {
         docs: {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.ts"),
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
-          editUrl: "https://github.com/Scandit/data-capture-documentation/edit/main",
           breadcrumbs: true,
           admonitions: {
             keywords: [
@@ -250,7 +247,7 @@ const config: Config = {
               "danger",
             ],
           },
-          showLastUpdateTime: true,
+          showLastUpdateTime: false,
           includeCurrentVersion: true,
           lastVersion: "8.0.0",
           versions: {
