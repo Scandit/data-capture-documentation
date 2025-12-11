@@ -270,7 +270,7 @@ idCapture.addListener(object : IdCaptureListener {
 
 ## Samples & References
 
-- **Android Samples**: `docs.scandit.com/sdks/android/samples/` — multiple ready‑to‑run apps.  
+- **Android Samples**: [https://github.com/Scandit/datacapture-android-samples](https://github.com/Scandit/datacapture-android-samples) — multiple ready‑to‑run apps.  
 - **Install guide** (Gradle, modules, requirements).  
 - **SparkScan get started** (prebuilt UI).  
 - **MatrixScan Find get started** (search & find).  

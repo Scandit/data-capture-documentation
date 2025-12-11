@@ -156,7 +156,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/ios/add-sdk',
-        'sdks/ios/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-ios-samples",
+        },
       ],
     },
     {
@@ -260,17 +264,22 @@ const sidebars: SidebarsConfig = {
                 "sdks/ios/matrixscan-pick/advanced",
               ],
             },
-            {
-              type: "category",
-              label: "Smart Label Capture",
-              items: [
-                "sdks/ios/label-capture/intro",
-                "sdks/ios/label-capture/get-started",
-                "sdks/ios/label-capture/get-started-with-swift-ui",
-                "sdks/ios/label-capture/label-definitions",
-                "sdks/ios/label-capture/advanced",
-              ],
-            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/ios/label-scanning',
+          },
+          collapsed: false,
+          items: [
+            "sdks/ios/label-capture/intro",
+            "sdks/ios/label-capture/get-started",
+            "sdks/ios/label-capture/get-started-with-swift-ui",
+            "sdks/ios/label-capture/label-definitions",
+            "sdks/ios/label-capture/advanced",
           ],
         },
         {
@@ -298,6 +307,11 @@ const sidebars: SidebarsConfig = {
           type: "doc",
           id: "sdks/ios/barcode-capture/configure-barcode-symbologies",
           label: "Configure Barcode Symbologies",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
         }, 
       ],
     },
@@ -377,7 +391,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/android/add-sdk',
-        'sdks/android/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-android-samples",
+        },
       ],
     },
     {
@@ -474,16 +492,21 @@ const sidebars: SidebarsConfig = {
                 "sdks/android/matrixscan-pick/advanced",
               ],
             },
-            {
-              type: "category",
-              label: "Smart Label Capture",
-              items: [
-                "sdks/android/label-capture/intro",
-                "sdks/android/label-capture/get-started",
-                "sdks/android/label-capture/label-definitions",
-                "sdks/android/label-capture/advanced",
-              ],
-            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/android/label-scanning',
+          },
+          collapsed: false,
+          items: [
+            "sdks/android/label-capture/intro",
+            "sdks/android/label-capture/get-started",
+            "sdks/android/label-capture/label-definitions",
+            "sdks/android/label-capture/advanced",
           ],
         },
         {
@@ -511,6 +534,11 @@ const sidebars: SidebarsConfig = {
           type: "doc",
           id: "sdks/android/barcode-capture/configure-barcode-symbologies",
           label: "Configure Barcode Symbologies",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
         }, 
       ],
     },
@@ -590,7 +618,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/web/add-sdk',
-        'sdks/web/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-web-samples",
+        },
       ],
     },
     {
@@ -660,16 +692,21 @@ const sidebars: SidebarsConfig = {
                 "sdks/web/matrixscan-find/advanced",
               ],
             },
-            {
-              type: "category",
-              label: "Smart Label Capture",
-              items: [
-                "sdks/web/label-capture/intro",
-                "sdks/web/label-capture/get-started",
-                "sdks/web/label-capture/label-definitions",
-                "sdks/web/label-capture/advanced",
-              ],
-            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/web/label-scanning',
+          },
+          collapsed: false,
+          items: [
+            "sdks/web/label-capture/intro",
+            "sdks/web/label-capture/get-started",
+            "sdks/web/label-capture/label-definitions",
+            "sdks/web/label-capture/advanced",
           ],
         },
         {
@@ -690,6 +727,11 @@ const sidebars: SidebarsConfig = {
           type: "doc",
           id: "sdks/web/barcode-capture/configure-barcode-symbologies",
           label: "Configure Barcode Symbologies",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
         }, 
       ],
     },
@@ -769,7 +811,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/cordova/add-sdk',
-        'sdks/cordova/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-cordova-samples",
+        },
       ],
     },
     {
@@ -884,6 +930,11 @@ const sidebars: SidebarsConfig = {
           type: "doc",
           id: "sdks/cordova/barcode-capture/configure-barcode-symbologies",
           label: "Configure Barcode Symbologies",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
         }, 
       ],
     },
@@ -958,7 +1009,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/react-native/add-sdk',
-        'sdks/react-native/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-react-native-samples",
+        },
       ],
     },
     {
@@ -1054,16 +1109,21 @@ const sidebars: SidebarsConfig = {
                 "sdks/react-native/matrixscan-pick/advanced",
               ],
             },
-            {
-              type: "category",
-              label: "Smart Label Capture",
-              items: [
-                "sdks/react-native/label-capture/intro",
-                "sdks/react-native/label-capture/get-started",
-                "sdks/react-native/label-capture/label-definitions",
-                "sdks/react-native/label-capture/advanced",
-              ],
-            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/react-native/label-scanning',
+          },
+          collapsed: false,
+          items: [
+            "sdks/react-native/label-capture/intro",
+            "sdks/react-native/label-capture/get-started",
+            "sdks/react-native/label-capture/label-definitions",
+            "sdks/react-native/label-capture/advanced",
           ],
         },
         {
@@ -1091,6 +1151,11 @@ const sidebars: SidebarsConfig = {
           type: "doc",
           id: "sdks/react-native/barcode-capture/configure-barcode-symbologies",
           label: "Configure Barcode Symbologies",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
         }, 
       ],
     },
@@ -1170,7 +1235,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/flutter/add-sdk',
-        'sdks/flutter/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-flutter-samples",
+        },
       ],
     },
     {
@@ -1266,16 +1335,21 @@ const sidebars: SidebarsConfig = {
                 "sdks/flutter/matrixscan-pick/advanced",
               ],
             },
-            {
-              type: "category",
-              label: "Smart Label Capture",
-              items: [
-                "sdks/flutter/label-capture/intro",
-                "sdks/flutter/label-capture/get-started",
-                "sdks/flutter/label-capture/label-definitions",
-                "sdks/flutter/label-capture/advanced",
-              ],
-            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/flutter/label-scanning',
+          },
+          collapsed: false,
+          items: [
+            "sdks/flutter/label-capture/intro",
+            "sdks/flutter/label-capture/get-started",
+            "sdks/flutter/label-capture/label-definitions",
+            "sdks/flutter/label-capture/advanced",
           ],
         },
         {
@@ -1296,6 +1370,11 @@ const sidebars: SidebarsConfig = {
           type: "doc",
           id: "sdks/flutter/barcode-capture/configure-barcode-symbologies",
           label: "Configure Barcode Symbologies",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
         }, 
       ],
     },
@@ -1375,7 +1454,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/capacitor/add-sdk',
-        'sdks/capacitor/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-capacitor-samples",
+        },
       ],
     },
     {
@@ -1463,16 +1546,21 @@ const sidebars: SidebarsConfig = {
                 "sdks/capacitor/matrixscan-pick/advanced",
               ],
             },
-            {
-              type: "category",
-              label: "Smart Label Capture",
-              items: [
-                "sdks/capacitor/label-capture/intro",
-                "sdks/capacitor/label-capture/get-started",
-                "sdks/capacitor/label-capture/label-definitions",
-                "sdks/capacitor/label-capture/advanced",
-              ],
-            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/capacitor/label-scanning',
+          },
+          collapsed: false,
+          items: [
+            "sdks/capacitor/label-capture/intro",
+            "sdks/capacitor/label-capture/get-started",
+            "sdks/capacitor/label-capture/label-definitions",
+            "sdks/capacitor/label-capture/advanced",
           ],
         },
         {
@@ -1500,6 +1588,11 @@ const sidebars: SidebarsConfig = {
           type: "doc",
           id: "sdks/capacitor/barcode-capture/configure-barcode-symbologies",
           label: "Configure Barcode Symbologies",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
         }, 
       ],
     },
@@ -1574,7 +1667,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/titanium/add-sdk',
-        'sdks/titanium/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-titanium-samples",
+        },
       ],
     },
     {
@@ -1596,6 +1693,11 @@ const sidebars: SidebarsConfig = {
               ],
             },
           ],
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
         },
       ],
     },
@@ -1643,7 +1745,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/net/ios/add-sdk',
-        'sdks/net/ios/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-dotnet-samples/tree/master",
+        },
       ],
     },
     {
@@ -1759,6 +1865,11 @@ const sidebars: SidebarsConfig = {
           type: "doc",
           id: "sdks/net/ios/barcode-capture/configure-barcode-symbologies",
           label: "Configure Barcode Symbologies",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
         }, 
       ],
     },
@@ -1833,7 +1944,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/net/android/add-sdk',
-        'sdks/net/android/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-dotnet-samples/tree/master",
+        },
       ],
     },
     {
@@ -1949,6 +2064,11 @@ const sidebars: SidebarsConfig = {
           type: "doc",
           id: "sdks/net/android/barcode-capture/configure-barcode-symbologies",
           label: "Configure Barcode Symbologies",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
         }, 
       ],
     },
@@ -2027,6 +2147,11 @@ const sidebars: SidebarsConfig = {
         "sdks/linux/barcode-capture/configure-with-json",
         "sdks/linux/barcode-capture/add-on-codes",
         "sdks/linux/barcode-capture/composite-codes",
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
+        },
       ],
     },
     {
