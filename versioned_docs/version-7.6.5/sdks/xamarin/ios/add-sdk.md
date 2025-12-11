@@ -59,7 +59,7 @@ You can safely remove `Scandit.DataCapture.Barcode.Xamarin`, `Scandit.DataCaptur
 
 ### Camera Permissions
 
-When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. On Xamarin.Android, you have to request camera permissions in your own application before starting scanning. To see how you can achieve this, take a look at our [samples](/sdks/xamarin/ios/samples.md).
+When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. On Xamarin.Android, you have to request camera permissions in your own application before starting scanning. To see how you can achieve this, take a look at our [samples](https://github.com/Scandit/datacapture-xamarin-samples).
 
 import OSSLicense from '../../../partials/_third-party-licenses-csharp.mdx';
 

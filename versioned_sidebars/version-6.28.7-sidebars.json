@@ -1414,7 +1414,11 @@
           "href": "https://support.scandit.com/hc/en-us"
         },
         "sdks/xamarin/ios/add-sdk",
-        "sdks/xamarin/ios/samples"
+        {
+          "type": "link",
+          "label": "Samples",
+          "href": "https://github.com/Scandit/datacapture-xamarin-samples"
+        }
       ]
     },
     {
@@ -1584,7 +1588,11 @@
           "href": "https://support.scandit.com/hc/en-us"
         },
         "sdks/xamarin/android/add-sdk",
-        "sdks/xamarin/android/samples"
+        {
+          "type": "link",
+          "label": "Samples",
+          "href": "https://github.com/Scandit/datacapture-xamarin-samples"
+        }
       ]
     },
     {
@@ -1754,7 +1762,11 @@
           "href": "https://support.scandit.com/hc/en-us"
         },
         "sdks/xamarin/forms/add-sdk",
-        "sdks/xamarin/forms/samples"
+        {
+          "type": "link",
+          "label": "Samples",
+          "href": "https://github.com/Scandit/datacapture-xamarin-samples"
+        }
       ]
     },
     {
