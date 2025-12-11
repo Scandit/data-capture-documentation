@@ -84,7 +84,7 @@ const config: Config = {
             from: ['/data-capture-sdk/ios', '/data-capture-sdk/ios/add-sdk.html'],
           },
           {
-            to: '/sdks/ios/samples',
+            to: 'https://github.com/Scandit/datacapture-ios-samples',
             from: '/data-capture-sdk/ios/samples/run-samples.html'
           },
           {
@@ -92,7 +92,7 @@ const config: Config = {
             from: ['/data-capture-sdk/android', '/data-capture-sdk/android/add-sdk.html'],
           },
           {
-            to: '/sdks/android/samples',
+            to: 'https://github.com/Scandit/datacapture-android-samples',
             from: '/data-capture-sdk/android/samples/run-samples.html'
           },
           {
@@ -100,7 +100,7 @@ const config: Config = {
             from: ['/data-capture-sdk/web', '/data-capture-sdk/web/add-sdk.html'],
           },
           {
-            to: '/sdks/web/samples',
+            to: 'https://github.com/Scandit/datacapture-web-samples',
             from: '/data-capture-sdk/web/samples/run-samples.html'
           },
           {
@@ -108,7 +108,7 @@ const config: Config = {
             from: ['/data-capture-sdk/cordova', '/data-capture-sdk/cordova/add-sdk.html'],
           },
           {
-            to: '/sdks/cordova/samples',
+            to: 'https://github.com/Scandit/datacapture-cordova-samples',
             from: '/data-capture-sdk/cordova/samples/run-samples.html'
           },
           {
@@ -116,7 +116,7 @@ const config: Config = {
             from: ['/data-capture-sdk/react-native', '/data-capture-sdk/react-native/add-sdk.html'],
           },
           {
-            to: '/sdks/react-native/samples',
+            to: 'https://github.com/Scandit/datacapture-react-native-samples',
             from: '/data-capture-sdk/react-native/samples/run-samples.html'
           },
           {
@@ -124,7 +124,7 @@ const config: Config = {
             from: ['/data-capture-sdk/flutter', '/data-capture-sdk/flutter/add-sdk.html'],
           },
           {
-            to: '/sdks/flutter/samples',
+            to: 'https://github.com/Scandit/datacapture-flutter-samples',
             from: '/data-capture-sdk/flutter/samples/run-samples.html'
           },
           {
@@ -132,7 +132,7 @@ const config: Config = {
             from: ['/data-capture-sdk/capacitor', '/data-capture-sdk/capacitor/add-sdk.html'],
           },
           {
-            to: '/sdks/capacitor/samples',
+            to: 'https://github.com/Scandit/datacapture-capacitor-samples',
             from: '/data-capture-sdk/capacitor/samples/run-samples.html'
           },
           {
@@ -140,7 +140,7 @@ const config: Config = {
             from: ['/data-capture-sdk/titanium', '/data-capture-sdk/titanium/add-sdk.html'],
           },
           {
-            to: '/sdks/titanium/samples',
+            to: 'https://github.com/Scandit/datacapture-titanium-samples',
             from: '/data-capture-sdk/titanium/samples/run-samples.html'
           },
           {
@@ -162,7 +162,7 @@ const config: Config = {
             from: ['/data-capture-sdk/dotnet.ios', '/data-capture-sdk/dotnet.ios/add-sdk.html'],
           },
           {
-            to: '/sdks/net/ios/samples',
+            to: 'https://github.com/Scandit/datacapture-dotnet-samples/tree/master',
             from: '/data-capture-sdk/dotnet.ios/samples/run-samples.html'
           },
           {
@@ -170,7 +170,7 @@ const config: Config = {
             from: ['/data-capture-sdk/dotnet.android', '/data-capture-sdk/dotnet.android/add-sdk.html'],
           },
           {
-            to: '/sdks/net/android/samples',
+            to: 'https://github.com/Scandit/datacapture-dotnet-samples/tree/master',
             from: '/data-capture-sdk/dotnet.android/samples/run-samples.html'
           },
           {

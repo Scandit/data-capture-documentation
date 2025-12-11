@@ -156,7 +156,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/ios/add-sdk',
-        'sdks/ios/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-ios-samples",
+        },
       ],
     },
     {
@@ -387,7 +391,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/android/add-sdk',
-        'sdks/android/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-android-samples",
+        },
       ],
     },
     {
@@ -610,7 +618,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/web/add-sdk',
-        'sdks/web/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-web-samples",
+        },
       ],
     },
     {
@@ -799,7 +811,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/cordova/add-sdk',
-        'sdks/cordova/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-cordova-samples",
+        },
       ],
     },
     {
@@ -993,7 +1009,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/react-native/add-sdk',
-        'sdks/react-native/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-react-native-samples",
+        },
       ],
     },
     {
@@ -1215,7 +1235,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/flutter/add-sdk',
-        'sdks/flutter/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-flutter-samples",
+        },
       ],
     },
     {
@@ -1430,7 +1454,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/capacitor/add-sdk',
-        'sdks/capacitor/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-capacitor-samples",
+        },
       ],
     },
     {
@@ -1639,7 +1667,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/titanium/add-sdk',
-        'sdks/titanium/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-titanium-samples",
+        },
       ],
     },
     {
@@ -1713,7 +1745,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/net/ios/add-sdk',
-        'sdks/net/ios/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-dotnet-samples/tree/master",
+        },
       ],
     },
     {
@@ -1908,7 +1944,11 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/net/android/add-sdk',
-        'sdks/net/android/samples',
+        {
+          type: "link",
+          label: "Samples",
+          href: "https://github.com/Scandit/datacapture-dotnet-samples/tree/master",
+        },
       ],
     },
     {
