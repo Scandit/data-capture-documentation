@@ -205,7 +205,7 @@ Typically, this is done once the view becomes active and the user granted permis
 await camera.switchToDesiredState(FrameSourceState.On);
 ```
 
-Please refer to the available [sample apps](/sdks/web/samples.md) for detailed examples of camera permission handling and view lifecycle management.
+Please refer to the available [sample apps](https://github.com/Scandit/datacapture-web-samples) for detailed examples of camera permission handling and view lifecycle management.
 
 ## Provide Feedback
 

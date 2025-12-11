@@ -75,7 +75,7 @@ Check [the official `<provider>` documentation](https://developer.android.com/gu
 
 ### Camera Permissions
 
-When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. On .NET for Android or MAUI, you have to request camera permissions in your own application before starting scanning. To see how you can achieve this, take a look at our [samples](./samples.md).
+When using the Scandit Data Capture SDK you will want to set the camera as the frame source for various capture modes. On .NET for Android or MAUI, you have to request camera permissions in your own application before starting scanning. To see how you can achieve this, take a look at our [samples](https://github.com/Scandit/datacapture-dotnet-samples/tree/master).
 
 import OSSLicense from '../../../partials/_third-party-licenses-csharp.mdx';
 

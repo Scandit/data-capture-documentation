@@ -447,7 +447,7 @@ No updates for this framework in this release.
 * MatrixScan Count now includes the option to set the text hint when clear screen is pressed.
 * QuadHD (Quad High Definition) is now a supported resolution. QHD is a resolution of `2560×1440` pixels, fitting between standard HD (`1920x1080`) and 4K(`3840×2160` pixels).
 * Added the `isPulsing` property to circle highlights in MatrixScan AR, enabling a pulsing animation effect.
-* A new [sample application](/sdks/android/samples.md) is available for [tote mapping in MatrixScan Count](/sdks/android/matrixscan-count/advanced/#tote-mapping).
+* A new [sample application](https://github.com/Scandit/datacapture-android-samples) is available for [tote mapping in MatrixScan Count](/sdks/android/matrixscan-count/advanced/#tote-mapping).
 
 #### ID
 
@@ -655,7 +655,7 @@ SparkScan, our flagship barcode scanning product, embodies the full potential of
 
 #### Smart Label Capture
 
-* A new [sample application](/sdks/android/samples.md) has been created to demonstrate Smart Label Capture functionality.
+* A new [sample application](https://github.com/Scandit/datacapture-android-samples) has been created to demonstrate Smart Label Capture functionality.
 
 #### ID
 

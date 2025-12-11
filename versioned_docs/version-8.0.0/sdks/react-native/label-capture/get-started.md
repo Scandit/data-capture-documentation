@@ -261,7 +261,7 @@ Typically, this is done once the view becomes active and the user granted permis
 camera.switchToDesiredState(FrameSourceState.ON);
 ```
 
-Please refer to the available [sample apps](/sdks/react-native/samples.md) for detailed examples of camera permission handling and view lifecycle management.
+Please refer to the available [sample apps](https://github.com/Scandit/datacapture-react-native-samples) for detailed examples of camera permission handling and view lifecycle management.
 
 ## Provide Feedback
 

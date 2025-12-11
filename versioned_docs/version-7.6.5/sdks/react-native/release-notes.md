@@ -526,7 +526,7 @@ No updates for this framework in this release.
 #### Label Capture
 
 * To simplify working with dates in Smart Label Capture (e.g., capturing an expiry date), we’ve added native support for dates in `LabelField`. Now, if a field contains a date you can retrieve it as a date object using `LabelField.asDate()`.
-* A new [sample application](/sdks/react-native/samples.md) has been created to demonstrate Smart Label Capture functionality.
+* A new [sample application](https://github.com/Scandit/datacapture-react-native-samples) has been created to demonstrate Smart Label Capture functionality.
 
 #### Core
 
