@@ -2,7 +2,6 @@
 description: 'Integrate barcode scanning directly into Safari on iOS with the Scandit Express extension.'
 sidebar_label: 'Safari Extension'
 displayed_sidebar: expressSidebar
-tags: [express]
 keywords:
   - express
 ---

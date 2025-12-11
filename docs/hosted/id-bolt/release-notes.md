@@ -3,7 +3,6 @@ description: "Release notes and updates for ID Bolt."
 toc_max_heading_level: 3
 displayed_sidebar: boltSidebar
 framework: bolt
-tags: [bolt]
 keywords:
   - bolt
 hide_title: true

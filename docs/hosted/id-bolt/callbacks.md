@@ -6,7 +6,6 @@ title: 'Callbacks'
 displayed_sidebar: boltSidebar
 toc_max_heading_level: 4
 framework: bolt
-tags: [bolt]
 keywords:
   - bolt
   - callbacks

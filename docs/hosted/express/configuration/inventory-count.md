@@ -1,7 +1,6 @@
 ---
 description: "Learn how to use the Inventory Count feature in Scandit Express."
 framework: express
-tags: [express]
 keywords:
   - express
 ---
