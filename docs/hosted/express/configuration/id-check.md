@@ -2,7 +2,6 @@
 description: 'Configuration options for the ID Check workflow in Scandit Express.'
 sidebar_label: 'ID Check'
 displayed_sidebar: expressSidebar
-tags: [express]
 keywords:
   - express
 ---

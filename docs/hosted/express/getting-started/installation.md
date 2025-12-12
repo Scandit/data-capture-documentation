@@ -4,7 +4,6 @@ sidebar_label: 'Installation'
 displayed_sidebar: expressSidebar
 sidebar_position: 1
 framework: express
-tags: [express]
 keywords:
   - express
 ---

@@ -3,7 +3,6 @@ description: "There are many configuration options and functionalities available
 
 toc_max_heading_level: 4
 framework: express
-tags: [express]
 keywords:
   - express
 ---

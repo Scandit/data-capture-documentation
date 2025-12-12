@@ -6,7 +6,6 @@ title: 'Getting Started'
 hide_title: false
 displayed_sidebar: boltSidebar
 framework: bolt
-tags: [bolt]
 keywords:
   - bolt
 ---

@@ -2,7 +2,6 @@
 description: 'Configuration options for the Markdown workflow in Scandit Express.'
 sidebar_label: 'Markdown Configuration'
 displayed_sidebar: expressSidebar
-tags: [express]
 keywords:
   - express
 ---
