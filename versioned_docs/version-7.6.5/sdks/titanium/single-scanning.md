@@ -1,5 +1,6 @@
 ---
-description: "import SingleScanning from '../../partials/_single-scanning.mdx';                                                                                                "
+description: "import SingleScanning from '../../partials/_single-scanning.mdx';
+                                               "
 
 toc_max_heading_level: 4
 pagination_prev: null
@@ -11,6 +12,10 @@ keywords:
 ---
 
 # Single Scanning
+
+:::note
+SparkScan is not available for Titanium.
+:::
 
 import SingleScanning from '../../partials/_single-scanning.mdx';
 

@@ -10,7 +10,10 @@ keywords:
 
 # Single Scanning
 
+:::note
+SparkScan is not available for Linux.
+:::
+
 import SingleScanning from '../../partials/_single-scanning.mdx';
 
 <SingleScanning/>
-
