@@ -92,9 +92,10 @@ For a rejected document, a [RejectionReason](https://docs.scandit.com/data-captu
 
 *ID Validate* is a fake ID detection software. It currently supports documents that follow the Driver License/Identification Card specification by the American Association of Motor Vehicle Administrators (AAMVA).
 
-The following verifier is available:
+Fake ID detection can be performed automatically using the following settings:
 
-* [AAMVABarcodeVerifier](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/aamva-barcode-verifier.html#class-scandit.datacapture.id.AamvaBarcodeVerifier): Validates the authenticity of the document by scanning the barcode on the back.
+* [IdCaptureSettings.rejectForgedAamvaBarcodes](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectForgedAamvaBarcodes): Automatically rejects documents whose AAMVA barcode fails authenticity validation.
+* [IdCaptureSettings.rejectInconsistentData](https://docs.scandit.com/data-capture-sdk/flutter/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectInconsistentData): Automatically rejects documents whose human‑readable data does not match the data encoded in the barcode or MRZ.
 
 To enable ID validation for your subscription, please reach out to [Scandit Support](mailto:support@scandit.com).
 
