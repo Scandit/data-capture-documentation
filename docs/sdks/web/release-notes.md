@@ -10,9 +10,9 @@ keywords:
   - web
 ---
 
-## 8.1.0-beta.1
+## 8.1.0
 
-**Released**: December 4, 2025
+**Released**: December 17, 2025
 
 ### New Features
 
@@ -49,8 +49,7 @@ keywords:
 
 #### Smart Label Capture
 
-* Improved the OCR model for Label Capture
-* The Receipt Scanning API (in beta) has been simplified:
+* Incremental improvements in accuracy across all use-cases for the OCR model powering Smart Label Capture.
 
 ### Behavioral Changes
 
@@ -66,8 +65,9 @@ keywords:
 
 #### Barcode
 
-* Fixed a rare crash in the EAN/UPC reader
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
 * Fixed an issue that caused continuous scanning to stop working when rotating the device
+* Fixed an issue where FrameData was not usable for tracking modes
 
 #### Core
 

@@ -10,9 +10,9 @@ keywords:
   - react
 ---
 
-## 8.1.0-beta.1
+## 8.1.0
 
-**Released**: December 4, 2025
+**Released**: December 17, 2025
 
 ### New Features
 
@@ -42,7 +42,7 @@ keywords:
 
 #### Smart Label Capture
 
-* Improved the OCR model for Label Capture
+* Incremental improvements in accuracy across all use-cases for the OCR model powering Smart Label Capture.
 
 ### Behavioral Changes
 
@@ -58,18 +58,24 @@ keywords:
 
 #### Barcode
 
-* Fixed a rare crash in the EAN/UPC reader
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
 * Fixed a bug in the default color of BarcodeCapture highlights
 * Fixed an issue where popover annotations with HIGHLIGHT_TAP_AND_BARCODE_SCAN trigger could not be opened again
 * Fixed an issue in BarcodeSequence where camera would not be ON in portrait
 * Fixed an issue where SparkScan mini preview would sometimes stay in regular when entering target mode
 * Fixed the app becoming unresponsive after being in the background for extended periods
+* Added the `cameraStateOnStop` property to BarcodeFindView to optimize camera transitions when switching between modes
+* Fixed an issue where the successful notification in BarcodeFind was not displayed
 
 #### Id
 
 * Fixed an issue where front expiry date anonymization rectangle is erroneously drawn on front and back
 * Fixed a bug that prevented VizResult anonymization of the following fields: additionalAddressInformation, bloodType, employer, fathersName, issuingAuthority, maritalStatus, mothersName, placeOfBirth, profession, race, residentialStatus
 * Fixed a bug concerning return complete instead of cropped images on the back of EU driving licenses
+
+#### Smart Label Capture
+
+* Fixed an issue where LabelCapture fields would return default data in some frameworks
 
 #### Core
 

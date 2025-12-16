@@ -10,9 +10,9 @@ keywords:
   - ios
 ---
 
-## 8.1.0-beta.1
+## 8.1.0
 
-**Released**: December 4, 2025
+**Released**: December 17, 2025
 
 ### New Features
 
@@ -38,9 +38,6 @@ keywords:
 #### Smart Label Capture
 
 * It's now possible to use Swift's result builder pattern to build a `LabelDefinition`
-* Improved theSwift API. For example:
-  - `CustomBarcode(name: "barcode", symbologies: [NSNumber(value: Symbology.ean13UPCA.rawValue)])`
-  - now becomes `CustomBarcode(name: "barcode", symbologies: [.ean13UPCA])`
 
 #### Core
 
@@ -56,8 +53,10 @@ keywords:
 
 #### Smart Label Capture
 
-* Improved the OCR model for Label Capture
-* The Receipt Scanning API (in beta) has been simplified:
+* Incremental improvements in accuracy across all use-cases for the OCR model powering Smart Label Capture.
+* Some Label Capture API have been refined for Swift. For example:
+  - `CustomBarcode(name: "barcode", symbologies: [NSNumber(value: Symbology.ean13UPCA.rawValue)])`
+  - now becomes `CustomBarcode(name: "barcode", symbologies: [.ean13UPCA])`
 
 ### Behavioral Changes
 
@@ -73,7 +72,8 @@ keywords:
 
 #### Barcode
 
-* Fixed a rare crash in the EAN/UPC reader
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
+* Added the `cameraStateOnStop` property to BarcodeFindView to optimize camera transitions when switching between modes
 
 #### Id
 
