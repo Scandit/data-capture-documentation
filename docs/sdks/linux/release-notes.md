@@ -9,9 +9,9 @@ keywords:
   - linux
 ---
 
-## 8.1.0-beta.1
+## 8.1.0
 
-**Released**: December 4, 2025
+**Released**: December 17, 2025
 
 ### New Features
 
@@ -37,7 +37,7 @@ keywords:
 
 #### Barcode
 
-* Fixed a rare crash in the EAN/UPC reader
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
 
 ## 8.0.0
 
