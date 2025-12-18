@@ -46,10 +46,13 @@ In this example, we will scan VIZ documents, so we also need to set [IdCaptureLo
 import { DataCaptureContext } from "@scandit/web-datacapture-core";
 import { idCaptureLoader } from "@scandit/web-datacapture-id";
 
-const context = await DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --", {
- libraryLocation: "/self-hosted-sdc-lib/",
- moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
-});
+const context = await DataCaptureContext.forLicenseKey(
+  "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+  {
+    libraryLocation: "/self-hosted-sdc-lib/",
+    moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
+  }
+);
 ```
 
 :::tip
@@ -88,7 +91,7 @@ await view.setContext(context);
 
 ## Add the Camera
 
-You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/web/core/api/camera.html#class-scandit.datacapture.core.Camera 'Camera class'):
+You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/web/core/api/camera.html#class-scandit.datacapture.core.Camera "Camera class"):
 
 ```ts
 import { Camera } from "@scandit/web-datacapture-core";
@@ -113,14 +116,14 @@ By default, [anonymized data](./advanced.md#configure-data-anonymization) is not
 
 ```ts
 import {
- IdCapture,
- IdCaptureSettings,
- IdCard,
- Region,
- RegionSpecific,
- Passport,
- SingleSideScanner,
- FullDocumentScanner
+  IdCapture,
+  IdCaptureSettings,
+  IdCard,
+  Region,
+  RegionSpecific,
+  Passport,
+  SingleSideScanner,
+  FullDocumentScanner,
 } from "@scandit/web-datacapture-id";
 
 const settings = new IdCaptureSettings();
@@ -138,10 +141,14 @@ settings.rejectedDocuments.push(new Passport(Region.Cuba));
 // To scan only one-sided documents and a given zone:
 // Signature: SingleSideScanner(barcode: boolean, machineReadableZone boolean, visualInspectionZone: boolean)
 // This would only scan a single side document having an MRZ:
-settings.scanner = new IdCaptureScanner({ physicalDocument: new SingleSideScanner(true, false, false) });
+settings.scanner = new IdCaptureScanner({
+  physicalDocument: new SingleSideScanner(true, false, false),
+});
 
 // To scan both sides of the document:
-settings.scanner = new IdCaptureScanner({ physicalDocument: new FullDocumentScanner() });
+settings.scanner = new IdCaptureScanner({
+  physicalDocument: new FullDocumentScanner(),
+});
 ```
 
 Create a new ID Capture mode with the chosen settings:
@@ -158,12 +165,12 @@ To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/
 import { type CapturedId, RejectionReason } from "@scandit/web-datacapture-id";
 
 idCapture.addListener({
- didCaptureId: (capturedId: CapturedId) => {
-  // Success! Handle extracted data here.
- },
- didRejectId: (capturedId: CapturedId, reason: RejectionReason) => {
-  // Something went wrong. Inspect the reason to determine the follow-up action.
- }
+  didCaptureId: (capturedId: CapturedId) => {
+    // Success! Handle extracted data here.
+  },
+  didRejectId: (capturedId: CapturedId, reason: RejectionReason) => {
+    // Something went wrong. Inspect the reason to determine the follow-up action.
+  },
 });
 ```
 
@@ -181,17 +188,17 @@ On a successful scan you may read the extracted data from `capturedId`:
 
 ```ts
 didCaptureId: async (capturedId: CapturedId) => {
- // stop processing new frames, we have a result
- await idCapture.setEnabled(false);
+  // stop processing new frames, we have a result
+  await idCapture.setEnabled(false);
 
- const fullName = capturedId.fullName;
- const dateOfBirth = capturedId.dateOfBirth;
- const dateOfExpiry = capturedId.dateOfExpiry;
- const documentNumber = capturedId.documentNumber;
+  const fullName = capturedId.fullName;
+  const dateOfBirth = capturedId.dateOfBirth;
+  const dateOfExpiry = capturedId.dateOfExpiry;
+  const documentNumber = capturedId.documentNumber;
 
- // Process data:
- processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
-}
+  // Process data:
+  processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
+};
 ```
 
 :::tip
@@ -225,10 +232,7 @@ The overlay informs and guides the user during the scanning process. Create an i
 ```ts
 import { IdCaptureOverlay } from "@scandit/web-datacapture-id";
 
-const overlay = await IdCaptureOverlay.withIdCaptureForView(
- idCapture,
- view
-);
+const overlay = await IdCaptureOverlay.withIdCaptureForView(idCapture, view);
 ```
 
 The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
@@ -248,3 +252,91 @@ await camera.switchToDesiredState(FrameSourceState.On);
 ```
 
 You can also enable or disable IdCapture by using [setEnabled](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture.html#method-scandit.datacapture.id.IdCapture.SetEnabled) whenever you need to.
+
+## Complete IdCapture Example
+
+```js
+import {
+  Camera,
+  DataCaptureContext,
+  DataCaptureView,
+  FrameSourceState,
+} from "@scandit/web-datacapture-core";
+import {
+  IdCapture,
+  IdCaptureOverlay,
+  IdCaptureSettings,
+  IdCard,
+  Passport,
+  Region,
+  FullDocumentScanner,
+  IdCaptureScanner,
+  RejectionReason,
+  idCaptureLoader,
+} from "@scandit/web-datacapture-id";
+
+const context = await DataCaptureContext.forLicenseKey(
+  "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+  {
+    libraryLocation: "/self-hosted-sdc-lib/",
+    moduleLoaders: [idCaptureLoader({ enableVIZDocuments: true })],
+  }
+);
+
+const view = await DataCaptureView.forContext(context);
+view.connectToElement(document.body);
+
+const camera = Camera.pickBestGuess();
+await camera.applySettings(IdCapture.recommendedCameraSettings);
+await context.setFrameSource(camera);
+
+const settings = new IdCaptureSettings();
+settings.acceptedDocuments.push(new IdCard(Region.Any));
+settings.acceptedDocuments.push(new Passport(Region.Any));
+settings.scanner = new IdCaptureScanner({
+  physicalDocument: new FullDocumentScanner(),
+});
+
+const idCapture = await IdCapture.forContext(context, settings);
+
+idCapture.addListener({
+  didCaptureId: async (capturedId) => {
+    await idCapture.setEnabled(false);
+
+    console.log("Captured ID:", {
+      fullName: capturedId.fullName,
+      dateOfBirth: capturedId.dateOfBirth,
+      documentNumber: capturedId.documentNumber,
+      dateOfExpiry: capturedId.dateOfExpiry,
+    });
+  },
+  didRejectId: (capturedId, reason) => {
+    console.log("ID rejected:", reason);
+
+    if (reason === RejectionReason.Timeout) {
+      console.log("Scan timed out. Please try again.");
+    } else if (reason === RejectionReason.NotAcceptedDocumentType) {
+      console.log("Document type not accepted.");
+    }
+  },
+});
+
+const overlay = await IdCaptureOverlay.withIdCaptureForView(idCapture, view);
+
+async function mount() {
+  await camera.switchToDesiredState(FrameSourceState.On);
+  await idCapture.setEnabled(true);
+}
+
+async function unmount() {
+  await camera.switchToDesiredState(FrameSourceState.Off);
+  await idCapture.setEnabled(false);
+}
+
+mount().catch(async (error) => {
+  console.error(error);
+  await unmount();
+});
+```
+
+A more complete example can be found [here on StackBlitz](https://stackblitz.com/github/Scandit/datacapture-web-samples/tree/master/02_ID_Scanning_Samples/IdCaptureSimpleSample).
