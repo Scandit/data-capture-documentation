@@ -418,7 +418,6 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/android/sparkscan/intro",
                 "sdks/android/sparkscan/get-started",
-                "sdks/android/sparkscan/workflow-configuration",
                 "sdks/android/sparkscan/advanced",
               ],
             },
