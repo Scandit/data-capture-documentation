@@ -40,7 +40,7 @@ Each scanning mode can be configured to work with different scanning behaviors a
 
 ## Available Configurations
 
-The combination of scanning mode, scanning behavior, and preview behavior allows for flexible configurations to suit different scanning needs.
+This combination allows for flexible configurations to suit different scanning needs.
 
 ### Default Mode + Single Scan + Default Preview
 

@@ -48,7 +48,7 @@ If instead of tapping on the trigger button the user taps and holds it pressed, 
 
 The default workflow just described has been carefully designed as a result of extensive user testing and customer feedback from the field.
 
-But not all use-cases look the same, and your needs may differ for most users. That's why SparkScan comes with a set of options to configure the scanner and to best fit in the desired workflow. Check the [Configuring Workflow Options](./workflow-configuration.md) guide to discover more.
+But not all use-cases look the same, and your needs may differ for most users. That's why SparkScan comes with a set of options to configure the scanner and to best fit in the desired workflow. Check the [Workflow Options](./advanced.md#workflow-options) guide to discover more.
 
 ## Supported Symbologies
 
