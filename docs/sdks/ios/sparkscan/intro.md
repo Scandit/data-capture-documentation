@@ -23,57 +23,33 @@ Two main elements compose the UI:
 
 ![SparkScan UI](/img/sparkscan/features_web.png)
 
-- **Camera preview**: A small camera preview helps with aiming and shows scan feedback. When not in use, the camera preview is hidden.
-- **Trigger button**: A large-sized, transparent, floating button that users can drag to position it in the most ergonomic position. When not in use, the trigger button collapses to occupy less space.
+- **Camera preview**: A small camera preview that helps with aiming and shows scan feedback. When not in use, the camera preview is hidden. It can be expanded and hosts easy to access controls (zoom level, flash etc).
+- **Trigger button**: A large-sized, semi-transparent floating button that users can drag to position it in the most ergonomic position. When not in use, the trigger button collapses to occupy less space.
 
 There are additional UI elements available for displaying additional scanning modes, errors, or providing feedback to the user. These are described in the [Advanced](./advanced.md) section.
 
-## Workflow Options
-
-The workflow here is based on the default configuration of SparkScan, carefully picked as a result of extensive user testing and customer feedback from the field.
-
-But not all workflows look the same, and your needs may differ. That’s why SparkScan comes with a set of options to configure the scanner and to best fit in the desired workflow.
-
-Scanning modes:
-
-- **Default mode**: Ideal for close-range and fast paced scanning. This mode will display a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed.
-- **Target mode**: Ideal for scanning scenarios where precision is important. This mode will add an aimer to the preview, to precisely select the barcode to scan. This is useful when multiple barcodes are in view (e.g. long range scanning).
-
-:::tip
-Users can enable the target mode by toggling the dedicated icon in the setting toolbar, shown when [`SparkScanView.targetModeButtonVisible`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.TargetModeButtonVisible) is enabled.
-
-The Settings toolbar itself is only visible if at least one of the buttons is enabled.
-:::
-
-Scanning behaviors:
-
-- **Single scan**: Scan one barcode at a time. The user needs to trigger the scanner every time to scan a barcode. This allows for a more controlled scanning and lower battery consumption.
-- **Continuous scan**: Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.
-    - Users can enable continuous scanning by holding down the trigger button ([`SDCSparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)). This gesture can be disabled.
-    - Developers can show a dedicated setting in the toolbar to let the user enable continuous scan mode ([`SDCSparkScanView.scanningBehaviorButtonVisible`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.ScanningBehaviorButtonVisible)), which is hidden by default.
-
-Camera preview behaviors:
-
-- **Default**: Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.
-- **Persistent**: Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode.
-
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode ([SDCSparkScanViewSettings.defaultScanningMode](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode)).
-
 ## Workflow Description
 
-When SparkScan is started, the UI presents just the trigger button, collapsed on the side. To start scanning, the user can:
-- Swipe to open the button, then tap on it.
-- Tap on the collapsed trigger button.
+When SparkScan is started, the UI presents just the trigger button, collapsed. The user can move the trigger button by simply dragging it around: the position of the trigger button is remembered across sessions, so the user can place the button where it's the most comfortable to use.
+To start scanning, the user can simply tap on it.
 
-When the scanner is active the mini preview is shown. Depending on the scanning mode enabled, the workflow will behave differently:
+When the scanner is active, the mini preview is shown. The mini preview too can be placed anywhere in the view by simply pressing on it for a little while and then dragging it around. Also the position of the mini preview is remembered across sessions, so the user can place it where it prefers (e.g. not to cover an important information at the top of the app).
+
+In the default configuration:
 - Upon scan the user will receive audio/haptic feedback confirming the scan, and the mini preview will display the scanned barcode for a small amount of time before fading away.
-- Tapping on the trigger button will restart immediately the scanner.
+- Tapping on the trigger button or the mini preview will restart immediately the scanner.
 
-Upon completing the scanning process (or to interact with the customer app layer), the user can tap in any area outside the trigger button and the mini preview. This collapses the scanner button back to the side, going back to the initial state.
+Upon completing the scanning process (or to interact with the customer app layer), the user can tap in any area outside the trigger button and the mini preview. This collapses the scanner button, going back to the initial state.
+
+If instead of tapping on the trigger button the user taps and holds it pressed, he will be able to scan multiple barcodes in a row. The scanner will stop when the trigger button is released.
 
 <p align="center">
   <img src="/img/sparkscan/workflow-example.gif" alt="SparkScan Workflow" /><br></br>List building use case using SparkScan.
 </p>
+
+The default workflow just described has been carefully designed as a result of extensive user testing and customer feedback from the field.
+
+But not all use-cases look the same, and your needs may differ for most users. That's why SparkScan comes with a set of options to configure the scanner and to best fit in the desired workflow. Check the [Configuring Workflow Options](./workflow-configuration.md) guide to discover more.
 
 ## Supported Symbologies
 

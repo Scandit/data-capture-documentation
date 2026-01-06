@@ -2,9 +2,9 @@
 description: "SparkScan can be customized to fit a wide range of scanning workflows through the combination of **Scanning Mode**, **Scanning Behavior**, and **Preview Behavior**.                                                                             "
 
 title: Configuring Workflow Options
-framework: android
+framework: react
 keywords:
-  - android
+  - react
 ---
 
 # Configuring Scanning and Preview Behavior
@@ -25,7 +25,7 @@ Scanning modes:
 - **Target mode**: Ideal for scanning scenarios where precision is important. This mode will add an aimer to the preview, to precisely select the barcode to scan. This is useful when multiple barcodes are in view (e.g. long range scanning).
 
 :::tip
-Users can enable the target mode by toggling the dedicated icon in the setting toolbar, shown when [`SparkScanView.targetModeButtonVisible`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.TargetModeButtonVisible) is enabled.
+Users can enable the target mode by toggling the dedicated icon in the setting toolbar, shown when [`SparkScanView.targetModeButtonVisible`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.TargetModeButtonVisible) is enabled.
 
 The Settings toolbar itself is only visible if at least one of the buttons is enabled.
 :::
@@ -34,15 +34,15 @@ Scanning behaviors:
 
 - **Single scan**: Scan one barcode at a time. The user needs to trigger the scanner every time to scan a barcode. This allows for a more controlled scanning and lower battery consumption.
 - **Continuous scan**: Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.
-    - Users can enable continuous scanning by holding down the trigger button ([`SparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)). This gesture can be disabled.
-    - Developers can show a dedicated setting in the toolbar to let the user enable continuous scan mode ([`SparkScanView.scanningBehaviorButtonVisible`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.ScanningBehaviorButtonVisible)), which is hidden by default.
+    - Users can enable continuous scanning by holding down the trigger button ([`SparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)). This gesture can be disabled.
+    - Developers can show a dedicated setting in the toolbar to let the user enable continuous scan mode ([`SparkScanView.scanningBehaviorButtonVisible`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.ScanningBehaviorButtonVisible)), which is hidden by default.
 
 Camera preview behaviors:
 
 - **Default**: Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.
 - **Persistent**: Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode.
 
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode ([`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode)).
+Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode (SparkScanViewSettings.defaultScanningMode).
 
 ## Scanning Modes
 
@@ -77,83 +77,84 @@ The combination of scanning mode, scanning behavior, and preview behavior allows
 
 Ideal for basic, one-barcode-at-a-time scanning with minimal power usage.
 
-```kotlin
-val settings = SparkScanSettings()
-settings.scanningBehavior = ScanningBehavior.SINGLE
+```javascript
+const settings = new SparkScanSettings();
+settings.scanningBehavior = ScanningBehavior.Single;
 
-val sparkViewSettings = SparkScanViewSettings()
-sparkViewSettings.scanningMode = SparkScanScanningMode.DEFAULT
-sparkViewSettings.previewBehavior = PreviewBehavior.DEFAULT
+const sparkViewSettings = new SparkScanViewSettings();
+sparkViewSettings.scanningMode = SparkScanScanningMode.Default;
+sparkViewSettings.previewBehavior = PreviewBehavior.Default;
 
-val sparkView = SparkScanView(context, sparkViewSettings)
+const sparkView = new SparkScanView(sparkViewSettings);
 ```
 
 ### Default Mode + Single Scan + Persistent Preview
 
 Suitable for single scans where some visual context is needed between scans.
 
-```kotlin
-settings.scanningBehavior = ScanningBehavior.SINGLE
-sparkViewSettings.scanningMode = SparkScanScanningMode.DEFAULT
-sparkViewSettings.previewBehavior = PreviewBehavior.PERSISTENT
+```javascript
+settings.scanningBehavior = ScanningBehavior.Single;
+sparkViewSettings.scanningMode = SparkScanScanningMode.Default;
+sparkViewSettings.previewBehavior = PreviewBehavior.Persistent;
 ```
 
 ### Default Mode + Continuous Scan + Default Preview
 
 Best for high-speed, repetitive scanning tasks where interface clarity is still needed after scanning.
 
-```kotlin
-settings.scanningBehavior = ScanningBehavior.CONTINUOUS
-sparkViewSettings.scanningMode = SparkScanScanningMode.DEFAULT
-sparkViewSettings.previewBehavior = PreviewBehavior.DEFAULT
+```javascript
+settings.scanningBehavior = ScanningBehavior.Continuous;
+sparkViewSettings.scanningMode = SparkScanScanningMode.Default;
+sparkViewSettings.previewBehavior = PreviewBehavior.Default;
 ```
 
 ### Default Mode + Continuous Scan + Persistent Preview
 
 Good for rapid scanning when the user needs ongoing visual alignment.
 
-```kotlin
-settings.scanningBehavior = ScanningBehavior.CONTINUOUS
-sparkViewSettings.scanningMode = SparkScanScanningMode.DEFAULT
-sparkViewSettings.previewBehavior = PreviewBehavior.PERSISTENT
+```javascript
+settings.scanningBehavior = ScanningBehavior.Continuous;
+sparkViewSettings.scanningMode = SparkScanScanningMode.Default;
+sparkViewSettings.previewBehavior = PreviewBehavior.Persistent;
 ```
 
 ### Target Mode + Single Scan + Default Preview
 
 Useful for precision tasks with isolated barcode scanning and less frequent visual alignment.
 
-```kotlin
-settings.scanningBehavior = ScanningBehavior.SINGLE
-sparkViewSettings.scanningMode = SparkScanScanningMode.TARGET
-sparkViewSettings.previewBehavior = PreviewBehavior.DEFAULT
+```javascript
+settings.scanningBehavior = ScanningBehavior.Single;
+sparkViewSettings.scanningMode = SparkScanScanningMode.Target;
+sparkViewSettings.previewBehavior = PreviewBehavior.Default;
 ```
 
 ### Target Mode + Single Scan + Persistent Preview
 
 Ideal when barcodes are close together and must be carefully selected, even before activating scanning.
 
-```kotlin
-settings.scanningBehavior = ScanningBehavior.SINGLE
-sparkViewSettings.scanningMode = SparkScanScanningMode.TARGET
-sparkViewSettings.previewBehavior = PreviewBehavior.PERSISTENT
+```javascript
+settings.scanningBehavior = ScanningBehavior.Single;
+sparkViewSettings.scanningMode = SparkScanScanningMode.Target;
+sparkViewSettings.previewBehavior = PreviewBehavior.Persistent;
 ```
 
 ### Target Mode + Continuous Scan + Default Preview
 
 Enables high-speed scanning in cluttered barcode environments, with reduced visual distraction between scans.
 
-```kotlin
-settings.scanningBehavior = ScanningBehavior.CONTINUOUS
-sparkViewSettings.scanningMode = SparkScanScanningMode.TARGET
-sparkViewSettings.previewBehavior = PreviewBehavior.DEFAULT
+```javascript
+settings.scanningBehavior = ScanningBehavior.Continuous;
+sparkViewSettings.scanningMode = SparkScanScanningMode.Target;
+sparkViewSettings.previewBehavior = PreviewBehavior.Default;
 ```
 
 ### Target Mode + Continuous Scan + Persistent Preview
 
 Perfect for scanning many barcodes in busy layouts where visual alignment must be constant.
 
-```kotlin
-settings.scanningBehavior = ScanningBehavior.CONTINUOUS
-sparkViewSettings.scanningMode = SparkScanScanningMode.TARGET
-sparkViewSettings.previewBehavior = PreviewBehavior.PERSISTENT
+```javascript
+settings.scanningBehavior = ScanningBehavior.Continuous;
+sparkViewSettings.scanningMode = SparkScanScanningMode.Target;
+sparkViewSettings.previewBehavior = PreviewBehavior.Persistent;
 ```
+
