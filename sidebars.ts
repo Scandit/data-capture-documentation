@@ -184,7 +184,11 @@ const sidebars: SidebarsConfig = {
                 "sdks/ios/sparkscan/intro",
                 "sdks/ios/sparkscan/get-started",
                 "sdks/ios/sparkscan/get-started-with-swift-ui",
-                "sdks/ios/sparkscan/workflow-configuration",
+                {
+                  type: 'doc',
+                  id: "sdks/ios/sparkscan/workflow-configuration",
+                  label: "Workflow Options",
+                },
                 "sdks/ios/sparkscan/advanced",
               ],
             },
@@ -419,7 +423,11 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/android/sparkscan/intro",
                 "sdks/android/sparkscan/get-started",
-                "sdks/android/sparkscan/workflow-configuration",
+                {
+                  type: 'doc',
+                  id: "sdks/android/sparkscan/workflow-configuration",
+                  label: "Workflow Options",
+                },
                 "sdks/android/sparkscan/advanced",
               ],
             },
@@ -646,7 +654,11 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/web/sparkscan/intro",
                 "sdks/web/sparkscan/get-started",
-                "sdks/web/sparkscan/workflow-configuration",
+                {
+                  type: 'doc',
+                  id: "sdks/web/sparkscan/workflow-configuration",
+                  label: "Workflow Options",
+                },
                 "sdks/web/sparkscan/advanced",
               ],
             },
@@ -840,7 +852,11 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/cordova/sparkscan/intro",
                 "sdks/cordova/sparkscan/get-started",
-                "sdks/cordova/sparkscan/workflow-configuration",
+                {
+                  type: 'doc',
+                  id: "sdks/cordova/sparkscan/workflow-configuration",
+                  label: "Workflow Options",
+                },
                 "sdks/cordova/sparkscan/advanced",
               ],
             },
@@ -1039,7 +1055,11 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/react-native/sparkscan/intro",
                 "sdks/react-native/sparkscan/get-started",
-                "sdks/react-native/sparkscan/workflow-configuration",
+                {
+                  type: 'doc',
+                  id: "sdks/react-native/sparkscan/workflow-configuration",
+                  label: "Workflow Options",
+                },
                 "sdks/react-native/sparkscan/advanced",
               ],
             },
@@ -1266,7 +1286,11 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/flutter/sparkscan/intro",
                 "sdks/flutter/sparkscan/get-started",
-                "sdks/flutter/sparkscan/workflow-configuration",
+                {
+                  type: 'doc',
+                  id: "sdks/flutter/sparkscan/workflow-configuration",
+                  label: "Workflow Options",
+                },
                 "sdks/flutter/sparkscan/advanced",
               ],
             },
@@ -1486,7 +1510,11 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/capacitor/sparkscan/intro",
                 "sdks/capacitor/sparkscan/get-started",
-                "sdks/capacitor/sparkscan/workflow-configuration",
+                {
+                  type: 'doc',
+                  id: "sdks/capacitor/sparkscan/workflow-configuration",
+                  label: "Workflow Options",
+                },
                 "sdks/capacitor/sparkscan/advanced",
               ],
             },
@@ -1778,7 +1806,11 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/net/ios/sparkscan/intro",
                 "sdks/net/ios/sparkscan/get-started",
-                "sdks/net/ios/sparkscan/workflow-configuration",
+                {
+                  type: 'doc',
+                  id: "sdks/net/ios/sparkscan/workflow-configuration",
+                  label: "Workflow Options",
+                },
                 "sdks/net/ios/sparkscan/advanced",
               ],
             },
@@ -1978,7 +2010,11 @@ const sidebars: SidebarsConfig = {
               items: [
                 "sdks/net/android/sparkscan/intro",
                 "sdks/net/android/sparkscan/get-started",
-                "sdks/net/android/sparkscan/workflow-configuration",
+                {
+                  type: 'doc',
+                  id: "sdks/net/android/sparkscan/workflow-configuration",
+                  label: "Workflow Options",
+                },
                 "sdks/net/android/sparkscan/advanced",
               ],
             },
