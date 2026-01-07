@@ -177,15 +177,6 @@
                 "sdks/ios/barcode-capture/get-started",
                 "sdks/ios/barcode-capture/get-started-with-swift-ui"
               ]
-            },
-            {
-              "type": "category",
-              "label": "Barcode Selection",
-              "items": [
-                "sdks/ios/barcode-selection/intro",
-                "sdks/ios/barcode-selection/get-started",
-                "sdks/ios/barcode-selection/get-started-with-swift-ui"
-              ]
             }
           ]
         },
@@ -399,14 +390,6 @@
               "label": "Barcode Capture API",
               "items": [
                 "sdks/android/barcode-capture/get-started"
-              ]
-            },
-            {
-              "type": "category",
-              "label": "Barcode Selection",
-              "items": [
-                "sdks/android/barcode-selection/intro",
-                "sdks/android/barcode-selection/get-started"
               ]
             }
           ]
@@ -797,14 +780,6 @@
               "items": [
                 "sdks/cordova/barcode-capture/get-started"
               ]
-            },
-            {
-              "type": "category",
-              "label": "Barcode Selection",
-              "items": [
-                "sdks/cordova/barcode-selection/intro",
-                "sdks/cordova/barcode-selection/get-started"
-              ]
             }
           ]
         },
@@ -988,14 +963,6 @@
               "label": "Barcode Capture API",
               "items": [
                 "sdks/react-native/barcode-capture/get-started"
-              ]
-            },
-            {
-              "type": "category",
-              "label": "Barcode Selection",
-              "items": [
-                "sdks/react-native/barcode-selection/intro",
-                "sdks/react-native/barcode-selection/get-started"
               ]
             }
           ]
@@ -1204,14 +1171,6 @@
               "items": [
                 "sdks/flutter/barcode-capture/get-started"
               ]
-            },
-            {
-              "type": "category",
-              "label": "Barcode Selection",
-              "items": [
-                "sdks/flutter/barcode-selection/intro",
-                "sdks/flutter/barcode-selection/get-started"
-              ]
             }
           ]
         },
@@ -1411,14 +1370,6 @@
               "label": "Barcode Capture API",
               "items": [
                 "sdks/capacitor/barcode-capture/get-started"
-              ]
-            },
-            {
-              "type": "category",
-              "label": "Barcode Selection",
-              "items": [
-                "sdks/capacitor/barcode-selection/intro",
-                "sdks/capacitor/barcode-selection/get-started"
               ]
             }
           ]
@@ -1677,14 +1628,6 @@
               "items": [
                 "sdks/xamarin/ios/barcode-capture/get-started"
               ]
-            },
-            {
-              "type": "category",
-              "label": "Barcode Selection",
-              "items": [
-                "sdks/xamarin/ios/barcode-selection/intro",
-                "sdks/xamarin/ios/barcode-selection/get-started"
-              ]
             }
           ]
         },
@@ -1843,14 +1786,6 @@
               "label": "Barcode Capture API",
               "items": [
                 "sdks/xamarin/android/barcode-capture/get-started"
-              ]
-            },
-            {
-              "type": "category",
-              "label": "Barcode Selection",
-              "items": [
-                "sdks/xamarin/android/barcode-selection/intro",
-                "sdks/xamarin/android/barcode-selection/get-started"
               ]
             }
           ]
@@ -2011,14 +1946,6 @@
               "items": [
                 "sdks/xamarin/forms/barcode-capture/get-started"
               ]
-            },
-            {
-              "type": "category",
-              "label": "Barcode Selection",
-              "items": [
-                "sdks/xamarin/forms/barcode-selection/intro",
-                "sdks/xamarin/forms/barcode-selection/get-started"
-              ]
             }
           ]
         },
@@ -2177,14 +2104,6 @@
               "label": "Barcode Capture API",
               "items": [
                 "sdks/net/ios/barcode-capture/get-started"
-              ]
-            },
-            {
-              "type": "category",
-              "label": "Barcode Selection",
-              "items": [
-                "sdks/net/ios/barcode-selection/intro",
-                "sdks/net/ios/barcode-selection/get-started"
               ]
             }
           ]
@@ -2370,14 +2289,6 @@
               "label": "Barcode Capture API",
               "items": [
                 "sdks/net/android/barcode-capture/get-started"
-              ]
-            },
-            {
-              "type": "category",
-              "label": "Barcode Selection",
-              "items": [
-                "sdks/net/android/barcode-selection/intro",
-                "sdks/net/android/barcode-selection/get-started"
               ]
             }
           ]
