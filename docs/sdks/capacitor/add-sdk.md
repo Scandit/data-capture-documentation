@@ -13,10 +13,10 @@ This page describes how to integrate the Scandit Data Capture SDK into your Capa
 
 ## Prerequisites
 
-- Capacitor Version 5-6 [and other related tools and dependencies](https://capacitorjs.com/docs/getting-started).
+- Capacitor Version 5-7 [and other related tools and dependencies](https://capacitorjs.com/docs/getting-started).
 - A project with:
-  - minimum iOS deployment target of 14.0 or higher (15.0 or higher for ID Capture)
-  - an Android project with target SDK version 23 (Android 6, Marshmallow) or higher (version 24 or higher for ID Capture)
+  - minimum iOS deployment target of 15.0 or higher
+  - an Android project with target SDK version 24 (Android 7, Nougat) or higher
 - A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
 
 :::tip
