@@ -164,16 +164,6 @@ const sidebars: SidebarsConfig = {
           label: "Samples",
           href: "https://github.com/Scandit/datacapture-ios-samples",
         },
-        {
-          type: 'category',
-          label: 'Migration Guides',
-          collapsed: true,
-          items: [
-            'sdks/ios/migrate-7-to-8',
-            'sdks/ios/migrate-6-to-7',
-            'sdks/ios/migrate-5-to-6',
-          ]
-        },
       ],
     },
     {
@@ -391,6 +381,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/ios/migrate-7-to-8',
+        'sdks/ios/migrate-6-to-7',
+        'sdks/ios/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/ios/release-notes',
@@ -423,16 +423,6 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "Samples",
           href: "https://github.com/Scandit/datacapture-android-samples",
-        },
-        {
-          type: 'category',
-          label: 'Migration Guides',
-          collapsed: true,
-          items: [
-            'sdks/android/migrate-7-to-8',
-            'sdks/android/migrate-6-to-7',
-            'sdks/android/migrate-5-to-6',
-          ]
         },
       ],
     },
@@ -643,6 +633,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/android/migrate-7-to-8',
+        'sdks/android/migrate-6-to-7',
+        'sdks/android/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/android/release-notes',
@@ -675,16 +675,6 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "Samples",
           href: "https://github.com/Scandit/datacapture-web-samples",
-        },
-        {
-          type: 'category',
-          label: 'Migration Guides',
-          collapsed: true,
-          items: [
-            'sdks/web/migrate-7-to-8',
-            'sdks/web/migrate-6-to-7',
-            'sdks/web/migrate-5-to-6',
-          ]
         },
       ],
     },
@@ -870,6 +860,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/web/migrate-7-to-8',
+        'sdks/web/migrate-6-to-7',
+        'sdks/web/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/web/release-notes',
@@ -902,16 +902,6 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "Samples",
           href: "https://github.com/Scandit/datacapture-cordova-samples",
-        },
-        {
-          type: 'category',
-          label: 'Migration Guides',
-          collapsed: true,
-          items: [
-            'sdks/cordova/migrate-7-to-8',
-            'sdks/cordova/migrate-6-to-7',
-            'sdks/cordova/migrate-5-to-6',
-          ]
         },
       ],
     },
@@ -1094,6 +1084,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/cordova/migrate-7-to-8',
+        'sdks/cordova/migrate-6-to-7',
+        'sdks/cordova/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/cordova/release-notes',
@@ -1126,16 +1126,6 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "Samples",
           href: "https://github.com/Scandit/datacapture-react-native-samples",
-        },
-        {
-          type: 'category',
-          label: 'Migration Guides',
-          collapsed: true,
-          items: [
-            'sdks/react-native/migrate-7-to-8',
-            'sdks/react-native/migrate-6-to-7',
-            'sdks/react-native/migrate-5-to-6',
-          ]
         },
       ],
     },
@@ -1346,6 +1336,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/react-native/migrate-7-to-8',
+        'sdks/react-native/migrate-6-to-7',
+        'sdks/react-native/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/react-native/release-notes',
@@ -1378,16 +1378,6 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "Samples",
           href: "https://github.com/Scandit/datacapture-flutter-samples",
-        },
-        {
-          type: 'category',
-          label: 'Migration Guides',
-          collapsed: true,
-          items: [
-            'sdks/flutter/migrate-7-to-8',
-            'sdks/flutter/migrate-6-to-7',
-            'sdks/flutter/migrate-5-to-6',
-          ]
         },
       ],
     },
@@ -1591,6 +1581,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/flutter/migrate-7-to-8',
+        'sdks/flutter/migrate-6-to-7',
+        'sdks/flutter/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/flutter/release-notes',
@@ -1623,16 +1623,6 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "Samples",
           href: "https://github.com/Scandit/datacapture-capacitor-samples",
-        },
-        {
-          type: 'category',
-          label: 'Migration Guides',
-          collapsed: true,
-          items: [
-            'sdks/capacitor/migrate-7-to-8',
-            'sdks/capacitor/migrate-6-to-7',
-            'sdks/capacitor/migrate-5-to-6',
-          ]
         },
       ],
     },
@@ -1830,6 +1820,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/capacitor/migrate-7-to-8',
+        'sdks/capacitor/migrate-6-to-7',
+        'sdks/capacitor/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/capacitor/release-notes',
@@ -1862,16 +1862,6 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "Samples",
           href: "https://github.com/Scandit/datacapture-titanium-samples",
-        },
-        {
-          type: 'category',
-          label: 'Migration Guides',
-          collapsed: true,
-          items: [
-            'sdks/titanium/migrate-7-to-8',
-            'sdks/titanium/migrate-6-to-7',
-            'sdks/titanium/migrate-5-to-6',
-          ]
         },
       ],
     },
@@ -1938,6 +1928,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/titanium/migrate-7-to-8',
+        'sdks/titanium/migrate-6-to-7',
+        'sdks/titanium/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/titanium/release-notes',
@@ -1969,16 +1969,6 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "Samples",
           href: "https://github.com/Scandit/datacapture-dotnet-samples/tree/master",
-        },
-        {
-          type: 'category',
-          label: 'Migration Guides',
-          collapsed: true,
-          items: [
-            'sdks/net/ios/migrate-7-to-8',
-            'sdks/net/ios/migrate-6-to-7',
-            'sdks/net/ios/migrate-5-to-6',
-          ]
         },
       ],
     },
@@ -2162,6 +2152,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/net/ios/migrate-7-to-8',
+        'sdks/net/ios/migrate-6-to-7',
+        'sdks/net/ios/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/net/ios/release-notes',
@@ -2194,16 +2194,6 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "Samples",
           href: "https://github.com/Scandit/datacapture-dotnet-samples/tree/master",
-        },
-        {
-          type: 'category',
-          label: 'Migration Guides',
-          collapsed: true,
-          items: [
-            'sdks/net/android/migrate-7-to-8',
-            'sdks/net/android/migrate-6-to-7',
-            'sdks/net/android/migrate-5-to-6',
-          ]
         },
       ],
     },
@@ -2385,6 +2375,16 @@ const sidebars: SidebarsConfig = {
           href: "https://docs.scandit.com/data-capture-sdk/dotnet.android/genindex.html",
         },
       ],
+    },
+    {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/net/android/migrate-7-to-8',
+        'sdks/net/android/migrate-6-to-7',
+        'sdks/net/android/migrate-5-to-6',
+      ]
     },
     {
       type: 'doc',
