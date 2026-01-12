@@ -10,6 +10,10 @@ keywords:
 
 # Get Started
 
+:::warning
+We recommend using **SparkScan** or **Barcode Capture API** instead of Barcode Selection. With the new smart features, barcode selection in crowded environments is done without the need of a dedicated API. This API will be deprecated.
+:::
+
 In this guide you will learn step by step how to add barcode selection to your application. The general step are:
 
 - Create a new [data capture context](https://docs.scandit.com/data-capture-sdk/cordova/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) instance, initialized with your license key.
