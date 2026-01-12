@@ -208,6 +208,14 @@ const sidebars: SidebarsConfig = {
                 "sdks/ios/barcode-capture/get-started-with-swift-ui",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/ios/barcode-selection/intro",
+                "sdks/ios/barcode-selection/get-started",
+              ],
+            },
           ],
         },
         {
@@ -455,6 +463,14 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/android/barcode-capture/get-started",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/android/barcode-selection/intro",
+                "sdks/android/barcode-selection/get-started",
               ],
             },
           ],
@@ -918,6 +934,14 @@ const sidebars: SidebarsConfig = {
                 "sdks/cordova/barcode-capture/get-started",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/cordova/barcode-selection/intro",
+                "sdks/cordova/barcode-selection/get-started",
+              ],
+            },
           ],
         },
         {
@@ -1131,6 +1155,14 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/react-native/barcode-capture/get-started",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/react-native/barcode-selection/intro",
+                "sdks/react-native/barcode-selection/get-started",
               ],
             },
           ],
@@ -1376,6 +1408,14 @@ const sidebars: SidebarsConfig = {
                 "sdks/flutter/barcode-capture/get-started",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/flutter/barcode-selection/intro",
+                "sdks/flutter/barcode-selection/get-started",
+              ],
+            },
           ],
         },
         {
@@ -1610,6 +1650,14 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/capacitor/barcode-capture/get-started",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/capacitor/barcode-selection/intro",
+                "sdks/capacitor/barcode-selection/get-started",
               ],
             },
           ],
@@ -1949,6 +1997,14 @@ const sidebars: SidebarsConfig = {
                 "sdks/net/ios/barcode-capture/get-started",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/net/ios/barcode-selection/intro",
+                "sdks/net/ios/barcode-selection/get-started",
+              ],
+            },
           ],
         },
         {
@@ -2163,6 +2219,14 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/net/android/barcode-capture/get-started",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/net/android/barcode-selection/intro",
+                "sdks/net/android/barcode-selection/get-started",
               ],
             },
           ],

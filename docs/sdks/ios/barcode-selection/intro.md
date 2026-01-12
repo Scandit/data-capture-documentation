@@ -10,6 +10,10 @@ keywords:
 
 # About Barcode Selection
 
+:::warning
+We recommend using **SparkScan** or **Barcode Capture API** instead of Barcode Selection. With the new smart features, barcode selection in crowded environments is done without the need of a dedicated API. This API will be deprecated.
+:::
+
 Barcode Selection enables you to increase scanning accuracy and prevent users from scanning the wrong code in scenario where there are multiple barcodes present. This includes the following:
 
 - A crowded shelf where users want to scan the correct barcode to report stockouts or perform a cycle count.
