@@ -221,6 +221,47 @@ const config: Config = {
               '/data-capture-sdk/dotnet.ios/requirements.html/system-requirements',
               '/data-capture-sdk/dotnet.android/requirements.html/system-requirements'
             ],
+          },
+          // Redirect old root-level framework-agnostic pages to framework-specific ones (defaulting to web)
+          {
+            to: '/sdks/web/core-concepts/',
+            from: ['/core-concepts', '/core-concepts/'],
+          },
+          {
+            to: '/sdks/web/features-by-framework/',
+            from: ['/features-by-framework', '/features-by-framework/'],
+          },
+          {
+            to: '/sdks/web/system-requirements/',
+            from: ['/system-requirements', '/system-requirements/'],
+          },
+          {
+            to: '/sdks/web/barcode-symbologies/',
+            from: ['/barcode-symbologies', '/barcode-symbologies/'],
+          },
+          {
+            to: '/sdks/web/symbology-properties/',
+            from: ['/symbology-properties', '/symbology-properties/'],
+          },
+          {
+            to: '/sdks/web/extension-codes/',
+            from: ['/extension-codes', '/extension-codes/'],
+          },
+          {
+            to: '/sdks/web/scanning-composite-codes/',
+            from: ['/scanning-composite-codes', '/scanning-composite-codes/'],
+          },
+          {
+            to: '/sdks/web/migrate-7-to-8/',
+            from: ['/migrate-7-to-8', '/migrate-7-to-8/'],
+          },
+          {
+            to: '/sdks/web/migrate-6-to-7/',
+            from: ['/migrate-6-to-7', '/migrate-6-to-7/'],
+          },
+          {
+            to: '/sdks/web/migrate-5-to-6/',
+            from: ['/migrate-5-to-6', '/migrate-5-to-6/'],
           },     
       ],
     },
