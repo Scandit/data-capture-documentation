@@ -19,6 +19,7 @@ The Barcode Generator supports the following formats:
 * ITF
 * QR
 * DataMatrix
+* PDF417 (SDK version >= 8.2)
 
 ## Prerequisites
 
