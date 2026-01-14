@@ -82,6 +82,29 @@ keywords:
 * Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed a small memory leak that affected fresh install runs only
 
+## 8.0.1
+
+**Released**: January 14, 2026
+
+### New Features
+
+#### Barcode
+
+* Added, in `BarcodeAr`, a `BarcodeArFilter` interface to selectively control which barcodes are displayed in the AR overlay based on custom filtering logic. You can set a filter via `BarcodeAr.SetBarcodeFilter`.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue where the successful hint in BarcodeFind was not displayed
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
+
+#### Core
+
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+* Fixed a small memory leak that affected fresh install runs only
+
 ## 8.0.0
 
 **Released**: November 4, 2025

@@ -74,6 +74,20 @@ keywords:
 * Fixed a small memory leak that affected fresh install runs only
 * Overcome orientation change limitation in iOS PWAs when display mode is fullscreen or standalone
 
+## 8.0.1
+
+**Released**: January 14, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
+
+#### Core
+
+* Fixed a small memory leak that affected fresh install runs only
+
 ## 8.0.0
 
 **Released**: November 4, 2025

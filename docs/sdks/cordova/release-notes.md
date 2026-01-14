@@ -70,6 +70,24 @@ keywords:
 * Fixed a small memory leak that affected fresh install runs only
 * Fixed an issue where barcode scanning would permanently stop after the app returned from background, particularly when camera permission dialogs were shown during initialization
 
+## 8.0.1
+
+**Released**: January 14, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue where the successful hint in BarcodeFind was not displayed
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
+
+#### Core
+
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed an issue where the interface and video feed could have different visual orientations
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+* Fixed a small memory leak that affected fresh install runs only
+
 ## 8.0.0
 
 **Released**: November 4, 2025

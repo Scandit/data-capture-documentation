@@ -86,6 +86,32 @@ keywords:
 * Fixed a small memory leak that affected fresh install runs only
 * Fixed an issue where barcode scanning would permanently stop after the app returned from background, particularly when camera permission dialogs were shown during initialization
 
+## 8.0.1
+
+**Released**: January 14, 2026
+
+### New Features
+
+#### Barcode
+
+* Added, in `BarcodeAr`, a `BarcodeArFilter` interface to selectively control which barcodes are displayed in the AR overlay based on custom filtering logic. You can set a filter via `BarcodeAr.SetBarcodeFilter`.
+* Fixed an issue where the optional and location fields of BarcodeDefinition and TextDefinition could not be set with builder methods
+
+#### Id
+
+* Added IdCaptureLite to CocoaPods. It is identical to IdCapture but without the dependency on ScanditIDC. This reduces the app size for customers that do not require VIZ scanning capabilities
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
+
+#### Core
+
+* Fixed an issue where the interface and video feed could have different visual orientations
+* Fixed a small memory leak that affected fresh install runs only
+
 ## 8.0.0
 
 **Released**: November 4, 2025
