@@ -28,7 +28,7 @@ The UI workflow is designed to be as simple and ergonomic as possible, and inclu
 Upon completing the scanning process, if all items have been successfully scanned, you can advance the user to the next scan automatically. Next steps may be finalizing order receipt if all items are present, reviewing the scan list to identify items that shouldn’t be present, or moving on to the next order.
 
 :::note
-MatrixScan Count does not include a UI for reviewing the scan list; however a recommended UI for this process can be seen in our [Receiving Sample](../samples.md#receiving-1).
+MatrixScan Count does not include a UI for reviewing the scan list; however a recommended UI for this process can be seen in our [Receiving Sample](https://github.com/Scandit/datacapture-android-samples).
 :::
 
 MatrixScan Count is conformed through functionality provided by [BarcodeCount](https://docs.scandit.com/6.28/data-capture-sdk/android/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount).
