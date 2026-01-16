@@ -94,6 +94,16 @@ function DropdownNavbarItemDesktop({
     return currentPath.includes("/7.6.") || currentPath.includes("/6.28.");
   }, [currentPath]);
 
+  // Get the version from the current path for Xamarin links
+  const xamarinVersion = useMemo(() => {
+    if (!currentPath) return "/7.6.5";
+    if (currentPath.includes("/7.6.5")) return "/7.6.5";
+    if (currentPath.includes("/6.28.7")) return "/6.28.7";
+    if (currentPath.includes("/7.6.")) return "/7.6.5";
+    if (currentPath.includes("/6.28.")) return "/6.28.7";
+    return "/7.6.5"; // Default to 7.6.5 for Xamarin
+  }, [currentPath]);
+
   useEffect(() => {
     if (!currentPath) return;
     const possibleVersions = ["/next", "/6.28.7", "/7.6.5"];
@@ -180,21 +190,21 @@ function DropdownNavbarItemDesktop({
       type: "docsVersion",
       label: "Xamarin iOS",
       sidebarId: "xamarinIosSidebar",
-      to: `${linkVersion}/xamarin/ios${link}`,
+      to: `${xamarinVersion}/sdks/xamarin/ios${link}`,
       activeBasePath: "sdks/xamarin/ios/",
     },
     {
       type: "docsVersion",
       label: "Xamarin Android",
       sidebarId: "xamarinAndroidSidebar",
-      to: `${linkVersion}/xamarin/android${link}`,
+      to: `${xamarinVersion}/sdks/xamarin/android${link}`,
       activeBasePath: "sdks/xamarin/android/",
     },
     {
       type: "docsVersion",
       label: "Xamarin Forms",
       sidebarId: "xamarinFormsSidebar",
-      to: `${linkVersion}/xamarin/forms${link}`,
+      to: `${xamarinVersion}/sdks/xamarin/forms${link}`,
       activeBasePath: "sdks/xamarin/forms/",
     },
     {

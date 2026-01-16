@@ -15,7 +15,7 @@ The general steps are:
 
 - Include the ScanditBarcodeCapture library and its dependencies to your project, if any. See the [Installation guide](../add-sdk.md) for details.
 - Create a new [data capture context](#create-the-data-capture-context) instance, initialized with your license key.
-- Create a [barcode capture settings](#configure-the-barcode-scanning-behavior) and enable the [barcode symbologies](../../../barcode-symbologies) you want to read in your application.
+- Create a [barcode capture settings](#configure-the-barcode-scanning-behavior) and enable the [barcode symbologies](../barcode-symbologies.mdx) you want to read in your application.
 - Create a new [barcode capture mode](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance and initialize it with the settings created above.
 - Register a [barcode capture listener](#register-the-barcode-capture-listener) to receive scan events. Process the successful scans according to your application’s needs, e.g. by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
 - Obtain a [camera](#use-the-built-in-camera) instance and set it as the frame source on the data capture context.

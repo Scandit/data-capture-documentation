@@ -45,7 +45,7 @@ You will need to set `ScanIntention.MANUAL` to disable the smart feature complet
 
 **Note:** For intent anticipation only, `ScanIntention.SMART` (the default value in SDK 7.x) would be sufficient, but since SDK 8.1+ we introduced a new value that enhance the intent anticipation even more, addressing specifically environments with multiple barcodes placed closely together (check the next paragraph for more information).
 
-<ReactPlayer playing controls width='1200' url="/img/ai-powered-scanning/intention.mp4" />
+<ReactPlayer controls width='1200' url="/img/ai-powered-scanning/intention.mp4" />
 
 ## Selecting Barcodes in Dense Environments
 
@@ -84,7 +84,7 @@ You will need to set `ScanIntention.MANUAL` to disable the smart feature complet
 
 > **Note:** SparkScan is recommended for single scanning workflows as its UI is optimized to provide visual feedback and adapt dynamically to AI inputs.
 
-<ReactPlayer playing controls width='1200' url="/img/ai-powered-scanning/dense-selection.mp4" />
+<ReactPlayer controls width='1200' url="/img/ai-powered-scanning/dense-selection.mp4" />
 
 ## Scanning Damaged Barcodes
 
@@ -118,7 +118,7 @@ Support and configuration details vary by symbology and may evolve over time. Fo
 
 > **Note:** OCR Fallback is triggered automatically after approximately 1 second of unsuccessful barcode decoding while the device remains stationary and aimed at the code.
 
-<ReactPlayer playing controls width='1200' url="/img/ai-powered-scanning/ocr-fallback.mp4" />
+<ReactPlayer controls width='1200' url="/img/ai-powered-scanning/ocr-fallback.mp4" />
 
 ## Filtering Duplicate Scans
 
@@ -161,4 +161,4 @@ The feature is active when both of the following conditions are met:
 With this configuration, the scanner automatically distinguishes intentional duplicate scans from accidental re-scans based on user behavior and context.
 To revert to manual, time-based duplicate filtering, set `codeDuplicateFilter` to any value greater than `0`. This disables Smart Duplicate Filter and restores fixed timeout-based duplicate suppression.
 
-<ReactPlayer playing controls width='1200' url="/img/ai-powered-scanning/duplicate-filter.mp4" />
+<ReactPlayer controls width='1200' url="/img/ai-powered-scanning/duplicate-filter.mp4" />

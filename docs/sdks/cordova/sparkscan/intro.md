@@ -52,4 +52,4 @@ But not all use-cases look the same, and your needs may differ for most users. T
 
 ## Supported Symbologies
 
-SparkScan supports all of the major symbologies listed here: [Barcode Symbologies](../barcode-symbologies).
+SparkScan supports all of the major symbologies listed here: [Barcode Symbologies](../barcode-symbologies.mdx).

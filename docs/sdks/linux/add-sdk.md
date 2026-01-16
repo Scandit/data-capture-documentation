@@ -16,7 +16,7 @@ The Scandit Data Capture SDK for Linux is provided as a Debian package.
 
 Before you begin, make sure you have the following prerequisites in place:
 
-* Meet the [system requirements](../system-requirements#linux)
+* Meet the [system requirements](/sdks/web/system-requirements/#linux)
 * Download the Scandit SDK for Linux from the [Scandit dashboard](https://ssl.scandit.com/dashboard/sign-in)
 * Have a valid Scandit license key
 

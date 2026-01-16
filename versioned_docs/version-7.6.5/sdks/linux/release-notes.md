@@ -368,5 +368,3 @@ The C API has been cleaned up and streamlined. If you migrate your code from ver
 
 
 ## 6.28.7
-
-Find earlier versions in the [release notes section of version 6](/6.28.7/sdks/linux/release-notes)
