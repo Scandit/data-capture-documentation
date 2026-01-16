@@ -54,7 +54,7 @@ SparkScanViewSettings viewSettings = new SparkScanViewSettings();
 // setup the desired appearance settings by updating the fields in the object above
 ```
 
-See the [SparkScan Workflow Options](./intro.md#workflow-options) section for more information.
+See the [SparkScan Workflow Options](./advanced.md#workflow-options) section for more information.
 
 By adding a [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view.html), the scanning interface (camera preview and scanning UI elements) will be added automatically to your application.
 

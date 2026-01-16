@@ -90,7 +90,7 @@ Construct a new SparkScan view. The SparkScan view is automatically added to the
 SparkScanView sparkScanView = SparkScanView.newInstance(parentView, dataCaptureContext, sparkScan, viewSettings);
 ```
 
-See the [SparkScan Workflow Options](./intro.md#workflow-options) section for more information.
+See the [SparkScan Workflow Options](./advanced.md#workflow-options) section for more information.
 
 Additionally, make sure to call `sparkScanView.onPause()` and `sparkScanView.onResume()` in your Fragment/Activity `onPause` and `onResume` callbacks. You have to call these for the correct functioning of the `SparkScanView`.
 

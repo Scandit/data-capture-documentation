@@ -687,7 +687,7 @@ camera.switchToDesiredState(ScanditCore.FrameSourceState.Off);
 ## Barcode Scanner Changes
 
 * The default code duplicate filter has been changed from _500ms_ to _0ms_. This means that a barcode that gets scanned in two consecutive scans will get reported twice. When you pause/stop the scanning as soon as one code gets scanned, the code duplicate filtering setting does not affect you. However if you continue scanning further codes without pausing/stopping recognition, you may want to change the `barcode.BarcodeCaptureSettings.CodeDuplicateFilter` property back to _500ms_.
-* EAN13 and UPCA used to be separate symbologies in 5.x but have now been merged into one symbology called [`Ean13Upca`](/barcode-symbologies#european-article-number-ean).
+* EAN13 and UPCA used to be separate symbologies in 5.x but have now been merged into one symbology called [`Ean13Upca`](../barcode-symbologies#european-article-number-ean).
 * The leading zero of UPCA codes is no longer removed by default. If you rely on this behavior in your app, you can either remove the leading zero yourself, or enable the _remove_leading_upca_zero_ extension:
 
 <Tabs groupId="frameworks">
