@@ -195,6 +195,7 @@ const sidebars: SidebarsConfig = {
                 "sdks/ios/barcode-capture/get-started-with-swift-ui",
               ],
             },
+            "sdks/ios/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -419,6 +420,7 @@ const sidebars: SidebarsConfig = {
                 "sdks/android/barcode-capture/get-started",
               ],
             },
+            "sdks/android/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -637,6 +639,7 @@ const sidebars: SidebarsConfig = {
                 "sdks/web/barcode-capture/get-started",
               ],
             },
+            "sdks/web/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -830,6 +833,7 @@ const sidebars: SidebarsConfig = {
                 "sdks/cordova/barcode-capture/get-started",
               ],
             },
+            "sdks/cordova/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -1020,6 +1024,7 @@ const sidebars: SidebarsConfig = {
                 "sdks/react-native/barcode-capture/get-started",
               ],
             },
+            "sdks/react-native/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -1238,6 +1243,7 @@ const sidebars: SidebarsConfig = {
                 "sdks/flutter/barcode-capture/get-started",
               ],
             },
+            "sdks/flutter/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -1449,6 +1455,7 @@ const sidebars: SidebarsConfig = {
                 "sdks/capacitor/barcode-capture/get-started",
               ],
             },
+            "sdks/capacitor/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -1732,6 +1739,7 @@ const sidebars: SidebarsConfig = {
                 "sdks/net/ios/barcode-capture/get-started",
               ],
             },
+            "sdks/net/ios/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -1923,6 +1931,7 @@ const sidebars: SidebarsConfig = {
                 "sdks/net/android/barcode-capture/get-started",
               ],
             },
+            "sdks/net/android/ai-powered-barcode-scanning",
           ],
         },
         {
