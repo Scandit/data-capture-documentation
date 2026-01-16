@@ -2081,11 +2081,6 @@ const sidebars: SidebarsConfig = {
         "sdks/linux/barcode-capture/configure-with-json",
         "sdks/linux/barcode-capture/add-on-codes",
         "sdks/linux/barcode-capture/composite-codes",
-        {
-          type: "link",
-          label: "Scandit Express Documentation",
-          href: "https://docs.scandit.com/hosted/express/overview/",
-        },
       ],
     },
     {
