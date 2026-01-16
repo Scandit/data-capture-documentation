@@ -11,7 +11,7 @@ keywords:
 # Get Started
 
 :::warning
-We recommend using **SparkScan** or **Barcode Capture API** instead of Barcode Selection. With the new smart features, barcode selection in crowded environments is done without the need of a dedicated API. This API will be deprecated.
+We recommend using **SparkScan** or **Barcode Capture API** instead of Barcode Selection. With the new [AI-powered features](/sdks/android/ai-powered-barcode-scanning), barcode selection in crowded environments is done without the need of a dedicated API. This API will be deprecated.
 :::
 
 This page describes the steps to add Barcode Selection to your application.
