@@ -55,7 +55,7 @@ import CalculateSymbolCount from '../../../partials/configure-symbologies/_calcu
 
 Most barcodes are printed using dark ink on a bright background. Some symbologies allow the colors to be inverted and can also be printed using bright ink on a dark background.
 
-This is not possible for all symbologies as it could lead to false reads when the symbology is not designed for this use case. See [symbology properties](/symbology-properties.md) to learn which symbologies allow color inversion.
+This is not possible for all symbologies as it could lead to false reads when the symbology is not designed for this use case. See [symbology properties](../../symbology-properties) to learn which symbologies allow color inversion.
 
 When you enable a symbology as described above, only dark-on-bright codes are enabled. If you also want to read bright-on-dark codes, color-inverted reading for that symbology must be enabled ( `SymbologySettings.isColorInvertedEnabled`).
 
@@ -71,7 +71,7 @@ symbologySettings.isColorInvertedEnabled = true;
 
 Some symbologies have a mandatory checksum that will always be enforced while others only have optional [checksums](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/checksum.html#enum-scandit.datacapture.barcode.Checksum). Enforcing an optional checksum will reduce false positives as an additional check can be performed.
 
-When enabling a checksum you have to make sure that the data of your codes contains the calculated checksum otherwise the codes get discarded as the checksum doesn’t match. All available checksums per symbology can be found in [symbology properties](/symbology-properties.md).
+When enabling a checksum you have to make sure that the data of your codes contains the calculated checksum otherwise the codes get discarded as the checksum doesn’t match. All available checksums per symbology can be found in [symbology properties](../../symbology-properties).
 
 You can enforce a specific checksum by setting it through [SymbologySettings.checksums](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.Checksums):
 
@@ -85,7 +85,7 @@ var symbologySettings = settings.settingsForSymbology(Symbology.code39)
 
 Some symbologies allow further configuration. These configuration options are available as symbology extensions that can be enabled/disabled for each symbology individually.
 
-Some extensions affect how the data in the code is formatted, others allow for more relaxed recognition modes that are disabled by default to eliminate false reads. All available extensions per symbology and a description of what they do can be found in the documentation on [symbology properties](/symbology-properties.md).
+Some extensions affect how the data in the code is formatted, others allow for more relaxed recognition modes that are disabled by default to eliminate false reads. All available extensions per symbology and a description of what they do can be found in the documentation on [symbology properties](../../symbology-properties).
 
 To enable/disable a symbology extension, use [SymbologySettings.setExtensionEnabled()](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/symbology-settings.html#method-scandit.datacapture.barcode.SymbologySettings.SetExtensionEnabled).
 

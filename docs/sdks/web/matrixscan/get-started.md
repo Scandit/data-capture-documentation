@@ -32,7 +32,7 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to [you
 
 ### Improve runtime performance by enabling browser multithreading
 
-You can achieve better performance by enabling multithreading in any browser that supports it. Check the [Requirements Page](../../../system-requirements.md) to know the minimum versions that can take advantage of multithreading.
+You can achieve better performance by enabling multithreading in any browser that supports it. Check the [Requirements Page](../../../system-requirements) to know the minimum versions that can take advantage of multithreading.
 
 To enable multithreading you must set your site to be [crossOriginIsolated](https://developer.mozilla.org/en-US/docs/Web/API/crossOriginIsolated/). This will enable the SDK to use multithreading and significantly boost performance. If the environment supports it the SDK will automatically use multithreading. You can programmatically check for multithreading support using [BrowserHelper.checkMultithreadingSupport()](https://docs.scandit.com/data-capture-sdk/web/core/api/web/browser-compatibility.html#method-scandit.datacapture.core.BrowserHelper.CheckMultithreadingSupport).
 
@@ -558,5 +558,5 @@ MatrixScan does not support the following symbologies:
 - All postal codes (KIX, RM4SCC)
 
 :::important
-Barcode Batch needs browser multithreading to run. Check the minimum browser support in the [Requirements Page](../../../system-requirements.md) and how to enable it in [Improve runtime performance by enabling browser multithreading](#improve-runtime-performance-by-enabling-browser-multithreading), above.
+Barcode Batch needs browser multithreading to run. Check the minimum browser support in the [Requirements Page](../../../system-requirements) and how to enable it in [Improve runtime performance by enabling browser multithreading](#improve-runtime-performance-by-enabling-browser-multithreading), above.
 :::
