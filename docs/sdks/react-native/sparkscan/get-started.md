@@ -60,7 +60,7 @@ const viewSettings = new SparkScanViewSettings();
 // setup the desired appearance settings by updating the fields in the object above
 ```
 
-See the [SparkScan Workflow Options](./intro.md#workflow-options) section for more information.
+See the [SparkScan Workflow Options](./advanced.md#workflow-options) section for more information.
 
 By adding a [SparkScanView](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView), the scanning interface (camera preview and scanning UI elements) will be added automatically to your application.
 

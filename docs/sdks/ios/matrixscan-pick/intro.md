@@ -27,6 +27,6 @@ MatrixScan Pick is implemented through functionality provided by [`BarcodePick`]
 
 ## Supported Symbologies
 
-MatrixScan Find supports all [symbologies](../../../barcode-symbologies.md) **except** DotCode, MaxiCode and postal codes (KIX, RM4SCC).
+MatrixScan Find supports all [symbologies](../barcode-symbologies.mdx) **except** DotCode, MaxiCode and postal codes (KIX, RM4SCC).
 
 If you are not familiar with the symbologies that are relevant for your use case, you can use capture presets that are tailored for different verticals (e.g. retail, logistics, etc.).

@@ -36,7 +36,8 @@ const config: Config = {
         fromExtensions: ['html'],
         createRedirects(existingPath) {
           // Redirect all /sdks/xamarin/* paths to the migration guide
-          if (existingPath.includes('/migrate-7-to-8')) {
+          // Only create redirects when processing the root migrate-7-to-8 page to avoid duplicates
+          if (existingPath === '/migrate-7-to-8' || existingPath === '/migrate-7-to-8/') {
             const xamarinPaths = [];
             const platforms = ['ios', 'android', 'forms'];
             const commonPages = [
@@ -221,7 +222,10 @@ const config: Config = {
               '/data-capture-sdk/dotnet.ios/requirements.html/system-requirements',
               '/data-capture-sdk/dotnet.android/requirements.html/system-requirements'
             ],
-          },     
+          },
+          // Note: Root-level pages (core-concepts, features-by-framework, etc.) already have
+          // <Redirect> components in their MDX files, so we don't need redirect plugin entries here.
+          // The redirect plugin cannot override existing files, so these redirects are removed.     
       ],
     },
   ],

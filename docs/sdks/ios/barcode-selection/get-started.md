@@ -10,6 +10,10 @@ keywords:
 
 # Get Started
 
+:::warning
+We recommend using **SparkScan** or **Barcode Capture API** instead of Barcode Selection. With the new [AI-powered features](/sdks/ios/ai-powered-barcode-scanning), barcode selection in crowded environments is done without the need of a dedicated API. This API will be deprecated.
+:::
+
 In this guide you will learn step-by-step how to add Barcode Selection to your application.
 
 The general steps are:
@@ -40,7 +44,7 @@ import DataCaptureContextIos from '../../../partials/get-started/_create-data-ca
 
 Barcode selection is orchestrated by the [`SDCBarcodeSelection`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) data capture mode. It is configured via [`SDCBarcodeSelectionSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-selection-settings.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionSettings) and allows you to register one or more listeners for when new codes have been selected.
 
-Here we setup barcode scanning for the desired barcode [symbologies](../../../barcode-symbologies.md). The list of symbologies to enable is highly application specific, and we recommend that you **only enable the list of symbologies your application requires**:
+Here we setup barcode scanning for the desired barcode [symbologies](../barcode-symbologies.mdx). The list of symbologies to enable is highly application specific, and we recommend that you **only enable the list of symbologies your application requires**:
 
 ```swift
 let settings = BarcodeSelectionSettings()

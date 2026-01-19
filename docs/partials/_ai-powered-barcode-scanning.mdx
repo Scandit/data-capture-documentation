@@ -1,0 +1,164 @@
+Modern barcode scanning workflows face recurring challenges that slow down operations and induce errors: scanning from awkward angles and long distances, decoding the right code in crowded environments, dealing with damaged labels, and managing intentional versus accidental duplicate scans. Traditional barcode scanners rely on rigid, time-based logic and manual user intervention to handle these scenarios, resulting in slower workflows, more errors, and higher user frustration.
+
+Scandit's AI-powered scanning capabilities, built into the **Scandit AI Engine** and available in both **SparkScan** and **Barcode Capture**, solve these problems by analyzing context and user intent in real-time. The scanner adapts dynamically to environmental conditions and user behavior, eliminating the need for manual settings adjustments or workarounds.
+
+## Overview
+
+The AI-powered features address four critical scanning challenges:
+
+1. **Avoiding unintentional scans** – Prevent background codes from being captured along with the intended barcode
+
+2. **Selecting barcodes in dense environments** – Support the user in selecting the right barcode among many by automatically enabling the aimer
+
+3. **Handling damaged or unreadable barcodes** – Automatically fall back to OCR to capture the text value when barcode decoding fails
+
+4. **Filtering duplicates** – Distinguish intentional duplicate scans from accidental re-scans
+
+These capabilities work together seamlessly and are **enabled by default** in SDK 8.1+. In most cases, no additional configuration is required.
+
+## Avoiding Unintentional Scans
+
+### The Problem
+
+When scanning items from a distance or with imperfect aiming, which is common in retail backrooms, warehouses, or during replenishment, users often accidentally capture barcodes in the background or periphery instead of their intended target. This forces them to open their scan list, identify the wrong entry, delete it, and try again.
+
+Traditional scanners trigger on any barcode that enters the scanning area, relying on users to maintain perfect aim and proximity to the target code. This approach breaks down in real-world conditions where users need to scan quickly from natural working distances.
+
+### How Scandit Solves It
+
+The scanner uses **intent anticipation algorithms** to analyze device movement, barcode position, and aiming behavior in real-time. It identifies which barcode the user is trying to scan and ignores unintended codes in the frame, even when aiming is imperfect or scanning from a distance.
+
+The system continuously evaluates multiple factors including device trajectory, barcode placement relative to the screen center, stability of aim, and historical scanning patterns to determine user intent. This allows users to scan from comfortable distances without the precision required by traditional scanners.
+
+**Key benefits:**
+
+* Scan from natural distances without bending or reaching
+
+* Reduce list cleanup and workflow interruptions
+
+* Maintain accuracy even with fast, imprecise movements
+
+### Configuration
+
+Intent anticipation is controlled by the `scanIntention` property, which defaults to `ScanIntention.SMARTSELECTION` in SDK 8.1+. So the feature is enabled by default, no further configuration is needed. \
+You will need to set `ScanIntention.MANUAL` to disable the smart feature completely.
+
+**Note:** For intent anticipation only, `ScanIntention.SMART` (the default value in SDK 7.x) would be sufficient, but since SDK 8.1+ we introduced a new value that enhance the intent anticipation even more, addressing specifically environments with multiple barcodes placed closely together (check the next paragraph for more information).
+
+<ReactPlayer controls width='1200' url="/img/ai-powered-scanning/intention.mp4" />
+
+## Selecting Barcodes in Dense Environments
+
+### The Problem
+
+In environments with multiple barcodes placed closely together, such as densely packed warehouse shelves, multi-label packages, or retail displays, traditional scanners often capture the wrong code. Users must manually adjust their position, zoom in, or repeatedly attempt the scan until the correct barcode is recognized. In some cases, they resort to covering adjacent barcodes with their hands, a slow and awkward workaround.
+
+While Smart Scan Intention helps suppress background or peripheral barcodes when a single clear target exists, it is not sufficient when several valid barcodes are simultaneously within the user's focus area. In these dense scenarios, multiple codes can appear equally prominent and intentional, which prevents the AI-engine from reliably inferring a single intended target. As a result, there is a higher risk to decode the wrong barcode.
+
+### How Scandit Solves It
+
+The scanner **automatically detects dense barcode environments** and adapts its behavior and user interface accordingly. When multiple codes are detected in close proximity, the system enables a selection mode, which combines automatic intent detection with visual aiming assistance.
+
+The interface transitions seamlessly based on environmental context:
+
+* **Sparse environments**: Direct scanning with intent anticipation (no aimer needed)
+
+* **Dense environments**: Aimer overlay appears automatically, allowing precise selection
+
+This adaptive approach means users never need to manually switch modes or adjust settings—the scanner handles everything based on what it sees.
+
+**Key benefits:**
+
+* Precise barcode selection in cluttered environments
+
+* Automatic interface adaptation based on context
+
+* No manual mode switching required
+
+* Reduced positioning and re-scanning attempts
+
+### Configuration
+
+Dense environment detection and barcode selection are controlled by the `scanIntention` property, which defaults to `ScanIntention.SMARTSELECTION` in SDK 8.1+. So the feature is enabled by default, no further configuration is needed. \
+You will need to set `ScanIntention.MANUAL` to disable the smart feature completely, or to `ScanIntention.SMART` to keep the intent anticipation but drop the dense environment detection and barcode selection assistance.
+
+> **Note:** SparkScan is recommended for single scanning workflows as its UI is optimized to provide visual feedback and adapt dynamically to AI inputs.
+
+<ReactPlayer controls width='1200' url="/img/ai-powered-scanning/dense-selection.mp4" />
+
+## Scanning Damaged Barcodes
+
+### The Problem
+
+Barcodes in real-world operational environments, retail stores, warehouses, distribution centers, are frequently damaged, partially torn, scratched, or covered by stickers. When the barcode structure itself is compromised to the point where decoding is impossible, users traditionally resort to manual data entry, asking colleagues for help, or moving items to access alternative labels.
+
+This interrupts the scanning workflow, slows down operations, and introduces opportunities for transcription errors when data is entered manually.
+
+### How Scandit Solves It
+
+Scandit's barcode scanning engine already employs **advanced computer vision techniques** at the frontier of the industry to decode damaged, low-contrast, poorly printed, and partially obscured barcodes with exceptional reliability. The engine uses sophisticated image processing, error correction algorithms, and pattern reconstruction to successfully read barcodes that other scanners cannot.
+However, when the barcode's encoded information is physically lost or damaged beyond reconstruction, such as when critical sections are torn away, burned, or chemically degraded, the scanner attempts to extract the information printed around the code.
+If decoding fails, the system automatically tries to read the human-readable text located below or near the barcode, for example SKU, UID, or product numbers. The user simply keeps the camera aimed at the label, and the scanner captures the data directly from the visible text without requiring any manual action or mode change.
+The transition is automatic and requires no user intervention. From the user's perspective, they simply point at a damaged label and get the data, whether through barcode decoding or OCR.
+
+**Key benefits:**
+
+* No manual workarounds or data entry
+
+* Seamless and quick transition from barcode scanning to text recognition
+
+* Maintains workflow speed even with severely damaged labels
+
+* Reduces dependency on backup labels or manual lookups
+
+### Configuration
+
+OCR-based text reading is supported for a subset of symbologies, including Code128, Code39, Codabar, and EAN13/UPCA.
+Support and configuration details vary by symbology and may evolve over time. For the up-to-date list of supported symbologies and instructions on how to enable text reading extensions, refer to the [symbology extension documentation](https://docs.scandit.com/symbology-properties/#symbology-extension-descriptions).
+
+> **Note:** OCR Fallback is triggered automatically after approximately 1 second of unsuccessful barcode decoding while the device remains stationary and aimed at the code.
+
+<ReactPlayer controls width='1200' url="/img/ai-powered-scanning/ocr-fallback.mp4" />
+
+## Filtering Duplicate Scans
+
+### The Problem
+
+Traditional duplicate filters use **time-based blocking**: after scanning a barcode, the same code cannot be scanned again for a fixed duration (e.g., 1.5 seconds). This approach creates two significant problems:
+
+1. **Workflow delays** – When intentionally scanning duplicate items (e.g., multiple boxes or items with the same barcode during inventory), users must wait for the timeout to expire between each scan. This artificial delay slows down operations.
+
+2. **Accidental re-scans** – When dwelling on a barcode or moving slowly, the timeout expires and the same code is accidentally captured multiple times. Users must then clean up their scan list by identifying and removing duplicate entries.
+
+Both scenarios reduce efficiency and create friction in scanning workflows. Time-based filters cannot distinguish between intentional and accidental duplicates, they simply impose a fixed delay regardless of user intent.
+
+### How Scandit Solves It
+
+The **Smart Duplicate Filter** uses AI algorithms to analyze user behavior and intent in real-time, distinguishing between:
+
+* **Intentional duplicate scans** – Deliberate movements to scan a second item with the same barcode
+
+* **Accidental duplicate scans** – Unintentional triggers from dwelling, hesitation, or slow camera movement on the same item
+
+The system analyzes factors including device movement patterns, barcode position changes, scanning rhythm, and physical context to determine whether a duplicate scan represents a new item or an accidental re-trigger.
+
+When the filter detects intentional scanning of a duplicate code, it reports the barcode immediately. When it detects accidental dwelling or hesitation, it suppresses the duplicate, eliminating both workflow delays and false positives.
+
+**Key benefits:**
+
+* Scan duplicate items back-to-back without delays
+
+* Prevent accidental re-scans from dwelling or slow movement
+
+* Eliminate manual cleanup of duplicate entries
+
+### Configuration
+
+Smart Duplicate Filter is enabled automatically starting from SDK 7.1+.
+The feature is active when both of the following conditions are met:
+* `scanIntention` is set to `ScanIntention.SMART` or `ScanIntention.SMARTSELECTION` (default)  
+* `codeDuplicateFilter` is set to the special value `-2` (default)
+With this configuration, the scanner automatically distinguishes intentional duplicate scans from accidental re-scans based on user behavior and context.
+To revert to manual, time-based duplicate filtering, set `codeDuplicateFilter` to any value greater than `0`. This disables Smart Duplicate Filter and restores fixed timeout-based duplicate suppression.
+
+<ReactPlayer controls width='1200' url="/img/ai-powered-scanning/duplicate-filter.mp4" />

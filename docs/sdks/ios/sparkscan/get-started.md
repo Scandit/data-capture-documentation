@@ -69,7 +69,7 @@ Construct a new [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/ios/
 let sparkScanView = SparkScanView(parentView: view, context: context, sparkScan: sparkScan, settings: viewSettings)
 ```
 
-See the [SparkScan Workflow Options](./intro.md#workflow-options) section for more information.
+See the [SparkScan Workflow Options](./advanced.md#workflow-options) section for more information.
 
 Additionally, make sure to call [`SDCSparkScanView.prepareScanning`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.PrepareScanning) and [`SDCSparkScanView.stopScanning`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your UIViewController’s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) and [`viewWillDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621485-viewwilldisappear) callbacks, to make sure that start up time is optimal and scanning is stopped when the app is going in the background.
 

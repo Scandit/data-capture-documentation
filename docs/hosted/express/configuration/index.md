@@ -15,7 +15,7 @@ There are many configuration options and functionalities available in Scandit Ex
 
 ### Recognized Symbologies
 
-You can configure which [barcode symbologies](/barcode-symbologies.md) Scandit Express should recognize. By default, all symbologies are enabled. You can disable symbologies that are not needed to improve scanning performance.
+You can configure which [barcode symbologies](../../../barcode-symbologies) Scandit Express should recognize. By default, all symbologies are enabled. You can disable symbologies that are not needed to improve scanning performance.
 
 1. Login to your [Scandit Dashboard](https://ssl.scandit.com/).
 2. Click on the Project card you want to configure.

@@ -63,7 +63,7 @@ import CalculateSymbolCount from '../../../partials/configure-symbologies/_calcu
 
 Most barcodes are printed using dark ink on a bright background. Some symbologies allow the colors to be inverted and can also be printed using bright ink on a dark background.
 
-This is not possible for all symbologies as it could lead to false reads when the symbology is not designed for this use case. See [symbology properties](/symbology-properties.md) to learn which symbologies allow color inversion.
+This is not possible for all symbologies as it could lead to false reads when the symbology is not designed for this use case. See [symbology properties](../symbology-properties.mdx) to learn which symbologies allow color inversion.
 
 When you enable a symbology as described above, only dark-on-bright codes are enabled (see [SymbologySettings.isEnabled](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.IsEnabled 'SymbologySettings.isEnabled property')). When you also want to read bright-on-dark codes, color-inverted reading for that symbology must also be enabled (see [SymbologySettings.isColorInvertedEnabled](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.IsColorInvertedEnabled)):
 
@@ -96,7 +96,7 @@ symbologySettings.checksums = [Scandit.Checksum.Mod43];
 
 Some symbologies allow further configuration. These configuration options are available as symbology extensions that can be enabled/disabled for each symbology individually.
 
-Some extensions affect how the data in the code is formatted, others allow for more relaxed recognition modes that are disabled by default to eliminate false reads. All available extensions per symbology and a description of what they do can be found in the documentation on [symbology properties](/symbology-properties.md).
+Some extensions affect how the data in the code is formatted, others allow for more relaxed recognition modes that are disabled by default to eliminate false reads. All available extensions per symbology and a description of what they do can be found in the documentation on [symbology properties](../symbology-properties.mdx).
 
 To enable/disable a symbology extension, use [SymbologySettings.setExtensionEnabled()](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/symbology-settings.html#method-scandit.datacapture.barcode.SymbologySettings.SetExtensionEnabled).
 

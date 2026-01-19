@@ -49,7 +49,7 @@ keywords:
 #### Barcode
 
 * Improved MicroQR detector tolerance to quiet zone violations
-* Improved suppression of incorrect Codabar recognitions when using the [“strict" symbology extension](/symbology-properties.md#symbology-extension-descriptions)
+* Improved suppression of incorrect Codabar recognitions when using the [“strict" symbology extension](../symbology-properties#symbology-extension-descriptions)
 
 #### Smart Label Capture
 
@@ -62,7 +62,7 @@ keywords:
 
 #### Barcode
 
-* Enabling the [“ocr_fallback" symbology extension](/symbology-properties.md#symbology-extension-descriptions) with missing OCR model resources now triggers the context error 28 (“Missing Resource”)
+* Enabling the [“ocr_fallback" symbology extension](../symbology-properties#symbology-extension-descriptions) with missing OCR model resources now triggers the context error 28 (“Missing Resource”)
 
 #### Smart Label Capture
 

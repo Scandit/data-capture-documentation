@@ -10,6 +10,10 @@ keywords:
 
 # Get Started
 
+:::warning
+We recommend using **SparkScan** or **Barcode Capture API** instead of Barcode Selection. With the new [AI-powered features](/sdks/android/ai-powered-barcode-scanning), barcode selection in crowded environments is done without the need of a dedicated API. This API will be deprecated.
+:::
+
 This page describes the steps to add Barcode Selection to your application.
 
 The general steps are:
@@ -54,7 +58,7 @@ import DataCaptureContextAndroid from '../../../partials/get-started/_create-dat
 
 Barcode selection is orchestrated by the [BarcodeSelection](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) [data capture mode](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-mode.html#interface-scandit.datacapture.core.IDataCaptureMode). It is configured via [BarcodeSelectionSettings](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection-settings.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) for when new codes have been selected.
 
-For this task, we setup barcode scanning for a small list of different barcode types, called [symbologies](/barcode-symbologies.md). The list of symbologies to enable is highly application specific. It is recommended that you **only enable the list of symbologies your application requires**.
+For this task, we setup barcode scanning for a small list of different barcode types, called [symbologies](../barcode-symbologies.mdx). The list of symbologies to enable is highly application specific. It is recommended that you **only enable the list of symbologies your application requires**.
 
 ```java
 BarcodeSelectionSettings settings = new BarcodeSelectionSettings();

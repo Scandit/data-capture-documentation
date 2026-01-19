@@ -20,9 +20,7 @@ const sidebars: SidebarsConfig = {
 			type: 'category',
 			label: 'Scandit Smart Data Capture',
 			items: [
-        'barcode-scanning',
-        'id-scanning',
-				'core-concepts',
+        'core-concepts',
 				'features-by-framework',
         'system-requirements',
 				{
@@ -146,9 +144,14 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         {
-          type: "link",
-          label: "Data Capture Basics",
-          href: "https://docs.scandit.com/core-concepts",
+          type: 'category',
+          label: 'Data Capture Basics',
+          collapsed: true,
+          items: [
+            'sdks/ios/core-concepts',
+            'sdks/ios/features-by-framework',
+            'sdks/ios/system-requirements',
+          ],
         },
         {
           type: "link",
@@ -195,6 +198,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/ios/barcode-capture/get-started-with-swift-ui",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/ios/barcode-selection/intro",
+                "sdks/ios/barcode-selection/get-started",
+              ],
+            },
+            "sdks/ios/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -264,7 +276,7 @@ const sidebars: SidebarsConfig = {
             type: 'doc',
             id: 'sdks/ios/label-scanning',
           },
-          collapsed: false,
+          collapsed: true,
           items: [
             "sdks/ios/label-capture/intro",
             "sdks/ios/label-capture/get-started",
@@ -295,9 +307,19 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: "doc",
-          id: "sdks/ios/barcode-capture/configure-barcode-symbologies",
-          label: "Configure Barcode Symbologies",
+          type: "category",
+          label: "Barcode Symbologies",
+          link: {
+            type: 'doc',
+            id: 'sdks/ios/barcode-symbologies',
+          },
+          collapsed: true,
+          items: [
+            'sdks/ios/symbology-properties',
+            'sdks/ios/extension-codes',
+            'sdks/ios/scanning-composite-codes',
+            "sdks/ios/barcode-capture/configure-barcode-symbologies",
+          ],
         },
         {
           type: "link",
@@ -359,6 +381,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/ios/migrate-7-to-8',
+        'sdks/ios/migrate-6-to-7',
+        'sdks/ios/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/ios/release-notes',
@@ -372,9 +404,14 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         {
-          type: "link",
-          label: "Data Capture Basics",
-          href: "https://docs.scandit.com/core-concepts",
+          type: 'category',
+          label: 'Data Capture Basics',
+          collapsed: true,
+          items: [
+            'sdks/android/core-concepts',
+            'sdks/android/features-by-framework',
+            'sdks/android/system-requirements',
+          ],
         },
         {
           type: "link",
@@ -419,6 +456,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/android/barcode-capture/get-started",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/android/barcode-selection/intro",
+                "sdks/android/barcode-selection/get-started",
+              ],
+            },
+            "sdks/android/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -483,7 +529,7 @@ const sidebars: SidebarsConfig = {
             type: 'doc',
             id: 'sdks/android/label-scanning',
           },
-          collapsed: false,
+          collapsed: true,
           items: [
             "sdks/android/label-capture/intro",
             "sdks/android/label-capture/get-started",
@@ -513,9 +559,19 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: "doc",
-          id: "sdks/android/barcode-capture/configure-barcode-symbologies",
-          label: "Configure Barcode Symbologies",
+          type: "category",
+          label: "Barcode Symbologies",
+          link: {
+            type: 'doc',
+            id: 'sdks/android/barcode-symbologies',
+          },
+          collapsed: true,
+          items: [
+            'sdks/android/symbology-properties',
+            'sdks/android/extension-codes',
+            'sdks/android/scanning-composite-codes',
+            "sdks/android/barcode-capture/configure-barcode-symbologies",
+          ],
         },
         {
           type: "link",
@@ -577,6 +633,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/android/migrate-7-to-8',
+        'sdks/android/migrate-6-to-7',
+        'sdks/android/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/android/release-notes',
@@ -590,9 +656,14 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         {
-          type: "link",
-          label: "Data Capture Basics",
-          href: "https://docs.scandit.com/core-concepts",
+          type: 'category',
+          label: 'Data Capture Basics',
+          collapsed: true,
+          items: [
+            'sdks/web/core-concepts',
+            'sdks/web/features-by-framework',
+            'sdks/web/system-requirements',
+          ],
         },
         {
           type: "link",
@@ -637,6 +708,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/web/barcode-capture/get-started",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/web/barcode-selection/intro",
+                "sdks/web/barcode-selection/get-started",
+              ],
+            },
+            "sdks/web/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -683,7 +763,7 @@ const sidebars: SidebarsConfig = {
             type: 'doc',
             id: 'sdks/web/label-scanning',
           },
-          collapsed: false,
+          collapsed: true,
           items: [
             "sdks/web/label-capture/intro",
             "sdks/web/label-capture/get-started",
@@ -706,9 +786,19 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: "doc",
-          id: "sdks/web/barcode-capture/configure-barcode-symbologies",
-          label: "Configure Barcode Symbologies",
+          type: "category",
+          label: "Barcode Symbologies",
+          link: {
+            type: 'doc',
+            id: 'sdks/web/barcode-symbologies',
+          },
+          collapsed: true,
+          items: [
+            'sdks/web/symbology-properties',
+            'sdks/web/extension-codes',
+            'sdks/web/scanning-composite-codes',
+            "sdks/web/barcode-capture/configure-barcode-symbologies",
+          ],
         },
         {
           type: "link",
@@ -770,6 +860,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/web/migrate-7-to-8',
+        'sdks/web/migrate-6-to-7',
+        'sdks/web/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/web/release-notes',
@@ -783,9 +883,14 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         {
-          type: "link",
-          label: "Data Capture Basics",
-          href: "https://docs.scandit.com/core-concepts",
+          type: 'category',
+          label: 'Data Capture Basics',
+          collapsed: true,
+          items: [
+            'sdks/cordova/core-concepts',
+            'sdks/cordova/features-by-framework',
+            'sdks/cordova/system-requirements',
+          ],
         },
         {
           type: "link",
@@ -830,6 +935,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/cordova/barcode-capture/get-started",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/cordova/barcode-selection/intro",
+                "sdks/cordova/barcode-selection/get-started",
+              ],
+            },
+            "sdks/cordova/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -901,9 +1015,19 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: "doc",
-          id: "sdks/cordova/barcode-capture/configure-barcode-symbologies",
-          label: "Configure Barcode Symbologies",
+          type: "category",
+          label: "Barcode Symbologies",
+          link: {
+            type: 'doc',
+            id: 'sdks/cordova/barcode-symbologies',
+          },
+          collapsed: true,
+          items: [
+            'sdks/cordova/symbology-properties',
+            'sdks/cordova/extension-codes',
+            'sdks/cordova/scanning-composite-codes',
+            "sdks/cordova/barcode-capture/configure-barcode-symbologies",
+          ],
         },
         {
           type: "link",
@@ -917,7 +1041,7 @@ const sidebars: SidebarsConfig = {
       label: "ID Capture and Validation",
       collapsed: false,
       items: [
-            "sdks/cordova/id-capture/intro",
+          "sdks/cordova/id-capture/intro",
             "sdks/cordova/id-capture/get-started",
             "sdks/cordova/id-capture/supported-documents",
             "sdks/cordova/id-capture/advanced",
@@ -960,6 +1084,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/cordova/migrate-7-to-8',
+        'sdks/cordova/migrate-6-to-7',
+        'sdks/cordova/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/cordova/release-notes',
@@ -973,9 +1107,14 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         {
-          type: "link",
-          label: "Data Capture Basics",
-          href: "https://docs.scandit.com/core-concepts",
+          type: 'category',
+          label: 'Data Capture Basics',
+          collapsed: true,
+          items: [
+            'sdks/react-native/core-concepts',
+            'sdks/react-native/features-by-framework',
+            'sdks/react-native/system-requirements',
+          ],
         },
         {
           type: "link",
@@ -1020,6 +1159,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/react-native/barcode-capture/get-started",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/react-native/barcode-selection/intro",
+                "sdks/react-native/barcode-selection/get-started",
+              ],
+            },
+            "sdks/react-native/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -1084,7 +1232,7 @@ const sidebars: SidebarsConfig = {
             type: 'doc',
             id: 'sdks/react-native/label-scanning',
           },
-          collapsed: false,
+          collapsed: true,
           items: [
             "sdks/react-native/label-capture/intro",
             "sdks/react-native/label-capture/get-started",
@@ -1114,9 +1262,19 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: "doc",
-          id: "sdks/react-native/barcode-capture/configure-barcode-symbologies",
-          label: "Configure Barcode Symbologies",
+          type: "category",
+          label: "Barcode Symbologies",
+          link: {
+            type: 'doc',
+            id: 'sdks/cordova/barcode-symbologies',
+          },
+          collapsed: true,
+          items: [
+            'sdks/cordova/symbology-properties',
+            'sdks/cordova/extension-codes',
+            'sdks/cordova/scanning-composite-codes',
+            "sdks/react-native/barcode-capture/configure-barcode-symbologies",
+          ],
         },
         {
           type: "link",
@@ -1178,6 +1336,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/react-native/migrate-7-to-8',
+        'sdks/react-native/migrate-6-to-7',
+        'sdks/react-native/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/react-native/release-notes',
@@ -1191,9 +1359,14 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         {
-          type: "link",
-          label: "Data Capture Basics",
-          href: "https://docs.scandit.com/core-concepts",
+          type: 'category',
+          label: 'Data Capture Basics',
+          collapsed: true,
+          items: [
+            'sdks/flutter/core-concepts',
+            'sdks/flutter/features-by-framework',
+            'sdks/flutter/system-requirements',
+          ],
         },
         {
           type: "link",
@@ -1238,6 +1411,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/flutter/barcode-capture/get-started",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/flutter/barcode-selection/intro",
+                "sdks/flutter/barcode-selection/get-started",
+              ],
+            },
+            "sdks/flutter/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -1302,7 +1484,7 @@ const sidebars: SidebarsConfig = {
             type: 'doc',
             id: 'sdks/flutter/label-scanning',
           },
-          collapsed: false,
+          collapsed: true,
           items: [
             "sdks/flutter/label-capture/intro",
             "sdks/flutter/label-capture/get-started",
@@ -1325,9 +1507,19 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: "doc",
-          id: "sdks/flutter/barcode-capture/configure-barcode-symbologies",
-          label: "Configure Barcode Symbologies",
+          type: "category",
+          label: "Barcode Symbologies",
+          link: {
+            type: 'doc',
+            id: 'sdks/react-native/barcode-symbologies',
+          },
+          collapsed: true,
+          items: [
+            'sdks/react-native/symbology-properties',
+            'sdks/react-native/extension-codes',
+            'sdks/react-native/scanning-composite-codes',
+            "sdks/flutter/barcode-capture/configure-barcode-symbologies",
+          ],
         },
         {
           type: "link",
@@ -1389,6 +1581,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/flutter/migrate-7-to-8',
+        'sdks/flutter/migrate-6-to-7',
+        'sdks/flutter/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/flutter/release-notes',
@@ -1402,9 +1604,14 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         {
-          type: "link",
-          label: "Data Capture Basics",
-          href: "https://docs.scandit.com/core-concepts",
+          type: 'category',
+          label: 'Data Capture Basics',
+          collapsed: true,
+          items: [
+            'sdks/capacitor/core-concepts',
+            'sdks/capacitor/features-by-framework',
+            'sdks/capacitor/system-requirements',
+          ],
         },
         {
           type: "link",
@@ -1449,6 +1656,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/capacitor/barcode-capture/get-started",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/capacitor/barcode-selection/intro",
+                "sdks/capacitor/barcode-selection/get-started",
+              ],
+            },
+            "sdks/capacitor/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -1505,7 +1721,7 @@ const sidebars: SidebarsConfig = {
             type: 'doc',
             id: 'sdks/capacitor/label-scanning',
           },
-          collapsed: false,
+          collapsed: true,
           items: [
             "sdks/capacitor/label-capture/intro",
             "sdks/capacitor/label-capture/get-started",
@@ -1535,9 +1751,19 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: "doc",
-          id: "sdks/capacitor/barcode-capture/configure-barcode-symbologies",
-          label: "Configure Barcode Symbologies",
+          type: "category",
+          label: "Barcode Symbologies",
+          link: {
+            type: 'doc',
+            id: 'sdks/flutter/barcode-symbologies',
+          },
+          collapsed: true,
+          items: [
+            'sdks/flutter/symbology-properties',
+            'sdks/flutter/extension-codes',
+            'sdks/flutter/scanning-composite-codes',
+            "sdks/capacitor/barcode-capture/configure-barcode-symbologies",
+          ],
         },
         {
           type: "link",
@@ -1594,6 +1820,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/capacitor/migrate-7-to-8',
+        'sdks/capacitor/migrate-6-to-7',
+        'sdks/capacitor/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/capacitor/release-notes',
@@ -1607,9 +1843,14 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         {
-          type: "link",
-          label: "Data Capture Basics",
-          href: "https://docs.scandit.com/core-concepts",
+          type: 'category',
+          label: 'Data Capture Basics',
+          collapsed: true,
+          items: [
+            'sdks/titanium/core-concepts',
+            'sdks/titanium/features-by-framework',
+            'sdks/titanium/system-requirements',
+          ],
         },
         {
           type: "link",
@@ -1639,9 +1880,23 @@ const sidebars: SidebarsConfig = {
               label: 'Barcode Capture API',
               items: [
                 "sdks/titanium/barcode-capture/get-started",
-                "sdks/titanium/barcode-capture/configure-barcode-symbologies",
               ],
             },
+          ],
+        },
+        {
+          type: "category",
+          label: "Barcode Symbologies",
+          link: {
+            type: 'doc',
+            id: 'sdks/titanium/barcode-symbologies',
+          },
+          collapsed: true,
+          items: [
+            'sdks/titanium/symbology-properties',
+            'sdks/titanium/extension-codes',
+            'sdks/titanium/scanning-composite-codes',
+            "sdks/titanium/barcode-capture/configure-barcode-symbologies",
           ],
         },
         {
@@ -1673,6 +1928,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/titanium/migrate-7-to-8',
+        'sdks/titanium/migrate-6-to-7',
+        'sdks/titanium/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/titanium/release-notes',
@@ -1685,9 +1950,14 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         {
-          type: "link",
-          label: "Data Capture Basics",
-          href: "https://docs.scandit.com/core-concepts",
+          type: 'category',
+          label: 'Data Capture Basics',
+          collapsed: true,
+          items: [
+            'sdks/net/ios/core-concepts',
+            'sdks/net/ios/features-by-framework',
+            'sdks/net/ios/system-requirements',
+          ],
         },
         {
           type: "link",
@@ -1732,6 +2002,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/net/ios/barcode-capture/get-started",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/net/ios/barcode-selection/intro",
+                "sdks/net/ios/barcode-selection/get-started",
+              ],
+            },
+            "sdks/net/ios/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -1804,9 +2083,19 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: "doc",
-          id: "sdks/net/ios/barcode-capture/configure-barcode-symbologies",
-          label: "Configure Barcode Symbologies",
+          type: "category",
+          label: "Barcode Symbologies",
+          link: {
+            type: 'doc',
+            id: 'sdks/net/ios/barcode-symbologies',
+          },
+          collapsed: true,
+          items: [
+            'sdks/net/ios/symbology-properties',
+            'sdks/net/ios/extension-codes',
+            'sdks/net/ios/scanning-composite-codes',
+            "sdks/net/ios/barcode-capture/configure-barcode-symbologies",
+          ],
         },
         {
           type: "link",
@@ -1863,6 +2152,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/net/ios/migrate-7-to-8',
+        'sdks/net/ios/migrate-6-to-7',
+        'sdks/net/ios/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/net/ios/release-notes',
@@ -1876,9 +2175,14 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         {
-          type: "link",
-          label: "Data Capture Basics",
-          href: "https://docs.scandit.com/core-concepts",
+          type: 'category',
+          label: 'Data Capture Basics',
+          collapsed: true,
+          items: [
+            'sdks/net/android/core-concepts',
+            'sdks/net/android/features-by-framework',
+            'sdks/net/android/system-requirements',
+          ],
         },
         {
           type: "link",
@@ -1923,6 +2227,15 @@ const sidebars: SidebarsConfig = {
                 "sdks/net/android/barcode-capture/get-started",
               ],
             },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/net/android/barcode-selection/intro",
+                "sdks/net/android/barcode-selection/get-started",
+              ],
+            },
+            "sdks/net/android/ai-powered-barcode-scanning",
           ],
         },
         {
@@ -1995,9 +2308,19 @@ const sidebars: SidebarsConfig = {
           ],
         },
         {
-          type: "doc",
-          id: "sdks/net/android/barcode-capture/configure-barcode-symbologies",
-          label: "Configure Barcode Symbologies",
+          type: "category",
+          label: "Barcode Symbologies",
+          link: {
+            type: 'doc',
+            id: 'sdks/net/android/barcode-symbologies',
+          },
+          collapsed: true,
+          items: [
+            'sdks/net/android/symbology-properties',
+            'sdks/net/android/extension-codes',
+            'sdks/net/android/scanning-composite-codes',
+            "sdks/net/android/barcode-capture/configure-barcode-symbologies",
+          ],
         },
         {
           type: "link",
@@ -2054,6 +2377,16 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: 'category',
+      label: 'Migration Guides',
+      collapsed: true,
+      items: [
+        'sdks/net/android/migrate-7-to-8',
+        'sdks/net/android/migrate-6-to-7',
+        'sdks/net/android/migrate-5-to-6',
+      ]
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/net/android/release-notes',
@@ -2076,11 +2409,24 @@ const sidebars: SidebarsConfig = {
       label: 'Barcode Scanning',
       collapsed: false,
       items: [
-        
-        "sdks/linux/barcode-capture/configure-barcode-symbologies",
         "sdks/linux/barcode-capture/configure-with-json",
-        "sdks/linux/barcode-capture/add-on-codes",
-        "sdks/linux/barcode-capture/composite-codes",
+        {
+          type: "category",
+          label: "Barcode Symbologies",
+          link: {
+            type: 'doc',
+            id: 'sdks/linux/barcode-symbologies',
+          },
+          collapsed: true,
+          items: [
+            'sdks/linux/symbology-properties',
+            'sdks/linux/extension-codes',
+            'sdks/linux/scanning-composite-codes',
+            "sdks/linux/barcode-capture/configure-barcode-symbologies",
+            "sdks/linux/barcode-capture/add-on-codes",
+            "sdks/linux/barcode-capture/composite-codes",
+          ],
+        },
         {
           type: "link",
           label: "Scandit Express Documentation",

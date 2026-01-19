@@ -4,8 +4,6 @@
       "type": "category",
       "label": "Scandit Smart Data Capture",
       "items": [
-        "barcode-scanning",
-        "id-scanning",
         "core-concepts",
         "features-by-framework",
         "system-requirements",

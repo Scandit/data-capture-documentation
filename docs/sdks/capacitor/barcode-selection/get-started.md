@@ -10,6 +10,10 @@ keywords:
 
 # Get Started
 
+:::warning
+We recommend using **SparkScan** or **Barcode Capture API** instead of Barcode Selection. With the new [AI-powered features](/sdks/capacitor/ai-powered-barcode-scanning), barcode selection in crowded environments is done without the need of a dedicated API. This API will be deprecated.
+:::
+
 In this guide you will learn step-by-step how to add Barcode Selection to your application.
 
 The general steps are:

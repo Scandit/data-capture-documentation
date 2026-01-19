@@ -24,7 +24,7 @@ Before you begin, make sure you have the following prerequisites in place:
 - The latest stable version of Node.js and npm (required only if including and building the SDK as part of an app, instead of just including it as an external resource from a CDN in HTML).
 - Valid Scandit Data Capture SDK license, sign up for a [free trial](https://www.scandit.com/trial/) if you don't already have a license key
 
-For detailed information about system requirements, see [System Requirements](/system-requirements/#web-sdk).
+For detailed information about system requirements, see [System Requirements](/sdks/web/system-requirements/#web-sdk).
 
 :::warning
 Devices running the Scandit Data Capture SDK need to have a GPU and run a browser capable of making it available (requires [WebGL - current support?](https://caniuse.com/#feat=webgl) and [OffscreenCanvas - current support?](https://caniuse.com/#feat=offscreencanvas)) or the performance will drastically decrease.

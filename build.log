@@ -1,0 +1,1235 @@
+yarn run v1.22.22
+warning ../../package.json: No license field
+$ docusaurus build
+
+ ------------------------------------------------------------------------------                                                                                                          Update available 3.4.0 → 3.9.2                                                                                                                 To upgrade Docusaurus packages with the latest version, run the                                       following command:                                                     `yarn upgrade @docusaurus/core@latest                                         @docusaurus/plugin-client-redirects@latest                       @docusaurus/preset-classic@latest @docusaurus/module-type-aliases@latest                 @docusaurus/tsconfig@latest @docusaurus/types@latest`                                                                                               ------------------------------------------------------------------------------ 
+
+[INFO] [en] Creating an optimized production build...
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ℹ Compiling Client
+ℹ Compiling Server
+[WARNING] Docs markdown link couldn't be resolved: (./samples.md) in source file "/Users/raffaelefarinaro/fork/data-capture-documentation/versioned_docs/version-6.28.7/sdks/net/android/add-sdk.md" for version 6.28.7
+[WARNING] Docs markdown link couldn't be resolved: (./samples.md) in source file "/Users/raffaelefarinaro/fork/data-capture-documentation/versioned_docs/version-6.28.7/sdks/net/android/add-sdk.md" for version 6.28.7
+[WARNING] Docs markdown link couldn't be resolved: (../samples.md) in source file "/Users/raffaelefarinaro/fork/data-capture-documentation/versioned_docs/version-6.28.7/sdks/ios/matrixscan-count/intro.md" for version 6.28.7
+[WARNING] Docs markdown link couldn't be resolved: (../samples.md) in source file "/Users/raffaelefarinaro/fork/data-capture-documentation/versioned_docs/version-6.28.7/sdks/ios/matrixscan-count/intro.md" for version 6.28.7
+[WARNING] Docs markdown link couldn't be resolved: (./samples.md) in source file "/Users/raffaelefarinaro/fork/data-capture-documentation/versioned_docs/version-6.28.7/sdks/react-native/add-sdk.md" for version 6.28.7
+[WARNING] Docs markdown link couldn't be resolved: (./samples.md) in source file "/Users/raffaelefarinaro/fork/data-capture-documentation/versioned_docs/version-6.28.7/sdks/react-native/add-sdk.md" for version 6.28.7
+[WARNING] Docs markdown link couldn't be resolved: (../samples.md) in source file "/Users/raffaelefarinaro/fork/data-capture-documentation/versioned_docs/version-6.28.7/sdks/android/matrixscan-count/intro.md" for version 6.28.7
+[WARNING] Docs markdown link couldn't be resolved: (../samples.md) in source file "/Users/raffaelefarinaro/fork/data-capture-documentation/versioned_docs/version-6.28.7/sdks/android/matrixscan-count/intro.md" for version 6.28.7
+[WARNING] Docs markdown link couldn't be resolved: (./samples.md) in source file "/Users/raffaelefarinaro/fork/data-capture-documentation/versioned_docs/version-6.28.7/sdks/flutter/add-sdk.md" for version 6.28.7
+[WARNING] Docs markdown link couldn't be resolved: (./samples.md) in source file "/Users/raffaelefarinaro/fork/data-capture-documentation/versioned_docs/version-6.28.7/sdks/flutter/add-sdk.md" for version 6.28.7
+✔ Server: Compiled successfully in 34.60s
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✔ Client: Compiled successfully in 46.97s
+Generating LLM-friendly documentation...
+Warning: Description for "Get Started" is very long (835 characters)
+Warning: Description for "Get Started" is very long (865 characters)
+Warning: Description for "Get Started" is very long (841 characters)
+Processed 612 documentation files for standard LLM files
+Generating file: /Users/raffaelefarinaro/fork/data-capture-documentation/build/llms.txt, version: undefined
+Generated: /Users/raffaelefarinaro/fork/data-capture-documentation/build/llms.txt
+Generating file: /Users/raffaelefarinaro/fork/data-capture-documentation/build/llms-full.txt, version: undefined
+Generated: /Users/raffaelefarinaro/fork/data-capture-documentation/build/llms-full.txt
+Stats: 612 total available documents processed
+[WARNING] Docusaurus found broken links!
+
+Please check the pages of your site in the list below, and make sure you don't reference any path that does not exist.
+Note: it's possible to ignore broken links with the 'onBrokenLinks' Docusaurus configuration, and let the build pass.
+
+It looks like some of the broken links we found appear in many pages of your site.
+Maybe those broken links appear on all pages through your site layout?
+We recommend that you check your theme configuration for such links (particularly, theme navbar and footer).
+Frequent broken links are linking to:
+- /sdks/xamarin/ios/add-sdk/
+- /sdks/xamarin/android/add-sdk/
+- /sdks/xamarin/forms/add-sdk/
+- barcode-symbologies/
+- symbology-properties/
+- extension-codes/
+- scanning-composite-codes/
+- ../../../barcode-symbologies/
+- barcode-symbologies/#european-article-number-ean
+- scanning-composite-codes/#enabling-composite-codes
+- barcode-symbologies/#gs1-composite-codes
+- ../barcode-symbologies/
+
+Exhaustive list of all broken links found:
+- Broken link on source page path = /6.28.7/tags/sdks/android/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/tags/sdks/capacitor/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/tags/sdks/cordova/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/tags/sdks/flutter/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/tags/sdks/ios/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/tags/sdks/net/android/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/tags/sdks/net/ios/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/tags/sdks/react-native/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/tags/sdks/titanium/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/tags/sdks/web/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/tags/sdks/xamarin/android/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/tags/sdks/xamarin/forms/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/tags/sdks/xamarin/ios/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/add-sdk/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/barcode-capture/configure-barcode-symbologies/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/barcode-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/barcode-generator/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/barcode-selection/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/barcode-selection/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/batch-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/id-capture/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/id-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/id-capture/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/id-validate/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/id-validate/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/label-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/matrixscan-count/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/matrixscan-count/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/matrixscan-count/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+   -> linking to ../samples.md/#receiving-1 (resolved as: /6.28.7/sdks/android/matrixscan-count/samples.md/#receiving-1)
+- Broken link on source page path = /6.28.7/sdks/android/matrixscan-find/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/matrixscan-find/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/matrixscan-find/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/matrixscan-pick/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/matrixscan-pick/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/matrixscan-pick/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/matrixscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/matrixscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/matrixscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/parser/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/release-notes/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/single-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/sparkscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/sparkscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/android/sparkscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/add-sdk/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/barcode-capture/configure-barcode-symbologies/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/barcode-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/barcode-generator/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/barcode-selection/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/barcode-selection/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/batch-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/id-capture/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/id-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/id-capture/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/id-validate/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/id-validate/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/matrixscan-count/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/matrixscan-count/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/matrixscan-count/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/matrixscan-find/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/matrixscan-find/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/matrixscan-find/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/matrixscan-pick/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/matrixscan-pick/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/matrixscan-pick/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/matrixscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/matrixscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/matrixscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/parser/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/release-notes/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/single-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/sparkscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/sparkscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/capacitor/sparkscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/add-sdk/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/barcode-capture/configure-barcode-symbologies/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/barcode-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/barcode-generator/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/barcode-selection/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/barcode-selection/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/batch-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/id-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/id-capture/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/id-validate/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/id-validate/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/matrixscan-count/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/matrixscan-count/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/matrixscan-count/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/matrixscan-find/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/matrixscan-find/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/matrixscan-find/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/matrixscan-pick/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/matrixscan-pick/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/matrixscan-pick/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/matrixscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/matrixscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/matrixscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/parser/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/release-notes/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/single-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/sparkscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/sparkscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/cordova/sparkscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/add-sdk/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+   -> linking to ./samples.md/ (resolved as: /6.28.7/sdks/flutter/add-sdk/samples.md/)
+- Broken link on source page path = /6.28.7/sdks/flutter/barcode-capture/configure-barcode-symbologies/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/barcode-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/barcode-generator/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/barcode-selection/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/barcode-selection/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/batch-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/id-capture/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/id-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/id-capture/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/id-validate/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/id-validate/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/matrixscan-count/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/matrixscan-count/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/matrixscan-count/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/matrixscan-find/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/matrixscan-find/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/matrixscan-find/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/matrixscan-pick/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/matrixscan-pick/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/matrixscan-pick/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/matrixscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/matrixscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/matrixscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/parser/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/release-notes/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/single-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/sparkscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/sparkscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/flutter/sparkscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/add-sdk/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/barcode-capture/configure-barcode-symbologies/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/barcode-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/barcode-generator/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/barcode-selection/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/barcode-selection/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/batch-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/id-capture/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/id-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/id-capture/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/id-validate/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/id-validate/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/label-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/matrixscan-count/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/matrixscan-count/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/matrixscan-count/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+   -> linking to ../samples.md/#receiving-1 (resolved as: /6.28.7/sdks/ios/matrixscan-count/samples.md/#receiving-1)
+- Broken link on source page path = /6.28.7/sdks/ios/matrixscan-find/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/matrixscan-find/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/matrixscan-find/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/matrixscan-pick/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/matrixscan-pick/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/matrixscan-pick/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/matrixscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/matrixscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/matrixscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/parser/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/release-notes/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/single-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/sparkscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/sparkscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/ios/sparkscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/add-sdk/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+   -> linking to ./samples.md/ (resolved as: /6.28.7/sdks/net/android/add-sdk/samples.md/)
+- Broken link on source page path = /6.28.7/sdks/net/android/barcode-capture/configure-barcode-symbologies/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/barcode-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/barcode-generator/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/barcode-selection/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/barcode-selection/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/batch-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/id-capture/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/id-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/id-capture/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/id-validate/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/id-validate/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/matrixscan-count/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/matrixscan-count/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/matrixscan-count/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/matrixscan-find/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/matrixscan-find/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/matrixscan-find/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/matrixscan-pick/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/matrixscan-pick/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/matrixscan-pick/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/matrixscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/matrixscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/matrixscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/parser/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/release-notes/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/single-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/sparkscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/sparkscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/android/sparkscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/add-sdk/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/barcode-capture/configure-barcode-symbologies/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/barcode-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/barcode-generator/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/barcode-selection/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/barcode-selection/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/batch-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/id-capture/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/id-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/id-capture/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/id-validate/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/id-validate/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/matrixscan-count/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/matrixscan-count/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/matrixscan-count/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/matrixscan-find/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/matrixscan-find/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/matrixscan-find/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/matrixscan-pick/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/matrixscan-pick/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/matrixscan-pick/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/matrixscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/matrixscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/matrixscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/parser/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/release-notes/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/single-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/sparkscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/sparkscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/net/ios/sparkscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/add-sdk/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+   -> linking to ./samples.md/ (resolved as: /6.28.7/sdks/react-native/add-sdk/samples.md/)
+- Broken link on source page path = /6.28.7/sdks/react-native/barcode-capture/configure-barcode-symbologies/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/barcode-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/barcode-generator/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/barcode-selection/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/barcode-selection/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/batch-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/id-capture/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/id-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/id-capture/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/id-validate/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/id-validate/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/label-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/matrixscan-count/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/matrixscan-count/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/matrixscan-count/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/matrixscan-find/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/matrixscan-find/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/matrixscan-find/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/matrixscan-pick/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/matrixscan-pick/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/matrixscan-pick/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/matrixscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/matrixscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/matrixscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/parser/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/release-notes/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/single-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/sparkscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/sparkscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/react-native/sparkscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/add-sdk/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/barcode-capture/configure-barcode-symbologies/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/barcode-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/barcode-generator/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/barcode-selection/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/barcode-selection/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/batch-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/id-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/id-capture/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/id-validate/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/id-validate/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/matrixscan-count/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/matrixscan-count/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/matrixscan-count/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/matrixscan-find/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/matrixscan-find/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/matrixscan-find/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/matrixscan-pick/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/matrixscan-pick/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/matrixscan-pick/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/matrixscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/matrixscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/parser/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/release-notes/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/single-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/sparkscan/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/sparkscan/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/titanium/sparkscan/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/web/add-sdk/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/web/barcode-capture/configure-barcode-symbologies/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/web/barcode-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/web/barcode-generator/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/web/barcode-selection/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/web/barcode-selection/intro/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/web/batch-scanning/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/web/id-capture/advanced/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamarin/forms/add-sdk/
+- Broken link on source page path = /6.28.7/sdks/web/id-capture/get-started/:
+   -> linking to /sdks/xamarin/ios/add-sdk/
+   -> linking to /sdks/xamarin/android/add-sdk/
+   -> linking to /sdks/xamar[SUCCESS] Generated static files in "build".
+[INFO] Use `npm run serve` command to test your build locally.
+Done in 74.81s.

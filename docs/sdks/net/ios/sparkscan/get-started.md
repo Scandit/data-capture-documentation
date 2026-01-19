@@ -64,7 +64,7 @@ Construct a new SparkScan view. The SparkScan view is automatically added to the
 SparkScanView sparkScanView = SparkScanView.Create(parentView, dataCaptureContext, sparkScan, viewSettings);
 ```
 
-See the [SparkScan Workflow Options](./intro.md#workflow-options) section for more information.
+See the [SparkScan Workflow Options](./advanced.md#workflow-options) section for more information.
 
 When developing on MAUI the SparkScan view should be added as the last item to [AbsoluteLayout](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/layouts/absolutelayout) or [RelativeLayout](https://learn.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/layouts/relativelayout), to make sure other UI components are visible.
 
