@@ -198,14 +198,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/ios/barcode-capture/get-started-with-swift-ui",
               ],
             },
-            {
-              type: "category",
-              label: "Barcode Selection",
-              items: [
-                "sdks/ios/barcode-selection/intro",
-                "sdks/ios/barcode-selection/get-started",
-              ],
-            },
             "sdks/ios/ai-powered-barcode-scanning",
           ],
         },
@@ -302,6 +294,14 @@ const sidebars: SidebarsConfig = {
               label: "Barcode Generator",
               items: [
                 "sdks/ios/barcode-generator",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/ios/barcode-selection/intro",
+                "sdks/ios/barcode-selection/get-started",
               ],
             },
           ],
@@ -456,14 +456,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/android/barcode-capture/get-started",
               ],
             },
-            {
-              type: "category",
-              label: "Barcode Selection",
-              items: [
-                "sdks/android/barcode-selection/intro",
-                "sdks/android/barcode-selection/get-started",
-              ],
-            },
             "sdks/android/ai-powered-barcode-scanning",
           ],
         },
@@ -554,6 +546,14 @@ const sidebars: SidebarsConfig = {
               label: "Barcode Generator",
               items: [
                 "sdks/android/barcode-generator",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/android/barcode-selection/intro",
+                "sdks/android/barcode-selection/get-started",
               ],
             },
           ],
@@ -708,14 +708,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/web/barcode-capture/get-started",
               ],
             },
-            {
-              type: "category",
-              label: "Barcode Selection",
-              items: [
-                "sdks/web/barcode-selection/intro",
-                "sdks/web/barcode-selection/get-started",
-              ],
-            },
             "sdks/web/ai-powered-barcode-scanning",
           ],
         },
@@ -781,6 +773,14 @@ const sidebars: SidebarsConfig = {
               label: "Parser",
               items: [
                 "sdks/web/parser/get-started",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/web/barcode-selection/intro",
+                "sdks/web/barcode-selection/get-started",
               ],
             },
           ],
@@ -935,14 +935,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/cordova/barcode-capture/get-started",
               ],
             },
-            {
-              type: "category",
-              label: "Barcode Selection",
-              items: [
-                "sdks/cordova/barcode-selection/intro",
-                "sdks/cordova/barcode-selection/get-started",
-              ],
-            },
             "sdks/cordova/ai-powered-barcode-scanning",
           ],
         },
@@ -1010,6 +1002,14 @@ const sidebars: SidebarsConfig = {
               label: "Barcode Generator",
               items: [
                 "sdks/cordova/barcode-generator",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/cordova/barcode-selection/intro",
+                "sdks/cordova/barcode-selection/get-started",
               ],
             },
           ],
@@ -1159,14 +1159,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/react-native/barcode-capture/get-started",
               ],
             },
-            {
-              type: "category",
-              label: "Barcode Selection",
-              items: [
-                "sdks/react-native/barcode-selection/intro",
-                "sdks/react-native/barcode-selection/get-started",
-              ],
-            },
             "sdks/react-native/ai-powered-barcode-scanning",
           ],
         },
@@ -1257,6 +1249,14 @@ const sidebars: SidebarsConfig = {
               label: "Barcode Generator",
               items: [
                 "sdks/react-native/barcode-generator",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/react-native/barcode-selection/intro",
+                "sdks/react-native/barcode-selection/get-started",
               ],
             },
           ],
@@ -1411,14 +1411,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/flutter/barcode-capture/get-started",
               ],
             },
-            {
-              type: "category",
-              label: "Barcode Selection",
-              items: [
-                "sdks/flutter/barcode-selection/intro",
-                "sdks/flutter/barcode-selection/get-started",
-              ],
-            },
             "sdks/flutter/ai-powered-barcode-scanning",
           ],
         },
@@ -1502,6 +1494,14 @@ const sidebars: SidebarsConfig = {
               label: "Parser",
               items: [
                 "sdks/flutter/parser/get-started",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/flutter/barcode-selection/intro",
+                "sdks/flutter/barcode-selection/get-started",
               ],
             },
           ],
@@ -1656,14 +1656,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/capacitor/barcode-capture/get-started",
               ],
             },
-            {
-              type: "category",
-              label: "Barcode Selection",
-              items: [
-                "sdks/capacitor/barcode-selection/intro",
-                "sdks/capacitor/barcode-selection/get-started",
-              ],
-            },
             "sdks/capacitor/ai-powered-barcode-scanning",
           ],
         },
@@ -1746,6 +1738,14 @@ const sidebars: SidebarsConfig = {
               label: "Barcode Generator",
               items: [
                 "sdks/capacitor/barcode-generator",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/capacitor/barcode-selection/intro",
+                "sdks/capacitor/barcode-selection/get-started",
               ],
             },
           ],
@@ -2002,14 +2002,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/net/ios/barcode-capture/get-started",
               ],
             },
-            {
-              type: "category",
-              label: "Barcode Selection",
-              items: [
-                "sdks/net/ios/barcode-selection/intro",
-                "sdks/net/ios/barcode-selection/get-started",
-              ],
-            },
             "sdks/net/ios/ai-powered-barcode-scanning",
           ],
         },
@@ -2078,6 +2070,14 @@ const sidebars: SidebarsConfig = {
               label: "Parser",
               items: [
                 "sdks/net/ios/parser/get-started",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/net/ios/barcode-selection/intro",
+                "sdks/net/ios/barcode-selection/get-started",
               ],
             },
           ],
@@ -2227,14 +2227,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/net/android/barcode-capture/get-started",
               ],
             },
-            {
-              type: "category",
-              label: "Barcode Selection",
-              items: [
-                "sdks/net/android/barcode-selection/intro",
-                "sdks/net/android/barcode-selection/get-started",
-              ],
-            },
             "sdks/net/android/ai-powered-barcode-scanning",
           ],
         },
@@ -2303,6 +2295,14 @@ const sidebars: SidebarsConfig = {
               label: "Parser",
               items: [
                 "sdks/net/android/parser/get-started",
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                "sdks/net/android/barcode-selection/intro",
+                "sdks/net/android/barcode-selection/get-started",
               ],
             },
           ],
