@@ -26,9 +26,9 @@ Traditional scanners trigger on any barcode that enters the scanning area, relyi
 
 ### How Scandit Solves It
 
-The scanner uses **intent anticipation algorithms** to analyze device movement, barcode position, and aiming behavior in real-time. It identifies which barcode the user is trying to scan and ignores unintended codes in the frame, even when aiming is imperfect or scanning from a distance.
+The scanner uses **intent anticipation algorithms** to analyze device movement, and aiming behavior in real-time. It identifies which barcode the user is trying to scan and ignores unintended codes even when aiming is imperfect or scanning from a distance.
 
-The system continuously evaluates multiple factors including device trajectory, barcode placement relative to the screen center, stability of aim, and historical scanning patterns to determine user intent. This allows users to scan from comfortable distances without the precision required by traditional scanners.
+This allows users to scan from comfortable distances without the precision required by traditional scanners.
 
 **Key benefits:**
 
@@ -53,11 +53,9 @@ You will need to set `ScanIntention.MANUAL` to disable the smart feature complet
 
 In environments with multiple barcodes placed closely together, such as densely packed warehouse shelves, multi-label packages, or retail displays, traditional scanners often capture the wrong code. Users must manually adjust their position, zoom in, or repeatedly attempt the scan until the correct barcode is recognized. In some cases, they resort to covering adjacent barcodes with their hands, a slow and awkward workaround.
 
-While Smart Scan Intention helps suppress background or peripheral barcodes when a single clear target exists, it is not sufficient when several valid barcodes are simultaneously within the user's focus area. In these dense scenarios, multiple codes can appear equally prominent and intentional, which prevents the AI-engine from reliably inferring a single intended target. As a result, there is a higher risk to decode the wrong barcode.
-
 ### How Scandit Solves It
 
-The scanner **automatically detects dense barcode environments** and adapts its behavior and user interface accordingly. When multiple codes are detected in close proximity, the system enables a selection mode, which combines automatic intent detection with visual aiming assistance.
+The scanner **automatically detects dense barcode environments** and adapts its behavior and user interface accordingly.
 
 The interface transitions seamlessly based on environmental context:
 
@@ -97,15 +95,13 @@ This interrupts the scanning workflow, slows down operations, and introduces opp
 ### How Scandit Solves It
 
 Scandit's barcode scanning engine already employs **advanced computer vision techniques** at the frontier of the industry to decode damaged, low-contrast, poorly printed, and partially obscured barcodes with exceptional reliability. The engine uses sophisticated image processing, error correction algorithms, and pattern reconstruction to successfully read barcodes that other scanners cannot.
-However, when the barcode's encoded information is physically lost or damaged beyond reconstruction, such as when critical sections are torn away, burned, or chemically degraded, the scanner attempts to extract the information printed around the code.
-If decoding fails, the system automatically tries to read the human-readable text located below or near the barcode, for example SKU, UID, or product numbers. The user simply keeps the camera aimed at the label, and the scanner captures the data directly from the visible text without requiring any manual action or mode change.
+However, when the barcode's encoded information is physically lost or damaged beyond reconstruction, such as when critical sections are torn away, burned, or chemically degraded, our text recognition technology helps to get the data. 
+
 The transition is automatic and requires no user intervention. From the user's perspective, they simply point at a damaged label and get the data, whether through barcode decoding or OCR.
 
 **Key benefits:**
 
 * No manual workarounds or data entry
-
-* Seamless and quick transition from barcode scanning to text recognition
 
 * Maintains workflow speed even with severely damaged labels
 
@@ -115,8 +111,6 @@ The transition is automatic and requires no user intervention. From the user's p
 
 OCR-based text reading is supported for a subset of symbologies, including Code128, Code39, Codabar, and EAN13/UPCA.
 Support and configuration details vary by symbology and may evolve over time. For the up-to-date list of supported symbologies and instructions on how to enable text reading extensions, refer to the [symbology extension documentation](https://docs.scandit.com/symbology-properties/#symbology-extension-descriptions).
-
-> **Note:** OCR Fallback is triggered automatically after approximately 1 second of unsuccessful barcode decoding while the device remains stationary and aimed at the code.
 
 <ReactPlayer controls width='1200' url="/img/ai-powered-scanning/ocr-fallback.mp4" />
 
@@ -136,11 +130,11 @@ Both scenarios reduce efficiency and create friction in scanning workflows. Time
 
 The **Smart Duplicate Filter** uses AI algorithms to analyze user behavior and intent in real-time, distinguishing between:
 
-* **Intentional duplicate scans** – Deliberate movements to scan a second item with the same barcode
+* **Intentional duplicate scans**
 
-* **Accidental duplicate scans** – Unintentional triggers from dwelling, hesitation, or slow camera movement on the same item
+* **Accidental duplicate scans**
 
-The system analyzes factors including device movement patterns, barcode position changes, scanning rhythm, and physical context to determine whether a duplicate scan represents a new item or an accidental re-trigger.
+The system analyzes user behaviour and context to determine whether a duplicate scan represents a new item or an accidental re-trigger.
 
 When the filter detects intentional scanning of a duplicate code, it reports the barcode immediately. When it detects accidental dwelling or hesitation, it suppresses the duplicate, eliminating both workflow delays and false positives.
 
