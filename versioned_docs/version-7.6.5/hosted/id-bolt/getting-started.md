@@ -6,7 +6,6 @@ title: 'Getting Started'
 hide_title: false
 displayed_sidebar: boltSidebar
 framework: bolt
-tags: [bolt]
 keywords:
   - bolt
 ---
@@ -71,23 +70,20 @@ async function startIdBolt() {
 	const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
 		licenseKey: LICENSE_KEY,
 		documentSelection,
-		// define what data you expect in the onCompletion listener (set below)
+		// define what data you expect in the onCompletion callback
 		returnDataMode: ReturnDataMode.Full,
 		// add validation rules on the scanned document
 		validation: [Validators.notExpired()],
 		locale: "en-US",
+		onCompletion: (result) => {
+			// the ID has been captured and validation was successful.
+		},
+		onCancellation: (reason) => {
+			// the ID Bolt pop-up has been closed by the user without finishing the scan process.
+		},
 	});
 	// open the pop-up
 	await idBoltSession.start();
-
-	// register some listeners:
-	idBoltSession.onCancellation = (reason) => {
-		// the ID Bolt pop-up has been closed by the user without finishing the scan process.
-	};
-	idBoltSession.onCompletion = (result) => {
-		// the ID has been captured and validation was successful. In this example the result
-		// will contain the document data because `returnDataMode` was set to ReturnDataMode.Full.
-	};
 }
 
 // open ID Bolt when some button is clicked
