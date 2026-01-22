@@ -54,3 +54,7 @@ But not all use-cases look the same, and your needs may differ for most users. T
 ## Supported Symbologies
 
 SparkScan supports all of the major symbologies listed here: [Barcode Symbologies](../barcode-symbologies.mdx).
+
+## AI-Powered Features
+
+SparkScan includes AI-powered scanning capabilities that enhance accuracy and user experience. These features automatically handle challenging scenarios such as avoiding unintentional scans, selecting barcodes in dense environments, scanning damaged barcodes with OCR fallback, and intelligently filtering duplicate scans. Learn more about these capabilities in our [AI-Powered Barcode Scanning](../ai-powered-barcode-scanning.md) guide.
