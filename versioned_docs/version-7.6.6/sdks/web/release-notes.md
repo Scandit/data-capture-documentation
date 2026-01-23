@@ -10,6 +10,20 @@ keywords:
   - web
 ---
 
+## 7.6.6
+
+**Released**: January 23, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
+
+#### Core
+
+* Fixed a bug where in Angular@15.x apps production builds a class was incorrectly treeshaken causing an error at runtime
+
 ## 7.6.5
 
 **Released**: November 12, 2025

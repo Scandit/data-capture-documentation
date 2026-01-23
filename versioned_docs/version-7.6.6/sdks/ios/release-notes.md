@@ -10,6 +10,22 @@ keywords:
   - ios
 ---
 
+## 7.6.6
+
+**Released**: January 23, 2026
+
+### New Features
+
+#### Id
+
+* Added IdCaptureLite to CocoaPods, which is identical to IdCapture but without the dependency on ScanditIDC, reducing the app size for customers that do not require VIZ scanning capabilities
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
+
 ## 7.6.5
 
 **Released**: November 12, 2025

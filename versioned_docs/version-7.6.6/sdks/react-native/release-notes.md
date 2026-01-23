@@ -10,6 +10,23 @@ keywords:
   - react
 ---
 
+## 7.6.6
+
+**Released**: January 23, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue where the successful hint in BarcodeFind is not displayed
+* Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
+
+#### Core
+
+* Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+
 ## 7.6.5
 
 **Released**: November 12, 2025

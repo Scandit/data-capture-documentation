@@ -14,6 +14,12 @@ import DeprecationNotice from '/versioned_docs/version-7.6.6/partials/_xamarin-d
 <DeprecationNotice/>
 
 
+## 7.6.6
+
+**Released**: January 23, 2026
+
+No updates for this framework in this release.
+
 ## 7.6.5
 
 **Released**: November 12, 2025
