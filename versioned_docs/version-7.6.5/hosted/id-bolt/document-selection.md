@@ -6,7 +6,6 @@ title: 'Document Selection'
 displayed_sidebar: boltSidebar
 toc_max_heading_level: 4
 framework: bolt
-tags: [bolt]
 keywords:
   - bolt
   - document selection
@@ -24,7 +23,7 @@ Use `DocumentSelection.create()` to define which types of documents the ID Bolt 
 const documentSelection = DocumentSelection.create({
   accepted: [
     new Passport(Region.Any),
-    new IDCard(Region.FRA),
+    new IdCard(Region.FRA),
     new DriverLicense(Region.France)
   ],
   rejected: [
@@ -52,8 +51,8 @@ new Passport(Region.Any) // Any passport
 Includes national identity cards.
 
 ```ts
-new IDCard(Region.Germany) // German identity cards only
-new IDCard(Region.Any) // Identity cards from any country
+new IdCard(Region.Germany) // German identity cards only
+new IdCard(Region.Any) // Identity cards from any country
 ```
 
 ### Driver License
@@ -110,7 +109,6 @@ The following region-specific document types are supported:
 * `UsBorderCrossingCard`
 * `UsGlobalEntryCard`
 * `UsNexusCard`
-* `UsGreenCard`
 * `UsCommonAccessCard`
 * `UsUniformedServicesId`
 * `UsVeteranId`
@@ -156,6 +154,7 @@ The following region-specific document types are supported:
 * `BelgiumMinorsId`
 * `HungaryAddressCard`
 * `UkAsylumRequest`
+* `UkMilitaryId`
 * `SwedenSocialSecurityCard`
 * `SwedenSisId`
 * `IrelandPublicServicesCard`
@@ -183,6 +182,7 @@ The following region-specific document types are supported:
 * `ApecBusinessTravelCard`
 * `AustraliaAsicCard`
 * `UaeVehicleRegistrationCard`
+* `UaeEsaadCard`
 
 ## Working with Regions
 

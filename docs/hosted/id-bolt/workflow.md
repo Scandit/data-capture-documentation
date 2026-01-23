@@ -141,7 +141,7 @@ Here's an example that combines various workflow and scanner options:
 const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   licenseKey: LICENSE_KEY,
   documentSelection: DocumentSelection.create({
-    accepted: [new Passport(Region.Any), new IDCard(Region.Any)]
+    accepted: [new Passport(Region.Any), new IdCard(Region.Any)]
   }),
   returnDataMode: ReturnDataMode.Full,
   // Configure scanner to only use MRZ reading (good for e.g. passports)

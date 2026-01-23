@@ -96,11 +96,15 @@ The `CapturedId` object contains the extracted data from the scanned document. T
 | `dateOfExpiry` | `DateResult` | Expiration date of the document |
 | `isExpired` | `boolean` | Whether the document is expired |
 | `dateOfIssue` | `DateResult` | Date when the document was issued |
-| `documentType` | `DocumentType` | Type of document (`"Passport"`, `"IDCard"`, or `"DriverLicense"`) |
+| `documentType` | `DocumentType` | Type of document (e.g. `"Passport"`, `"IdCard"`, `"DriverLicense"`, `"VisaIcao"`, `"ResidencePermit"`, `"HealthInsuranceCard"`, `"RegionSpecific"`) |
+| `documentSubtype` | `string \| null` | Subtype of the document, if applicable |
 | `capturedResultTypes` | `string[]` | Types of data that were captured |
-| `images` | `ImageData` | Object containing base64 encoded images (if requested) |
-| `mrzResult` | `object \| null` | Raw extracted data from Machine Readable Zone (MRZ) |
-| `vizResult` | `object \| null` | Raw extracted data from Visual Inspection Zone (VIZ) |
+| `nationalityISO` | `string \| null` | ISO code of the nationality |
+| `isCitizenPassport` | `boolean` | Whether the document is a citizen passport |
+| `images` | `object \| null` | Object containing base64 encoded images (if requested) |
+| `mrzResult` | `MrzResult \| null` | Raw extracted data from Machine Readable Zone (MRZ) |
+| `vizResult` | `VizResult \| null` | Raw extracted data from Visual Inspection Zone (VIZ) |
+| `barcodeResult` | `BarcodeResult \| null` | Raw extracted data from barcode |
 
 ### DateResult Object
 
@@ -112,14 +116,24 @@ Date values are represented as `DateResult` objects:
 | `month` | `number` | Month (1-12) |
 | `year` | `number` | Four-digit year |
 
-### ImageData Object
+### Images Object
 
-If you've used `ReturnDataMode.FullWithImages`, the `images` property will contain:
+If you've used `ReturnDataMode.FullWithImages`, the `images` property will contain front and back image sets:
+
+```ts
+images: {
+  front: ImageSet;
+  back: ImageSet;
+} | null
+```
+
+Each `ImageSet` contains:
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `fullFrame` | `string[]` | Raw captured frames used for detection (base64 encoded JPG images) |
-| `cropped` | `string[]` | Cropped face and ID images, if available (base64 encoded JPG images) |
+| `face` | `string \| null` | Cropped face image extracted from the document (base64 encoded) |
+| `croppedDocument` | `string \| null` | Cropped image of the document, only available when the visual inspection zone is scanned (base64 encoded) |
+| `frame` | `string \| null` | Full frame image of the captured document (base64 encoded) |
 
 ## Example: Complete Callback Usage
 

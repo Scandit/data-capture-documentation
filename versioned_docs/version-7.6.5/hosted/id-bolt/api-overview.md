@@ -6,7 +6,6 @@ title: 'API Overview'
 displayed_sidebar: boltSidebar
 toc_max_heading_level: 4
 framework: bolt
-tags: [bolt]
 keywords:
   - bolt
 ---
@@ -88,6 +87,7 @@ The following options can be configured when creating an ID Bolt session:
 | `keepAliveForNextSession` | `boolean` | No | Keeps resources for multiple sessions | [Advanced Options](../advanced) |
 | `disableCloseOnBrowserBack` | `boolean` | No | Prevents closing on browser back | [Advanced Options](../advanced) |
 | `externalTransactionId` | `string` | No | Your tracking ID for analytics | [Advanced Options](../advanced) |
+| `learnMore` | `LearnMore` | No | Customize the "learn more" section | |
 | `onCompletion` | `Function` | Yes | Completion callback | [Callbacks](../callbacks) |
 | `onCancellation` | `Function` | No | Cancellation callback | [Callbacks](../callbacks) |
 

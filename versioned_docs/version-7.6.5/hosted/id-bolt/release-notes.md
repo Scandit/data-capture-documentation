@@ -3,12 +3,46 @@ description: "Release notes and updates for ID Bolt."
 toc_max_heading_level: 3
 displayed_sidebar: boltSidebar
 framework: bolt
-tags: [bolt]
 keywords:
   - bolt
 hide_title: true
 title: Release Notes
 ---
+
+## 2.1.0
+
+**Released**: January 21, 2026
+
+### New Features
+
+* Allow scanning of the table on the back of EU driver licenses.
+* Include the full decoded barcode result when scanning barcode on the back of US driver licenses.
+
+
+## 2.0.0
+
+**Released**: January 12, 2026
+
+### New Features
+
+* Updated Scandit Data Capture SDK to 8.x.
+* ID-Bolt SDK changes to align with Scandit Data Capture SDK 8.x.
+* Learn-more feature: User customizable content and external link to provide more information about the scanning process.
+
+### Bug Fixes
+
+* Improved translation strings with more concise error and success messaging.
+
+
+## 1.19.0
+
+**Released**: November 11, 2025
+
+### Bug Fixes
+
+* US RealID check now also checks RealID compliance for VIZ scan, before it would only check barcode. Requires update to ID-Bolt SDK 1.19.0.
+* Other minor bug fixes.
+
 
 ## 1.18.0
 
