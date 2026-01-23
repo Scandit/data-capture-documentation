@@ -300,32 +300,32 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/ios/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/ios/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/ios/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/ios/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditIdCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/ios/id-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/ios/id-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditLabelCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/ios/label-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditParser",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/ios/parser/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/ios/parser/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/ios/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/ios/genindex.html"
         }
       ]
     },
@@ -508,32 +508,32 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/android/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/android/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/android/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditIdCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/android/id-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditLabelCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/android/label-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/android/label-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditParser",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/android/parser/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/android/parser/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/android/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/android/genindex.html"
         }
       ]
     },
@@ -690,32 +690,32 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/web/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/web/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/web/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditIdCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/web/id-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/web/id-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditLabelCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/web/label-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/web/label-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditParser",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/web/parser/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/web/parser/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/web/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/web/genindex.html"
         }
       ]
     },
@@ -879,27 +879,27 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/cordova/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/cordova/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/cordova/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/cordova/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditIdCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/cordova/id-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/cordova/id-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditParser",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/cordova/parser/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/cordova/parser/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/cordova/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/cordova/genindex.html"
         }
       ]
     },
@@ -1081,32 +1081,32 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/react-native/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/react-native/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/react-native/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditIdCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/react-native/id-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/react-native/id-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditLabelCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/react-native/label-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/react-native/label-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditParser",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/react-native/parser/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/react-native/parser/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/react-native/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/react-native/genindex.html"
         }
       ]
     },
@@ -1281,32 +1281,32 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/flutter/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/flutter/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/flutter/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/flutter/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditIdCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/flutter/id-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/flutter/id-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditLabelCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/flutter/label-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/flutter/label-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditParser",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/flutter/parser/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/flutter/parser/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/flutter/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/flutter/genindex.html"
         }
       ]
     },
@@ -1470,27 +1470,27 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/capacitor/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/capacitor/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/capacitor/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/capacitor/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditIdCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/capacitor/id-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/capacitor/id-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditParser",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/capacitor/parser/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/capacitor/parser/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/capacitor/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/capacitor/genindex.html"
         }
       ]
     },
@@ -1553,17 +1553,17 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/titanium/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/titanium/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/titanium/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/titanium/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/titanium/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/titanium/genindex.html"
         }
       ]
     },
@@ -1702,27 +1702,27 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.ios/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.ios/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditIdCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/id-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.ios/id-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditParser",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/parser/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.ios/parser/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.ios/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.ios/genindex.html"
         }
       ]
     },
@@ -1861,27 +1861,27 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.android/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.android/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditIdCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/id-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.android/id-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditParser",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/parser/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.android/parser/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.android/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.android/genindex.html"
         }
       ]
     },
@@ -2020,27 +2020,27 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.forms/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.forms/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditIdCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/id-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.forms/id-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditParser",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/parser/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.forms/parser/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/xamarin.forms/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/xamarin.forms/genindex.html"
         }
       ]
     },
@@ -2205,27 +2205,27 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/dotnet.ios/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/dotnet.ios/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditIdCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/id-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/dotnet.ios/id-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditParser",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/parser/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/dotnet.ios/parser/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/dotnet.ios/genindex.html"
         }
       ]
     },
@@ -2390,27 +2390,27 @@
         {
           "type": "link",
           "label": "ScanditCaptureCore",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/core/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/dotnet.android/core/api.html"
         },
         {
           "type": "link",
           "label": "ScanditBarcodeCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/barcode-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/dotnet.android/barcode-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditIdCapture",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/id-capture/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/dotnet.android/id-capture/api.html"
         },
         {
           "type": "link",
           "label": "ScanditParser",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/parser/api.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/dotnet.android/parser/api.html"
         },
         {
           "type": "link",
           "label": "Index",
-          "href": "https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/genindex.html"
+          "href": "https://docs.scandit.com/7.6.6/data-capture-sdk/dotnet.android/genindex.html"
         }
       ]
     },
