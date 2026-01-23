@@ -91,7 +91,7 @@ export const frameworkCards = [
       {
         framework: "xamarinIos",
         icon: <XamarinIosFramework iconClass={style.iconStyle} />,
-        link: "/7.6.5/sdks/xamarin/ios",
+        link: "/7.6.6/sdks/xamarin/ios",
         barcodeScanning: [
           BarcodeScanning.SingleScanning,
           BarcodeScanning.BatchScanning,
@@ -102,7 +102,7 @@ export const frameworkCards = [
       {
         framework: "xamarinAndroid",
         icon: <XamarinAndroidFramework iconClass={style.iconStyle} />,
-        link: "/7.6.5/sdks/xamarin/android",
+        link: "/7.6.6/sdks/xamarin/android",
         barcodeScanning: [
           BarcodeScanning.SingleScanning,
           BarcodeScanning.BatchScanning,
@@ -113,7 +113,7 @@ export const frameworkCards = [
       {
         framework: "xamarinForms",
         icon: <Xamarin iconClass={style.iconStyle} />,
-        link: "/7.6.5/sdks/xamarin/forms",
+        link: "/7.6.6/sdks/xamarin/forms",
         barcodeScanning: [
           BarcodeScanning.SingleScanning,
           BarcodeScanning.BatchScanning,
