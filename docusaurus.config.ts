@@ -253,10 +253,14 @@ const config: Config = {
           },
           showLastUpdateTime: false,
           includeCurrentVersion: true,
-          lastVersion: "current",
+          lastVersion: "8.1.0",
           versions: {
             current: {
-              label: '8.1.0',
+              label: '8.2.0-beta.1',
+              banner: 'unreleased',
+              badge: false,
+            },
+            '8.1.0': {
               banner: 'none',
               badge: false,
             },
