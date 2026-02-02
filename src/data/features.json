@@ -12,7 +12,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/serial-number-barcode.html#serial-number-barcode" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/serial-number-barcode.html#serial-number-barcode" }
     }
   },
   {
@@ -28,7 +30,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/part-number-barcode.html#part-number-barcode" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/part-number-barcode.html#part-number-barcode" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/part-number-barcode.html#part-number-barcode" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/part-number-barcode.html#part-number-barcode" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/part-number-barcode.html#part-number-barcode" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/part-number-barcode.html#part-number-barcode" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/part-number-barcode.html#part-number-barcode" }
     }
   },
   {
@@ -44,7 +48,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/imei-one-barcode.html#imei-one-barcode" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/imei-one-barcode.html#imei-one-barcode" }
     }
   },
   {
@@ -60,7 +66,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/imei-two-barcode.html#imei-two-barcode" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/imei-two-barcode.html#imei-two-barcode" }
     }
   },
   {
@@ -76,7 +84,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/unit-price-text.html#unit-price-text" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/unit-price-text.html#unit-price-text" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/unit-price-text.html#unit-price-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/unit-price-text.html#unit-price-text" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/unit-price-text.html#unit-price-text" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/unit-price-text.html#unit-price-text" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/unit-price-text.html#unit-price-text" }
     }
   },
   {
@@ -92,7 +102,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/total-price-text.html#total-price-text" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/total-price-text.html#total-price-text" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/total-price-text.html#total-price-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/total-price-text.html#total-price-text" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/total-price-text.html#total-price-text" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/total-price-text.html#total-price-text" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/total-price-text.html#total-price-text" }
     }
   },
   {
@@ -108,7 +120,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/weight-text.html#weight-text" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/weight-text.html#weight-text" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/weight-text.html#weight-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/weight-text.html#weight-text" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/weight-text.html#weight-text" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/weight-text.html#weight-text" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/weight-text.html#weight-text" }
     }
   },
   {
@@ -124,7 +138,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/packing-date-text.html#packing-date-text" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/packing-date-text.html#packing-date-text" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/packing-date-text.html#packing-date-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/packing-date-text.html#packing-date-text" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/packing-date-text.html#packing-date-text" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/packing-date-text.html#packing-date-text" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/packing-date-text.html#packing-date-text" }
     }
   },
   {
@@ -140,7 +156,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/expiry-date-text.html#expiry-date-text" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/expiry-date-text.html#expiry-date-text" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/expiry-date-text.html#expiry-date-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/expiry-date-text.html#expiry-date-text" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/expiry-date-text.html#expiry-date-text" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/expiry-date-text.html#expiry-date-text" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/expiry-date-text.html#expiry-date-text" }
     }
   },
   {
@@ -156,7 +174,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" }
     }
   },
   {
@@ -172,7 +192,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" }
     }
   },
   {
@@ -188,7 +210,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" }
     }
   },
   {
@@ -204,7 +228,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/custom-barcode.html#custom-barcode" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/custom-barcode.html#custom-barcode" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/custom-barcode.html#custom-barcode" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/custom-barcode.html#custom-barcode" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/custom-barcode.html#custom-barcode" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/custom-barcode.html#custom-barcode" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/custom-barcode.html#custom-barcode" }
     }
   },
   {
@@ -220,7 +246,9 @@
       "React Native": { "version": "6.5", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/custom-text.html#custom-text" },
       "Flutter": { "version": "7.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/custom-text.html#custom-text" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/custom-text.html#custom-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/custom-text.html#custom-text" }
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/custom-text.html#custom-text" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/custom-text.html#custom-text" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/custom-text.html#custom-text" }
     }
   }
 ]
