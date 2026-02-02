@@ -260,7 +260,7 @@ const config: Config = {
               banner: 'none',
               badge: false,
             },
-            '7.6.6': {
+            '7.6.7': {
               banner: 'none',
               badge: false,
             },
