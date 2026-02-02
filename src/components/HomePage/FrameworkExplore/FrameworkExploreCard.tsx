@@ -20,7 +20,7 @@ export default function FrameworkExploreCard({
       return `/sdks/linux/add-sdk`;
     }
 
-    // If link starts with "/" (e.g., versioned path like "/7.6.6/sdks/xamarin/ios"), use it directly
+    // If link starts with "/" (e.g., versioned path like "/7.6.7/sdks/xamarin/ios"), use it directly
     if (link && link.startsWith('/')) {
       return `${link}/add-sdk`;
     }

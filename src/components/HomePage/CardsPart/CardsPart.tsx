@@ -11,9 +11,9 @@ export default function CardsPart() {
       react: "sdks/react-native/add-sdk",
       netIos: "sdks/net/ios/add-sdk",
       netAndroid: "sdks/net/android/add-sdk",
-      xamarinIos: "/7.6.6/sdks/xamarin/ios/add-sdk",
-      xamarinAndroid: "/7.6.6/sdks/xamarin/android/add-sdk",
-      xamarinForms: "/7.6.6/sdks/xamarin/forms/add-sdk",
+      xamarinIos: "/7.6.7/sdks/xamarin/ios/add-sdk",
+      xamarinAndroid: "/7.6.7/sdks/xamarin/android/add-sdk",
+      xamarinForms: "/7.6.7/sdks/xamarin/forms/add-sdk",
       web: "sdks/web/getting-started",
       capacitor: "sdks/capacitor/getting-started",
     };
@@ -26,9 +26,9 @@ export default function CardsPart() {
       react: "sdks/react-native/id-capture/get-started/",
       netIos: "sdks/net/ios/id-capture/get-started/",
       netAndroid: "sdks/net/id-capture/get-started/",
-      xamarinIos: "/7.6.6/sdks/xamarin/id-capture/get-started/",
-      xamarinAndroid: "/7.6.6/sdks/xamarin/android/id-capture/get-started/",
-      xamarinForms: "/7.6.6/sdks/xamarin/forms/id-capture/get-started/",
+      xamarinIos: "/7.6.7/sdks/xamarin/id-capture/get-started/",
+      xamarinAndroid: "/7.6.7/sdks/xamarin/android/id-capture/get-started/",
+      xamarinForms: "/7.6.7/sdks/xamarin/forms/id-capture/get-started/",
     };
 
     return frameworkUrls[framework] || `sdks/${framework}/id-capture/get-started/`;
