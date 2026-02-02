@@ -10,6 +10,16 @@ keywords:
   - react
 ---
 
+## 7.6.7
+
+**Released**: February 2, 2026
+
+### Performance Improvements
+
+#### Core
+
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
+
 ## 7.6.6
 
 **Released**: January 23, 2026
