@@ -9,6 +9,28 @@ keywords:
   - linux
 ---
 
+## 8.2.0-beta.1
+
+**Released**: February 2, 2026
+
+### New Features
+
+#### Barcode
+
+* Added PDF417 barcode generation, including compact mode (`compact`), compaction selection (`compaction` with values auto/text/byte/numeric), error-correction levels 0–8 (`errorCorrectionLevel`), and optional dimension bounds
+
+### Performance Improvements
+
+#### Core
+
+* Barcode Generator: Improved DataMatrix encoding efficiency, which depending on input data may result in smaller generated codes
+
+### Bug Fixes
+
+#### Barcode
+
+* Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
+
 ## 8.1.0
 
 **Released**: December 17, 2025

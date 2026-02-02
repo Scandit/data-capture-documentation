@@ -10,6 +10,56 @@ keywords:
   - cordova
 ---
 
+## 8.2.0-beta.1
+
+**Released**: February 2, 2026
+
+### New Features
+
+#### Barcode
+
+* Added new getFeedbackForScannedItem method to SparkScanFeedbackDelegate
+* Added BarcodeArResponsiveAnnotation API
+* Added MatrixScanArSimpleSample on Cordova
+* Added MatrixScan AR mode to Cordova framework
+* Added some missing BarcodePick APIs to React-Native, Capacitor and Cordova
+
+#### Smart Label Capture
+
+* [Smart Label Capture](/sdks/cordova/label-capture/intro.md) is now available on .NET for Android. It enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.
+
+#### Core
+
+* Added Electronic Product Code (EPC) data format
+
+### Performance Improvements
+
+#### Core
+
+* Barcode Generator: Improved DataMatrix encoding efficiency, which depending on input data may result in smaller generated codes
+
+### Bug Fixes
+
+#### Barcode
+
+* Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
+* Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
+* Fixed BarcodeCount Scan Preview issues including: fixed an issue where preview barcodes were used to populate the scanning list, the correct feedback is played when a barcode not in list is scanned, fixed an issue where scanning was not possible after the app was put in background, and corrected highlight orientation in landscape
+* Added cameraStateOnStop property to BarcodeFindView to optimize camera transitions when switching between modes
+* Fixed an issue where the successful hint in BarcodeFind is not displayed
+
+#### Id
+
+* Fixed an issue affecting MRZ scanning performance when using the user facing camera in portrait mode on Android
+
+#### Core
+
+* Fixed MatrixScanBubble Tap not being triggered in Cordova
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed an issue where the interface and video feed could have different visual orientations
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+* Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
+
 ## 8.1.0
 
 **Released**: December 17, 2025

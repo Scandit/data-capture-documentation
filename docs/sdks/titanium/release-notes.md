@@ -10,6 +10,24 @@ keywords:
   - titanium
 ---
 
+## 8.2.0-beta.1
+
+**Released**: February 2, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
+* Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
+
+#### Core
+
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed an issue where the interface and video feed could have different visual orientations
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+* Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
+
 ## 8.1.0
 
 **Released**: December 17, 2025

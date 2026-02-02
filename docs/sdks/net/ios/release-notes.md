@@ -9,6 +9,32 @@ keywords:
   - netIos
 ---
 
+## 8.2.0-beta.1
+
+**Released**: February 2, 2026
+
+### New Features
+
+#### Smart Label Capture
+
+* [Smart Label Capture](/sdks/net/ios/label-capture/intro.md) is now available on .NET for Android. It enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.
+
+### Bug Fixes
+
+#### Barcode
+
+* Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
+* Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
+* Fixed BarcodeCount Scan Preview issues including: fixed an issue where preview barcodes were used to populate the scanning list, the correct feedback is played when a barcode not in list is scanned, fixed an issue where scanning was not possible after the app was put in background, and corrected highlight orientation in landscape
+* Fixed an issue where MatrixScan AR circle highlights stopped pulsing when the app was restored from the background
+* Added cameraStateOnStop property to BarcodeFindView to optimize camera transitions when switching between modes
+
+#### Core
+
+* Fixed an issue where the interface and video feed could have different visual orientations
+* Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
+* Fixed `BarcodeBatchBasicOverlayStyle.Frame` such that it now correctly displays as a frame on iOS and MAUI iOS platforms, where previously setting the style to `Frame` would incorrectly render as a dot due to an enum value mismatch in the iOS binding layer
+
 ## 8.1.0
 
 **Released**: December 17, 2025

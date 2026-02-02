@@ -9,6 +9,63 @@ keywords:
   - capacitor
 ---
 
+## 8.2.0-beta.1
+
+**Released**: February 2, 2026
+
+### New Features
+
+#### Barcode
+
+* Added new getFeedbackForScannedItem method to SparkScanFeedbackDelegate
+* Added BarcodeArResponsiveAnnotation API
+* Added BarcodeAr API to Capacitor
+* Added some missing BarcodePick APIs to React-Native, Capacitor and Cordova
+
+#### Smart Label Capture
+
+* The Validation Flow, our ready‑to‑use workflow in Smart Label Capture for capturing and validating label data with minimal code, now features a completely redesigned user interface. The update improves ergonomics through a simplified API and highly requested customization options, making Smart Label Capture more intuitive and significantly reducing integration and customization effort across a wider range of use cases
+* Smart Label Capture now supports Receipt Scanning Capture. The feature is available in beta (contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out).
+* Added `getFrameData` to `didUpdateSession` of the LabelCaptureListener
+
+#### Core
+
+* Added Electronic Product Code (EPC) data format
+* Added support for Capacitor 8
+
+### Performance Improvements
+
+#### Core
+
+* Barcode Generator: Improved DataMatrix encoding efficiency, which depending on input data may result in smaller generated codes
+
+### Bug Fixes
+
+#### Barcode
+
+* Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
+* Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
+* Fixed BarcodeCount Scan Preview issues including: fixed an issue where preview barcodes were used to populate the scanning list, the correct feedback is played when a barcode not in list is scanned, fixed an issue where scanning was not possible after the app was put in background, and corrected highlight orientation in landscape
+* Added cameraStateOnStop property to BarcodeFindView to optimize camera transitions when switching between modes
+* Fixed an issue where the successful hint in BarcodeFind is not displayed
+
+#### Id
+
+* Fixed an issue affecting MRZ scanning performance when using the user facing camera in portrait mode on Android
+
+#### Core
+
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed an issue where the interface and video feed could have different visual orientations
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+* Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
+
+### Deprecations
+
+#### Smart Label Capture
+
+* Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
+
 ## 8.1.0
 
 **Released**: December 17, 2025
