@@ -13,33 +13,51 @@ keywords:
 
 To customize the appearance of an overlay you can implement a [LabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener) and/or [LabelCaptureAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/ui/label-capture-advanced-overlay-listener.html) interface, depending on the overlay(s) you are using.
 
-The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [brushForField()](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
+The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [brushForFieldOfLabel()](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
 ```dart
-overlay.addListener(LabelCaptureBasicOverlayListener(
-  brushForLabel: (overlay, label) {
+// Create a custom listener class that implements LabelCaptureBasicOverlayListener.
+class MyBasicOverlayListener extends LabelCaptureBasicOverlayListener {
+  @override
+  Future<Brush?> brushForLabel(LabelCaptureBasicOverlay overlay, CapturedLabel label) async {
+    // Use a transparent brush for the label itself.
     return null;
-  },
-  brushForField: (overlay, field, label) {
-    if (field.name == '<your-barcode-field-name>') {
+  }
+
+  @override
+  Future<Brush?> brushForFieldOfLabel(
+      LabelCaptureBasicOverlay overlay, LabelField field, CapturedLabel label) async {
+    if (field.name == 'Barcode') {
+      // Highlight barcode fields with a cyan color.
       return Brush(
-        fillColor: Colors.blue.withOpacity(0.2),
-        strokeColor: Colors.blue,
-        strokeWidth: 0,
+        Color.fromRGBO(0, 255, 255, 0.5),
+        Color.fromRGBO(0, 255, 255, 0.5),
+        0,
       );
     }
 
-    if (field.name == '<your-expiry-date-field-name>') {
+    if (field.name == 'Expiry Date') {
+      // Highlight expiry date fields with an orange color.
       return Brush(
-        fillColor: Colors.red.withOpacity(0.2),
-        strokeColor: Colors.red,
-        strokeWidth: 0,
+        Color.fromRGBO(255, 165, 0, 0.5),
+        Color.fromRGBO(255, 165, 0, 0.5),
+        0,
       );
     }
 
+    // Use transparent brush for other fields.
     return null;
-  },
-));
+  }
+
+  @override
+  void didTapLabel(LabelCaptureBasicOverlay overlay, CapturedLabel label) {
+    // Handle user tap gestures on the label.
+  }
+}
+
+// Create the overlay and set the listener.
+final overlay = LabelCaptureBasicOverlay(labelCapture);
+overlay.listener = MyBasicOverlayListener();
 ```
 
 :::tip
