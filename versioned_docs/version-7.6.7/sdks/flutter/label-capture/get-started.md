@@ -49,27 +49,28 @@ The main entry point for the Label Capture Mode is the [LabelCapture](https://do
 It is configured through [LabelCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/flutter/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/7.6/data-capture-sdk/flutter/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
 ```dart
-import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
-import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
-import 'package:scandit_flutter_datacapture_label/scandit_flutter_datacapture_label.dart';
+// Create a barcode field using the builder pattern.
+final barcodeField = CustomBarcodeBuilder()
+    .setSymbologies([Symbology.ean13Upca, Symbology.code128])
+    .build('Barcode');
 
-final settings = LabelCaptureSettings();
+// Create an expiry date text field using the builder pattern.
+final expiryDateField = ExpiryDateTextBuilder()
+    .isOptional(true)
+    .build('Expiry Date');
 
-// Create a label and add barcode field
-final label = LabelBuilder('<your-label-name>')
-  ..addCustomBarcodeField(
-    fieldName: '<your-barcode-field-name>',
-    symbologies: {Symbology.ean13Upca, Symbology.code128},
-    pattern: r'\d{12,14}', // Dart raw string for regex
-  )
-  ..addExpiryDateTextField(
-    fieldName: '<your-expiry-date-field-name>',
-    isOptional: false,
-  );
+// Create a label definition using the builder pattern.
+final labelDefinition = LabelDefinitionBuilder()
+    .addCustomBarcode(barcodeField)
+    .addExpiryDateText(expiryDateField)
+    .build('Product Label');
 
-settings.addLabel(label.build());
+// Create the label capture settings using the builder pattern.
+final settings = LabelCaptureSettingsBuilder()
+    .addLabel(labelDefinition)
+    .build();
 
-// Assuming you have a DataCaptureContext instance
+// Create the label capture mode with the context and settings.
 final labelCapture = LabelCapture.forContext(dataCaptureContext, settings);
 ```
 
@@ -84,74 +85,43 @@ In this example, we create a `LabelCaptureRepository` class that implements the 
 Depending on your app architecture and whether you use dependency injection or not, you may use a fragment or a repository to implement the listener.
 
 ```dart
-import 'dart:async';
-
-import 'package:flutter/foundation.dart';
-import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
-import 'package:scandit_flutter_datacapture_label/scandit_flutter_datacapture_label.dart';
-
-class CapturedLabelEvent {
-  final String? barcodeData;
-  final String? expiryDate;
-
-  CapturedLabelEvent(this.barcodeData, this.expiryDate);
-}
-
-class LabelCaptureRepository {
-  final ValueNotifier<CapturedLabelEvent?> capturedLabels = ValueNotifier(null);
-
-  late final LabelCapture labelCapture;
-  late final LabelCaptureListener _listener;
-
-  LabelCaptureRepository(DataCaptureContext context, LabelCaptureSettings settings) {
-    labelCapture = LabelCapture.forContext(context, settings);
-    _listener = _LabelCaptureListener(this);
-    labelCapture.addListener(_listener);
-  }
-
-  void dispose() {
-    labelCapture.removeListener(_listener);
-    capturedLabels.dispose();
-  }
-}
-
-class _LabelCaptureListener extends LabelCaptureListener {
-  final LabelCaptureRepository repository;
-
-  _LabelCaptureListener(this.repository);
-
+// Create a custom listener class that implements LabelCaptureListener.
+class MyLabelCaptureListener implements LabelCaptureListener {
   @override
-  void onSessionUpdated(LabelCapture capture, LabelCaptureSession session, FrameData? frameData) {
+  void didUpdateSession(LabelCapture labelCapture, LabelCaptureSession session) {
     final labels = session.capturedLabels;
 
     if (labels.isNotEmpty) {
       final label = labels.first;
 
-      // Extract the barcode field
-      final barcodeField = label.fields.firstWhere(
-        (field) => field.name == '<your-barcode-field-name>',
+      // Extract the barcode field by name.
+      final barcodeField = label.fields.cast<LabelField?>().firstWhere(
+        (field) => field?.name == 'Barcode',
         orElse: () => null,
       );
       final barcodeData = barcodeField?.barcode?.data;
 
-      // Extract the expiry date field (optional)
-      final expiryDateField = label.fields.firstWhere(
-        (field) => field.name == '<your-expiry-date-field-name>',
+      // Extract the expiry date field (optional).
+      final expiryDateField = label.fields.cast<LabelField?>().firstWhere(
+        (field) => field?.name == 'Expiry Date',
         orElse: () => null,
       );
       final expiryDate = expiryDateField?.text;
 
-      // Disable label capture to avoid duplicate scans
-      capture.isEnabled = false;
+      // Disable label capture to avoid duplicate scans.
+      labelCapture.isEnabled = false;
 
-      // Notify UI via ValueNotifier
-      repository.capturedLabels.value = CapturedLabelEvent(barcodeData, expiryDate);
+      // Process the captured data...
+      print('Barcode: $barcodeData, Expiry: $expiryDate');
 
-      // Emit default feedback (sound + vibration)
+      // Emit default feedback (sound + vibration).
       Feedback.defaultFeedback.emit();
     }
   }
 }
+
+// Add the listener to your label capture instance.
+labelCapture.addListener(MyLabelCaptureListener());
 ```
 
 ## Visualize the Scan Process

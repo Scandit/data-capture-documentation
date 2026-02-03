@@ -28,14 +28,35 @@ Smart Label Capture includes ready-made label definitions for common use cases. 
 
 ### Example: Price label
 
-Use the `LabelCaptureSettings` builder to configure a pre-built label definition for price labels, such as those found in retail environments:
+Create a label definition for price labels, such as those found in retail environments:
 
 ![Price Label Example](/img/slc/price-label.png)
 
 ```js
-const settings = LabelCaptureSettings.builder()
-    .addLabel(LabelDefinition.createPriceCaptureDefinition("price-label"))
-    .build();
+import { Symbology } from 'scandit-react-native-datacapture-barcode';
+import {
+  CustomBarcode,
+  TotalPriceText,
+  LabelDefinition,
+  LabelCaptureSettings
+} from 'scandit-react-native-datacapture-label';
+
+// Create a barcode field for the SKU.
+const skuField = CustomBarcode.initWithNameAndSymbologies(
+  'SKU',
+  [Symbology.EAN13UPCA, Symbology.Code128]
+);
+
+// Create a text field for the price.
+const priceField = new TotalPriceText('priceText');
+
+// Create a label definition for the price label.
+const priceLabel = new LabelDefinition('price-label');
+priceLabel.addField(skuField);
+priceLabel.addField(priceField);
+
+// Create the label capture settings from the label definitions.
+const settings = LabelCaptureSettings.settingsFromLabelDefinitions([priceLabel]);
 ```
 
 ## Custom Labels
@@ -53,14 +74,12 @@ There are two types of custom fields you can define:
 * [`CustomBarcode`](https://docs.scandit.com/7.6/data-capture-sdk/react-native/label-capture/api/custom-barcode.html#custom-barcode)
 * [`CustomText`](https://docs.scandit.com/7.6/data-capture-sdk/react-native/label-capture/api/custom-text.html#custom-text)
 
-The following methods are available to configure custom fields:
+The following properties are available to configure custom fields:
 
-| Method | Optional | Description |
-|--------|----------|-------------|
-| `patterns` | No | The regex patterns that identify the target string in the scanned content. |
-| `dataTypePatterns` | Yes | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
-| `symbologies` | No | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
-| `isOptional` | Yes | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
+| Property | Required | Description |
+|----------|----------|-------------|
+| `symbologies` | Yes (barcode fields) | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
+| `optional` | No | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
 
 #### Example: Fish Shipping Box
 
@@ -69,18 +88,31 @@ This example shows how to create a custom label definition for a fish shipping b
 ![Fish Shipping Box Example](/img/slc/fish-shipping-box.png)
 
 ```js
-const settings = LabelCaptureSettings.builder()
-    .addLabel(LabelDefinition.builder()
-        .addCustomBarcode()
-            .setSymbologies([Symbology.code128])
-            .buildFluent("barcode-field")
-        .addCustomText()
-            .setDataTypePatterns(["Batch"])
-            .setPatterns(["FZ\\d{5,10}"])
-            .setOptional(true)
-            .buildFluent("batch-number-field")
-        .buildFluent("shipping-label"))
-    .build();
+import { Symbology } from 'scandit-react-native-datacapture-barcode';
+import {
+  CustomBarcode,
+  CustomText,
+  LabelDefinition,
+  LabelCaptureSettings
+} from 'scandit-react-native-datacapture-label';
+
+// Create a barcode field with Code 128 symbology.
+const barcodeField = CustomBarcode.initWithNameAndSymbologies(
+  'barcode-field',
+  [Symbology.Code128]
+);
+
+// Create a custom text field for the batch number.
+const batchNumberField = new CustomText('batch-number-field');
+batchNumberField.optional = true;
+
+// Create a label definition for the shipping label.
+const shippingLabel = new LabelDefinition('shipping-label');
+shippingLabel.addField(barcodeField);
+shippingLabel.addField(batchNumberField);
+
+// Create the label capture settings.
+const settings = LabelCaptureSettings.settingsFromLabelDefinitions([shippingLabel]);
 ```
 
 ### Pre-built Fields
@@ -90,9 +122,7 @@ You can also configure your label by using pre-built fields. These are some comm
 Customization of pre-built fields is done via the `patterns`, `dataTypePatterns`, and `isOptional` methods, which allow you to specify the expected format of the field data.
 
 :::tip
-All pre-built fields come with default `patterns` and `dataTypePatterns` that are suitable for most use cases. **Using either method is optional and will override the defaults**.
-
-The `resetDataTypePatterns` method can be used to remove the default `dataTypePattern`, allowing you to rely solely on the `patterns` for detection.
+All pre-built fields come with predefined patterns that are suitable for most use cases.
 :::
 
 #### Barcode Fields
@@ -129,12 +159,32 @@ This example demonstrates how to configure a label definition for a hard disk dr
 ![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
 
 ```js
-const settings = LabelCaptureSettings.builder()
-    .addLabel(LabelDefinition.builder()
-        .addSerialNumberBarcode()
-        .buildFluent("serial-number")
-        .addPartNumberBarcode()
-        .buildFluent("part-number")
-        .buildFluent("hdd-label"))
-    .build();
+import { Symbology } from 'scandit-react-native-datacapture-barcode';
+import {
+  SerialNumberBarcode,
+  PartNumberBarcode,
+  LabelDefinition,
+  LabelCaptureSettings
+} from 'scandit-react-native-datacapture-label';
+
+// Create a serial number barcode field.
+// Pre-built fields like SerialNumberBarcode have predefined patterns.
+const serialNumberField = SerialNumberBarcode.initWithNameAndSymbology(
+  'serial-number',
+  Symbology.Code128
+);
+
+// Create a part number barcode field.
+const partNumberField = PartNumberBarcode.initWithNameAndSymbology(
+  'part-number',
+  Symbology.Code128
+);
+
+// Create a label definition for the HDD label.
+const hddLabel = new LabelDefinition('hdd-label');
+hddLabel.addField(serialNumberField);
+hddLabel.addField(partNumberField);
+
+// Create the label capture settings.
+const settings = LabelCaptureSettings.settingsFromLabelDefinitions([hddLabel]);
 ```
