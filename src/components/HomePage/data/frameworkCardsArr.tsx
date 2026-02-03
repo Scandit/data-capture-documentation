@@ -76,6 +76,7 @@ export const frameworkCards = [
       BarcodeScanning.ScanditExpress,
     ],
     IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
+    labelScanning: [LabelScanning.LabelScanning],
   },
   {
     framework: "xamarin",
@@ -155,6 +156,7 @@ export const frameworkCards = [
           BarcodeScanning.ScanditExpress,
         ],
         IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
+        labelScanning: [LabelScanning.LabelScanning],
       },
       {
         framework: "netAndroid",
@@ -166,6 +168,7 @@ export const frameworkCards = [
           BarcodeScanning.ScanditExpress,
         ],
         IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
+        labelScanning: [LabelScanning.LabelScanning],
       },
     ],
   },

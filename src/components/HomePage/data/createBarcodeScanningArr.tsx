@@ -32,6 +32,10 @@ export function createBarcodeScanningArr(framework: string) {
     if (path && path.startsWith('/')) {
       return `${path}${basePath}`;
     }
+    // For Cordova and .NET iOS label capture, link to /next/ docs (8.2)
+    if ((framework === 'cordova' || framework === 'netIos') && basePath === '/label-capture/intro') {
+      return `/next/sdks/${path}${basePath}`;
+    }
     // Otherwise prepend /sdks/
     return `/sdks/${path}${basePath}`;
   }
