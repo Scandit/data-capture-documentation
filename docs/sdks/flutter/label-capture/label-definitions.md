@@ -31,13 +31,17 @@ Smart Label Capture includes ready-made label definitions for common use cases. 
 
 ### Example: Price label
 
-Use the `LabelCaptureSettings` builder to configure a pre-built label definition for price labels, such as those found in retail environments:
+Use `LabelDefinition.priceCaptureDefinitionWithName()` to create a pre-built label definition for price labels, such as those found in retail environments:
 
 ![Price Label Example](/img/slc/price-label.png)
 
 ```dart
-final settings = LabelCaptureSettingsBuilder()()
-    .addLabel(LabelDefinition.priceCaptureDefinitionWithName("price-label"))
+// Create a pre-built price capture label definition.
+final priceLabel = LabelDefinition.priceCaptureDefinitionWithName('price-label');
+
+// Create the label capture settings using the builder pattern.
+final settings = LabelCaptureSettings.builder()
+    .addLabel(priceLabel)
     .build();
 ```
 
@@ -60,14 +64,14 @@ There are two types of custom fields you can define:
   displayMode="compact"
 />
 
-The following methods are available to configure custom fields:
+The following builder methods are available to configure custom fields:
 
-| Method | Optional | Description |
+| Method | Required | Description |
 |--------|----------|-------------|
-| `valueRegexes` | No | The regex patterns that identify the target string in the scanned content. |
-| `anchorRegexes` | Yes | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
-| `symbologies` | No | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
-| `isOptional` | Yes | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
+| `setValueRegexes()` / `setValueRegex()` | Yes | The regex patterns that identify the target string in the scanned content. |
+| `setAnchorRegexes()` / `setAnchorRegex()` | No | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
+| `setSymbologies()` / `setSymbology()` | Yes (barcode fields) | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
+| `isOptional()` | No | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
 
 #### Example: Fish Shipping Box
 
@@ -76,17 +80,29 @@ This example shows how to create a custom label definition for a fish shipping b
 ![Fish Shipping Box Example](/img/slc/fish-shipping-box.png)
 
 ```dart
-final settings = LabelCaptureSettingsBuilder()()
-    .addLabel(LabelDefinitionBuilder()
-        .addCustomBarcode()
-            .setSymbologies([Symbology.code128])
-            .buildFluent("barcode-field")
-        .addCustomText()
-            .setAnchorRegexes(["Batch"])
-            .setValueRegexes(["FZ\\d{5,10}"])
-            .setOptional(true)
-            .buildFluent("batch-number-field")
-        .buildFluent("shipping-label"))
+// Create a barcode field with Code 128 symbology.
+final barcodeField = CustomBarcodeBuilder()
+    .setSymbology(Symbology.code128)
+    .build('barcode-field');
+
+// Create a custom text field for the batch number.
+// Use setAnchorRegexes to specify keywords that help identify the field context.
+// Use setValueRegexes to specify the expected format of the field data.
+final batchNumberField = CustomTextBuilder()
+    .setAnchorRegexes(anchorRegexes: ['Batch'])
+    .setValueRegexes([r'FZ\d{5,10}'])
+    .isOptional(true)
+    .build('batch-number-field');
+
+// Create a label definition using the builder pattern.
+final shippingLabel = LabelDefinition.builder()
+    .addCustomBarcode(barcodeField)
+    .addCustomText(batchNumberField)
+    .build('shipping-label');
+
+// Create the label capture settings.
+final settings = LabelCaptureSettings.builder()
+    .addLabel(shippingLabel)
     .build();
 ```
 
@@ -97,9 +113,9 @@ You can also build your label using pre-built fields. These common fields speed 
 Customization of pre-built fields is done via the `valueRegexes`, `anchorRegexes`, and `isOptional` methods, which allow you to specify the expected format of the field data.
 
 :::tip
-All pre-built fields come with default `valueRegexes` and `anchorRegexes` that are suitable for most use cases. **Using either method is optional and will override the defaults**.
+All pre-built fields come with default `valueRegexes` and `anchorRegexes` that are suitable for most use cases. **Calling either builder method is optional and will override the defaults**.
 
-The `resetAnchorRegexes` method can be used to remove the default `anchorRegexes`, allowing you to rely solely on the `valueRegexes` for detection.
+The `resetAnchorRegexes()` method can be used to remove the default `anchorRegexes`, allowing you to rely solely on the `valueRegexes` for detection.
 :::
 
 import FeatureList from '@site/src/components/FeatureList';
@@ -138,12 +154,25 @@ This example demonstrates how to configure a label definition for a hard disk dr
 ![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
 
 ```dart
-final settings = LabelCaptureSettingsBuilder()()
-    .addLabel(LabelDefinitionBuilder()
-        .addSerialNumberBarcode()
-        .buildFluent("serial-number")
-        .addPartNumberBarcode()
-        .buildFluent("part-number")
-        .buildFluent("hdd-label"))
+// Create a serial number barcode field.
+// Pre-built fields like SerialNumberBarcode have predefined valueRegexes and anchorRegexes.
+final serialNumberField = SerialNumberBarcodeBuilder()
+    .setSymbology(Symbology.code128)
+    .build('serial-number');
+
+// Create a part number barcode field.
+final partNumberField = PartNumberBarcodeBuilder()
+    .setSymbology(Symbology.code128)
+    .build('part-number');
+
+// Create a label definition using the builder pattern.
+final hddLabel = LabelDefinition.builder()
+    .addSerialNumberBarcode(serialNumberField)
+    .addPartNumberBarcode(partNumberField)
+    .build('hdd-label');
+
+// Create the label capture settings.
+final settings = LabelCaptureSettings.builder()
+    .addLabel(hddLabel)
     .build();
 ```

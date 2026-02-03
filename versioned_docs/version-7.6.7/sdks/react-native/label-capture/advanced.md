@@ -16,52 +16,56 @@ To customize the appearance of the overlay, you can implement a [LabelCaptureBas
 The method [brushForLabel()](https://docs.scandit.com/7.6/data-capture-sdk/react-native/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label captured and [brushForField()](https://docs.scandit.com/7.6/data-capture-sdk/react-native/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
 ```js
-const overlayListener = useMemo<LabelCaptureBasicOverlayListener>(() => ({
-    brushForFieldOfLabel: (_, field) => {
-      switch (field.name) {
-      case "<your-barcode-field-name>":
+import { Brush, Color } from 'scandit-react-native-datacapture-core';
+import { LabelCaptureBasicOverlay } from 'scandit-react-native-datacapture-label';
+
+// Create the overlay listener to customize the appearance of captured labels.
+const overlayListener = useMemo(() => ({
+  // Called for each field to determine its brush.
+  brushForFieldOfLabel: (overlay, field, label) => {
+    switch (field.name) {
+      case 'Barcode':
+        // Highlight barcode fields with a cyan color.
         return new Brush(
-          "rgba(0, 255, 255, 0.5)",
-          "rgba(0, 255, 255, 0.5)",
-          0)
-      case "<your-expiry-date-field-name>":
+          Color.fromRGBA(0, 255, 255, 0.5),
+          Color.fromRGBA(0, 255, 255, 0.5),
+          0
+        );
+      case 'Expiry Date':
+        // Highlight expiry date fields with an orange color.
         return new Brush(
-          "rgba(255, 165, 0, 0.5)",
-          "rgba(255, 165, 0, 0.5)",
-          0)
+          Color.fromRGBA(255, 165, 0, 0.5),
+          Color.fromRGBA(255, 165, 0, 0.5),
+          0
+        );
       default:
-        return new Brush(
-          Colors.transparentColor,
-          Colors.transparentColor,
-          0)
-    },
-    brushForLabel() {
-      return new Brush(Colors.transparentColor, Colors.transparentColor, 0)
-    },
-    didTapLabel() {
-      /*
-       * Handle user tap gestures on the label.
-       */
+        // Use transparent brush for other fields.
+        return Brush.transparent;
     }
-  }), [])
+  },
+  // Called for each label to determine its brush.
+  brushForLabel: (overlay, label) => {
+    return Brush.transparent;
+  },
+  // Called when the user taps on a label.
+  didTapLabel: (overlay, label) => {
+    // Handle user tap gestures on the label.
+  }
+}), []);
 
 useEffect(() => {
-    /*
-     * Assign the overlay listener to the overlay
-     * before adding it to the data capture view.
-     */
-    overlay.listener = overlayListener
-    const dataCaptureView = dataCaptureViewRef.current
-    dataCaptureView.addOverlay(overlay)
-    return () => {
-        /*
-         * Unassign the overlay listener from the overlay
-         * before removing it from the data capture view.
-         */
-        overlay.listener = null
-        dataCaptureView?.removeOverlay(overlay)
-    }
-}, [])
+  // Assign the overlay listener to the overlay
+  // before adding it to the data capture view.
+  overlay.listener = overlayListener;
+  const dataCaptureView = dataCaptureViewRef.current;
+  dataCaptureView?.addOverlay(overlay);
+  return () => {
+    // Unassign the overlay listener from the overlay
+    // before removing it from the data capture view.
+    overlay.listener = null;
+    dataCaptureView?.removeOverlay(overlay);
+  };
+}, [overlay, overlayListener]);
 ```
 
 :::tip

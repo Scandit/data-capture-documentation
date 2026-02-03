@@ -13,55 +13,53 @@ keywords:
 
 To customize the appearance of the overlay, you can implement a [LabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener).
 
-The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label captured and [brushForField()](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
+The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label captured and [brushForFieldOfLabel()](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
 ```js
-const overlayListener = LabelCaptureBasicOverlayListener>(() => ({
-    brushForFieldOfLabel: (_, field) => {
-      switch (field.name) {
-      case "<your-barcode-field-name>":
-        return new Brush(
-          "rgba(0, 255, 255, 0.5)",
-          "rgba(0, 255, 255, 0.5)",
-          0)
-      case "<your-expiry-date-field-name>":
-        return new Brush(
-          "rgba(255, 165, 0, 0.5)",
-          "rgba(255, 165, 0, 0.5)",
-          0)
-      default:
-        return new Brush(
-          Colors.transparentColor,
-          Colors.transparentColor,
-          0)
-    },
-    brushForLabel() {
-      return new Brush(Colors.transparentColor, Colors.transparentColor, 0)
-    },
-    didTapLabel() {
-      /*
-       * Handle user tap gestures on the label.
-       */
-    }
-  }), [])
+// Create the overlay for the label capture mode.
+const overlay = new LabelCaptureBasicOverlay(labelCapture);
 
-useEffect(() => {
-    /*
-     * Assign the overlay listener to the overlay
-     * before adding it to the data capture view.
+// Set the listener to customize the appearance of captured labels and fields.
+overlay.listener = {
+    /**
+     * Called for each field of a captured label to determine its brush.
+     * Return a Brush to customize the field's appearance, or null to use the default.
      */
-    overlay.listener = overlayListener
-    const dataCaptureView = dataCaptureViewRef.current
-    dataCaptureView.addOverlay(overlay)
-    return () => {
-        /*
-         * Unassign the overlay listener from the overlay
-         * before removing it from the data capture view.
-         */
-        overlay.listener = null
-        dataCaptureView?.removeOverlay(overlay)
+    brushForFieldOfLabel: (overlay, field, label) => {
+        // Create colors with transparency (alpha 0.5 = 50% opacity).
+        const cyanColor = Color.fromRGBA(0, 255, 255, 0.5);
+        const orangeColor = Color.fromRGBA(255, 165, 0, 0.5);
+
+        switch (field.name) {
+            case "<your-barcode-field-name>":
+                // Highlight barcode fields with a cyan color.
+                return new Brush(cyanColor, cyanColor, 0);
+            case "<your-expiry-date-field-name>":
+                // Highlight expiry date fields with an orange color.
+                return new Brush(orangeColor, orangeColor, 0);
+            default:
+                // Use a transparent brush for other fields.
+                return Brush.transparent;
+        }
+    },
+    /**
+     * Called for each captured label to determine its brush.
+     * Return a Brush to customize the label's appearance, or null to use the default.
+     */
+    brushForLabel: (overlay, label) => {
+        // Use a transparent brush for the label itself.
+        return Brush.transparent;
+    },
+    /**
+     * Called when the user taps on a label.
+     */
+    didTapLabel: (overlay, label) => {
+        // Handle user tap gestures on the label.
     }
-}, [])
+};
+
+// Add the overlay to the data capture view.
+dataCaptureView.addOverlay(overlay);
 ```
 
 :::tip

@@ -116,30 +116,33 @@ It is configured through [LabelCaptureSettings](https://docs.scandit.com/7.6/dat
 import { Symbology } from "scandit-react-native-datacapture-barcode"
 import {
   CustomBarcode,
+  ExpiryDateText,
   LabelCapture,
   LabelCaptureSettings,
   LabelDefinition
 } from "scandit-react-native-datacapture-label"
 
-const labelCapture = useMemo<LabelCapture>(() => {
-  // Create a barcode field with the expected symbologies
-  const barcodeField = new CustomBarcode.initWithNameAndSymbologies('<your-barcode-field-name>', [Symbology.EAN13_UPCA, Symbology.CODE128]);
+const labelCapture = useMemo(() => {
+  // Create a barcode field with the expected symbologies.
+  const barcodeField = CustomBarcode.initWithNameAndSymbologies(
+    'Barcode',
+    [Symbology.EAN13UPCA, Symbology.Code128]
+  );
 
-  // Create a expiry date text field, using the ExpiryDateText preset
-  const expiryDateField = new ExpiryDateText('<your-expiry-date-field-name>')
-  expiryDateField.optional = true 
+  // Create an expiry date text field using the ExpiryDateText preset.
+  const expiryDateField = new ExpiryDateText('Expiry Date');
+  expiryDateField.optional = true;
 
-  // Create a label definition with the fields created above
-  const labelDefinition = new LabelDefinition('<your-label-name>');
-  labelDefinition.fields = [
-      barcodeField,
-      expiryDateField,
-  ];
+  // Create a label definition and assign the fields.
+  const labelDefinition = new LabelDefinition('Product Label');
+  labelDefinition.addField(barcodeField);
+  labelDefinition.addField(expiryDateField);
 
-  const settings = LabelCaptureSettings.settingsFromLabelDefinitions([labelDefinition], {})!
+  // Create the label capture settings from the label definitions.
+  const settings = LabelCaptureSettings.settingsFromLabelDefinitions([labelDefinition]);
 
-  // Create the label capture mode with the settings and data capture context created earlier
-  return LabelCapture.forContext(dataCaptureContext, settings)
+  // Create the label capture mode with the context and settings.
+  return LabelCapture.forContext(dataCaptureContext, settings);
 }, [dataCaptureContext])
 ```
 
@@ -152,10 +155,11 @@ First conform to the `LabelCaptureListener` interface. Here is an example of how
 Remember to add and remove listeners as described in the [Create Component](#create-component) section.
 
 ```js
-import { CapturedLabel, LabelCaptureListener } from 'scandit-react-native-datacapture-label';
+import { LabelCaptureListener } from 'scandit-react-native-datacapture-label';
+import { Feedback } from 'scandit-react-native-datacapture-core';
 
-const labelCaptureListener = useMemo<LabelCaptureListener>(() => ({
-  didUpdateSession(_, session) {
+const labelCaptureListener = useMemo(() => ({
+  didUpdateSession(labelCapture, session) {
     /* 
      * The session update callback is called for every processed frame.
      * Early return if no label has been captured.
@@ -169,7 +173,7 @@ const labelCaptureListener = useMemo<LabelCaptureListener>(() => ({
        * Given the label capture settings defined above, barcode data will always be present.
        */
       const barcodeData = fields.find(
-        field => field.name === '<your-barcode-field-name>'
+        field => field.name === 'Barcode'
       )?.barcode?.data;
       
       /* 
@@ -177,7 +181,7 @@ const labelCaptureListener = useMemo<LabelCaptureListener>(() => ({
        * Check for null in your result handling.
        */
       const expiryDate = fields.find(
-        field => field.name === '<your-expiry-date-field-name>'
+        field => field.name === 'Expiry Date'
       )?.text;
 
       /* 
@@ -214,17 +218,18 @@ Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptur
 
 ```js
 import { RectangularViewfinder, RectangularViewfinderStyle } from 'scandit-react-native-datacapture-core';
-import { LabelCapture, LabelCaptureBasicOverlay } from "scandit-react-native-datacapture-label"
+import { LabelCaptureBasicOverlay } from "scandit-react-native-datacapture-label"
 
-const labelCaptureOverlay = useMemo<LabelCaptureBasicOverlay>(() => {
-  // Create the overlay with the label capture mode created earlier
-  const labelCaptureOverlay = LabelCaptureBasicOverlay.withLabelCapture(labelCapture)
+const labelCaptureOverlay = useMemo(() => {
+  // Create the overlay with the label capture mode created earlier.
+  // In 7.6+, you can use the constructor directly.
+  const overlay = new LabelCaptureBasicOverlay(labelCapture);
   
-  // Add a square viewfinder to the overlay to guide users through the capture process
-  const viewfinder = new RectangularViewfinder(RectangularViewfinderStyle.Square)
-  labelCaptureOverlay.viewfinder = viewfinder
+  // Add a square viewfinder to the overlay to guide users through the capture process.
+  const viewfinder = new RectangularViewfinder(RectangularViewfinderStyle.Square);
+  overlay.viewfinder = viewfinder;
   
-  return labelCaptureOverlay
+  return overlay;
 }, [labelCapture])
 ```
 
@@ -237,16 +242,18 @@ See the [Advanced Configurations](advanced.md) section for more information abou
 You need to also create the [Camera](https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api/camera.html#class-scandit.datacapture.core.Camera):
 
 ```js
+import { Camera } from 'scandit-react-native-datacapture-core';
+import { LabelCapture } from 'scandit-react-native-datacapture-label';
+
+// Get the default camera.
 const camera = Camera.default;
-context.setFrameSource(camera);
 
-const cameraSettings = IdCapture.recommendedCameraSettings;
+// Set the camera as the frame source for the data capture context.
+dataCaptureContext.setFrameSource(camera);
 
-// Depending on the use case further camera settings adjustments can be made here.
-
-if (camera != null) {
-	camera.applySettings(cameraSettings);
-}
+// Apply the recommended camera settings for label capture.
+const cameraSettings = LabelCapture.recommendedCameraSettings;
+camera.applySettings(cameraSettings);
 ```
 
 Once the Camera, DataCaptureContext, DataCaptureView and LabelCapture are initialized, you can switch on the camera to start capturing labels.
@@ -270,7 +277,8 @@ Here, we use the default [Feedback](https://docs.scandit.com/7.6/data-capture-sd
 ```js
 import { Feedback } from 'scandit-react-native-datacapture-core';
 
-const feedback = Feedback.defaultFeedback();
+// Use the default feedback for sound and vibration.
+const feedback = Feedback.defaultFeedback;
 ```
 
 After creating the feedback, you can emit it on successful scans with `feedback.emit()`. See the `LabelCaptureListener` implementation above for more information.

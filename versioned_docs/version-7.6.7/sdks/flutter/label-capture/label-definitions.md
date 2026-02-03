@@ -27,13 +27,29 @@ Smart Label Capture includes ready-made label definitions for common use cases. 
 
 ### Example: Price label
 
-Use the `LabelCaptureSettings` builder to configure a pre-built label definition for price labels, such as those found in retail environments:
+Create a label definition for price labels, such as those found in retail environments:
 
 ![Price Label Example](/img/slc/price-label.png)
 
 ```dart
-final settings = LabelCaptureSettingsBuilder()()
-    .addLabel(LabelDefinition.priceCaptureDefinitionWithName("price-label"))
+// Create a barcode field for the SKU.
+final skuField = CustomBarcodeBuilder()
+    .setSymbologies([Symbology.ean13Upca, Symbology.code128])
+    .build('SKU');
+
+// Create a text field for the price.
+final priceField = TotalPriceTextBuilder()
+    .build('priceText');
+
+// Create a label definition for the price label.
+final priceLabel = LabelDefinitionBuilder()
+    .addCustomBarcode(skuField)
+    .addTotalPriceText(priceField)
+    .build('price-label');
+
+// Create the label capture settings using the builder pattern.
+final settings = LabelCaptureSettingsBuilder()
+    .addLabel(priceLabel)
     .build();
 ```
 
@@ -52,14 +68,13 @@ There are two types of custom fields you can define:
 * [`CustomBarcode`](https://docs.scandit.com/7.6/data-capture-sdk/flutter/label-capture/api/custom-barcode.html#custom-barcode)
 * [`CustomText`](https://docs.scandit.com/7.6/data-capture-sdk/flutter/label-capture/api/custom-text.html#custom-text)
 
-The following methods are available to configure custom fields:
+The following builder methods are available to configure custom fields:
 
-| Method | Optional | Description |
+| Method | Required | Description |
 |--------|----------|-------------|
-| `patterns` | No | The regex patterns that identify the target string in the scanned content. |
-| `dataTypePatterns` | Yes | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
-| `symbologies` | No | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
-| `isOptional` | Yes | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
+| `setSymbology()` / `setSymbologies()` | Yes (barcode fields) | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
+| `isOptional()` | No | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
+| `setHiddenProperty()` | No | Set hidden properties for advanced configuration. |
 
 #### Example: Fish Shipping Box
 
@@ -68,17 +83,25 @@ This example shows how to create a custom label definition for a fish shipping b
 ![Fish Shipping Box Example](/img/slc/fish-shipping-box.png)
 
 ```dart
-final settings = LabelCaptureSettingsBuilder()()
-    .addLabel(LabelDefinitionBuilder()  
-        .addCustomBarcode()
-            .setSymbologies([Symbology.code128])
-            .buildFluent("barcode-field")
-        .addCustomText()
-            .setDataTypePatterns(["Batch"])
-            .setPatterns(["FZ\\d{5,10}"])
-            .setOptional(true)
-            .buildFluent("batch-number-field")
-        .buildFluent("shipping-label"))
+// Create a barcode field with Code 128 symbology.
+final barcodeField = CustomBarcodeBuilder()
+    .setSymbology(Symbology.code128)
+    .build('barcode-field');
+
+// Create a custom text field for the batch number.
+final batchNumberField = CustomTextBuilder()
+    .isOptional(true)
+    .build('batch-number-field');
+
+// Create a label definition using the builder pattern.
+final shippingLabel = LabelDefinitionBuilder()
+    .addCustomBarcode(barcodeField)
+    .addCustomText(batchNumberField)
+    .build('shipping-label');
+
+// Create the label capture settings.
+final settings = LabelCaptureSettingsBuilder()
+    .addLabel(shippingLabel)
     .build();
 ```
 
@@ -89,9 +112,7 @@ You can also configure your label by using pre-built fields. These are some comm
 Customization of pre-built fields is done via the `patterns`, `dataTypePatterns`, and `isOptional` methods, which allow you to specify the expected format of the field data.
 
 :::tip
-All pre-built fields come with default `patterns` and `dataTypePatterns` that are suitable for most use cases. **Using either method is optional and will override the defaults**.
-
-The `resetDataTypePatterns` method can be used to remove the default `dataTypePattern`, allowing you to rely solely on the `patterns` for detection.
+All pre-built fields come with predefined patterns that are suitable for most use cases. You can use `setHiddenProperty()` for advanced customization if needed.
 :::
 
 #### Barcode Fields
@@ -128,12 +149,25 @@ This example demonstrates how to configure a label definition for a hard disk dr
 ![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
 
 ```dart
-final settings = LabelCaptureSettingsBuilder()()
-    .addLabel(LabelDefinitionBuilder()
-        .addSerialNumberBarcode()
-        .buildFluent("serial-number")
-        .addPartNumberBarcode()
-        .buildFluent("part-number")
-        .buildFluent("hdd-label"))
+// Create a serial number barcode field.
+// Pre-built fields like SerialNumberBarcode have predefined patterns.
+final serialNumberField = SerialNumberBarcodeBuilder()
+    .setSymbology(Symbology.code128)
+    .build('serial-number');
+
+// Create a part number barcode field.
+final partNumberField = PartNumberBarcodeBuilder()
+    .setSymbology(Symbology.code128)
+    .build('part-number');
+
+// Create a label definition using the builder pattern.
+final hddLabel = LabelDefinitionBuilder()
+    .addSerialNumberBarcode(serialNumberField)
+    .addPartNumberBarcode(partNumberField)
+    .build('hdd-label');
+
+// Create the label capture settings.
+final settings = LabelCaptureSettingsBuilder()
+    .addLabel(hddLabel)
     .build();
 ```

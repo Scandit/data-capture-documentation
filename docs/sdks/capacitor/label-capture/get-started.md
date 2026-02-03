@@ -47,54 +47,88 @@ The main entry point for the Label Capture Mode is the [LabelCapture](https://do
 It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
 ```js
-import { Symbology } from "@scandit/capacitor-datacapture-barcode"
+import { Symbology } from "scandit-capacitor-datacapture-barcode";
 import {
-  CustomBarcodeBuilder,
+  CustomBarcode,
+  ExpiryDateText,
+  ImeiOneBarcode,
+  ImeiTwoBarcode,
   LabelCapture,
   LabelCaptureSettings,
-  LabelDefinitionBuilder,
-  TotalPriceTextBuilder,
-  UnitPriceTextBuilder,
+  LabelDateComponentFormat,
   LabelDateFormat,
-  WeightTextBuilder,
-  ImeiOneBarcodeBuilder,
-  ImeiTwoBarcodeBuilder,
-  SerialNumberBarcodeBuilder,
-} from "@scandit/capacitor-datacapture-label"
+  LabelDefinition,
+  SerialNumberBarcode,
+  TotalPriceText,
+  UnitPriceText,
+  WeightText,
+} from "scandit-capacitor-datacapture-label";
 
-const isofLabel = await new LabelDefinitionBuilder()
-  .addCustomBarcode(
-    // Create a barcode field with the expected symbologies
-    await new CustomBarcodeBuilder().isOptional(false).setSymbology(Symbology.EAN13UPCA).build("Barcode")
-  )
-  .addTotalPriceText(await new TotalPriceTextBuilder().isOptional(false).build("Total Price"))
-  .addUnitPriceText(await new UnitPriceTextBuilder().isOptional(false).build("Unit Price"))
-  .addExpiryDateText(
-    await new ExpiryDateTextBuilder()
-      .isOptional(false)
-      .setLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY))
-      .build("Expiry Date")
-  )
-  .addWeightText(await new WeightTextBuilder().isOptional(false).build("Weight"))
-  .build("ISOF Label");
+// Create a label definition for an ISOF (In-Store Order Fulfillment) label.
+// This label type typically includes a barcode, price fields, expiry date, and weight.
+const isofLabel = new LabelDefinition("ISOF Label");
 
-const smartDeviceLabel = await new LabelDefinitionBuilder()
-  .addImeiOneBarcode(
-    await new ImeiOneBarcodeBuilder().isOptional(false).setSymbology(Symbology.Code128).build("IMEI")
-  )
-  .addImeiTwoBarcode(
-    await new ImeiTwoBarcodeBuilder().isOptional(false).setSymbology(Symbology.Code128).build("IMEI2")
-  )
-  .addSerialNumberBarcode(
-    await new SerialNumberBarcodeBuilder().isOptional(false).setSymbology(Symbology.Code128).build("Serial Number")
-  )
-  .addCustomBarcode(await new CustomBarcodeBuilder().isOptional(false).setSymbology(Symbology.Code128).build("EID"))
-  .build("Smart Device Label");
+// Add a barcode field that expects an EAN-13 or UPC-A barcode.
+const barcodeField = CustomBarcode.initWithNameAndSymbology("Barcode", Symbology.EAN13UPCA);
+barcodeField.optional = false;
+isofLabel.addField(barcodeField);
 
-const settings = await new LabelCaptureSettingsBuilder().addLabel(isofLabel).addLabel(smartDeviceLabel).build();
-// Create the label capture mode with the settings and data capture context created earlier
-const mode = new LabelCapture(settings);
-dataCaptureContext.addMode(mode);
+// Add a total price text field.
+const totalPriceField = new TotalPriceText("Total Price");
+totalPriceField.optional = false;
+isofLabel.addField(totalPriceField);
+
+// Add a unit price text field.
+const unitPriceField = new UnitPriceText("Unit Price");
+unitPriceField.optional = false;
+isofLabel.addField(unitPriceField);
+
+// Add an expiry date text field with a specific date format (Month-Day-Year).
+const expiryDateField = new ExpiryDateText("Expiry Date");
+expiryDateField.optional = false;
+expiryDateField.labelDateFormat = new LabelDateFormat(LabelDateComponentFormat.MDY, false);
+isofLabel.addField(expiryDateField);
+
+// Add a weight text field.
+const weightField = new WeightText("Weight");
+weightField.optional = false;
+isofLabel.addField(weightField);
+
+// Create a label definition for a smart device label.
+// This label type is commonly found on electronic devices and includes IMEI numbers and serial numbers.
+const smartDeviceLabel = new LabelDefinition("Smart Device Label");
+
+// Add an IMEI barcode field (first IMEI number).
+const imeiField = ImeiOneBarcode.initWithNameAndSymbology("IMEI", Symbology.Code128);
+imeiField.optional = false;
+smartDeviceLabel.addField(imeiField);
+
+// Add a second IMEI barcode field (for dual-SIM devices).
+const imei2Field = ImeiTwoBarcode.initWithNameAndSymbology("IMEI2", Symbology.Code128);
+imei2Field.optional = false;
+smartDeviceLabel.addField(imei2Field);
+
+// Add a serial number barcode field.
+const serialNumberField = SerialNumberBarcode.initWithNameAndSymbology("Serial Number", Symbology.Code128);
+serialNumberField.optional = false;
+smartDeviceLabel.addField(serialNumberField);
+
+// Add a custom barcode field for EID (Electronic ID).
+const eidField = CustomBarcode.initWithNameAndSymbology("EID", Symbology.Code128);
+eidField.optional = false;
+smartDeviceLabel.addField(eidField);
+
+// Create the label capture settings from the label definitions.
+const settings = LabelCaptureSettings.settingsFromLabelDefinitions(
+  [isofLabel, smartDeviceLabel],
+  null // Optional properties
+);
+
+// Create the label capture mode with the settings.
+const labelCapture = new LabelCapture(settings);
+
+// Add the mode to the data capture context created earlier.
+dataCaptureContext.addMode(labelCapture);
 ```
 
 ## Implement a Listener to Handle Captured Labels
@@ -103,58 +137,54 @@ To get informed whenever a new label has been recognized, add a [LabelCaptureLis
 
 First conform to the `LabelCaptureListener` interface. Here is an example of how to implement a listener that processes the captured labels based on the label capture settings defined above.
 
-```ts
-import { CapturedLabel, LabelCaptureListener } from '@scandit/capacitor-datacapture-label';
-import type { LabelCapture, LabelCaptureSession } from '@scandit/capacitor-datacapture-label';
+```js
+import { Feedback } from "scandit-capacitor-datacapture-core";
+import { LabelCaptureListener } from "scandit-capacitor-datacapture-label";
 
-const labelCaptureListener: LabelCaptureListener = {
-  async didUpdateSession(labelCapture: LabelCapture, session: LabelCaptureSession) {
-    /* 
-     * The session update callback is called for every processed frame.
-     * Early return if no label has been captured.
-     */
-    if (!session.capturedLabels.length) return;
-    
-    session.capturedLabels.forEach(capturedLabel => {
-      const { fields } = capturedLabel;
-      
-      /* 
-       * Given the label capture settings defined above, barcode data will always be present.
-       */
-      const barcodeData = fields.find(
-        field => field.name === '<your-barcode-field-name>'
-      )?.barcode?.data;
-      
-      /* 
-       * The expiry date is an optional field.
-       * Check for null in your result handling.
-       */
-      const expiryDate = fields.find(
-        field => field.name === '<your-expiry-date-field-name>'
-      )?.text;
+// Create a listener to handle captured labels.
+const labelCaptureListener = {
+    // Called for every processed frame. Check session.capturedLabels for results.
+    didUpdateSession: (labelCapture, session) => {
+        // Early return if no label has been captured in this frame.
+        if (session.capturedLabels.length === 0) {
+            return;
+        }
 
-      /* 
-       * Handle the captured data as needed, for example:
-       * - Update your app's state
-       * - Call a callback function
-       * - Navigate to a results screen
-       */
-      onLabelCaptured({ barcodeData, expiryDate });
-    });
+        // Process each captured label.
+        session.capturedLabels.forEach((capturedLabel) => {
+            const fields = capturedLabel.fields;
 
-    /* 
-     * Disable the label capture mode after all labels have been processed
-     * to prevent it from capturing the same labels multiple times.
-     */
-    await labelCapture.setEnabled(false);
+            // Access the barcode field by its name (as defined in the label definition).
+            // The barcode property contains the scanned barcode data.
+            const barcodeField = fields.find((field) => field.name === "Barcode");
+            const barcodeData = barcodeField?.barcode?.data;
 
-    /* 
-     * You may want to communicate a successful scan with vibration and audio feedback.
-     * See the Feedback section for more information on how to customize the feedback.
-     */
-    Feedback.defaultFeedback.emit();
-  }
-}
+            // Access the expiry date field. Use the text property for OCR-captured text,
+            // or the asDate() method to get a parsed LabelDateResult.
+            const expiryDateField = fields.find((field) => field.name === "Expiry Date");
+            const expiryDateText = expiryDateField?.text;
+            const expiryDateResult = expiryDateField?.asDate();
+
+            // Handle the captured data as needed, for example:
+            // - Update your app's state
+            // - Navigate to a results screen
+            // - Send data to your backend
+            console.log("Barcode:", barcodeData);
+            console.log("Expiry Date:", expiryDateText);
+        });
+
+        // Disable label capture to prevent capturing the same labels multiple times.
+        // Re-enable it when you're ready to scan again.
+        labelCapture.isEnabled = false;
+
+        // Emit feedback to indicate a successful scan.
+        // See the Feedback section for customization options.
+        Feedback.defaultFeedback.emit();
+    }
+};
+
+// Register the listener with the label capture mode.
+labelCapture.addListener(labelCaptureListener);
 ```
 
 ## Visualize the Scan Process
@@ -166,17 +196,18 @@ To visualize the results of Label Capture, you can choose between two overlays, 
 Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptureView`.
 
 ```js
-import { RectangularViewfinder, RectangularViewfinderStyle } from '@scandit/capacitor-datacapture-core';
-import { LabelCapture, LabelCaptureBasicOverlay } from "@scandit/capacitor-datacapture-label"
+import { RectangularViewfinder, RectangularViewfinderStyle } from "scandit-capacitor-datacapture-core";
+import { LabelCaptureBasicOverlay } from "scandit-capacitor-datacapture-label";
 
+// Create the overlay for the label capture mode created earlier.
+const overlay = new LabelCaptureBasicOverlay(labelCapture);
 
-// Create the overlay with the label capture mode created earlier
-const overlay = await LabelCaptureBasicOverlay.withLabelCapture(mode);
-await view.addOverlay(overlay);
+// Add the overlay to the data capture view.
+dataCaptureView.addOverlay(overlay);
 
-// Add a square viewfinder to the overlay to guide users through the capture process
-const viewfinder = new RectangularViewfinder(RectangularViewfinderStyle.Square)
-await overlay.setViewfinder(viewfinder)
+// Optionally, add a viewfinder to guide users through the capture process.
+const viewfinder = new RectangularViewfinder(RectangularViewfinderStyle.Square);
+overlay.viewfinder = viewfinder;
 ```
 
 :::tip
@@ -188,13 +219,20 @@ See the [Advanced Configurations](advanced.md) section for more information abou
 You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/camera.html#class-scandit.datacapture.core.Camera):
 
 ```js
-const camera = Camera.default;
-await context.setFrameSource(camera);
+import { Camera, FrameSourceState } from "scandit-capacitor-datacapture-core";
+import { LabelCapture } from "scandit-capacitor-datacapture-label";
 
+// Get the default camera (usually the back-facing camera).
+const camera = Camera.default;
+
+// Set the camera as the frame source for the data capture context.
+await dataCaptureContext.setFrameSource(camera);
+
+// Use the recommended camera settings for label capture.
 const cameraSettings = LabelCapture.createRecommendedCameraSettings();
 
-// Depending on the use case further camera settings adjustments can be made here.
-camera?.applySettings(cameraSettings);
+// Depending on the use case, further camera settings adjustments can be made here.
+await camera.applySettings(cameraSettings);
 ```
 
 Once the `Camera`, `DataCaptureContext`, `DataCaptureView` and `LabelCapture` are initialized, you can switch on the camera to start capturing labels.
@@ -202,6 +240,7 @@ Once the `Camera`, `DataCaptureContext`, `DataCaptureView` and `LabelCapture` ar
 Typically, this is done once the view becomes active and the user granted permission to use the camera, or once the user presses continue scanning after handling a previous scan.
 
 ```js
+// Turn on the camera to start capturing labels.
 await camera.switchToDesiredState(FrameSourceState.On);
 ```
 
@@ -218,7 +257,13 @@ If you already have a [Feedback](https://docs.scandit.com/data-capture-sdk/capac
 :::
 
 ```js
-const feedback = LabelCaptureFeedback.default;
+import { LabelCaptureFeedback } from "scandit-capacitor-datacapture-label";
+
+// Get the default feedback configuration.
+const feedback = LabelCaptureFeedback.defaultFeedback;
+
+// Assign the feedback to the label capture mode.
+labelCapture.feedback = feedback;
 ```
 
 :::note

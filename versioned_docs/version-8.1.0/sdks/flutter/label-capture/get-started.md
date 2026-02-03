@@ -49,28 +49,31 @@ The main entry point for the Label Capture Mode is the [LabelCapture](https://do
 It is configured through [LabelCaptureSettings](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
 ```dart
-import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
-import 'package:scandit_flutter_datacapture_barcode/scandit_flutter_datacapture_barcode.dart';
-import 'package:scandit_flutter_datacapture_label/scandit_flutter_datacapture_label.dart';
+// Create a barcode field using the builder pattern.
+final barcodeField = CustomBarcodeBuilder()
+    .setSymbologies([Symbology.ean13Upca, Symbology.code128])
+    .build('Barcode');
 
-final settings = LabelCaptureSettings();
+// Create an expiry date text field using the builder pattern.
+final expiryDateField = ExpiryDateTextBuilder()
+    .isOptional(true)
+    .build('Expiry Date');
 
-// Create a label and add barcode field
-final label = LabelBuilder('<your-label-name>')
-  ..addCustomBarcodeField(
-    fieldName: '<your-barcode-field-name>',
-    symbologies: {Symbology.ean13Upca, Symbology.code128},
-    pattern: r'\d{12,14}', // Dart raw string for regex
-  )
-  ..addExpiryDateTextField(
-    fieldName: '<your-expiry-date-field-name>',
-    isOptional: false,
-  );
+// Create a label definition using the builder pattern.
+final labelDefinition = LabelDefinition.builder()
+    .addCustomBarcode(barcodeField)
+    .addExpiryDateText(expiryDateField)
+    .build('Product Label');
 
-settings.addLabel(label.build());
+// Create the label capture settings using the builder pattern.
+final settings = LabelCaptureSettings.builder()
+    .addLabel(labelDefinition)
+    .build();
 
-// Assuming you have a DataCaptureContext instance
+// Create the label capture mode with the settings.
 final labelCapture = LabelCapture(settings);
+
+// Add the mode to the data capture context created earlier.
 dataCaptureContext.addMode(labelCapture);
 ```
 
