@@ -30,15 +30,15 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 ### Module Overview
 
-import LabelCaptureModuleOverview from '../../../../partials/get-started/_smart-label-capture-module-overview.mdx';
+import LabelCaptureModuleOverview from '../../../../partials/get-started/_smart-label-capture-module-overview-dotnet.mdx';
 
 <LabelCaptureModuleOverview/>
 
 ## Create a Data Capture Context
 
-import DataCaptureContextAndroid from '../../../../partials/get-started/_create-data-capture-context-android.mdx';
+import DataCaptureContextDotNet from '../../../../partials/get-started/_create-data-capture-context-dotnet.mdx';
 
-<DataCaptureContextAndroid/>
+<DataCaptureContextDotNet/>
 
 ## Configure the Label Capture Mode
 
