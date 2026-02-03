@@ -1,21 +1,9 @@
 ---
-description: "import AboutLabelCapture from '../../../../partials/intro/_about-smart-label-capture.mdx';                                                                                                "
-
-sidebar_label: About Smart Label Capture
-title: About Smart Label Capture
-toc_max_heading_level: 4
-pagination_prev: null
-framework: net-ios
-keywords:
-  - net-ios
+displayed_sidebar: netIosSidebar
 ---
 
-import AboutLabelCapture from '../../../../partials/intro/_about-smart-label-capture.mdx';
+# Page Unavailable
 
-<AboutLabelCapture/>
+This functionality is not currently supported in the selected framework.
 
-import ValidationFlow from '../../../../partials/intro/_about_validation_flow.mdx';
-
-<ValidationFlow/>
-
-See [here](./advanced.md#validation-flow) for more details.
+---
