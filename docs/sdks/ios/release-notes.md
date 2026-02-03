@@ -10,6 +10,58 @@ keywords:
   - ios
 ---
 
+## 8.2.0-beta.1
+
+**Released**: February 2, 2026
+
+### New Features
+
+#### Barcode
+
+* Added access to closeUp and farAway annotations in MatrixScan AR
+
+#### Id
+
+* Enabled scanning of MRZ on the backside of several EU residence permits
+* Added extraction of a cropped document image from Passports and VISAs that do not support VIZ extraction
+* Added extraction of the date of birth from Romanian IDs
+
+#### Smart Label Capture
+
+* The Validation Flow, our ready‑to‑use workflow in Smart Label Capture for capturing and validating label data with minimal code, now features a completely redesigned user interface. The update improves ergonomics through a simplified API and highly requested customization options, making Smart Label Capture more intuitive and significantly reducing integration and customization effort across a wider range of use cases
+* Added LabelCapture Validation Flow Manual input delegate, that allows the developer to receive a callback when the users trigger the manual input.
+
+#### Core
+
+* Added a third standby stage to the iOS camera that turns everything off for improved power management
+
+### Performance Improvements
+
+#### Core
+
+* Barcode Generator: Improved DataMatrix encoding efficiency, which depending on input data may result in smaller generated codes
+
+### Bug Fixes
+
+#### Barcode
+
+* Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
+* Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
+* Fixed BarcodeCount Scan Preview issues including: fixed an issue where preview barcodes were used to populate the scanning list, the correct feedback is played when a barcode not in list is scanned, fixed an issue where scanning was not possible after the app was put in background, and corrected highlight orientation in landscape
+* Fixed an issue where MatrixScan AR circle highlights stopped pulsing when the app was restored from the background
+* Added cameraStateOnStop property to BarcodeFindView to optimize camera transitions when switching between modes
+
+#### Core
+
+* Fixed an issue where the interface and video feed could have different visual orientations
+* Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
+
+### Deprecations
+
+#### Smart Label Capture
+
+* Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
+
 ## 8.1.0
 
 **Released**: December 17, 2025

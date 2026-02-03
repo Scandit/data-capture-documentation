@@ -1054,6 +1054,21 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "Label Scanning",
+      link: {
+        type: 'doc',
+        id: 'sdks/cordova/label-scanning',
+      },
+      collapsed: true,
+      items: [
+        "sdks/cordova/label-capture/intro",
+        "sdks/cordova/label-capture/get-started",
+        "sdks/cordova/label-capture/label-definitions",
+        "sdks/cordova/label-capture/advanced",
+      ],
+    },
+    {
+      type: "category",
       label: "API Reference",
       items: [
         {
@@ -1070,6 +1085,11 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "ScanditIdCapture",
           href: "https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api.html",
+        },
+        {
+          type: "link",
+          label: "ScanditLabelCapture",
+          href: "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api.html",
         },
         {
           type: "link",
@@ -2122,6 +2142,21 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "Label Scanning",
+      link: {
+        type: 'doc',
+        id: 'sdks/net/ios/label-scanning',
+      },
+      collapsed: true,
+      items: [
+        "sdks/net/ios/label-capture/intro",
+        "sdks/net/ios/label-capture/get-started",
+        "sdks/net/ios/label-capture/label-definitions",
+        "sdks/net/ios/label-capture/advanced",
+      ],
+    },
+    {
+      type: "category",
       label: "API Reference",
       items: [
         {
@@ -2138,6 +2173,11 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "ScanditIdCapture",
           href: "https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api.html",
+        },
+        {
+          type: "link",
+          label: "ScanditLabelCapture",
+          href: "https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api.html",
         },
         {
           type: "link",
@@ -2287,6 +2327,21 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "category",
+          label: "Label Scanning",
+          link: {
+            type: 'doc',
+            id: 'sdks/net/android/label-scanning',
+          },
+          collapsed: true,
+          items: [
+            "sdks/net/android/label-capture/intro",
+            "sdks/net/android/label-capture/get-started",
+            "sdks/net/android/label-capture/label-definitions",
+            "sdks/net/android/label-capture/advanced",
+          ],
+        },
+        {
+          type: "category",
           label: "Additional Functionalities",
           collapsed: true,
           items: [
@@ -2363,6 +2418,11 @@ const sidebars: SidebarsConfig = {
           type: "link",
           label: "ScanditIdCapture",
           href: "https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api.html",
+        },
+        {
+          type: "link",
+          label: "ScanditLabelCapture",
+          href: "https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api.html",
         },
         {
           type: "link",

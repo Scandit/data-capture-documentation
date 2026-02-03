@@ -9,6 +9,40 @@ keywords:
   - netAndroid
 ---
 
+## 8.2.0-beta.1
+
+**Released**: February 2, 2026
+
+### New Features
+
+#### Smart Label Capture
+
+* The Validation Flow, our ready‑to‑use workflow in Smart Label Capture for capturing and validating label data with minimal code, now features a completely redesigned user interface. The update improves ergonomics through a simplified API and highly requested customization options, making Smart Label Capture more intuitive and significantly reducing integration and customization effort across a wider range of use cases
+
+### Bug Fixes
+
+#### Barcode
+
+* Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
+* Fixed an issue where the successful hint in BarcodeFind is not displayed
+
+#### Id
+
+* Fixed an issue affecting MRZ scanning performance when using the user facing camera in portrait mode on Android
+
+#### Core
+
+* Fixed SparkScanView crash on Android when hiding the trigger button or changing certain UI properties in specific layout configurations, where the view now correctly handles dimension calculations during layout changes
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+* Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
+
+### Deprecations
+
+#### Smart Label Capture
+
+* Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
+
 ## 8.1.0
 
 **Released**: December 17, 2025

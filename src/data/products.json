@@ -142,14 +142,14 @@
     "frameworks": {
       "iOS": { "version": "6.0", "apiUrl": "/sdks/ios/label-capture/intro" },
       "Android": { "version": "6.0", "apiUrl": "/sdks/android/label-capture/intro" },
-      "Cordova": { "version": "n/a" },
+      "Cordova": { "version": "8.2", "apiUrl": "/sdks/cordova/label-capture/intro"  },
       "React Native": { "version": "6.5", "apiUrl": "/sdks/react-native/label-capture/intro" },
       "Flutter": { "version": "7.2", "apiUrl": "/sdks/flutter/label-capture/intro" },
       "Capacitor": { "version": "8.0", "apiUrl": "/sdks/capacitor/label-capture/intro" },
       "Titanium": { "version": "n/a" },
       "Web": { "version": "7.2", "apiUrl": "/sdks/web/label-capture/intro" },
-      ".NET iOS": { "version": "n/a" },
-      ".NET Android": { "version": "n/a" }
+      ".NET iOS": { "version": "8.2", "apiUrl": "/sdks/net/ios/label-capture/intro"  },
+      ".NET Android": { "version": "8.1", "apiUrl": "/sdks/net/android/label-capture/intro"  }
     }
   },
   {

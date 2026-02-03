@@ -10,6 +10,47 @@ keywords:
   - web
 ---
 
+## 8.2.0-beta.1
+
+**Released**: February 2, 2026
+
+### New Features
+
+#### Barcode
+
+* Stopped emitting vibration feedbacks when the scanner is stopped without user interaction
+
+#### Id
+
+* Enabled scanning of MRZ on the backside of several EU residence permits
+* Added extraction of a cropped document image from Passports and VISAs that do not support VIZ extraction
+* Added extraction of the date of birth from Romanian IDs
+
+#### Smart Label Capture
+
+* The Validation Flow, our ready‑to‑use workflow in Smart Label Capture for capturing and validating label data with minimal code, now features a completely redesigned user interface. The update improves ergonomics through a simplified API and highly requested customization options, making Smart Label Capture more intuitive and significantly reducing integration and customization effort across a wider range of use cases
+
+#### Core
+
+* Removed Howler.hs and JavaScript Cookie 3rd party dependencies
+
+### Bug Fixes
+
+#### Barcode
+
+* Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
+* Fixed a bug where the torch control would be shown even if the torch was not supported
+
+#### Id
+
+* Improved success rate when scanning using the ImageFrameSource or the SingleImageUploader as frame source
+
+### Deprecations
+
+#### Smart Label Capture
+
+* Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
+
 ## 8.1.0
 
 **Released**: December 17, 2025
