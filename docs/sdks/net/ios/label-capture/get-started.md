@@ -55,21 +55,43 @@ using Scandit.DataCapture.Label.Capture;
 using Scandit.DataCapture.Label.Data;
 using Scandit.DataCapture.Barcode.Data;
 
-// Build LabelCaptureSettings
-var settings = LabelCaptureSettings.Create()
-    .AddLabel()
-        // Add a barcode field with the expected symbologies and pattern
-        .AddCustomBarcode()
-            .SetSymbologies(Symbology.Ean13Upca, Symbology.Code128)
-            .SetPattern("\\d{12,14}")
-        .BuildFluent("<your-barcode-field-name>")
-        // Add a text field for capturing expiry dates
-        .AddExpiryDateText()
-            .IsOptional(true)
-            .SetLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY, false))
-        .BuildFluent("<your-expiry-date-field-name>")
-    .BuildFluent("<your-label-name>")
-    .Build();
+// Define field names and label name constants
+const string FIELD_BARCODE = "barcode";
+const string FIELD_EXPIRY_DATE = "expiry_date";
+const string FIELD_WEIGHT = "weight";
+const string LABEL_NAME = "weighted_item";
+
+// Build field definitions
+var fields = new List<LabelFieldDefinition>();
+
+// Add a custom barcode field with the expected symbologies
+var customBarcode = CustomBarcode.Builder()
+    .SetSymbologies(new List<Symbology>
+    {
+        Symbology.Ean13Upca,
+        Symbology.Gs1DatabarExpanded,
+        Symbology.Code128
+    })
+    .Build(FIELD_BARCODE);
+fields.Add(customBarcode);
+
+// Add an expiry date text field
+var expiryDateText = ExpiryDateText.Builder()
+    .SetLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY, acceptPartialDates: false))
+    .Build(FIELD_EXPIRY_DATE);
+fields.Add(expiryDateText);
+
+// Add a weight text field (optional)
+var weightText = WeightText.Builder()
+    .IsOptional(true)
+    .Build(FIELD_WEIGHT);
+fields.Add(weightText);
+
+// Create the label definition with the fields
+var labelDefinition = LabelDefinition.Create(LABEL_NAME, fields);
+
+// Create the settings with the label definition
+var settings = LabelCaptureSettings.Create(new List<LabelDefinition> { labelDefinition });
 
 // Create the label capture mode with the settings and data capture context
 var labelCapture = LabelCapture.Create(dataCaptureContext, settings);
@@ -82,7 +104,7 @@ To get informed whenever a new label has been recognized, add a [ILabelCaptureLi
 First implement the `ILabelCaptureListener` interface. Here is an example of how to implement a listener that processes the captured labels based on the label capture settings defined above:
 
 ```csharp
-public class LabelCaptureRepository : ILabelCaptureListener
+public class LabelCaptureRepository : NSObject, ILabelCaptureListener
 {
     public void OnSessionUpdated(LabelCapture labelCapture, LabelCaptureSession session, IFrameData frameData)
     {
@@ -102,7 +124,7 @@ public class LabelCaptureRepository : ILabelCaptureListener
              * the barcode field would always be present.
              */
             var barcodeData = label.Fields
-                .FirstOrDefault(field => field.Name == "<your-barcode-field-name>")
+                .FirstOrDefault(field => field.Name == FIELD_BARCODE)
                 ?.Barcode?.Data;
 
             /*
@@ -110,7 +132,15 @@ public class LabelCaptureRepository : ILabelCaptureListener
              * Check for null in your result handling.
              */
             var expiryDate = label.Fields
-                .FirstOrDefault(field => field.Name == "<your-expiry-date-field-name>")
+                .FirstOrDefault(field => field.Name == FIELD_EXPIRY_DATE)
+                ?.Text;
+
+            /*
+             * The weight field is optional.
+             * Check for null in your result handling.
+             */
+            var weight = label.Fields
+                .FirstOrDefault(field => field.Name == FIELD_WEIGHT)
                 ?.Text;
 
             /*
@@ -125,8 +155,7 @@ public class LabelCaptureRepository : ILabelCaptureListener
              */
             Task.Run(() =>
             {
-                HandleResults(barcodeData, expiryDate);
-                Feedback.DefaultFeedback.Emit();
+                HandleResults(barcodeData, expiryDate, weight);
             });
         }
     }
@@ -141,7 +170,7 @@ public class LabelCaptureRepository : ILabelCaptureListener
         // Called when the listener is removed from LabelCapture
     }
 
-    private void HandleResults(string barcodeData, string expiryDate)
+    private void HandleResults(string? barcodeData, string? expiryDate, string? weight)
     {
         // Process the captured data
     }
@@ -174,7 +203,7 @@ Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptur
 /*
  * Create the data capture view and attach it to the data capture context created earlier.
  */
-var dataCaptureView = DataCaptureView.Create(this, dataCaptureContext);
+var dataCaptureView = DataCaptureView.Create(dataCaptureContext, View.Bounds);
 
 /*
  * Add the data capture view to your view hierarchy
@@ -190,9 +219,18 @@ NSLayoutConstraint.ActivateConstraints(new[]
 });
 
 /*
- * Create the overlay with the label capture mode and data capture view created earlier.
+ * Create the overlay with the label capture mode.
  */
-var overlay = LabelCaptureBasicOverlay.Create(labelCapture, dataCaptureView);
+var overlay = LabelCaptureBasicOverlay.Create(labelCapture);
+
+/*
+ * Add the overlay to the data capture view.
+ */
+dataCaptureView.AddOverlay(overlay);
+
+/*
+ * Optionally, set a viewfinder to guide the user.
+ */
 overlay.Viewfinder = new RectangularViewfinder(RectangularViewfinderStyle.Square);
 ```
 
@@ -204,14 +242,17 @@ See the [Advanced Configurations](advanced.md) section for more information abou
 
 Next, you need to create a new instance of the [Camera](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera to stream previews and to capture images.
 
-When initializing the camera, you can pass the recommended camera settings for Label Capture.
+When initializing the camera, you can pass the recommended camera settings for Label Capture using the [LabelCapture.RecommendedCameraSettings](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/label-capture.html#property-scandit.datacapture.label.LabelCapture.RecommendedCameraSettings) static property.
 
 ```csharp
-var camera = Camera.GetDefaultCamera(LabelCapture.CreateRecommendedCameraSettings());
+var cameraSettings = LabelCapture.RecommendedCameraSettings;
+var camera = Camera.GetDefaultCamera(cameraSettings);
+
 if (camera == null)
 {
     throw new InvalidOperationException("Failed to init camera!");
 }
+
 dataCaptureContext.SetFrameSourceAsync(camera);
 ```
 
@@ -233,7 +274,13 @@ If you already have a [Feedback](https://docs.scandit.com/data-capture-sdk/dotne
 :::
 
 ```csharp
-labelCapture.Feedback = LabelCaptureFeedback.DefaultFeedback;
+// Use the default feedback (vibration and beep sound)
+labelCapture.Feedback = LabelCaptureFeedback.Default;
+
+// Or customize the feedback
+var customFeedback = LabelCaptureFeedback.Default;
+customFeedback.Success = new Feedback(Vibration.DefaultVibration, sound: null);
+labelCapture.Feedback = customFeedback;
 ```
 
 :::note

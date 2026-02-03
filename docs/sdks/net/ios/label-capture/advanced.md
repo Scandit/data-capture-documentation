@@ -18,41 +18,43 @@ To customize the appearance of an overlay you can implement a [ILabelCaptureBasi
 The method [BrushForLabel()](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [BrushForField()](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
 ```csharp
-public class BasicOverlayListener : ILabelCaptureBasicOverlayListener
+public class BasicOverlayListener : NSObject, ILabelCaptureBasicOverlayListener
 {
+    private readonly Brush upcBrush = new(
+        fillColor: UIColor.FromRGB(46, 193, 206),    // #2EC1CE
+        strokeColor: UIColor.FromRGB(46, 193, 206),
+        strokeWidth: 1f);
+    private readonly Brush expiryDateBrush = new(
+        fillColor: UIColor.FromRGB(250, 68, 70),     // #FA4446
+        strokeColor: UIColor.FromRGB(250, 68, 70),
+        strokeWidth: 1f);
+    private readonly Brush transparentBrush = Brush.TransparentBrush;
+
     /*
      * Customize the appearance of the overlay for the individual fields.
      */
-    public Brush BrushForField(
+    public Brush? BrushForField(
         LabelCaptureBasicOverlay overlay,
-        CapturedField field,
+        LabelField field,
         CapturedLabel label)
     {
         return field.Name switch
         {
-            "<your-barcode-field-name>" => new Brush(
-                UIColor.Cyan.ColorWithAlpha(0.5f),
-                UIColor.Cyan,
-                1f
-            ),
-            "<your-expiry-date-field-name>" => new Brush(
-                UIColor.Green.ColorWithAlpha(0.5f),
-                UIColor.Green,
-                1f
-            ),
-            _ => new Brush(UIColor.Clear, UIColor.Clear, 0f)
+            "barcode" => this.upcBrush,
+            "expiry_date" => this.expiryDateBrush,
+            _ => null
         };
     }
 
     /*
      * Customize the appearance of the overlay for the full label.
-     * In this example, we disable label overlays by returning null always.
+     * In this example, we disable label overlays by returning a transparent brush.
      */
-    public Brush BrushForLabel(
+    public Brush? BrushForLabel(
         LabelCaptureBasicOverlay overlay,
         CapturedLabel label)
     {
-        return null;
+        return this.transparentBrush;
     }
 
     public void OnLabelTapped(
@@ -70,7 +72,7 @@ overlay.Listener = new BasicOverlayListener();
 ```
 
 :::tip
-You can also use `LabelCaptureBasicOverlay.SetLabelBrush()` and `LabelCaptureBasicOverlay.SetCapturedFieldBrush()` to configure the overlay if you don't need to customize the appearance based on the name or content of the fields.
+You can also use `LabelCaptureBasicOverlay.LabelBrush`, `LabelCaptureBasicOverlay.CapturedFieldBrush`, and `LabelCaptureBasicOverlay.PredictedFieldBrush` properties to configure the overlay if you don't need to customize the appearance based on the name or content of the fields.
 :::
 
 ### Advanced Overlay
@@ -80,15 +82,18 @@ For more advanced use cases, such as adding custom views or implementing Augment
 ```csharp
 // Create an advanced overlay that allows for custom views to be added over detected label fields
 // This is the key component for implementing Augmented Reality features
-var advancedOverlay = LabelCaptureAdvancedOverlay.Create(labelCapture, dataCaptureView);
+var advancedOverlay = LabelCaptureAdvancedOverlay.Create(labelCapture);
+
+// Add the overlay to the data capture view
+dataCaptureView.AddOverlay(advancedOverlay);
 
 // Configure the advanced overlay with a listener that handles AR content creation and positioning
 advancedOverlay.Listener = new AdvancedOverlayListener();
 
-public class AdvancedOverlayListener : ILabelCaptureAdvancedOverlayListener
+public class AdvancedOverlayListener : NSObject, ILabelCaptureAdvancedOverlayListener
 {
     // This method is called when a label is detected - we return null since we're only adding AR elements to specific fields, not the entire label
-    public UIView ViewForCapturedLabel(
+    public UIView? ViewForCapturedLabel(
         LabelCaptureAdvancedOverlay overlay,
         CapturedLabel capturedLabel)
     {
@@ -113,7 +118,7 @@ public class AdvancedOverlayListener : ILabelCaptureAdvancedOverlayListener
     }
 
     // This method is called when a field is detected in a label
-    public UIView ViewForCapturedLabelField(
+    public UIView? ViewForCapturedLabelField(
         LabelCaptureAdvancedOverlay overlay,
         LabelField labelField)
     {
@@ -174,7 +179,7 @@ public class AdvancedOverlayListener : ILabelCaptureAdvancedOverlayListener
         return new PointWithUnit(0f, 22f, MeasureUnit.Dip);
     }
 
-    private int CalculateDaysUntilExpiry(string expiryDateText)
+    private int CalculateDaysUntilExpiry(string? expiryDateText)
     {
         // Parse the expiry date and calculate days remaining
         // Implementation depends on your date format
@@ -220,24 +225,24 @@ validationFlowOverlay.ApplySettings(validationSettings);
 
 ### Define a Listener
 
-To handle validation events, implement the [ILabelCaptureValidationFlowOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-validation-flow-listener.html) interface.
+To handle validation events, implement the [ILabelCaptureValidationFlowListener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-validation-flow-listener.html) interface.
 
 ```csharp
-public class ValidationFlowListener : ILabelCaptureValidationFlowOverlayListener
+public class ValidationFlowListener : NSObject, ILabelCaptureValidationFlowListener
 {
     // This is called by the validation flow overlay when a label has been fully captured and validated
     public void OnValidationFlowLabelCaptured(IList<LabelField> fields)
     {
-        string barcodeData = null;
-        string expiryDate = null;
+        string? barcodeData = null;
+        string? expiryDate = null;
 
         foreach (var field in fields)
         {
-            if (field.Name == "<your-barcode-field-name>")
+            if (field.Name == "barcode")
             {
                 barcodeData = field.Barcode?.Data;
             }
-            else if (field.Name == "<your-expiry-date-field-name>")
+            else if (field.Name == "expiry_date")
             {
                 expiryDate = field.Text;
             }

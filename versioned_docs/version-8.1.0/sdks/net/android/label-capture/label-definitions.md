@@ -13,34 +13,6 @@ A **Label Definition** is a configuration that defines the label, and its releva
 
 Smart Label Capture provides a [Label Definition](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/label-definition.html#label-definition) API, enabling you to configure and extract structured data from predefined and custom labels. This feature provides a flexible way to recognize and decode fields within a specific label layout such as price tags, VIN labels, or packaging stickers without needing to write custom code for each label type.
 
-There are two approaches to using label definitions:
-
-- [**Pre-built Labels**](#pre-built-labels)
-- [**Custom Labels**](#custom-labels)
-
-## Pre-built Labels
-
-Smart Label Capture includes ready-made label definitions for common use cases. These pre-built options let you recognize and extract information from standard label types without creating custom configurations:
-
-<FeatureList
-  product="smart-label-capture"
-  category="Pre-built Labels"
-  tag="Label Definitions"
-  displayMode="compact"
-/>
-
-### Example: Price label
-
-Use the `LabelCaptureSettings` builder to configure a pre-built label definition for price labels, such as those found in retail environments:
-
-![Price Label Example](/img/slc/price-label.png)
-
-```csharp
-var settings = LabelCaptureSettings.Create()
-    .AddLabel(LabelDefinition.CreatePriceCaptureDefinition("price-label"))
-    .Build();
-```
-
 ## Custom Labels
 
 If Smart Label Capture's pre-built options don't fit your needs, define a custom label instead. Custom labels can combine your own fields with any of the available pre-built ones.
@@ -76,18 +48,28 @@ This example shows how to create a custom label definition for a fish shipping b
 ![Fish Shipping Box Example](/img/slc/fish-shipping-box.png)
 
 ```csharp
-var settings = LabelCaptureSettings.Create()
-    .AddLabel()
-        .AddCustomBarcode()
-            .SetSymbologies(Symbology.Code128)
-        .BuildFluent("barcode-field")
-        .AddCustomText()
-            .SetAnchorRegexes("Batch")
-            .SetValueRegexes("FZ\\d{5,10}")
-            .IsOptional(true)
-        .BuildFluent("batch-number-field")
-    .BuildFluent("shipping-label")
-    .Build();
+// Build field definitions
+var fields = new List<LabelFieldDefinition>();
+
+// Add a custom barcode field with the expected symbology
+var barcodeField = CustomBarcode.Builder()
+    .SetSymbology(Symbology.Code128)
+    .Build("barcode-field");
+fields.Add(barcodeField);
+
+// Add a custom text field for the batch number
+var batchNumberField = CustomText.Builder()
+    .SetAnchorRegex("Batch")
+    .SetValueRegex("FZ\\d{5,10}")
+    .IsOptional(true)
+    .Build("batch-number-field");
+fields.Add(batchNumberField);
+
+// Create the label definition with the fields
+var labelDefinition = LabelDefinition.Create("shipping-label", fields);
+
+// Create the settings with the label definition
+var settings = LabelCaptureSettings.Create(new List<LabelDefinition> { labelDefinition });
 ```
 
 ### Pre-built Fields
@@ -138,12 +120,22 @@ This example demonstrates how to configure a label definition for a hard disk dr
 ![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
 
 ```csharp
-var settings = LabelCaptureSettings.Create()
-    .AddLabel()
-        .AddSerialNumberBarcode()
-        .BuildFluent("serial-number")
-        .AddPartNumberBarcode()
-        .BuildFluent("part-number")
-    .BuildFluent("hdd-label")
-    .Build();
+// Build field definitions using pre-built barcode fields
+var fields = new List<LabelFieldDefinition>();
+
+// Add a serial number barcode field
+var serialNumberField = SerialNumberBarcode.Builder()
+    .Build("serial-number");
+fields.Add(serialNumberField);
+
+// Add a part number barcode field
+var partNumberField = PartNumberBarcode.Builder()
+    .Build("part-number");
+fields.Add(partNumberField);
+
+// Create the label definition with the fields
+var labelDefinition = LabelDefinition.Create("hdd-label", fields);
+
+// Create the settings with the label definition
+var settings = LabelCaptureSettings.Create(new List<LabelDefinition> { labelDefinition });
 ```
