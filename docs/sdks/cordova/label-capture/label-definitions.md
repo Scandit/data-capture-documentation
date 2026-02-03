@@ -30,14 +30,18 @@ Smart Label Capture includes ready-made label definitions for common use cases. 
 
 ### Example: Price label
 
-Use the `LabelCaptureSettings` builder to configure a pre-built label definition for price labels, such as those found in retail environments:
+Use `LabelDefinition.createPriceCaptureDefinition()` to create a pre-built label definition for price labels, such as those found in retail environments:
 
 ![Price Label Example](/img/slc/price-label.png)
 
 ```js
-const settings = LabelCaptureSettings.builder()
-    .addLabel(LabelDefinition.createPriceCaptureDefinition("price-label"))
-    .build();
+import { LabelCaptureSettings, LabelDefinition } from "scandit-cordova-datacapture-label";
+
+// Create a pre-built price capture label definition.
+const priceLabel = LabelDefinition.createPriceCaptureDefinition("price-label");
+
+// Create the label capture settings from the label definition.
+const settings = LabelCaptureSettings.settingsFromLabelDefinitions([priceLabel], null);
 ```
 
 ## Custom Labels
@@ -59,14 +63,14 @@ There are two types of custom fields you can define:
   displayMode="compact"
 />
 
-The following methods are available to configure custom fields:
+The following properties are available to configure custom fields:
 
-| Method | Optional | Description |
-|--------|----------|-------------|
-| `valueRegexes` | No | The regex patterns that identify the target string in the scanned content. |
-| `anchorRegexes` | Yes | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
-| `symbologies` | No | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
-| `isOptional` | Yes | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
+| Property | Required | Description |
+|----------|----------|-------------|
+| `valueRegexes` | Yes | The regex patterns that identify the target string in the scanned content. |
+| `anchorRegexes` | No | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
+| `symbologies` | Yes (barcode fields) | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
+| `optional` | No | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
 
 #### Example: Fish Shipping Box
 
@@ -75,18 +79,32 @@ This example shows how to create a custom label definition for a fish shipping b
 ![Fish Shipping Box Example](/img/slc/fish-shipping-box.png)
 
 ```js
-const settings = LabelCaptureSettings.builder()
-    .addLabel(LabelDefinition.builder()
-        .addCustomBarcode()
-            .setSymbologies([Symbology.code128])
-            .buildFluent("barcode-field")
-        .addCustomText()
-            .setAnchorRegexes(["Batch"])
-            .setValueRegexes(["FZ\\d{5,10}"])
-            .setOptional(true)
-            .buildFluent("batch-number-field")
-        .buildFluent("shipping-label"))
-    .build();
+import { Symbology } from "scandit-cordova-datacapture-barcode";
+import {
+    CustomBarcode,
+    CustomText,
+    LabelCaptureSettings,
+    LabelDefinition,
+} from "scandit-cordova-datacapture-label";
+
+// Create a custom label definition for a fish shipping box.
+const shippingLabel = new LabelDefinition("shipping-label");
+
+// Add a barcode field with Code 128 symbology.
+const barcodeField = CustomBarcode.initWithNameAndSymbology("barcode-field", Symbology.Code128);
+shippingLabel.addField(barcodeField);
+
+// Add a custom text field for the batch number.
+// Use anchorRegexes to specify keywords that help identify the field context.
+// Use valueRegexes to specify the expected format of the field data.
+const batchNumberField = new CustomText("batch-number-field");
+batchNumberField.anchorRegexes = ["Batch"];
+batchNumberField.valueRegexes = ["FZ\\d{5,10}"];
+batchNumberField.optional = true;
+shippingLabel.addField(batchNumberField);
+
+// Create the label capture settings from the label definition.
+const settings = LabelCaptureSettings.settingsFromLabelDefinitions([shippingLabel], null);
 ```
 
 ### Pre-built Fields
@@ -96,9 +114,9 @@ You can also build your label using pre-built fields. These common fields speed 
 Customization of pre-built fields is done via the `valueRegexes`, `anchorRegexes`, and `isOptional` methods, which allow you to specify the expected format of the field data.
 
 :::tip
-All pre-built fields come with default `valueRegexes` and `anchorRegexes` that are suitable for most use cases. **Using either method is optional and will override the defaults**.
+All pre-built fields come with default `valueRegexes` and `anchorRegexes` that are suitable for most use cases. **Setting either property is optional and will override the defaults**.
 
-The `resetAnchorRegexes` method can be used to remove the default `anchorRegexes`, allowing you to rely solely on the `valueRegexes` for detection.
+You can set `anchorRegexes` to an empty array to remove the default anchor patterns, allowing you to rely solely on the `valueRegexes` for detection.
 :::
 
 import FeatureList from '@site/src/components/FeatureList';
@@ -137,12 +155,26 @@ This example demonstrates how to configure a label definition for a hard disk dr
 ![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
 
 ```js
-const settings = LabelCaptureSettings.builder()
-    .addLabel(LabelDefinition.builder()
-        .addSerialNumberBarcode()
-        .buildFluent("serial-number")
-        .addPartNumberBarcode()
-        .buildFluent("part-number")
-        .buildFluent("hdd-label"))
-    .build();
+import { Symbology } from "scandit-cordova-datacapture-barcode";
+import {
+    LabelCaptureSettings,
+    LabelDefinition,
+    PartNumberBarcode,
+    SerialNumberBarcode,
+} from "scandit-cordova-datacapture-label";
+
+// Create a custom label definition for an HDD label.
+const hddLabel = new LabelDefinition("hdd-label");
+
+// Add a serial number barcode field.
+// Pre-built fields like SerialNumberBarcode have predefined valueRegexes and anchorRegexes.
+const serialNumberField = SerialNumberBarcode.initWithNameAndSymbology("serial-number", Symbology.Code128);
+hddLabel.addField(serialNumberField);
+
+// Add a part number barcode field.
+const partNumberField = PartNumberBarcode.initWithNameAndSymbology("part-number", Symbology.Code128);
+hddLabel.addField(partNumberField);
+
+// Create the label capture settings from the label definition.
+const settings = LabelCaptureSettings.settingsFromLabelDefinitions([hddLabel], null);
 ```
