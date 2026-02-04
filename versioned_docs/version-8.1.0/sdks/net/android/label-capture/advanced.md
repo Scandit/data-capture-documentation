@@ -37,12 +37,12 @@ public class BasicOverlayListener : Java.Lang.Object, ILabelCaptureBasicOverlayL
     {
         return field.Name switch
         {
-            "barcode" => new Brush(
+            "<your-barcode-field-name>" => new Brush(
                 fillColor: new Color(context.GetColor(Resource.Color.barcode_highlight)),
                 strokeColor: new Color(context.GetColor(Resource.Color.barcode_highlight)),
                 strokeWidth: 1f
             ),
-            "expiry_date" => new Brush(
+            "<your-expiry-date-field-name>" => new Brush(
                 fillColor: new Color(context.GetColor(Resource.Color.expiry_date_highlight)),
                 strokeColor: new Color(context.GetColor(Resource.Color.expiry_date_highlight)),
                 strokeWidth: 1f
@@ -249,11 +249,11 @@ public class ValidationFlowListener : Java.Lang.Object, ILabelCaptureValidationF
 
         foreach (var field in fields)
         {
-            if (field.Name == "barcode")
+            if (field.Name == "<your-barcode-field-name>")
             {
                 barcodeData = field.Barcode?.Data;
             }
-            else if (field.Name == "expiry_date")
+            else if (field.Name == "<your-expiry-date-field-name>")
             {
                 expiryDate = field.Text;
             }

@@ -55,12 +55,6 @@ using Scandit.DataCapture.Label.Capture;
 using Scandit.DataCapture.Label.Data;
 using Scandit.DataCapture.Barcode.Data;
 
-// Define field names and label name constants
-const string FIELD_BARCODE = "barcode";
-const string FIELD_EXPIRY_DATE = "expiry_date";
-const string FIELD_WEIGHT = "weight";
-const string LABEL_NAME = "weighted_item";
-
 // Build field definitions
 var fields = new List<LabelFieldDefinition>();
 
@@ -72,23 +66,17 @@ var customBarcode = CustomBarcode.Builder()
         Symbology.Gs1DatabarExpanded,
         Symbology.Code128
     })
-    .Build(FIELD_BARCODE);
+    .Build("<your-barcode-field-name>");
 fields.Add(customBarcode);
 
 // Add an expiry date text field
 var expiryDateText = ExpiryDateText.Builder()
     .SetLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY, acceptPartialDates: false))
-    .Build(FIELD_EXPIRY_DATE);
+    .Build("<your-expiry-date-field-name>");
 fields.Add(expiryDateText);
 
-// Add a weight text field (optional)
-var weightText = WeightText.Builder()
-    .IsOptional(true)
-    .Build(FIELD_WEIGHT);
-fields.Add(weightText);
-
 // Create the label definition with the fields
-var labelDefinition = LabelDefinition.Create(LABEL_NAME, fields);
+var labelDefinition = LabelDefinition.Create("<your-label-name>", fields);
 
 // Create the settings with the label definition
 var settings = LabelCaptureSettings.Create(new List<LabelDefinition> { labelDefinition });
@@ -124,7 +112,7 @@ public class LabelCaptureRepository : NSObject, ILabelCaptureListener
              * the barcode field would always be present.
              */
             var barcodeData = label.Fields
-                .FirstOrDefault(field => field.Name == FIELD_BARCODE)
+                .FirstOrDefault(field => field.Name == "<your-barcode-field-name>")
                 ?.Barcode?.Data;
 
             /*
@@ -132,15 +120,7 @@ public class LabelCaptureRepository : NSObject, ILabelCaptureListener
              * Check for null in your result handling.
              */
             var expiryDate = label.Fields
-                .FirstOrDefault(field => field.Name == FIELD_EXPIRY_DATE)
-                ?.Text;
-
-            /*
-             * The weight field is optional.
-             * Check for null in your result handling.
-             */
-            var weight = label.Fields
-                .FirstOrDefault(field => field.Name == FIELD_WEIGHT)
+                .FirstOrDefault(field => field.Name == "<your-expiry-date-field-name>")
                 ?.Text;
 
             /*
@@ -155,7 +135,7 @@ public class LabelCaptureRepository : NSObject, ILabelCaptureListener
              */
             Task.Run(() =>
             {
-                HandleResults(barcodeData, expiryDate, weight);
+                HandleResults(barcodeData, expiryDate);
             });
         }
     }
@@ -170,7 +150,7 @@ public class LabelCaptureRepository : NSObject, ILabelCaptureListener
         // Called when the listener is removed from LabelCapture
     }
 
-    private void HandleResults(string? barcodeData, string? expiryDate, string? weight)
+    private void HandleResults(string? barcodeData, string? expiryDate)
     {
         // Process the captured data
     }

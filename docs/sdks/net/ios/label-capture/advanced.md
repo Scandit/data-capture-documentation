@@ -40,8 +40,8 @@ public class BasicOverlayListener : NSObject, ILabelCaptureBasicOverlayListener
     {
         return field.Name switch
         {
-            "barcode" => this.upcBrush,
-            "expiry_date" => this.expiryDateBrush,
+            "<your-barcode-field-name>" => this.upcBrush,
+            "<your-expiry-date-field-name>" => this.expiryDateBrush,
             _ => null
         };
     }
@@ -238,11 +238,11 @@ public class ValidationFlowListener : NSObject, ILabelCaptureValidationFlowListe
 
         foreach (var field in fields)
         {
-            if (field.Name == "barcode")
+            if (field.Name == "<your-barcode-field-name>")
             {
                 barcodeData = field.Barcode?.Data;
             }
-            else if (field.Name == "expiry_date")
+            else if (field.Name == "<your-expiry-date-field-name>")
             {
                 expiryDate = field.Text;
             }
