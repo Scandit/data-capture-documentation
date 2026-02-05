@@ -60,6 +60,30 @@ keywords:
 * Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 
+## 8.1.1
+
+**Released**: February 5, 2026
+
+### Performance Improvements
+
+#### Core
+
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
+
+### Bug Fixes
+
+#### Id
+
+* Fixed a memory issue leading to a persistent black screen during ID Capture startup
+
+#### Core
+
+* Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates
+* Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed an issue where the interface and video feed could have different visual orientations
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+
 ## 8.1.0
 
 **Released**: December 17, 2025

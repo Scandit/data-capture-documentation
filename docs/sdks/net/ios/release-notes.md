@@ -35,6 +35,24 @@ keywords:
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 * Fixed `BarcodeBatchBasicOverlayStyle.Frame` such that it now correctly displays as a frame on iOS and MAUI iOS platforms, where previously setting the style to `Frame` would incorrectly render as a dot due to an enum value mismatch in the iOS binding layer
 
+## 8.1.1
+
+**Released**: February 5, 2026
+
+### Performance Improvements
+
+#### Core
+
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates
+* Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
+* Fixed an issue where the interface and video feed could have different visual orientations
+
 ## 8.1.0
 
 **Released**: December 17, 2025
