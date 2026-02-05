@@ -232,8 +232,9 @@ def update_versions_json(old_version: str, new_version: str) -> None:
 
 def update_config_version_entry(config_path: Path, old_version: str, new_version: str) -> None:
     """
-    Update versions object entry in docusaurus.config.ts.
+    Update versions object entry and lastVersion in docusaurus.config.ts.
     Replace: '7.6.5': { ... with '7.6.6': { ...
+    Replace: lastVersion: "7.6.5" with lastVersion: "7.6.6" (only if lastVersion currently points to old_version)
     """
     content = config_path.read_text()
 
@@ -241,6 +242,14 @@ def update_config_version_entry(config_path: Path, old_version: str, new_version
     content = re.sub(
         rf"'{re.escape(old_version)}':",
         f"'{new_version}':",
+        content
+    )
+
+    # Replace lastVersion field only if it currently points to the old version
+    # This ensures we only update lastVersion when updating the actual latest stable version
+    content = re.sub(
+        rf'(lastVersion:\s*)["\']({re.escape(old_version)})["\']',
+        rf'\g<1>"{new_version}"',
         content
     )
 
