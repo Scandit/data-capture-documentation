@@ -31,6 +31,22 @@ keywords:
 
 * Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
 
+## 8.1.1
+
+**Released**: February 5, 2026
+
+### Performance Improvements
+
+#### Core
+
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a typo in the ProcessFrameResult.message function of SDK Python bindings
+
 ## 8.1.0
 
 **Released**: December 17, 2025

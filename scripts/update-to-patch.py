@@ -20,18 +20,16 @@ class Version:
     """Semantic version with comparison support."""
 
     def __init__(self, version_string: str):
-        """Parse a semantic version string (X.Y.Z)."""
-        parts = version_string.split('.')
-        if len(parts) != 3:
-            raise ValueError(f"Invalid version format: {version_string}. Expected X.Y.Z")
+        """Parse a semantic version string (X.Y.Z or X.Y.Z-prerelease)."""
+        # Match X.Y.Z with optional prerelease suffix (e.g., -beta.1, -alpha.2)
+        match = re.match(r'^(\d+)\.(\d+)\.(\d+)(?:-(.+))?$', version_string)
+        if not match:
+            raise ValueError(f"Invalid version format: {version_string}. Expected X.Y.Z or X.Y.Z-prerelease")
 
-        try:
-            self.major = int(parts[0])
-            self.minor = int(parts[1])
-            self.patch = int(parts[2])
-        except ValueError:
-            raise ValueError(f"Invalid version format: {version_string}. Parts must be integers")
-
+        self.major = int(match.group(1))
+        self.minor = int(match.group(2))
+        self.patch = int(match.group(3))
+        self.prerelease = match.group(4)  # e.g., "beta.1" or None
         self.version_string = version_string
 
     def __lt__(self, other: 'Version') -> bool:
@@ -40,13 +38,27 @@ class Version:
             return self.major < other.major
         if self.minor != other.minor:
             return self.minor < other.minor
-        return self.patch < other.patch
+        if self.patch != other.patch:
+            return self.patch < other.patch
+
+        # Handle prerelease comparison
+        # No prerelease (release version) is greater than prerelease
+        if self.prerelease is None and other.prerelease is None:
+            return False
+        if self.prerelease is None:
+            return False  # Release version is not less than prerelease
+        if other.prerelease is None:
+            return True  # Prerelease is less than release version
+
+        # Both have prereleases, compare lexicographically
+        return self.prerelease < other.prerelease
 
     def __eq__(self, other: 'Version') -> bool:
         """Check version equality."""
         return (self.major == other.major and
                 self.minor == other.minor and
-                self.patch == other.patch)
+                self.patch == other.patch and
+                self.prerelease == other.prerelease)
 
     def __str__(self) -> str:
         """Return string representation."""
@@ -114,7 +126,7 @@ def find_update_target(registry: dict, new_version: Version) -> tuple[str, Optio
     1. Check if new_version matches current version's major.minor
        → Return ('current', None)
     2. Find versioned version matching new_version's major.minor
-       → Validate it's the latest minor for that major
+       → Validate it's the latest minor for that major (excluding prereleases if new_version is stable)
        → Return ('versioned', old_version_string)
     3. Otherwise → Return ('none', None)
     """
@@ -130,6 +142,12 @@ def find_update_target(registry: dict, new_version: Version) -> tuple[str, Optio
         if new_version.major_minor() == versioned.major_minor():
             # Validate it's the latest minor for this major
             all_versions = [current_version] + versioned_versions
+
+            # If new_version is stable (no prerelease), exclude prereleases from comparison
+            # This allows updating stable version lines even when a beta/preview exists
+            if new_version.prerelease is None:
+                all_versions = [v for v in all_versions if v.prerelease is None]
+
             latest_minor = find_latest_minor_for_major(all_versions, new_version.major)
 
             if latest_minor and latest_minor.major_minor() == new_version.major_minor():
@@ -214,8 +232,9 @@ def update_versions_json(old_version: str, new_version: str) -> None:
 
 def update_config_version_entry(config_path: Path, old_version: str, new_version: str) -> None:
     """
-    Update versions object entry in docusaurus.config.ts.
+    Update versions object entry and lastVersion in docusaurus.config.ts.
     Replace: '7.6.5': { ... with '7.6.6': { ...
+    Replace: lastVersion: "7.6.5" with lastVersion: "7.6.6" (only if lastVersion currently points to old_version)
     """
     content = config_path.read_text()
 
@@ -223,6 +242,14 @@ def update_config_version_entry(config_path: Path, old_version: str, new_version
     content = re.sub(
         rf"'{re.escape(old_version)}':",
         f"'{new_version}':",
+        content
+    )
+
+    # Replace lastVersion field only if it currently points to the old version
+    # This ensures we only update lastVersion when updating the actual latest stable version
+    content = re.sub(
+        rf'(lastVersion:\s*)["\']({re.escape(old_version)})["\']',
+        rf'\g<1>"{new_version}"',
         content
     )
 
