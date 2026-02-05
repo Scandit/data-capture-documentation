@@ -31,14 +31,16 @@ Smart Label Capture includes ready-made label definitions for common use cases. 
 
 ### Example: Price label
 
-Use the `LabelCaptureSettings` builder to configure a pre-built label definition for price labels, such as those found in retail environments:
+Use `LabelCaptureSettings` to configure a pre-built label definition for price labels, such as those found in retail environments:
 
 ![Price Label Example](/img/slc/price-label.png)
 
 ```csharp
-var settings = LabelCaptureSettings.Create()
-    .AddLabel(LabelDefinition.CreatePriceCaptureDefinition("price-label"))
-    .Build();
+// Create a pre-built price capture label definition
+var priceLabel = LabelDefinition.CreatePriceCaptureDefinition("price-label");
+
+// Create the settings with the label definition
+var settings = LabelCaptureSettings.Create(new List<LabelDefinition> { priceLabel });
 ```
 
 ## Custom Labels
@@ -76,18 +78,28 @@ This example shows how to create a custom label definition for a fish shipping b
 ![Fish Shipping Box Example](/img/slc/fish-shipping-box.png)
 
 ```csharp
-var settings = LabelCaptureSettings.Create()
-    .AddLabel()
-        .AddCustomBarcode()
-            .SetSymbologies(Symbology.Code128)
-        .BuildFluent("barcode-field")
-        .AddCustomText()
-            .SetAnchorRegexes("Batch")
-            .SetValueRegexes("FZ\\d{5,10}")
-            .IsOptional(true)
-        .BuildFluent("batch-number-field")
-    .BuildFluent("shipping-label")
-    .Build();
+// Build field definitions
+var fields = new List<LabelFieldDefinition>();
+
+// Add a custom barcode field with the expected symbology
+var barcodeField = CustomBarcode.Builder()
+    .SetSymbology(Symbology.Code128)
+    .Build("barcode-field");
+fields.Add(barcodeField);
+
+// Add a custom text field for the batch number
+var batchNumberField = CustomText.Builder()
+    .SetAnchorRegex("Batch")
+    .SetValueRegex("FZ\\d{5,10}")
+    .IsOptional(true)
+    .Build("batch-number-field");
+fields.Add(batchNumberField);
+
+// Create the label definition with the fields
+var labelDefinition = LabelDefinition.Create("shipping-label", fields);
+
+// Create the settings with the label definition
+var settings = LabelCaptureSettings.Create(new List<LabelDefinition> { labelDefinition });
 ```
 
 ### Pre-built Fields
@@ -138,12 +150,22 @@ This example demonstrates how to configure a label definition for a hard disk dr
 ![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
 
 ```csharp
-var settings = LabelCaptureSettings.Create()
-    .AddLabel()
-        .AddSerialNumberBarcode()
-        .BuildFluent("serial-number")
-        .AddPartNumberBarcode()
-        .BuildFluent("part-number")
-    .BuildFluent("hdd-label")
-    .Build();
+// Build field definitions using pre-built barcode fields
+var fields = new List<LabelFieldDefinition>();
+
+// Add a serial number barcode field
+var serialNumberField = SerialNumberBarcode.Builder()
+    .Build("serial-number");
+fields.Add(serialNumberField);
+
+// Add a part number barcode field
+var partNumberField = PartNumberBarcode.Builder()
+    .Build("part-number");
+fields.Add(partNumberField);
+
+// Create the label definition with the fields
+var labelDefinition = LabelDefinition.Create("hdd-label", fields);
+
+// Create the settings with the label definition
+var settings = LabelCaptureSettings.Create(new List<LabelDefinition> { labelDefinition });
 ```
