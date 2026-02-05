@@ -260,7 +260,7 @@ const config: Config = {
               banner: 'unreleased',
               badge: false,
             },
-            '8.1.0': {
+            '8.1.1': {
               banner: 'none',
               badge: false,
             },
