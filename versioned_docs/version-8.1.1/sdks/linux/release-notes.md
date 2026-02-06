@@ -110,6 +110,6 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * In the public API, changed all `_retain` and `_release` functions on opaque pointers to accept const pointers.
 
 
-## 7.6.5
+## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.6/sdks/linux/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.7/sdks/linux/release-notes)

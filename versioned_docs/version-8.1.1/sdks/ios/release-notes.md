@@ -217,6 +217,6 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * All previously deprecated APIs have been removed in this release.
 
 
-## 7.6.5
+## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.6/sdks/ios/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.7/sdks/ios/release-notes)
