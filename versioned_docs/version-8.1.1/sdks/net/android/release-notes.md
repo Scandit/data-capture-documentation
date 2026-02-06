@@ -9,6 +9,27 @@ keywords:
   - netAndroid
 ---
 
+## 8.1.1
+
+**Released**: February 5, 2026
+
+### Performance Improvements
+
+#### Core
+
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
+
+### Bug Fixes
+
+#### Id
+
+* Fixed a memory issue leading to a persistent black screen during ID Capture startup
+
+#### Core
+
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+
 ## 8.1.0
 
 **Released**: December 17, 2025

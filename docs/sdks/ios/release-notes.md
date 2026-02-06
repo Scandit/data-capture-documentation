@@ -76,7 +76,6 @@ keywords:
 
 #### Core
 
-* Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates
 * Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
 * Fixed an issue where the interface and video feed could have different visual orientations
 
