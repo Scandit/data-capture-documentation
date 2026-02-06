@@ -176,6 +176,20 @@ No updates for this framework in this release.
 
 * Deprecated `BarcodeCaptureOverlayStyle`.
 
+## 7.4.5
+
+**Released**: February 6, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash that occurred when scanning barcodes encoded with non-UTF-8 data
+
+#### Core
+
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+
 ## 7.4.4
 
 **Released**: November 22, 2025
