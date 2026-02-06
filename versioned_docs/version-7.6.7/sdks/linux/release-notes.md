@@ -114,6 +114,12 @@ No updates for this framework in this release.
 * Improved Code128 and EAN13/UPCA scanning performance.
 * Reduced incorrect EAN13/UPCA, EAN8 and UPCE scans in cases of low resolution and out-of-focus.
 
+## 7.4.5
+
+**Released**: February 6, 2026
+
+No updates for this framework in this release.
+
 ## 7.4.4
 
 **Released**: November 22, 2025
