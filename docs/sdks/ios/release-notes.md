@@ -76,7 +76,6 @@ keywords:
 
 #### Core
 
-* Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates
 * Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
 * Fixed an issue where the interface and video feed could have different visual orientations
 
@@ -270,6 +269,6 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * All previously deprecated APIs have been removed in this release.
 
 
-## 7.6.5
+## 7.6.7
 
 Find earlier versions in the [release notes section of version 7](/7.6.7/sdks/ios/release-notes)

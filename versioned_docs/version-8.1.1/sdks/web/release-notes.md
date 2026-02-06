@@ -10,6 +10,26 @@ keywords:
   - web
 ---
 
+## 8.1.1
+
+**Released**: February 5, 2026
+
+### Performance Improvements
+
+#### Core
+
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue where the SparkScanView was not being disposed correctly
+
+#### Id
+
+* Removed the Centaurus dependency from the ID Capture package which was accidentally added in 8.1.0 but never actually used
+
 ## 8.1.0
 
 **Released**: December 17, 2025
@@ -182,6 +202,6 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * `DataCaptureContext.create`, `createWithOptions` and `configure` have been removed in favor of the `forLicenseKey` method.
 
 
-## 7.6.5
+## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.6/sdks/web/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.7/sdks/web/release-notes)

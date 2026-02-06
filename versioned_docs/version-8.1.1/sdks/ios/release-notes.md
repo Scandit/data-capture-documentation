@@ -10,6 +10,23 @@ keywords:
   - ios
 ---
 
+## 8.1.1
+
+**Released**: February 5, 2026
+
+### Performance Improvements
+
+#### Core
+
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
+
+### Bug Fixes
+
+#### Core
+
+* Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
+* Fixed an issue where the interface and video feed could have different visual orientations
+
 ## 8.1.0
 
 **Released**: December 17, 2025
@@ -200,6 +217,6 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * All previously deprecated APIs have been removed in this release.
 
 
-## 7.6.5
+## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.6/sdks/ios/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.7/sdks/ios/release-notes)

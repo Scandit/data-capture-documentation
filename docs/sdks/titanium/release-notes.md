@@ -46,7 +46,6 @@ keywords:
 
 #### Core
 
-* Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates
 * Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
 * Fixed an issue where the camera would not restart when opened from another app
 * Fixed an issue where the interface and video feed could have different visual orientations
@@ -151,6 +150,6 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * `VideoResolution::Auto` is now deprecated. Please use the capture mode's `recommendedCameraSettings` for the best results.
 
 
-## 7.6.5
+## 7.6.7
 
 Find earlier versions in the [release notes section of version 7](/7.6.7/sdks/titanium/release-notes)

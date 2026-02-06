@@ -9,6 +9,30 @@ keywords:
   - capacitor
 ---
 
+## 8.1.1
+
+**Released**: February 5, 2026
+
+### Performance Improvements
+
+#### Core
+
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
+
+### Bug Fixes
+
+#### Id
+
+* Fixed a memory issue leading to a persistent black screen during ID Capture startup
+
+#### Core
+
+* Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates
+* Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed an issue where the interface and video feed could have different visual orientations
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+
 ## 8.1.0
 
 **Released**: December 17, 2025
@@ -171,6 +195,6 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * `VideoResolution::Auto` is now deprecated. Please use the capture mode's `recommendedCameraSettings` for the best results.
 
 
-## 7.6.5
+## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.6/sdks/capacitor/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.7/sdks/capacitor/release-notes)
