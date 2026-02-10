@@ -2,7 +2,6 @@
 description: 'An overview of Scandit Express’s built-in workflows.'
 sidebar_label: 'Overview'
 displayed_sidebar: expressSidebar
-tags: [express]
 keywords:
   - express
 ---

@@ -1,7 +1,6 @@
 ---
 pagination_prev: null
 framework: netAndroid
-tags: [netAndroid]
 keywords:
   - netAndroid
 ---

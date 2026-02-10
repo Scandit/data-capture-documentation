@@ -5,7 +5,6 @@ toc_max_heading_level: 2
 pagination_next: null
 displayed_sidebar: capacitorSidebar
 framework: capacitor
-tags: [capacitor]
 keywords:
   - capacitor
 ---

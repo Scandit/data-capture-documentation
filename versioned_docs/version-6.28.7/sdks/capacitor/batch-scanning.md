@@ -1,7 +1,6 @@
 ---
 pagination_prev: null
 framework: capacitor
-tags: [capacitor]
 keywords:
   - capacitor
 ---

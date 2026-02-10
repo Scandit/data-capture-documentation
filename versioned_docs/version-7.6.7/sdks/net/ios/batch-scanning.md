@@ -1,7 +1,6 @@
 ---
 pagination_prev: null
 framework: netIos
-tags: [netIos]
 keywords:
   - netIos
 ---

@@ -1,7 +1,6 @@
 ---
 description: "Custom Data Transfer in Scandit Express allows you to import and export data using configurable CSV files or Google Sheets, ensuring seamless integration with your system without the need for coding or reformatting."
 framework: express
-tags: [express]
 sidebar_label: Overview
 keywords:
   - express

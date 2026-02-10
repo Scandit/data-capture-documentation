@@ -6,7 +6,6 @@ sidebar_label: 'Overview'
 title: 'Scandit Express'
 displayed_sidebar: expressSidebar
 framework: express
-tags: [express]
 keywords:
   - express
 ---

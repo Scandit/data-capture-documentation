@@ -1,7 +1,6 @@
 ---
 pagination_prev: null
 framework: cordova
-tags: [cordova]
 keywords:
   - cordova
 ---
