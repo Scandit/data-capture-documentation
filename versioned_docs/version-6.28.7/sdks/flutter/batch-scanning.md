@@ -1,7 +1,6 @@
 ---
 pagination_prev: null
 framework: flutter
-tags: [flutter]
 keywords:
   - flutter
 ---

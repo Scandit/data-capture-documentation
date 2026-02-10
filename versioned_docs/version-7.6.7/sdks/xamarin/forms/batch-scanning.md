@@ -1,7 +1,6 @@
 ---
 pagination_prev: null
 framework: xamarinForms
-tags: [xamarinForms]
 keywords:
   - xamarinForms
 title: Batch Scanning

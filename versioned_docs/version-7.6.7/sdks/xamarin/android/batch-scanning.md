@@ -1,7 +1,6 @@
 ---
 pagination_prev: null
 framework: xamarinAndroid
-tags: [xamarinAndroid]
 keywords:
   - xamarinAndroid
 title: Batch Scanning

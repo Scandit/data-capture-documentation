@@ -1,7 +1,6 @@
 ---
 description: "Guide to integrating and configuring online device pairing using the Scandit Express app."
 framework: express
-tags: [express]
 keywords:
   - express
 ---

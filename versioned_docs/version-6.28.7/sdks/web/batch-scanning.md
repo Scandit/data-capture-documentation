@@ -1,7 +1,6 @@
 ---
 pagination_prev: null
 framework: web
-tags: [web]
 keywords:
   - web
 ---

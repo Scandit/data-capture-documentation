@@ -3,7 +3,6 @@ description: "Label scanning enables you to capture and extract data from labels
 toc_max_heading_level: 4
 pagination_prev: null
 framework: flutter
-tags: [flutter]
 keywords:
   - flutter
 ---

@@ -6,7 +6,6 @@ sidebar_label: 'Overview'
 title: 'ID Bolt'
 displayed_sidebar: boltSidebar
 framework: bolt
-tags: [bolt]
 keywords:
   - bolt
 ---

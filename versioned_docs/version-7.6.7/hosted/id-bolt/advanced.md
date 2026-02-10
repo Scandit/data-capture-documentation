@@ -6,7 +6,6 @@ title: 'Advanced Options'
 displayed_sidebar: boltSidebar
 toc_max_heading_level: 4
 framework: bolt
-tags: [bolt]
 keywords:
   - bolt
   - advanced

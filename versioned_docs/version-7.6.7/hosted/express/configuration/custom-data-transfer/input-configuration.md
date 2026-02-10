@@ -1,7 +1,6 @@
 ---
 description: "Learn how to configure input data for the Custom Data Transfer feature in Scandit Express, enabling you to collect and manage data efficiently during scanning tasks."
 framework: express
-tags: [express]
 sidebar_label: Input Configuration
 keywords:
   - express

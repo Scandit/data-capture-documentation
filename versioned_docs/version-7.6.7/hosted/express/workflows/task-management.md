@@ -2,7 +2,6 @@
 description: 'Configuration options for the Task Management workflow in Scandit Express.'
 sidebar_label: 'Task Management Configuration'
 displayed_sidebar: expressSidebar
-tags: [express]
 keywords:
   - express
 ---

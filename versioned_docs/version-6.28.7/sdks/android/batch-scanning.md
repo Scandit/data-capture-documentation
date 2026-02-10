@@ -1,7 +1,6 @@
 ---
 pagination_prev: null
 framework: android
-tags: [android]
 keywords:
   - android
 ---
