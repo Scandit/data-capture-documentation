@@ -9,7 +9,7 @@ keywords:
 
 # Get Started
 
-The parser parses data strings, e.g. as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/hibc.html), [GS1 Application Identifier (https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/iata-bcbp.html), Electronic Product Code (EPC).
+The parser parses data strings, e.g. as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/hibc.html), [GS1 Application Identifier (https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/iata-bcbp.html)
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -22,4 +22,3 @@ More data formats will be added in future releases. Please contact us if the dat
 - [Swiss QR](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/swissqr.html)
 - [VIN](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/vin.html)
 - [IATA BCBP](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/iata-bcbp.html)
-- Electronic Product Code (EPC)
