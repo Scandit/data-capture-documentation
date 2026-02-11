@@ -287,7 +287,6 @@ const sidebars: SidebarsConfig = {
               label: "Parser",
               items: [
                 "sdks/ios/parser/get-started",
-                "sdks/ios/parser/epc",
               ],
             },
             {
@@ -540,7 +539,6 @@ const sidebars: SidebarsConfig = {
               label: "Parser",
               items: [
                 "sdks/android/parser/get-started",
-                "sdks/android/parser/epc",
               ],
             },
             {
@@ -775,7 +773,6 @@ const sidebars: SidebarsConfig = {
               label: "Parser",
               items: [
                 "sdks/web/parser/get-started",
-                "sdks/web/parser/epc",
               ],
             },
             {
@@ -998,7 +995,6 @@ const sidebars: SidebarsConfig = {
               label: "Parser",
               items: [
                 "sdks/cordova/parser/get-started",
-                "sdks/cordova/parser/epc",
               ],
             },
             {
@@ -1266,7 +1262,6 @@ const sidebars: SidebarsConfig = {
               label: "Parser",
               items: [
                 "sdks/react-native/parser/get-started",
-                "sdks/react-native/parser/epc",
               ],
             },
             {
@@ -1519,7 +1514,6 @@ const sidebars: SidebarsConfig = {
               label: "Parser",
               items: [
                 "sdks/flutter/parser/get-started",
-                "sdks/flutter/parser/epc",
               ],
             },
             {
@@ -1757,7 +1751,6 @@ const sidebars: SidebarsConfig = {
               label: "Parser",
               items: [
                 "sdks/capacitor/parser/get-started",
-                "sdks/capacitor/parser/epc",
               ],
             },
             {
