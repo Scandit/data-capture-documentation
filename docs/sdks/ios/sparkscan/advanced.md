@@ -40,7 +40,7 @@ You can customize:
 To emit an error, you have to implement a [SDCSparkScanFeedbackDelegate](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-feedback-delegate.html#interface-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate) and set it to the [SparkScanView](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView):
 
 ```swift
-sparkScanView.feedbackDelegate  = self
+sparkScanView.feedbackDelegate = self
 ```
 
 In the [SDCSparkScanFeedbackDelegate.feedbackForBarcode](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-feedback-delegate.html#method-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate.GetFeedbackForBarcode) you can then return an error or a success feedback:

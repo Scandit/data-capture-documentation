@@ -48,9 +48,9 @@ First you will need to show these buttons:
 
 ```sh
 // Show the Label Capture, MatrixScan Count, and MatrixScan Find buttons
-sparkScanView.labelCaptureButtonVisible = true;
-sparkScanView.barcodeCountButtonVisible = true;
-sparkScanView.barcodeFindButtonVisible = true;
+sparkScanView.isLabelCaptureButtonVisible = true
+sparkScanView.isBarcodeCountButtonVisible = true
+sparkScanView.isBarcodeFindButtonVisible = true
 ```
 
 <p align="center">
@@ -61,4 +61,4 @@ sparkScanView.barcodeFindButtonVisible = true;
   <img src="/img/sparkscan/toolbar-buttons.png" alt="Toolbar with Scanning Modes" /><br></br>The toolbar with MatrixScan Find and MatrixScan Count buttons.
 </p>
 
-In addition you have to add a listener to the `SparkScanView` via `SparkScanView.setListener()`. You will then receive callbacks when the MatrixScan Find button or MatrixScan Count button is tapped from the toolbar.
+In addition you have to add a delegate to the `SparkScanView` via `SparkScanView.uiDelegate`. You will then receive callbacks when the MatrixScan Find button or MatrixScan Count button is tapped from the toolbar.
