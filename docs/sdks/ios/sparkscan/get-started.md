@@ -103,7 +103,7 @@ extension ViewController: SparkScanListener {
                       didScanIn session: SparkScanSession,
                       frameData: FrameData?) {
         // Gather the recognized barcode
-        let barcode = session.newlyRecognizedBarcode.first
+        let barcode = session.newlyRecognizedBarcode
         // This method is invoked from a recognition internal thread.
         // Dispatch to the main thread to update the internal barcode list.
         DispatchQueue.main.async {
