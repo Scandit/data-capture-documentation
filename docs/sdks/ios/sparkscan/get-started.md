@@ -39,7 +39,6 @@ For this tutorial, we will set up SparkScan for scanning EAN13 codes. Change thi
 ```swift
 let settings = SparkScanSettings()
 settings.set(symbology: .ean13UPCA, enabled: true)
-sparkScan.apply(settings, completionHandler: nil)
 ```
 
 Next, create a SparkScan instance with the settings initialized in the previous step:
