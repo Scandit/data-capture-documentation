@@ -27,7 +27,7 @@ The advanced overlay combined with its listener offers an easy way of adding aug
 First, create a new instance of `SDCBarcodeBatchAdvancedOverlay` and add it to your `SDCDataCaptureView`:
 
 ```swift
-let overlay = BarcodeBatchAdvancedOverlay(barcodeBatch: barcodeBatch, for: captureView)
+let overlay = BarcodeBatchAdvancedOverlay(barcodeBatch: barcodeBatch, view: captureView)
 ```
 
 There are two ways to proceed from here:
