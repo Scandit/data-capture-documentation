@@ -81,7 +81,7 @@ To keep track of the barcodes that have been scanned, implement the [`SDCBarcode
 
 ```swift
 // Register self as a listener to monitor the barcode count session.
-barcodeCount.add(self)
+barcodeCount.addListener(self)
 ```
 
 [`SDCBarcodeCountListener.barcodeCount:didScanInSession:frameData:`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-count-listener.html#method-scandit.datacapture.barcode.count.IBarcodeCountListener.OnScan) is called when the scan phase has finished and results can be retrieved from [`SDCBarcodeCountSession`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-count-session.html#class-scandit.datacapture.barcode.count.BarcodeCountSession).
@@ -128,7 +128,7 @@ extension ViewController: BarcodeCountListener {
                       didScanIn session: BarcodeCountSession,
                       frameData: FrameData) {
         // Gather all the recognized barcodes
-        let allRecognizedBarcodes = session.recognizedBarcodes.map({ $0.value })
+        let allRecognizedBarcodes = session.recognizedBarcodes
         // This method is invoked from a recognition internal thread.
         // Dispatch to the main thread to update the internal barcode list.
         DispatchQueue.main.async {
