@@ -63,7 +63,7 @@ class LabelCaptureViewController: UIViewController {
 
 extension LabelCaptureViewController: LabelCaptureListener {
     func labelCapture(_ labelCapture: LabelCapture,
-                      didUpdateSession session: LabelCaptureSession,
+                      didUpdate session: LabelCaptureSession,
                       frameData: FrameData) {
         // Handle label capture results
         // See the main Get Started guide
