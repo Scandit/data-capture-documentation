@@ -135,14 +135,14 @@ extension YourScanViewController: LabelCaptureListener {
         /*
          * Given the label capture settings defined above, barcode data will always be present.
          */
-        guard let barcodeField = label.field(for: "<your-barcode-field-name>"),
+        guard let barcodeField = label.fields.first(where: { $0.name == "<your-barcode-field-name>"}),
               let barcodeData = barcodeField.barcode?.data else { return }
 
         /*
          * The expiry date field is optional. 
          * Check for nil in your result handling.
          */
-        let expiryDate = label.field(for: "<your-expiry-date-field-name>").text
+        let expiryDate = label.fields.first(where: { $0.name == "<your-barcode-field-name>"})?.text
 
         /*
          * Emit feedback to notify the user that a label has been captured.
@@ -150,7 +150,7 @@ extension YourScanViewController: LabelCaptureListener {
         Feedback.default.emit()
 
         DispatchQueue.main.async {
-            camera?.switch(toDesiredState: .off)
+            self.camera?.switch(toDesiredState: .off)
             labelCapture.isEnabled = false
             /*
              * Handle the captured barcode and expiry date here.
