@@ -140,7 +140,7 @@ override func viewDidLoad() {
 Next, use this feedback in a `SDCBarcodeBatchListener`:
 
 ```swift
-extension ScanningViewController: BarcodeBatchListener {
+extension ViewController: BarcodeBatchListener {
     func barcodeBatch(_ barcodeBatch: BarcodeBatch,
                             didUpdate session: BarcodeBatchSession,
                             frameData: FrameData) {
