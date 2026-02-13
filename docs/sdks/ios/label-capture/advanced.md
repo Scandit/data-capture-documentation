@@ -45,14 +45,14 @@ extension YourScanViewController: LabelCaptureBasicOverlayDelegate {
     private func brush(for field: LabelField) -> Brush {
         let fillColor: UIColor
         let strokeColor: UIColor
-        switch Field(rawValue: field.name) {
+        switch field.name {
         case "<your-barcode-field-name>":
             fillColor = .systemCyan.withAlphaComponent(0.5)
             strokeColor = .systemCyan
         case "<your-expiry-date-field-name>":
             fillColor = .systemOrange.withAlphaComponent(0.5)
             strokeColor = .systemOrange
-        case .none:
+        default:
             fillColor = .clear
             strokeColor = .clear
         }
@@ -70,7 +70,7 @@ import ScanditLabelCapture
 
 // Create an advanced overlay that allows for custom views to be added over detected label fields
 // This is the key component for implementing Augmented Reality features
-let advancedOverlay = LabelCaptureAdvancedOverlay(labelCapture: labelCapture, dataCaptureView: dataCaptureView)
+let advancedOverlay = LabelCaptureAdvancedOverlay(labelCapture: labelCapture, view: dataCaptureView)
 
 // Configure the advanced overlay with a delegate that handles AR content creation and positioning
 advancedOverlay.delegate = self
@@ -91,9 +91,8 @@ extension YourScanViewController: LabelCaptureAdvancedOverlayDelegate {
 
     // This defines the offset from the anchor point for the label's AR view
     func labelCaptureAdvancedOverlay(_ overlay: LabelCaptureAdvancedOverlay,
-                                     offsetFor capturedLabel: CapturedLabel,
-                                     view: UIView) -> PointWithUnit {
-        return PointWithUnit(x: 0, y: 0, unit: .pixel)
+                                    offsetFor capturedLabel: CapturedLabel) -> PointWithUnit {
+        return PointWithUnit(x: .zero, y: .zero)
     }
 
     // This method is called when a field is detected in a label
@@ -137,9 +136,9 @@ extension YourScanViewController: LabelCaptureAdvancedOverlayDelegate {
 
     // This defines the offset from the anchor point
     func labelCaptureAdvancedOverlay(_ overlay: LabelCaptureAdvancedOverlay,
-                                     offsetFor labelField: LabelField,
-                                     view: UIView) -> PointWithUnit {
-        return PointWithUnit(x: 0, y: 22, unit: .dip)
+                                     offsetFor capturedField: LabelField,
+                                     of capturedLabel: CapturedLabel) -> PointWithUnit {
+        return PointWithUnit(x: .zero, y: .zero)
     }
 }
 ```
@@ -184,7 +183,7 @@ validationFlowOverlay.applySettings(validationSettings)
 To handle validation events, implement the `LabelCaptureValidationFlowOverlayDelegate` protocol.
 
 ```swift
-extension YourScanViewController: LabelCaptureValidationFlowOverlayDelegate {
+extension YourScanViewController: LabelCaptureValidationFlowDelegate {
     // This is called by the validation flow overlay when a label has been fully captured and validated
     func labelCaptureValidationFlowOverlay(_ overlay: LabelCaptureValidationFlowOverlay,
                                            didCaptureLabelWith fields: [LabelField]) {
