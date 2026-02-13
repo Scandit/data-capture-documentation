@@ -91,8 +91,7 @@ When using the built-in camera as frame source, you will typically want to displ
 To do that, add a [`SDCDataCaptureView`](https://docs.scandit.com/data-capture-sdk/ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```swift
-let captureView = DataCaptureView(for: context, frame: view.bounds)
-captureView.dataCaptureContext = context
+let captureView = DataCaptureView(context: context, frame: view.bounds)
 captureView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 view.addSubview(captureView)
 ```
