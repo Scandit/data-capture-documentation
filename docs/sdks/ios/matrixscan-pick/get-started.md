@@ -134,7 +134,7 @@ let viewSettings = BarcodePickViewSettings()
 Next, create a `BarcodePickView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodePickView` is automatically added to the provided parent view.
 
 ```swift
-let BarcodePickView = BarcodePickView(parentView: view, context: context, BarcodePick: mode, settings: viewSettings)
+let barcodePickView = BarcodePickView(frame: view.bounds, context: context, barcodePick: mode, settings: viewSettings)
 ```
 
 Connect the `BarcodePickView` to the iOS view controller lifecycle. In particular, make sure to call `BarcodePickView.prepareSearching()` on your UIViewController’s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) method to make sure that start up time is optimal.
@@ -189,7 +189,7 @@ With everything configured, you can now start searching for items. This is done 
 ```swift
 override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
-    BarcodePickView.start()
+    barcodePickView.start()
 }
 ```
 
