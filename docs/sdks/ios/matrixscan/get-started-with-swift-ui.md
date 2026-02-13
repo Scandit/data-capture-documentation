@@ -63,7 +63,12 @@ class MatrixScanViewController: UIViewController {
 
 extension MatrixScanViewController: BarcodeBatchBasicOverlayDelegate {
     func barcodeBatchBasicOverlay(_ overlay: BarcodeBatchBasicOverlay,
-                                  didTapTrackedBarcode trackedBarcode: TrackedBarcode) {
+                                brushFor trackedBarcode: TrackedBarcode) -> Brush? {
+        // Return a custom Brush based on the tracked barcode.
+    }
+
+    func barcodeBatchBasicOverlay(_ overlay: BarcodeBatchBasicOverlay,
+                                  didTap trackedBarcode: TrackedBarcode) {
         // Handle barcode tap
         // See the main Get Started guide
     }
