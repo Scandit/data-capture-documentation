@@ -10,9 +10,15 @@ keywords:
   - titanium
 ---
 
-## 8.2.0-beta.1
+## 8.2.0
 
-**Released**: February 2, 2026
+**Released**: February 13, 2026
+
+### Performance Improvements
+
+#### Core
+
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
 
 ### Bug Fixes
 
@@ -20,6 +26,7 @@ keywords:
 
 * Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
 * Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
+* Fixed the missing found item icon in the MatrixScan Find carousel
 
 #### Core
 

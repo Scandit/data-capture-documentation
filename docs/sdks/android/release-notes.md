@@ -10,9 +10,9 @@ keywords:
   - android
 ---
 
-## 8.2.0-beta.1
+## 8.2.0
 
-**Released**: February 2, 2026
+**Released**: February 13, 2026
 
 ### New Features
 
@@ -40,6 +40,7 @@ keywords:
 
 #### Core
 
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
 * Barcode Generator: Improved DataMatrix encoding efficiency, which depending on input data may result in smaller generated codes
 
 ### Behavioral Changes
@@ -59,6 +60,9 @@ keywords:
 #### Id
 
 * Fixed an issue affecting MRZ scanning performance when using the user facing camera in portrait mode on Android
+* Fixed a memory issue leading to a persistent black screen during ID Capture startup
+* Treated Puerto Rico driver licenses as AAMVA to enforce barcode capture with FullScanner
+* Fixed a bug that would cause Canada Northwest Territories driver license scans to be incomplete
 
 #### Core
 

@@ -9,9 +9,9 @@ keywords:
   - linux
 ---
 
-## 8.2.0-beta.1
+## 8.2.0
 
-**Released**: February 2, 2026
+**Released**: February 13, 2026
 
 ### New Features
 
@@ -23,6 +23,7 @@ keywords:
 
 #### Core
 
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
 * Barcode Generator: Improved DataMatrix encoding efficiency, which depending on input data may result in smaller generated codes
 
 ### Bug Fixes

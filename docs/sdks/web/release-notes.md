@@ -10,9 +10,9 @@ keywords:
   - web
 ---
 
-## 8.2.0-beta.1
+## 8.2.0
 
-**Released**: February 2, 2026
+**Released**: February 13, 2026
 
 ### New Features
 
@@ -34,16 +34,30 @@ keywords:
 
 * Removed Howler.hs and JavaScript Cookie 3rd party dependencies
 
+### Performance Improvements
+
+#### Core
+
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
+
 ### Bug Fixes
 
 #### Barcode
 
 * Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
 * Fixed a bug where the torch control would be shown even if the torch was not supported
+* Fixed an issue where SparkScan would select the wrong camera
+* Fixed an issue where the SparkScanView was not being disposed correctly
 
 #### Id
 
 * Improved success rate when scanning using the ImageFrameSource or the SingleImageUploader as frame source
+* Treated Puerto Rico driver licenses as AAMVA to enforce barcode capture with FullScanner
+* Fixed a bug that would cause Canada Northwest Territories driver license scans to be incomplete
+
+#### Core
+
+* Fixed an issue where in some webview scenarios the wrong back camera was selected on the iPhone Pro
 
 ### Deprecations
 
