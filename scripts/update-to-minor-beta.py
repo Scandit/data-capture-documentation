@@ -28,8 +28,11 @@ def update_docusaurus_config(config_path: Path, current_version: str, new_versio
     # Update lastVersion from "current" to the archived version
     content = re.sub(r'lastVersion:\s*["\']current["\']', f'lastVersion: "{current_version}"', content)
 
+    # Strip -beta.* suffix from version label (docusaurus.config.ts should never contain beta suffix)
+    version_label = re.sub(r'-beta\.\d+$', '', new_version)
+
     # Update current version label
-    content = re.sub(r"(current:\s*\{[^}]*label:\s*')[^']+'", rf"\g<1>{new_version}'", content, flags=re.DOTALL)
+    content = re.sub(r"(current:\s*\{[^}]*label:\s*')[^']+'", rf"\g<1>{version_label}'", content, flags=re.DOTALL)
 
     # Update current banner to 'unreleased'
     content = re.sub(r"(current:\s*\{[^}]*banner:\s*)'[^']*'", r"\g<1>'unreleased'", content, flags=re.DOTALL)

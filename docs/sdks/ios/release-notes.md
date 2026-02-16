@@ -10,9 +10,9 @@ keywords:
   - ios
 ---
 
-## 8.2.0-beta.1
+## 8.2.0
 
-**Released**: February 2, 2026
+**Released**: February 13, 2026
 
 ### New Features
 
@@ -39,6 +39,7 @@ keywords:
 
 #### Core
 
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
 * Barcode Generator: Improved DataMatrix encoding efficiency, which depending on input data may result in smaller generated codes
 
 ### Bug Fixes
@@ -50,6 +51,12 @@ keywords:
 * Fixed BarcodeCount Scan Preview issues including: fixed an issue where preview barcodes were used to populate the scanning list, the correct feedback is played when a barcode not in list is scanned, fixed an issue where scanning was not possible after the app was put in background, and corrected highlight orientation in landscape
 * Fixed an issue where MatrixScan AR circle highlights stopped pulsing when the app was restored from the background
 * Added cameraStateOnStop property to BarcodeFindView to optimize camera transitions when switching between modes
+* Fixed the missing found item icon in the MatrixScan Find carousel
+
+#### Id
+
+* Treated Puerto Rico driver licenses as AAMVA to enforce barcode capture with FullScanner
+* Fixed a bug that would cause Canada Northwest Territories driver license scans to be incomplete
 
 #### Core
 

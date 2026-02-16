@@ -9,15 +9,21 @@ keywords:
   - netAndroid
 ---
 
-## 8.2.0-beta.1
+## 8.2.0
 
-**Released**: February 2, 2026
+**Released**: February 13, 2026
 
 ### New Features
 
 #### Smart Label Capture
 
 * The Validation Flow, our ready‑to‑use workflow in Smart Label Capture for capturing and validating label data with minimal code, now features a completely redesigned user interface. The update improves ergonomics through a simplified API and highly requested customization options, making Smart Label Capture more intuitive and significantly reducing integration and customization effort across a wider range of use cases
+
+### Performance Improvements
+
+#### Core
+
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
 
 ### Bug Fixes
 
@@ -29,6 +35,9 @@ keywords:
 #### Id
 
 * Fixed an issue affecting MRZ scanning performance when using the user facing camera in portrait mode on Android
+* Fixed a memory issue leading to a persistent black screen during ID Capture startup
+* Treated Puerto Rico driver licenses as AAMVA to enforce barcode capture with FullScanner
+* Fixed a bug that would cause Canada Northwest Territories driver license scans to be incomplete
 
 #### Core
 

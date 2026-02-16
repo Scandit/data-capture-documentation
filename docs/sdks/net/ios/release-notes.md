@@ -9,15 +9,21 @@ keywords:
   - netIos
 ---
 
-## 8.2.0-beta.1
+## 8.2.0
 
-**Released**: February 2, 2026
+**Released**: February 13, 2026
 
 ### New Features
 
 #### Smart Label Capture
 
 * [Smart Label Capture](/sdks/net/ios/label-capture/intro.md) is now available on .NET for Android. It enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.
+
+### Performance Improvements
+
+#### Core
+
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
 
 ### Bug Fixes
 
@@ -28,6 +34,12 @@ keywords:
 * Fixed BarcodeCount Scan Preview issues including: fixed an issue where preview barcodes were used to populate the scanning list, the correct feedback is played when a barcode not in list is scanned, fixed an issue where scanning was not possible after the app was put in background, and corrected highlight orientation in landscape
 * Fixed an issue where MatrixScan AR circle highlights stopped pulsing when the app was restored from the background
 * Added cameraStateOnStop property to BarcodeFindView to optimize camera transitions when switching between modes
+* Fixed the missing found item icon in the MatrixScan Find carousel
+
+#### Id
+
+* Treated Puerto Rico driver licenses as AAMVA to enforce barcode capture with FullScanner
+* Fixed a bug that would cause Canada Northwest Territories driver license scans to be incomplete
 
 #### Core
 

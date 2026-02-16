@@ -10,9 +10,9 @@ keywords:
   - react
 ---
 
-## 8.2.0-beta.1
+## 8.2.0
 
-**Released**: February 2, 2026
+**Released**: February 13, 2026
 
 ### New Features
 
@@ -37,6 +37,7 @@ keywords:
 
 #### Core
 
+* Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes
 * Barcode Generator: Improved DataMatrix encoding efficiency, which depending on input data may result in smaller generated codes
 
 ### Bug Fixes
@@ -49,10 +50,14 @@ keywords:
 * Fixed an issue where MatrixScan AR circle highlights stopped pulsing when the app was restored from the background
 * Added cameraStateOnStop property to BarcodeFindView to optimize camera transitions when switching between modes
 * Fixed an issue where the successful hint in BarcodeFind is not displayed
+* Fixed the missing found item icon in the MatrixScan Find carousel
 
 #### Id
 
 * Fixed an issue affecting MRZ scanning performance when using the user facing camera in portrait mode on Android
+* Fixed a memory issue leading to a persistent black screen during ID Capture startup
+* Treated Puerto Rico driver licenses as AAMVA to enforce barcode capture with FullScanner
+* Fixed a bug that would cause Canada Northwest Territories driver license scans to be incomplete
 
 #### Core
 
@@ -62,6 +67,7 @@ keywords:
 * Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 * Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates.
+* Fixed compatibility of the React Native plugins with apps using React Native versions below 0.78
 
 ### Deprecations
 
