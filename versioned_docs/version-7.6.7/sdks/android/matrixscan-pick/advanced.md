@@ -17,7 +17,7 @@ MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless
 You can register a [`BarcodePickListener`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/ui/barcode-pick-listener.html) on the mode, which can be used to get updates about the scanned items with each frame.
 
 ```java
-mode.addListener(new BarcodePickListener() {
+barcodePick.addListener(new BarcodePickListener() {
     @Override
     public void onSessionUpdated(@NonNull BarcodePick barcodePick, @NonNull BarcodePickSession session) {
         // This callback will be invoked on a background thread every frame. the session object contains
@@ -37,7 +37,7 @@ mode.addListener(new BarcodePickListener() {
 You can register a [`BarcodePickScanningListener`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-pick-scanning-listener.html) on the mode, which can be used to listen to every time the pick state changes.
 
 ```java
-mode.addScanningListener(new BarcodePickScanningListener() {
+barcodePick.addScanningListener(new BarcodePickScanningListener() {
     @Override
     public void onScanningSessionUpdated(@NonNull BarcodePick barcodePick, @NonNull BarcodePickScanningSession session) {
         // This callback will be invoked on a background thread every time the picked state of some item changes.

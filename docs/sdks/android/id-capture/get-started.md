@@ -117,12 +117,12 @@ IdCaptureSettings settings = new IdCaptureSettings();
 settings.setAcceptedDocuments(acceptedDocuments);
 settings.setRejectedDocuments(rejectedDocuments);
 
-// To scan only one-sided documents and a given zone with barcode:
-settings.setScanner(new IdCaptureScanner(new SingleSideScanner(true, false, false), null));
-// or machineReadableZone:
-settings.setScanner(new IdCaptureScanner(new SingleSideScanner(false, true, false), null));
-// or visualInspectionZone:
-settings.setScanner(new IdCaptureScanner(new SingleSideScanner(false, false, true), null));
+// To scan only one-sided documents and a given zone:
+settings.setScanner(new IdCaptureScanner(new SingleSideScanner(
+        true, // barcode
+        true, // machineReadableZone
+        true // visualInspectionZone
+), null));
 
 // To scan both sides of the document:
 settings.setScanner(new IdCaptureScanner(new FullDocumentScanner(), null));

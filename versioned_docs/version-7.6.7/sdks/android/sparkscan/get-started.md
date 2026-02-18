@@ -126,18 +126,18 @@ Note that this list only contains one barcode entry.
 ```java
 @Override
 public void onBarcodeScanned(
-    @NonNull SparkScan sparkScan, @NonNull SparkScanSession session, @Nullable FrameData data
+        @NonNull SparkScan sparkScan, @NonNull SparkScanSession session, @Nullable FrameData data
 ) {
     // Gather the recognized barcode
-    Barcode barcode = session.getNewlyRecognizedBarcode().get(0);
+    Barcode barcode = session.getNewlyRecognizedBarcode();
 
     // This method is invoked from a recognition internal thread.
     // Run the specified action in the UI thread to update the internal barcode list.
     runOnUiThread(() -> {
         // Update the internal list and the UI with the barcode retrieved above
-        this.latestBarcode = barcode
+        this.latestBarcode = barcode;
     });
-  }
+}
 ```
 
 ## Scan Some Barcodes

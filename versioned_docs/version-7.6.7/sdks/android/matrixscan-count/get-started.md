@@ -67,7 +67,7 @@ settings.setSymbologyEnabled(Symbology.EAN13_UPCA, true);
 Next, create a `BarcodeCount` instance with the Data Capture Context and the settings initialized in the previous step:
 
 ```java
-BarcodeCount barcodeCount = BarcodeCount.forDataCaptureContext(context, settings);
+BarcodeCount barcodeCount = BarcodeCount.forDataCaptureContext(dataCaptureContext, settings);
 ```
 
 ## Camera Instance And Set Frame Source
@@ -77,8 +77,7 @@ Our recommended camera settings should be used to achieve the best performance a
 ```java
 CameraSettings cameraSettings = BarcodeCount.createRecommendedCameraSettings();
 
-Camera camera = Camera.getDefaultCamera();
-camera.applySettings(cameraSettings);
+Camera camera = Camera.getDefaultCamera(cameraSettings);
 ```
 
 Because the frame source is configurable the data capture context must be told which frame source to use. This is done with a call to [`DataCaptureContext.setFrameSource()`](https://docs.scandit.com/7.6/data-capture-sdk/android/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
@@ -105,7 +104,7 @@ MatrixScan Count’s built-in AR user interface includes buttons and overlays th
 Add a `BarcodeCountView` to your view hierarchy:
 
 ```java
-BarcodeCountView view = BarcodeCountView.newInstance(barcodeCount, captureView);
+BarcodeCountView view = BarcodeCountView.newInstance(context, dataCaptureView, barcodeCount);
 ```
 
 ## Configuring the Camera for Scanning View
@@ -137,11 +136,11 @@ We recommend you store the values to present a list, for example when the user t
 ```java
 @Override
 public void onScan(
-    @NonNull BarcodeCount mode,
-    @NonNull BarcodeCountSession session,
-    @NonNull FrameData data
+        @NonNull BarcodeCount mode,
+        @NonNull BarcodeCountSession session,
+        @NonNull FrameData data
 ) {
-    allRecognizedBarcodes = session.getRecognizedBarcodes().values();
+    List<Barcode> allRecognizedBarcodes = session.getRecognizedBarcodes();
 }
 ```
 
@@ -152,7 +151,7 @@ When the scanning process is over, you need to reset the mode to make it ready f
 To reset Barcode Count’s scanning process, call the `BarcodeCount.reset` method:
 
 ```java
-barcodeCount.reset()
+barcodeCount.reset();
 ```
 
 ## List and Exit Callbacks

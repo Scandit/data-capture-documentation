@@ -89,7 +89,7 @@ public void onBarcodeScanned(
         @NonNull BarcodeCaptureSession session,
         @NonNull FrameData frameData
 ) {
-    List<Barcode> recognizedBarcodes = session.getNewlyRecognizedBarcode();
+    Barcode recognizedBarcode = session.getNewlyRecognizedBarcode();
     // Do something with the barcodes. See Rejecting Barcodes, below, for an example.
 }
 ```

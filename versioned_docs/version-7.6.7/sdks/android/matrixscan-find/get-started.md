@@ -83,8 +83,8 @@ items.add(
 Finally, create a `BarcodeFind` instance with the Data Capture Context and the settings initialized in the previous step:
 
 ```java
-BarcodeFind mode = new BarcodeFind(settings);
-mode.setItemList(items);
+BarcodeFind barcodeFind = new BarcodeFind(settings);
+barcodeFind.setItemList(items);
 ```
 
 ## Setup the `BarcodeFindView`
@@ -94,17 +94,18 @@ MatrixScan Find’s built-in AR user interface includes buttons and overlays tha
 The `BarcodeFindView` appearance can be customized through [`BarcodeFindViewSettings`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/ui/barcode-find-view-settings.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindViewSettings) to match your application’s look and feel. For example, you can change the color of the dots that are overlaid on top of the items that are found and enable sound and haptic alerts.
 
 ```java
-BarcodeFindViewSettings viewSettings = new BarcodeFindViewSettings();
-viewSettings.inListItemColor = .green
-viewSettings.notInListItemColor = .red
-viewSettings.soundEnabled = true
-viewSettings.hapticEnabled = true
+BarcodeFindViewSettings viewSettings = new BarcodeFindViewSettings(
+        Color.GREEN, // inListItemColor
+        Color.RED, // notInListItemColor
+        true, // soundEnabled
+        true // hapticEnabled
+);
 ```
 
 Next, create a `BarcodeFindView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeFindView` is automatically added to the provided parent view.
 
 ```java
-BarcodeFindView barcodeFindView = BarcodeFindView.newInstance(parentView, dataCaptureContext, mode, viewSettings);
+BarcodeFindView barcodeFindView = BarcodeFindView.newInstance(parentView, dataCaptureContext, barcodeFind, viewSettings);
 ```
 
 Connect the `BarcodeFindView` to the Android lifecycle. The view is dependent on calling `BarcodeFindView.onPause()` and `BarcodeFindView.onResume()` to set up the camera and its overlays properly.

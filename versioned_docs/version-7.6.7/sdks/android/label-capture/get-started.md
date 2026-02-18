@@ -94,28 +94,27 @@ LabelCaptureSettings settings = LabelCaptureSettings.builder()
     .addLabel()
         /*
          * Add a barcode field with the expected symbologies and pattern.
-         * You can omit the pattern if the content of the barcode is unknown. 
+         * You can omit the pattern if the content of the barcode is unknown.
          */
         .addCustomBarcode()
             .setSymbologies(Symbology.EAN13_UPCA, Symbology.CODE128)
-            .setPattern("\\d{12,14}")
         .buildFluent("<your-barcode-field-name")
         /*
          * Add a text field for capturing expiry dates.
-         * The field is set as optional so that the capture can complete 
+         * The field is set as optional so that the capture can complete
          * even if the expiry date is not present or not readable.
          */
         .addExpiryDateText()
             .isOptional(true)
-            .setLabelDateFormat(LabelDateFormat(LabelDateComponentFormat.MDY,false))
+            .setLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY,false))
         .buildFluent("<your-expiry-date-field-name>")
     .buildFluent("<your-label-name>")
 .build();
 
 /*
- * Create the label capture mode with the settings and data capture context created earlier.
- */
-LabelCapture labelCapture = LabelCapture.forDataCaptureContext(dataCaptureContext, settings)
+* Create the label capture mode with the settings and data capture context created earlier.
+*/
+LabelCapture labelCapture = LabelCapture.forDataCaptureContext(dataCaptureContext, settings);
 ```
 </TabItem>
 </Tabs>

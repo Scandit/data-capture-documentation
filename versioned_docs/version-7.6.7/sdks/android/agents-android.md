@@ -63,8 +63,7 @@ val dataCaptureContext = DataCaptureContext.forLicenseKey(BuildConfig.SCANDIT_LI
 
 Java:
 ```java
-import com.scandit.datacapture.core.DataCaptureContext;
-
+import com.scandit.datacapture.core.capture.DataCaptureContext;
 DataCaptureContext dataCaptureContext =
     DataCaptureContext.forLicenseKey(BuildConfig.SCANDIT_LICENSE_KEY);
 ```
