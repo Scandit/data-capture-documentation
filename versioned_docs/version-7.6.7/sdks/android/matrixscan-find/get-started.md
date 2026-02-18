@@ -67,16 +67,16 @@ Next, create the list of items that will be actively searched for. We will also 
 ```java
 Set<BarcodeFindItem> items = new HashSet<>();
 items.add(
-        new BarcodeFindItem(
-                new BarcodeFindItemSearchOptions("9783598215438"),
-                new BarcodeFindItemContent("Mini Screwdriver Set", "(6-Piece)", null)
-        )
+    new BarcodeFindItem(
+        new BarcodeFindItemSearchOptions("9783598215438"),
+        new BarcodeFindItemContent("Mini Screwdriver Set", "(6-Piece)", null)
+    )
 );
 items.add(
-        new BarcodeFindItem(
-                new BarcodeFindItemSearchOptions("9783598215414"),
-                null // Item information is optional, used for display only
-        )
+    new BarcodeFindItem(
+        new BarcodeFindItemSearchOptions("9783598215414"),
+        null // Item information is optional, used for display only
+    )
 );
 ```
 
@@ -95,10 +95,10 @@ The `BarcodeFindView` appearance can be customized through [`BarcodeFindViewSett
 
 ```java
 BarcodeFindViewSettings viewSettings = new BarcodeFindViewSettings(
-        Color.GREEN, // inListItemColor
-        Color.RED, // notInListItemColor
-        true, // soundEnabled
-        true // hapticEnabled
+    Color.GREEN, // inListItemColor
+    Color.RED, // notInListItemColor
+    true, // soundEnabled
+    true // hapticEnabled
 );
 ```
 

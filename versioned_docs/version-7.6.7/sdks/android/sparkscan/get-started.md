@@ -126,7 +126,7 @@ Note that this list only contains one barcode entry.
 ```java
 @Override
 public void onBarcodeScanned(
-        @NonNull SparkScan sparkScan, @NonNull SparkScanSession session, @Nullable FrameData data
+    @NonNull SparkScan sparkScan, @NonNull SparkScanSession session, @Nullable FrameData data
 ) {
     // Gather the recognized barcode
     Barcode barcode = session.getNewlyRecognizedBarcode();

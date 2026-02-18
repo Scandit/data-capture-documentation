@@ -55,18 +55,18 @@ For this option, keep in mind that:
 @Nullable
 @Override
 public View viewForTrackedBarcode(
-        @NonNull BarcodeBatchAdvancedOverlay overlay,
-        @NonNull TrackedBarcode trackedBarcode
+    @NonNull BarcodeBatchAdvancedOverlay overlay,
+    @NonNull TrackedBarcode trackedBarcode
 ) {
     // Create and return the view you want to show for this tracked barcode.
     // You can also return null, to have no view for this barcode.
     TextView textView = new TextView(this);
     textView.setBackgroundColor(Color.WHITE);
     textView.setLayoutParams(
-            new ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
-            )
+        new ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
     );
     textView.setText(trackedBarcode.getBarcode().getData());
     return textView;
@@ -75,8 +75,8 @@ public View viewForTrackedBarcode(
 @NonNull
 @Override
 public Anchor anchorForTrackedBarcode(
-        @NonNull BarcodeBatchAdvancedOverlay overlay,
-        @NonNull TrackedBarcode trackedBarcode
+    @NonNull BarcodeBatchAdvancedOverlay overlay,
+    @NonNull TrackedBarcode trackedBarcode
 ) {
     // As we want the view to be above the barcode, we anchor the view's center to the top-center of the barcode quadrilateral.
     // Use the function 'offsetForTrackedBarcode' below to adjust the position of the view by providing an offset.
@@ -86,16 +86,16 @@ public Anchor anchorForTrackedBarcode(
 @NonNull
 @Override
 public PointWithUnit offsetForTrackedBarcode(
-        @NonNull BarcodeBatchAdvancedOverlay overlay,
-        @NonNull TrackedBarcode trackedBarcode,
-        @NonNull View view
+    @NonNull BarcodeBatchAdvancedOverlay overlay,
+    @NonNull TrackedBarcode trackedBarcode,
+    @NonNull View view
 ) {
     // This is the offset that will be applied to the view.
     // You can use MeasureUnit.FRACTION to give a measure relative to the view itself, the sdk will take care of transforming this into pixel size.
     // We now center horizontally and move up the view to make sure it's centered and above the barcode quadrilateral by half of the view's height.
     return new PointWithUnit(
-            new FloatWithUnit(0f, MeasureUnit.FRACTION),
-            new FloatWithUnit(-1f, MeasureUnit.FRACTION)
+        new FloatWithUnit(0f, MeasureUnit.FRACTION),
+        new FloatWithUnit(-1f, MeasureUnit.FRACTION)
     );
 }
 ```
@@ -113,9 +113,9 @@ From here you can create the view you want to display, and then call:
 ```java
 @Override
 public void onSessionUpdated(
-        @NonNull BarcodeBatch mode,
-        @NonNull BarcodeBatchSession session,
-        @NonNull FrameData data
+    @NonNull BarcodeBatch mode,
+    @NonNull BarcodeBatchSession session,
+    @NonNull FrameData data
 ) {
     // Be careful, this function is not invoked on the main thread!
     runOnUiThread(() -> {
@@ -123,22 +123,22 @@ public void onSessionUpdated(
             TextView textView = new TextView(this);
             textView.setBackgroundColor(Color.WHITE);
             textView.setLayoutParams(
-                    new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
-                    )
+                new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
             );
             textView.setText(trackedBarcode.getBarcode().getData());
             overlay.setViewForTrackedBarcode(trackedBarcode, textView);
             overlay.setAnchorForTrackedBarcode(
-                    trackedBarcode, Anchor.TOP_CENTER
+                trackedBarcode, Anchor.TOP_CENTER
             );
             overlay.setOffsetForTrackedBarcode(
-                    trackedBarcode,
-                    new PointWithUnit(
-                            new FloatWithUnit(0f, MeasureUnit.FRACTION),
-                            new FloatWithUnit(-1f, MeasureUnit.FRACTION)
-                    )
+                trackedBarcode,
+                new PointWithUnit(
+                    new FloatWithUnit(0f, MeasureUnit.FRACTION),
+                    new FloatWithUnit(-1f, MeasureUnit.FRACTION)
+                )
             );
         }
     });
@@ -162,9 +162,9 @@ The frame coordinates from `TrackedBarcode.location` need to be mapped to view c
 ```java
 @Override
 public void onSessionUpdated(
-        @NonNull BarcodeBatch mode,
-        @NonNull final BarcodeBatchSession session,
-        @NonNull FrameData data
+    @NonNull BarcodeBatch mode,
+    @NonNull final BarcodeBatchSession session,
+    @NonNull FrameData data
 ) {
     // Be careful, this function is not invoked on the main thread!
     runOnUiThread(() -> {

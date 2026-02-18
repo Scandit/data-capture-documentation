@@ -63,8 +63,8 @@ overlay.setListener(new LabelCaptureBasicOverlayListener() {
     @Nullable
     @Override
     public Brush brushForLabel(
-            @NonNull LabelCaptureBasicOverlay overlay,
-            @NonNull CapturedLabel label
+        @NonNull LabelCaptureBasicOverlay overlay,
+        @NonNull CapturedLabel label
     ) {
         return null;
     }
@@ -72,23 +72,23 @@ overlay.setListener(new LabelCaptureBasicOverlayListener() {
     @Nullable
     @Override
     public Brush brushForField(
-            @NonNull LabelCaptureBasicOverlay overlay,
-            @NonNull LabelField field,
-            @NonNull CapturedLabel label
+        @NonNull LabelCaptureBasicOverlay overlay,
+        @NonNull LabelField field,
+        @NonNull CapturedLabel label
     ) {
         if (field.getName().equals("<your-barcode-field-name>")) {
             return new Brush(
-                    getResources().getColor(R.color.barcode_overlay_fill),
-                    getResources().getColor(R.color.barcode_overlay_stroke),
-                    0f
+                getResources().getColor(R.color.barcode_overlay_fill),
+                getResources().getColor(R.color.barcode_overlay_stroke),
+                0f
             );
         }
 
         if (field.getName().equals("<your-expiry-date-field-name>")) {
             return new Brush(
-                    getResources().getColor(R.color.expiry_date_overlay_fill),
-                    getResources().getColor(R.color.expiry_date_overlay_stroke),
-                    0f
+                getResources().getColor(R.color.expiry_date_overlay_fill),
+                getResources().getColor(R.color.expiry_date_overlay_stroke),
+                0f
             );
         }
 
@@ -197,46 +197,54 @@ advancedOverlay.listener = object : LabelCaptureAdvancedOverlayListener {
 // Create an advanced overlay that allows for custom views to be added over detected label fields
 // This is the key component for implementing Augmented Reality features
 LabelCaptureAdvancedOverlay advancedOverlay = LabelCaptureAdvancedOverlay.newInstance(
-        labelCapture, dataCaptureView);
+    labelCapture, dataCaptureView);
 
 // Configure the advanced overlay with a listener that handles AR content creation and positioning
 advancedOverlay.setListener(new LabelCaptureAdvancedOverlayListener() {
 
     @Nullable
     @Override
-    public View viewForCapturedLabel(@NonNull LabelCaptureAdvancedOverlay overlay,
-                                     @NonNull CapturedLabel capturedLabel) {
+    public View viewForCapturedLabel(
+        @NonNull LabelCaptureAdvancedOverlay overlay,
+        @NonNull CapturedLabel capturedLabel
+    ) {
         // We return null since we're only adding AR elements to specific fields, not the entire label
         return null;
     }
 
     @NonNull
     @Override
-    public Anchor anchorForCapturedLabel(@NonNull LabelCaptureAdvancedOverlay overlay,
-                                         @NonNull CapturedLabel capturedLabel) {
+    public Anchor anchorForCapturedLabel(
+        @NonNull LabelCaptureAdvancedOverlay overlay,
+        @NonNull CapturedLabel capturedLabel
+    ) {
         // This defines where on the detected label the AR view would be anchored
         return Anchor.CENTER;
     }
 
     @NonNull
     @Override
-    public PointWithUnit offsetForCapturedLabel(@NonNull LabelCaptureAdvancedOverlay overlay,
-                                                @NonNull CapturedLabel capturedLabel,
-                                                @NonNull View view) {
+    public PointWithUnit offsetForCapturedLabel(
+        @NonNull LabelCaptureAdvancedOverlay overlay,
+        @NonNull CapturedLabel capturedLabel,
+        @NonNull View view
+    ) {
         // This defines the offset from the anchor point for the label's AR view
         return new PointWithUnit(
-                new FloatWithUnit(0f, MeasureUnit.PIXEL),
-                new FloatWithUnit(0f, MeasureUnit.PIXEL)
+            new FloatWithUnit(0f, MeasureUnit.PIXEL),
+            new FloatWithUnit(0f, MeasureUnit.PIXEL)
         );
     }
 
     @Nullable
     @Override
-    public View viewForCapturedLabelField(@NonNull LabelCaptureAdvancedOverlay overlay,
-                                          @NonNull LabelField labelField) {
+    public View viewForCapturedLabelField(
+        @NonNull LabelCaptureAdvancedOverlay overlay,
+        @NonNull LabelField labelField
+    ) {
         // We only want to create AR elements for expiry date fields that are text-based
         if (labelField.getName().toLowerCase().contains("expiry") &&
-                labelField.getType() == LabelFieldType.TEXT) {
+            labelField.getType() == LabelFieldType.TEXT) {
 
             //
             // data extraction from expiry date field and days until expiry date calculation
@@ -272,21 +280,25 @@ advancedOverlay.setListener(new LabelCaptureAdvancedOverlayListener() {
 
     @NonNull
     @Override
-    public Anchor anchorForCapturedLabelField(@NonNull LabelCaptureAdvancedOverlay overlay,
-                                              @NonNull LabelField labelField) {
+    public Anchor anchorForCapturedLabelField(
+        @NonNull LabelCaptureAdvancedOverlay overlay,
+        @NonNull LabelField labelField
+    ) {
         // BOTTOM_CENTER places it right below the expiry date text for better visibility
         return Anchor.BOTTOM_CENTER;
     }
 
     @NonNull
     @Override
-    public PointWithUnit offsetForCapturedLabelField(@NonNull LabelCaptureAdvancedOverlay overlay,
-                                                     @NonNull LabelField labelField,
-                                                     @NonNull View view) {
+    public PointWithUnit offsetForCapturedLabelField(
+        @NonNull LabelCaptureAdvancedOverlay overlay,
+        @NonNull LabelField labelField,
+        @NonNull View view
+    ) {
         // This defines the offset from the anchor point
         return new PointWithUnit(
-                new FloatWithUnit(0f, MeasureUnit.DIP),
-                new FloatWithUnit(22f, MeasureUnit.DIP)
+            new FloatWithUnit(0f, MeasureUnit.DIP),
+            new FloatWithUnit(22f, MeasureUnit.DIP)
         );
     }
 });
@@ -323,9 +335,9 @@ validationFlowOverlay?.listener = this
 ```java
 // Create the overlay
 validationFlowOverlay = LabelCaptureValidationFlowOverlay.newInstance(
-        getContext(),
-        labelCapture,
-        dataCaptureView
+    getContext(),
+    labelCapture,
+    dataCaptureView
 );
 // Set the listener to receive validation events
 validationFlowOverlay.setListener(this);

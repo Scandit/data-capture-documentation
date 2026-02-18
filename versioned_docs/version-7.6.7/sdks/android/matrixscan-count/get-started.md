@@ -136,9 +136,9 @@ We recommend you store the values to present a list, for example when the user t
 ```java
 @Override
 public void onScan(
-        @NonNull BarcodeCount mode,
-        @NonNull BarcodeCountSession session,
-        @NonNull FrameData data
+    @NonNull BarcodeCount mode,
+    @NonNull BarcodeCountSession session,
+    @NonNull FrameData data
 ) {
     List<Barcode> allRecognizedBarcodes = session.getRecognizedBarcodes();
 }

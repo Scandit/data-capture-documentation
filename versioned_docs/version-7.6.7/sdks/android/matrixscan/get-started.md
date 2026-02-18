@@ -130,8 +130,10 @@ Once the overlay has been added, you must conform to the [BarcodeBatchBasicOverl
 ```java
 @Nullable
 @Override
-public Brush brushForTrackedBarcode(@NonNull BarcodeBatchBasicOverlay overlay,
-                                    @NonNull TrackedBarcode trackedBarcode) {
+public Brush brushForTrackedBarcode(
+    @NonNull BarcodeBatchBasicOverlay overlay,
+    @NonNull TrackedBarcode trackedBarcode
+) {
     // Return a custom Brush based on the tracked barcode.
 }
 ```
@@ -141,8 +143,8 @@ If you want to make the highlights tappable, you need to implement the [BarcodeB
 ```java
 @Override
 public void onTrackedBarcodeTapped(
-        @NonNull BarcodeBatchBasicOverlay overlay,
-        @NonNull TrackedBarcode trackedBarcode
+    @NonNull BarcodeBatchBasicOverlay overlay,
+    @NonNull TrackedBarcode trackedBarcode
 ) {
     // A tracked barcode was tapped.
 }
@@ -180,9 +182,9 @@ public class FeedbackListener implements BarcodeBatchListener {
 
     @Override
     public void onSessionUpdated(
-            @NonNull BarcodeBatch mode,
-            @NonNull BarcodeBatchSession session,
-            @NonNull FrameData data
+        @NonNull BarcodeBatch mode,
+        @NonNull BarcodeBatchSession session,
+        @NonNull FrameData data
     ) {
         if (!session.getAddedTrackedBarcodes().isEmpty()) {
             feedback.emit();

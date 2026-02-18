@@ -123,16 +123,16 @@ If you want to be notified when a user taps on an overlay, you need to implement
 ```java
 @Override
 public void onRecognizedBarcodeTapped(
-        @NonNull BarcodeCountView view, 
-        @NonNull TrackedBarcode trackedBarcode
+    @NonNull BarcodeCountView view,
+    @NonNull TrackedBarcode trackedBarcode
 ) {
     // Do something with the tapped barcode
 }
 
 @Override
 public void onRecognizedBarcodeNotInListTapped(
-        @NonNull BarcodeCountView view,
-        @NonNull TrackedBarcode trackedBarcode
+    @NonNull BarcodeCountView view,
+    @NonNull TrackedBarcode trackedBarcode
 ) {
     // Do something with the tapped barcode
 }
