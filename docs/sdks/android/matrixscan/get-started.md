@@ -128,6 +128,7 @@ BarcodeBatchBasicOverlay overlay = BarcodeBatchBasicOverlay.newInstance(barcodeB
 Once the overlay has been added, you must conform to the [BarcodeBatchBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener) interface. The method [BarcodeBatchBasicOverlayListener.brushForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener.BrushForTrackedBarcode) is invoked every time a new tracked barcode appears and it can be used to set a brush used to highlight that specific barcode in the [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay).
 
 ```java
+@Nullable
 @Override
 public Brush brushForTrackedBarcode(@NonNull BarcodeBatchBasicOverlay overlay,
                                     @NonNull TrackedBarcode trackedBarcode) {
@@ -139,8 +140,10 @@ If you want to make the highlights tappable, you need to implement the [BarcodeB
 
 ```java
 @Override
-public void onTap(@NonNull BarcodeBatchBasicOverlay overlay,
-                  @NonNull TrackedBarcode trackedBarcode) {
+public void onTrackedBarcodeTapped(
+        @NonNull BarcodeBatchBasicOverlay overlay,
+        @NonNull TrackedBarcode trackedBarcode
+) {
     // A tracked barcode was tapped.
 }
 ```
@@ -154,33 +157,32 @@ Here, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/an
 First, we create a feedback and release it after it is no longer used, to avoid resources being unnecessarily held.
 
 ```java
-override func viewDidLoad() {
-    super.viewDidLoad()
-    feedback = Feedback.default
-}
+Feedback feedback = Feedback.defaultFeedback();
 ```
 
 Next, use this `feedback` in a `BarcodeBatchListener`:
 
 ```java
 public class FeedbackListener implements BarcodeBatchListener {
+    Feedback feedback = Feedback.defaultFeedback();
+    
     @Override
-    public void onObservationStarted(@NotNull BarcodeBatch barcodeBatch) {
+    public void onObservationStarted(@NonNull  BarcodeBatch barcodeBatch) {
         // Called when Barcode Batch is started.
         // We don't use this callback in this guide.
     }
 
     @Override
-    public void onObservationStopped(@NotNull BarcodeBatch barcodeBatch) {
+    public void onObservationStopped(@NonNull BarcodeBatch barcodeBatch) {
         // Called when Barcode Batch is stopped.
         // We don't use this callback in this guide.
     }
 
     @Override
     public void onSessionUpdated(
-            @NotNull BarcodeBatch mode,
-            @NotNull BarcodeBatchSession session,
-            @NotNull FrameData data
+            @NonNull BarcodeBatch mode,
+            @NonNull BarcodeBatchSession session,
+            @NonNull FrameData data
     ) {
         if (!session.getAddedTrackedBarcodes().isEmpty()) {
             feedback.emit();
@@ -194,7 +196,7 @@ public class FeedbackListener implements BarcodeBatchListener {
 As the last step, register the listener responsible for emitting the feedback with the `BarcodeBatch` instance.
 
 ```java
-barcodeBatch.addListener(feedbackListener);
+barcodeBatch.addListener(new FeedbackListener());
 ```
 
 ## Disable Barcode Batch

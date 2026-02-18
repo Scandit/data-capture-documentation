@@ -39,7 +39,7 @@ You can configure the colors used in the resulting image:
 
 ```java
 DataCaptureContext dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
-BarcodeGenerator.Code128BarcodeGeneratorBuilder builder = new BarcodeGenerator.code128BarcodeGeneratorBuilder(dataCaptureContext)
+BarcodeGenerator.Code128BarcodeGeneratorBuilder builder = BarcodeGenerator.code128BarcodeGeneratorBuilder(dataCaptureContext)
     .withBackgroundColor(Color.WHITE)
     .withForegroundColor(Color.BLACK);
 ```

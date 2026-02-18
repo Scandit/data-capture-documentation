@@ -61,7 +61,7 @@ settings.enableSymbology(Symbology.EAN13_UPCA, true);
 Then create the mode with the previously created settings:
 
 ```java
-BarcodeAr mode = new BarcodeAr(dataCaptureContext, settings);
+BarcodeAr barcodeAr = new BarcodeAr(dataCaptureContext, settings);
 ```
 
 ## Setup the `BarcodeArView`
@@ -143,8 +143,8 @@ public void onPause() {
 }
 
 @Override
-public void onDestroyView() {
-    super.onDestroyView(); 
+public void onDestroy() {
+    super.onDestroy();
     barcodeArView.onDestroy();
 }
 ```

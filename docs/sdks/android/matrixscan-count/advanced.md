@@ -65,7 +65,7 @@ For example, you might want to scan only Code 128 barcodes and no PDF417 barcode
 
 ```java
 BarcodeCountSettings settings = new BarcodeCountSettings();
-barcodeCountSettings.enableSymbologies(enabledSymbologies);
+settings.enableSymbologies(enabledSymbologies);
 
 Set<Symbology> excludedSymbologies = new HashSet<>();
 excludedSymbologies.add(Symbology.PDF417);
@@ -105,15 +105,13 @@ The methods [BarcodeCountViewListener.brushForRecognizedBarcode()](https://docs.
 ```java
 @Nullable
 @Override
-public Brush brushForRecognizedBarcode(
-        @NonNull BarcodeCountView view, @NonNull TrackedBarcode trackedBarcode) {
+public Brush brushForRecognizedBarcode(@NonNull BarcodeCountView view, @NonNull TrackedBarcode trackedBarcode) {
     // Return a custom brush
 }
 
 @Nullable
 @Override
-public Brush brushForUnrecognizedBarcode(
-        @NonNull BarcodeCountView view, @NonNull TrackedBarcode trackedBarcode) {
+public Brush brushForRecognizedBarcodeNotInList(@NonNull BarcodeCountView view, @NonNull TrackedBarcode trackedBarcode) {
     // Return a custom brush
 }
 ```
@@ -125,13 +123,17 @@ If you want to be notified when a user taps on an overlay, you need to implement
 ```java
 @Override
 public void onRecognizedBarcodeTapped(
-        @NonNull BarcodeCountView view, @NonNull TrackedBarcode trackedBarcode) {
+        @NonNull BarcodeCountView view, 
+        @NonNull TrackedBarcode trackedBarcode
+) {
     // Do something with the tapped barcode
 }
 
 @Override
-public void onUnrecognizedBarcodeTapped(
-        @NonNull BarcodeCountView view, @NonNull TrackedBarcode trackedBarcode) {
+public void onRecognizedBarcodeNotInListTapped(
+        @NonNull BarcodeCountView view,
+        @NonNull TrackedBarcode trackedBarcode
+) {
     // Do something with the tapped barcode
 }
 ```
