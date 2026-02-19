@@ -1,0 +1,10 @@
+# Generated snippet sources (recreated on every validation run)
+app/src/main/**/generated/
+
+# Android build outputs
+.gradle/
+build/
+app/build/
+local.properties
+*.iml
+.idea/
