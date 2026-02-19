@@ -3,6 +3,7 @@ import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 import * as dotenv from 'dotenv';
 import { version } from "react";
+import remarkHideComments from "./src/plugins/remark-hide-comments";
 dotenv.config();  // Load environment variables from .env file
 
 
@@ -242,6 +243,7 @@ const config: Config = {
         docs: {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.ts"),
+          remarkPlugins: [remarkHideComments],
           breadcrumbs: true,
           admonitions: {
             keywords: [
