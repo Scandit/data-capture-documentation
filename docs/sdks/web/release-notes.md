@@ -51,7 +51,6 @@ keywords:
 
 #### Id
 
-* Improved success rate when scanning using the ImageFrameSource or the SingleImageUploader as frame source
 * Treated Puerto Rico driver licenses as AAMVA to enforce barcode capture with FullScanner
 * Fixed a bug that would cause Canada Northwest Territories driver license scans to be incomplete
 
