@@ -59,40 +59,41 @@ The main entry point for the Barcode Count Mode is the `BarcodeCount` object. It
 
 Here we set up Barcode Count for tracking EAN13 codes, however you must change this to the appropriate symbologies for your use case. If you are sure that your environment has only unique barcodes, you can also enable `BarcodeCountSettings.expectsOnlyUniqueBarcodes`. This option improves scanning performance as long as you are sure that no duplicates are present.
 
-```java
-BarcodeCountSettings settings = new BarcodeCountSettings();
-settings.setSymbologyEnabled(Symbology.EAN13_UPCA, true);
+```kotlin
+val settings = BarcodeCountSettings().apply {
+    setSymbologyEnabled(Symbology.EAN13_UPCA, true)
+}
 ```
 
 Next, create a `BarcodeCount` instance with the Data Capture Context and the settings initialized in the previous step:
 
-```java
-BarcodeCount barcodeCount = BarcodeCount.forDataCaptureContext(dataCaptureContext, settings);
+```kotlin
+val barcodeCount = BarcodeCount.forDataCaptureContext(dataCaptureContext, settings)
 ```
 
 ## Camera Instance And Set Frame Source
 
 Our recommended camera settings should be used to achieve the best performance and user experience. The following code shows how to get the recommended settings for MatrixScan Count and create the camera from it:
 
-```java
-CameraSettings cameraSettings = BarcodeCount.createRecommendedCameraSettings();
+```kotlin
+val cameraSettings = BarcodeCount.createRecommendedCameraSettings()
 
-Camera camera = Camera.getDefaultCamera(cameraSettings);
+val camera = Camera.getDefaultCamera(cameraSettings)
 ```
 
 Because the frame source is configurable the data capture context must be told which frame source to use. This is done with a call to [`DataCaptureContext.setFrameSource()`](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
-```java
-dataCaptureContext.setFrameSource(camera);
+```kotlin
+dataCaptureContext.setFrameSource(camera)
 ```
 
 ## Registering the Listener
 
 To keep track of the barcodes that have been scanned, implement the [BarcodeCountListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-count-listener.html#interface-scandit.datacapture.barcode.count.IBarcodeCountListener) interface and register the listener.
 
-```java
+```kotlin
 // Register self as a listener to monitor the barcode count session.
-barcodeCount.addListener(this);
+barcodeCount.addListener(this)
 ```
 
 [`BarcodeCountListener.onScan()`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-count-listener.html#method-scandit.datacapture.barcode.count.IBarcodeCountListener.OnScan) is called when the scan phase has finished and results can be retrieved from [`BarcodeCountSession`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-count-session.html#class-scandit.datacapture.barcode.count.BarcodeCountSession).
@@ -103,8 +104,8 @@ MatrixScan Count’s built-in AR user interface includes buttons and overlays th
 
 Add a `BarcodeCountView` to your view hierarchy:
 
-```java
-BarcodeCountView view = BarcodeCountView.newInstance(context, dataCaptureView, barcodeCount);
+```kotlin
+val barcodeCountView = BarcodeCountView.newInstance(context, captureView, barcodeCount)
 ```
 
 ## Configuring the Camera for Scanning View
@@ -113,17 +114,15 @@ The camera is not automatically turned on when you are in a scanning view. You n
 
 Similarly `BarcodeCount` should also be enabled and disabled. For example, you should switch off the camera when the `BarcodeCountView` is not visible and switch on the camera when the `BarcodeCountView` is visible. For example:
 
-```java
-@Override
-protected void onPause() {
-    camera.switchToDesiredState(FrameSourceState.OFF);
-    super.onPause();
+```kotlin
+override fun onPause() {
+    camera.switchToDesiredState(FrameSourceState.OFF)
+    super.onPause()
 }
 
-@Override
-protected void onResume() {
-    super.onResume();
-    camera.switchToDesiredState(FrameSourceState.ON);
+override fun onResume() {
+    super.onResume()
+    camera.switchToDesiredState(FrameSourceState.ON)
 }
 ```
 
@@ -133,14 +132,13 @@ The values captured as part of the scanning process are part of the session, and
 
 We recommend you store the values to present a list, for example when the user taps the list icon. To do this, make a copy of [`BarcodeCountSession.recognizedBarcodes`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-count-session.html#property-scandit.datacapture.barcode.count.BarcodeCountSession.RecognizedBarcodes):
 
-```java
-@Override
-public void onScan(
-    @NonNull BarcodeCount mode,
-    @NonNull BarcodeCountSession session,
-    @NonNull FrameData data
+```kotlin
+override fun onScan(
+    mode: BarcodeCount,
+    session: BarcodeCountSession,
+    data: FrameData,
 ) {
-    List<Barcode> allRecognizedBarcodes = session.getRecognizedBarcodes();
+    val allRecognizedBarcodes = session.recognizedBarcodes
 }
 ```
 
@@ -150,26 +148,20 @@ When the scanning process is over, you need to reset the mode to make it ready f
 
 To reset Barcode Count’s scanning process, call the `BarcodeCount.reset` method:
 
-```java
-barcodeCount.reset();
+```kotlin
+barcodeCount.reset()
 ```
 
 ## List and Exit Callbacks
 
 The UI includes two icons (buttons): “List” and “Exit”. The SDK provides the callbacks so you can add the desired action when those icons are tapped by the user:
 
-```java
-@Override
-public void onListButtonTapped(
-    @NonNull BarcodeCountView view
-) {
+```kotlin
+override fun onListButtonTapped() {
     // Show the current progress but the order is not completed
 }
 
-@Override
-public void onExitButtonTapped(
-    @NonNull BarcodeCountView view
-) {
+override fun onExitButtonTapped(view: BarcodeCountView) {
     // The order is completed
 }
 ```

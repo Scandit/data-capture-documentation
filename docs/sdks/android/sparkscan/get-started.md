@@ -48,8 +48,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 The first step to add capture capabilities to your application is to create a new Data Capture Context. The context expects a valid Scandit Data Capture SDK license key during construction.
 
-```java
-DataCaptureContext dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+```kotlin
+val dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
 ```
 
 ## Configure the SparkScan Mode
@@ -58,17 +58,17 @@ The SparkScan Mode is configured through SparkScanSettings and allows you to reg
 
 For this tutorial, we set up SparkScan for scanning EAN13 codes. You can change this to the correct symbologies for your use case (for instance, Code 128, Code 39…).
 
-```java
-SparkScanSettings settings = new SparkScanSettings();
-HashSet<Symbology> symbologies = new HashSet<>();
-symbologies.add(Symbology.EAN13_UPCA);
-settings.enableSymbologies(symbologies);
+```kotlin
+val settings = SparkScanSettings().apply {
+    val symbologies = setOf(Symbology.EAN13_UPCA)
+    enableSymbologies(symbologies)
+}
 ```
 
 Next, create a SparkScan instance with the settings initialized in the previous step:
 
-```java
-SparkScan sparkScan = new SparkScan(settings);
+```kotlin
+val sparkScan = SparkScan(settings)
 ```
 
 ## Create the SparkScan View
@@ -77,8 +77,8 @@ The SparkScan built-in user interface includes the camera preview and scanning U
 
 The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view.html) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-settings.html).
 
-```java
-SparkScanViewSettings viewSettings = new SparkScanViewSettings();
+```kotlin
+val viewSettings = SparkScanViewSettings()
 // setup the desired appearance settings by updating the fields in the object above
 ```
 
@@ -86,25 +86,23 @@ By adding a `SparkScanView`, the scanning interface (camera preview and scanning
 
 Construct a new SparkScan view. The SparkScan view is automatically added to the provided parentView:
 
-```java
-SparkScanView sparkScanView = SparkScanView.newInstance(parentView, dataCaptureContext, sparkScan, viewSettings);
+```kotlin
+val sparkScanView = SparkScanView.newInstance(parentView, dataCaptureContext, sparkScan, viewSettings)
 ```
 
 See the [SparkScan Workflow Options](./advanced.md#workflow-options) section for more information.
 
 Additionally, make sure to call `sparkScanView.onPause()` and `sparkScanView.onResume()` in your Fragment/Activity `onPause` and `onResume` callbacks. You have to call these for the correct functioning of the `SparkScanView`.
 
-```java
-@Override
-protected void onPause() {
-    sparkScanView.onPause();
-    super.onPause();
+```kotlin
+override fun onPause() {
+    sparkScanView.onPause()
+    super.onPause()
 }
 
-@Override
-protected void onResume() {
-    sparkScanView.onResume();
-    super.onResume();
+override fun onResume() {
+    sparkScanView.onResume()
+    super.onResume()
 }
 ```
 
@@ -112,9 +110,9 @@ protected void onResume() {
 
 To keep track of the barcodes that have been scanned, implement the [SparkScanListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) interface and register the listener to the SparkScan mode.
 
-```java
+```kotlin
 // Register self as a listener to monitor the spark scan session.
-sparkScan.addListener(this);
+sparkScan.addListener(this)
 ```
 
 [SparkScanListener.onBarcodeScanned()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list: [SparkScanSession.newlyRecognizedBarcode](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode).
@@ -123,21 +121,22 @@ sparkScan.addListener(this);
 Note that this list only contains one barcode entry.
 :::
 
-```java
-@Override
-public void onBarcodeScanned(
-    @NonNull SparkScan sparkScan, @NonNull SparkScanSession session, @Nullable FrameData data
-) {
+```kotlin
+override fun onBarcodeScanned(
+    sparkScan: SparkScan,
+    session: SparkScanSession,
+    data: FrameData?,
+){
     // Gather the recognized barcode
-    Barcode barcode = session.getNewlyRecognizedBarcode();
+    val barcode = session.newlyRecognizedBarcode
 
     // This method is invoked from a recognition internal thread.
     // Run the specified action in the UI thread to update the internal barcode list.
-    runOnUiThread(() -> {
+    runOnUiThread {
         // Update the internal list and the UI with the barcode retrieved above
-        this.latestBarcode = barcode;
-    });
-}
+        this.latestBarcode = barcode
+    }
+  }
 ```
 
 ## Scan Some Barcodes

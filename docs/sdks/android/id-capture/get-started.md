@@ -80,14 +80,14 @@ import DataCaptureContextAndroid from '../../../partials/get-started/_create-dat
 
 Next, you need to create a new instance of the [Camera](https://docs.scandit.com/data-capture-sdk/android/core/api/camera.html#class-scandit.datacapture.core.Camera) class to indicate the camera to stream previews and to capture images.
 
-```java
-camera = Camera.getDefaultCamera(IdCapture.createRecommendedCameraSettings());
+```kotlin
+val camera = Camera.getDefaultCamera(IdCapture.createRecommendedCameraSettings())
 
 if (camera == null) {
-    throw new IllegalStateException("Failed to init camera!");
+    throw IllegalStateException("Failed to init camera!")
 }
 
-dataCaptureContext.setFrameSource(camera);
+dataCaptureContext.setFrameSource(camera)
 ```
 
 ## Configure the Capture Settings
@@ -100,58 +100,53 @@ Check [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/android/
 By default, [anonymized data](./advanced.md#configure-data-anonymization) is not returned in accordance with local regulations for specific documents. This setting can be disabled for testing purposes, but be sure to comply with local laws and requirements in production.
 :::
 
-```java
-List<IdCaptureDocument> acceptedDocuments = new ArrayList<>();
-List<IdCaptureDocument> rejectedDocuments = new ArrayList<>();
+```kotlin
+val settings = IdCaptureSettings().apply {
+    acceptedDocuments = listOf(
+        // Documents from any region
+        IdCard(IdCaptureRegion.ANY),
+        // Only documents issued by a specific country
+        IdCard(IdCaptureRegion.GERMANY),
+        // Regional documents
+        RegionSpecific(RegionSpecificSubtype.APEC_BUSINESS_TRAVEL_CARD),
+    )
+    rejectedDocuments = listOf(
+        // Reject passports from certain regions:
+        Passport(IdCaptureRegion.CUBA),
+    )
 
-// Documents from any region:
-acceptedDocuments.add(new IdCard(IdCaptureRegion.ANY));
-// Only documents issued by a specific country:
-acceptedDocuments.add(new IdCard(IdCaptureRegion.GERMANY));
-// Regional documents:
-acceptedDocuments.add(new RegionSpecific(RegionSpecificSubtype.APEC_BUSINESS_TRAVEL_CARD));
-// Reject passports from certain regions:
-rejectedDocuments.add(new Passport(IdCaptureRegion.CUBA));
+    // To scan only one-sided documents and a given zone:
+    scanner = IdCaptureScanner(SingleSideScanner(
+        barcode = true,
+        machineReadableZone = true,
+        visualInspectionZone = true,
+    ))
 
-IdCaptureSettings settings = new IdCaptureSettings();
-settings.setAcceptedDocuments(acceptedDocuments);
-settings.setRejectedDocuments(rejectedDocuments);
-
-// To scan only one-sided documents and a given zone:
-settings.setScanner(new IdCaptureScanner(new SingleSideScanner(
-        true, // barcode
-        true, // machineReadableZone
-        true // visualInspectionZone
-), null));
-
-// To scan both sides of the document:
-settings.setScanner(new IdCaptureScanner(new FullDocumentScanner(), null));
+    // To scan both sides of the document:
+    scanner = IdCaptureScanner(FullDocumentScanner())
+}
 ```
 
 Create a new ID Capture mode with the chosen settings:
 
-```java
-IdCapture idCapture = IdCapture.forDataCaptureContext(dataCaptureContext, settings);
+```kotlin
+val idCapture = IdCapture.forDataCaptureContext(dataCaptureContext, settings)
 ```
 
 ## Implement a Listener
 
 To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `onIdCaptured` and `onIdRejected`.
 
-```java
-IdCaptureListener listener = new IdCaptureListener() {
-    @Override
-    public void onIdCaptured(@NonNull IdCapture idCapture, @NonNull CapturedId capturedId) {
+```kotlin
+idCapture.addListener(object : IdCaptureListener {
+    override fun onIdCaptured(idCapture: IdCapture, capturedId: CapturedId) {
         // Success! Handle extracted data here.
     }
-    
-    @Override
-    public void onIdRejected(@NonNull IdCapture idCapture, @Nullable CapturedId capturedId, @NonNull RejectionReason rejectionReason) {
+
+    override fun onIdRejected(idCapture: IdCapture, capturedId: CapturedId?, rejectionReason: RejectionReason) {
         // Something went wrong. Inspect the reason to determine the follow-up action.
     }
-};
-
-idCapture.addListener(listener);
+})
 ```
 
 ### Handling Success
@@ -162,16 +157,15 @@ For more specific information, use its non-null result properties (e.g. [Capture
 
 On a successful scan you may read the extracted data from `CapturedId`:
     
-```java
-@Override
-public void onIdCaptured(@NonNull IdCapture idCapture, @NonNull CapturedId capturedId) {
-    String fullName = capturedId.getFullName();
-    DateResult dateOfBirth = capturedId.getDateOfBirth();
-    DateResult dateOfExpiry = capturedId.getDateOfExpiry();
-    String documentNumber = capturedId.getDocumentNumber();
+```kotlin
+override fun onIdCaptured(idCapture: IdCapture, capturedId: CapturedId) {
+    val fullName = capturedId.fullName
+    val dateOfBirth = capturedId.dateOfBirth
+    val dateOfExpiry = capturedId.dateOfExpiry
+    val documentNumber = capturedId.documentNumber
 
     // Process data:
-    processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
+    processData(fullName, dateOfBirth, dateOfExpiry, documentNumber)
 }
 ```
 :::tip
@@ -184,15 +178,21 @@ The ID scanning process may fail for various reasons. Start from inspecting [`Re
 
 You may wish to implement the follow-up action based on the reason of failure:
 
-```java
-@Override
-public void onIdRejected(@NonNull IdCapture idCapture, @Nullable CapturedId capturedId, @NonNull RejectionReason rejectionReason) {
-    if (rejectionReason == RejectionReason.TIMEOUT) {
-        // Ask the user to retry, or offer alternative input method.
-    } else if (rejectionReason == RejectionReason.DOCUMENT_EXPIRED) {
-        // Ask the user to provide alternative document.
-    } else if (rejectionReason == RejectionReason.HOLDER_UNDERAGE) {
-        // Reject the process.
+```kotlin
+override fun onIdRejected(idCapture: IdCapture, capturedId: CapturedId, rejectionReason: RejectionReason) {
+    when (rejectionReason) {
+        RejectionReason.TIMEOUT -> {
+            // Ask the user to retry, or offer alternative input method.
+        }
+        RejectionReason.DOCUMENT_EXPIRED -> {
+            // Ask the user to provide alternative document.
+        }
+        RejectionReason.HOLDER_UNDERAGE -> {
+            // Reject the process.
+        }
+        else -> {
+            // Deal with the default case.
+        }
     }
 }
 ```
@@ -203,15 +203,15 @@ When using the built-in camera as frame source, you may typically want to displa
 
 To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
-```java
-DataCaptureView dataCaptureView = DataCaptureView.newInstance(this, dataCaptureContext);
-setContentView(dataCaptureView);
+```kotlin
+val dataCaptureView = DataCaptureView.newInstance(this, dataCaptureContext)
+setContentView(dataCaptureView)
 ```
 
 Then, add an instance of [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) to the view:
 
-```java
-IdCaptureOverlay overlay = IdCaptureOverlay.newInstance(idCapture, dataCaptureView);
+```kotlin
+val overlay = IdCaptureOverlay.newInstance(idCapture, dataCaptureView)
 ```
 
 The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
@@ -222,6 +222,6 @@ If you prefer to show a different UI or to temporarily hide it, set the appropri
 
 Finally, turn on the camera to start scanning:
 
-```java
-camera.switchToDesiredState(FrameSourceState.ON);
+```kotlin
+camera.switchToDesiredState(FrameSourceState.ON)
 ```

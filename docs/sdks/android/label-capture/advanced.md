@@ -28,10 +28,10 @@ overlay.listener = object : LabelCaptureBasicOverlayListener {
     override fun brushForField(
         overlay: LabelCaptureBasicOverlay,
         field: LabelField,
-        label: CapturedLabel
+        label: CapturedLabel,
     ): Brush? = when (field.name) {
-        "<your-barcode-field-name>" -> Brush(Color.CYAN.withAlpha(128), Color.CYAN, 1f)
-        "<your-expiry-date-field-name>" -> Brush(Color.GREEN.withAlpha(128), Color.GREEN, 1f)
+        "<your-barcode-field-name>" -> Brush(Color.CYAN, Color.CYAN, 1f)
+        "<your-expiry-date-field-name>" -> Brush(Color.GREEN, Color.GREEN, 1f)
         else -> Brush(Color.TRANSPARENT, Color.TRANSPARENT, 0f)
     }
 
@@ -41,12 +41,12 @@ overlay.listener = object : LabelCaptureBasicOverlayListener {
      */
     override fun brushForLabel(
         overlay: LabelCaptureBasicOverlay,
-        label: CapturedLabel
+        label: CapturedLabel,
     ): Brush? = null
 
     override fun onLabelTapped(
         overlay: LabelCaptureBasicOverlay,
-        label: CapturedLabel
+        label: CapturedLabel,
     ) { 
         /*
          * Handle the user tap gesture on the label.
@@ -121,26 +121,26 @@ advancedOverlay.listener = object : LabelCaptureAdvancedOverlayListener {
     // This method is called when a label is detected - we return null since we're only adding AR elements to specific fields, not the entire label
     override fun viewForCapturedLabel(
         overlay: LabelCaptureAdvancedOverlay,
-        capturedLabel: CapturedLabel
+        capturedLabel: CapturedLabel,
     ): View? = null
 
     // This defines where on the detected label the AR view would be anchored 
     override fun anchorForCapturedLabel(
         overlay: LabelCaptureAdvancedOverlay,
-        capturedLabel: CapturedLabel
+        capturedLabel: CapturedLabel,
     ): Anchor = Anchor.CENTER
 
     // This defines the offset from the anchor point for the label's AR view
     override fun offsetForCapturedLabel(
         overlay: LabelCaptureAdvancedOverlay,
         capturedLabel: CapturedLabel,
-        view: View
+        view: View,
     ): PointWithUnit = PointWithUnit(0f, 0f, MeasureUnit.PIXEL)
 
     // This method is called when a field is detected in a label
     override fun viewForCapturedLabelField(
         overlay: LabelCaptureAdvancedOverlay,
-        labelField: LabelField
+        labelField: LabelField,
     ): View? {
         // We only want to create AR elements for expiry date fields that are text-based
         if (labelField.name.contains("expiry", ignoreCase = true) && labelField.type == LabelFieldType.TEXT) {
@@ -178,14 +178,14 @@ advancedOverlay.listener = object : LabelCaptureAdvancedOverlayListener {
     // BOTTOM_CENTER places it right below the expiry date text for better visibility
     override fun anchorForCapturedLabelField(
         overlay: LabelCaptureAdvancedOverlay,
-        labelField: LabelField
+        labelField: LabelField,
     ): Anchor = Anchor.BOTTOM_CENTER
 
     // This defines the offset from the anchor point
     override fun offsetForCapturedLabelField(
         overlay: LabelCaptureAdvancedOverlay,
         labelField: LabelField,
-        view: View
+        view: View,
     ): PointWithUnit = PointWithUnit(0f, 22f, MeasureUnit.DIP)
 }
 ```
@@ -320,14 +320,14 @@ Validation flow uses a different overlay, the [LabelCaptureValidationFlowOverlay
 
 ```kotlin
 // Create the overlay
-validationFlowOverlay = LabelCaptureValidationFlowOverlay.newInstance(
+val validationFlowOverlay = LabelCaptureValidationFlowOverlay.newInstance(
     requireContext(),
     dataCaptureManager.getLabelCapture(),
-    view
+    view,
 )
 
 // Set the listener to receive validation events
-validationFlowOverlay?.listener = this
+validationFlowOverlay.listener = this
 ```
 </TabItem>
 <TabItem value="java" label="Java">
@@ -352,8 +352,7 @@ validationFlowOverlay.setListener(this);
 
 ```kotlin
 // Configure the validation flow with custom settings
-val validationSettings = LabelCaptureValidationFlowSettings.newInstance()
-validationSettings.apply {
+val validationSettings = LabelCaptureValidationFlowSettings.newInstance().apply {
     missingFieldsHintText = "Please add this field"
     standbyHintText = "No label detected, camera paused"
     validationHintText = "fields captured" // X/Y (X fields out of total Y) is  shown in front of this string
@@ -363,7 +362,7 @@ validationSettings.apply {
 }
 
 // Apply the settings to the overlay
-validationFlowOverlay?.applySettings(validationSettings)
+validationFlowOverlay.applySettings(validationSettings)
 ```
 </TabItem>
 

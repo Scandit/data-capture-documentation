@@ -53,86 +53,85 @@ The main entry point for the Barcode Pick Mode is the `BarcodePick` object. You 
 
 Here we configure it for tracking EAN13 codes, but you should change this to the correct symbologies for your use case.
 
-```java
-BarcodePickSettings settings = new BarcodePickSettings();
-settings.enableSymbology(Symbology.EAN13_UPCA, true);
+```kotlin
+val settings = BarcodePickSettings().apply {
+    enableSymbology(Symbology.EAN13_UPCA, true)
+}
 ```
 
 Then you have to create the product provider for the Barcode Pick mode. This provider is responsible for providing the items that should be highlighted in the AR view. Note that in this example we are using a hardcoded list of items, but in a real-world scenario, you would fetch this list from your backend.
 
-```java
-List<ProductDatabaseEntry> productDatabase = new ArrayList<>();
-        productDatabase.add(
-            new ProductDatabaseEntry(
-                /*product identifier*/"product_1",
-                /*quantity to pick*/2,
-                /*items for the product*/new HashSet<String>() {{
-                    add("9783598215438");
-                    add("9783598215414");
-                    add("9783598215441");
-                    add("9783598215412");
-                }})
-        );
-        productDatabase.add(
-            new ProductDatabaseEntry(
-                /*product identifier*/"product_2",
-                /*quantity to pick*/3,
-                /*items for the product*/new HashSet<String>() {{
-                    add("9783598215471");
-                    add("9783598215481");
-                    add("9783598215458");
-                    add("9783598215498");
-                    add("9783598215421");
-                }})
-        );
-
-        // Map the database products to create the Scandit product provider input.
-        Set<BarcodePickProduct> items = new HashSet<>();
-        for (ProductDatabaseEntry productDatabaseEntry : productDatabase) {
-            items.add(
-                new BarcodePickProduct(
-                    productDatabaseEntry.productIdentifier,
-                    productDatabaseEntry.quantityToPick
-                )
-            );
+```kotlin
+val productDatabase = listOf(
+    ProductDatabaseEntry(
+        /*product identifier*/"product_1",
+        /*quantity to pick*/2,
+        /*items for the product*/setOf {
+            "9783598215438",
+            "9783598215414",
+            "9783598215441",
+            "9783598215412",
         }
+    ),
+    ProductDatabaseEntry(
+        /*product identifier*/"product_2",
+        /*quantity to pick*/3,
+        /*items for the product*/setOf {
+            "9783598215471",
+            "9783598215481",
+            "9783598215458",
+            "9783598215498",
+            "9783598215421",
+        }
+    ),
+)
 
-        // Finally, create the product provider itself
-        BarcodePickProductProvider productProvider = new BarcodePickAsyncMapperProductProvider(
-            items,
-            new BarcodePickAsyncMapperProductProviderCallback() {
-                @Override
-                public void productIdentifierForItems(
-                    @NonNull List<String> itemsData,
-                    @NonNull BarcodePickProductProviderCallback callback
-                ) {
-                    ArrayList<BarcodePickProductProviderCallbackItem> results = new ArrayList<>();
+// Map the database products to create the Scandit product provider input.
+val items = mutableSetOf<BarcodePickProduct>()
+productDatabase.forEach { productDatabaseEntry ->
+    items.add(
+        BarcodePickProduct(
+            productDatabaseEntry.productIdentifier,
+            productDatabaseEntry.quantityToPick,
+        )
+    )
+}
 
-                    // Use the scanned itemsData list to retrieve the identifier of the product they belong to.
-                    // This should be an async query in real world scenarios if there are a lot of products/items to loop.
-                    for (String itemData : itemsData) {
-                        for (ProductDatabaseEntry entry : productDatabase) {
-                            if (entry.items.contains(itemData)) {
-                                results.add(
-                                    new BarcodePickProductProviderCallbackItem(
-                                        /*item data*/itemData,
-                                        /*product identifier*/entry.productIdentifier
-                                    )
-                                );
-                                break;
-                            }
-                        }
+// Finally, create the product provider itself
+val productProvider = BarcodePickAsyncMapperProductProvider(
+    items,
+    object : BarcodePickAsyncMapperProductProviderCallback {
+        override fun productIdentifierForItems(
+            itemsData: List<String>,
+            callback: BarcodePickProductProviderCallback,
+        ) {
+            val results = mutableListOf<BarcodePickProductProviderCallbackItem>()
+
+            // Use the scanned itemsData list to retrieve the identifier of the product they belong to.
+            // This should be an async query in real world scenarios if there are a lot of products/items to loop.
+            itemsData.forEach { itemData ->
+                for (entry in productDatabase) {
+                    if (entry.items.contains(itemData)) {
+                        results.add(
+                            BarcodePickProductProviderCallbackItem(
+                                /*item data*/itemData,
+                                /*product identifier*/entry.productIdentifier
+                            )
+                        )
+                        break
                     }
-                    callback.onData(results);
                 }
             }
-        );
+            callback.onData(results)
+        }
+    }
+)
 ```
 
 Create the mode with the previously created settings:
 
-```java
-BarcodePick mode = new BarcodePick(dataCaptureContext, settings, productProvider);
+```kotlin
+val barcodePick = BarcodePick(dataCaptureContext, settings, productProvider)
 ```
 
 ## Setup the `BarcodePickView`
@@ -150,36 +149,33 @@ The `BarcodePickView` appearance can be customized through [`BarcodePickViewSett
 * Zoom button
 * Loading Dialog
 
-```java
-BarcodePickViewSettings viewSettings = new BarcodePickViewSettings();
+```kotlin
+val viewSettings = BarcodePickViewSettings()
 // ...
 ```
 
 Next, create a `BarcodePickView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodePickView` is automatically added to the provided parent view.
 
-```java
-BarcodePickView barcodePickView = BarcodePickView.newInstance(parentView, dataCaptureContext, mode, viewSettings);
+```kotlin
+val barcodePickView = BarcodePickView.newInstance(parentView, dataCaptureContext, barcodePick, viewSettings)
 ```
 
 Connect the `BarcodePickView` to the Android lifecycle. The view is dependent on calling `BarcodePickView.onPause()`, `BarcodePickView.onResume()`, and `BarcodePickView.onDestroy()` to set up the camera and its overlays properly.
 
-```java
-@Override
-public void onResume() {
-    super.onResume();
-    barcodePickView.onResume();
+```kotlin
+override fun onResume() {
+    super.onResume()
+    barcodePickView.onResume()
 }
 
-@Override
-public void onPause() {
-    super.onPause();
-    barcodePickView.onPause();
+override fun onPause() {
+    super.onPause()
+    barcodePickView.onPause()
 }
 
-@Override
-public void onDestroyView() {
-    super.onDestroyView(); 
-    barcodePickView.onDestroy();
+override fun onDestroy() {
+    super.onDestroy(); 
+    barcodePickView.onDestroy()
 }
 ```
 
@@ -191,21 +187,20 @@ Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk
 
 In this tutorial, we will then navigate back to the previous screen to finish the find session.
 
-```java
-barcodePickView.setUiListener(new BarcodePickViewUiListener() {
-    @Override
-    public void onFinishButtonTapped(@NonNull BarcodePickView view) {
-        requireActivity().onBackPressed();
+```kotlin
+barcodePickView.uiListener = object : BarcodePickViewUiListener {
+    override fun onFinishButtonTapped(view: BarcodePickView) {
+        requireActivity().onBackPressed()
     }
-});
+}
 ```
 
 ## Start Searching
 
 With everything configured, you can now start searching for items. This is done by calling `barcodePickView.start()`.
 
-```java
-barcodePickView.start();
+```kotlin
+barcodePickView.start()
 ```
 
 This is the equivalent of pressing the Play button programmatically. It will start the search process, turn on the camera, and hide the item carousel.

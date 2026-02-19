@@ -56,14 +56,15 @@ Barcode scanning is orchestrated by the [BarcodeCapture data capture mode](https
 
 For this task, we setup barcode scanning for a small list of barcode types, called [symbologies](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology). The list of symbologies to enable is application specific. We recommend that you only enable the symbologies your application requires. If you are not familiar with the symbologies that are relevant for your use case, you can use [capture presets](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/capture-preset.html#enum-scandit.datacapture.barcode.CapturePreset) that are tailored for different verticals (for instance, retail, logistics, and so on).
 
-```java
-BarcodeCaptureSettings settings = new BarcodeCaptureSettings();
-settings.enableSymbology(Symbology.CODE128, true);
-settings.enableSymbology(Symbology.CODE39, true);
-settings.enableSymbology(Symbology.QR, true);
-settings.enableSymbology(Symbology.EAN8, true);
-settings.enableSymbology(Symbology.UPCE, true);
-settings.enableSymbology(Symbology.EAN13_UPCA, true);
+```kotlin
+val settings = BarcodeCaptureSettings().apply {
+    enableSymbology(Symbology.CODE128, true)
+    enableSymbology(Symbology.CODE39, true)
+    enableSymbology(Symbology.QR, true)
+    enableSymbology(Symbology.EAN8, true)
+    enableSymbology(Symbology.UPCE, true)
+    enableSymbology(Symbology.EAN13_UPCA, true)
+}
 ```
 
 :::note
@@ -72,8 +73,8 @@ If you are not disabling barcode capture immediately after having scanned the fi
 
 Next, create a [BarcodeCapture](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance with the settings initialized in the previous step:
 
-```java
-barcodeCapture = BarcodeCapture.forDataCaptureContext(dataCaptureContext, settings);
+```kotlin
+val barcodeCapture = BarcodeCapture.forDataCaptureContext(dataCaptureContext, settings)
 ```
 
 ## Register the Barcode Capture Listener
@@ -82,22 +83,21 @@ To get informed whenever a new code has been recognized, add a [BarcodeCaptureLi
 
 First conform to the `BarcodeCaptureListener` interface. For example:
 
-```java
-@Override
-public void onBarcodeScanned(
-        @NonNull BarcodeCapture barcodeCapture,
-        @NonNull BarcodeCaptureSession session,
-        @NonNull FrameData frameData
+```kotlin
+override fun onBarcodeScanned(
+    barcodeCapture: BarcodeCapture,
+    session: BarcodeCaptureSession,
+    frameData: FrameData
 ) {
-    Barcode recognizedBarcode = session.getNewlyRecognizedBarcode();
+    val recognizedBarcodes = session.newlyRecognizedBarcode
     // Do something with the barcodes. See Rejecting Barcodes, below, for an example.
 }
 ```
 
 Then add the listener:
 
-```java
-barcodeCapture.addListener(this);
+```kotlin
+barcodeCapture.addListener(this)
 ```
 
 ### Rejecting Barcodes
@@ -106,11 +106,11 @@ To prevent scanning unwanted codes, you can reject them by adding the desired lo
 
 The example below will only scan barcodes beginning with the digits `09` and ignore all others, using a transparent brush to distinguish a rejected barcode from a recognized one:
 
-```java
+```kotlin
 ...
-if (barcode.getData() == null || !barcode.getData().startsWith("09:")) {
-    overlay.setBrush(Brush.transparent());
-    return;
+if (barcode.data == null || !barcode.data.startsWith("09:")) {
+    overlay.brush = Brush.transparent()
+    return
 }
 ...
 ```
@@ -125,30 +125,25 @@ In Android, the user must explicitly grant permission for each app to access cam
 
 When using the built-in camera there are recommended settings for each capture mode. These must be used to achieve the best performance and user experience for the respective mode. The following code shows how to get the recommended settings and create the camera:
 
-```java
-CameraSettings cameraSettings = BarcodeCapture.createRecommendedCameraSettings();
+```kotlin
+val cameraSettings = BarcodeCapture.createRecommendedCameraSettings()
 
 // Depending on the use case further camera settings adjustments can be made here.
 
-Camera camera = Camera.getDefaultCamera();
-
-if (camera != null) {
-    camera.applySettings(cameraSettings);
-}
+val camera = Camera.getDefaultCamera()
+camera?.applySettings(cameraSettings)
 ```
 
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync)
 
-```java
-dataCaptureContext.setFrameSource(camera);
+```kotlin
+dataCaptureContext.setFrameSource(camera)
 ```
 
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.ON](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
-```java
-if (camera != null) {
-  camera.switchToDesiredState(FrameSourceState.ON);
-}
+```kotlin
+camera?.switchToDesiredState(FrameSourceState.ON)
 ```
 
 :::note
@@ -161,15 +156,15 @@ When using the built-in camera as frame source, you may want to display the came
 
 To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
-```java
-DataCaptureView dataCaptureView = DataCaptureView.newInstance(this, dataCaptureContext);
-setContentView(dataCaptureView);
+```kotlin
+val dataCaptureView = DataCaptureView.newInstance(this, dataCaptureContext)
+setContentView(dataCaptureView)
 ```
 
 To visualize the results of barcode scanning, the following [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) can be added:
 
-```java
-BarcodeCaptureOverlay overlay = BarcodeCaptureOverlay.newInstance(barcodeCapture, dataCaptureView);
+```kotlin
+val overlay = BarcodeCaptureOverlay.newInstance(barcodeCapture, dataCaptureView)
 ```
 
 ## Disabling Barcode Capture

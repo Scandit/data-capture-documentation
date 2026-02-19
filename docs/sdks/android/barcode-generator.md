@@ -37,23 +37,23 @@ With the context you can then instantiate a [`BarcodeGeneratorBuilder`](https://
 
 You can configure the colors used in the resulting image:
 
-```java
-DataCaptureContext dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
-BarcodeGenerator.Code128BarcodeGeneratorBuilder builder = BarcodeGenerator.code128BarcodeGeneratorBuilder(dataCaptureContext)
+```kotlin
+val dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey)
+val builder = BarcodeGenerator.code128BarcodeGeneratorBuilder(dataCaptureContext)
     .withBackgroundColor(Color.WHITE)
-    .withForegroundColor(Color.BLACK);
+    .withForegroundColor(Color.BLACK)
 ```
 
 When the builder is configured get the `BarcodeGenerator` and try to generate the image:
 
-```java
+```kotlin
 try {
-    BarcodeGenerator generator = builder.build();
-    Bitmap image = generator.generate(dataString, 200);
+    val generator = builder.build()
+    val image = generator.generate(dataString, 200)
     // Use the image
-} catch (Exception exception) {
+} catch (exception: Exception) {
     // Handle the error
-    exception.printStackTrace();
+    exception.printStackTrace()
 }
 ```
 
@@ -67,25 +67,25 @@ With the context you can then instantiate a [`QRCodeBarcodeGeneratorBuilder`](ht
 
 You can configure the colors used in the resulting image, and the two settings that can be configured for QR codes: [`QRCodeBarcodeGeneratorBuilder.errorCorrectionLevel`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-generator-builder.html#method-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder.WithErrorCorrectionLevel) and [`QRCodeBarcodeGeneratorBuilder.versionNumber`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-generator-builder.html#method-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder.WithVersionNumber).
 
-```java
-DataCaptureContext dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
-BarcodeGenerator.QrCodeBarcodeGeneratorBuilder builder = new BarcodeGenerator.QrCodeBarcodeGeneratorBuilder(dataCaptureContext)
+```kotlin
+val dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey)
+val builder = BarcodeGenerator.qrCodeBarcodeGeneratorBuilder(dataCaptureContext)
     .withBackgroundColor(Color.WHITE)
     .withForegroundColor(Color.BLACK)
     .withErrorCorrectionLevel(QrCodeErrorCorrectionLevel.MEDIUM)
-    .withVersionNumber(4);
+    .withVersionNumber(4)
 ```
 
 When the builder is configured get the `BarcodeGenerator` and try to generate the image:
 
-```java
+```kotlin
 try {
-    BarcodeGenerator generator = builder.build();
-    Bitmap image = generator.generate(dataString, 200);
+    val generator = builder.build()
+    val image = generator.generate(dataString, 200)
     // Use the image
-} catch (Exception exception) {
+} catch (exception: Exception) {
     // Handle the error
-    exception.printStackTrace();
+    exception.printStackTrace()
 }
 ```
 

@@ -16,8 +16,8 @@ There are several advanced configurations that can be used to customize the beha
 
 By default, ID Capture doesn’t extract data from the table on the back of European Driver Licenses. If you are interested in this data, you may enable the extraction by calling:
 
-```java
-settings.setDecodeBackOfEuropeanDrivingLicense(true);
+```kotlin
+settings.decodeBackOfEuropeanDrivingLicense = true
 ```
 
 :::warning
@@ -30,18 +30,18 @@ By default, data extracted from documents is anonymized according to local regul
 
 That means certain data from certain fields won’t be returned, even if it’s present on a document. You control the anonymization level with the following setting:
 
-```java
+```kotlin
 // Default value:
-settings.setAnonymizationMode(IdAnonymizationMode.FIELDS_ONLY);
+settings.anonymizationMode = IdAnonymizationMode.FIELDS_ONLY
 
 // Sensitive data is additionally covered with black boxes on returned images:
-settings.setAnonymizationMode(IdAnonymizationMode.FIELDS_AND_IMAGES);
+settings.anonymizationMode = IdAnonymizationMode.FIELDS_AND_IMAGES
 
 // Only images are anonymized:
-settings.setAnonymizationMode(IdAnonymizationMode.IMAGES_ONLY);
+settings.anonymizationMode = IdAnonymizationMode.IMAGES_ONLY
 
 // No anonymization:
-settings.setAnonymizationMode(IdAnonymizationMode.NONE);
+settings.anonymizationMode = IdAnonymizationMode.NONE
 ```
 
 ## ID Images
@@ -55,15 +55,15 @@ In the case of `FullDocumentScanner`, if the front & the back side of a document
 
 For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult) when creating the `IdCaptureSettings` object. This will pass the image type to the result, which you can then access in the `CapturedId` object.
 
-```java
+```kotlin
 // Holder's picture as printed on a document:
-settings.setShouldPassImageTypeToResult(IdImageType.FACE, true);
+settings.setShouldPassImageTypeToResult(IdImageType.FACE, true)
 
 // Cropped image of a document:
-settings.setShouldPassImageTypeToResult(IdImageType.CROPPED_DOCUMENT, true);
+settings.setShouldPassImageTypeToResult(IdImageType.CROPPED_DOCUMENT, true)
 
 // Full camera frame that contains the document:
-settings.setShouldPassImageTypeToResult(IdImageType.FRAME, true);
+settings.setShouldPassImageTypeToResult(IdImageType.FRAME, true)
 ```
 
 ## Callbacks and Scanning Workflows
