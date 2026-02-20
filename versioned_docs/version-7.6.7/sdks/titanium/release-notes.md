@@ -334,6 +334,6 @@ Version 7.0 also offers increased versatility by supporting multiple input forma
 In 7.0, we removed several APIs that were deprecated during the lifetime of 6.0. Before [migrating to 7.0](/migrate-6-to-7.md), we suggest upgrading to 6.28, fixing all deprecation warnings and then upgrading to 7.0.
 
 
-## 6.28.7
+## 6.28.8
 
-Find earlier versions in the [release notes section of version 6](/6.28.7/sdks/titanium/release-notes)
+Find earlier versions in the [release notes section of version 6](/6.28.8/sdks/titanium/release-notes)

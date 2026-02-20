@@ -639,6 +639,6 @@ Text Capture functionality has been deprecated in 7.0. If your use case requires
 The legacy ID Capture UI has been removed in 7.0. If you are using the legacy UI, you must migrate to the new ID Capture API.
 
 
-## 6.28.7
+## 6.28.8
 
-Find earlier versions in the [release notes section of version 6](/6.28.7/sdks/capacitor/release-notes)
+Find earlier versions in the [release notes section of version 6](/6.28.8/sdks/capacitor/release-notes)
