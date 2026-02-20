@@ -39,40 +39,20 @@ ANDROID_PROJECT_DIR = Path(__file__).parent / "android-test-bed"
 DOCUSAURUS_CONFIG = REPO_ROOT / "docusaurus.config.ts"
 CLASSPATH_FILE = ANDROID_PROJECT_DIR / "app" / "build" / "compile-classpath.txt"
 
-# --- Java ---
-JAVA_GENERATED_DIR = (
-    ANDROID_PROJECT_DIR
-    / "app"
-    / "src"
-    / "main"
-    / "java"
-    / "com"
-    / "scandit"
-    / "validation"
-    / "generated"
+# Both Java and Kotlin generated sources share the same directory
+GENERATED_DIR = (
+    ANDROID_PROJECT_DIR / "app" / "src" / "generated" / "com" / "scandit" / "validation"
 )
-GENERATED_DIR = JAVA_GENERATED_DIR  # backward-compat alias
+JAVA_GENERATED_DIR = GENERATED_DIR
+KOTLIN_GENERATED_DIR = GENERATED_DIR
 
-JAVA_CLASSES_DIR = ANDROID_PROJECT_DIR / "build" / "snippet-classes"
-CLASSES_DIR = JAVA_CLASSES_DIR  # backward-compat alias
-JAVA_CACHE_FILE = ANDROID_PROJECT_DIR / "build" / "snippet-cache.json"
-CACHE_FILE = JAVA_CACHE_FILE  # backward-compat alias
+JAVA_CLASSES_DIR = ANDROID_PROJECT_DIR / "build" / "snippet-java-classes"
+JAVA_CACHE_FILE = ANDROID_PROJECT_DIR / "build" / "snippet-java-cache.json"
 
 # --- Baselines (committed to the repo; silence known-failing snippets) ---
 VALIDATION_DIR = Path(__file__).parent
 
 # --- Kotlin ---
-KOTLIN_GENERATED_DIR = (
-    ANDROID_PROJECT_DIR
-    / "app"
-    / "src"
-    / "main"
-    / "kotlin"
-    / "com"
-    / "scandit"
-    / "validation"
-    / "generated"
-)
 VALIDATION_BASE = (
     ANDROID_PROJECT_DIR
     / "app"
@@ -89,15 +69,12 @@ KOTLIN_CACHE_FILE = ANDROID_PROJECT_DIR / "build" / "snippet-kotlin-cache.json"
 
 # Wildcard imports that cover the Scandit SDK packages used in the docs.
 # Extend this list if you add new SDK modules to the Android project.
-COMMON_IMPORTS = """\
+JAVA_COMMON_IMPORTS = """\
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.MutableLiveData;
-import com.scandit.datacapture.core.source.Camera;
-import com.scandit.datacapture.core.source.FrameSourceState;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -107,15 +84,7 @@ import java.util.List;"""
 KOTLIN_COMMON_IMPORTS = """\
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import androidx.annotation.NonNull
-import androidx.lifecycle.MutableLiveData
-import com.scandit.datacapture.core.source.Camera
-import com.scandit.datacapture.core.source.FrameSourceState
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.EnumSet
-import java.util.HashSet"""
+import android.os.Bundle"""
 
 # =============================================================================
 # Language
@@ -147,7 +116,9 @@ class Language(Enum):
 
     @property
     def cache_file(self) -> Path:
-        return {Language.JAVA: JAVA_CACHE_FILE, Language.KOTLIN: KOTLIN_CACHE_FILE}[self]
+        return {Language.JAVA: JAVA_CACHE_FILE, Language.KOTLIN: KOTLIN_CACHE_FILE}[
+            self
+        ]
 
     @property
     def baseline_file(self) -> Path:
@@ -322,9 +293,8 @@ def generate_java(class_name: str, snippet: Snippet) -> str:
     indented_body = "\n".join(f"        {line}" for line in body.split("\n"))
 
     return (
-        f"package com.scandit.validation.generated;\n\n"
-        f"import com.scandit.validation.ValidationBase;\n"
-        f"{COMMON_IMPORTS}{extra_block}\n\n"
+        f"package com.scandit.validation;\n\n"
+        f"{JAVA_COMMON_IMPORTS}{extra_block}\n\n"
         f"// Source: {snippet.source_file.name}, snippet {snippet.index}\n"
         f'@SuppressWarnings("all")\n'
         f"public class {class_name} extends ValidationBase {{\n\n"
@@ -342,7 +312,9 @@ def generate_kotlin(class_name: str, snippet: Snippet) -> str:
 
     extra_block = ("\n" + "\n".join(extra_imports)) if extra_imports else ""
     # Top-level objects are placed at package scope, before the class.
-    objects_block = ("\n\n" + "\n\n".join(top_level_objects)) if top_level_objects else ""
+    objects_block = (
+        ("\n\n" + "\n\n".join(top_level_objects)) if top_level_objects else ""
+    )
     # Companion objects live inside the class but outside validate(), indented one level.
     companion_section = ""
     if companion_objects:
@@ -355,8 +327,7 @@ def generate_kotlin(class_name: str, snippet: Snippet) -> str:
     indented_body = "\n".join(f"        {line}" for line in body.split("\n"))
 
     return (
-        f"package com.scandit.validation.generated\n\n"
-        f"import com.scandit.validation.ValidationBase\n"
+        f"package com.scandit.validation\n\n"
         f"{KOTLIN_COMMON_IMPORTS}{extra_block}{objects_block}\n\n"
         f"// Source: {snippet.source_file.name}, snippet {snippet.index}\n"
         f'@Suppress("all")\n'
@@ -368,7 +339,9 @@ def generate_kotlin(class_name: str, snippet: Snippet) -> str:
     )
 
 
-def generate_all(snippets: List[Snippet], generate_fn: Callable, language: Language) -> dict:
+def generate_all(
+    snippets: List[Snippet], generate_fn: Callable, language: Language
+) -> dict:
     """Returns {class_name: (snippet, source)}"""
     result = {}
     for s in snippets:
@@ -540,7 +513,9 @@ def _compile_file(javac: str, classpath: str, java_file: Path) -> List[str]:
     return errors
 
 
-def _compile_kotlin_file(kotlinc: str, classpath: str, kotlin_file: Path, output_dir: Path) -> List[str]:
+def _compile_kotlin_file(
+    kotlinc: str, classpath: str, kotlin_file: Path, output_dir: Path
+) -> List[str]:
     """Compile a single Kotlin file and return any error messages."""
     r = subprocess.run(
         [
@@ -597,9 +572,7 @@ def _load_baseline(baseline_file: Path) -> set:
 
 
 def _save_baseline(hashes: List[str], baseline_file: Path):
-    baseline_file.write_text(
-        json.dumps(sorted(hashes), indent=2), encoding="utf-8"
-    )
+    baseline_file.write_text(json.dumps(sorted(hashes), indent=2), encoding="utf-8")
 
 
 def compile_java_sources(sources: dict, sdk_version: str) -> dict:
@@ -613,7 +586,9 @@ def compile_java_sources(sources: dict, sdk_version: str) -> dict:
     JAVA_CLASSES_DIR.mkdir(parents=True, exist_ok=True)
 
     # Compile ValidationBase.kt first so Java snippets can extend it
-    base_errors = _compile_kotlin_file(kotlinc, sdk_classpath, VALIDATION_BASE, JAVA_CLASSES_DIR)
+    base_errors = _compile_kotlin_file(
+        kotlinc, sdk_classpath, VALIDATION_BASE, JAVA_CLASSES_DIR
+    )
     if base_errors:
         print("ERROR: ValidationBase.kt failed to compile:")
         for e in base_errors:
@@ -673,7 +648,9 @@ def compile_kotlin_sources(sources: dict, sdk_version: str) -> dict:
     KOTLIN_CLASSES_DIR.mkdir(parents=True, exist_ok=True)
 
     # Compile ValidationBase.kt first so snippets can extend it
-    base_errors = _compile_kotlin_file(kotlinc, sdk_classpath, VALIDATION_BASE, KOTLIN_CLASSES_DIR)
+    base_errors = _compile_kotlin_file(
+        kotlinc, sdk_classpath, VALIDATION_BASE, KOTLIN_CLASSES_DIR
+    )
     if base_errors:
         print("ERROR: ValidationBase.kt failed to compile:")
         for e in base_errors:
@@ -760,6 +737,8 @@ def report(
 
     if returncode == 0:
         print("[PASS] All snippets compiled successfully.")
+    else:
+        print(summary)
     return returncode
 
 

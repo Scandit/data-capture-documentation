@@ -1,5 +1,5 @@
 # Generated snippet sources (recreated on every validation run)
-app/src/main/**/generated/
+app/src/generated/
 
 # Android build outputs
 .gradle/
