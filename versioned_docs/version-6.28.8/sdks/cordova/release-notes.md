@@ -1,13 +1,24 @@
 ---
 toc_max_heading_level: 3
-displayed_sidebar: reactnativeSidebar
+displayed_sidebar: cordovaSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
-framework: react
+framework: cordova
 keywords:
-  - react
+  - cordova
 ---
+
+## 6.28.8
+
+**Released**: February 20, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed Zoom Control visibility on MS Find for devices with an Ultra-Wide camera, including non-Pro models
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
 
 ## 6.28.7
 
@@ -29,7 +40,11 @@ No updates for this framework in this release.
 
 **Released**: April 4, 2025
 
-No updates for this framework in this release.
+### Bug Fixes
+
+#### Core
+
+* Fixed an issue issue where the promise to switch the camera to a desired state would never complete.
 
 ## 6.28.4
 
@@ -56,13 +71,7 @@ No updates for this framework in this release.
 
 **Released**: December 12, 2024
 
-### New Features
-
-* Added support for React Native 0.76.x, which introduces the possibility to use React Native's new architecture in apps using the Scandit plugin.
-
-### Bug Fixes
-
-* Fixed various compatibility issues when using the new architecture in 0.76.x+ releases of Reach Native.
+No updates for this framework in this release.
 
 ## 6.28.1
 
@@ -78,8 +87,8 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* Added [`barcode.pick.ui.RectangularWithIcons.StatusIconSettings`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-pick-view-highlight-style-rectangular-with-icons.html#property-scandit.datacapture.barcode.pick.ui.RectangularWithIcons.StatusIconSettings) property to apply a `barcode.pick.ui.BarcodePickStatusIconSettings` object and customize the status icons appearances.
-* Added ability to customize the minimum width and height of the highlights in the [`scandit.datacapture.barcode.pick.ui.Rectangular`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-pick-view-highlight-style-rectangular.html) and [`scandit.datacapture.barcode.pick.ui.RectangularWithIcons`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-pick-view-highlight-style-rectangular-with-icons.html) highlight styles.
+* Added [`barcode.pick.ui.RectangularWithIcons.StatusIconSettings`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-pick-view-highlight-style-rectangular-with-icons.html#property-scandit.datacapture.barcode.pick.ui.RectangularWithIcons.StatusIconSettings) property to apply a `barcode.pick.ui.BarcodePickStatusIconSettings` object and customize the status icons appearances.
+* Added ability to customize the minimum width and height of the highlights in the [`scandit.datacapture.barcode.pick.ui.Rectangular`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-pick-view-highlight-style-rectangular.html) and [`scandit.datacapture.barcode.pick.ui.RectangularWithIcons`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-pick-view-highlight-style-rectangular-with-icons.html) highlight styles.
 * On Barcode Capture and SparkScan, we optimized the frame processing time in 4k-UHD resolution with dynamic resolution selection, resulting in up to 35% reduction on high-end devices and consistent performance improvements across all supported devices.
 platforms.
 
@@ -88,10 +97,6 @@ platforms.
 * ID Capture now supports scanning:
   * Visual Inspection Zone (VIZ) of New York City IDs.
   * Florida Medical Marijuana IDs.
-
-#### Label
-
-* Added support for text fields that are identified only based on their data pattern. These do not need textual identifiers to be identified, and therefore no data type patterns (i.e., patterns for the textual identifiers) need to be specified for them.
 
 ### Bug Fixes
 
@@ -108,16 +113,12 @@ platforms.
 
 No updates for this framework in this release.
 
+
 ## 6.27.1
 
-**Released**: September 6, 2024
+**Released** September 6, 2024
 
-### API Changes
-
-#### Barcode
-
-- - [`BarcodeTrackingAdvancedOverlay`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#) and [`BarcodeTrackingAdvancedOverlayListener`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#) have been re-added, with the following changes:
-  - The [`BarcodeTrackingAdvancedOverlay.ViewForTrackedBarcode()`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode) and [`BarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode()`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) methods no longer support rendering any kind of images. For further details about this backwards incompatible change, contact [Scandit Support](mailto:support@scandit.com).
+No updates for this framework in this version.
 
 ## 6.27.0
 
@@ -127,7 +128,7 @@ No updates for this framework in this release.
 
 #### Barcode
 
-- The `BarcodeTrackingAdvancedOverlay` and `BarcodeTrackingAdvancedOverlayListener` have been removed. For further details about this backwards incompatible change, contact [Scandit Support](mailto:support@scandit.com).
+- The [`BarcodeTrackingAdvancedOverlay.ViewForTrackedBarcode()`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#method-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay.SetViewForTrackedBarcode) and [`BarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode()`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-advanced-overlay-listener.html#method-scandit.datacapture.barcode.tracking.ui.IBarcodeTrackingAdvancedOverlayListener.ViewForTrackedBarcode) methods no longer support rendering any kind of images. For further details about this backwards incompatible change, contact [Scandit Support](mailto:support@scandit.com).
 
 ### Bug Fixes
 
@@ -143,22 +144,23 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* Added torch control to BarcodeCount with [`BarcodeCountView.shouldShowTorchControl`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.ShouldShowTorchControl) and [`BarcodeCountView.torchControlPosition`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.TorchControlPosition) to control visibility and position in [`BarcodeCountView`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-count-view.html#class-scandit.datacapture.barcode.count.ui.BarcodeCountView).
+* Added torch control to BarcodeCount with [`BarcodeCountView.shouldShowTorchControl`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.ShouldShowTorchControl) and [`BarcodeCountView.torchControlPosition`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.TorchControlPosition) to control visibility and position in [`BarcodeCountView`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-count-view.html#class-scandit.datacapture.barcode.count.ui.BarcodeCountView).
+* Added [`ImageFrameSource`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/core/api/image-frame-source.html#class-scandit.datacapture.core.ImageFrameSource). This new type of [`FrameSource`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/core/api/frame-source.html#interface-scandit.datacapture.core.IFrameSource) allows capturing of data inside base64 encoded images.
 
 #### ID
 
-* Added [`AamvaVizBarcodeComparisonResult.frontMismatchImage`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/id-capture/api/aamva-viz-barcode-comparison-verifier.html#property-scandit.datacapture.id.AamvaVizBarcodeComparisonResult.FrontMismatchImage) that highlights data fields on the front side of the document differing from the data encoded in the barcode. Please contact [Scandit Support](mailto:support@scandit.com) if you want to use this feature.
+* Added [`AamvaVizBarcodeComparisonResult.frontMismatchImage`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/aamva-viz-barcode-comparison-verifier.html#property-scandit.datacapture.id.AamvaVizBarcodeComparisonResult.FrontMismatchImage) that highlights data fields on the front side of the document differing from the data encoded in the barcode. Please contact [Scandit Support](mailto:support@scandit.com) if you want to use this feature.
 
 #### Parser
 
-* The [Parser](./parser/get-started.md) has been expanded to support the IATA Bar Coded Boarding Pass (BCBP). [`ParserDataFormat.IataBcbp`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.IataBcbp) supports the latest specifications from the 2023-2024 Passenger Services Conference Resolution Manual (PSCRM). For the complete documentation of the standard please refer to [`the official website`](https://www.iata.org/en/programs/passenger/common-use/).
-* SwissQR parser: parsing issues are now reported as error code and message pairs, see [`ParserIssue`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/parser/api/parser-issue.html#class-scandit.datacapture.parser.ParserIssue). [`ParsedField.warnings`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/parser/api/parsed-field.html#property-scandit.datacapture.parser.ParsedField.Warnings) contains all the issues for a given field. Query all the fields with issues by calling [`ParsedData.fieldsWithIssues`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/parser/api/parsed-data.html#property-scandit.datacapture.parser.ParsedData.FieldsWithIssues).
+* The [Parser](./parser/get-started.md) has been expanded to support the IATA Bar Coded Boarding Pass (BCBP). [`ParserDataFormat.IataBcbp`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.IataBcbp) supports the latest specifications from the 2023-2024 Passenger Services Conference Resolution Manual (PSCRM). For the complete documentation of the standard please refer to [`the official website`](https://www.iata.org/en/programs/passenger/common-use/).
+* SwissQR parser: parsing issues are now reported as error code and message pairs, see [`ParserIssue`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/parser/api/parser-issue.html#class-scandit.datacapture.parser.ParserIssue). [`ParsedField.warnings`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/parser/api/parsed-field.html#property-scandit.datacapture.parser.ParsedField.Warnings) contains all the issues for a given field. Query all the fields with issues by calling [`ParsedData.fieldsWithIssues`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/parser/api/parsed-data.html#property-scandit.datacapture.parser.ParsedData.FieldsWithIssues).
 
 ### Behavioral Changes
 
 #### Barcode
 
-* Default value of [`BarcodeCaptureSettings.batterySavingMode`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.BatterySavingMode) (deprecated) and [`BarcodeCaptureSettings.batterySaving`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.BatterySaving) has been changed from [`BatterySavingMode.OFF`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/battery-saving.html#value-scandit.datacapture.core.BatterySavingMode.Off) to [`BatterySavingMode.AUTO`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/battery-saving.html#value-scandit.datacapture.core.BatterySavingMode.Auto).
+* Default value of [`BarcodeCaptureSettings.batterySavingMode`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.BatterySavingMode) (deprecated) and [`BarcodeCaptureSettings.batterySaving`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.BatterySaving) has been changed from [`BatterySavingMode.OFF`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/core/api/battery-saving.html#value-scandit.datacapture.core.BatterySavingMode.Off) to [`BatterySavingMode.AUTO`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/core/api/battery-saving.html#value-scandit.datacapture.core.BatterySavingMode.Auto).
 
 ### Performance Improvements
 
@@ -173,30 +175,21 @@ No updates for this framework in this release.
 
 ### Bug Fixes
 
-#### Barcode
-
-* Fixed an issue where the Barcode Generator could throw an exception on iOS.
-
 #### ID
 
 * Fixed an error 255 that would prevent capturing MRZ for some license keys, for which this feature was enabled.
 
-#### Core
-
-* Fixed an issue where subsequent scans would fail due to improper context handling in React Native debug mode.
-* Fixed an issue where having no camera available resulted in failure to return from the `switchCameraToState` call.
-
 ### Deprecations
 
-* Deprecated [`BarcodeCaptureSettings.batterySavingMode`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.BatterySavingMode) in favor of [`BarcodeCaptureSettings.batterySaving`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.BatterySaving).
-* Deprecated [`BarcodeTrackingScenario`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-scenario.html#enum-scandit.datacapture.barcode.tracking.BarcodeTrackingScenario) and [`BarcodeTrackingSettings.forScenario()`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-settings.html#method-scandit.datacapture.barcode.tracking.BarcodeTrackingSettings.ForScenario). Setting a scenario is no longer recommended, [`BarcodeTrackingSettings.BarcodeTrackingSettings()`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/barcode-tracking-settings.html#method-scandit.datacapture.barcode.tracking.BarcodeTrackingSettings.BarcodeTrackingSettings) should be used instead.
-* Deprecated [`TextCapture`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/text-capture/api/text-capture.html#class-scandit.datacapture.text.TextCapture).
-* Deprecated [`SparkScanView.shouldShowScanAreaGuides`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.ShouldShowScanAreaGuides), [`SparkScanView.soundModeButtonVisible`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.SoundModeButtonVisible), [`SparkScanView.hapticModeButtonVisible`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.HapticModeButtonVisible) and [`SparkScanView.fastFindButtonVisible`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.FastFindButtonVisible) (renamed [`SparkScanView.barcodeFindButtonVisible`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.BarcodeFindButtonVisible)). Also deprecated [`SparkScanViewUiListener.onFastFindButtonTap()`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.ISparkScanViewUiListener.OnFastFindButtonTap) (renamed [`SparkScanViewUiListener.onBarcodeFindButtonTap()`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.ISparkScanViewUiListener.OnBarcodeFindButtonTap)).
-* Deprecated [`LaserlineViewfinderStyle`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/laserline-viewfinder.html#enum-scandit.datacapture.core.ui.LaserlineViewfinderStyle).
-* Deprecated [`LaserlineViewfinder`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/laserline-viewfinder.html#class-scandit.datacapture.core.ui.LaserlineViewfinder).
-* Deprecated Legacy value of the [`RectangularViewfinder`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder).
-* Deprecated Legacy value of the [`BarcodeCaptureOverlayStyle`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-capture-overlay.html#enum-scandit.datacapture.barcode.ui.BarcodeCaptureOverlayStyle).
-* Deprecated Legacy value of the [`BarcodeTrackingBasicOverlayStyle`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#enum-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlayStyle).
+* Deprecated [`BarcodeCaptureSettings.batterySavingMode`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.BatterySavingMode) in favor of [`BarcodeCaptureSettings.batterySaving`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.BatterySaving).
+* Deprecated [`BarcodeTrackingScenario`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/barcode-tracking-scenario.html#enum-scandit.datacapture.barcode.tracking.BarcodeTrackingScenario) and [`BarcodeTrackingSettings.forScenario()`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/barcode-tracking-settings.html#method-scandit.datacapture.barcode.tracking.BarcodeTrackingSettings.ForScenario). Setting a scenario is no longer recommended, [`BarcodeTrackingSettings.BarcodeTrackingSettings()`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/barcode-tracking-settings.html#method-scandit.datacapture.barcode.tracking.BarcodeTrackingSettings.BarcodeTrackingSettings) should be used instead.
+* Deprecated [`TextCapture`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/text-capture/api/text-capture.html#class-scandit.datacapture.text.TextCapture).
+* Deprecated [`SparkScanView.shouldShowScanAreaGuides`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.ShouldShowScanAreaGuides), [`SparkScanView.soundModeButtonVisible`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.SoundModeButtonVisible), [`SparkScanView.hapticModeButtonVisible`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.HapticModeButtonVisible) and [`SparkScanView.fastFindButtonVisible`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.FastFindButtonVisible) (renamed [`SparkScanView.barcodeFindButtonVisible`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.BarcodeFindButtonVisible)). Also deprecated [`SparkScanViewUiListener.onFastFindButtonTap()`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.ISparkScanViewUiListener.OnFastFindButtonTap) (renamed [`SparkScanViewUiListener.onBarcodeFindButtonTap()`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.ISparkScanViewUiListener.OnBarcodeFindButtonTap)).
+* Deprecated [`LaserlineViewfinderStyle`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/core/api/laserline-viewfinder.html#enum-scandit.datacapture.core.ui.LaserlineViewfinderStyle).
+* Deprecated [`LaserlineViewfinder`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/core/api/laserline-viewfinder.html#class-scandit.datacapture.core.ui.LaserlineViewfinder).
+* Deprecated Legacy value of the [`RectangularViewfinder`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/core/api/rectangular-viewfinder.html#class-scandit.datacapture.core.ui.RectangularViewfinder).
+* Deprecated Legacy value of the [`BarcodeCaptureOverlayStyle`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-capture-overlay.html#enum-scandit.datacapture.barcode.ui.BarcodeCaptureOverlayStyle).
+* Deprecated Legacy value of the [`BarcodeTrackingBasicOverlayStyle`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#enum-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlayStyle).
 
 ## 6.25.3
 
@@ -210,9 +203,7 @@ No updates for this framework in this release.
 
 **Released**: August 2, 2024
 
-#### Core
-
-- Fixed a rare reference table overflow by reducing the number of global refs created.
+No updates for this framework in this release.
 
 ## 6.25.1
 
@@ -223,7 +214,6 @@ No updates for this framework in this release.
 #### Barcode
 
 - Fixed an issue in MatrixScan Count that was causing a reset after a rotation.
-- Fixed an issue where the Barcode Generator could throw an exception on iOS.
 
 #### ID
 
@@ -232,8 +222,6 @@ No updates for this framework in this release.
 #### Core
 
 - Fixed an issue where having no frame source available resulted in failure to return from the `core.IFrameSource.SwitchToDesiredStateAsync` call.
-- Fixed an issue where subsequent scans would fail due to improper context handling in React Native debug mode.
-- Fixed a crash using camera API 2 where an `IllegalStateException` could be thrown in some edge cases.
 
 ## 6.25.0
 
@@ -243,7 +231,7 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* Added the ability to hide the progress bar when counting against a list with BarcodeCount: [`BarcodeCountView.shouldShowListProgressBar`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.ShouldShowListProgressBar).
+* Added the ability to hide the progress bar when counting against a list with BarcodeCount: [`BarcodeCountView.shouldShowListProgressBar`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-count-view.html#property-scandit.datacapture.barcode.count.ui.BarcodeCountView.ShouldShowListProgressBar).
 
 #### ID
 
@@ -252,13 +240,13 @@ No updates for this framework in this release.
   - `SDCVizResult.sponsor` to represent the sponsor of the document owner.
   - `SDCVizResult.mothersName` to represent the mother’s name of the document owner.
   - `SDCVizResult.fathersName` to represent the father’s name of the document owner.
-* Added [`IdCaptureSettings.rejectVoidedIds`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectVoidedIds). When enabled, documents voided by authorities are rejected.
+* Added [`IdCaptureSettings.rejectVoidedIds`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.RejectVoidedIds). When enabled, documents voided by authorities are rejected.
   :::warning
   This feature currently supports 3 kinds of invalidation: Cut corners, holes punched in the document, and “VOID” perforations. Additionally, this feature currently supports only US Driver’s Licenses, and has no effect when scanning other document types.
   :::
-* Added [`RejectedId.rejectionReason`](https://docs.scandit.com/6.28/data-capture-sdk/react-native/id-capture/api/rejected-id.html#property-scandit.datacapture.id.RejectedId.RejectionReason) which contains the reason the document was rejected.
+* Added [`RejectedId.rejectionReason`](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/rejected-id.html#property-scandit.datacapture.id.RejectedId.RejectionReason) which contains the reason the document was rejected.
 * Improved the extraction of the document number from UK driver’s licenses.
-* Added _scandit-react-native-datacapture-id-voided-detection_ library that must be included when activating `IdCaptureSettings.rejectVoidedIds`.
+* Added _scandit-cordova-datacapture-id-voided-detection_ library that must be included when activating `IdCaptureSettings.rejectVoidedIds`.
 
 ### Performance Improvements
 
@@ -287,8 +275,6 @@ No updates for this framework in this release.
 - **Smart Battery Management**: Introduced smart battery management to lower energy consumption and increase device uptime. Tests show up to a 15% improvement in battery life. This option is disabled by default but can be enabled via `BarcodeCaptureSettings.batterySavingMode`.
 
 - **User-Facing Camera**: SparkScan now allows switching to the user-facing camera for scanning, useful in scenarios where the rear camera is not accessible or barcodes are hard to reach. See `SparkScanView.cameraSwitchButtonVisible`.
-
-- **Barcode Generation**: Added `BarcodeGenerator` class, allowing the generation of Code 39, Code 128, EAN13, ITF, QR, UPCA, and DataMatrix codes directly in the SDK.
 
 - **New Symbology Supports**:
   - **Symbology.FrenchPost**: Recognizes postal codes used by the French Post.
@@ -343,16 +329,9 @@ No updates for this framework in this release.
 #### Barcode
 
 - **Renamed Methods in BarcodePickView**:
-  - **Lifecycle Methods**:
-    - When the AppState changes to active, `BarcodePickView.resume()` should be called.
-    - When the AppState changes to inactive or background, `BarcodePickView.pause()` should be called.
   - **Start/Stop Scanning**:
-    - `BarcodePickView.start()`: Starts the scanning flow and can be manually stopped by calling `BarcodePickView.stop()`. It will be stopped automatically when `BarcodePickView.pause()` is called and resumed with `BarcodePickView.resume()`.
+    - `BarcodePickView.start()`: Starts the scanning flow and can be manually stopped by calling `BarcodePickView.stop()`.
     - `BarcodePickView.stop()`: Stops the scanning flow and can be manually started by calling `BarcodePickView.start()`.
-
-:::note
-Scanning is only possible when in resumed state, meaning `BarcodePickView.start()` won’t start the scanning flow if `BarcodePickView.resume()` isn’t called before or afterwards.
-:::
 
 ## 6.23.4
 
@@ -411,7 +390,8 @@ No updates for this framework in this release.
   - The feedback emission system has been improved: for new implementation, there is no need to explicitly emit a success feedback on scan, as it became implicit.
   - Added `SparkScanBarcodeFeedback`, `SparkScanFeedbackDelegate`, and `SparkScanView.feedbackDelegate` to define and emit feedback that can be customized for every scanned barcode.
   - Added `SparkScanViewSettings.inactiveStateTimeout` to specify the timeout to automatically stop scanning across all modes.
-- Barcode Pick is an API that implements MatrixScan Pick. MatrixScan Pick is an out-of-the-box scan solution that uses real-time inventory data and augmented reality to assign precise, item-specific tasks, guaranteeing pinpoint accuracy in restocking, inventory audits, and parcel delivery. Barcode Pick is no longer in beta.
+- Barcode Pick is an API that implements MatrixScan Pick. MatrixScan Pick is an out-of-the-box scan solution that uses real-time inventory data and augmented reality to assign precise, item-specific tasks, guaranteeing pinpoint accuracy in restocking, inventory audits, and parcel delivery. Barcode Pick is no longer in beta and several new features have been added in 6.23:
+  - Added the possibility to customize icons in `scandit.datacapture.barcode.pick.ui.RectangularWithIcons`. See `scandit.datacapture.barcode.pick.ui.RectangularWithIcons.SetIconForState`.
 - Added support for `Symbology.AUSTRALIANPOST`. By default, customer information is decoded with Table N, and Table C is used as a fallback. To set a specific decoding table for the customer information, use the symbology extensions: `force_table_c` or `force_table_n` to enforce decoding with either C or N tables respectively. The symbology extension `decode_bar_states` returns the error-corrected customer information bars as a string of the bar states: A for ascending, D for descending, T for tracker, and F for full.
 - Added support for `Symbology.Upu4State`.
 
@@ -422,10 +402,6 @@ No updates for this framework in this release.
 * It is now possible to run basic authenticity checks on VIZ & MRZ documents by comparing the data from the VIZ with the data decoded from the MRZ. Check `id.VizMrzComparisonVerifier` for details. This feature is currently in beta, and may still change significantly in the next releases.
 
 ### Performance Improvements
-
-#### Barcode
-
-- Improved tracking robustness for low-end devices in MatrixScan Count.
 
 #### ID
 
@@ -451,10 +427,8 @@ No updates for this framework in this release.
 
 #### Barcode
 
-* Deprecated `barcode.spark.ui.SparkScanScanningPrecision`. Replaced by `barcode.spark.ui.SparkScanPreviewBehavior` because the "accurate" workflow has been simplified.
-* Deprecated `barcode.spark.ui.SparkScanScanningModeTarget` and `barcode.spark.ui.SparkScanScanningModeDefault` initializers that accepted `barcode.spark.ui.SparkScanScanningPrecision`. Replaced by initializers that accept `barcode.spark.ui.SparkScanPreviewBehavior` instead.
 * Deprecated `barcode.spark.ui.SparkScanView.ShouldShowTargetModeHint` and `barcode.spark.ui.SparkScanView.TargetModeHintText`. This hint is not displayed anymore due to changes in `barcode.spark.ui.SparkScanScanningModeTarget` scanning mode.
-* Deprecated 'barcode.spark.ui.SparkScanToastSettings.CameraTimeoutMessage' because toast with this message is not displayed anymore due to changes in the SparkScan toast system.
+* Deprecated `barcode.spark.ui.SparkScanToastSettings.CameraTimeoutMessage` because toast with this message is not displayed anymore due to changes in the SparkScan toast system.
 * Deprecated `barcode.spark.ui.SparkScanViewSettings.TargetZoomFactorOut` and `barcode.spark.ui.SparkScanViewSettings.TargetZoomFactorIn`. Replaced by `barcode.spark.ui.SparkScanViewSettings.ZoomFactorOut` and `barcode.spark.ui.SparkScanViewSettings.ZoomFactorIn`.
 * Deprecated `barcode.spark.ui.SparkScanViewSettings.ContinuousCaptureTimeout`. Replaced by `barcode.spark.ui.SparkScanViewSettings.InactiveStateTimeout`.
 * Deprecated `barcode.spark.ui.SparkScanViewFeedback`, `barcode.spark.SparkScanFeedback`, `barcode.spark.ui.SparkScanView.Brush` and `barcode.spark.ui.SparkScanView.emitFeedback`. These classes and methods are not used anymore. Use `barcode.spark.feedback.SparkScanBarcodeFeedback` and `barcode.spark.ui.SparkScanView.FeedbackDelegate`.

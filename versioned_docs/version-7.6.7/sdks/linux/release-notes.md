@@ -393,4 +393,4 @@ The C API has been cleaned up and streamlined. If you migrate your code from ver
 * Fixed Shift-JIS encoding classification for raw byte data in 2d barcodes
 
 
-## 6.28.7
+## 6.28.8
