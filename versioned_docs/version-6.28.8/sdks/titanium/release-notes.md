@@ -9,6 +9,16 @@ keywords:
   - titanium
 ---
 
+## 6.28.8
+
+**Released**: February 20, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+
 ## 6.28.7
 
 **Released**: November 3, 2025
