@@ -17,7 +17,7 @@ There are several advanced configurations that can be used to customize the beha
 By default, ID Capture doesn’t extract data from the table on the back of European Driver Licenses. If you are interested in this data, you may enable the extraction by calling:
 
 ```java
-settings.decodeBackOfEuropeanDrivingLicenses();
+settings.setDecodeBackOfEuropeanDrivingLicense(true);
 ```
 
 :::warning
@@ -32,16 +32,16 @@ That means certain data from certain fields won’t be returned, even if it’s 
 
 ```java
 // Default value:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_ONLY);
+settings.setAnonymizationMode(IdAnonymizationMode.FIELDS_ONLY);
 
 // Sensitive data is additionally covered with black boxes on returned images:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_AND_IMAGES);
+settings.setAnonymizationMode(IdAnonymizationMode.FIELDS_AND_IMAGES);
 
 // Only images are anonymized:
-settings.setAnyonymizationMode(IdAnonymizationMode.IMAGES_ONLY);
+settings.setAnonymizationMode(IdAnonymizationMode.IMAGES_ONLY);
 
 // No anonymization:
-settings.setAnyonymizationMode(IdAnonymizationMode.NONE);
+settings.setAnonymizationMode(IdAnonymizationMode.NONE);
 ```
 
 ## ID Images
@@ -57,13 +57,13 @@ For the full frame of the document, you can use [`setShouldPassImageTypeToResult
 
 ```java
 // Holder's picture as printed on a document:
-settings.setShouldPassImageTypeToResult(ImageType.FACE);
+settings.setShouldPassImageTypeToResult(IdImageType.FACE, true);
 
 // Cropped image of a document:
-settings.setShouldPassImageTypeToResult(ImageType.CROPPED_DOCUMENT);
+settings.setShouldPassImageTypeToResult(IdImageType.CROPPED_DOCUMENT, true);
 
 // Full camera frame that contains the document:
-settings.setShouldPassImageTypeToResult(ImageType.FULL_FRAME);
+settings.setShouldPassImageTypeToResult(IdImageType.FRAME, true);
 ```
 
 ## Callbacks and Scanning Workflows

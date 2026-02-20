@@ -55,10 +55,11 @@ For this option, keep in mind that:
 @Nullable
 @Override
 public View viewForTrackedBarcode(
-    @NotNull BarcodeBatchAdvancedOverlay overlay,
-    @NotNull TrackedBarcode trackedBarcode
+    @NonNull BarcodeBatchAdvancedOverlay overlay,
+    @NonNull TrackedBarcode trackedBarcode
 ) {
-    // Create and return the view you want to show for this tracked barcode. You can also return null, to have no view for this barcode.
+    // Create and return the view you want to show for this tracked barcode.
+    // You can also return null, to have no view for this barcode.
     TextView textView = new TextView(this);
     textView.setBackgroundColor(Color.WHITE);
     textView.setLayoutParams(
@@ -71,23 +72,23 @@ public View viewForTrackedBarcode(
     return textView;
 }
 
-@NotNull
+@NonNull
 @Override
 public Anchor anchorForTrackedBarcode(
-    @NotNull BarcodeBatchAdvancedOverlay overlay,
-    @NotNull TrackedBarcode trackedBarcode
+    @NonNull BarcodeBatchAdvancedOverlay overlay,
+    @NonNull TrackedBarcode trackedBarcode
 ) {
     // As we want the view to be above the barcode, we anchor the view's center to the top-center of the barcode quadrilateral.
     // Use the function 'offsetForTrackedBarcode' below to adjust the position of the view by providing an offset.
     return Anchor.TOP_CENTER;
 }
 
-@NotNull
+@NonNull
 @Override
 public PointWithUnit offsetForTrackedBarcode(
-    @NotNull BarcodeBatchAdvancedOverlay overlay,
-    @NotNull TrackedBarcode trackedBarcode,
-    @NotNull View view
+    @NonNull BarcodeBatchAdvancedOverlay overlay,
+    @NonNull TrackedBarcode trackedBarcode,
+    @NonNull View view
 ) {
     // This is the offset that will be applied to the view.
     // You can use MeasureUnit.FRACTION to give a measure relative to the view itself, the sdk will take care of transforming this into pixel size.
@@ -113,38 +114,35 @@ From here you can create the view you want to display, and then call:
 @Override
 public void onSessionUpdated(
     @NonNull BarcodeBatch mode,
-    @NonNull final BarcodeBatchSession session,
+    @NonNull BarcodeBatchSession session,
     @NonNull FrameData data
 ) {
-      // Be careful, this function is not invoked on the main thread!
-      runOnUiThread(new Runnable() {
-          @Override
-          public void run() {
-              for (TrackedBarcode trackedBarcode : session.getAddedTrackedBarcodes()) {
-                  TextView textView = new TextView(this);
-                  textView.setBackgroundColor(Color.WHITE);
-                  textView.setLayoutParams(
-                      new ViewGroup.LayoutParams(
-                          ViewGroup.LayoutParams.WRAP_CONTENT,
-                          ViewGroup.LayoutParams.WRAP_CONTENT
-                      )
-                  );
-                  textView.setText(trackedBarcode.getBarcode().getData());
-                  overlay.setViewForTrackedBarcode(trackedBarcode, textView);
-                  overlay.setAnchorForTrackedBarcode(
-                      trackedBarcode, Anchor.TOP_CENTER
-                  );
-                  overlay.setOffsetForTrackedBarcode(
-                      trackedBarcode,
-                      new PointWithUnit(
-                          new FloatWithUnit(0f, MeasureUnit.FRACTION),
-                          new FloatWithUnit(-1f, MeasureUnit.FRACTION)
-                      )
-                  );
-              }
-          }
-      });
-  }
+    // Be careful, this function is not invoked on the main thread!
+    runOnUiThread(() -> {
+        for (TrackedBarcode trackedBarcode : session.getAddedTrackedBarcodes()) {
+            TextView textView = new TextView(this);
+            textView.setBackgroundColor(Color.WHITE);
+            textView.setLayoutParams(
+                new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            );
+            textView.setText(trackedBarcode.getBarcode().getData());
+            overlay.setViewForTrackedBarcode(trackedBarcode, textView);
+            overlay.setAnchorForTrackedBarcode(
+                trackedBarcode, Anchor.TOP_CENTER
+            );
+            overlay.setOffsetForTrackedBarcode(
+                trackedBarcode,
+                new PointWithUnit(
+                    new FloatWithUnit(0f, MeasureUnit.FRACTION),
+                    new FloatWithUnit(-1f, MeasureUnit.FRACTION)
+                )
+            );
+        }
+    });
+}
 ```
 
 ## Using Custom Implementations
@@ -163,32 +161,28 @@ The frame coordinates from `TrackedBarcode.location` need to be mapped to view c
 
 ```java
 @Override
-  public void onSessionUpdated(
-      @NonNull BarcodeBatch mode,
-      @NonNull final BarcodeBatchSession session,
-      @NonNull FrameData data
-  ) {
-      // Be careful, this function is not invoked on the main thread!
-      runOnUiThread(new Runnable() {
-          @Override
-          public void run() {
+public void onSessionUpdated(
+    @NonNull BarcodeBatch mode,
+    @NonNull final BarcodeBatchSession session,
+    @NonNull FrameData data
+) {
+    // Be careful, this function is not invoked on the main thread!
+    runOnUiThread(() -> {
+        for (int lostTrackIdentifier : session.getRemovedTrackedBarcodes()) {
+            // You now know the identifier of the tracked barcode that has been lost. Usually here you would remove the views associated.
+        }
 
-              for (int lostTrackIdentifier : session.getRemovedTrackedBarcodes()) {
-                  // You now know the identifier of the tracked barcode that has been lost. Usually here you would remove the views associated.
-              }
+        for (TrackedBarcode trackedBarcode : session.getAddedTrackedBarcodes()) {
 
-              for (TrackedBarcode trackedBarcode : session.getAddedTrackedBarcodes()) {
+            // Fixed identifier for the tracked barcode.
+            Integer trackingIdentifier = trackedBarcode.getIdentifier();
 
-                  // Fixed identifier for the tracked barcode.
-                  Integer trackingIdentifier = trackedBarcode.getIdentifier();
+            // Current location of the tracked barcode.
+            Quadrilateral location = trackedBarcode.getLocation();
+            Quadrilateral quadrilateral = dataCaptureView.mapFrameQuadrilateralToView(location);
 
-                  // Current location of the tracked barcode.
-                  Quadrilateral location = trackedBarcode.getLocation();
-                  Quadrilateral quadrilateral = dataCaptureView.mapFrameQuadrilateralToView(location);
-
-                  // You now know this new tracking's identifier and location. Usually here you would create and show the views.
-              }
-          }
-      });
-  }
+            // You now know this new tracking's identifier and location. Usually here you would create and show the views.
+        }
+    });
+}
 ```

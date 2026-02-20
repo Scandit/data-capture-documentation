@@ -54,15 +54,15 @@ import ExternalDependencies from '../../partials/get-started/_external-deps-andr
 
 Add _mavenCentral()_ repository in your _build.gradle_ file:
 
-```java
+```gradle
 repositories {
   mavenCentral()
 }
 ```
 
-See [Internal Dependencies](#internal-dependencies) to identify the artifacts needed based on your desired functionality. Then add the necessary dependencies to your app’s _build.gradle_ file:
+See [Internal Dependencies](#internal-dependencies) to identify the artifacts needed based on your desired functionality. Then add the necessary dependencies to your app's _build.gradle_ file:
 
-```java
+```gradle
 dependencies {
   implementation "com.scandit.datacapture:[dependency]:[version]"
 }
@@ -76,7 +76,7 @@ You can find the latest version on [Sonatype](https://s01.oss.sonatype.org/conte
 
 Add the _mavenCentral_ repository in _pom.xml_ file:
 
-```java
+```xml
 <repositories>
   <repository>
       <snapshots>
@@ -91,7 +91,7 @@ Add the _mavenCentral_ repository in _pom.xml_ file:
 
 See [Internal Dependencies](#internal-dependencies) to identify the artifacts needed based on your desired functionality. Then add the necessary dependencies:
 
-```java
+```xml
 ...
 
 <dependency>
@@ -115,7 +115,7 @@ Depending on the data capture task, you also need to reference the specific modu
 
 If your project already has a local `flatDir` repository, add the AAR files to that folder. If you do not have a `flatDir` repository yet, create a new one in your _build.gradle_ file as illustrated below:
 
-```java
+```gradle
 repositories {
   flatDir {
     dirs '/path/to/folder/containing/the/aar/file'
@@ -125,7 +125,7 @@ repositories {
 
 Add the .aar libraries as dependencies to your `build.gradle` file:
 
-```java
+```gradle
 dependencies {
   api(name:'ScanditBarcodeCapture', ext:'aar')
 }

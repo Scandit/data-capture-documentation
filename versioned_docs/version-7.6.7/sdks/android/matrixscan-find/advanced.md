@@ -19,7 +19,7 @@ You may want more fine-grained knowledge over the different events happening dur
 To do this, you can directly register a [`BarcodeFindListener`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-find-listener.html#interface-scandit.datacapture.barcode.find.IBarcodeFindListener) on the mode itself, keeping in mind that these listeners are called from a background thread.
 
 ```java
-mode.addListener(new BarcodeFindListener() {
+barcodeFind.addListener(new BarcodeFindListener() {
     @Override
     public void onSearchPaused(@NonNull Set<BarcodeFindItem> foundItems) {
         // The mode was paused
@@ -55,7 +55,7 @@ class Transformer implements BarcodeFindTransformer {
 Then the transformer needs to be set so it can be used by MatrixScan Find:
 
 ```java
-barcodeFind.setBarcodeTransformer(new Transformer())
+barcodeFind.setTransformer(new Transformer());
 ```
 
 ## UI Customization

@@ -101,37 +101,37 @@ By default, [anonymized data](./advanced.md#configure-data-anonymization) is not
 :::
 
 ```java
-List<DocumentType> acceptedDocuments = new ArrayList();
-List<DocumentType> rejectedDocuments = new ArrayList();
+List<IdCaptureDocument> acceptedDocuments = new ArrayList<>();
+List<IdCaptureDocument> rejectedDocuments = new ArrayList<>();
 
 // Documents from any region:
-acceptedDocuments.add(new IdCard(Region.AnyRegion));
+acceptedDocuments.add(new IdCard(IdCaptureRegion.ANY));
 // Only documents issued by a specific country:
-acceptedDocuments.add(new IdCard(Region.Germany));
+acceptedDocuments.add(new IdCard(IdCaptureRegion.GERMANY));
 // Regional documents:
-acceptedDocuments.add(new RegionSpecific.ApecBusinessTravelCard());
+acceptedDocuments.add(new RegionSpecific(RegionSpecificSubtype.APEC_BUSINESS_TRAVEL_CARD));
 // Reject passports from certain regions:
-rejectedDocuments.add(new Passport(Region.Cuba));
+rejectedDocuments.add(new Passport(IdCaptureRegion.CUBA));
 
 IdCaptureSettings settings = new IdCaptureSettings();
-settings.acceptedDocuments = acceptedDocuments;
-settings.rejectedDocuments = rejectedDocuments;
+settings.setAcceptedDocuments(acceptedDocuments);
+settings.setRejectedDocuments(rejectedDocuments);
 
 // To scan only one-sided documents and a given zone:
-settings.scannerType = new SingleSideScanner(barcode = true);
-// or
-settings.scannerType = new SingleSideScanner(machineReadableZone = true);
-// or
-settings.scannerType = new SingleSideScanner(visualInspectionZone = true);
+settings.setScannerType(new SingleSideScanner(
+        true, // barcode
+        true, // machineReadableZone
+        true // visualInspectionZone
+));
 
 // To scan both sides of the document:
-settings.scannerType = new FullDocumentScanner();
+settings.setScannerType(new FullDocumentScanner());
 ```
 
 Create a new ID Capture mode with the chosen settings:
 
 ```java
-IdCapture idCapture = IdCapture.forDataCaptureContext(context, settings);
+IdCapture idCapture = IdCapture.forDataCaptureContext(dataCaptureContext, settings);
 ```
 
 ## Implement a Listener
@@ -139,19 +139,19 @@ IdCapture idCapture = IdCapture.forDataCaptureContext(context, settings);
 To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/7.6/data-capture-sdk/android/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `onIdCaptured` and `onIdRejected`.
 
 ```java
-IdCaptureListener listener = new IdCaptureListner() {
+IdCaptureListener listener = new IdCaptureListener() {
     @Override
-    public void onIdCaptured(CapturedId data) {
-    // Success! Handle extracted data here.
-}
-
-    @Override
-    public void onIdRejected(CapturedId data, RejectionReason reason) {
-    // Something went wrong. Inspect the reason to determine the follow-up action.
+    public void onIdCaptured(@NonNull IdCapture idCapture, @NonNull CapturedId capturedId) {
+        // Success! Handle extracted data here.
     }
-}
 
-idCapture.setListener(listener);
+    @Override
+    public void onIdRejected(@NonNull IdCapture idCapture, @Nullable CapturedId capturedId, @NonNull RejectionReason rejectionReason) {
+        // Something went wrong. Inspect the reason to determine the follow-up action.
+    }
+};
+
+idCapture.addListener(listener);
 ```
 
 ### Handling Success
@@ -164,14 +164,14 @@ On a successful scan you may read the extracted data from `CapturedId`:
     
 ```java
 @Override
-public void onIdCaptured(CapturedId data) {
-    String fullName = data.getFullName();
-    DateResult dateOfBirth = data.getDateOfBirth();
-    DateResult dateOfExpiry = data.getDateOfExpiry();
-    String documentNumber = data.getDocumentNumber();
+public void onIdCaptured(@NonNull IdCapture idCapture, @NonNull CapturedId capturedId) {
+    String fullName = capturedId.getFullName();
+    DateResult dateOfBirth = capturedId.getDateOfBirth();
+    DateResult dateOfExpiry = capturedId.getDateOfExpiry();
+    String documentNumber = capturedId.getDocumentNumber();
 
     // Process data:
-    processData(fullName, dateOfBirth, dateOfExpiry, documentNumber); 
+    processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
 }
 ```
 :::tip
@@ -186,14 +186,14 @@ You may wish to implement the follow-up action based on the reason of failure:
 
 ```java
 @Override
-public void onIdRejected(CapturedId data, RejectionReason reason) {
-     if (reason == RejectionReason.Timeout) {
-         // Ask the user to retry, or offer alternative input method.
-     } else if (reason == RejectionReason.DocumentExpired) {
-         // Ask the user to provide alternative document.
-     } else if (reason == RejectionReason.HolderUnderage) {
-         // Reject the process.
-     }
+public void onIdRejected(@NonNull IdCapture idCapture, @Nullable CapturedId capturedId, @NonNull RejectionReason rejectionReason) {
+    if (rejectionReason == RejectionReason.TIMEOUT) {
+        // Ask the user to retry, or offer alternative input method.
+    } else if (rejectionReason == RejectionReason.DOCUMENT_EXPIRED) {
+        // Ask the user to provide alternative document.
+    } else if (rejectionReason == RejectionReason.HOLDER_UNDERAGE) {
+        // Reject the process.
+    }
 }
 ```
 

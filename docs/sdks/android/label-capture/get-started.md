@@ -94,29 +94,29 @@ LabelCaptureSettings settings = LabelCaptureSettings.builder()
     .addLabel()
         /*
          * Add a barcode field with the expected symbologies and pattern.
-         * You can omit the pattern if the content of the barcode is unknown. 
+         * You can omit the pattern if the content of the barcode is unknown.
          */
         .addCustomBarcode()
             .setSymbologies(Symbology.EAN13_UPCA, Symbology.CODE128)
-            .setPattern("\\d{12,14}")
         .buildFluent("<your-barcode-field-name")
         /*
          * Add a text field for capturing expiry dates.
-         * The field is set as optional so that the capture can complete 
+         * The field is set as optional so that the capture can complete
          * even if the expiry date is not present or not readable.
          */
         .addExpiryDateText()
             .isOptional(true)
-            .setLabelDateFormat(LabelDateFormat(LabelDateComponentFormat.MDY,false))
+            .setLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY,false))
         .buildFluent("<your-expiry-date-field-name>")
     .buildFluent("<your-label-name>")
 .build();
 
 /*
- * Create the label capture mode with the settings and data capture context created earlier.
- */
-LabelCapture labelCapture = LabelCapture.forDataCaptureContext(dataCaptureContext, settings)
+* Create the label capture mode with the settings and data capture context created earlier.
+*/
+LabelCapture labelCapture = LabelCapture.forDataCaptureContext(dataCaptureContext, settings);
 ```
+
 </TabItem>
 </Tabs>
 
@@ -136,33 +136,33 @@ labelCapture.addListener(object : LabelCaptureListener {
         session: LabelCaptureSession,
         data: FrameData
     ) {
-        /* 
+        /*
          * The session update callback is called for every processed frame.
-         * Check if the session contains any captured labels; 
+         * Check if the session contains any captured labels;
          * if not, continue capturing.
          */
         val capturedLabel = session.capturedLabels.firstOrNull() ?: return
 
-        /* 
-         * Given the label capture settings defined above, 
+        /*
+         * Given the label capture settings defined above,
          * barcode data will always be present.
          */
         val barcodeData = capturedLabel.fields
             .find { it.name == "<your-barcode-field-name>" }?.barcode?.data
 
-        /* 
+        /*
          * The expiry date field is optional. Check for null in your result handling.
          */
         val expiryDate = capturedLabel.fields
             .find { it.name == "<your-expiry-date-field-name>" }?.asDate()
 
-        /* 
+        /*
          * Disable the label capture mode after a label has been captured
          * to prevent it from capturing the same label multiple times.
          */
         mode.isEnabled = false
-        
-        /* 
+
+        /*
          * Consider handling the results in a coroutine to avoid blocking the main thread
          * when updating the UI.
          */
@@ -184,20 +184,20 @@ Depending on your app architecture and whether you use dependency injection or n
 ```java
 public class LabelCaptureRepository implements LabelCaptureListener {
 
-    /* 
+    /*
      * We use MutableLiveData to post captured labels to the UI thread.
      * You don't need to use MutableLiveData in your implementation, but it's important good practice to keep the UI thread free from heavy processing.
      */
     private final MutableLiveData<CapturedLabelEvent> capturedLabels = new MutableLiveData<>();
-    
+
     // ... other methods
-    
+
     @Override
     public void onSessionUpdated(
             @NonNull LabelCapture labelCapture,
             @NonNull LabelCaptureSession session,
             @NonNull FrameData frameData) {
-        /* 
+        /*
          * The session update callback is called for every processed frame.
          * Check if the session contains any captured labels; if not, continue capturing.
          */
@@ -205,40 +205,40 @@ public class LabelCaptureRepository implements LabelCaptureListener {
 
         if (!labels.isEmpty()) {
             final CapturedLabel label = labels.get(0);
-            
-            /* 
-             * Given the label capture settings defined above, 
+
+            /*
+             * Given the label capture settings defined above,
              * the barcode field would always be present.
              */
             String barcodeData = label.getFields().stream()
-                .filter(field -> field.getName().equals("<your-barcode-field-name>"))
-                .findFirst()
-                .map(field -> field.getBarcode().getData())
-                .orElse(null);
+                    .filter(field -> field.getName().equals("<your-barcode-field-name>"))
+                    .findFirst()
+                    .map(field -> field.getBarcode().getData())
+                    .orElse(null);
 
-            /* 
-             * The expiry date field is optional. 
+            /*
+             * The expiry date field is optional.
              * Check for null in your result handling.
              */
             String expiryDate = label.getFields().stream()
-                .filter(field -> field.getName().equals("<your-expiry-date-field-name>"))
-                .findFirst()
-                .map(CapturedField::getText)
-                .orElse(null);
+                    .filter(field -> field.getName().equals("<your-expiry-date-field-name>"))
+                    .findFirst()
+                    .map(LabelField::getText)
+                    .orElse(null);
 
-            /* 
+            /*
              * Disable the label capture mode after a label has been captured
              * to prevent it from capturing the same label multiple times.
              */
             labelCapture.setEnabled(false);
 
-            /* 
+            /*
              * Post the captured results for further processing.
              */
             capturedLabels.postValue(new CapturedLabelEvent(barcodeData, expiryDate));
-            
-            /* 
-             * Consider communicating a successful scan with audio and vibration feedback. 
+
+            /*
+             * Consider communicating a successful scan with audio and vibration feedback.
              * See the Feedback section for more information.
              */
             Feedback.defaultFeedback().emit();
@@ -268,12 +268,12 @@ Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptur
 <TabItem value="kotlin" label="Kotlin">
 
 ```kotlin
-/* 
+/*
  * Create the data capture view and attach it to the data capture context created earlier.
  */
 val dataCaptureView = DataCaptureView.newInstance(requireContext(), dataCaptureContext)
 
-/* 
+/*
  * Add the data capture view to your view hierarchy, e.g. with setContentView or findViewById.
  */
 val container = /* get your containing view here, e.g. with inflate or findViewById */
@@ -283,7 +283,7 @@ container.addView(
   ViewGroup.LayoutParams.MATCH_PARENT
 )
 
-/* 
+/*
  * Create the overlay with the label capture mode and data capture view created earlier.
  */
 val overlay = LabelCaptureBasicOverlay.newInstance(labelCapture, dataCaptureView)
@@ -294,21 +294,21 @@ overlay.viewfinder = RectangularViewfinder(RectangularViewfinderStyle.SQUARE)
 <TabItem value="java" label="Java">
 
 ```java
-/* 
+/*
  * Create the data capture view and attach it to the data capture context created earlier.
  */
 DataCaptureView dataCaptureView = DataCaptureView.newInstance(this, dataCaptureContext);
 
-/* 
+/*
  * Add the data capture view to your view hierarchy, e.g. with setContentView or findViewById.
  */
-ViewGroup container = /* get your containing view here, e.g. with inflate or findViewById */
+ViewGroup container = findViewById(R.id.container); /* get your containing view here, e.g. with inflate or findViewById */
 container.addView(
-  dataCaptureView,
-  new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+    dataCaptureView,
+    new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
 );
 
-/* 
+/*
  * Create the overlay with the label capture mode and data capture view created earlier.
  */
 LabelCaptureBasicOverlay overlay = LabelCaptureBasicOverlay.newInstance(labelCapture, dataCaptureView);
