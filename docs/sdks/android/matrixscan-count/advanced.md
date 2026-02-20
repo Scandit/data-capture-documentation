@@ -18,11 +18,12 @@ There is a function to set a list of expected barcodes if you are scanning again
 
 When scanning against a list, the UI will also show red icons to mark scanned barcodes that aren’t present on the list. To set the list of expected barcodes, use the following code:
 
-```java
-List<TargetBarcode> targetBarcodes = new ArrayList<>();
-targetBarcodes.add(TargetBarcode.create("data", 1));
-BarcodeCountCaptureList captureList = BarcodeCountCaptureList.create(this, targetBarcodes);
-barcodeCount.setBarcodeCountCaptureList(captureList);
+```kotlin
+val targetBarcodes = listOf(
+    TargetBarcode.create("data", 1)
+)
+val captureList = BarcodeCountCaptureList.create(this, targetBarcodes)
+barcodeCount.setBarcodeCountCaptureList(captureList)
 ```
 
 ## Barcode Count Status
@@ -53,8 +54,8 @@ It can be difficult to reach the shutter button if the smart device is attached 
 
 You can enable a floating shutter button that can be positioned by the end user in a more ergonomically suitable position:
 
-```java
-barcodeCountView.setShouldShowFloatingShutterButton(true);
+```kotlin
+barcodeCountView.shouldShowFloatingShutterButton = true
 ```
 
 ## Filtering
@@ -63,23 +64,23 @@ If there several types of barcodes on your label you may want to scan only one o
 
 For example, you might want to scan only Code 128 barcodes and no PDF417 barcodes. You can do this by setting the following:
 
-```java
-BarcodeCountSettings settings = new BarcodeCountSettings();
-settings.enableSymbologies(enabledSymbologies);
+```kotlin
+val settings = BarcodeCountSettings().apply {
+    enableSymbologies(enabledSymbologies)
+}
 
-Set<Symbology> excludedSymbologies = new HashSet<>();
-excludedSymbologies.add(Symbology.PDF417);
-BarcodeFilterSettings filterSettings = settings.getFilterSettings();
-filterSettings.setExcludedSymbologies(excludedSymbologies);
+val excludedSymbologies = setOf(Symbology.PDF417)
+val filterSettings = settings.filterSettings
+filterSettings.excludedSymbologies = excludedSymbologies
 ```
 
 Or to exclude all the barcodes starting with 4 numbers:
 
-```java
-BarcodeCountSettings settings = new BarcodeCountSettings();
+```kotlin
+val settings = BarcodeCountSettings()
 
-BarcodeFilterSettings filterSettings = settings.getFilterSettings();
-filterSettings.setExcludedCodesRegex("^1234.*");
+val filterSettings = settings.filterSettings
+filterSettings.excludedCodesRegex = "^1234.*"
 ```
 
 By default the filters applied to the relevant barcodes are transparent, but you can use [`BarcodeFilterHighlightSettings`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-filter-highlight-settings.html#barcode-filter-highlight-settings) to change the color and level of transparency.
@@ -92,8 +93,8 @@ There are situations in which the user may find it helpful to clean up their scr
 
 For this you can enable the “Clear screen” button:
 
-```java
-barcodeCountView.setShouldShowClearHighlightsButton(true);
+```kotlin
+barcodeCountView.shouldShowClearHighlightsButton = true
 ```
 
 ## Customizing the AR Overlays
@@ -102,16 +103,12 @@ MatrixScan Count comes with recommended and user-tested AR overlays. However, if
 
 The methods [BarcodeCountViewListener.brushForRecognizedBarcode()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.BrushForRecognizedBarcode) and [BarcodeCountViewListener.brushForUnrecognizedBarcode()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.BrushForUnrecognizedBarcode) are invoked every time a new recognized or unrecognized barcode appears. These can be used to set a brush that will be used to highlight that specific barcode in the overlay. Keep in mind that these methods are relevant only when using the style [BarcodeCountViewStyle.DOT](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-count-view.html#value-scandit.datacapture.barcode.count.ui.BarcodeCountViewStyle.Dot).
 
-```java
-@Nullable
-@Override
-public Brush brushForRecognizedBarcode(@NonNull BarcodeCountView view, @NonNull TrackedBarcode trackedBarcode) {
+```kotlin
+override fun brushForRecognizedBarcode(view: BarcodeCountView, trackedBarcode: TrackedBarcode): Brush? {
     // Return a custom brush
 }
 
-@Nullable
-@Override
-public Brush brushForRecognizedBarcodeNotInList(@NonNull BarcodeCountView view, @NonNull TrackedBarcode trackedBarcode) {
+override fun brushForRecognizedBarcodeNotInList(view: BarcodeCountView, trackedBarcode: TrackedBarcode): Brush? {
     // Return a custom brush
 }
 ```
@@ -120,20 +117,12 @@ public Brush brushForRecognizedBarcodeNotInList(@NonNull BarcodeCountView view, 
 
 If you want to be notified when a user taps on an overlay, you need to implement the [BarcodeCountViewListener.onRecognizedBarcodeTapped()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.OnRecognizedBarcodeTapped) and [BarcodeCountViewListener.onUnrecognizedBarcodeTapped()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.OnUnrecognizedBarcodeTapped) methods.
 
-```java
-@Override
-public void onRecognizedBarcodeTapped(
-    @NonNull BarcodeCountView view,
-    @NonNull TrackedBarcode trackedBarcode
-) {
+```kotlin
+override fun onRecognizedBarcodeTapped(view: BarcodeCountView, trackedBarcode: TrackedBarcode) {
     // Do something with the tapped barcode
 }
 
-@Override
-public void onRecognizedBarcodeNotInListTapped(
-    @NonNull BarcodeCountView view,
-    @NonNull TrackedBarcode trackedBarcode
-) {
+override fun onRecognizedBarcodeNotInListTapped(view: BarcodeCountView, trackedBarcode: TrackedBarcode) {
     // Do something with the tapped barcode
 }
 ```
@@ -144,15 +133,15 @@ The UI is an integral part of MatrixScan Count and we do not recommend that you 
 
 To disable buttons:
 
-```java
-barcodeCountView.setShouldShowListButton(false);
-barcodeCountView.setShouldShowExitButton(false);
-barcodeCountView.setShouldShowShutterButton(false);
+```kotlin
+barcodeCountView.shouldShowListButton = false
+barcodeCountView.shouldShowExitButton = false
+barcodeCountView.shouldShowShutterButton = false
 ```
 
 To disable feedback and hints:
 
-```java
-barcodeCountView.setShouldShowUserGuidanceView(false);
-barcodeCountView.setShouldShowHints(false);
+```kotlin
+barcodeCountView.shouldShowUserGuidanceView = false
+barcodeCountView.shouldShowHints = false
 ```

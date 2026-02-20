@@ -60,15 +60,16 @@ Typically you do not need to implement to a `BarcodeBatchListener`, instead you 
 
 For this task, we setup Barcode Batch for tracking QR codes:
 
-```java
-BarcodeBatchSettings settings = new BarcodeBatchSettings();
-settings.enableSymbology(Symbology.QR, true);
+```kotlin
+val settings = BarcodeBatchSettings().apply {
+    enableSymbology(Symbology.QR, true)
+}
 ```
 
 Next, create a `BarcodeBatch` instance with the data capture context and the settings initialized in the previous steps:
 
-```java
-BarcodeBatch barcodeBatch = BarcodeBatch.forDataCaptureContext(dataCaptureContext, settings);
+```kotlin
+val barcodeBatch = BarcodeBatch.forDataCaptureContext(dataCaptureContext, settings)
 ```
 
 ## Use the Built-in Camera
@@ -83,29 +84,25 @@ When using the built-in camera there are recommended settings for each capture m
 
 The following lines show how to get the recommended settings and create the camera from it:
 
-```java
-CameraSettings cameraSettings = BarcodeBatch.createRecommendedCameraSettings();
+```kotlin
+val cameraSettings = BarcodeBatch.createRecommendedCameraSettings()
 
 // Depending on the use case further camera settings adjustments can be made here.
 
-Camera camera = Camera.getDefaultCamera();
-if (camera != null) {
-  camera.applySettings(cameraSettings, null);
-}
+val camera = Camera.getDefaultCamera()
+camera?.applySettings(cameraSettings, null)
 ```
 
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/android/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
-```java
-dataCaptureContext.setFrameSource(camera);
+```kotlin
+dataCaptureContext.setFrameSource(camera)
 ```
 
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.ON](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
-```java
-if (camera != null) {
-  camera.switchToDesiredState(FrameSourceState.ON);
-}
+```kotlin
+camera?.switchToDesiredState(FrameSourceState.ON)
 ```
 
 ## Visualize the Scan Process
@@ -114,37 +111,34 @@ When using the built-in camera as frame source, you typically want to display th
 
 To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
-```java
-DataCaptureView dataCaptureView = DataCaptureView.newInstance(this, dataCaptureContext);
-setContentView(dataCaptureView);
+```kotlin
+val dataCaptureView = DataCaptureView.newInstance(this, dataCaptureContext)
+setContentView(dataCaptureView)
 ```
 
 To visualize the results of Barcode Batch, first you need to add the following [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay):
 
-```java
-BarcodeBatchBasicOverlay overlay = BarcodeBatchBasicOverlay.newInstance(barcodeBatch, dataCaptureView);
+```kotlin
+val overlay = BarcodeBatchBasicOverlay.newInstance(barcodeBatch, dataCaptureView)
 ```
 
 Once the overlay has been added, you must conform to the [BarcodeBatchBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener) interface. The method [BarcodeBatchBasicOverlayListener.brushForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener.BrushForTrackedBarcode) is invoked every time a new tracked barcode appears and it can be used to set a brush used to highlight that specific barcode in the [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay).
 
-```java
-@Nullable
-@Override
-public Brush brushForTrackedBarcode(
-    @NonNull BarcodeBatchBasicOverlay overlay,
-    @NonNull TrackedBarcode trackedBarcode
-) {
+```kotlin
+override fun brushForTrackedBarcode(
+    overlay: BarcodeBatchBasicOverlay,
+    trackedBarcode: TrackedBarcode,
+): Brush {
     // Return a custom Brush based on the tracked barcode.
 }
 ```
 
 If you want to make the highlights tappable, you need to implement the [BarcodeBatchBasicOverlayListener.onTrackedBarcodeTapped()] method.
 
-```java
-@Override
-public void onTrackedBarcodeTapped(
-    @NonNull BarcodeBatchBasicOverlay overlay,
-    @NonNull TrackedBarcode trackedBarcode
+```kotlin
+override fun onTrackedBarcodeTapped(
+    overlay: BarcodeBatchBasicOverlay,
+    trackedBarcode: TrackedBarcode,
 ) {
     // A tracked barcode was tapped.
 }
@@ -158,36 +152,33 @@ Here, we use the default [Feedback](https://docs.scandit.com/data-capture-sdk/an
 
 First, we create a feedback and release it after it is no longer used, to avoid resources being unnecessarily held.
 
-```java
-Feedback feedback = Feedback.defaultFeedback();
+```kotlin
+val feedback = Feedback.defaultFeedback()
 ```
 
 Next, use this `feedback` in a `BarcodeBatchListener`:
 
-```java
-public class FeedbackListener implements BarcodeBatchListener {
-    Feedback feedback = Feedback.defaultFeedback();
-    
-    @Override
-    public void onObservationStarted(@NonNull  BarcodeBatch barcodeBatch) {
+```kotlin
+class FeedbackListener: BarcodeBatchListener {
+    val feedback = Feedback.defaultFeedback()
+
+    override fun onObservationStarted(barcodeBatch: BarcodeBatch) {
         // Called when Barcode Batch is started.
         // We don't use this callback in this guide.
     }
 
-    @Override
-    public void onObservationStopped(@NonNull BarcodeBatch barcodeBatch) {
+    override fun onObservationStopped(barcodeBatch: BarcodeBatch) {
         // Called when Barcode Batch is stopped.
         // We don't use this callback in this guide.
     }
 
-    @Override
-    public void onSessionUpdated(
-        @NonNull BarcodeBatch mode,
-        @NonNull BarcodeBatchSession session,
-        @NonNull FrameData data
+    override fun onSessionUpdated(
+        mode: BarcodeBatch,
+        session: BarcodeBatchSession,
+        data: FrameData,
     ) {
-        if (!session.getAddedTrackedBarcodes().isEmpty()) {
-            feedback.emit();
+        if (session.addedTrackedBarcodes.isNotEmpty()) {
+            feedback.emit()
         }
     }
 }
@@ -197,8 +188,8 @@ public class FeedbackListener implements BarcodeBatchListener {
 
 As the last step, register the listener responsible for emitting the feedback with the `BarcodeBatch` instance.
 
-```java
-barcodeBatch.addListener(new FeedbackListener());
+```kotlin
+barcodeBatch.addListener(FeedbackListener())
 ```
 
 ## Disable Barcode Batch

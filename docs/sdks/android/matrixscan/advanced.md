@@ -29,8 +29,8 @@ This example describes the steps to add a view above each barcode showing its co
 
 First, create a new instance of `BarcodeBatchAdvancedOverlay` and add it to your `DataCaptureView`:
 
-```java
-BarcodeBatchAdvancedOverlay overlay = BarcodeBatchAdvancedOverlay.newInstance(barcodeBatch, dataCaptureView);
+```kotlin
+val overlay = BarcodeBatchAdvancedOverlay.newInstance(barcodeBatch, dataCaptureView)
 ```
 
 There are two ways to proceed from here:
@@ -51,53 +51,38 @@ For this option, keep in mind that:
 * [BarcodeBatchAdvancedOverlayListener.anchorForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener.AnchorForTrackedBarcode) asks how to anchor the view to the barcode through Anchor. Be aware that it anchors the view’s center to the anchor point. To achieve anchoring the top of the view or the bottom etc. you need to set an offset as explained in the next point.
 * [BarcodeBatchAdvancedOverlayListener.offsetForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-advanced-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchAdvancedOverlayListener.OffsetForTrackedBarcode) asks for an offset that is applied on the already anchored view. This offset is expressed through a [PointWithUnit](https://docs.scandit.com/data-capture-sdk/android/core/api/common.html#struct-scandit.datacapture.core.PointWithUnit).
 
-```java
-@Nullable
-@Override
-public View viewForTrackedBarcode(
-    @NonNull BarcodeBatchAdvancedOverlay overlay,
-    @NonNull TrackedBarcode trackedBarcode
-) {
-    // Create and return the view you want to show for this tracked barcode.
-    // You can also return null, to have no view for this barcode.
-    TextView textView = new TextView(this);
-    textView.setBackgroundColor(Color.WHITE);
-    textView.setLayoutParams(
-        new ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-    );
-    textView.setText(trackedBarcode.getBarcode().getData());
-    return textView;
+```kotlin
+// Create and return the view you want to show for this tracked barcode. You can also return null, to have no view for this barcode.
+fun viewForTrackedBarcode(
+    overlay: BarcodeBatchAdvancedOverlay,
+    trackedBarcode: TrackedBarcode,
+): View = TextView(this).apply {
+    setBackgroundColor(Color.WHITE)
+    layoutParams = ViewGroup.LayoutParams(
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+    )
+    text = trackedBarcode.barcode.data
 }
 
-@NonNull
-@Override
-public Anchor anchorForTrackedBarcode(
-    @NonNull BarcodeBatchAdvancedOverlay overlay,
-    @NonNull TrackedBarcode trackedBarcode
-) {
-    // As we want the view to be above the barcode, we anchor the view's center to the top-center of the barcode quadrilateral.
-    // Use the function 'offsetForTrackedBarcode' below to adjust the position of the view by providing an offset.
-    return Anchor.TOP_CENTER;
-}
+// As we want the view to be above the barcode, we anchor the view's center to the top-center of the barcode quadrilateral.
+// Use the function 'offsetForTrackedBarcode' below to adjust the position of the view by providing an offset.
+fun anchorForTrackedBarcode(
+    overlay: BarcodeBatchAdvancedOverlay,
+    trackedBarcode: TrackedBarcode,
+): Anchor = Anchor.TOP_CENTER
 
-@NonNull
-@Override
-public PointWithUnit offsetForTrackedBarcode(
-    @NonNull BarcodeBatchAdvancedOverlay overlay,
-    @NonNull TrackedBarcode trackedBarcode,
-    @NonNull View view
-) {
-    // This is the offset that will be applied to the view.
-    // You can use MeasureUnit.FRACTION to give a measure relative to the view itself, the sdk will take care of transforming this into pixel size.
-    // We now center horizontally and move up the view to make sure it's centered and above the barcode quadrilateral by half of the view's height.
-    return new PointWithUnit(
-        new FloatWithUnit(0f, MeasureUnit.FRACTION),
-        new FloatWithUnit(-1f, MeasureUnit.FRACTION)
-    );
-}
+// This is the offset that will be applied to the view.
+// You can use MeasureUnit.FRACTION to give a measure relative to the view itself, the sdk will take care of transforming this into pixel size.
+// We now center horizontally and move up the view to make sure it's centered and above the barcode quadrilateral by half of the view's height.
+fun offsetForTrackedBarcode(
+    overlay: BarcodeBatchAdvancedOverlay,
+    trackedBarcode: TrackedBarcode,
+    view: View,
+): PointWithUnit = PointWithUnit(
+    FloatWithUnit(0f, MeasureUnit.FRACTION),
+    FloatWithUnit(-1f, MeasureUnit.FRACTION),
+)
 ```
 
 ### Using the Setters
@@ -110,38 +95,37 @@ From here you can create the view you want to display, and then call:
 * [BarcodeBatchAdvancedOverlay.setAnchorForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#method-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay.SetAnchorForTrackedBarcode)
 * [BarcodeBatchAdvancedOverlay.setOffsetForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#method-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay.SetOffsetForTrackedBarcode)
 
-```java
-@Override
-public void onSessionUpdated(
-    @NonNull BarcodeBatch mode,
-    @NonNull BarcodeBatchSession session,
-    @NonNull FrameData data
+```kotlin
+fun onSessionUpdated(
+    mode: BarcodeBatch,
+    session: BarcodeBatchSession,
+    data: FrameData,
 ) {
     // Be careful, this function is not invoked on the main thread!
-    runOnUiThread(() -> {
-        for (TrackedBarcode trackedBarcode : session.getAddedTrackedBarcodes()) {
-            TextView textView = new TextView(this);
-            textView.setBackgroundColor(Color.WHITE);
-            textView.setLayoutParams(
-                new ViewGroup.LayoutParams(
+    runOnUiThread {
+        session.addedTrackedBarcodes.forEach { trackedBarcode ->
+            val textView = TextView(this).apply {
+                setBackgroundColor(Color.WHITE)
+                layoutParams = ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT
                 )
-            );
-            textView.setText(trackedBarcode.getBarcode().getData());
-            overlay.setViewForTrackedBarcode(trackedBarcode, textView);
+                text = trackedBarcode.barcode.data
+            }
+            overlay.setViewForTrackedBarcode(trackedBarcode, textView)
             overlay.setAnchorForTrackedBarcode(
-                trackedBarcode, Anchor.TOP_CENTER
-            );
+                trackedBarcode,
+                Anchor.TOP_CENTER,
+            )
             overlay.setOffsetForTrackedBarcode(
                 trackedBarcode,
-                new PointWithUnit(
-                    new FloatWithUnit(0f, MeasureUnit.FRACTION),
-                    new FloatWithUnit(-1f, MeasureUnit.FRACTION)
+                PointWithUnit(
+                    FloatWithUnit(0f, MeasureUnit.FRACTION),
+                    FloatWithUnit(-1f, MeasureUnit.FRACTION),
                 )
-            );
+            )
         }
-    });
+    }
 }
 ```
 
@@ -159,30 +143,28 @@ If you do not want to use the overlay, it is also possible to add augmented real
 The frame coordinates from `TrackedBarcode.location` need to be mapped to view coordinates, using [DataCaptureView.mapFrameQuadrilateralToView()](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#method-scandit.datacapture.core.ui.DataCaptureView.MapFrameQuadrilateralToView).
 :::
 
-```java
-@Override
-public void onSessionUpdated(
-    @NonNull BarcodeBatch mode,
-    @NonNull final BarcodeBatchSession session,
-    @NonNull FrameData data
+```kotlin
+fun onSessionUpdated(
+    mode: BarcodeBatch,
+    session: BarcodeBatchSession,
+    data: FrameData,
 ) {
     // Be careful, this function is not invoked on the main thread!
-    runOnUiThread(() -> {
-        for (int lostTrackIdentifier : session.getRemovedTrackedBarcodes()) {
+    runOnUiThread {
+        session.removedTrackedBarcodes.forEach { lostTrackIdentifier ->
             // You now know the identifier of the tracked barcode that has been lost. Usually here you would remove the views associated.
         }
 
-        for (TrackedBarcode trackedBarcode : session.getAddedTrackedBarcodes()) {
-
+        session.addedTrackedBarcodes.forEach { trackedBarcode ->
             // Fixed identifier for the tracked barcode.
-            Integer trackingIdentifier = trackedBarcode.getIdentifier();
+            val trackingIdentifier = trackedBarcode.identifier
 
             // Current location of the tracked barcode.
-            Quadrilateral location = trackedBarcode.getLocation();
-            Quadrilateral quadrilateral = dataCaptureView.mapFrameQuadrilateralToView(location);
+            val location = trackedBarcode.location
+            val quadrilateral = dataCaptureView.mapFrameQuadrilateralToView(location)
 
-            // You now know this new tracking's identifier and location. Usually here you would create and show the views.
+            // You now know this tracking's identifier and location. Usually here you would create and show the views.
         }
-    });
+    }
 }
 ```
