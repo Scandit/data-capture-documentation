@@ -163,6 +163,17 @@ No updates for this framework in this release.
 
 * Updated ARM MbedTLS from 3.6.2 to 3.6.3.
 
+## 7.3.4
+
+**Released**: February 24, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+* Fixed a crash when toggling the zoom switch without setting a frame source
+
 ## 7.3.3
 
 **Released**: July 25, 2025

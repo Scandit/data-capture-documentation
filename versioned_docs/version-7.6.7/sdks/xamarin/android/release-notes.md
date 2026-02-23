@@ -226,6 +226,16 @@ No updates for this framework in this release.
 
 * Fixed an issue where preexisting OTA models on the device, if any, would be loaded instead of the latest model for the SDK version, leading to errors.
 
+## 7.3.4
+
+**Released**: February 24, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+
 ## 7.3.2
 
 **Released**: June 25, 2025
