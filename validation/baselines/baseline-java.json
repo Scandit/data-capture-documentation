@@ -1,0 +1,57 @@
+[
+  {
+    "hash": "270fdecc3a950cd2ca8d129131adb9288e1c0101e1673152ac7010c37267e754",
+    "file": "docs/sdks/android/agents-android.md",
+    "snippet": 0
+  },
+  {
+    "hash": "b6473e22805672f38b2d4abe69a419a5589ea3fcfde2b34e28d65586727cf734",
+    "file": "docs/sdks/android/agents-android.md",
+    "snippet": 1
+  },
+  {
+    "hash": "5157628b994253defed5be2ab1d34e73a89d7c1dc39c847dfdd2c98593eaa0b0",
+    "file": "docs/sdks/android/label-capture/advanced.md",
+    "snippet": 0
+  },
+  {
+    "hash": "47eefbca3203e087948c60916498b2e35fcdf89784974c3e63a3d69307f680f4",
+    "file": "docs/sdks/android/label-capture/advanced.md",
+    "snippet": 1
+  },
+  {
+    "hash": "2327f705a8975510eba27fc65d03248d886a220d57af2ca4c17b676f1b84dc8c",
+    "file": "docs/sdks/android/label-capture/advanced.md",
+    "snippet": 2
+  },
+  {
+    "hash": "0d306308a632563528849267027b17faa8f22deed6a9a13d3757b8f539a9583e",
+    "file": "docs/sdks/android/label-capture/advanced.md",
+    "snippet": 3
+  },
+  {
+    "hash": "ff791e4e93cc19322a2de79cc3ea5fb3a086a726afc72271a13dbfa49924d465",
+    "file": "docs/sdks/android/label-capture/advanced.md",
+    "snippet": 4
+  },
+  {
+    "hash": "a013a3cc22eef8610e8708fc8a54cce40463623fa6c80c55f76078c0284ef682",
+    "file": "docs/sdks/android/label-capture/get-started.md",
+    "snippet": 0
+  },
+  {
+    "hash": "bd09350c95902b704594e9c21347b9c2b11a012dbd9b4d3d92d871e24ef7e20a",
+    "file": "docs/sdks/android/label-capture/get-started.md",
+    "snippet": 1
+  },
+  {
+    "hash": "a4e54ce73da51bd982cbb37f08802e6de135c66cfdce32423ead517de9ec204c",
+    "file": "docs/sdks/android/label-capture/get-started.md",
+    "snippet": 2
+  },
+  {
+    "hash": "bc648182d4d9a162fa164d4f677c6d9909bf3fab3d025d48e9241cbb08956256",
+    "file": "docs/sdks/android/label-capture/get-started.md",
+    "snippet": 3
+  }
+]

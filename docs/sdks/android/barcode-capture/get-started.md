@@ -57,6 +57,8 @@ Barcode scanning is orchestrated by the [BarcodeCapture data capture mode](https
 For this task, we setup barcode scanning for a small list of barcode types, called [symbologies](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology). The list of symbologies to enable is application specific. We recommend that you only enable the symbologies your application requires. If you are not familiar with the symbologies that are relevant for your use case, you can use [capture presets](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/capture-preset.html#enum-scandit.datacapture.barcode.CapturePreset) that are tailored for different verticals (for instance, retail, logistics, and so on).
 
 ```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSettings
+# import com.scandit.datacapture.barcode.data.Symbology
 val settings = BarcodeCaptureSettings().apply {
     enableSymbology(Symbology.CODE128, true)
     enableSymbology(Symbology.CODE39, true)
@@ -74,6 +76,9 @@ If you are not disabling barcode capture immediately after having scanned the fi
 Next, create a [BarcodeCapture](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance with the settings initialized in the previous step:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCapture
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSettings
+# lateinit var settings: BarcodeCaptureSettings
 val barcodeCapture = BarcodeCapture.forDataCaptureContext(dataCaptureContext, settings)
 ```
 
@@ -84,6 +89,11 @@ To get informed whenever a new code has been recognized, add a [BarcodeCaptureLi
 First conform to the `BarcodeCaptureListener` interface. For example:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCapture
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureListener
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSession
+# import com.scandit.datacapture.core.data.FrameData
+# object : BarcodeCaptureListener {
 override fun onBarcodeScanned(
     barcodeCapture: BarcodeCapture,
     session: BarcodeCaptureSession,
@@ -92,12 +102,20 @@ override fun onBarcodeScanned(
     val recognizedBarcodes = session.newlyRecognizedBarcode
     // Do something with the barcodes. See Rejecting Barcodes, below, for an example.
 }
+# }
 ```
 
 Then add the listener:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCapture
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureListener
+# object : BarcodeCaptureListener {
+# init {
+# lateinit var barcodeCapture: BarcodeCapture
 barcodeCapture.addListener(this)
+# }
+# }
 ```
 
 ### Rejecting Barcodes
@@ -107,12 +125,16 @@ To prevent scanning unwanted codes, you can reject them by adding the desired lo
 The example below will only scan barcodes beginning with the digits `09` and ignore all others, using a transparent brush to distinguish a rejected barcode from a recognized one:
 
 ```kotlin
-...
-if (barcode.data == null || !barcode.data.startsWith("09:")) {
+# import com.scandit.datacapture.barcode.data.Barcode
+# import com.scandit.datacapture.barcode.ui.overlay.BarcodeCaptureOverlay
+# import com.scandit.datacapture.core.ui.style.Brush
+# lateinit var barcode: Barcode
+# lateinit var overlay: BarcodeCaptureOverlay
+val data = barcode.data
+if (data == null || !data.startsWith("09:")) {
     overlay.brush = Brush.transparent()
     return
 }
-...
 ```
 
 ## Use the Built-in Camera
@@ -126,6 +148,8 @@ In Android, the user must explicitly grant permission for each app to access cam
 When using the built-in camera there are recommended settings for each capture mode. These must be used to achieve the best performance and user experience for the respective mode. The following code shows how to get the recommended settings and create the camera:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCapture
+# import com.scandit.datacapture.core.source.Camera
 val cameraSettings = BarcodeCapture.createRecommendedCameraSettings()
 
 // Depending on the use case further camera settings adjustments can be made here.
@@ -143,6 +167,7 @@ dataCaptureContext.setFrameSource(camera)
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.ON](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
 ```kotlin
+# import com.scandit.datacapture.core.source.FrameSourceState
 camera?.switchToDesiredState(FrameSourceState.ON)
 ```
 
@@ -157,13 +182,22 @@ When using the built-in camera as frame source, you may want to display the came
 To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```kotlin
+# import android.app.Activity
+# import com.scandit.datacapture.core.ui.DataCaptureView
+# object : Activity() {
+# init {
 val dataCaptureView = DataCaptureView.newInstance(this, dataCaptureContext)
 setContentView(dataCaptureView)
+# }
+# }
 ```
 
 To visualize the results of barcode scanning, the following [overlay](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) can be added:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCapture
+# import com.scandit.datacapture.barcode.ui.overlay.BarcodeCaptureOverlay
+# lateinit var barcodeCapture: BarcodeCapture
 val overlay = BarcodeCaptureOverlay.newInstance(barcodeCapture, dataCaptureView)
 ```
 
