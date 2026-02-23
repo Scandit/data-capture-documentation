@@ -23,8 +23,8 @@ import EnableSymbologies from '../../../partials/configure-symbologies/_enable-s
 The following lines of code show you how to enable scanning Code 128 codes for barcode capture:
 
 ```js
-const settings = new Scandit.BarcodeCaptureSettings();
-settings.enableSymbology(Scandit.Symbology.Code128, true);
+const settings = new BarcodeCaptureSettings();
+settings.enableSymbology(Symbology.Code128, true);
 ```
 
 import CapturePresents from '../../../partials/configure-symbologies/_capture-presents.mdx'
@@ -42,16 +42,8 @@ If you want to read codes that are shorter/longer than the specified default ran
 The below lines of code show how to change the active symbol count for Code 128 to read codes with 6, 7 and 8 symbols.
 
 ```js
-const settings = new Scandit.BarcodeCaptureSettings();
-const symbologySettings = settings.settingsForSymbology(
-	Scandit.Symbology.Code128
-);
-symbologySettings.activeSymbolCounts = [6, 7, 8];
-
-const settings = new ScanditBarcode.BarcodeCaptureSettings();
-const symbologySettings = settings.settingsForSymbology(
-	ScanditBarcode.Symbology.Code128
-);
+const settings = new BarcodeCaptureSettings();
+const symbologySettings = settings.settingsForSymbology(Symbology.Code128);
 symbologySettings.activeSymbolCounts = [6, 7, 8];
 ```
 
@@ -68,10 +60,8 @@ This is not possible for all symbologies as it could lead to false reads when th
 When you enable a symbology as described above, only dark-on-bright codes are enabled (see [SymbologySettings.isEnabled](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.IsEnabled 'SymbologySettings.isEnabled property')). When you also want to read bright-on-dark codes, color-inverted reading for that symbology must also be enabled (see [SymbologySettings.isColorInvertedEnabled](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.IsColorInvertedEnabled)):
 
 ```js
-const settings = new Scandit.BarcodeCaptureSettings();
-const symbologySettings = settings.settingsForSymbology(
-	Scandit.Symbology.Code128
-);
+const settings = new BarcodeCaptureSettings();
+const symbologySettings = settings.settingsForSymbology(Symbology.Code128);
 symbologySettings.isColorInvertedEnabled = true;
 ```
 
@@ -85,11 +75,9 @@ You can enforce a specific checksum by setting it through
 [SymbologySettings.checksums](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.Checksums):
 
 ```js
-const settings = new Scandit.BarcodeCaptureSettings();
-const symbologySettings = settings.settingsForSymbology(
-	Scandit.Symbology.Code39
-);
-symbologySettings.checksums = [Scandit.Checksum.Mod43];
+const settings = new BarcodeCaptureSettings();
+const symbologySettings = settings.settingsForSymbology(Symbology.Code39);
+symbologySettings.checksums = [Checksum.Mod43];
 ```
 
 ## Enable Symbology-Specific Extensions
@@ -103,10 +91,8 @@ To enable/disable a symbology extension, use [SymbologySettings.setExtensionEnab
 The following code shows how to enable the full ASCII extension for Code 39.
 
 ```js
-const settings = new Scandit.BarcodeCaptureSettings();
-const symbologySettings = settings.settingsForSymbology(
-	Scandit.Symbology.Code39
-);
+const settings = new BarcodeCaptureSettings();
+const symbologySettings = settings.settingsForSymbology(Symbology.Code39);
 symbologySettings.setExtensionEnabled('full_ascii', true);
 ```
 
