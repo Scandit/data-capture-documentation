@@ -21,9 +21,9 @@ import EnableSymbologies from '../../../partials/configure-symbologies/_enable-s
 
 The following code shows how to enable scanning Code 128 codes for Barcode Capture:
 
-```java
-BarcodeCaptureSettings settings = new BarcodeCaptureSettings();
-settings.enableSymbology(Symbology.CODE128, true);
+```kotlin
+val settings = BarcodeCaptureSettings()
+settings.enableSymbology(Symbology.CODE128, true)
 ```
 
 import CapturePresents from '../../../partials/configure-symbologies/_capture-presents.mdx'
@@ -40,11 +40,11 @@ If you want to read codes that are shorter/longer than the specified default ran
 
 The below code shows how to change the active symbol count for Code 128 to read codes with 6, 7 and 8 symbols.
 
-```java
-BarcodeCaptureSettings settings = new BarcodeCaptureSettings();
-SymbologySettings symbologySettings = settings.getSymbologySettings(Symbology.CODE128);
-HashSet<Short> activeSymbolCounts = new HashSet<>(Arrays.asList(new Short[] { 6, 7, 8}));
-symbologySettings.setActiveSymbolCounts(activeSymbolCounts);
+```kotlin
+val settings = BarcodeCaptureSettings()
+val symbologySettings = settings.getSymbologySettings(Symbology.CODE128)
+val activeSymbolCounts = mutableSetOf<Short>(6, 7, 8)
+symbologySettings.activeSymbolCounts = activeSymbolCounts
 ```
 
 import CalculateSymbolCount from '../../../partials/configure-symbologies/_calculate-symbol-count.mdx'
@@ -61,10 +61,10 @@ When you enable a symbology as described above, only dark-on-bright codes are en
 
 The following code shows how to enable color-inverted reading for Code 128:
 
-```java
-BarcodeCaptureSettings settings = new BarcodeCaptureSettings();
-SymbologySettings symbologySettings = settings.getSymbologySettings(Symbology.CODE128);
-symbologySettings.setColorInvertedEnabled(true);
+```kotlin
+val settings = BarcodeCaptureSettings()
+val symbologySettings = settings.getSymbologySettings(Symbology.CODE128)
+symbologySettings.isColorInvertedEnabled = true
 ```
 
 ## Enforce Checksums
@@ -75,10 +75,10 @@ When enabling a checksum you have to make sure that the data of your codes conta
 
 You can enforce a specific checksum by setting it through `SymbologySettings.checksums`:
 
-```java
-BarcodeCaptureSettings settings = new BarcodeCaptureSettings();
-SymbologySettings symbologySettings = settings.getSymbologySettings(Symbology.CODE39);
-symbologySettings.setChecksums(EnumSet.of(Checksum.MOD43));
+```kotlin
+val settings = BarcodeCaptureSettings()
+val symbologySettings = settings.getSymbologySettings(Symbology.CODE39)
+symbologySettings.checksums = EnumSet.of(Checksum.MOD43)
 ```
 
 ## Enable Symbology-Specific Extensions
@@ -91,10 +91,10 @@ To enable/disable a symbology extension, use `SymbologySettings.setExtensionEnab
 
 The following code shows how to enable the full ASCII extension for Code 39.
 
-```java
-BarcodeCaptureSettings settings = new BarcodeCaptureSettings();
-SymbologySettings symbologySettings = settings.getSymbologySettings(Symbology.CODE39);
-symbologySettings.setExtensionEnabled("full_ascii", true);
+```kotlin
+val settings = BarcodeCaptureSettings()
+val symbologySettings = settings.getSymbologySettings(Symbology.CODE39)
+symbologySettings.setExtensionEnabled("full_ascii", true)
 ```
 
 This extension allows Code 39 to encode all 128 ASCII characters instead of only the 43 characters defined in the standard. The extension is disabled by default as it can lead to false reads when enabled.

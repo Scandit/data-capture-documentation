@@ -53,15 +53,16 @@ The main entry point for the Barcode AR Mode is the `BarcodeAr` object. You can 
 
 Here we configure it for tracking EAN13 codes, but you should change this to the correct symbologies for your use case.
 
-```java
-BarcodeArSettings settings = new BarcodeArSettings();
-settings.enableSymbology(Symbology.EAN13_UPCA, true);
+```kotlin
+val settings = BarcodeArSettings().apply {
+    enableSymbology(Symbology.EAN13_UPCA, true)
+}
 ```
 
 Then create the mode with the previously created settings:
 
-```java
-BarcodeAr barcodeAr = new BarcodeAr(dataCaptureContext, settings);
+```kotlin
+val barcodeAr = BarcodeAr(dataCaptureContext, settings)
 ```
 
 ## Setup the `BarcodeArView`
@@ -79,73 +80,71 @@ The `BarcodeArView` appearance can be customized through [`BarcodeArViewSettings
 * Zoom control visibility and its position
 * The size, colors, and styles of the highlights and annotations
 
-```java
-BarcodeArViewSettings viewSettings = new BarcodeArViewSettings();
-viewSettings.setHapticEnabled(false);
-viewSettings.setSoundEnabled(false);
-viewSettings.setDefaultCameraPosition(CameraPosition.USER_FACING);
+```kotlin
+val viewSettings = BarcodeArViewSettings().apply {
+    hapticEnabled = false
+    soundEnabled = false
+    defaultCameraPosition = CameraPosition.USER_FACING
+}
 ```
 
 Next, create a `BarcodeArView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeArView` is automatically added to the provided parent view.
 
-```java
-BarcodeArView barcodeArView = BarcodeArView(parentView, barcodeAr, dataCaptureContext, viewSettings);
-barcodeArView.setShouldShowCameraSwitchControl(true);
-barcodeArView.setShouldShowTorchControl(true);
-barcodeArView.setShouldShowZoomControl(true);
-barcodeArView.setCameraSwitchControlPosition(Anchor.TOP_RIGHT);
-barcodeArView.setTorchControlPosition(Anchor.BOTTOM_RIGHT);
-barcodeArView.setZoomControlPosition(Anchor.TOP_LEFT);
+```kotlin
+val barcodeArView = BarcodeArView(parentView, barcodeAr, dataCaptureContext, viewSettings).apply {
+    shouldShowCameraSwitchControl = true
+    shouldShowTorchControl = true
+    shouldShowZoomControl = true
+    cameraSwitchControlPosition = Anchor.TOP_RIGHT
+    torchControlPosition = Anchor.BOTTOM_RIGHT
+    zoomControlPosition = Anchor.TOP_LEFT
+}
 ```
 
 Configure the [`highlightProvider`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.AnnotationProvider).
 
-```java
-private class AnnotationProvider implements BarcodeArAnnotationProvider {
+```kotlin
+private class AnnotationProvider: BarcodeArAnnotationProvider {
 
-    @Override
-    public void annotationForBarcode(@NonNull Context context, @NonNull Barcode barcode, @NonNull Callback callback) {
-        BarcodeArStatusIconAnnotation annotation = new BarcodeArStatusIconAnnotation(context, barcode);
-        annotation.setText("Example annotation");
-        callback.onData(annotation);
+    override fun annotationForBarcode(context: Context, barcode: Barcode, callback: Callback) {
+        val annotation = BarcodeArStatusIconAnnotation(context, barcode).apply {
+            text = "Example annotation"
+        }
+        callback.onData(annotation)
     }
 }
 
-private class HighlightProvider implements BarcodeArHighlightProvider {
+private class HighlightProvider: BarcodeArHighlightProvider {
 
-    @Override
-    public void highlightForBarcode(@NonNull Context context, @NonNull Barcode barcode, @NonNull Callback callback) {
-        callback.onData(new BarcodeArRectangleHighlight(context, barcode));
+    override fun highlightForBarcode(context: Context, barcode: Barcode, callback: Callback) {
+        callback.onData(BarcodeArRectangleHighlight(context, barcode))
     }
 }
 ```
 
 And set them to the view:
 
-```java
-barcodeArView.setHighlightProvider(new HighlightProvider());
-barcodeArView.setAnnotationProvider(new AnnotationProvider());
+```kotlin
+barcodeArView.highlightProvider = HighlightProvider()
+barcodeArView.annotationProvider = AnnotationProvider()
 ```
 
 Connect the `BarcodeArView` to the Android lifecycle. The view is dependent on calling `BarcodeArView.onPause()`, `BarcodeArView.onResume()`, and `BarcodeArView.onDestroy()` to set up the camera and its overlays properly.
 
-```java
-@Override
-public void onResume() {
-    super.onResume();
-    barcodeArView.onResume();
+```kotlin
+override fun onResume() {
+    super.onResume()
+    barcodeArView.onResume()
 }
 
-@Override
-public void onPause() {
-    super.onPause();
-    barcodeArView.onPause();
+override fun onPause() {
+    super.onPause()
+    barcodeArView.onPause()
 }
 
-@Override
-public void onDestroy() {
-    super.onDestroy();
-    barcodeArView.onDestroy();
+override fun onDestroy() {
+    super.onDestroy(); 
+    barcodeArView.onDestroy()
 }
 ```
 
@@ -153,19 +152,18 @@ public void onDestroy() {
 
 If you want a callback when a highlight is tapped, register a [BarcodeArViewUiListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-ar-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeArViewUiListener).
 
-```java
-barcodeArView.setUiListener(new BarcodeArViewUiListener() {
-    @Override
-    public void onHighlightForBarcodeTapped(@NonNull BarcodeAr barcodeAr, @NonNull Barcode barcode, @NonNull BarcodeArHighlight highlight, @NonNull View highlightView) {
+```kotlin
+barcodeArView.uiListener = object : BarcodeArViewUiListener {
+    override fun onHighlightForBarcodeTapped(barcodeAr: BarcodeAr, barcode: Barcode, highlight: BarcodeArHighlight, highlightView: View) {
         // handle tap
     }
-});
+}
 ```
 
 ## Start Searching
 
 With everything configured, you can now start searching for items. This is done by calling `barcodeArView.start()`.
 
-```java
-barcodeArView.start();
+```kotlin
+barcodeArView.start()
 ```

@@ -66,7 +66,7 @@ val settings = LabelCaptureSettings.builder()
         // Add a barcode field with the expected symbologies and pattern
         .addCustomBarcode()
             .setSymbologies(Symbology.EAN13_UPCA, Symbology.CODE128)
-            .setPattern("\\d{12,14}")
+            .setAnchorRegexes("\\d{12,14}")
         .buildFluent("<your-barcode-field-name>")
         // Add a text field for capturing expiry dates
         .addExpiryDateText()
@@ -134,7 +134,7 @@ labelCapture.addListener(object : LabelCaptureListener {
     override fun onSessionUpdated(
         mode: LabelCapture,
         session: LabelCaptureSession,
-        data: FrameData
+        data: FrameData,
     ) {
         /*
          * The session update callback is called for every processed frame.
@@ -278,9 +278,9 @@ val dataCaptureView = DataCaptureView.newInstance(requireContext(), dataCaptureC
  */
 val container = /* get your containing view here, e.g. with inflate or findViewById */
 container.addView(
-  dataCaptureView,
-  ViewGroup.LayoutParams.MATCH_PARENT,
-  ViewGroup.LayoutParams.MATCH_PARENT
+    dataCaptureView,
+    ViewGroup.LayoutParams.MATCH_PARENT,
+    ViewGroup.LayoutParams.MATCH_PARENT,
 )
 
 /*
@@ -328,19 +328,19 @@ Next, you need to create a new instance of the [Camera](https://docs.scandit.com
 
 When initializing the camera, you can pass the recommended camera settings for Label Capture.
 
-```java
-camera = Camera.getDefaultCamera(LabelCapture.createRecommendedCameraSettings());
+```kotlin
+val camera = Camera.getDefaultCamera(LabelCapture.createRecommendedCameraSettings())
 if (camera == null) {
-    throw new IllegalStateException("Failed to init camera!");
+    throw IllegalStateException("Failed to init camera!")
 }
-dataCaptureContext.setFrameSource(camera);
+dataCaptureContext.setFrameSource(camera)
 ```
 
 Once the Camera, DataCaptureContext, DataCaptureView and LabelCapture are initialized, you can switch on the camera to start capturing labels.
 Typically, this is done on resuming the view and when the user granted permission to use the camera, or once the user pressed continue scanning after handling a previous scan.
 
-```java
-camera.switchToDesiredState(FrameSourceState.ON);
+```kotlin
+camera.switchToDesiredState(FrameSourceState.ON)
 ```
 
 ## Provide Feedback

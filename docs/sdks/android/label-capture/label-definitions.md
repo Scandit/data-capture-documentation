@@ -36,10 +36,9 @@ Use the `LabelCaptureSettings` builder to configure a pre-built label definition
 ![Price Label Example](/img/slc/price-label.png)
 
 ```kotlin
-val settings = 
-    LabelCaptureSettings.builder()
-        .addLabel(LabelDefinition.createPriceCaptureDefinition("price-label"))
-        .build
+val settings = LabelCaptureSettings.builder()
+    .addLabel(LabelDefinition.createPriceCaptureDefinition("price-label"))
+    .build()
 ```
 
 ## Custom Labels
@@ -77,19 +76,18 @@ This example shows how to create a custom label definition for a fish shipping b
 ![Fish Shipping Box Example](/img/slc/fish-shipping-box.png)
 
 ```kotlin
-val settings =
-    LabelCaptureSettings.builder()
-        .addLabel()
-            .addCustomBarcode()
-                .setSymbologies(Symbology.CODE128)
-            .buildFluent("barcode-field")
-            .addCustomText()
-                .setAnchorRegexes("Batch")
-                .setValueRegexes("FZ\\d{5,10}")
-                .isOptional(true)
-            .buildFluent("batch-number-field")
-        .buildFluent("shipping-label")
-        .build
+val settings = LabelCaptureSettings.builder()
+    .addLabel()
+        .addCustomBarcode()
+            .setSymbologies(Symbology.CODE128)
+        .buildFluent("barcode-field")
+        .addCustomText()
+            .setAnchorRegexes("Batch")
+            .setValueRegexes("FZ\\d{5,10}")
+            .isOptional(true)
+        .buildFluent("batch-number-field")
+    .buildFluent("shipping-label")
+.build()
 ```
 
 ### Pre-built Fields
@@ -140,13 +138,12 @@ This example demonstrates how to configure a label definition for a hard disk dr
 ![Hard Disk Drive Label Example](/img/slc/hdd-label.png)
 
 ```kotlin
-val settings = 
-    LabelCaptureSettings.builder()
-        .addLabel()
-            .addSerialNumberBarcode()
-            .buildFluent("serial-number")
-            .addPartNumberBarcode()
-            .buildFluent("part-number")
-        .buildFluent("hdd-label")
-        .build
+val settings = LabelCaptureSettings.builder()
+    .addLabel()
+        .addSerialNumberBarcode()
+        .buildFluent("serial-number")
+        .addPartNumberBarcode()
+        .buildFluent("part-number")
+    .buildFluent("hdd-label")
+.build()
 ```

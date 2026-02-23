@@ -38,23 +38,20 @@ You can customize:
 
 To emit an error, you have to implement a [`SparkScanFeedbackDelegate`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-feedback-delegate.html#interface-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate) and set it to the `SparkScanView`:
 
-```java
-sparkScanView.setFeedbackDelegate(this);
+```kotlin
+sparkScanView.feedbackDelegate = this
 ```
 
 In the [`SparkScanFeedbackDelegate.getFeedbackForBarcode()`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-feedback-delegate.html#method-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate.GetFeedbackForBarcode) you can then return an error or a success feedback:
 
-```java
-@Nullable
-@Override
-public SparkScanBarcodeFeedback getFeedbackForBarcode(@NonNull Barcode barcode) {
+```kotlin
+override fun getFeedbackForBarcode(barcode: Barcode): SparkScanBarcodeFeedback? =
   if (isValidBarcode(barcode)) {
-        return new SparkScanBarcodeFeedback.Success();
+      SparkScanBarcodeFeedback.Success()
   } else {
-        return new SparkScanBarcodeFeedback.Error("This code should not have been scanned",
-        TimeInterval.seconds(60f));
+      SparkScanBarcodeFeedback.Error("This code should not have been scanned",
+          TimeInterval.seconds(60f))
   }
-}
 ```
 
 

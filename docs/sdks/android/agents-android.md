@@ -100,7 +100,7 @@ override fun onPause() { sparkView.onPause(); super.onPause() }
 // Listen for results
 sparkScan.addListener(object : SparkScanListener {
     override fun onBarcodeScanned(spark: SparkScan, session: SparkScanSession, data: FrameData?) {
-        val barcode = session.newlyRecognizedBarcode.firstOrNull()
+        val barcode = session.newlyRecognizedBarcode
         barcode?.let { /* handle on UI thread */ }
     }
 })
@@ -142,13 +142,10 @@ val overlay = BarcodeCaptureOverlay.newInstance(barcodeCapture, captureView)
 
 barcodeCapture.addListener(object : BarcodeCaptureListener {
     override fun onBarcodeScanned(mode: BarcodeCapture, session: BarcodeCaptureSession, data: FrameData?) {
-        val code = session.newlyRecognizedBarcodes.firstOrNull()?.data
+        val code = session.newlyRecognizedBarcode?.data
         // handle result
     }
 })
-
-override fun onResume() { super.onResume(); captureView.onResume() }
-override fun onPause() { captureView.onPause(); super.onPause() }
 ```
 
 ---
@@ -207,7 +204,7 @@ Typical flow:
 
 Kotlin sketch:
 ```kotlin
-val labelSettings = LabelCaptureSettings(/* configure with your label definition */)
+val labelSettings = LabelCaptureSettings.builder()/* configure with your label definition */.build()
 val labelCapture = LabelCapture.forDataCaptureContext(dataCaptureContext, labelSettings)
 
 val captureView = DataCaptureView.newInstance(context, dataCaptureContext)
@@ -218,7 +215,7 @@ val validationOverlay = LabelCaptureValidationFlowOverlay.newInstance(
 
 labelCapture.addListener(object : LabelCaptureListener {
     override fun onLabelCaptured(capture: LabelCapture, session: LabelCaptureSession, data: FrameData?) {
-        val fields = session.newlyCapturedLabels.firstOrNull()?.fields
+        val fields = session.capturedLabels.firstOrNull()?.fields
         // Extract required field values
     }
 })
@@ -237,7 +234,7 @@ labelCapture.addListener(object : LabelCaptureListener {
 Kotlin outline:
 ```kotlin
 val idSettings = IdCaptureSettings().apply {
-    supportedDocuments = EnumSet.of(SupportedDocuments.IdentityCard, SupportedDocuments.DLVIZ)
+    acceptedDocuments = listOf(IdCard(IdCaptureRegion.ANY), DriverLicense(IdCaptureRegion.ANY))
     // Configure sides/regions as required
 }
 val idCapture = IdCapture.forDataCaptureContext(dataCaptureContext, idSettings)
@@ -246,8 +243,7 @@ val captureView = DataCaptureView.newInstance(context, dataCaptureContext)
 val overlay = IdCaptureOverlay.newInstance(idCapture, captureView)
 
 idCapture.addListener(object : IdCaptureListener {
-    override fun onIdCaptured(mode: IdCapture, session: IdCaptureSession, data: FrameData?) {
-        val capturedId = session.newlyCapturedId
+    override fun onIdCaptured(mode: IdCapture, id: CapturedId) {
         // Consume fields (name, DOB, document number, etc.)
     }
 })
