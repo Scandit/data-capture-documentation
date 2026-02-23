@@ -126,7 +126,7 @@ When using the built-in camera there are recommended settings for each capture m
 recommended settings and create the camera from it:
 
 ```js
-const cameraSettings = Scandit.BarcodeSelection.recommendedCameraSettings;
+const cameraSettings = Scandit.BarcodeSelection.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
 

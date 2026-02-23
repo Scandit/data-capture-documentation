@@ -35,7 +35,7 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to [you
 The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext 'data capture context class'). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```js
-const context = Scandit.DataCaptureContext.forLicenseKey(
+const context = DataCaptureContext.forLicenseKey(
 	'-- ENTER YOUR SCANDIT LICENSE KEY HERE --'
 );
 ```
@@ -49,7 +49,7 @@ Barcode selection is orchestrated by the [BarcodeSelection](https://docs.scandit
 For this tutorial, we will setup barcode scanning for a small list of different barcode types, called [symbologies](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology). The list of symbologies to enable is highly application specific. We recommend that you only enable the list of symbologies your application requires.
 
 ```js
-const settings = new Scandit.BarcodeSelectionSettings();
+const settings = new BarcodeSelectionSettings();
 settings.enableSymbologies([
 	Symbology.Code128,
 	Symbology.EAN8,
@@ -79,7 +79,7 @@ _Creating the mode_
 Next, create a [BarcodeSelection](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) instance with the settings initialized in the previous step:
 
 ```js
-const barcodeSelection = Scandit.BarcodeSelection.forContext(context, settings);
+const barcodeSelection = BarcodeSelection.forContext(context, settings);
 ```
 
 ## Register the Barcode Selection Listener
@@ -118,11 +118,11 @@ In Android, the user must explicitly grant permission for each app to access cam
 When using the built-in camera there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
 
 ```js
-const cameraSettings = Scandit.BarcodeSelection.recommendedCameraSettings;
+const cameraSettings = BarcodeSelection.recommendedCameraSettings;
 
 // Depending on the use case further camera settings adjustments can be made here.
 
-const camera = Scandit.Camera.default;
+const camera = Camera.default;
 
 if (camera) {
 	camera.applySettings(cameraSettings);
