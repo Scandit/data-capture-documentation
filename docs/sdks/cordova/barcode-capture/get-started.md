@@ -123,7 +123,7 @@ In Android, the user must explicitly grant permission for each app to access cam
 When using the built-in camera there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
 
 ```js
-const cameraSettings = Scandit.BarcodeCapture.recommendedCameraSettings;
+const cameraSettings = Scandit.BarcodeCapture.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
 
@@ -160,10 +160,8 @@ view.connectToElement(htmlElement);
 To visualize the results of barcode scanning, the following [overlay](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) can be added:
 
 ```js
-const overlay = Scandit.BarcodeCaptureOverlay.withBarcodeCaptureForView(
-	barcodeCapture,
-	view
-);
+const overlay = new Scandit.BarcodeCaptureOverlay(barcodeCapture);
+view.addOverlay(overlay);
 ```
 
 ## Disabling Barcode Capture
