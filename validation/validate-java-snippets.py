@@ -70,9 +70,6 @@ KOTLIN_CACHE_FILE = ANDROID_PROJECT_DIR / "build" / "snippet-kotlin-cache.json"
 # Wildcard imports that cover the Scandit SDK packages used in the docs.
 # Extend this list if you add new SDK modules to the Android project.
 JAVA_COMMON_IMPORTS = """\
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.util.ArrayList;
@@ -81,10 +78,7 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;"""
 
-KOTLIN_COMMON_IMPORTS = """\
-import android.content.Context
-import android.content.Intent
-import android.os.Bundle"""
+KOTLIN_COMMON_IMPORTS = """"""
 
 # =============================================================================
 # Language
