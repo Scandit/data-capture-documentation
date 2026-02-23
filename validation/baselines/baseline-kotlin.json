@@ -60,6 +60,11 @@
     "snippet": 4
   },
   {
+    "hash": "873e9864b2c762be8816e473369d1d304864d737eb8b497c50634e7f864ce5d6",
+    "file": "docs/sdks/android/barcode-selection/get-started.md",
+    "snippet": 5
+  },
+  {
     "hash": "25489abeb5e906847f1dbfd3591d211c0e078e3f55be76d874b0ee5ae1eb8070",
     "file": "docs/sdks/android/barcode-selection/get-started.md",
     "snippet": 6
@@ -300,6 +305,11 @@
     "snippet": 2
   },
   {
+    "hash": "873e9864b2c762be8816e473369d1d304864d737eb8b497c50634e7f864ce5d6",
+    "file": "docs/sdks/android/matrixscan-count/get-started.md",
+    "snippet": 3
+  },
+  {
     "hash": "4ff99ae3734e33fe4744d5e4cee7a10cf736522a5b0b64eb879b634391647c7b",
     "file": "docs/sdks/android/matrixscan-count/get-started.md",
     "snippet": 4
@@ -488,6 +498,11 @@
     "hash": "04f55a5782e31283165baf96762e2d800e793fa592d729280561bf682b8f037c",
     "file": "docs/sdks/android/matrixscan/get-started.md",
     "snippet": 2
+  },
+  {
+    "hash": "873e9864b2c762be8816e473369d1d304864d737eb8b497c50634e7f864ce5d6",
+    "file": "docs/sdks/android/matrixscan/get-started.md",
+    "snippet": 3
   },
   {
     "hash": "25489abeb5e906847f1dbfd3591d211c0e078e3f55be76d874b0ee5ae1eb8070",
