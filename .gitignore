@@ -8,6 +8,11 @@
 .docusaurus
 .cache-loader
 
+# Python
+__pycache__/
+*.pyc
+validation/cache/
+
 # Misc
 .DS_Store
 .env.local
