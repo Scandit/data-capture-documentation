@@ -16,7 +16,7 @@ import com.scandit.datacapture.core.ui.DataCaptureView
 abstract class ValidationBase {
 
     // Android context — typically an Activity or Application
-    protected var context: Context? = null
+    protected lateinit var context: Context
 
     // Core SDK
     protected lateinit var dataCaptureContext: DataCaptureContext

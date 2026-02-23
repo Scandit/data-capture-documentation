@@ -122,7 +122,7 @@ class Language(Enum):
 
     @property
     def baseline_file(self) -> Path:
-        return VALIDATION_DIR / f"baseline-{self.value}.json"
+        return VALIDATION_DIR / "baselines" / f"baseline-{self.value}.json"
 
     @property
     def generate_fn(self) -> Callable:
@@ -564,15 +564,24 @@ def _save_cache(cache: dict, sdk_version: str, cache_file: Path):
 
 
 def _load_baseline(baseline_file: Path) -> set:
-    """Return the set of snippet hashes recorded in the baseline file, or empty set."""
+    """Return a set of (hash, file, snippet_index) tuples from the baseline file."""
     try:
-        return set(json.loads(baseline_file.read_text(encoding="utf-8")))
+        data = json.loads(baseline_file.read_text(encoding="utf-8"))
+        return {(entry["hash"], entry["file"], entry["snippet"]) for entry in data}
     except (FileNotFoundError, json.JSONDecodeError):
         return set()
 
 
-def _save_baseline(hashes: List[str], baseline_file: Path):
-    baseline_file.write_text(json.dumps(sorted(hashes), indent=2), encoding="utf-8")
+def _save_baseline(entries: List[dict], baseline_file: Path):
+    """Write a human-friendly baseline file sorted by file path then snippet index."""
+    baseline_file.parent.mkdir(parents=True, exist_ok=True)
+    baseline_file.write_text(
+        json.dumps(
+            sorted(entries, key=lambda e: (e["file"], e["snippet"])),
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
 
 
 def compile_java_sources(sources: dict, sdk_version: str) -> dict:
@@ -714,7 +723,7 @@ def report(
 ) -> int:
     total = len(sources)
     failed = len(errors)
-    passed = total - failed - baseline_skipped
+    passed = total - failed
 
     print(f"\n{'=' * 60}")
     print(f"{language.label} Snippet Validation")
@@ -794,6 +803,27 @@ def main():
     n_files = len({s.source_file for s in snippets})
     print(f"  {len(snippets)} snippets across {n_files} files")
 
+    # In normal mode, skip snippets already covered by the baseline entirely
+    # so we don't generate or compile them at all.
+    baseline_skipped = 0
+    if not args.baseline:
+        baseline = _load_baseline(language.baseline_file)
+        if baseline:
+            before = len(snippets)
+            snippets = [
+                s
+                for s in snippets
+                if (
+                    _snippet_hash(s.content),
+                    str(s.source_file.relative_to(REPO_ROOT)),
+                    s.index,
+                )
+                not in baseline
+            ]
+            baseline_skipped = before - len(snippets)
+            if baseline_skipped:
+                print(f"  {baseline_skipped} skipped (baseline)")
+
     print(f"Generating {language.label} source files…")
     sources = generate_all(snippets, language.generate_fn, language)
 
@@ -807,28 +837,23 @@ def main():
 
     if args.baseline:
         if errors:
-            failed_hashes = [_snippet_hash(sources[cn][0].content) for cn in errors]
-            _save_baseline(failed_hashes, language.baseline_file)
+            failed_entries = [
+                {
+                    "hash": _snippet_hash(sources[cn][0].content),
+                    "file": str(sources[cn][0].source_file.relative_to(REPO_ROOT)),
+                    "snippet": sources[cn][0].index,
+                }
+                for cn in errors
+            ]
+            _save_baseline(failed_entries, language.baseline_file)
             print(
-                f"Baseline saved: {len(failed_hashes)} failing snippet(s) → "
+                f"Baseline saved: {len(failed_entries)} failing snippet(s) → "
                 f"{language.baseline_file.relative_to(REPO_ROOT)}"
             )
         else:
             print("All snippets passed — no baseline file generated.")
         returncode = 1 if errors else 0
         sys.exit(report(sources, errors, language, returncode))
-
-    # Normal mode: filter out errors covered by the baseline
-    baseline = _load_baseline(language.baseline_file)
-    baseline_skipped = 0
-    if baseline:
-        filtered = {
-            cn: errs
-            for cn, errs in errors.items()
-            if _snippet_hash(sources[cn][0].content) not in baseline
-        }
-        baseline_skipped = len(errors) - len(filtered)
-        errors = filtered
 
     returncode = 1 if errors else 0
     sys.exit(report(sources, errors, language, returncode, baseline_skipped))

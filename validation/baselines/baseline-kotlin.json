@@ -1,0 +1,602 @@
+[
+  {
+    "hash": "0f44203557870d33daf3c7cf6ac179960aaf4441f3d8079fd05705ce5627021a",
+    "file": "docs/sdks/android/agents-android.md",
+    "snippet": 0
+  },
+  {
+    "hash": "3cd47a52bb6d0f2bca3be23fad107f49c01d68f5119a2808e809e14138f94ffd",
+    "file": "docs/sdks/android/agents-android.md",
+    "snippet": 1
+  },
+  {
+    "hash": "b0ed2a28e222486e229476689c4ddb45c9c99e191f7cdd0166915b8cafb2ef8b",
+    "file": "docs/sdks/android/agents-android.md",
+    "snippet": 2
+  },
+  {
+    "hash": "f756fdf21978c2258f17f65d4b39458e542c91945a458d7a54bf273ce6b0a7bf",
+    "file": "docs/sdks/android/agents-android.md",
+    "snippet": 3
+  },
+  {
+    "hash": "9de4ec087ee429f4c17e27bb32152eea0fd580e853b6c83a1332bb17af3c4187",
+    "file": "docs/sdks/android/agents-android.md",
+    "snippet": 4
+  },
+  {
+    "hash": "261a67173ae73e2f638b517dcbf64e33cd86ad6e32f011bc449688a73190145f",
+    "file": "docs/sdks/android/agents-android.md",
+    "snippet": 5
+  },
+  {
+    "hash": "e828a61a5054d138a4ef40db37bffb621789df3dec988afe98f0df1f7900eb98",
+    "file": "docs/sdks/android/agents-android.md",
+    "snippet": 6
+  },
+  {
+    "hash": "0032c8f92cdad5e7edc5a621b32e1f409a4378e564fdfb43d1a85bf8e31b0bdb",
+    "file": "docs/sdks/android/barcode-generator.md",
+    "snippet": 0
+  },
+  {
+    "hash": "fe417170e5af96481b1bdf0d798a7bfae5c0090e563900538ed26f7c98dd4049",
+    "file": "docs/sdks/android/barcode-generator.md",
+    "snippet": 1
+  },
+  {
+    "hash": "a4955fade235a54489dd77d36b7428fe5b4b6ded473414e1924d648fbfc43d6e",
+    "file": "docs/sdks/android/barcode-generator.md",
+    "snippet": 2
+  },
+  {
+    "hash": "fe417170e5af96481b1bdf0d798a7bfae5c0090e563900538ed26f7c98dd4049",
+    "file": "docs/sdks/android/barcode-generator.md",
+    "snippet": 3
+  },
+  {
+    "hash": "04f2ea1ad300cdcc5c4359134b035975cb91d2297c54abee5900f1161ffc68a7",
+    "file": "docs/sdks/android/barcode-selection/get-started.md",
+    "snippet": 0
+  },
+  {
+    "hash": "3a84e846cb001a078e6c3fc84e51775d5c55ab7c3531b4181bcc2f6a48e28d1b",
+    "file": "docs/sdks/android/barcode-selection/get-started.md",
+    "snippet": 1
+  },
+  {
+    "hash": "08093a26883b2f138f51ba9f46e43345024d7326bc26c5d9dea1c39ddfee2438",
+    "file": "docs/sdks/android/barcode-selection/get-started.md",
+    "snippet": 2
+  },
+  {
+    "hash": "969a4f8a3976b02c898c69c545f274b4432bda43322f4089366c6712757d26ef",
+    "file": "docs/sdks/android/barcode-selection/get-started.md",
+    "snippet": 3
+  },
+  {
+    "hash": "21b48173b9adbd8ae6c3988c3fd49b094a4e009a4b2eba180cb548581e1b6fb9",
+    "file": "docs/sdks/android/barcode-selection/get-started.md",
+    "snippet": 4
+  },
+  {
+    "hash": "25489abeb5e906847f1dbfd3591d211c0e078e3f55be76d874b0ee5ae1eb8070",
+    "file": "docs/sdks/android/barcode-selection/get-started.md",
+    "snippet": 6
+  },
+  {
+    "hash": "ec027539d9ea1182209c18281dae2c78ba32507f094f43d8dd59d1045df01c64",
+    "file": "docs/sdks/android/id-capture/advanced.md",
+    "snippet": 0
+  },
+  {
+    "hash": "d72f9f783287525e270bd9f6ce994468980d2685a200f7ee0415e9ac8bf5e980",
+    "file": "docs/sdks/android/id-capture/advanced.md",
+    "snippet": 1
+  },
+  {
+    "hash": "21e3737a90ac87150c01af5a99ec57e9e6468ad1e7fa2bc3f3f1c1ab9d0af160",
+    "file": "docs/sdks/android/id-capture/advanced.md",
+    "snippet": 2
+  },
+  {
+    "hash": "8399e1dd154a6281ab82bb3434bb395f81d94de46c0771e6a0a46b8c2a47e9b1",
+    "file": "docs/sdks/android/id-capture/get-started.md",
+    "snippet": 0
+  },
+  {
+    "hash": "d4ae8c91137c55527c58af1706aedfa0af50ec5585be1f7929fedd7e34960d40",
+    "file": "docs/sdks/android/id-capture/get-started.md",
+    "snippet": 1
+  },
+  {
+    "hash": "b6cdce1bc5ae219167b4c8c0b24ece49337141c17a69787236657d2643e1919d",
+    "file": "docs/sdks/android/id-capture/get-started.md",
+    "snippet": 2
+  },
+  {
+    "hash": "a23656a463abe4ee1d45cfdbb8d8aa7f59cf51fbe82c000eb0e45b9ee5bd9bc3",
+    "file": "docs/sdks/android/id-capture/get-started.md",
+    "snippet": 3
+  },
+  {
+    "hash": "32770db80f08ed98e3de7e529198915f43be1643fe69f6874ed5ebbebe78cb7c",
+    "file": "docs/sdks/android/id-capture/get-started.md",
+    "snippet": 4
+  },
+  {
+    "hash": "c97a0985ae5be09d43d38ba6ded59aea524947d8c525d53c81f3625cc73c570a",
+    "file": "docs/sdks/android/id-capture/get-started.md",
+    "snippet": 5
+  },
+  {
+    "hash": "efdd28b90178565cc4f24ced4ec136373b138dbf5c770b94cb4f18e951b9d520",
+    "file": "docs/sdks/android/id-capture/get-started.md",
+    "snippet": 6
+  },
+  {
+    "hash": "56eb86e33d9ef3b2601a47e9c2cc297221169d0338760a4066d5b7371fc67c80",
+    "file": "docs/sdks/android/id-capture/get-started.md",
+    "snippet": 7
+  },
+  {
+    "hash": "61ae43c7fe4bbf370edfd28bedcf3c0ddcab57dbd5abebdea879930688cdf23a",
+    "file": "docs/sdks/android/id-capture/get-started.md",
+    "snippet": 8
+  },
+  {
+    "hash": "045d6162fed583ea91f46b51d4c920484c9dd979600982800a70c367e63bbf5c",
+    "file": "docs/sdks/android/label-capture/advanced.md",
+    "snippet": 0
+  },
+  {
+    "hash": "e7d6de9504c0aafcaa65f61061b675d5410f83d6f6c976e4845e82510e8180bd",
+    "file": "docs/sdks/android/label-capture/advanced.md",
+    "snippet": 1
+  },
+  {
+    "hash": "32c22e21909a7102e88674cdd6484956063246a1842c8bb8f21821c889a9c966",
+    "file": "docs/sdks/android/label-capture/advanced.md",
+    "snippet": 2
+  },
+  {
+    "hash": "7dd0c537ed88044f93969a0216e877aed081122657cd7aba2754e7be8380a2e5",
+    "file": "docs/sdks/android/label-capture/advanced.md",
+    "snippet": 3
+  },
+  {
+    "hash": "454201d95761598e1342c5d572d6d023f318973e6984db517bd61e4f42f8f7f8",
+    "file": "docs/sdks/android/label-capture/advanced.md",
+    "snippet": 4
+  },
+  {
+    "hash": "5e1c7d2ec5c668133bc81ec19c156ce805edc57c668bf4bda419dccafb9b3710",
+    "file": "docs/sdks/android/label-capture/get-started.md",
+    "snippet": 0
+  },
+  {
+    "hash": "3c654b52bd8661267b77b98af2960f3d0b78e378e88ec3ba74b7f0a0744eb537",
+    "file": "docs/sdks/android/label-capture/get-started.md",
+    "snippet": 1
+  },
+  {
+    "hash": "234a7f817eeb3365f23e6695bf492c50a7c4eab3acc7aa60d67ba4a54b355cca",
+    "file": "docs/sdks/android/label-capture/get-started.md",
+    "snippet": 2
+  },
+  {
+    "hash": "63cd13e0d7164c77bda494c78bdae4343235133e8140fae177d32854e8ae1aa2",
+    "file": "docs/sdks/android/label-capture/get-started.md",
+    "snippet": 3
+  },
+  {
+    "hash": "61ae43c7fe4bbf370edfd28bedcf3c0ddcab57dbd5abebdea879930688cdf23a",
+    "file": "docs/sdks/android/label-capture/get-started.md",
+    "snippet": 4
+  },
+  {
+    "hash": "cf475e4d8df3de1718f34f5b7b899c1c9f49bcf9e0dba37425835952d345ad9f",
+    "file": "docs/sdks/android/label-capture/get-started.md",
+    "snippet": 5
+  },
+  {
+    "hash": "406b935abc5739b20a7b5448bdfbf6a6cf60406e9274267e467bc94a0caeb2cd",
+    "file": "docs/sdks/android/label-capture/label-definitions.md",
+    "snippet": 0
+  },
+  {
+    "hash": "72e6b02d5247eceb3d198e6752f35cb05ca6665e964573f0f2fb3e5aca025a42",
+    "file": "docs/sdks/android/label-capture/label-definitions.md",
+    "snippet": 1
+  },
+  {
+    "hash": "50926ee761b36634b5fd4cc2a29a32701d19f372bb4ae01b4959fe844a535e1d",
+    "file": "docs/sdks/android/label-capture/label-definitions.md",
+    "snippet": 2
+  },
+  {
+    "hash": "faf74809b65ded4eb8dbfc75cade0f53dbb052f5d829c967802b74ca400a2631",
+    "file": "docs/sdks/android/matrixscan-ar/get-started.md",
+    "snippet": 0
+  },
+  {
+    "hash": "232e8394c745dbb622793d1b7974aec655ce5a548028993339dcff938f1163ef",
+    "file": "docs/sdks/android/matrixscan-ar/get-started.md",
+    "snippet": 1
+  },
+  {
+    "hash": "7966a030a3d419dafec258a1d6e0dd62fc77091a750e1d956624eecd29ab1f1f",
+    "file": "docs/sdks/android/matrixscan-ar/get-started.md",
+    "snippet": 2
+  },
+  {
+    "hash": "bcb21ac024e2cecfb3d646b22f9f45ea7416141375c159c341b151613f386027",
+    "file": "docs/sdks/android/matrixscan-ar/get-started.md",
+    "snippet": 3
+  },
+  {
+    "hash": "79d2f2a4af6763424d03d55dd009d0b2a7bda1bff86ff7ad76b6088ccb5c3d65",
+    "file": "docs/sdks/android/matrixscan-ar/get-started.md",
+    "snippet": 4
+  },
+  {
+    "hash": "c9dc830ff66f9edaf9d90b566595ee2f1fde65e4a642ebaf41e0df2462f2af41",
+    "file": "docs/sdks/android/matrixscan-ar/get-started.md",
+    "snippet": 5
+  },
+  {
+    "hash": "9d53a1a5725562706293aa17ff0b69eccadb39b0aa246afc2693c19b5a86bcdc",
+    "file": "docs/sdks/android/matrixscan-ar/get-started.md",
+    "snippet": 6
+  },
+  {
+    "hash": "59fe87d44dced82d1c8813814fe468d0c2e836c85006bf055da7b139fc10c5a7",
+    "file": "docs/sdks/android/matrixscan-ar/get-started.md",
+    "snippet": 7
+  },
+  {
+    "hash": "d2e8c25739cd063b0d58837148660f11f259ec6bd585b28ced6a7160e5cf179c",
+    "file": "docs/sdks/android/matrixscan-ar/get-started.md",
+    "snippet": 8
+  },
+  {
+    "hash": "3033140fc1f643775a144d377dde4ba44b4adb23ecf4bd220d563b03c755d90f",
+    "file": "docs/sdks/android/matrixscan-count/advanced.md",
+    "snippet": 0
+  },
+  {
+    "hash": "9a1b9b9d4521560e3b680e3fb6094a7f6fc93c168b174d5b07d6de206a58f4d9",
+    "file": "docs/sdks/android/matrixscan-count/advanced.md",
+    "snippet": 1
+  },
+  {
+    "hash": "99fe3df2d5a6db49a5aeea520ee25468c65bb6236e8f5f4332571a8c2bcc659c",
+    "file": "docs/sdks/android/matrixscan-count/advanced.md",
+    "snippet": 2
+  },
+  {
+    "hash": "8f1f0483b0c4c3418ef20d7edc4714dcd79a9da6f0b489d5b84aae120826c50f",
+    "file": "docs/sdks/android/matrixscan-count/advanced.md",
+    "snippet": 3
+  },
+  {
+    "hash": "9b571bf95a877f864cefe5d287f1c026d2d49c83b265eefc3a4a46d0ec7416ee",
+    "file": "docs/sdks/android/matrixscan-count/advanced.md",
+    "snippet": 4
+  },
+  {
+    "hash": "d0f7336c2834d30ce8a98287558184102b4df050ae5b874356b799110db1701a",
+    "file": "docs/sdks/android/matrixscan-count/advanced.md",
+    "snippet": 5
+  },
+  {
+    "hash": "77d330cbebbfe9a4401e37e14ae364a5d7e5a6af5f69f6b496c3b46130b66323",
+    "file": "docs/sdks/android/matrixscan-count/advanced.md",
+    "snippet": 6
+  },
+  {
+    "hash": "a6ccf17dccc9a227d54654bb06b9f8b38a91ed3878ff0e14187f2af8cd4ff76f",
+    "file": "docs/sdks/android/matrixscan-count/advanced.md",
+    "snippet": 7
+  },
+  {
+    "hash": "cd43adfa7b8e5fc68bb8d0f628f2ba6ba7ffebe30ea69696d460786f9bb789af",
+    "file": "docs/sdks/android/matrixscan-count/advanced.md",
+    "snippet": 8
+  },
+  {
+    "hash": "cd04dba1d35642f3b55f182fb642942255b6a82b5bdd2d7ac170dfb6303e159c",
+    "file": "docs/sdks/android/matrixscan-count/get-started.md",
+    "snippet": 0
+  },
+  {
+    "hash": "ee7c29698554cb9c900cd7a2b5a623dcf64bf2ab854b20561c7051431a6d21b5",
+    "file": "docs/sdks/android/matrixscan-count/get-started.md",
+    "snippet": 1
+  },
+  {
+    "hash": "00f3061be5a99df6126fa4533e165be1ba9e6ee059792aa6f9a15a5e9456d1cf",
+    "file": "docs/sdks/android/matrixscan-count/get-started.md",
+    "snippet": 2
+  },
+  {
+    "hash": "4ff99ae3734e33fe4744d5e4cee7a10cf736522a5b0b64eb879b634391647c7b",
+    "file": "docs/sdks/android/matrixscan-count/get-started.md",
+    "snippet": 4
+  },
+  {
+    "hash": "ea8d2ca7e84c7e571f361d45c5ce022d40482a108204645cc2af3bc8d566dce9",
+    "file": "docs/sdks/android/matrixscan-count/get-started.md",
+    "snippet": 5
+  },
+  {
+    "hash": "5eb3f0dd4d8e7f3001e201c12daf2cfcd71b28d230f460ac967ff6329eba19ce",
+    "file": "docs/sdks/android/matrixscan-count/get-started.md",
+    "snippet": 6
+  },
+  {
+    "hash": "1e46af91708f7530c2c6bbf439e1e3843d8788c54fcc67dc5318b6599ed6cc8b",
+    "file": "docs/sdks/android/matrixscan-count/get-started.md",
+    "snippet": 7
+  },
+  {
+    "hash": "d8b381c825eafdd550bd4353a6236e77a68c6781cf0a9528e773bbed867e32ff",
+    "file": "docs/sdks/android/matrixscan-count/get-started.md",
+    "snippet": 8
+  },
+  {
+    "hash": "9f05bccf07bf7e52e651f93153eb8dcca2390d23b0b8d219e8e2ff1cc3b3b071",
+    "file": "docs/sdks/android/matrixscan-count/get-started.md",
+    "snippet": 9
+  },
+  {
+    "hash": "d4fe0a79d37ff05a108f1d94727c7a21becfbb8ada7feb8e25464d6b40781080",
+    "file": "docs/sdks/android/matrixscan-find/advanced.md",
+    "snippet": 0
+  },
+  {
+    "hash": "a31bd9411625b37b709670cb4212b5725c4cebf8176ce59b63ff99e010b42158",
+    "file": "docs/sdks/android/matrixscan-find/advanced.md",
+    "snippet": 1
+  },
+  {
+    "hash": "4f51780cbc027cb57c91912bca8bf1f10fec191b54feb6d264a414c3162e9938",
+    "file": "docs/sdks/android/matrixscan-find/advanced.md",
+    "snippet": 2
+  },
+  {
+    "hash": "6319716b27ed2fb12908f96cba3ca638204343f7528ec42b16461ef216c70905",
+    "file": "docs/sdks/android/matrixscan-find/advanced.md",
+    "snippet": 3
+  },
+  {
+    "hash": "7e39887956d390a1031fdf6da9aeab721919619f5bbdd9ca441ca7d916e71778",
+    "file": "docs/sdks/android/matrixscan-find/advanced.md",
+    "snippet": 4
+  },
+  {
+    "hash": "cafed2fad358a12126a0934c5ddd9731835f205e835fbb782a653ea9b0c46e88",
+    "file": "docs/sdks/android/matrixscan-find/get-started.md",
+    "snippet": 0
+  },
+  {
+    "hash": "755f8229d77ae243243510760dd3c7c482a56125563f012e9d19cca08deeee02",
+    "file": "docs/sdks/android/matrixscan-find/get-started.md",
+    "snippet": 1
+  },
+  {
+    "hash": "0330f582ffc24779ddf4da4e90aab7c25aa8f4a7782d95b19da858c5b7a50347",
+    "file": "docs/sdks/android/matrixscan-find/get-started.md",
+    "snippet": 2
+  },
+  {
+    "hash": "d15a3281b35405bd3738f59b582e8db06c41939f55fc1cef0de3b72657a7f34e",
+    "file": "docs/sdks/android/matrixscan-find/get-started.md",
+    "snippet": 3
+  },
+  {
+    "hash": "7564204f5fb8134c4c96ec28d6cf38726914df226afae4b8bf9b3c359aeb28b0",
+    "file": "docs/sdks/android/matrixscan-find/get-started.md",
+    "snippet": 4
+  },
+  {
+    "hash": "b15daa4290809bda5db66da9a91c99db03416bed81605801e13ac9f1b6af03cf",
+    "file": "docs/sdks/android/matrixscan-find/get-started.md",
+    "snippet": 5
+  },
+  {
+    "hash": "3abcf276de83c58d4f00e061848e37b1a74c590d3d6834781c1f91aa99efb633",
+    "file": "docs/sdks/android/matrixscan-find/get-started.md",
+    "snippet": 6
+  },
+  {
+    "hash": "72b93023cbb42dba02dc1859209c41c32708e9ec4009ec6ed76c84e114d7ad79",
+    "file": "docs/sdks/android/matrixscan-find/get-started.md",
+    "snippet": 7
+  },
+  {
+    "hash": "2e4cdbb1cc4e22f47cd2f35d73cbd5a06d999f3e10a48cbb23102895ae33873c",
+    "file": "docs/sdks/android/matrixscan-pick/advanced.md",
+    "snippet": 0
+  },
+  {
+    "hash": "16dc7506343888488103484f7181ea65067994f7ebdc4acb17f590c94bb60b47",
+    "file": "docs/sdks/android/matrixscan-pick/advanced.md",
+    "snippet": 1
+  },
+  {
+    "hash": "3928be74ecad04eb51788649000390c0b4a9b4005b15f90cd430d3e902aef5e3",
+    "file": "docs/sdks/android/matrixscan-pick/advanced.md",
+    "snippet": 2
+  },
+  {
+    "hash": "e2dbb9620735328a816c30f97725aec5388b0195ad09eacc28db8e2e1f0e602d",
+    "file": "docs/sdks/android/matrixscan-pick/advanced.md",
+    "snippet": 3
+  },
+  {
+    "hash": "76af24f0323e0aae50c65d5b1078888f8e457e1c331faf691568e43104df56d3",
+    "file": "docs/sdks/android/matrixscan-pick/get-started.md",
+    "snippet": 0
+  },
+  {
+    "hash": "9981d6a4141c32f12025b091de6b0e63c586c8aa4b55657cf4eefd3ddee3638d",
+    "file": "docs/sdks/android/matrixscan-pick/get-started.md",
+    "snippet": 1
+  },
+  {
+    "hash": "e02edd1f0a0b1bc9c93cfed0047e7e7270bf36fe09f1a70222d1283fa0ea676f",
+    "file": "docs/sdks/android/matrixscan-pick/get-started.md",
+    "snippet": 2
+  },
+  {
+    "hash": "2ac3208bb314f0e6b5a67d65a234f9ecac2918513e243763cd77d0eab000e1b4",
+    "file": "docs/sdks/android/matrixscan-pick/get-started.md",
+    "snippet": 3
+  },
+  {
+    "hash": "661ecae5efc0a164338c2ac766a540a19a8286802b0a4d541cc2467fff8e49e8",
+    "file": "docs/sdks/android/matrixscan-pick/get-started.md",
+    "snippet": 4
+  },
+  {
+    "hash": "eb4cf9ff8fd1e663e8d9dac25364ed8f1f951f50eed4067475a2bc6a3369cbe2",
+    "file": "docs/sdks/android/matrixscan-pick/get-started.md",
+    "snippet": 5
+  },
+  {
+    "hash": "4b6dfd938a98d303f85834eb78a9dc9f4543da180c6d82e4b2ac021da28071d5",
+    "file": "docs/sdks/android/matrixscan-pick/get-started.md",
+    "snippet": 6
+  },
+  {
+    "hash": "47f1bdc9caba29d1fdbba50982a971f77708a59d98f0f0456551729a38e4bce9",
+    "file": "docs/sdks/android/matrixscan-pick/get-started.md",
+    "snippet": 7
+  },
+  {
+    "hash": "c842a05b1a4825b2539b4f05a746e42eb53e1f913e61594e4b7f20953710d954",
+    "file": "docs/sdks/android/matrixscan/advanced.md",
+    "snippet": 0
+  },
+  {
+    "hash": "d5c4fda86266e4e895b793745a196d04d9dcd6827bf8cef6cffbaaf98f7a259f",
+    "file": "docs/sdks/android/matrixscan/advanced.md",
+    "snippet": 1
+  },
+  {
+    "hash": "61d6d71183e62abd1b9277e996543fb05556097e017798600f0b18437284c667",
+    "file": "docs/sdks/android/matrixscan/advanced.md",
+    "snippet": 2
+  },
+  {
+    "hash": "e3118fa1274700348578f378d63e6ed62656c93f9625fc1e313b2fcfb18022b8",
+    "file": "docs/sdks/android/matrixscan/advanced.md",
+    "snippet": 3
+  },
+  {
+    "hash": "27b45878c6fc0dd870b7173ad05fcfac2919e1b8e7ee8616e9c7af6e7a4facd9",
+    "file": "docs/sdks/android/matrixscan/get-started.md",
+    "snippet": 0
+  },
+  {
+    "hash": "37615aa1fc78337c0fe9cf62155f6ea616c11d8166583c4eaf0310421fcbb7f9",
+    "file": "docs/sdks/android/matrixscan/get-started.md",
+    "snippet": 1
+  },
+  {
+    "hash": "04f55a5782e31283165baf96762e2d800e793fa592d729280561bf682b8f037c",
+    "file": "docs/sdks/android/matrixscan/get-started.md",
+    "snippet": 2
+  },
+  {
+    "hash": "25489abeb5e906847f1dbfd3591d211c0e078e3f55be76d874b0ee5ae1eb8070",
+    "file": "docs/sdks/android/matrixscan/get-started.md",
+    "snippet": 4
+  },
+  {
+    "hash": "efdd28b90178565cc4f24ced4ec136373b138dbf5c770b94cb4f18e951b9d520",
+    "file": "docs/sdks/android/matrixscan/get-started.md",
+    "snippet": 5
+  },
+  {
+    "hash": "11317078f6c1fd2268459baf7716da3bd11e391ef1c475a6cf43dd6dd8b455b2",
+    "file": "docs/sdks/android/matrixscan/get-started.md",
+    "snippet": 6
+  },
+  {
+    "hash": "e33a0291f98d05a95ea8cdc1191bc553f255fe849d6d5647791353ee536c63ae",
+    "file": "docs/sdks/android/matrixscan/get-started.md",
+    "snippet": 7
+  },
+  {
+    "hash": "c0c165e53ce6253d32153b4f6dea5952eaee57ab0f5cc61f585d21b1be3607a7",
+    "file": "docs/sdks/android/matrixscan/get-started.md",
+    "snippet": 8
+  },
+  {
+    "hash": "71cb2a5ede503c99126d0d0f164e102c1673c6779db09463e7aad950aad65477",
+    "file": "docs/sdks/android/matrixscan/get-started.md",
+    "snippet": 9
+  },
+  {
+    "hash": "a9e9e23e405b7cd57d8cc24ac50ed7547ebdca5f81dc1606967f3b041f8230f5",
+    "file": "docs/sdks/android/matrixscan/get-started.md",
+    "snippet": 10
+  },
+  {
+    "hash": "fb00664dcec12e0a4a90ad97d7b241a575d67cdf3978483e4ef0785f23b5572b",
+    "file": "docs/sdks/android/matrixscan/get-started.md",
+    "snippet": 11
+  },
+  {
+    "hash": "1a42e684cfa2fbf5009ced493640da0e93df69322697adfcdd5cd3de85495c2f",
+    "file": "docs/sdks/android/sparkscan/advanced.md",
+    "snippet": 0
+  },
+  {
+    "hash": "759e827ec0f3c813e156cd8f75a7d3a4c583764369bd3843f5d8e22c0352eef6",
+    "file": "docs/sdks/android/sparkscan/advanced.md",
+    "snippet": 1
+  },
+  {
+    "hash": "16151dc46e6ff90c7c40dea91b3dd5dfef5f730a14403e4801f38ee5028552bd",
+    "file": "docs/sdks/android/sparkscan/get-started.md",
+    "snippet": 0
+  },
+  {
+    "hash": "8216c6b84a4825c2cc43813910063a3e35fd9b9a64bb52b612c12b8b6d88a6c9",
+    "file": "docs/sdks/android/sparkscan/get-started.md",
+    "snippet": 1
+  },
+  {
+    "hash": "e6ed3c9718fee34ec9cc143358315c0ac33e8c81cf684f16f17c89878d32a625",
+    "file": "docs/sdks/android/sparkscan/get-started.md",
+    "snippet": 2
+  },
+  {
+    "hash": "4522b5c2f53144f964f163ecd06014655156a06d7cd7225a68ba639b697c9750",
+    "file": "docs/sdks/android/sparkscan/get-started.md",
+    "snippet": 3
+  },
+  {
+    "hash": "e4ae7aba9a4672f397d4e949930b009fa33aced0fb79436ac9cfdf8da7b242e3",
+    "file": "docs/sdks/android/sparkscan/get-started.md",
+    "snippet": 4
+  },
+  {
+    "hash": "d57dfe3276e817bafbcce95234b6a825f0540876fde191695b840c3e7c1bd535",
+    "file": "docs/sdks/android/sparkscan/get-started.md",
+    "snippet": 5
+  },
+  {
+    "hash": "826afb10e95cfc4406f004494573ba110539307ffc99440b3297b9bb1bc606c9",
+    "file": "docs/sdks/android/sparkscan/get-started.md",
+    "snippet": 6
+  },
+  {
+    "hash": "b355d727130f8eba029d33570b91a31e611db7cd192bf90044f4eddb9ac40ae9",
+    "file": "docs/sdks/android/sparkscan/get-started.md",
+    "snippet": 7
+  }
+]
