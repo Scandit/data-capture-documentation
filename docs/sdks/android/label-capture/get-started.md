@@ -329,9 +329,9 @@ Next, you need to create a new instance of the [Camera](https://docs.scandit.com
 When initializing the camera, you can pass the recommended camera settings for Label Capture.
 
 ```kotlin
-val camera = Camera.getDefaultCamera(LabelCapture.createRecommendedCameraSettings());
+val camera = Camera.getDefaultCamera(LabelCapture.createRecommendedCameraSettings())
 if (camera == null) {
-    throw IllegalStateException("Failed to init camera!");
+    throw IllegalStateException("Failed to init camera!")
 }
 dataCaptureContext.setFrameSource(camera)
 ```
