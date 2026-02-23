@@ -20,10 +20,10 @@ First, enable scanning of both sides of documents in [IdCaptureSettings](https:/
 
 ```js
 settings.supportedDocuments = [
-	Scandit.IdDocumentType.IdCardVIZ,
-	Scandit.IdDocumentType.DLVIZ,
+	IdDocumentType.IdCardVIZ,
+	IdDocumentType.DLVIZ,
 ];
-settings.supportedSides = Scandit.SupportedSides.FrontAndBack;
+settings.supportedSides = SupportedSides.FrontAndBack;
 ```
 
 Start by scanning the front side of a document. After you receive the result in [IdCaptureListener](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener), inspect [VIZResult.isBackSideCaptureSupported](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.IsBackSideCaptureSupported). If scanning of the back side of your document is supported, flip the document and capture the back side as well. The next result that you receive is a combined result that contains the information from both sides. You may verify this by checking [VIZResult.capturedSides](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/id-capture/api/viz-result.html#property-scandit.datacapture.id.VizResult.CapturedSides). After both sides of the document are scanned, you may proceed with another document.

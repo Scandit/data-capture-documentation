@@ -20,16 +20,16 @@ That means certain data from certain fields won’t be returned, even if it’s 
 
 ```js
 // Default value:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_ONLY);
+settings.anonymizationMode = IdAnonymizationMode.FieldsOnly;
 
 // Sensitive data is additionally covered with black boxes on returned images:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_AND_IMAGES);
+settings.anonymizationMode = IdAnonymizationMode.FieldsAndImages;
 
 // Only images are anonymized:
-settings.setAnyonymizationMode(IdAnonymizationMode.IMAGES_ONLY);
+settings.anonymizationMode = IdAnonymizationMode.ImagesOnly;
 
 // No anonymization:
-settings.setAnyonymizationMode(IdAnonymizationMode.NONE);
+settings.anonymizationMode = IdAnonymizationMode.None;
 ```
 
 ## Document Capture Zones
@@ -43,11 +43,11 @@ The `FullDocumentScanner` extracts all document information by default. If using
 
 ```js
 // To extract data from barcodes on IDs
-SingleSideScanner.barcode(true);
+const scanner = new SingleSideScanner(true, false, false);
 // To extract data from the visual inspection zone (VIZ) on IDs
-SingleSideScanner.visualInspectionZone(true);
+const scanner = new SingleSideScanner(false, false, true);
 // To extract data from the machine-readable zone (MRZ) on IDs
-SingleSideScanner.machineReadableZone(true);
+const scanner = new SingleSideScanner(false, true, false);
 ```
 
 ## Configure Accepted and Rejected Documents
@@ -59,14 +59,14 @@ These methods are used in conjunction with the [IdCaptureDocumentType](https://d
 For example, to accept only US Driver Licenses:
 
 ```js
-settings.acceptedDocuments(DRIVER_LICENSE, Region.US);
+settings.acceptedDocuments = [new DriverLicense(IdCaptureRegion.Us)];
 ```
 
 Or to accept all Passports *except* those from the US:
 
 ```js
-settings.acceptedDocuments(PASSPORT);
-settings.rejectedDocuments(Region.US);
+settings.acceptedDocuments = [new Passport(IdCaptureRegion.Any)];
+settings.rejectedDocuments = [new Passport(IdCaptureRegion.Us)];
 ```
 
 ## ID Images
