@@ -41,11 +41,12 @@ When add-on codes are enabled the Scandit Data Capture SDK automatically couples
 Inside `SDCBarcodeCaptureListener.barcodeCapture:didScanInSession:frameData:` the data can be retrieved from the recognized barcode as follows:
 
 ```swift
-let barcode = session.newlyRecognizedBarcode[0]
+guard let barcode = session.newlyRecognizedBarcode,
+    let data = barcode.data else {
+    return
+}
 
-let data = barcode.data
-let addOnData = barcode.addOnData
-if let addOnData = addOnData {
+if let addOnData = barcode.addOnData {
     // Do something with the data & addOnData.
 } else {
     // Do something with just the data.
