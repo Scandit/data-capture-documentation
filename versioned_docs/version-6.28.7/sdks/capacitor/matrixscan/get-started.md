@@ -23,7 +23,7 @@ The general steps are:
 The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```js
-const context = Scandit.DataCaptureContext.forLicenseKey(
+const context = DataCaptureContext.forLicenseKey(
 	'-- ENTER YOUR SCANDIT LICENSE KEY HERE --'
 );
 ```
@@ -37,14 +37,14 @@ Most of the times, you will not need to implement a [BarcodeTrackingListener](ht
 For this tutorial, we will setup Barcode Tracking for tracking QR codes.
 
 ```js
-const settings = new Scandit.BarcodeTrackingSettings();
-settings.enableSymbology(Scandit.Symbology.QR, true);
+const settings = new BarcodeTrackingSettings();
+settings.enableSymbology(Symbology.QR, true);
 ```
 
 Next, create a [BarcodeTracking](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/barcode-tracking.html#class-scandit.datacapture.barcode.tracking.BarcodeTracking) instance with the data capture context and the settings initialized in the previous steps:
 
 ```js
-const barcodeTracking = Scandit.BarcodeTracking.forContext(context, settings);
+const barcodeTracking = BarcodeTracking.forContext(context, settings);
 ```
 
 ## Use the Built-in Camera
@@ -62,11 +62,11 @@ In Android, the user must explicitly grant permission for each app to access cam
 When using the built-in camera there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
 
 ```js
-const cameraSettings = Scandit.BarcodeTracking.recommendedCameraSettings;
+const cameraSettings = BarcodeTracking.recommendedCameraSettings;
 
 // Depending on the use case further camera settings adjustments can be made here.
 
-const camera = Scandit.Camera.default;
+const camera = Camera.default;
 if (camera != null) {
 	camera.applySettings(cameraSettings);
 }
@@ -81,7 +81,7 @@ context.setFrameSource(camera);
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.On](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
 ```js
-camera.switchToDesiredState(Scandit.FrameSourceState.On);
+camera.switchToDesiredState(FrameSourceState.On);
 ```
 
 There is a separate guide for [more advanced camera functionality](advanced.md).
@@ -91,14 +91,14 @@ There is a separate guide for [more advanced camera functionality](advanced.md).
 When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```js
-const view = Scandit.DataCaptureView.forContext(context);
+const view = DataCaptureView.forContext(context);
 view.connectToElement(htmlElement);
 ```
 
 To visualize the results of Barcode Tracking, first you need to add the following [overlay](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-tracking-basic-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingBasicOverlay):
 
 ```js
-const overlay = Scandit.BarcodeTrackingBasicOverlay.withBarcodeTrackingForView(
+const overlay = BarcodeTrackingBasicOverlay.withBarcodeTrackingForView(
 	barcodeTracking,
 	view
 );
@@ -131,7 +131,7 @@ Barcode Tracking, unlike Barcode Capture, doesn’t emit feedback (sound or vibr
 with your own sound or vibration if you want.
 
 ```js
-const feedback = Scandit.Feedback.defaultFeedback;
+const feedback = Feedback.defaultFeedback;
 ```
 
 Next, use this [feedback](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/core/api/feedback.html#class-scandit.datacapture.core.Feedback) in a [BarcodeTrackingListener](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/barcode-tracking-listener.html#interface-scandit.datacapture.barcode.tracking.IBarcodeTrackingListener):

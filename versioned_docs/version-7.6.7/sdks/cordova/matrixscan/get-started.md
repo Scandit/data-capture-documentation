@@ -61,7 +61,8 @@ settings.enableSymbology(Scandit.Symbology.QR, true);
 Next, create a [BarcodeBatch](https://docs.scandit.com/7.6/data-capture-sdk/cordova/barcode-capture/api/barcode-batch.html#class-scandit.datacapture.barcode.batch.BarcodeBatch) instance with the data capture context and the settings initialized in the previous steps:
 
 ```js
-const barcodeBatch = Scandit.BarcodeBatch.forContext(context, settings);
+const barcodeBatch = new Scandit.BarcodeBatch(settings);
+context.addMode(barcodeBatch);
 ```
 
 ## Use the Built-in Camera
@@ -80,7 +81,7 @@ In Android, the user must explicitly grant permission for each app to access cam
 When using the built-in camera there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
 
 ```js
-const cameraSettings = Scandit.BarcodeBatch.recommendedCameraSettings;
+const cameraSettings = Scandit.BarcodeBatch.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
 
@@ -114,10 +115,8 @@ view.connectToElement(htmlElement);
 To visualize the results of Barcode Batch, first you need to add the following [overlay](https://docs.scandit.com/7.6/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay):
 
 ```js
-const overlay = Scandit.BarcodeBatchBasicOverlay.withBarcodeBatchForView(
-	barcodeBatch,
-	view
-);
+const overlay = new Scandit.BarcodeBatchBasicOverlay(barcodeBatch, Scandit.BarcodeBatchBasicOverlayStyle.Frame);
+view.addOverlay(overlay);
 ```
 
 Once the overlay has been added, you should implement the [BarcodeBatchBasicOverlayListener](https://docs.scandit.com/7.6/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener) interface. The method
