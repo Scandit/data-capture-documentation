@@ -59,7 +59,7 @@ You need to also create the [Camera](https://docs.scandit.com/7.6/data-capture-s
 const camera = Scandit.Camera.default;
 context.setFrameSource(camera);
 
-const cameraSettings = Scandit.IdCapture.recommendedCameraSettings;
+const cameraSettings = Scandit.IdCapture.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
 
@@ -82,20 +82,20 @@ By default, [anonymized data](./advanced.md#configure-data-anonymization) is not
 const settings = new Scandit.IdCaptureSettings();
 
 // Documents from any region:
-settings.acceptedDocuments.push(new Scandit.IdCard(Scandit.Region.AnyRegion));
+settings.acceptedDocuments.push(new Scandit.IdCard(Scandit.IdCaptureRegion.Any));
 // Only documents issued by a specific country:
-settings.acceptedDocuments.push(new Scandit.IdCard(Scandit.Region.Germany));
+settings.acceptedDocuments.push(new Scandit.IdCard(Scandit.IdCaptureRegion.Germany));
 // Regional documents:
-settings.acceptedDocuments.push(new Scandit.RegionSpecific.ApecBusinessTravelCard());
+settings.acceptedDocuments.push(new Scandit.RegionSpecific(Scandit.RegionSpecificSubtype.ApecBusinessTravelCard));
 // Reject passports from certain regions:
-settings.rejectedDocuments.push(new Scandit.Passport(Scandit.Region.Cuba));
+settings.rejectedDocuments.push(new Scandit.Passport(Scandit.IdCaptureRegion.Cuba));
 
 // To scan only one-sided documents and a given zone:
-settings.scannerType = new Scandit.SingleSideScanner({ barcode: true });
+settings.scannerType = new Scandit.SingleSideScanner(true, false, false);
 // or
-settings.scannerType = new Scandit.SingleSideScanner({ machineReadableZone: true });
+settings.scannerType = new Scandit.SingleSideScanner(false, true, false);
 // or
-settings.scannerType = new Scandit.SingleSideScanner({ visualInspectionZone: true });
+settings.scannerType = new Scandit.SingleSideScanner(false, false, true);
 
 // To scan both sides of the document:
 settings.scannerType = new Scandit.FullDocumentScanner();
@@ -104,7 +104,8 @@ settings.scannerType = new Scandit.FullDocumentScanner();
 Create a new ID Capture mode with the chosen settings:
 
 ```ts
-const idCapture = Scandit.IdCapture.forContext(context, settings);
+const idCapture = new Scandit.IdCapture(settings);
+context.addMode(idCapture);
 ```
 
 ## Implement the Listener
@@ -178,10 +179,8 @@ view.connectToElement(htmlElement);
 Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/7.6/data-capture-sdk/cordova/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
 
 ```js
-let overlay = Scandit.IdCaptureOverlay.withTextCaptureForView(
-	idCapture,
-	dataCaptureView
-);
+const overlay = new Scandit.IdCaptureOverlay(idCapture);
+view.addOverlay(overlay);
 ```
 
 The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/cordova/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).

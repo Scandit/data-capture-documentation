@@ -52,7 +52,7 @@ You need to also create the [Camera](https://docs.scandit.com/7.6/data-capture-s
 const camera = Camera.default;
 context.setFrameSource(camera);
 
-const cameraSettings = IdCapture.recommendedCameraSettings;
+const cameraSettings = IdCapture.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
 
@@ -73,8 +73,8 @@ By default, [anonymized data](./advanced.md#configure-data-anonymization) is not
 
 ```js
 const settings = new IdCaptureSettings();
-settings.scannerType = SingleSideScanner(); // To scan only one-sided documents
-// settings.scannerType = FullDocumentScanner(); // To scan both sides of the document
+settings.scannerType = new SingleSideScanner(true, false, false); // To scan only one-sided documents
+// settings.scannerType = new FullDocumentScanner(); // To scan both sides of the document
 
 settings.acceptedDocuments.push(
 	new DriverLicense(IdCaptureRegion.Any),
@@ -96,9 +96,9 @@ For more specific information, use its non-null result properties (e.g. [Capture
 ```js
 const listener = {
 	didCaptureId: (idCapture, session) => {
-		if (session.newlyCapturedId.isPassport() = true) {
+		if (session.newlyCapturedId.isPassport() === true) {
 			// Handle the information extracted.
-		} else if (session.newlyCapturedId.isDriverLicense() = true) {
+		} else if (session.newlyCapturedId.isDriverLicense() === true) {
 			// Handle the information extracted.
 		}
 	},
