@@ -4,7 +4,7 @@ Kotlin-specific validation plugin.
 
 import os
 import re
-from concurrent.futures import ThreadPoolExecutor, as_completed
+import subprocess
 from pathlib import Path
 from typing import List, Tuple
 
@@ -13,7 +13,7 @@ from android import (
     GENERATED_DIR,
     VALIDATION_BASE,
     _export_classpath,
-    _compile_kotlin_file,
+    _KOTLIN_ERROR_RE,
     _snippet_hash,
     _split_imports,
     _ELLIPSIS_LINE,
@@ -162,37 +162,33 @@ class KotlinPlugin(LanguagePlugin):
         )
 
     def compile(self, sources: dict, sdk_version: str) -> CompileResult:
-        """Compile each Kotlin snippet in its own kotlinc process, run in parallel."""
+        """Compile all Kotlin snippets in a single kotlinc invocation."""
         kotlinc = _find_kotlinc()
         sdk_classpath = _export_classpath(sdk_version)
 
         KOTLIN_CLASSES_DIR.mkdir(parents=True, exist_ok=True)
-        _compile_kotlin_file(
-            kotlinc, sdk_classpath, VALIDATION_BASE, KOTLIN_CLASSES_DIR
+
+        if not sources:
+            return CompileResult(failures=[])
+
+        kt_files = [str(VALIDATION_BASE)] + [str(GENERATED_DIR / f"{cn}.kt") for cn in sources]
+
+        r = subprocess.run(
+            [kotlinc, "-cp", sdk_classpath, "-d", str(KOTLIN_CLASSES_DIR)] + kt_files,
+            capture_output=True,
+            text=True,
         )
 
-        full_classpath = sdk_classpath + os.pathsep + str(KOTLIN_CLASSES_DIR)
-        failures: list[Failure] = []
+        if r.returncode == 0:
+            return CompileResult(failures=[])
 
-        if sources:
-            workers = min(os.cpu_count() or 8, len(sources))
-            with ThreadPoolExecutor(max_workers=workers) as pool:
-                futures = {
-                    pool.submit(
-                        _compile_kotlin_file,
-                        kotlinc,
-                        full_classpath,
-                        GENERATED_DIR / f"{cn}.kt",
-                        KOTLIN_CLASSES_DIR,
-                    ): (cn, _snippet_hash(sources[cn][0].content))
-                    for cn in sources
-                }
-                for future in as_completed(futures):
-                    cn, h = futures[future]
-                    file_errors = future.result()
-                    if file_errors:
-                        failures.append(
-                            Failure(class_name=cn, content_hash=h, errors=file_errors)
-                        )
+        errors_by_cn: dict[str, list[str]] = {}
+        for m in _KOTLIN_ERROR_RE.finditer(r.stdout + r.stderr):
+            cn = Path(m.group(1)).stem
+            errors_by_cn.setdefault(cn, []).append(f"  line {m.group(2)}: {m.group(3).strip()}")
 
-        return CompileResult(failures=failures)
+        return CompileResult(failures=[
+            Failure(class_name=cn, content_hash=_snippet_hash(sources[cn][0].content), errors=errs)
+            for cn, errs in errors_by_cn.items()
+            if cn in sources
+        ])
