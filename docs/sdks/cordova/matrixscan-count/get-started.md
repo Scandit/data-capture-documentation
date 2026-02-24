@@ -93,13 +93,13 @@ barcodeCountView.connectToElement(htmlElement);
 The camera is not automatically turned on when you are in a scanning view. You need to set up the camera so that it switches on when needed and it switches off when not needed anymore. Similarly [BarcodeCount](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount) should also be enabled and disabled. For instance, you should switch off the camera when the [BarcodeCountView](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-count-view.html#class-scandit.datacapture.barcode.count.ui.BarcodeCountView) is not visible anymore (including when the app goes in the background), similarly you want to switch on the camera when the [BarcodeCountView](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-count-view.html#class-scandit.datacapture.barcode.count.ui.BarcodeCountView) is visible (including when the app goes to the foreground). One way to achieve this is the following:
 
 ```js
-document.addEventListener('visibilitychange', () => {
-	if (document.hidden) {
-		camera.switchToDesiredState(Scandit.FrameSourceState.Off);
-	} else {
-		camera.switchToDesiredState(Scandit.FrameSourceState.On);
-	}
-});
+document.addEventListener('pause', () => {
+	camera.switchToDesiredState(Scandit.FrameSourceState.Off);
+}, false);
+
+document.addEventListener('resume', () => {
+	camera.switchToDesiredState(Scandit.FrameSourceState.On);
+}, false);
 ```
 
 ## Store And Retrieve Scanned Barcodes
