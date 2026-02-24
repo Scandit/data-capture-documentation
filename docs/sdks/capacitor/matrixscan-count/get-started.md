@@ -56,10 +56,12 @@ context.addMode(barcodeCount);
 Our recommended camera settings should be used to achieve the best performance and user experience. The following couple of lines show how to get the recommended settings for MatrixScan Count and create the camera from it:
 
 ```js
-const cameraSettings = new CameraSettings();
+const cameraSettings = BarcodeCount.createRecommendedCameraSettings();
 
 const camera = Camera.default;
-camera.applySettings(cameraSettings);
+if (camera != null) {
+	camera.applySettings(cameraSettings);
+}
 ```
 
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
@@ -82,9 +84,8 @@ MatrixScan Count’s built-in AR user interface includes buttons and overlays th
 Add a [BarcodeCountView](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-count-view.html#class-scandit.datacapture.barcode.count.ui.BarcodeCountView) to your view hierarchy:
 
 ```js
-const barcodeCountViewComponent = (
-	<BarcodeCountView barcodeCount={barcodeCount} context={context} />
-);
+const barcodeCountView = BarcodeCountView.forContextWithMode(context, barcodeCount);
+barcodeCountView.connectToElement(htmlElement);
 ```
 
 ## Set Up The Camera So That It Switches On When You Are In Scanning View
@@ -92,21 +93,13 @@ const barcodeCountViewComponent = (
 The camera is not automatically turned on when you are in a scanning view. You need to set up the camera so that it switches on when needed and it switches off when not needed anymore. Similarly [BarcodeCount](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount) should also be enabled and disabled. For instance, you should switch off the camera when the [BarcodeCountView](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-count-view.html#class-scandit.datacapture.barcode.count.ui.BarcodeCountView) is not visible anymore (including when the app goes in the background), similarly you want to switch on the camera when the [BarcodeCountView](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-count-view.html#class-scandit.datacapture.barcode.count.ui.BarcodeCountView) is visible (including when the app goes to the foreground). One way to achieve this is the following:
 
 ```js
-componentDidMount() {
-handleAppStateChangeSubscription = AppState.addEventListener('change', handleAppStateChange);
-}
-
-componentWillUnmount() {
-handleAppStateChangeSubscription.remove();
-}
-
-handleAppStateChange = async (nextAppState) => {
-if (nextAppState.match(/inactive|background/)) {
-camera.switchToDesiredState(FrameSourceState.Off);
-} else {
-camera.switchToDesiredState(FrameSourceState.On);
-}
-}
+document.addEventListener('visibilitychange', () => {
+	if (document.hidden) {
+		camera.switchToDesiredState(FrameSourceState.Off);
+	} else {
+		camera.switchToDesiredState(FrameSourceState.On);
+	}
+});
 ```
 
 ## Store And Retrieve Scanned Barcodes
@@ -150,13 +143,5 @@ const viewUiListener = {
 	},
 };
 
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.uiListener = viewUiListener;
-			}
-		}}
-	/>
-);
+barcodeCountView.uiListener = viewUiListener;
 ```

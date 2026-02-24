@@ -36,15 +36,7 @@ barcodeCount.setBarcodeCountCaptureList(barcodeCountCaptureList);
 It can be difficult to reach the shutter button if the smart device is attached to the user’s wrist by a strap or similar. In this instance, you can enable a floating shutter button that can be positioned by the end user in a more ergonomically suitable position.
 
 ```js
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.shouldShowFloatingShutterButton = true;
-			}
-		}}
-	/>
-);
+barcodeCountView.shouldShowFloatingShutterButton = true;
 ```
 
 ## Filtering
@@ -57,7 +49,7 @@ For example, you might want to scan only Code 128 barcodes and no PDF417 ones.
 
 ```js
 const settings = new BarcodeCountSettings();
-barcodeCountSettings.enableSymbologies(enabledSymbologies);
+settings.enableSymbologies(enabledSymbologies);
 
 const excludedSymbologies = [Symbology.PDF417];
 const filterSettings = settings.filterSettings;
@@ -80,15 +72,7 @@ There are situations in which the user may find it helpful to clean up their scr
 If this is the case, you can enable the “Clear screen” button.
 
 ```js
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.shouldShowClearHighlightsButton = true;
-			}
-		}}
-	/>
-);
+barcodeCountView.shouldShowClearHighlightsButton = true;
 ```
 
 ## Customize Overlay Colors
@@ -106,15 +90,7 @@ const viewListener = {
 	},
 };
 
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.listener = viewListener;
-			}
-		}}
-	/>
-);
+barcodeCountView.listener = viewListener;
 ```
 
 ## Notifications
@@ -135,15 +111,7 @@ const viewListener = {
 	},
 };
 
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.listener = viewListener;
-			}
-		}}
-	/>
-);
+barcodeCountView.listener = viewListener;
 ```
 
 ## Disable UI Elements
@@ -154,30 +122,14 @@ However, if you wish to disable UI elements you can do it as follows.
 Disable buttons:
 
 ```js
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.shouldShowListButton = false;
-				view.shouldShowExitButton = false;
-				view.shouldShowShutterButton = false;
-			}
-		}}
-	/>
-);
+barcodeCountView.shouldShowListButton = false;
+barcodeCountView.shouldShowExitButton = false;
+barcodeCountView.shouldShowShutterButton = false;
 ```
 
 Disable feedback and hints:
 
 ```js
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.shouldShowUserGuidanceView = false;
-				view.shouldShowHints = false;
-			}
-		}}
-	/>
-);
+barcodeCountView.shouldShowUserGuidanceView = false;
+barcodeCountView.shouldShowHints = false;
 ```

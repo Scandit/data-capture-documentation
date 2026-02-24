@@ -57,7 +57,7 @@ For example, you might want to scan only Code 128 barcodes and no PDF417 ones.
 
 ```js
 const settings = new BarcodeCountSettings();
-barcodeCountSettings.enableSymbologies(enabledSymbologies);
+settings.enableSymbologies(enabledSymbologies);
 
 const excludedSymbologies = [Symbology.PDF417];
 const filterSettings = settings.filterSettings;
