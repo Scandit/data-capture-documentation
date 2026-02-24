@@ -211,6 +211,24 @@ No updates for this framework in this release.
 
 * Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
 
+## 7.3.4
+
+**Released**: February 24, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash that could occur in Barcode Pick when the BarcodePickView is deallocated but the guidance on screen was being updated
+
+#### Smart Label Capture
+
+* Fixed Swift naming for SDCLabelDateResult - now correctly exposed as LabelDateResult. Resolves naming conflict that could cause undefined behavior
+
+#### Core
+
+* Fixed a crash when toggling the zoom switch without setting a frame source
+
 ## 7.3.3
 
 **Released**: July 25, 2025

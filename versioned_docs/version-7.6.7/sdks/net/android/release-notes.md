@@ -242,6 +242,16 @@ No updates for this framework in this release.
 
 * Fixed an issue where the middle name read from an AAMVA-compliant barcode would be at times returned as `NONE`.
 
+## 7.3.4
+
+**Released**: February 24, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
+
 ## 7.3.3
 
 **Released**: July 25, 2025
