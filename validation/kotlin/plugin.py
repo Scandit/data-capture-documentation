@@ -6,7 +6,6 @@ import os
 import re
 import subprocess
 from pathlib import Path
-from typing import List, Tuple
 
 from android import (
     ANDROID_PROJECT_DIR,
@@ -24,8 +23,6 @@ from base import CompileResult, Failure, LanguagePlugin, Snippet
 # =============================================================================
 
 KOTLIN_CLASSES_DIR = ANDROID_PROJECT_DIR / "build" / "snippet-kotlin-classes"
-
-KOTLIN_COMMON_IMPORTS = """"""
 
 _KOTLIN_FENCE = re.compile(r"```kotlin\s*\n(.*?)```", re.DOTALL)
 
@@ -49,7 +46,7 @@ def _find_kotlinc() -> str:
     return "kotlinc"
 
 
-def _extract_block(lines: List[str], start: int) -> Tuple[str, int]:
+def _extract_block(lines: list[str], start: int) -> tuple[str, int]:
     """Collect a brace-delimited block starting at lines[start].
     Returns (block_text, next_index)."""
     block_lines = [lines[start]]
@@ -62,7 +59,7 @@ def _extract_block(lines: List[str], start: int) -> Tuple[str, int]:
     return "\n".join(block_lines), i
 
 
-def _split_object_blocks(content: str) -> Tuple[List[str], List[str], str]:
+def _split_object_blocks(content: str) -> tuple[list[str], list[str], str]:
     """Extract Kotlin object declarations from snippet content.
 
     Returns (top_level_objects, companion_objects, remaining):
@@ -75,9 +72,9 @@ def _split_object_blocks(content: str) -> Tuple[List[str], List[str], str]:
     Brace depth tracking handles multi-line bodies correctly.
     """
     lines = content.split("\n")
-    top_level: List[str] = []
-    companion: List[str] = []
-    remaining: List[str] = []
+    top_level: list[str] = []
+    companion: list[str] = []
+    remaining: list[str] = []
     i = 0
     while i < len(lines):
         line = lines[i]
@@ -150,7 +147,7 @@ class KotlinPlugin(LanguagePlugin):
 
         return (
             f"package com.scandit.validation\n\n"
-            f"{KOTLIN_COMMON_IMPORTS}{extra_block}{objects_block}\n\n"
+            f"{extra_block}{objects_block}\n\n"
             f"// Source: {snippet.source_file.name}, snippet {snippet.index}\n"
             f'@Suppress("all")\n'
             f"class {class_name} : ValidationBaseKotlin() {{{companion_section}\n"

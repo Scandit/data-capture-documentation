@@ -61,6 +61,8 @@ Barcode selection is orchestrated by the [BarcodeSelection](https://docs.scandit
 For this task, we setup barcode scanning for a small list of different barcode types, called [symbologies](../barcode-symbologies.mdx). The list of symbologies to enable is highly application specific. It is recommended that you **only enable the list of symbologies your application requires**.
 
 ```kotlin
+# import com.scandit.datacapture.barcode.data.Symbology
+# import com.scandit.datacapture.barcode.selection.capture.BarcodeSelectionSettings
 val settings = BarcodeSelectionSettings().apply {
     enableSymbology(Symbology.QR, true)
     enableSymbology(Symbology.EAN8, true)

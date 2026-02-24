@@ -4,9 +4,9 @@ Java-specific validation plugin.
 
 import os
 import re
+import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from typing import List
 
 from android import (
     ANDROID_PROJECT_DIR,
@@ -53,10 +53,8 @@ def _find_javac() -> str:
     return "javac"
 
 
-def _compile_file(javac: str, classpath: str, java_file: Path) -> List[str]:
+def _compile_file(javac: str, classpath: str, java_file: Path) -> list[str]:
     """Compile a single Java file and return any error messages."""
-    import subprocess
-
     r = subprocess.run(
         [
             javac,

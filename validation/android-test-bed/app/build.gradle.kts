@@ -28,10 +28,6 @@ android {
     }
 }
 
-tasks.withType<JavaCompile>().configureEach {
-    options.compilerArgs.addAll(listOf("-Xmaxerrs", "10000"))
-}
-
 // Resolves and exports the debug compile classpath to a file so the
 // validate.py script can invoke javac directly per snippet.
 tasks.register("exportClasspath") {
@@ -54,7 +50,7 @@ dependencies {
     compileOnly("com.scandit.datacapture:label:$scanditSdkVersion")
     compileOnly("com.scandit.datacapture:parser:$scanditSdkVersion")
 
-    compileOnly("androidx.annotation:annotation:1.7.0")
-    compileOnly("androidx.appcompat:appcompat:1.7.0")
-    compileOnly("androidx.lifecycle:lifecycle-livedata:2.8.0")
+    compileOnly("androidx.annotation:annotation:1.9.1")
+    compileOnly("androidx.appcompat:appcompat:1.7.1")
+    compileOnly("androidx.lifecycle:lifecycle-livedata:2.10.0")
 }
