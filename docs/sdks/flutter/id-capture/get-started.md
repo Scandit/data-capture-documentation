@@ -13,7 +13,7 @@ This page will guide you through the process of adding ID Capture to your Flutte
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
+- Initializing the Data Capture Context
 - Accessing a Camera
 - Configuring the Capture Settings
 - Implementing a Listener to Receive Scan Results
@@ -53,13 +53,17 @@ await ScanditFlutterDataCaptureId.initialize();
 runApp(MyApp());
 }
 ```
-## Create the Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [data capture context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```dart
-var context = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Add the Camera
 
@@ -71,7 +75,7 @@ Camera? camera = Camera.defaultCamera;
 if (camera != null) {
 // Use the settings recommended by id capture.
 camera.applySettings(IdCapture.createRecommendedCameraSettings());
-context.setFrameSource(camera);
+DataCaptureContext.sharedInstance.setFrameSource(camera);
 }
 ```
 
@@ -118,7 +122,7 @@ Create a new ID Capture mode with the chosen settings. Then register the listene
 ```dart
 idCapture = IdCapture(settings);
 idCapture.addListener(this)
-context.addMode(idCapture);
+DataCaptureContext.sharedInstance.addMode(idCapture);
 ```
 
 ## Set up Capture View and Overlay
@@ -128,7 +132,7 @@ When using the built-in camera as [frameSource](https://docs.scandit.com/data-ca
 To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/flutter/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```dart
-var dataCaptureView = DataCaptureView.forContext(dataCaptureContext);
+var dataCaptureView = DataCaptureView.forContext(DataCaptureContext.sharedInstance);
 // Add the dataCaptureView to your widget tree
 ```
 

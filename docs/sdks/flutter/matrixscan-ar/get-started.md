@@ -16,7 +16,7 @@ In this guide you will learn step-by-step how to add MatrixScan AR to your appli
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
+- Initializing the Data Capture Context
 - Configuring the Barcode AR Mode
 - Setup the Barcode AR View
 - Registering the Listener to notify about found items
@@ -29,13 +29,17 @@ Before starting with adding a capture mode, make sure that you have a valid Scan
 You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-## Create a Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add find capabilities to your application is to create a new [DataCaptureContext](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add find capabilities to your application is to initialize the [DataCaptureContext](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```dart
-var dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the Barcode AR Mode
 
@@ -77,7 +81,7 @@ var viewSettings = BarcodeArViewSettings(
 Next, create a `BarcodeArView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeArView` is automatically added to the provided parent view.
 
 ```dart
-var barcodeArView = BarcodeArView.forModeWithViewSettings(dataCaptureContext, barcodeAr, viewSettings);
+var barcodeArView = BarcodeArView.forModeWithViewSettings(DataCaptureContext.sharedInstance, barcodeAr, viewSettings);
 ```
 
 Connect the `BarcodeArView` to the Widget lifecycle. The widget is dependent on calling `widgetPaused` and `widgetResumed` to set up the camera and its overlays properly.

@@ -13,20 +13,24 @@ In this guide you will learn step-by-step how to add MatrixScan to your applicat
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
+- Initializing the Data Capture Context
 - Configuring the MatrixScan mode
 - Using the built-in camera
 - Visualizing the scan process
 - Providing feedback
 - Disabling barcode tracking
 
-## Create a Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [data capture context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```dart
-var context = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the Barcode Batch Mode
 
@@ -45,7 +49,7 @@ Next, create a [BarcodeBatch](https://docs.scandit.com/data-capture-sdk/flutter/
 
 ```dart
 var barcodeBatch = BarcodeBatch(settings);
-dataCaptureContext.addMode(barcodeBatch);
+DataCaptureContext.sharedInstance.addMode(barcodeBatch);
 ```
 
 ## Use the Built-in Camera
@@ -73,7 +77,7 @@ var camera = Camera.defaultCamera?..applySettings(cameraSettings);
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
 ```dart
-context.setFrameSource(camera);
+DataCaptureContext.sharedInstance.setFrameSource(camera);
 ```
 
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/flutter/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.on](https://docs.scandit.com/data-capture-sdk/flutter/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
@@ -89,7 +93,7 @@ camera.switchToDesiredState(FrameSourceState.on);
 When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/flutter/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```dart
-var dataCaptureView = DataCaptureView.forContext(dataCaptureContext);
+var dataCaptureView = DataCaptureView.forContext(DataCaptureContext.sharedInstance);
 // Add the dataCaptureView to your widget tree
 ```
 

@@ -13,7 +13,7 @@ In this guide you will learn step-by-step how to add MatrixScan Count to your ap
 
 The general steps are:
 
-1. Create a new Data Capture Context instance
+1. Initialize the Data Capture Context
 2. Configure the Barcode Count Mode
 3. Obtain camera instance and set frame source used
 4. Register the listener to be informed when scanned phase is over
@@ -23,13 +23,17 @@ The general steps are:
 8. Reset Barcode Count mode
 9. List and Exit callbacks
 
-## Create A New Data Capture Context Instance
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```dart
-var dataCaptureContext = DataCaptureContext.forLicenseKey('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
+await DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure The Barcode Count Mode
 
@@ -47,7 +51,7 @@ If you are sure that your environment will only have unique barcodes (i.e. no du
 
 ```dart
 var barcodeCount = BarcodeCount(settings);
-dataCaptureContext.addMode(barcodeCount);
+DataCaptureContext.sharedInstance.addMode(barcodeCount);
 ```
 
 ## Obtain Camera Instance And Set Frame Source Used
@@ -57,7 +61,7 @@ Our recommended camera settings should be used to achieve the best performance a
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
 ```dart
-dataCaptureContext.setFrameSource(camera);
+DataCaptureContext.sharedInstance.setFrameSource(camera);
 ```
 
 ## Register the Listener
@@ -77,7 +81,7 @@ MatrixScan Count’s built-in AR user interface includes buttons and overlays th
 Add a [BarcodeCountView](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-count-view.html#class-scandit.datacapture.barcode.count.ui.BarcodeCountView) to your view hierarchy:
 
 ```dart
-var barcodeCountView = BarcodeCountView.forContextWithMode(dataCaptureContext, barcodeCount);
+var barcodeCountView = BarcodeCountView.forContextWithMode(DataCaptureContext.sharedInstance, barcodeCount);
 ```
 
 ## Set Up The Camera So That It Switches On When You Are In Scanning View

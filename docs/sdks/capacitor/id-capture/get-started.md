@@ -13,7 +13,7 @@ In this guide you will learn step-by-step how to add ID Capture to your applicat
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
+- Initializing the Data Capture Context
 - Accessing a Camera
 - Configuring the Capture Settings
 - Implementing a Listener to Receive Scan Results
@@ -40,15 +40,17 @@ import IdModuleOverview from '../../../partials/get-started/_id-module-overview-
 
 <IdModuleOverview/>
 
-## Create the Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [data capture context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```js
-const context = DataCaptureContext.forLicenseKey(
-	'-- ENTER YOUR SCANDIT LICENSE KEY HERE --'
-);
+await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Add the Camera
 
@@ -56,7 +58,7 @@ You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/c
 
 ```js
 const camera = Camera.default;
-context.setFrameSource(camera);
+DataCaptureContext.sharedInstance.setFrameSource(camera);
 
 const cameraSettings = IdCapture.createRecommendedCameraSettings();
 
@@ -104,7 +106,7 @@ Create a new ID Capture mode with the chosen settings:
 
 ```ts
 const idCapture = new IdCapture(settings);
-context.addMode(idCapture);
+DataCaptureContext.sharedInstance.addMode(idCapture);
 ```
 
 ## Implement the Listener
@@ -171,7 +173,7 @@ When using the built-in camera as [frameSource](https://docs.scandit.com/data-ca
 To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```js
-const view = DataCaptureView.forContext(context);
+const view = DataCaptureView.forContext(DataCaptureContext.sharedInstance);
 view.connectToElement(htmlElement);
 ```
 

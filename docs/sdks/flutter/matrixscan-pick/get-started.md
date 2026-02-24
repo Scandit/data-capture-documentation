@@ -16,7 +16,7 @@ In this guide you will learn step-by-step how to add MatrixScan Pick to your app
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
+- Initializing the Data Capture Context
 - Configuring the Barcode Pick Mode
 - Setup the Barcode Pick View
 - Registering the Listener to notify about found items
@@ -29,13 +29,17 @@ Before starting with adding a capture mode, make sure that you have a valid Scan
 You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-## Create a Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new Data Capture Context. The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```dart
-var dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the Barcode Pick Mode
 
@@ -61,7 +65,7 @@ Create a product provider and the mode:
 
 ```dart
 var productProvider = BarcodePickAsyncMapperProductProvider(items, productProviderCallback);
-var mode = BarcodePick(dataCaptureContext, settings, productProvider);
+var mode = BarcodePick(DataCaptureContext.sharedInstance, settings, productProvider);
 ```
 
 ## Setup the `BarcodePickView`
@@ -88,7 +92,7 @@ var viewSettings = BarcodePickViewSettings(
 Construct a new `BarcodePickView`.
 
 ```dart
-var barcodePickView = BarcodePickView.forModeWithViewSettings(dataCaptureContext, mode, viewSettings);
+var barcodePickView = BarcodePickView.forModeWithViewSettings(DataCaptureContext.sharedInstance, mode, viewSettings);
 ```
 
 Connect the `BarcodePickView` to the Widget lifecycle. The widget is dependent on calling `widgetPaused` and `widgetResumed` to set up the camera and its overlays properly.

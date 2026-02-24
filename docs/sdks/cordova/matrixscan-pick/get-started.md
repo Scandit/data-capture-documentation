@@ -16,7 +16,7 @@ In this guide you will learn step-by-step how to add MatrixScan Pick to your app
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
+- Initializing the Data Capture Context
 - Configuring the Barcode Pick Mode
 - Setup the Barcode Pick View
 - Registering the Listener to notify about found items
@@ -29,13 +29,17 @@ Before starting with adding a capture mode, make sure that you have a valid Scan
 You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-## Create a Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new Data Capture Context. The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the Data Capture Context with a valid Scandit Data Capture SDK license key.
 
 ```js
-const dataCaptureContext = Scandit.DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the Barcode Pick Mode
 
@@ -86,7 +90,7 @@ const viewSettings = new Scandit.BarcodePickViewSettings();
 Construct a new `BarcodePickView`. The `BarcodePickView` is automatically added to the provided parent view.
 
 ```js
-const barcodePickView = new Scandit.BarcodePickView({ context: dataCaptureContext, barcodePick: mode, settings: viewSettings });
+const barcodePickView = new Scandit.BarcodePickView({ context: DataCaptureContext.sharedInstance, barcodePick: mode, settings: viewSettings });
 barcodePickView.connectToElement(document.getElementById('html-element-id'));
 ```
 

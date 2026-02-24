@@ -16,7 +16,7 @@ In this guide you will learn step-by-step how to add MatrixScan Pick to your app
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
+- Initializing the Data Capture Context
 - Configuring the Barcode Pick Mode
 - Setup the Barcode Pick View
 - Registering the Listener to notify about found items
@@ -29,13 +29,17 @@ Before starting with adding a capture mode, make sure that you have a valid Scan
 You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-## Create a Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new Data Capture Context. The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the Data Capture Context with a valid Scandit Data Capture SDK license key.
 
 ```js
-const dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the Barcode Pick Mode
 
@@ -86,7 +90,7 @@ const viewSettings = new BarcodePickViewSettings();
 Construct a new `BarcodePickView`. The `BarcodePickView` will be attached to the HTMLElement provided in the ConnectToElement function.
 
 ```js
-const barcodePickView = new BarcodePickView({ context: dataCaptureContext, barcodePick: mode, settings: viewSettings });
+const barcodePickView = new BarcodePickView({ context: DataCaptureContext.sharedInstance, barcodePick: mode, settings: viewSettings });
 // Connect the view to the HTML element, so it can fill up its size and follow its position.
 barcodePickView.connectToElement(document.getElementById('html-element-id'));
 ```

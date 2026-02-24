@@ -17,7 +17,7 @@ In this guide you will learn step-by-step how to add MatrixScan AR to your appli
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
+- Initializing the Data Capture Context
 - Configuring the Barcode AR Mode
 - Setup the Barcode AR View
 - Registering the Listener to notify about found items
@@ -30,15 +30,17 @@ Before starting with adding a capture mode, make sure that you have a valid Scan
 You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-## Create the Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [data capture context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```js
-const context = DataCaptureContext.forLicenseKey(
-	'-- ENTER YOUR SCANDIT LICENSE KEY HERE --'
-);
+await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the Barcode AR Mode
 
@@ -79,7 +81,7 @@ Next, create a `BarcodeArView` instance with the Data Capture Context and the se
 
 ```js
 const barcodeArView = new BarcodeArView({
-	context: context,
+	context: DataCaptureContext.sharedInstance,
 	barcodeAr: mode,
 	settings: viewSettings,
 });

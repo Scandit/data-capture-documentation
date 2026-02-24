@@ -16,19 +16,23 @@ In this guide you will learn step-by-step how to add MatrixScan Find to your app
 
 The general steps are:
 
-1. Create a new Data Capture Context instance.
+1. Initialize the Data Capture Context.
 2. Configure the Barcode Find Mode.
 3. Setup the BarcodeFindView.
 4. Register a listener to be notified with found items
 5. Start searching
 
-## Create a new Data Capture Context instance
+## Initialize the Data Capture Context
 
-The first step to add find capabilities to your application is to create a new [DataCaptureContext](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add find capabilities to your application is to initialize the [DataCaptureContext](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```dart
-var dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the Barcode Find Mode
 
@@ -84,7 +88,7 @@ true // haptic enabled
 Construct a new BarcodeFindView.
 
 ```dart
-var barcodeFindView = BarcodeFindView.forModeWithViewSettings(dataCaptureContext, barcodeFind, viewSettings);
+var barcodeFindView = BarcodeFindView.forModeWithViewSettings(DataCaptureContext.sharedInstance, barcodeFind, viewSettings);
 ```
 
 Connect the BarcodeFindView to the Widget lifecycle. The widget is dependent on calling widgetPaused and widgetResumed to set up the camera and its overlays properly.

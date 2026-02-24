@@ -47,9 +47,13 @@ cd datacapture-capacitor-samples/ListBuildingSample
 
 ```js
 ...
-const context = DataCaptureContext.forLicenseKey('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
+await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ...
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 4. Install the dependencies:
 
@@ -81,13 +85,17 @@ npm install scandit-capacitor-datacapture-core
 npm install scandit-capacitor-datacapture-barcode
 ```
 
-### 2. Create the Context
+### 2. Initialize the Data Capture Context
 
-The first step is to create a context for the Data Capture tasks. This is done by creating an instance of the `DataCaptureContext` class:
+The first step is to initialize the Data Capture Context with your license key:
 
 ```js
-const context = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ### 3. Configure SparkScan Settings
 
@@ -126,7 +134,7 @@ In this example, we're:
 Next, we create the `SparkScanView` instance, adding the scanning interface to the application:
 
 ```js
-const sparkScanView = SparkScanView.forContext(context, sparkScan, viewSettings);
+const sparkScanView = SparkScanView.forContext(DataCaptureContext.sharedInstance, sparkScan, viewSettings);
 ```
 
 In your application's state handling logic, you must also call the `stopScanning` method when the scanner is no longer needed:

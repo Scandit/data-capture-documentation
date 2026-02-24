@@ -11,7 +11,7 @@ keywords:
 
 In this guide you will learn step-by-step how to add SparkScan to your application. The general steps are:
 
-1. Create a new Data Capture Context instance.
+1. Initialize the Data Capture Context.
 2. Configure the Spark Scan Mode.
 3. Create the SparkScanView with the desired settings and bind it to the application’s lifecycle.
 4. Register the listener to be informed when new barcodes are scanned and update your data whenever this event occurs.
@@ -26,13 +26,17 @@ In this guide you will learn step-by-step how to add SparkScan to your applicati
 Devices running the Scandit Data Capture SDK need to have a GPU or the performance will drastically decrease.
 :::
 
-## Create a New Data Capture Context Instance
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/cordova/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/cordova/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```js
-const context = Scandit.DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the SparkScan Mode
 
@@ -69,7 +73,7 @@ By adding a `SparkScanView`, the scanning interface (camera preview and scanning
 Add a `SparkScanView` to your view hierarchy. Construct a new SparkScan view. The `SparkScan` view is automatically added to the provided parentView:
 
 ```js
-const sparkScanView = Scandit.SparkScanView.forContext(context, sparkScan, viewSettings);
+const sparkScanView = Scandit.SparkScanView.forContext(DataCaptureContext.sharedInstance, sparkScan, viewSettings);
 ```
 
 Additionally, make sure to call [SparkScanView.stopScanning()](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your app state handling logic. You have to call this for the correct functioning of the
