@@ -4,6 +4,7 @@ Java-specific validation plugin.
 
 import os
 import re
+import shutil
 import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -33,7 +34,6 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;"""
 
-_JAVA_FENCE = re.compile(r"```java\s*\n(.*?)```", re.DOTALL)
 _PUBLIC_LOCAL_CLASS = re.compile(
     r"(?m)^(\s*)(?:public|private|protected)\s+(class|interface|enum)\b"
 )
@@ -95,27 +95,12 @@ class JavaPlugin(LanguagePlugin):
     def value(self) -> str:
         return "java"
 
-    @property
-    def ext(self) -> str:
-        return "java"
+    def _class_name(self, snippet: Snippet) -> str:
+        slug = re.sub(r"[^A-Za-z0-9]", "_", str(snippet.source_file))
+        slug = re.sub(r"_+", "_", slug).strip("_")
+        return f"Snippet_java_{slug}_{snippet.index:03d}"
 
-    @property
-    def fence(self) -> re.Pattern:
-        return _JAVA_FENCE
-
-    @property
-    def generated_dir(self) -> Path:
-        return GENERATED_DIR
-
-    @property
-    def classes_dir(self) -> Path:
-        return JAVA_CLASSES_DIR
-
-    @property
-    def baseline_file(self) -> Path:
-        return Path(__file__).parent.parent / "baselines" / "baseline-java.json"
-
-    def generate_source(self, class_name: str, snippet: Snippet) -> str:
+    def _generate_source(self, class_name: str, snippet: Snippet) -> str:
         extra_imports, body = _split_imports(snippet.content)
         body = _ELLIPSIS_LINE.sub("// ...", body)
         body = _PUBLIC_LOCAL_CLASS.sub(r"\1\2", body)
@@ -126,7 +111,7 @@ class JavaPlugin(LanguagePlugin):
         return (
             f"package com.scandit.validation;\n\n"
             f"{JAVA_COMMON_IMPORTS}{extra_block}\n\n"
-            f"// Source: {snippet.source_file.name}, snippet {snippet.index}\n"
+            f"// Source: {snippet.source_file}, snippet {snippet.index}\n"
             f'@SuppressWarnings("all")\n'
             f"public class {class_name} extends ValidationBaseJava {{\n\n"
             f"    void validate() throws Exception {{\n"
@@ -135,7 +120,21 @@ class JavaPlugin(LanguagePlugin):
             f"}}\n"
         )
 
-    def compile(self, sources: dict, sdk_version: str) -> CompileResult:
+    def generate_sources(self, snippets: list[Snippet]) -> None:
+        GENERATED_DIR.mkdir(parents=True, exist_ok=True)
+        for snippet in snippets:
+            class_name = self._class_name(snippet)
+            source = self._generate_source(class_name, snippet)
+            (GENERATED_DIR / f"{class_name}.java").write_text(source, encoding="utf-8")
+
+    def clean(self) -> None:
+        if GENERATED_DIR.exists():
+            for f in GENERATED_DIR.glob("*.java"):
+                f.unlink()
+        if JAVA_CLASSES_DIR.exists():
+            shutil.rmtree(JAVA_CLASSES_DIR)
+
+    def compile(self, snippets: list[Snippet], sdk_version: str) -> CompileResult:
         """Compile each Java snippet in its own javac process, run in parallel."""
         javac = _find_javac()
         sdk_classpath = _export_classpath(sdk_version)
@@ -146,24 +145,22 @@ class JavaPlugin(LanguagePlugin):
         full_classpath = sdk_classpath + os.pathsep + str(JAVA_CLASSES_DIR)
         failures: list[Failure] = []
 
-        if sources:
-            workers = min(os.cpu_count() or 8, len(sources))
+        if snippets:
+            workers = min(os.cpu_count() or 8, len(snippets))
             with ThreadPoolExecutor(max_workers=workers) as pool:
                 futures = {
                     pool.submit(
                         _compile_file,
                         javac,
                         full_classpath,
-                        GENERATED_DIR / f"{cn}.java",
-                    ): (cn, sources[cn][0].hash)
-                    for cn in sources
+                        GENERATED_DIR / f"{self._class_name(snippet)}.java",
+                    ): snippet
+                    for snippet in snippets
                 }
                 for future in as_completed(futures):
-                    cn, h = futures[future]
+                    snippet = futures[future]
                     file_errors = future.result()
                     if file_errors:
-                        failures.append(
-                            Failure(class_name=cn, content_hash=h, errors=file_errors)
-                        )
+                        failures.append(Failure(snippet=snippet, errors=file_errors))
 
         return CompileResult(failures=failures)
