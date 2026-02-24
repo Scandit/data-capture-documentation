@@ -11,10 +11,8 @@ from typing import List
 from android import (
     ANDROID_PROJECT_DIR,
     GENERATED_DIR,
-    VALIDATION_BASE,
+    VALIDATION_BASE_JAVA,
     _export_classpath,
-    _compile_kotlin_file,
-    _snippet_hash,
     _split_imports,
     _ELLIPSIS_LINE,
 )
@@ -44,15 +42,6 @@ _ERROR_RE = re.compile(r"([^\s:]+\.java):(\d+):\s*error:\s*(.+)")
 # =============================================================================
 # Java compiler utilities
 # =============================================================================
-
-
-def _find_kotlinc() -> str:
-    kotlin_home = os.environ.get("KOTLIN_HOME")
-    if kotlin_home:
-        kotlinc = Path(kotlin_home) / "bin" / "kotlinc"
-        if kotlinc.exists():
-            return str(kotlinc)
-    return "kotlinc"
 
 
 def _find_javac() -> str:
@@ -141,7 +130,7 @@ class JavaPlugin(LanguagePlugin):
             f"{JAVA_COMMON_IMPORTS}{extra_block}\n\n"
             f"// Source: {snippet.source_file.name}, snippet {snippet.index}\n"
             f'@SuppressWarnings("all")\n'
-            f"public class {class_name} extends ValidationBase {{\n\n"
+            f"public class {class_name} extends ValidationBaseJava {{\n\n"
             f"    void validate() throws Exception {{\n"
             f"{indented_body}\n"
             f"    }}\n"
@@ -154,7 +143,7 @@ class JavaPlugin(LanguagePlugin):
         sdk_classpath = _export_classpath(sdk_version)
 
         JAVA_CLASSES_DIR.mkdir(parents=True, exist_ok=True)
-        _compile_kotlin_file(_find_kotlinc(), sdk_classpath, VALIDATION_BASE, JAVA_CLASSES_DIR)
+        _compile_file(javac, sdk_classpath, VALIDATION_BASE_JAVA)
 
         full_classpath = sdk_classpath + os.pathsep + str(JAVA_CLASSES_DIR)
         failures: list[Failure] = []
@@ -168,7 +157,7 @@ class JavaPlugin(LanguagePlugin):
                         javac,
                         full_classpath,
                         GENERATED_DIR / f"{cn}.java",
-                    ): (cn, _snippet_hash(sources[cn][0].content))
+                    ): (cn, sources[cn][0].hash)
                     for cn in sources
                 }
                 for future in as_completed(futures):
