@@ -24,7 +24,6 @@ sys.path.insert(0, str(Path(__file__).parent))
 from android import (
     _load_cache,
     _save_cache,
-    _snippet_hash,
     ensure_gradle_wrapper,
 )
 from base import CompileResult, Failure, LanguagePlugin, Snippet
@@ -198,7 +197,7 @@ def run_compile(
     preserved: dict = {}
 
     for cn, (snippet, source) in sources.items():
-        h = _snippet_hash(snippet.content)
+        h = snippet.hash
         if h in cache:
             preserved[h] = cache[h]
             if cache[h]:
@@ -217,8 +216,7 @@ def run_compile(
         new_failures = result.failures
         failed_hashes = {f.content_hash: f.errors for f in new_failures}
         for cn, (snippet, _) in to_compile.items():
-            h = _snippet_hash(snippet.content)
-            new_cache[h] = failed_hashes.get(h, [])
+            new_cache[snippet.hash] = failed_hashes.get(snippet.hash, [])
 
     _save_cache(new_cache, sdk_version, cache_file_for(plugin))
     return CompileResult(failures=cached_failures + new_failures)
@@ -323,7 +321,7 @@ def main():
                 s
                 for s in snippets
                 if (
-                    _snippet_hash(s.content),
+                    s.hash,
                     str(s.source_file.relative_to(REPO_ROOT)),
                     s.index,
                 )

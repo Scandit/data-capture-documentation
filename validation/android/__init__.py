@@ -2,7 +2,6 @@
 Shared Android/Gradle infrastructure for all JVM language validation plugins.
 """
 
-import hashlib
 import json
 import os
 import re
@@ -24,7 +23,7 @@ GENERATED_DIR = (
     ANDROID_PROJECT_DIR / "app" / "src" / "generated" / "com" / "scandit" / "validation"
 )
 
-VALIDATION_BASE = (
+_VALIDATION_BASE_DIR = (
     ANDROID_PROJECT_DIR
     / "app"
     / "src"
@@ -33,8 +32,9 @@ VALIDATION_BASE = (
     / "com"
     / "scandit"
     / "validation"
-    / "ValidationBase.kt"
 )
+VALIDATION_BASE_KOTLIN = _VALIDATION_BASE_DIR / "ValidationBaseKotlin.kt"
+VALIDATION_BASE_JAVA = _VALIDATION_BASE_DIR / "ValidationBaseJava.java"
 
 _COMPILE_SDK = 35
 
@@ -152,10 +152,6 @@ def _split_imports(content: str):
 # =============================================================================
 # Snippet hash and compilation cache
 # =============================================================================
-
-
-def _snippet_hash(content: str) -> str:
-    return hashlib.sha256(content.encode()).hexdigest()
 
 
 def _load_cache(sdk_version: str, cache_file: Path) -> dict:

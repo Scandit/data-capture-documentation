@@ -2,9 +2,10 @@
 Base types shared across all language validation plugins.
 """
 
+import hashlib
 import re
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 
@@ -13,6 +14,10 @@ class Snippet:
     source_file: Path
     index: int  # position within the source file (0-based)
     content: str
+    hash: str = field(init=False)
+
+    def __post_init__(self):
+        self.hash = hashlib.sha256(self.content.encode()).hexdigest()
 
 
 @dataclass

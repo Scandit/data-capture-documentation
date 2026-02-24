@@ -11,10 +11,9 @@ from typing import List, Tuple
 from android import (
     ANDROID_PROJECT_DIR,
     GENERATED_DIR,
-    VALIDATION_BASE,
+    VALIDATION_BASE_KOTLIN,
     _export_classpath,
     _KOTLIN_ERROR_RE,
-    _snippet_hash,
     _split_imports,
     _ELLIPSIS_LINE,
 )
@@ -154,7 +153,7 @@ class KotlinPlugin(LanguagePlugin):
             f"{KOTLIN_COMMON_IMPORTS}{extra_block}{objects_block}\n\n"
             f"// Source: {snippet.source_file.name}, snippet {snippet.index}\n"
             f'@Suppress("all")\n'
-            f"class {class_name} : ValidationBase() {{{companion_section}\n"
+            f"class {class_name} : ValidationBaseKotlin() {{{companion_section}\n"
             f"    fun validate() {{\n"
             f"{indented_body}\n"
             f"    }}\n"
@@ -171,7 +170,9 @@ class KotlinPlugin(LanguagePlugin):
         if not sources:
             return CompileResult(failures=[])
 
-        kt_files = [str(VALIDATION_BASE)] + [str(GENERATED_DIR / f"{cn}.kt") for cn in sources]
+        kt_files = [str(VALIDATION_BASE_KOTLIN)] + [
+            str(GENERATED_DIR / f"{cn}.kt") for cn in sources
+        ]
 
         r = subprocess.run(
             [kotlinc, "-cp", sdk_classpath, "-d", str(KOTLIN_CLASSES_DIR)] + kt_files,
@@ -185,10 +186,14 @@ class KotlinPlugin(LanguagePlugin):
         errors_by_cn: dict[str, list[str]] = {}
         for m in _KOTLIN_ERROR_RE.finditer(r.stdout + r.stderr):
             cn = Path(m.group(1)).stem
-            errors_by_cn.setdefault(cn, []).append(f"  line {m.group(2)}: {m.group(3).strip()}")
+            errors_by_cn.setdefault(cn, []).append(
+                f"  line {m.group(2)}: {m.group(3).strip()}"
+            )
 
-        return CompileResult(failures=[
-            Failure(class_name=cn, content_hash=_snippet_hash(sources[cn][0].content), errors=errs)
-            for cn, errs in errors_by_cn.items()
-            if cn in sources
-        ])
+        return CompileResult(
+            failures=[
+                Failure(class_name=cn, content_hash=sources[cn][0].hash, errors=errs)
+                for cn, errs in errors_by_cn.items()
+                if cn in sources
+            ]
+        )

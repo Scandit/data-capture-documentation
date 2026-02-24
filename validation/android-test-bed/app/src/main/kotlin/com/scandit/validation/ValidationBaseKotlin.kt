@@ -13,7 +13,7 @@ import com.scandit.datacapture.core.ui.DataCaptureView
  * can find them in scope.
  */
 @Suppress("all")
-abstract class ValidationBase {
+abstract class ValidationBaseKotlin {
 
     // Android context — typically an Activity or Application
     protected lateinit var context: Context
