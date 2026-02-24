@@ -24,11 +24,11 @@ mode.addListener({
 		// The mode was started
 	},
 
-	didPauseSearch(foundItems: BarcodeFindItem[]) {
+	didPauseSearch(foundItems) {
 		// The mode was paused
 	},
 
-	didStopSearch(foundItems: BarcodeFindItem[]) {
+	didStopSearch(foundItems) {
 		// The mode was stopped after the finish button was clicked
 	},
 });
