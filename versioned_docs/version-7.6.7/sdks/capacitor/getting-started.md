@@ -95,10 +95,9 @@ Next, you need to configure your desired settings for SparkScan, such as the sym
 
 ```js
 const settings = new SparkScanSettings();
-settings.enabledSymbologies = [Symbology.EAN13, Symbology.Code128];
+settings.enableSymbologies([Symbology.EAN13UPCA, Symbology.Code128]);
 settings.codeDuplicateFilter = 0;
-settings.ScanIntention = ScanIntention.Smart;
-await sparkScan.applySettings(settings);
+settings.scanIntention = ScanIntention.Smart;
 ```
 
 In this example, we're:
@@ -107,15 +106,13 @@ In this example, we're:
 - Setting the code duplicate filter to 0, meaning the same code can be reported multiple times
 - Using the Smart [scan intention](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/core/api/scan-intention.html#enum-scandit.datacapture.core.ScanIntention) algorithm, to reduce the likelihood of unintended scans
 
-Lastly, we apply the settings to the SparkScan instance.
-
 ### 4. Setup the SparkScanView
 
 Now we'll create and configure the scanner view and it's settings. This is done via the `SparkScanView` and `SparkScanViewSettings` classes:
 
 ```js
 const viewSettings = new SparkScanViewSettings();
-viewSettings.defaultScanningMode = SparkScanScanningModeTarget;
+viewSettings.defaultScanningMode = new SparkScanScanningModeTarget(SparkScanScanningBehavior.Single);
 viewSettings.soundEnabled = true;
 viewSettings.hapticEnabled = false;
 ```
@@ -129,25 +126,19 @@ In this example, we're:
 Next, we create the `SparkScanView` instance, adding the scanning interface to the application:
 
 ```js
-const sparkScanComponent = (
-	<SparkScanView
-		context={context}
-		sparkScan={sparkScan}
-		sparkScanViewSettings={viewSettings}
-	/>
-);
+const sparkScanView = SparkScanView.forContext(context, sparkScan, viewSettings);
 ```
 
 In your application's state handling logic, you must also call the `stopScanning` method when the scanner is no longer needed:
 
 ```js
 componentWillUnmount() {
-sparkScanComponent.stopScanning();
+sparkScanView.stopScanning();
 }
 
 handleAppStateChange = async (nextAppState) => {
 if (nextAppState.match(/inactive|background/)) {
-sparkScanComponent.stopScanning();
+sparkScanView.stopScanning();
 }
 };
 ```
