@@ -46,7 +46,7 @@ settings.enableSymbologies([Symbology.EAN13UPCA]);
 Next, create a SparkScan instance with the settings initialized in the previous step:
 
 ```js
-const sparkScan = SparkScan.forSettings(settings);
+const sparkScan = new SparkScan(settings);
 ```
 
 ## Setup the Spark Scan View
