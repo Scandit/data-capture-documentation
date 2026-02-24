@@ -1,0 +1,59 @@
+name: Validate Code Snippets
+on:
+  pull_request:
+    branches:
+      - main
+      - 'release/**'
+  push:
+    branches:
+      - main
+
+jobs:
+  validate-snippets:
+    name: Validate Code Snippets
+    runs-on: ubuntu-latest
+    container:
+      image: mingc/android-build-box:latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure Android SDK path
+        run: echo "sdk.dir=$ANDROID_HOME" > validation/android-test-bed/local.properties
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('validation/android-test-bed/**/*.gradle*', 'validation/android-test-bed/**/gradle-wrapper.properties') }}
+
+      - name: Cache Kotlin snippet compilation results
+        uses: actions/cache@v4
+        with:
+          path: validation/cache/snippet-kotlin-cache.json
+          key: snippet-kotlin-${{ hashFiles('docs/sdks/android/**/*.md', 'docs/sdks/android/**/*.mdx') }}
+          restore-keys: snippet-kotlin-
+
+      - name: Cache Java snippet compilation results
+        uses: actions/cache@v4
+        with:
+          path: validation/cache/snippet-java-cache.json
+          key: snippet-java-${{ hashFiles('docs/sdks/android/**/*.md', 'docs/sdks/android/**/*.mdx') }}
+          restore-keys: snippet-java-
+
+      - name: Validate Kotlin snippets
+        id: kotlin
+        continue-on-error: true
+        run: python3 validation/validate-code-snippets.py kotlin
+
+      - name: Validate Java snippets
+        id: java
+        continue-on-error: true
+        run: python3 validation/validate-code-snippets.py java
+
+      - name: Fail if any validation failed
+        if: steps.kotlin.outcome == 'failure' || steps.java.outcome == 'failure'
+        run: exit 1
