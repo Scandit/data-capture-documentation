@@ -105,6 +105,7 @@ The `CapturedId` object contains the extracted data from the scanned document. T
 | `mrzResult` | `MrzResult \| null` | Raw extracted data from Machine Readable Zone (MRZ) |
 | `vizResult` | `VizResult \| null` | Raw extracted data from Visual Inspection Zone (VIZ) |
 | `barcodeResult` | `BarcodeResult \| null` | Raw extracted data from barcode |
+| `anonymizedFields` | `IdFieldType[]` | List of fields that were anonymized for this document |
 
 ### DateResult Object
 
