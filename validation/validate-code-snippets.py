@@ -12,11 +12,11 @@ Usage:
         snippet hashes. Commit this file to silence known failures in CI.
 """
 
+import json
 import re
 import shutil
 import sys
 from pathlib import Path
-from typing import List
 
 # Add the validation/ directory to sys.path so language plugins can import _android
 sys.path.insert(0, str(Path(__file__).parent))
@@ -78,7 +78,7 @@ def _restore_hidden_lines(content: str) -> str:
     return _HIDDEN_LINE.sub("", content)
 
 
-def extract_snippets(path: Path, fence: re.Pattern) -> List[Snippet]:
+def extract_snippets(path: Path, fence: re.Pattern) -> list[Snippet]:
     text = path.read_text(encoding="utf-8")
     snippets = []
     for i, match in enumerate(fence.finditer(text)):
@@ -89,8 +89,8 @@ def extract_snippets(path: Path, fence: re.Pattern) -> List[Snippet]:
     return snippets
 
 
-def collect_snippets(fence: re.Pattern) -> List[Snippet]:
-    all_snippets: List[Snippet] = []
+def collect_snippets(fence: re.Pattern) -> list[Snippet]:
+    all_snippets: list[Snippet] = []
     for docs_dir in DOCS_DIRS:
         if not docs_dir.exists():
             continue
@@ -114,7 +114,7 @@ def _class_name(snippet: Snippet, language_value: str) -> str:
     return f"Snippet_{language_value}_{slug}_{snippet.index:03d}"
 
 
-def generate_all(snippets: List[Snippet], plugin: LanguagePlugin) -> dict:
+def generate_all(snippets: list[Snippet], plugin: LanguagePlugin) -> dict:
     """Returns {class_name: (snippet, source)}"""
     result = {}
     for s in snippets:
@@ -155,8 +155,6 @@ def clean_classes(plugin: LanguagePlugin):
 
 def _load_baseline(baseline_file: Path) -> set:
     """Return a set of (hash, file, snippet_index) tuples from the baseline file."""
-    import json
-
     try:
         data = json.loads(baseline_file.read_text(encoding="utf-8"))
         return {(entry["hash"], entry["file"], entry["snippet"]) for entry in data}
@@ -164,10 +162,8 @@ def _load_baseline(baseline_file: Path) -> set:
         return set()
 
 
-def _save_baseline(entries: List[dict], baseline_file: Path):
+def _save_baseline(entries: list[dict], baseline_file: Path):
     """Write a human-friendly baseline file sorted by file path then snippet index."""
-    import json
-
     baseline_file.parent.mkdir(parents=True, exist_ok=True)
     baseline_file.write_text(
         json.dumps(
@@ -340,7 +336,7 @@ def main():
     write_sources(sources, plugin.generated_dir, plugin.ext)
 
     print("Compiling…")
-    result = plugin.compile(sources, sdk_version)
+    result = run_compile(plugin, sources, sdk_version)
 
     if args.baseline:
         if result.failures:

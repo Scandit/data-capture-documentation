@@ -9,7 +9,6 @@ import subprocess
 import sys
 import zipfile
 from pathlib import Path
-from typing import List
 
 # =============================================================================
 # Paths and constants
@@ -140,10 +139,11 @@ def _export_classpath(sdk_version: str) -> str:
 _ELLIPSIS_LINE = re.compile(r"^\s*\.\.\.\s*$", re.MULTILINE)
 
 
-def _split_imports(content: str):
+def _split_imports(content: str) -> tuple[list[str], str]:
     """Peel off any `import …` lines the snippet itself contains.
     Returns (imports_list, remaining_content)."""
-    imports, rest = [], []
+    imports: list[str] = []
+    rest: list[str] = []
     for line in content.split("\n"):
         (imports if line.strip().startswith("import ") else rest).append(line)
     return imports, "\n".join(rest)
@@ -171,37 +171,6 @@ def _save_cache(cache: dict, sdk_version: str, cache_file: Path):
     )
 
 
-# =============================================================================
-# Kotlin compilation utility (shared — Java also compiles ValidationBase.kt)
-# =============================================================================
-
 _KOTLIN_ERROR_RE = re.compile(r"([^\s:]+\.kt):(\d+):\d+:\s*error:\s*(.+)")
 
 
-def _compile_kotlin_file(
-    kotlinc: str, classpath: str, kotlin_file: Path, output_dir: Path
-) -> List[str]:
-    """Compile a single Kotlin file and return any error messages."""
-    r = subprocess.run(
-        [
-            kotlinc,
-            "-cp",
-            classpath,
-            "-d",
-            str(output_dir),
-            str(kotlin_file),
-        ],
-        capture_output=True,
-        text=True,
-    )
-    if r.returncode == 0:
-        return []
-    errors = []
-    for m in _KOTLIN_ERROR_RE.finditer(r.stdout + r.stderr):
-        errors.append(f"  line {m.group(2)}: {m.group(3).strip()}")
-    if not errors:
-        # Fallback: surface any raw error lines if the regex didn't match
-        for line in (r.stdout + r.stderr).splitlines():
-            if "error:" in line.lower():
-                errors.append(f"  {line.strip()}")
-    return errors
