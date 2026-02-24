@@ -5,10 +5,9 @@ wrapping each one in its own compilable class, and checking they compile against
 the real Scandit SDK.
 
 Usage:
-    python3 validation/validate-code-snippets.py
-    python3 validation/validate-code-snippets.py --language kotlin
-    python3 validation/validate-code-snippets.py --language java --clean
-    python3 validation/validate-code-snippets.py --baseline
+    python3 validation/validate-code-snippets.py kotlin
+    python3 validation/validate-code-snippets.py java --clean
+    python3 validation/validate-code-snippets.py kotlin --baseline
         Run full validation and write a baseline JSON of all currently-failing
         snippet hashes. Commit this file to silence known failures in CI.
 """
@@ -284,10 +283,9 @@ def main():
         help="Remove the snippet cache before running.",
     )
     parser.add_argument(
-        "--language",
+        "language",
         choices=list(LANGUAGE_PLUGINS),
-        default="java",
-        help="Language of snippets to validate (default: java).",
+        help="Language of snippets to validate.",
     )
     parser.add_argument(
         "--baseline",
@@ -350,11 +348,11 @@ def main():
         if result.failures:
             failed_entries = [
                 {
-                    "hash": _snippet_hash(sources[cn][0].content),
-                    "file": str(sources[cn][0].source_file.relative_to(REPO_ROOT)),
-                    "snippet": sources[cn][0].index,
+                    "hash": failure.content_hash,
+                    "file": str(sources[failure.class_name][0].source_file.relative_to(REPO_ROOT)),
+                    "snippet": sources[failure.class_name][0].index,
                 }
-                for cn in result.failures
+                for failure in result.failures
             ]
             _save_baseline(failed_entries, plugin.baseline_file)
             print(
