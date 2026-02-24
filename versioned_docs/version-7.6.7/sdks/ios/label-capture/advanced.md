@@ -45,14 +45,14 @@ extension YourScanViewController: LabelCaptureBasicOverlayDelegate {
     private func brush(for field: LabelField) -> Brush {
         let fillColor: UIColor
         let strokeColor: UIColor
-        switch Field(rawValue: field.name) {
+        switch field.name {
         case "<your-barcode-field-name>":
             fillColor = .systemCyan.withAlphaComponent(0.5)
             strokeColor = .systemCyan
         case "<your-expiry-date-field-name>":
             fillColor = .systemOrange.withAlphaComponent(0.5)
             strokeColor = .systemOrange
-        case .none:
+        default:
             fillColor = .clear
             strokeColor = .clear
         }
