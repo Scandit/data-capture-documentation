@@ -39,17 +39,17 @@ With the context you can then instantiate a [`BarcodeGeneratorBuilder`](https://
 You can configure the colors used in the resulting image:
 
 ```javascript
-const DataCaptureContext = Scandit.DataCaptureContext.forLicenseKey(licenseKey);
-const builder = new Scandit.BarcodeGenerator.Code128BarcodeGeneratorBuilder(dataCaptureContext)
-    .withBackgroundColor(Color.WHITE)
-    .withForegroundColor(Color.BLACK);
+const dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
+const builder = BarcodeGenerator.code128BarcodeGeneratorBuilder(dataCaptureContext)
+    .withBackgroundColor(Color.fromHex('#ffffff'))
+    .withForegroundColor(Color.fromHex('#000000'));
 ```
 
 When the builder is configured get the `BarcodeGenerator` and try to generate the image:
 
 ```javascript
 try {
-    const generator = await builder.build();
+    const generator = builder.build();
     const image = await generator.generate(dataString, 200);
     // Use the image
 } catch (error) {
@@ -69,11 +69,11 @@ With the context you can then instantiate a [`QRCodeBarcodeGeneratorBuilder`](ht
 You can configure the colors used in the resulting image, and the two settings that can be configured for QR codes: [`QRCodeBarcodeGeneratorBuilder.errorCorrectionLevel`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-generator-builder.html#method-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder.WithErrorCorrectionLevel) and [`QRCodeBarcodeGeneratorBuilder.versionNumber`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-generator-builder.html#method-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder.WithVersionNumber).
 
 ```javascript
-const DataCaptureContext = Scandit.DataCaptureContext.forLicenseKey(licenseKey);
-const builder = new Scandit.BarcodeGenerator.QrCodeBarcodeGeneratorBuilder(dataCaptureContext)
-    .withBackgroundColor(Color.WHITE)
-    .withForegroundColor(Color.BLACK)
-    .withErrorCorrectionLevel(Scandit.QrCodeErrorCorrectionLevel.MEDIUM)
+const dataCaptureContext = DataCaptureContext.forLicenseKey(licenseKey);
+const builder = BarcodeGenerator.qrCodeBarcodeGeneratorBuilder(dataCaptureContext)
+    .withBackgroundColor(Color.fromHex('#ffffff'))
+    .withForegroundColor(Color.fromHex('#000000'))
+    .withErrorCorrectionLevel(QrCodeErrorCorrectionLevel.Medium)
     .withVersionNumber(4);
 ```
 
@@ -81,7 +81,7 @@ When the builder is configured get the `BarcodeGenerator` and try to generate th
 
 ```javascript
 try {
-    const generator = await builder.build();
+    const generator = builder.build();
     const image = await generator.generate(dataString, 200);
     // Use the image
 } catch (error) {
