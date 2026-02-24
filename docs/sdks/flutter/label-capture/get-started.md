@@ -90,6 +90,7 @@ Depending on your app architecture and whether you use dependency injection or n
 ```dart
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:scandit_flutter_datacapture_label/scandit_flutter_datacapture_label.dart';
@@ -132,16 +133,14 @@ class _LabelCaptureListener extends LabelCaptureListener {
       final label = labels.first;
 
       // Extract the barcode field
-      final barcodeField = label.fields.firstWhere(
+      final barcodeField = label.fields.firstWhereOrNull(
         (field) => field.name == '<your-barcode-field-name>',
-        orElse: () => null,
       );
       final barcodeData = barcodeField?.barcode?.data;
 
       // Extract the expiry date field (optional)
-      final expiryDateField = label.fields.firstWhere(
+      final expiryDateField = label.fields.firstWhereOrNull(
         (field) => field.name == '<your-expiry-date-field-name>',
-        orElse: () => null,
       );
       final expiryDate = expiryDateField?.text;
 
@@ -203,10 +202,8 @@ class _LabelCaptureScreenState extends State<LabelCaptureScreen> {
     _dataCaptureView = DataCaptureView.forContext(widget.context);
 
     // Create the overlay and add it to the DataCaptureView
-    final overlay = LabelCaptureBasicOverlay.newInstance(
-      widget.labelCapture,
-      _dataCaptureView,
-    );
+    final overlay = LabelCaptureBasicOverlay(widget.labelCapture);
+    _dataCaptureView.addOverlay(overlay);
 
     // Optionally set a rectangular viewfinder
     overlay.viewfinder = RectangularViewfinder.withStyle(
@@ -245,7 +242,7 @@ Future<void> setupCamera(DataCaptureContext context) async {
   }
 
   // Apply recommended settings for LabelCapture
-  final settings = LabelCapture.recommendedCameraSettings;
+  final settings = LabelCapture.createRecommendedCameraSettings();
   await camera.applySettings(settings);
 
   // Set camera as the frame source for the context

@@ -70,7 +70,7 @@ Camera? camera = Camera.defaultCamera;
 
 if (camera != null) {
 // Use the settings recommended by id capture.
-camera.applySettings(IdCapture.recommendedCameraSettings);
+camera.applySettings(IdCapture.createRecommendedCameraSettings());
 context.setFrameSource(camera);
 }
 ```
@@ -87,14 +87,14 @@ By default, [anonymized data](./advanced.md#configure-data-anonymization) is not
 
 ```dart
 var settings = IdCaptureSettings();
-settings.scannerType(
-    SingleSideScanner // To scan only one-sided documents
-    // or
-    FullDocumentScanner // To scan both sides of the document
-);
 
-settings.acceptedDocuments.addAll([PASSPORT, DRIVER_LICENSE]);
-settings.rejectedDocuments.addAll([ID_CARD]);
+// To scan only one-sided documents:
+settings.scanner = IdCaptureScanner(physicalDocumentScanner: SingleSideScanner(true, false, false));
+// To scan both sides of the document:
+// settings.scanner = IdCaptureScanner(physicalDocumentScanner: FullDocumentScanner());
+
+settings.acceptedDocuments.addAll([Passport(IdCaptureRegion.any), DriverLicense(IdCaptureRegion.any)]);
+settings.rejectedDocuments.addAll([IdCard(IdCaptureRegion.any)]);
 ```
 
 ## Implement the Listener

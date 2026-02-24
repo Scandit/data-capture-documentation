@@ -121,7 +121,7 @@ var cameraSettings = BarcodeSelection.recommendedCameraSettings;
 
 // Depending on the use case further camera settings adjustments can be made here.
 
-var camera = Camera.defaultCamera..applySettings(cameraSettings);
+var camera = Camera.defaultCamera?..applySettings(cameraSettings);
 ```
 
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/6.28/data-capture-sdk/flutter/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
@@ -133,7 +133,7 @@ context.setFrameSource(camera);
 The camera is off by default and must be turned on. This is done by calling
 [FrameSource.switchToDesiredState()](https://docs.scandit.com/6.28/data-capture-sdk/flutter/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.on](https://docs.scandit.com/6.28/data-capture-sdk/flutter/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
-```js
+```dart
 camera.switchToDesiredState(FrameSourceState.on);
 ```
 

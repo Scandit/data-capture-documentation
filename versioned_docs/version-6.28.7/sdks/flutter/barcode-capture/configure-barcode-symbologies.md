@@ -46,7 +46,7 @@ Most barcodes are printed using dark ink on a bright background. Some symbologie
 
 ```dart
 var settings = BarcodeCaptureSettings();
-var symbologySettings = settings.getSymbologySettings(Symbology.code128);
+var symbologySettings = settings.settingsForSymbology(Symbology.code128);
 symbologySettings.isColorInvertedEnabled = true;
 ```
 

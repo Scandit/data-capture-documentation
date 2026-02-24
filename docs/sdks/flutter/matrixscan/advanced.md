@@ -30,7 +30,8 @@ As mentioned above, the advanced overlay combined with its [listener](https://do
 First of all, create a new instance of [BarcodeBatchAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay) and add it to the [DataCaptureView](https://docs.scandit.com/data-capture-sdk/flutter/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 
 ```dart
-var overlay = BarcodeBatchAdvancedOverlay.forView(barcodeBatch, dataCaptureView);
+var overlay = BarcodeBatchAdvancedOverlay(barcodeBatch);
+dataCaptureView.addOverlay(overlay);
 ```
 
 At this point, you have two options.
@@ -52,9 +53,8 @@ Using [BarcodeBatchAdvancedOverlayListener](https://docs.scandit.com/data-captur
 
 ```dart
 @override
-Widget widgetForTrackedBarcode(BarcodeBatchAdvancedOverlay overlay, TrackedBarcode trackedBarcode) {
-// Create and return the view you want to show for this tracked barcode. You can also return null, to have no view for
-this barcode.
+BarcodeBatchAdvancedOverlayWidget? widgetForTrackedBarcode(BarcodeBatchAdvancedOverlay overlay, TrackedBarcode trackedBarcode) {
+// Create and return the widget you want to show for this tracked barcode. You can also return null, to have no widget for this barcode.
 return ARWidget(trackedBarcode.barcode.data);
 }
 
@@ -84,7 +84,7 @@ The function [BarcodeBatchListener.didUpdateSession()](https://docs.scandit.com/
 @override
 void didUpdateSession(BarcodeBatch barcodeBatch, BarcodeBatchSession session) {
 for (final trackedBarcode in session.addedTrackedBarcodes) {
-Widget arWidget = ARWidget(trackedBarcode.barcode.data);
+var arWidget = ARWidget(trackedBarcode.barcode.data);
 overlay.setWidgetForTrackedBarcode(arWidget, trackedBarcode);
 overlay.setAnchorForTrackedBarcode(Anchor.topCenter, trackedBarcode);
 overlay.setOffsetForTrackedBarcode(

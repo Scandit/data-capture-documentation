@@ -52,19 +52,16 @@ Then you have to create the list of items that will be picked and quantity to be
 
 ```dart
 var items = <BarcodePickProduct>{
-  new BarcodePickProduct(
-      BarcodePickProductIdentifier("9783598215438")),
-      BarcodePickProductQuantityToPick(3),
-  new BarcodePickProduct(
-      BarcodePickProductIdentifier("9783598215414")),
-      BarcodePickProductQuantityToPick(3)
+  BarcodePickProduct("9783598215438", 3),
+  BarcodePickProduct("9783598215414", 3),
 };
 ```
 
-Create the mode with the previously created settings:
+Create a product provider and the mode:
 
 ```dart
-var mode = BarcodePick(settings);
+var productProvider = BarcodePickAsyncMapperProductProvider(items, productProviderCallback);
+var mode = BarcodePick(dataCaptureContext, settings, productProvider);
 ```
 
 ## Setup the `BarcodePickView`
@@ -83,7 +80,7 @@ The `BarcodePickView` appearance can be customized through [`BarcodePickViewSett
 * Loading Dialog
 
 ```dart
-var viewSettings = new BarcodePickViewSettings(
+var viewSettings = BarcodePickViewSettings(
   // ...
 );
 ```
@@ -91,7 +88,7 @@ var viewSettings = new BarcodePickViewSettings(
 Construct a new `BarcodePickView`.
 
 ```dart
-var BarcodePickView = BarcodePickView.forModeWithViewSettings(dataCaptureContext, BarcodePick, viewSettings);
+var barcodePickView = BarcodePickView.forModeWithViewSettings(dataCaptureContext, mode, viewSettings);
 ```
 
 Connect the `BarcodePickView` to the Widget lifecycle. The widget is dependent on calling `widgetPaused` and `widgetResumed` to set up the camera and its overlays properly.
@@ -103,12 +100,12 @@ void didChangeAppLifecycleState(AppLifecycleState state) {
     // Resume finding by calling the BarcodePickView widgetResumed function.
     // Under the hood, it re-enables the BarcodePick mode and makes sure the view is properly
     // setup.
-    BarcodePickView.widgetResumed();
+    barcodePickView.widgetResumed();
   } else {
     // Pause finding by calling the BarcodePickView widgetPaused function.
     // Under the hood, it will disable the mode and free resources that are not needed in a
     // paused state.
-    BarcodePickView.widgetPaused();
+    barcodePickView.widgetPaused();
   }
 }
 ```
@@ -122,13 +119,11 @@ Register a [BarcodePickViewUiListener](https://docs.scandit.com/7.6/data-capture
 In this tutorial, we will then navigate back to the previous screen to finish the session.
 
 ```dart
-BarcodePickView.uiListener = this
+barcodePickView.uiListener = this;
 
 @override
-void didTapFinishButton(Set<BarcodePickProduct> foundItems) {
-  // This method is called when the user presses the
-  // finish button. It returns the list of all items that were found during
-  // the session.
+void didTapFinishButton(BarcodePickView view) {
+  // This method is called when the user presses the finish button.
 }
 ```
 
@@ -137,7 +132,7 @@ void didTapFinishButton(Set<BarcodePickProduct> foundItems) {
 With everything configured, you can now start searching for items. This is done by calling `BarcodePickView.start()`.
 
 ```dart
-BarcodePickView.start();
+barcodePickView.start();
 ```
 
 This is the equivalent of pressing the Play button programmatically. It will start the search process, turn on the camera, and hide the item carousel.

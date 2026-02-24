@@ -54,22 +54,22 @@ In this case, you can filter the others out. This can be done by symbology, symb
 For example, you might want to scan only Code 128 barcodes and no PDF417 ones.
 
 ```dart
-var settings = new BarcodeCountSettings();
-barcodeCountSettings.enableSymbologies(enabledSymbologies);
+var settings = BarcodeCountSettings();
+settings.enableSymbology(Symbology.code128, true);
 
 Set<Symbology> excludedSymbologies = {};
 excludedSymbologies.add(Symbology.pdf417);
 var filterSettings = settings.filterSettings;
-filterSettings.excludedSymbologies(excludedSymbologies);
+filterSettings.excludedSymbologies = excludedSymbologies;
 ```
 
 Or, you want to exclude all the barcodes starting with 4 numbers:
 
 ```dart
-var settings = new BarcodeCountSettings();
+var settings = BarcodeCountSettings();
 
 var filterSettings = settings.filterSettings;
-filterSettings.excludedCodesRegex("^1234.*");
+filterSettings.excludedCodesRegex = "^1234.*";
 ```
 
 By default the filters applied to the relevant barcodes are transparent, but you can use [`BarcodeFilterHighlightSettings`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-filter-highlight-settings.html#barcode-filter-highlight-settings) to change the color and level of transparency.

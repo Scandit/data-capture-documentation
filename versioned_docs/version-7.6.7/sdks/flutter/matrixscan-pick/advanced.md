@@ -19,18 +19,27 @@ You may want more fine-grained knowledge over the different events happening dur
 To do this, you can directly register a [`BarcodePickListener`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-pick-listener.html#interface-scandit.datacapture.barcode.pick.IBarcodePickListener) on the mode itself, keeping in mind that these listeners are called from a background thread.
 
 ```dart
-mode.addListener(this)
+barcodePickView.addListener(myListener);
 
-    class BarcodePickListenerImpl implements BarcodePickListener
-    {
-        @override
-        void onObservationStarted() {
-          // The mode was started
-        }
+class BarcodePickViewListenerImpl implements BarcodePickViewListener {
+  @override
+  void didStartScanning(BarcodePickView view) {
+    // The view started scanning
+  }
 
-        @override
-        void onObservationStopped {
-          // The mode was stopped
-        }
-    }
+  @override
+  void didFreezeScanning(BarcodePickView view) {
+    // The view was frozen
+  }
+
+  @override
+  void didPauseScanning(BarcodePickView view) {
+    // The view was paused
+  }
+
+  @override
+  void didStopScanning(BarcodePickView view) {
+    // The view stopped scanning
+  }
+}
 ```

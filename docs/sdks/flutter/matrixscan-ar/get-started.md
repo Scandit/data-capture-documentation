@@ -52,7 +52,6 @@ The create the mode with the previously created settings:
 
 ```dart
 var mode = BarcodeAr(settings);
-mode.setItemList(items);
 ```
 
 ## Setup the BarcodeArView

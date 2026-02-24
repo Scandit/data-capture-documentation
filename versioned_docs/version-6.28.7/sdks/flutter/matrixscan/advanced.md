@@ -28,7 +28,7 @@ As mentioned above, the advanced overlay combined with its [listener](https://do
 First of all, create a new instance of [BarcodeTrackingAdvancedOverlay](https://docs.scandit.com/6.28/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-tracking-advanced-overlay.html#class-scandit.datacapture.barcode.tracking.ui.BarcodeTrackingAdvancedOverlay) and add it to the [DataCaptureView](https://docs.scandit.com/6.28/data-capture-sdk/flutter/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 
 ```dart
-var overlay = BarcodeTrackingAdvancedOverlay.forView(barcodeTracking, dataCaptureView);
+var overlay = BarcodeTrackingAdvancedOverlay.withBarcodeTrackingForView(barcodeTracking, dataCaptureView);
 ```
 
 At this point, you have two options.
@@ -50,9 +50,8 @@ Using [BarcodeTrackingAdvancedOverlayListener](https://docs.scandit.com/6.28/dat
 
 ```dart
 @override
-Widget widgetForTrackedBarcode(BarcodeTrackingAdvancedOverlay overlay, TrackedBarcode trackedBarcode) {
-// Create and return the view you want to show for this tracked barcode. You can also return null, to have no view for
-this barcode.
+BarcodeTrackingAdvancedOverlayWidget? widgetForTrackedBarcode(BarcodeTrackingAdvancedOverlay overlay, TrackedBarcode trackedBarcode) {
+// Create and return the widget you want to show for this tracked barcode. You can also return null, to have no widget for this barcode.
 return ARWidget(trackedBarcode.barcode.data);
 }
 
@@ -82,7 +81,7 @@ The function [BarcodeTrackingListener.didUpdateSession()](https://docs.scandit.c
 @override
 void didUpdateSession(BarcodeTracking barcodeTracking, BarcodeTrackingSession session) {
 for (final trackedBarcode in session.addedTrackedBarcodes) {
-Widget arWidget = ARWidget(trackedBarcode.barcode.data);
+var arWidget = ARWidget(trackedBarcode.barcode.data);
 overlay.setWidgetForTrackedBarcode(arWidget, trackedBarcode);
 overlay.setAnchorForTrackedBarcode(Anchor.topCenter, trackedBarcode);
 overlay.setOffsetForTrackedBarcode(

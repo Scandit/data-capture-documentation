@@ -25,7 +25,7 @@ The general steps are:
 
 The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/6.28/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
-```sh
+```dart
 var dataCaptureContext = DataCaptureContext.forLicenseKey('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
 
@@ -36,7 +36,7 @@ The main entry point for the Barcode Count Mode is the [BarcodeCount](https://do
 For this tutorial, we will set up Barcode Count for tracking EAN13 codes. Change this to the correct symbologies for your use case (for example, Code 128, Code 39…).
 
 ```dart
-var settings = new BarcodeCountSettings();
+var settings = BarcodeCountSettings();
 settings.enableSymbology(Symbology.ean13Upca, true);
 ```
 
@@ -98,8 +98,8 @@ The values captured as part of the scanning process are part of the [session](ht
 
 ```dart
 @override
-void didScan(BarcodeCount barcodeCount, BarcodeCountSession session, Future<FrameData> Function() getFrameData) {
-	allRecognizedBarcodes = session.recognizedBarcodes.values;
+Future<void> didScan(BarcodeCount barcodeCount, BarcodeCountSession session, Future<FrameData> Function() getFrameData) async {
+	allRecognizedBarcodes = session.recognizedBarcodes;
 }
 ```
 

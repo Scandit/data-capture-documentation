@@ -63,7 +63,7 @@ The following code shows how to enable color-inverted reading for Code 128:
 
 ```dart
 var settings = BarcodeCaptureSettings();
-var symbologySettings = settings.getSymbologySettings(Symbology.code128);
+var symbologySettings = settings.settingsForSymbology(Symbology.code128);
 symbologySettings.isColorInvertedEnabled = true;
 ```
 

@@ -49,7 +49,7 @@ In this tutorial, let’s look up two items based on their EAN13 codes. We will 
 var items = <BarcodeFindItem>{
 BarcodeFindItem(BarcodeFindItemSearchOptions("9783598215438"),
 BarcodeFindItemContent("Mini Screwdriver Set", "(6-Piece)", null)),
-new BarcodeFindItem(
+BarcodeFindItem(
     BarcodeFindItemSearchOptions("9783598215414"), null) // Item information is optional, used for display only
     };
 ```

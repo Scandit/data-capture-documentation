@@ -58,11 +58,6 @@ The SparkScan built-in user interface includes the camera preview and scanning U
 
 The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [SparkScanViewSettings](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html).
 
-```dart
-SparkScanViewSettings viewSettings = new SparkScanViewSettings();
-// setup the desired appearance settings by updating the fields in the object above
-```
-
 See the [SparkScan Workflow Options](./advanced.md#workflow-options) section for more information.
 
 By adding a [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView), the scanning interface (camera preview and scanning UI elements) gets added automatically to your application.
@@ -101,11 +96,11 @@ Note that this list only contains one barcode entry.
 
 ```dart
 @override
-void didScan(SparkScan sparkScan, SparkScanSession session, Future<FrameData?> getFrameData()) {
-  if (session.newlyRecognizedBarcode.isEmpty) return;
+Future<void> didScan(SparkScan sparkScan, SparkScanSession session, Future<FrameData> getFrameData()) async {
+  if (session.newlyRecognizedBarcode == null) return;
 
   // Gather the recognized barcode
-  var barcode = session.newlyRecognizedBarcode[0];
+  var barcode = session.newlyRecognizedBarcode!;
 
   // Do something with the recognized barcode
 }
