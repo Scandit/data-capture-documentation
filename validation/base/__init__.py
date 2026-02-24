@@ -3,7 +3,6 @@ Base types shared across all language validation plugins.
 """
 
 import hashlib
-import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -11,7 +10,7 @@ from pathlib import Path
 
 @dataclass
 class Snippet:
-    source_file: Path
+    source_file: Path  # relative to repo root
     index: int  # position within the source file (0-based)
     content: str
     hash: str = field(init=False)
@@ -23,14 +22,15 @@ class Snippet:
 @dataclass
 class Failure:
     """A single snippet that failed to compile."""
-    class_name: str    # for reporting: which generated class failed
-    content_hash: str  # for cache: keyed by snippet content hash
-    errors: list[str]  # the compiler error messages
+
+    snippet: Snippet
+    errors: list[str]
 
 
 @dataclass
 class CompileResult:
     """Compilation outcome for a batch of snippets."""
+
     failures: list[Failure]
 
 
@@ -45,40 +45,19 @@ class LanguagePlugin(ABC):
     def value(self) -> str:
         """CLI argument value, e.g. 'java'."""
 
-    @property
     @abstractmethod
-    def ext(self) -> str:
-        """File extension without dot, e.g. 'java' or 'kt'."""
-
-    @property
-    @abstractmethod
-    def fence(self) -> re.Pattern:
-        """Compiled regex matching fenced code blocks for this language."""
-
-    @property
-    @abstractmethod
-    def generated_dir(self) -> Path:
-        """Where generated source files are written."""
-
-    @property
-    @abstractmethod
-    def classes_dir(self) -> Path:
-        """Where compiled class files are written."""
-
-    @property
-    @abstractmethod
-    def baseline_file(self) -> Path:
-        """Path to the committed baseline JSON."""
+    def generate_sources(self, snippets: list[Snippet]) -> None:
+        """Compute class names, generate source text, and write files to disk."""
 
     @abstractmethod
-    def generate_source(self, class_name: str, snippet: Snippet) -> str:
-        """Wrap a snippet's content in a compilable source file."""
+    def clean(self) -> None:
+        """Remove all generated source and compiled class files for this language."""
 
     @abstractmethod
-    def compile(self, sources: dict, sdk_version: str) -> CompileResult:
-        """Compile all generated source files.
+    def compile(self, snippets: list[Snippet], sdk_version: str) -> CompileResult:
+        """Compile all generated source files for the given snippets.
 
         Arguments:
-            sources: {class_name: (Snippet, source_text)}
+            snippets: snippets whose source files have already been generated
             sdk_version: e.g. '8.1.0'
         """

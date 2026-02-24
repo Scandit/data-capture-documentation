@@ -14,7 +14,6 @@ Usage:
 
 import json
 import re
-import shutil
 import sys
 from pathlib import Path
 
@@ -41,6 +40,7 @@ DOCS_DIRS = [
 DOCUSAURUS_CONFIG = REPO_ROOT / "docusaurus.config.ts"
 VALIDATION_DIR = Path(__file__).parent
 CACHE_DIR = VALIDATION_DIR / "cache"
+BASELINES_DIR = VALIDATION_DIR / "baselines"
 
 LANGUAGE_PLUGINS = {p.value: p for p in [java_plugin, kotlin_plugin]}
 
@@ -54,7 +54,7 @@ _CURRENT_VERSION_RE = re.compile(
 )
 
 
-def read_sdk_version() -> str:
+def _read_sdk_version() -> str:
     """Extract the current SDK version label from docusaurus.config.ts."""
     text = DOCUSAURUS_CONFIG.read_text(encoding="utf-8")
     m = _CURRENT_VERSION_RE.search(text)
@@ -78,74 +78,25 @@ def _restore_hidden_lines(content: str) -> str:
     return _HIDDEN_LINE.sub("", content)
 
 
-def extract_snippets(path: Path, fence: re.Pattern) -> list[Snippet]:
+def _extract_snippets(path: Path, fence: re.Pattern) -> list[Snippet]:
     text = path.read_text(encoding="utf-8")
     snippets = []
     for i, match in enumerate(fence.finditer(text)):
         content = _restore_hidden_lines(match.group(1).rstrip())
         if _ONLY_DOTS.match(content):
             continue
-        snippets.append(Snippet(source_file=path, index=i, content=content))
+        snippets.append(Snippet(source_file=path.relative_to(REPO_ROOT), index=i, content=content))
     return snippets
 
 
-def collect_snippets(fence: re.Pattern) -> list[Snippet]:
+def _collect_snippets(fence: re.Pattern) -> list[Snippet]:
     all_snippets: list[Snippet] = []
     for docs_dir in DOCS_DIRS:
         if not docs_dir.exists():
             continue
         for path in sorted(docs_dir.rglob("*.md")) + sorted(docs_dir.rglob("*.mdx")):
-            all_snippets.extend(extract_snippets(path, fence))
+            all_snippets.extend(_extract_snippets(path, fence))
     return all_snippets
-
-
-# =============================================================================
-# Step 2 — Generate one source file per snippet
-# =============================================================================
-
-
-def _class_name(snippet: Snippet, language_value: str) -> str:
-    try:
-        rel = snippet.source_file.relative_to(REPO_ROOT / "docs")
-    except ValueError:
-        rel = Path(snippet.source_file.name)
-    slug = re.sub(r"[^A-Za-z0-9]", "_", str(rel))
-    slug = re.sub(r"_+", "_", slug).strip("_")
-    return f"Snippet_{language_value}_{slug}_{snippet.index:03d}"
-
-
-def generate_all(snippets: list[Snippet], plugin: LanguagePlugin) -> dict:
-    """Returns {class_name: (snippet, source)}"""
-    result = {}
-    for s in snippets:
-        cn = _class_name(s, plugin.value)
-        result[cn] = (s, plugin.generate_source(cn, s))
-    return result
-
-
-# =============================================================================
-# Step 3 — Write sources and build
-# =============================================================================
-
-
-def write_sources(sources: dict, generated_dir: Path, ext: str):
-    generated_dir.mkdir(parents=True, exist_ok=True)
-    for class_name, (_, source) in sources.items():
-        (generated_dir / f"{class_name}.{ext}").write_text(source, encoding="utf-8")
-
-
-def clean_generated_sources(plugin: LanguagePlugin):
-    """Remove all generated source files for the given language."""
-    d = plugin.generated_dir
-    if d.exists():
-        for f in d.glob(f"*.{plugin.ext}"):
-            f.unlink()
-
-
-def clean_classes(plugin: LanguagePlugin):
-    """Remove compiled class files for the given language."""
-    if plugin.classes_dir.exists():
-        shutil.rmtree(plugin.classes_dir)
 
 
 # =============================================================================
@@ -179,58 +130,56 @@ def _save_baseline(entries: list[dict], baseline_file: Path):
 # =============================================================================
 
 
-def cache_file_for(plugin: LanguagePlugin) -> Path:
+def _cache_file_for(plugin: LanguagePlugin) -> Path:
     return CACHE_DIR / f"snippet-{plugin.value}-cache.json"
 
 
-def run_compile(
-    plugin: LanguagePlugin, sources: dict, sdk_version: str
+def _run_compile(
+    plugin: LanguagePlugin, snippets: list[Snippet], sdk_version: str
 ) -> CompileResult:
     """Load cache, filter already-compiled snippets, compile the rest, save cache."""
-    cache = _load_cache(sdk_version, cache_file_for(plugin))
+    cache = _load_cache(sdk_version, _cache_file_for(plugin))
     cached_failures: list[Failure] = []
-    to_compile: dict = {}
+    to_compile: list[Snippet] = []
     preserved: dict = {}
 
-    for cn, (snippet, source) in sources.items():
+    for snippet in snippets:
         h = snippet.hash
         if h in cache:
             preserved[h] = cache[h]
             if cache[h]:
-                cached_failures.append(
-                    Failure(class_name=cn, content_hash=h, errors=cache[h])
-                )
+                cached_failures.append(Failure(snippet=snippet, errors=cache[h]))
         else:
-            to_compile[cn] = (snippet, source)
+            to_compile.append(snippet)
 
-    print(f"  {len(sources) - len(to_compile)} cached, {len(to_compile)} to compile")
+    print(f"  {len(snippets) - len(to_compile)} cached, {len(to_compile)} to compile")
 
     new_cache = dict(preserved)
     new_failures: list[Failure] = []
     if to_compile:
         result = plugin.compile(to_compile, sdk_version)
         new_failures = result.failures
-        failed_hashes = {f.content_hash: f.errors for f in new_failures}
-        for cn, (snippet, _) in to_compile.items():
+        failed_hashes = {f.snippet.hash: f.errors for f in new_failures}
+        for snippet in to_compile:
             new_cache[snippet.hash] = failed_hashes.get(snippet.hash, [])
 
-    _save_cache(new_cache, sdk_version, cache_file_for(plugin))
+    _save_cache(new_cache, sdk_version, _cache_file_for(plugin))
     return CompileResult(failures=cached_failures + new_failures)
 
 
 # =============================================================================
-# Step 4 — Report
+# Step 2 — Report
 # =============================================================================
 
 
-def report(
-    sources: dict,
+def _report(
+    snippets: list[Snippet],
     result: CompileResult,
     plugin: LanguagePlugin,
     returncode: int,
     baseline_skipped: int = 0,
 ) -> int:
-    total = len(sources)
+    total = len(snippets)
     failed = len(result.failures)
     passed = total - failed
 
@@ -242,13 +191,8 @@ def report(
         summary += f"  |  {baseline_skipped} skipped (baseline)"
     print(summary + "\n")
 
-    for failure in sorted(result.failures, key=lambda f: f.class_name):
-        snippet, _ = sources[failure.class_name]
-        try:
-            display = str(snippet.source_file.relative_to(REPO_ROOT))
-        except ValueError:
-            display = str(snippet.source_file)
-        print(f"[FAIL] {display}  (snippet {snippet.index})")
+    for failure in sorted(result.failures, key=lambda f: (str(f.snippet.source_file), f.snippet.index)):
+        print(f"[FAIL] {failure.snippet.source_file}  (snippet {failure.snippet.index})")
         for e in failure.errors:
             print(e)
         print()
@@ -294,15 +238,16 @@ def main():
 
     plugin = LANGUAGE_PLUGINS[args.language]
 
-    if (args.clean or args.baseline) and cache_file_for(plugin).exists():
-        cache_file_for(plugin).unlink()
+    if (args.clean or args.baseline) and _cache_file_for(plugin).exists():
+        _cache_file_for(plugin).unlink()
         print("Cleaned snippet cache.")
 
-    sdk_version = read_sdk_version()
+    sdk_version = _read_sdk_version()
     print(f"SDK version: {sdk_version}")
 
     print(f"Extracting {plugin.name} snippets from docs…")
-    snippets = collect_snippets(plugin.fence)
+    fence = re.compile(rf"```{plugin.value}\s*\n(.*?)```", re.DOTALL)
+    snippets = _collect_snippets(fence)
     n_files = len({s.source_file for s in snippets})
     print(f"  {len(snippets)} snippets across {n_files} files")
 
@@ -310,56 +255,49 @@ def main():
     # so we don't generate or compile them at all.
     baseline_skipped = 0
     if not args.baseline:
-        baseline = _load_baseline(plugin.baseline_file)
+        baseline = _load_baseline(BASELINES_DIR / f"baseline-{plugin.value}.json")
         if baseline:
             before = len(snippets)
             snippets = [
                 s
                 for s in snippets
-                if (
-                    s.hash,
-                    str(s.source_file.relative_to(REPO_ROOT)),
-                    s.index,
-                )
-                not in baseline
+                if (s.hash, str(s.source_file), s.index) not in baseline
             ]
             baseline_skipped = before - len(snippets)
             if baseline_skipped:
                 print(f"  {baseline_skipped} skipped (baseline)")
 
     print(f"Generating {plugin.name} source files…")
-    sources = generate_all(snippets, plugin)
 
     ensure_gradle_wrapper()
-    clean_generated_sources(plugin)
-    clean_classes(plugin)
-    write_sources(sources, plugin.generated_dir, plugin.ext)
+    plugin.clean()
+    plugin.generate_sources(snippets)
 
     print("Compiling…")
-    result = run_compile(plugin, sources, sdk_version)
+    result = _run_compile(plugin, snippets, sdk_version)
 
     if args.baseline:
         if result.failures:
             failed_entries = [
                 {
-                    "hash": failure.content_hash,
-                    "file": str(sources[failure.class_name][0].source_file.relative_to(REPO_ROOT)),
-                    "snippet": sources[failure.class_name][0].index,
+                    "hash": failure.snippet.hash,
+                    "file": str(failure.snippet.source_file),
+                    "snippet": failure.snippet.index,
                 }
                 for failure in result.failures
             ]
-            _save_baseline(failed_entries, plugin.baseline_file)
+            _save_baseline(failed_entries, BASELINES_DIR / f"baseline-{plugin.value}.json")
             print(
                 f"Baseline saved: {len(failed_entries)} failing snippet(s) → "
-                f"{plugin.baseline_file.relative_to(REPO_ROOT)}"
+                f"{BASELINES_DIR / f"baseline-{plugin.value}.json".relative_to(REPO_ROOT)}"
             )
         else:
             print("All snippets passed — no baseline file generated.")
         returncode = 1 if result.failures else 0
-        sys.exit(report(sources, result, plugin, returncode))
+        sys.exit(_report(snippets, result, plugin, returncode))
 
     returncode = 1 if result.failures else 0
-    sys.exit(report(sources, result, plugin, returncode, baseline_skipped))
+    sys.exit(_report(snippets, result, plugin, returncode, baseline_skipped))
 
 
 if __name__ == "__main__":

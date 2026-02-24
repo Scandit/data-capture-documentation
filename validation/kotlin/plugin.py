@@ -4,6 +4,7 @@ Kotlin-specific validation plugin.
 
 import os
 import re
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -23,8 +24,6 @@ from base import CompileResult, Failure, LanguagePlugin, Snippet
 # =============================================================================
 
 KOTLIN_CLASSES_DIR = ANDROID_PROJECT_DIR / "build" / "snippet-kotlin-classes"
-
-_KOTLIN_FENCE = re.compile(r"```kotlin\s*\n(.*?)```", re.DOTALL)
 
 # Matches a top-level Kotlin object declaration (column 0, optional visibility
 # modifier), e.g. `object BuildConfig {` or `private object Foo {`.
@@ -104,27 +103,12 @@ class KotlinPlugin(LanguagePlugin):
     def value(self) -> str:
         return "kotlin"
 
-    @property
-    def ext(self) -> str:
-        return "kt"
+    def _class_name(self, snippet: Snippet) -> str:
+        slug = re.sub(r"[^A-Za-z0-9]", "_", str(snippet.source_file))
+        slug = re.sub(r"_+", "_", slug).strip("_")
+        return f"Snippet_kotlin_{slug}_{snippet.index:03d}"
 
-    @property
-    def fence(self) -> re.Pattern:
-        return _KOTLIN_FENCE
-
-    @property
-    def generated_dir(self) -> Path:
-        return GENERATED_DIR
-
-    @property
-    def classes_dir(self) -> Path:
-        return KOTLIN_CLASSES_DIR
-
-    @property
-    def baseline_file(self) -> Path:
-        return Path(__file__).parent.parent / "baselines" / "baseline-kotlin.json"
-
-    def generate_source(self, class_name: str, snippet: Snippet) -> str:
+    def _generate_source(self, class_name: str, snippet: Snippet) -> str:
         extra_imports, body = _split_imports(snippet.content)
         body = _ELLIPSIS_LINE.sub("// ...", body)
         top_level_objects, companion_objects, body = _split_object_blocks(body)
@@ -148,7 +132,7 @@ class KotlinPlugin(LanguagePlugin):
         return (
             f"package com.scandit.validation\n\n"
             f"{extra_block}{objects_block}\n\n"
-            f"// Source: {snippet.source_file.name}, snippet {snippet.index}\n"
+            f"// Source: {snippet.source_file}, snippet {snippet.index}\n"
             f'@Suppress("all")\n'
             f"class {class_name} : ValidationBaseKotlin() {{{companion_section}\n"
             f"    fun validate() {{\n"
@@ -157,18 +141,34 @@ class KotlinPlugin(LanguagePlugin):
             f"}}\n"
         )
 
-    def compile(self, sources: dict, sdk_version: str) -> CompileResult:
+    def generate_sources(self, snippets: list[Snippet]) -> None:
+        GENERATED_DIR.mkdir(parents=True, exist_ok=True)
+        for snippet in snippets:
+            class_name = self._class_name(snippet)
+            source = self._generate_source(class_name, snippet)
+            (GENERATED_DIR / f"{class_name}.kt").write_text(source, encoding="utf-8")
+
+    def clean(self) -> None:
+        if GENERATED_DIR.exists():
+            for f in GENERATED_DIR.glob("*.kt"):
+                f.unlink()
+        if KOTLIN_CLASSES_DIR.exists():
+            shutil.rmtree(KOTLIN_CLASSES_DIR)
+
+    def compile(self, snippets: list[Snippet], sdk_version: str) -> CompileResult:
         """Compile all Kotlin snippets in a single kotlinc invocation."""
         kotlinc = _find_kotlinc()
         sdk_classpath = _export_classpath(sdk_version)
 
         KOTLIN_CLASSES_DIR.mkdir(parents=True, exist_ok=True)
 
-        if not sources:
+        if not snippets:
             return CompileResult(failures=[])
 
+        snippet_by_class_name = {self._class_name(s): s for s in snippets}
+
         kt_files = [str(VALIDATION_BASE_KOTLIN)] + [
-            str(GENERATED_DIR / f"{cn}.kt") for cn in sources
+            str(GENERATED_DIR / f"{cn}.kt") for cn in snippet_by_class_name
         ]
 
         r = subprocess.run(
@@ -189,8 +189,8 @@ class KotlinPlugin(LanguagePlugin):
 
         return CompileResult(
             failures=[
-                Failure(class_name=cn, content_hash=sources[cn][0].hash, errors=errs)
+                Failure(snippet=snippet_by_class_name[cn], errors=errs)
                 for cn, errs in errors_by_cn.items()
-                if cn in sources
+                if cn in snippet_by_class_name
             ]
         )
