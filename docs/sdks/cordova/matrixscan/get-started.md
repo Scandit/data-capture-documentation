@@ -40,7 +40,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 The first step to add capture capabilities to your application is to initialize the [data capture context](https://docs.scandit.com/data-capture-sdk/cordova/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```js
-await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
 
 :::note

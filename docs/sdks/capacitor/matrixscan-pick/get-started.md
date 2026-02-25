@@ -34,7 +34,7 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to [you
 The first step to add capture capabilities to your application is to initialize the Data Capture Context with a valid Scandit Data Capture SDK license key.
 
 ```js
-await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
 
 :::note

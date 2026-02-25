@@ -47,7 +47,7 @@ cd datacapture-capacitor-samples/ListBuildingSample
 
 ```js
 ...
-await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ...
 ```
 
@@ -90,7 +90,7 @@ npm install scandit-capacitor-datacapture-barcode
 The first step is to initialize the Data Capture Context with your license key:
 
 ```js
-await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
 
 :::note

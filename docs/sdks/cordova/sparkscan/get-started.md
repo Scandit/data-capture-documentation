@@ -31,7 +31,7 @@ Devices running the Scandit Data Capture SDK need to have a GPU or the performan
 The first step to add capture capabilities to your application is to initialize the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/cordova/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```js
-await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
 
 :::note

@@ -39,7 +39,7 @@ With the context you can then instantiate a [`BarcodeGeneratorBuilder`](https://
 You can configure the colors used in the resulting image:
 
 ```javascript
-await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 const builder = BarcodeGenerator.code128BarcodeGeneratorBuilder(DataCaptureContext.sharedInstance)
     .withBackgroundColor(Color.fromHex('#ffffff'))
     .withForegroundColor(Color.fromHex('#000000'));
@@ -73,7 +73,7 @@ With the context you can then instantiate a [`QRCodeBarcodeGeneratorBuilder`](ht
 You can configure the colors used in the resulting image, and the two settings that can be configured for QR codes: [`QRCodeBarcodeGeneratorBuilder.errorCorrectionLevel`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-generator-builder.html#method-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder.WithErrorCorrectionLevel) and [`QRCodeBarcodeGeneratorBuilder.versionNumber`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-generator-builder.html#method-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder.WithVersionNumber).
 
 ```javascript
-await DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 const builder = BarcodeGenerator.qrCodeBarcodeGeneratorBuilder(DataCaptureContext.sharedInstance)
     .withBackgroundColor(Color.fromHex('#ffffff'))
     .withForegroundColor(Color.fromHex('#000000'))
