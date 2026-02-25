@@ -75,7 +75,7 @@ To automatically synchronize your Scandit Express configuration with Scandit, yo
 2. Click on your project card.
 
 3. The Android Scandit Express App specifies the following Application Restriction:
-    ```java
+    ```xml
     <restriction
 
        android:key="deploymentCode"

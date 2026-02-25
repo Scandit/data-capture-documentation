@@ -54,18 +54,10 @@ This file guides coding agents (and humans!) to install and integrate the **Scan
 
 ## Initialize the SDK (Core)
 
-Kotlin:
 ```kotlin
 import com.scandit.datacapture.core.DataCaptureContext
 
 val dataCaptureContext = DataCaptureContext.forLicenseKey(BuildConfig.SCANDIT_LICENSE_KEY)
-```
-
-Java:
-```java
-import com.scandit.datacapture.core.capture.DataCaptureContext;
-DataCaptureContext dataCaptureContext =
-    DataCaptureContext.forLicenseKey(BuildConfig.SCANDIT_LICENSE_KEY);
 ```
 
 > Tip: The built‑in UI components (e.g., `SparkScanView`, `BarcodeFindView`) manage camera start/stop when you route lifecycle calls to them.
@@ -78,7 +70,6 @@ DataCaptureContext dataCaptureContext =
 
 **Dependencies**: `ScanditCaptureCore`, `ScanditBarcodeCapture`.
 
-Kotlin (Activity/Fragment extract):
 ```kotlin
 import com.scandit.datacapture.barcode.spark.ui.SparkScanView
 import com.scandit.datacapture.barcode.spark.ui.SparkScanViewSettings
@@ -106,21 +97,6 @@ sparkScan.addListener(object : SparkScanListener {
 })
 ```
 
-Java (snippets equivalent):
-```java
-SparkScanSettings settings = new SparkScanSettings();
-HashSet<Symbology> syms = new HashSet<>();
-syms.add(Symbology.EAN13_UPCA);
-settings.enableSymbologies(syms);
-
-SparkScan sparkScan = new SparkScan(settings);
-SparkScanViewSettings viewSettings = new SparkScanViewSettings();
-SparkScanView sparkView = SparkScanView.newInstance(parentView, dataCaptureContext, sparkScan, viewSettings);
-
-@Override protected void onResume() { sparkView.onResume(); super.onResume(); }
-@Override protected void onPause() { sparkView.onPause(); super.onPause(); }
-```
-
 ---
 
 ## Barcode Capture (low‑level single scan)
@@ -129,7 +105,6 @@ SparkScanView sparkView = SparkScanView.newInstance(parentView, dataCaptureConte
 
 **Dependencies**: `ScanditCaptureCore`, `ScanditBarcodeCapture`.
 
-Kotlin (essentials):
 ```kotlin
 val barcodeSettings = BarcodeCaptureSettings().apply {
     enableSymbologies(setOf(Symbology.CODE128, Symbology.QR))
@@ -155,7 +130,6 @@ barcodeCapture.addListener(object : BarcodeCaptureListener {
 **When to use**: highlight items that match a *list*; quickly search shelves/containers.  
 **Note**: MatrixScan Count/Find are powered by **BarcodeFind** + **BarcodeFindView**.
 
-Kotlin:
 ```kotlin
 val findSettings = BarcodeFindSettings().apply {
     setSymbologyEnabled(Symbology.EAN13_UPCA, true)
@@ -185,8 +159,6 @@ findView.setListener(object : BarcodeFindViewUiListener {
 // Programmatic start (same as tapping Play):
 findView.startSearching()
 ```
-
-Java equivalents mirror the above (per docs).
 
 ---
 

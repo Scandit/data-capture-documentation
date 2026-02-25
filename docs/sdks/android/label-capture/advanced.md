@@ -17,9 +17,6 @@ To customize the appearance of an overlay you can implement a [LabelCaptureBasic
 
 The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [brushForField()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
-<Tabs groupId="language">
-<TabItem value="kotlin" label="Kotlin">
-
 ```kotlin
 overlay.listener = object : LabelCaptureBasicOverlayListener {
     /*
@@ -55,49 +52,6 @@ overlay.listener = object : LabelCaptureBasicOverlayListener {
 }
 
 ```
-</TabItem>
-<TabItem value="java" label="Java">
-
-```java
-overlay.setListener(new LabelCaptureBasicOverlayListener() {
-    @Nullable
-    @Override
-    public Brush brushForLabel(
-        @NonNull LabelCaptureBasicOverlay overlay,
-        @NonNull CapturedLabel label
-    ) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public Brush brushForField(
-        @NonNull LabelCaptureBasicOverlay overlay,
-        @NonNull LabelField field,
-        @NonNull CapturedLabel label
-    ) {
-        if (field.getName().equals("<your-barcode-field-name>")) {
-            return new Brush(
-                getResources().getColor(R.color.barcode_overlay_fill),
-                getResources().getColor(R.color.barcode_overlay_stroke),
-                0f
-            );
-        }
-
-        if (field.getName().equals("<your-expiry-date-field-name>")) {
-            return new Brush(
-                getResources().getColor(R.color.expiry_date_overlay_fill),
-                getResources().getColor(R.color.expiry_date_overlay_stroke),
-                0f
-            );
-        }
-
-        return null;
-    }
-});
-```
-</TabItem>
-</Tabs>
 
 :::tip
 You can also use `LabelCaptureBasicOverlay.setLabelBrush()` and `LabelCaptureBasicOverlay.setCapturedFieldBrush()` to configure the overlay if you don't need to customize the appearance based on the name or content of the fields.
@@ -106,9 +60,6 @@ You can also use `LabelCaptureBasicOverlay.setLabelBrush()` and `LabelCaptureBas
 ### Advanced Overlay
 
 For more advanced use cases, such as adding custom views or implementing Augmented Reality (AR) features, you can use the `LabelCaptureAdvancedOverlay`. The example below creates an advanced overlay, configuring it to display a styled warning message below expiry date fields when they’re close to expiring, while ignoring other fields.
-
-<Tabs groupId="language">
-<TabItem value="kotlin" label="Kotlin">
 
 ```kotlin
 // Create an advanced overlay that allows for custom views to be added over detected label fields
@@ -190,123 +141,6 @@ advancedOverlay.listener = object : LabelCaptureAdvancedOverlayListener {
 }
 ```
 
-</TabItem>
-<TabItem value="java" label="Java">
-
-```java
-// Create an advanced overlay that allows for custom views to be added over detected label fields
-// This is the key component for implementing Augmented Reality features
-LabelCaptureAdvancedOverlay advancedOverlay = LabelCaptureAdvancedOverlay.newInstance(
-    labelCapture, dataCaptureView);
-
-// Configure the advanced overlay with a listener that handles AR content creation and positioning
-advancedOverlay.setListener(new LabelCaptureAdvancedOverlayListener() {
-
-    @Nullable
-    @Override
-    public View viewForCapturedLabel(
-        @NonNull LabelCaptureAdvancedOverlay overlay,
-        @NonNull CapturedLabel capturedLabel
-    ) {
-        // We return null since we're only adding AR elements to specific fields, not the entire label
-        return null;
-    }
-
-    @NonNull
-    @Override
-    public Anchor anchorForCapturedLabel(
-        @NonNull LabelCaptureAdvancedOverlay overlay,
-        @NonNull CapturedLabel capturedLabel
-    ) {
-        // This defines where on the detected label the AR view would be anchored
-        return Anchor.CENTER;
-    }
-
-    @NonNull
-    @Override
-    public PointWithUnit offsetForCapturedLabel(
-        @NonNull LabelCaptureAdvancedOverlay overlay,
-        @NonNull CapturedLabel capturedLabel,
-        @NonNull View view
-    ) {
-        // This defines the offset from the anchor point for the label's AR view
-        return new PointWithUnit(
-            new FloatWithUnit(0f, MeasureUnit.PIXEL),
-            new FloatWithUnit(0f, MeasureUnit.PIXEL)
-        );
-    }
-
-    @Nullable
-    @Override
-    public View viewForCapturedLabelField(
-        @NonNull LabelCaptureAdvancedOverlay overlay,
-        @NonNull LabelField labelField
-    ) {
-        // We only want to create AR elements for expiry date fields that are text-based
-        if (labelField.getName().toLowerCase().contains("expiry") &&
-            labelField.getType() == LabelFieldType.TEXT) {
-
-            //
-            // data extraction from expiry date field and days until expiry date calculation
-            //
-
-            // Assume we have a method `daysUntilExpiry()` that returns the days left until expiry
-            int daysUntilExpiry = daysUntilExpiry(labelField.getText());
-            int dayLimit = 3; // Example threshold
-
-            if (daysUntilExpiry < dayLimit) {
-                // Create and configure the AR element - a TextView with appropriate styling
-                // This view will appear as an overlay on the camera feed
-                TextView textView = new TextView(context);
-                textView.setText("Item expires soon!");
-                textView.setTextColor(Color.WHITE);
-                textView.setBackgroundColor(Color.RED);
-                textView.setPadding(16, 8, 16, 8);
-
-                // Add an icon to the left of the text for visual guidance
-                Drawable drawable = ContextCompat.getDrawable(context, R.drawable.ic_warning);
-                if (drawable != null) {
-                    drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-                    textView.setCompoundDrawables(drawable, null, null, null);
-                }
-                textView.setCompoundDrawablePadding(16); // Padding between icon and text
-
-                return textView;
-            }
-        }
-        // Return null for any fields that aren't expiry dates, which means no AR overlay
-        return null;
-    }
-
-    @NonNull
-    @Override
-    public Anchor anchorForCapturedLabelField(
-        @NonNull LabelCaptureAdvancedOverlay overlay,
-        @NonNull LabelField labelField
-    ) {
-        // BOTTOM_CENTER places it right below the expiry date text for better visibility
-        return Anchor.BOTTOM_CENTER;
-    }
-
-    @NonNull
-    @Override
-    public PointWithUnit offsetForCapturedLabelField(
-        @NonNull LabelCaptureAdvancedOverlay overlay,
-        @NonNull LabelField labelField,
-        @NonNull View view
-    ) {
-        // This defines the offset from the anchor point
-        return new PointWithUnit(
-            new FloatWithUnit(0f, MeasureUnit.DIP),
-            new FloatWithUnit(22f, MeasureUnit.DIP)
-        );
-    }
-});
-```
-</TabItem>
-</Tabs>
-
-
 ## Validation Flow
 
 Implementing a validation flow in your Smart Label Capture application differs from the [Get Started](/sdks/android/label-capture/get-started.md) steps outlined earlier as follows:
@@ -314,9 +148,6 @@ Implementing a validation flow in your Smart Label Capture application differs f
 ### Visualize the Scan Process
 
 Validation flow uses a different overlay, the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-validation-flow-overlay.html). This overlay provides a user interface that guides users through the label capture process, including validation steps.
-
-<Tabs groupId="language">
-<TabItem value="kotlin" label="Kotlin">
 
 ```kotlin
 // Create the overlay
@@ -329,26 +160,8 @@ val validationFlowOverlay = LabelCaptureValidationFlowOverlay.newInstance(
 // Set the listener to receive validation events
 validationFlowOverlay.listener = this
 ```
-</TabItem>
-<TabItem value="java" label="Java">
-
-```java
-// Create the overlay
-validationFlowOverlay = LabelCaptureValidationFlowOverlay.newInstance(
-    getContext(),
-    labelCapture,
-    dataCaptureView
-);
-// Set the listener to receive validation events
-validationFlowOverlay.setListener(this);
-```
-</TabItem>
-</Tabs>
 
 ### Adjust the Hint Messages
-
-<Tabs groupId="language">
-<TabItem value="kotlin" label="Kotlin">
 
 ```kotlin
 // Configure the validation flow with custom settings
@@ -364,30 +177,10 @@ val validationSettings = LabelCaptureValidationFlowSettings.newInstance().apply 
 // Apply the settings to the overlay
 validationFlowOverlay.applySettings(validationSettings)
 ```
-</TabItem>
-
-<TabItem value="java" label="Java">
-
-```java
-// Configure the validation flow with custom settings
-LabelCaptureValidationFlowSettings validationSettings = LabelCaptureValidationFlowSettings.newInstance();
-
-validationSettings.setStandbyHintText("No label detected, camera paused");
-validationSettings.setValidationHintText("fields captured"); // X/Y (X fields out of total Y) is shown in front of this string
-validationSettings.setValidationErrorText("Input not valid");
-
-// Apply the settings to the overlay
-validationFlowOverlay.applySettings(validationSettings);
-```
-</TabItem>
-</Tabs>
 
 ### Define a Listener
 
 To handle validation events, implement the [LabelCaptureValidationFlowOverlayListener](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-validation-flow-listener.html) interface.
-
-<Tabs groupId="language">
-<TabItem value="kotlin" label="Kotlin">
 
 ```kotlin
 // This is called by the validation flow overlay when a label has been fully captured and validated
@@ -398,24 +191,3 @@ override fun onValidationFlowLabelCaptured(fields: List<LabelField>) {
     val expiryDate = fields.find { it.name == "<your-expiry-date-field-name>" }?.text
 }
 ```
-</TabItem>
-<TabItem value="java" label="Java">
-
-```java
-// This is called by the validation flow overlay when a label has been fully captured and validated
-@Override
-public void onValidationFlowLabelCaptured(@NonNull List<LabelField> fields) {
-    
-    String barcodeData = null;
-    for (LabelField field : fields) {
-        if (field.getName().equals("<your-barcode-field-name>")) {
-            barcodeData = field.getBarcode().getData();
-        } else if (field.getName().equals("<your-expiry-date-field-name>")) {
-            String expiryDate = field.getText();
-        }
-    }
-}
-```
-</TabItem>
-</Tabs>
-
