@@ -86,7 +86,7 @@ Next, create a [BarcodeSelection](https://docs.scandit.com/data-capture-sdk/capa
 
 ```js
 const barcodeSelection = new BarcodeSelection(settings);
-DataCaptureContext.sharedInstance.addMode(barcodeSelection);
+await DataCaptureContext.sharedInstance.addMode(barcodeSelection);
 ```
 
 ## Register the Barcode Selection Listener

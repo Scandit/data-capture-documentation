@@ -89,7 +89,7 @@ Next, create a [BarcodeSelection](https://docs.scandit.com/data-capture-sdk/flut
 
 ```dart
 var barcodeSelection = BarcodeSelection(settings);
-DataCaptureContext.sharedInstance.addMode(barcodeSelection);
+await DataCaptureContext.sharedInstance.addMode(barcodeSelection);
 ```
 
 ## Register the Barcode Selection Listener

@@ -87,7 +87,7 @@ Next, create a [BarcodeSelection](https://docs.scandit.com/data-capture-sdk/cord
 
 ```js
 const barcodeSelection = new Scandit.BarcodeSelection(settings);
-DataCaptureContext.sharedInstance.addMode(barcodeSelection);
+await Scandit.DataCaptureContext.sharedInstance.addMode(barcodeSelection);
 ```
 
 ## Register the Barcode Selection Listener
@@ -143,7 +143,7 @@ Because the frame source is configurable, the data capture context must be told 
 [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/cordova/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
 ```js
-DataCaptureContext.sharedInstance.setFrameSource(camera);
+Scandit.DataCaptureContext.sharedInstance.setFrameSource(camera);
 ```
 
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/cordova/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of
