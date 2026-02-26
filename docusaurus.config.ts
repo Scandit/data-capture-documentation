@@ -266,7 +266,7 @@ const config: Config = {
               banner: 'none',
               badge: false,
             },
-            '6.28.7': {
+            '6.28.8': {
               banner: 'none',
               badge: false,
             },

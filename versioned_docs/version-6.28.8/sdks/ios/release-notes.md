@@ -9,6 +9,20 @@ keywords:
   - ios
 ---
 
+## 6.28.8
+
+**Released**: February 27, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a memory leak and removed unnecessary retention of scanning data in some MatrixScan modes
+
+#### Core
+
+* Fixed Zoom Control visibility on MS Find for devices with an Ultra-Wide camera, including non-Pro models
+
 ## 6.28.7
 
 **Released**: November 3, 2025
