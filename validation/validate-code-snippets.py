@@ -35,7 +35,7 @@ from kotlin import plugin as kotlin_plugin
 
 REPO_ROOT = Path(__file__).parent.parent
 DOCS_DIRS = [
-    REPO_ROOT / "docs" / "sdks" / "android",
+    REPO_ROOT / "docs" / "sdks",
 ]
 DOCUSAURUS_CONFIG = REPO_ROOT / "docusaurus.config.ts"
 VALIDATION_DIR = Path(__file__).parent
@@ -85,7 +85,9 @@ def _extract_snippets(path: Path, fence: re.Pattern) -> list[Snippet]:
         content = _restore_hidden_lines(match.group(1).rstrip())
         if _ONLY_DOTS.match(content):
             continue
-        snippets.append(Snippet(source_file=path.relative_to(REPO_ROOT), index=i, content=content))
+        snippets.append(
+            Snippet(source_file=path.relative_to(REPO_ROOT), index=i, content=content)
+        )
     return snippets
 
 
@@ -191,8 +193,12 @@ def _report(
         summary += f"  |  {baseline_skipped} skipped (baseline)"
     print(summary + "\n")
 
-    for failure in sorted(result.failures, key=lambda f: (str(f.snippet.source_file), f.snippet.index)):
-        print(f"[FAIL] {failure.snippet.source_file}  (snippet {failure.snippet.index})")
+    for failure in sorted(
+        result.failures, key=lambda f: (str(f.snippet.source_file), f.snippet.index)
+    ):
+        print(
+            f"[FAIL] {failure.snippet.source_file}  (snippet {failure.snippet.index})"
+        )
         for e in failure.errors:
             print(e)
         print()
@@ -277,6 +283,7 @@ def main():
     result = _run_compile(plugin, snippets, sdk_version)
 
     if args.baseline:
+        baseline_file = BASELINES_DIR / f"baseline-{plugin.value}.json"
         if result.failures:
             failed_entries = [
                 {
@@ -286,13 +293,17 @@ def main():
                 }
                 for failure in result.failures
             ]
-            _save_baseline(failed_entries, BASELINES_DIR / f"baseline-{plugin.value}.json")
+            _save_baseline(failed_entries, baseline_file)
             print(
                 f"Baseline saved: {len(failed_entries)} failing snippet(s) → "
-                f"{BASELINES_DIR / f"baseline-{plugin.value}.json".relative_to(REPO_ROOT)}"
+                f"{(BASELINES_DIR / f'baseline-{plugin.value}.json').relative_to(REPO_ROOT)}"
             )
         else:
-            print("All snippets passed — no baseline file generated.")
+            if baseline_file.exists():
+                baseline_file.unlink()
+                print("All snippets passed — baseline file removed.")
+            else:
+                print("All snippets passed — no baseline file generated.")
         returncode = 1 if result.failures else 0
         sys.exit(_report(snippets, result, plugin, returncode))
 
