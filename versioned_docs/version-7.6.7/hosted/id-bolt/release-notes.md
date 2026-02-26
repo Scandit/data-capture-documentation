@@ -9,6 +9,14 @@ hide_title: true
 title: Release Notes
 ---
 
+## 2.2.0
+
+**Released**: February 24, 2026
+
+### New Features
+
+* Granular anonymization control: configure which specific fields to anonymize, either using a default set or by specifying extra fields per document type. See [Data Handling](../data-handling) for details.
+
 ## 2.1.0
 
 **Released**: January 21, 2026

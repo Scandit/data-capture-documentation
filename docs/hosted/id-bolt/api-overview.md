@@ -78,6 +78,7 @@ The following options can be configured when creating an ID Bolt session:
 | `documentSelection` | `DocumentSelection` | Yes | Defines acceptable documents | [Document Selection](../document-selection) |
 | `returnDataMode` | `ReturnDataMode` | Yes | Controls what data is returned | [Data Handling](../data-handling) |
 | `anonymizationMode` | `AnonymizationMode` | No | Controls data anonymization | [Data Handling](../data-handling) |
+| `anonymizedFields` | `AnonymizedFields` | No | Fine-grained control over which fields to anonymize | [Data Handling](../data-handling) |
 | `scanner` | `Scanner` | No | Customizes scanner behavior | [Workflow Options](../workflow) |
 | `validation` | `Validators[]` | No | Validators to verify ID | [Validators](../validators) |
 | `locale` | `string` | No | Interface language | [Supported Locales](#supported-locales) |
