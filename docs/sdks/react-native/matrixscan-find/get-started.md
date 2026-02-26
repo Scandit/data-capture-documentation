@@ -76,15 +76,16 @@ const viewSettings = new BarcodeFindViewSettings();
 Construct a new BarcodeFindView. The BarcodeFindView is automatically added to the provided parent view.
 
 ```js
-let barcodeFindView;
+const viewRef = useRef<BarcodeFindView | null>(null);
+
 <BarcodeFindView
 	barcodeFind={mode}
 	context={dataCaptureContext}
 	viewSettings={viewSettings}
 	ref={(view) => {
-		barcodeFindView = view;
+		viewRef.current = view;
 		// Handle the view as needed, for example
-		barcodeFindView.startSearching();
+		view.startSearching();
 	}}
 ></BarcodeFindView>;
 ```

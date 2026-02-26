@@ -73,13 +73,14 @@ const viewSettings = new BarcodeArViewSettings();
 Next, create a `BarcodeArView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeArView` is automatically added to the provided parent view.
 
 ```js
-let barcodeArView;
+const viewRef = useRef<BarcodeArView | null>(null);
+
 <BarcodeArView
 	barcodeAr={mode}
 	context={dataCaptureContext}
 	settings={viewSettings}
 	ref={(view) => {
-		barcodeArView = view;
+		viewRef.current = view;
 	}}
 ></BarcodeArView>;
 ```

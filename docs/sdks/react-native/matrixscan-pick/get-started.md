@@ -84,13 +84,14 @@ const viewSettings = new BarcodePickViewSettings();
 Construct a new `BarcodePickView`. The `BarcodePickView` is automatically added to the provided parent view.
 
 ```js
-let barcodePickView;
+const viewRef = useRef<BarcodePickView | null>(null);
+
 <BarcodePickView
         barcodePick={mode}
         context={dataCaptureContext}
         settings={viewSettings}
         ref={view => {
-          barcodePickView = view;
+          viewRef.current = view;
         }}
 />
 ```
