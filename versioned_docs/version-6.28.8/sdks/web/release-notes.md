@@ -11,9 +11,13 @@ keywords:
 
 ## 6.28.8
 
-**Released**: February 20, 2026
+**Released**: February 26, 2026
 
-No updates for this framework in this release.
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a memory leak and removed unnecessary retention of scanning data in some MatrixScan modes
 
 ## 6.28.7
 
