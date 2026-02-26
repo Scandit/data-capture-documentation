@@ -11,9 +11,14 @@ keywords:
 
 ## 6.28.8
 
-**Released**: February 20, 2026
+**Released**: February 26, 2026
 
 ### Bug Fixes
+
+#### Barcode
+
+* Fixed a memory leak and removed unnecessary retention of scanning data in some MatrixScan modes
+* Added improvements to the handling of the finish button in MS Find and enabled control of the view position and size via the API
 
 #### Core
 
