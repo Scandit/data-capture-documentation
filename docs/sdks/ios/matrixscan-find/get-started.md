@@ -70,8 +70,8 @@ items.insert(BarcodeFindItem(
 Finally, create a [`SDCBarcodeFind`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) instance with the Data Capture Context and the settings initialized in the previous step:
 
 ```swift
-let barcodeFind = BarcodeFind(context: context, settings: settings)
-mode.setItemsList(items)
+let barcodeFind = BarcodeFind(settings: settings)
+barcodeFind.setItemList(items)
 ```
 
 ## Setup the `BarcodeFindView`
@@ -91,7 +91,7 @@ viewSettings.hapticEnabled = true
 Next, create a `SDCBarcodeFindView` instance with the Data Capture Context and the settings initialized in the previous step. he BarcodeFindView is automatically added to the provided parent view.
 
 ```swift
-let barcodeFindView = BarcodeFindView(parentView: view, context: context, barcodeFind: mode, settings: viewSettings)
+let barcodeFindView = BarcodeFindView(parentView: view, context: context, barcodeFind: barcodeFind, settings: viewSettings)
 ```
 
 Last, connect the [`BarcodeFindView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-find-view.html#class-scandit.datacapture.barcode.find.ui.BarcodeFindView) to the iOS view controller lifecycle. 

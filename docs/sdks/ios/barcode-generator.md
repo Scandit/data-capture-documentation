@@ -36,7 +36,7 @@ To generate barcodes, you need to create a [`SDCDataCaptureContext`](https://doc
 With the context you can then instantiate a [`SDCBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.BarcodeGeneratorBuilder), and use the method of [`SDCBarcodeGenerator`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator.html#class-scandit.datacapture.barcode.generator.BarcodeGenerator) for the symbology you are interested in, in this example Code 128.
 
 ```swift
-let context = DataCaptureContext(licenseKey: licenseKey)
+let context = DataCaptureContext(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
 let builder = BarcodeGenerator.code128BarcodeGeneratorBuilder(with: context)
 ```
 
@@ -69,7 +69,7 @@ To generate barcodes, you need to create a [`SDCDataCaptureContext`](https://doc
 With the context you can then instantiate a [`SDCQRCodeBarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder) using the method of [`SDCBarcodeGenerator`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-generator.html#class-scandit.datacapture.barcode.generator.BarcodeGenerator) specific for QR codes.
 
 ```swift
-let context = DataCaptureContext(licenseKey: licenseKey)
+let context = DataCaptureContext(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
 let builder = BarcodeGenerator.qrCodeBarcodeGeneratorBuilder(with: context)
 ```
 

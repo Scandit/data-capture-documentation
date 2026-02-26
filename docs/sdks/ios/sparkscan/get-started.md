@@ -39,7 +39,6 @@ For this tutorial, we will set up SparkScan for scanning EAN13 codes. Change thi
 ```swift
 let settings = SparkScanSettings()
 settings.set(symbology: .ean13UPCA, enabled: true)
-sparkScan.apply(settings, completionHandler: nil)
 ```
 
 Next, create a SparkScan instance with the settings initialized in the previous step:
@@ -74,12 +73,12 @@ See the [SparkScan Workflow Options](./advanced.md#workflow-options) section for
 Additionally, make sure to call [`SDCSparkScanView.prepareScanning`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.PrepareScanning) and [`SDCSparkScanView.stopScanning`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your UIViewController’s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) and [`viewWillDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621485-viewwilldisappear) callbacks, to make sure that start up time is optimal and scanning is stopped when the app is going in the background.
 
 ```swift
-override func viewWillAppear(animated: Bool) {
+override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     sparkScanView.prepareScanning()
 }
 
-override func viewWillDisappear(animated: Bool) {
+override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
     sparkScanView.stopScanning()
 }
@@ -104,7 +103,7 @@ extension ViewController: SparkScanListener {
                       didScanIn session: SparkScanSession,
                       frameData: FrameData?) {
         // Gather the recognized barcode
-        let barcode = session.newlyRecognizedBarcode.first
+        let barcode = session.newlyRecognizedBarcode
         // This method is invoked from a recognition internal thread.
         // Dispatch to the main thread to update the internal barcode list.
         DispatchQueue.main.async {

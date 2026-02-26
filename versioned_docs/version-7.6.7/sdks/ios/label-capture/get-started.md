@@ -79,11 +79,11 @@ The main entry point for the Label Capture Mode is the [LabelCapture](https://do
 It is configured through [LabelCaptureSettings](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/label-capture-settings.html#class-scandit.datacapture.label.LabelCaptureSettings) and allows you to register one or more [listeners](https://docs.scandit.com/7.6/data-capture-sdk/ios/label-capture/api/label-capture-listener.html#interface-scandit.datacapture.label.ILabelCaptureListener) that get informed whenever a new frame has been processed.
 
 ```swift
-let labelDefinition: LabelDefinition {
+let labelDefinition: LabelDefinition = {
     /*
-     * Add a barcode field with the expected symbologies and pattern.
-     * You can omit the pattern if the content of the barcode is unknown. 
-     */
+        * Add a barcode field with the expected symbologies and pattern.
+        * You can omit the pattern if the content of the barcode is unknown.
+        */
     let barcodeField = CustomBarcode(
         name: "<your-barcode-field-name>",
         symbologies: [
@@ -94,18 +94,18 @@ let labelDefinition: LabelDefinition {
     barcodeField.patterns = ["\\d{12,14}"]
 
     /*
-     * Add a text field for capturing expiry dates.
-     * The field is set as optional so that the capture can complete 
-     * even if the expiry date is not present or not readable.
-     */
+        * Add a text field for capturing expiry dates.
+        * The field is set as optional so that the capture can complete
+        * even if the expiry date is not present or not readable.
+        */
     let expiryDateField = ExpiryDateText(name: "<your-expiry-date-field-name>")
     expiryDateField.optional = false
 
     return LabelDefinition(
-      name: "<your-label-name>", 
-      fields: [barcodeField, expiryDateField]
+        name: "<your-label-name>",
+        fields: [barcodeField, expiryDateField]
     )
-}
+}()
 
 guard let labelCaptureSettings = try? LabelCaptureSettings(
     labelDefinitions: [labelDefinition]
@@ -152,14 +152,14 @@ extension YourScanViewController: LabelCaptureListener {
         /*
          * Given the label capture settings defined above, barcode data will always be present.
          */
-        guard let barcodeField = label.field(for: "<your-barcode-field-name>"),
+        guard let barcodeField = label.fields.first(where: { $0.name == "<your-barcode-field-name>"}),
               let barcodeData = barcodeField.barcode?.data else { return }
 
         /*
-         * The expiry date field is optional. 
+         * The expiry date field is optional.
          * Check for nil in your result handling.
          */
-        let expiryDate = label.field(for: "<your-expiry-date-field-name>").text
+        let expiryDate = label.fields.first(where: { $0.name == "<your-barcode-field-name>"})?.text
 
         /*
          * Emit feedback to notify the user that a label has been captured.
@@ -167,7 +167,7 @@ extension YourScanViewController: LabelCaptureListener {
         Feedback.default.emit()
 
         DispatchQueue.main.async {
-            camera?.switch(toDesiredState: .off)
+            self.camera?.switch(toDesiredState: .off)
             labelCapture.isEnabled = false
             /*
              * Handle the captured barcode and expiry date here.
@@ -188,7 +188,7 @@ Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptur
 /* 
 * Create the data capture view and attach it to the data capture context created earlier.
 */
-dataCaptureView = DataCaptureView(context: dataCaptureContext, frame: .zero)
+dataCaptureView = DataCaptureView(context: context, frame: .zero)
 
 /* 
 * Add the data capture view to your view hierarchy, e.g. with insertSubview.

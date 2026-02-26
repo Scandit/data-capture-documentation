@@ -74,10 +74,8 @@ extension ViewController: BarcodeCaptureListener {
   func barcodeCapture(_ barcodeCapture: BarcodeCapture,
                    didScanIn session: BarcodeCaptureSession,
                    frameData: FrameData) {
-        let recognizedBarcodes = session.newlyRecognizedBarcode
-        for barcode in recognizedBarcodes {
-            // Do something with the barcode.
-        }
+        let recognizedBarcode = session.newlyRecognizedBarcode
+        // Do something with the barcode.
     }
 }
 ```
@@ -90,7 +88,7 @@ barcodeCapture.addListener(self)
 
 ### Rejecting Barcodes
 
-To prevent scanning unwanted codes, you can reject them by adding the desired logic to the `onBarcodeScanned` method. This will prevent the barcode from being added to the session and will not trigger the `onSessionUpdated` method.
+To prevent scanning unwanted codes, you can reject them by adding the desired logic to the `didScanIn` method.
 
 The example below will only scan barcodes beginning with the digits `09` and ignore all others, using a transparent brush to distinguish a rejected barcode from a recognized one:
 
@@ -138,12 +136,11 @@ camera?.switch(toDesiredState: .on)
 When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a `SDCDataCaptureView` to your view hierarchy:
 
 ```swift
-let captureView = DataCaptureView(for: context, frame: view.bounds)
-captureView.dataCaptureContext = context
+let captureView = DataCaptureView(context: context, frame: view.bounds)
 captureView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 view.addSubview(captureView)
-To visualize the results of barcode scanning, the following overlay can be added:
 
+// To visualize the results of barcode scanning, the following overlay can be added:
 let overlay = BarcodeCaptureOverlay(barcodeCapture: barcodeCapture, view: captureView)
 ```
 

@@ -49,7 +49,7 @@ settings.set(symbology: .ean13UPCA, enabled: true)
 Then create the mode with the previously created settings:
 
 ```swift
-let mode = BarcodeAr(context: context,
+let barcodeAr = BarcodeAr(context: context,
                      settings: settings)
 ```
 

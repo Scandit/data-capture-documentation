@@ -67,8 +67,8 @@ let filterSettings = BarcodeFilterSettings()
 filterSettings.excludedSymbologies = [.pdf417]
 
 let barcodeCountSettings = BarcodeCountSettings()
-barcodeCountSettings.set(symbology: .code128, enabled: true))
-barcodeCountSettings.set(symbology: .pdf417, enabled: true))
+barcodeCountSettings.set(symbology: .code128, enabled: true)
+barcodeCountSettings.set(symbology: .pdf417, enabled: true)
 barcodeCountSettings.filterSettings = filterSettings
 ```
 
@@ -76,7 +76,7 @@ Or to exclude all the barcodes starting with 4 numbers:
 
 ```swift
 let filterSettings = BarcodeFilterSettings()
-settings.excludedCodesRegex = "^1234.*"
+filterSettings.excludedCodesRegex = "^1234.*"
 
 let barcodeCountSettings = BarcodeCountSettings()
 barcodeCountSettings.filterSettings = filterSettings
