@@ -56,7 +56,7 @@ keywords:
 
 #### Core
 
-* Fixed a memory leak.
+* Fixed a memory leak and removed unnecessary retention of scanning data in some MatrixScan modes
 
 ## 7.6.4
 
@@ -187,6 +187,7 @@ No updates for this framework in this release.
 
 * Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
 * Fixed a crash that occurred when scanning barcodes encoded with non-UTF-8 data.
+* Fixed a memory leak and removed unnecessary retention of scanning data in some MatrixScan modes
 
 #### Smart Label Capture
 
@@ -277,7 +278,7 @@ No updates for this framework in this release.
 #### Core
 
 * Fixed a rare crash in the EAN/UPC reader.
-* Fixed a memory leak.
+* Fixed a memory leak and removed unnecessary retention of scanning data in some MatrixScan modes
 
 ## 7.4.3
 
@@ -376,6 +377,7 @@ No updates for this framework in this release.
 #### Core
 
 * Fixed a bug that could in rare cases produce a black screen when starting the camera
+* Fixed a memory leak and removed unnecessary retention of scanning data in some MatrixScan modes
 
 ## 7.3.3
 
@@ -450,7 +452,7 @@ No updates for this framework in this release.
 
 #### Core
 
-* Fixed a memory leak.
+* Removed unnecessary retention of scanning data in some MatrixScan modes
 
 ## 7.2.5
 
@@ -460,7 +462,7 @@ No updates for this framework in this release.
 
 #### Core
 
-* Fixed a memory leak.
+* Fixed a memory leak in MatrixScan modes
 
 ## 7.2.4
 
