@@ -20,7 +20,7 @@ This page describes how to integrate the Scandit Data Capture SDK into your Flut
 
 - The latest stable version of the [Flutter SDK](https://pub.dev/publishers/scandit.com/packages) (for example through the latest Android Studio).
 - A project with:
-  - minimum iOS deployment target of 14.0 or higher (15.0 or higher for ID Capture)
+  - minimum iOS deployment target of 15.0 or higher
   - an Android project with target SDK version 23 (Android 6, Marshmallow) and Kotlin 1.7.21 or higher (version 24 or higher for ID Capture).
 - A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
 
