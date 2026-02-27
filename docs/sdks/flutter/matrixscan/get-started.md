@@ -13,20 +13,24 @@ In this guide you will learn step-by-step how to add MatrixScan to your applicat
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
+- Initializing the Data Capture Context
 - Configuring the MatrixScan mode
 - Using the built-in camera
 - Visualizing the scan process
 - Providing feedback
 - Disabling barcode tracking
 
-## Create a Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [data capture context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```dart
-var context = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the Barcode Batch Mode
 
@@ -45,7 +49,7 @@ Next, create a [BarcodeBatch](https://docs.scandit.com/data-capture-sdk/flutter/
 
 ```dart
 var barcodeBatch = BarcodeBatch(settings);
-dataCaptureContext.addMode(barcodeBatch);
+DataCaptureContext.sharedInstance.addMode(barcodeBatch);
 ```
 
 ## Use the Built-in Camera
@@ -63,17 +67,17 @@ In Android, the user must explicitly grant permission for each app to access cam
 When using the built-in camera there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
 
 ```dart
-var cameraSettings = BarcodeBatch.recommendedCameraSettings;
+var cameraSettings = BarcodeBatch.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
 
-var camera = Camera.defaultCamera..applySettings(cameraSettings);
+var camera = Camera.defaultCamera?..applySettings(cameraSettings);
 ```
 
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
 ```dart
-context.setFrameSource(camera);
+DataCaptureContext.sharedInstance.setFrameSource(camera);
 ```
 
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/flutter/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.on](https://docs.scandit.com/data-capture-sdk/flutter/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
@@ -89,14 +93,15 @@ camera.switchToDesiredState(FrameSourceState.on);
 When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/flutter/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```dart
-var dataCaptureView = DataCaptureView.forContext(dataCaptureContext);
+var dataCaptureView = DataCaptureView.forContext(DataCaptureContext.sharedInstance);
 // Add the dataCaptureView to your widget tree
 ```
 
 To visualize the results of Barcode Batch, first you need to add the following [overlay](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay):
 
 ```dart
-var overlay = BarcodeBatchBasicOverlay.withBarcodeBatchForView(barcodeBatch, dataCaptureView);
+var overlay = BarcodeBatchBasicOverlay(barcodeBatch);
+dataCaptureView.addOverlay(overlay);
 ```
 
 Once the overlay has been added, you should implement the [BarcodeBatchBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener) interface. The method [BarcodeBatchBasicOverlayListener.brushForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener.BrushForTrackedBarcode) is invoked every time a new tracked barcode appears and it can be used to set a [brush](https://docs.scandit.com/data-capture-sdk/flutter/core/api/ui/brush.html#class-scandit.datacapture.core.ui.Brush) that will be used to highlight that specific barcode in the [overlay](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay).

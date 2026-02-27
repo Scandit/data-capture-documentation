@@ -24,11 +24,8 @@ As mentioned above, the advanced overlay combined with its [listener](https://do
 First of all, create a new instance of [BarcodeBatchAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay) and add it to the [DataCaptureView](https://docs.scandit.com/data-capture-sdk/cordova/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 
 ```js
-const overlay =
-	Scandit.BarcodeBatchAdvancedOverlay.withBarcodeBatchForView(
-		barcodeBatch,
-		view
-	);
+const overlay = new Scandit.BarcodeBatchAdvancedOverlay(barcodeBatch);
+view.addOverlay(overlay);
 ```
 
 At this point, you have two options.

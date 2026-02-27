@@ -31,11 +31,29 @@ You may want to introduce logic in your app to show an error message when scanni
   
 - The color of the flashing screen upon scan. You can enable or disable the visual feedback via [SparkScanViewSettings.visualFeedbackEnabled](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.VisualFeedbackEnabled) and you can control the color via [SparkScanBarcodeFeedback](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-barcode-feedback.html#sparkscan-barcode-feedback).
 
-An error example is here reported:
+To emit an error, implement a [SparkScanFeedbackDelegate](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-feedback-delegate.html#interface-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate) and set it on the [SparkScanView](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.FeedbackDelegate):
 
 ```js
-self.sparkScanView.emitFeedback(SparkScanBarcodeErrorFeedback(message: "This code should not have been scanned",
-resumeCapturingDelay: 6, visualFeedbackColor: UIColor.red))
+sparkScanView.feedbackDelegate = sparkScanFeedbackDelegate;
+```
+
+In the [feedbackForBarcode](https://docs.scandit.com/7.6/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-feedback-delegate.html#method-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate.GetFeedbackForBarcode) callback you can return an error or a success feedback:
+
+```js
+const sparkScanFeedbackDelegate = {
+    feedbackForBarcode: (barcode) => {
+        if (isValidBarcode(barcode)) {
+            return new SparkScanBarcodeSuccessFeedback();
+        } else {
+            return new SparkScanBarcodeErrorFeedback(
+                'This code should not have been scanned',
+                60 * 1000,
+                Color.fromHex('#FF0000'),
+                new Brush(Color.fromHex('#FF0000'), Color.fromHex('#FF0000'), 1),
+            );
+        }
+    },
+};
 ```
 
 You can have different error states triggered by different logic conditions. For example you can trigger an error state when a wrong barcode is scanned, and another one when a duplicate barcode is scanned. These errors can show different colors and have different timeouts.

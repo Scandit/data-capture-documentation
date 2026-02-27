@@ -27,7 +27,7 @@ The general steps are:
 The first step to add find capabilities to your application is to create a new [DataCaptureContext](https://docs.scandit.com/7.6/data-capture-sdk/cordova/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
 
 ```js
-const dataCaptureContext = DataCaptureContext.forLicenseKey(
+const dataCaptureContext = Scandit.DataCaptureContext.forLicenseKey(
 	'-- ENTER YOUR SCANDIT LICENSE KEY HERE --'
 );
 ```
@@ -41,8 +41,8 @@ For this tutorial, we will set up Barcode Find for tracking EAN13 codes. Change 
 First create the settings:
 
 ```js
-const settings = BarcodeFindSettings();
-settings.enableSymbology(Symbology.ean13Upca, true);
+const settings = new Scandit.BarcodeFindSettings();
+settings.enableSymbology(Scandit.Symbology.EAN13UPCA, true);
 ```
 
 Then you have to create the list of items that will be actively searched for.
@@ -51,16 +51,16 @@ In this tutorial, let’s look up two items based on their EAN13 codes. We will 
 
 ```js
 const items = [
-new BarcodeFindItem(new BarcodeFindItemSearchOptions("9783598215438"),
-new BarcodeFindItemContent("Mini Screwdriver Set", "(6-Piece)", null)),
-new BarcodeFindItem(new BarcodeFindItemSearchOptions("9783598215414"), null) // Item information is optional, used for display only
+new Scandit.BarcodeFindItem(new Scandit.BarcodeFindItemSearchOptions("9783598215438"),
+new Scandit.BarcodeFindItemContent("Mini Screwdriver Set", "(6-Piece)", null)),
+new Scandit.BarcodeFindItem(new Scandit.BarcodeFindItemSearchOptions("9783598215414"), null) // Item information is optional, used for display only
 ]
 ```
 
 Create the mode with the previously created settings and set the items:
 
 ```js
-const mode = new BarcodeFind(settings);
+const mode = new Scandit.BarcodeFind(settings);
 mode.setItemList(items);
 ```
 
@@ -74,23 +74,14 @@ The BarcodeFindView appearance can be customized through [BarcodeFindViewSetting
 - Enable sound and haptic alerts
 
 ```js
-const viewSettings = new BarcodeFindViewSettings();
+const viewSettings = new Scandit.BarcodeFindViewSettings();
 ```
 
 Construct a new BarcodeFindView. The BarcodeFindView is automatically added to the provided parent view.
 
 ```js
-let barcodeFind;
-<BarcodeFindView
-	barcodeFind={barcodeFind}
-	context={dataCaptureContext}
-	viewSettings={viewSettings}
-	ref={(view) => {
-		barcodeFindView = view;
-		// Handle the view as needed, for example
-		barcodeFindView.startSearching();
-	}}
-></BarcodeFindView>;
+const barcodeFindView = new Scandit.BarcodeFindView({ context: dataCaptureContext, barcodeFind: mode, viewSettings });
+barcodeFindView.connectToElement(htmlElement);
 ```
 
 ## Register a listener to be notified with found items
@@ -101,7 +92,7 @@ In this tutorial, we will then navigate back to the previous screen to finish th
 
 ```js
 barcodeFindView.barcodeFindViewUiListener = {
-	didTapFinishButton(foundItems: BarcodeFindItem[]) {
+	didTapFinishButton(foundItems) {
 		// This method is called when the user presses the
 		// finish button. It returns the list of all items that were found during
 		// the session.

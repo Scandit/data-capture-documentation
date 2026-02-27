@@ -108,11 +108,11 @@ In Android, the user must explicitly grant permission for each app to access cam
 When using the built-in camera there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
 
 ```dart
-var cameraSettings = BarcodeCapture.recommendedCameraSettings;
+var cameraSettings = BarcodeCapture.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
 
-var camera = Camera.defaultCamera..applySettings(cameraSettings);
+var camera = Camera.defaultCamera?..applySettings(cameraSettings);
 ```
 
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/7.6/data-capture-sdk/flutter/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):

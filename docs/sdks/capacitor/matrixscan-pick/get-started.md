@@ -16,7 +16,7 @@ In this guide you will learn step-by-step how to add MatrixScan Pick to your app
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
+- Initializing the Data Capture Context
 - Configuring the Barcode Pick Mode
 - Setup the Barcode Pick View
 - Registering the Listener to notify about found items
@@ -29,13 +29,17 @@ Before starting with adding a capture mode, make sure that you have a valid Scan
 You can retrieve your Scandit Data Capture SDK license key by signing in to [your Scandit account](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-## Create a Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new Data Capture Context. The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the Data Capture Context with a valid Scandit Data Capture SDK license key.
 
-```javascript
-const dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+```js
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the Barcode Pick Mode
 
@@ -43,24 +47,23 @@ The main entry point for the Barcode Pick Mode is the `BarcodePick` object. You 
 
 Here we configure it for tracking EAN13 codes, but you should change this to the correct symbologies for your use case.
 
-```javascript
-const settings = BarcodePickSettings();
-settings.enableSymbology(Symbology.ean13Upca, true);
+```js
+const settings = new BarcodePickSettings();
+settings.enableSymbology(Symbology.EAN13UPCA, true);
 ```
 
 Then you have to create the list of items that will be picked and quantity to be picked for each item.
 
-```javascript
+```js
 const items = [
-    new BarcodePickProduct(new BarcodePickProductIdentifier("9783598215438"),
-                        new BarcodePickProductQuantityToPick(3),
-    new BarcodePickProduct(new BarcodePickProductIdentifier("9783598215414"), new BarcodePickProductQuantityToPick(3)
-]
+    new BarcodePickProduct(new BarcodePickProductIdentifier("9783598215438"), new BarcodePickProductQuantityToPick(3)),
+    new BarcodePickProduct(new BarcodePickProductIdentifier("9783598215414"), new BarcodePickProductQuantityToPick(3)),
+];
 ```
 
 Create the mode with the previously created settings:
 
-```javascript
+```js
 const mode = new BarcodePick(settings);
 ```
 
@@ -79,17 +82,17 @@ The `BarcodePickView` appearance can be customized through [`BarcodePickViewSett
 * Zoom button
 * Loading Dialog
 
-```javascript
+```js
 const viewSettings = new BarcodePickViewSettings();
 // ...
 ```
 
 Construct a new `BarcodePickView`. The `BarcodePickView` will be attached to the HTMLElement provided in the ConnectToElement function.
 
-```javascript
-const BarcodePickView = BarcodePickView.forModeWithViewSettings(dataCaptureContext, BarcodePick, viewSettings);
-// Connect the data capture view to the HTML element, so it can fill up its size and follow its position.
-view.connectToElement(document.getElementById('html-element-id'));
+```js
+const barcodePickView = new BarcodePickView({ context: DataCaptureContext.sharedInstance, barcodePick: mode, settings: viewSettings });
+// Connect the view to the HTML element, so it can fill up its size and follow its position.
+barcodePickView.connectToElement(document.getElementById('html-element-id'));
 ```
 
 ## Register the Listener
@@ -100,13 +103,12 @@ Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk
 
 In this tutorial, we will then navigate back to the previous screen to finish the find session.
 
-```javascript
-BarcodePickView.BarcodePickViewUiListener = {
-    didTapFinishButton(foundItems: BarcodePickProduct[]) {
-    // This method is called when the user presses the
-    // finish button. It returns the list of all items that were found during
-    // the session.
-    }
+```js
+barcodePickView.uiListener = {
+    didTapFinishButton(foundItems) {
+        // This method is called when the user presses the finish button.
+        // It returns the list of all items that were found during the session.
+    },
 };
 ```
 
@@ -114,8 +116,8 @@ BarcodePickView.BarcodePickViewUiListener = {
 
 With everything configured, you can now start searching for items. This is done by calling `BarcodePickView.start()`.
 
-```javascript
-BarcodePickView.start();
+```js
+barcodePickView.start();
 ```
 
 This is the equivalent of pressing the Play button programmatically. It will start the search process, turn on the camera, and hide the item carousel.

@@ -18,11 +18,8 @@ As mentioned above, the advanced overlay combined with its [listener](https://do
 First of all, create a new instance of [BarcodeBatchAdvancedOverlay](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-batch-advanced-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchAdvancedOverlay) and add it to the [DataCaptureView](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 
 ```js
-const overlay =
-	Scandit.BarcodeBatchAdvancedOverlay.withBarcodeBatchForView(
-		barcodeBatch,
-		view
-	);
+const overlay = new BarcodeBatchAdvancedOverlay(barcodeBatch);
+view.addOverlay(overlay);
 ```
 
 At this point, you have two options.
@@ -48,22 +45,22 @@ overlay.listener = {
 		let element = document.createElement('span');
 		element.innerText = trackedBarcode.barcode.data;
 		element.style.backgroundColor = '#FFFFFFFF';
-		return Scandit.TrackedBarcodeView.withHTMLElement(element, null);
+		return TrackedBarcodeView.withHTMLElement(element, null);
 	},
 
 	anchorForTrackedBarcode: (overlay, trackedBarcode) => {
 		// As we want the view to be above the barcode, we anchor the view's center to the top-center of the barcode quadrilateral.
 		// Use the function 'offsetForTrackedBarcode' below to adjust the position of the view by providing an offset.
-		return Scandit.Anchor.TopCenter;
+		return Anchor.TopCenter;
 	},
 
 	offsetForTrackedBarcode: (overlay, trackedBarcode) => {
 		// This is the offset that will be applied to the view.
 		// You can use .fraction to give a measure relative to the view itself, the sdk will take care of transforming this into pixel size.
 		// We now center horizontally and move up the view to make sure it's centered and above the barcode quadrilateral by half of the view's height.
-		return new Scandit.PointWithUnit(
-			new Scandit.NumberWithUnit(0, Scandit.MeasureUnit.Fraction),
-			new Scandit.NumberWithUnit(-1, Scandit.MeasureUnit.Fraction)
+		return new PointWithUnit(
+			new NumberWithUnit(0, MeasureUnit.Fraction),
+			new NumberWithUnit(-1, MeasureUnit.Fraction)
 		);
 	},
 };
@@ -79,20 +76,20 @@ didUpdateSession: (barcodeBatch, session) => {
 		let element = document.createElement('span');
 		element.innerText = trackedBarcode.barcode.data;
 		element.style.backgroundColor = '#FFFFFFFF';
-		let trackedBarcodeView = Scandit.TrackedBarcodeView.withHTMLElement(
+		let trackedBarcodeView = TrackedBarcodeView.withHTMLElement(
 			element,
 			null
 		);
 
 		window.overlay.setViewForTrackedBarcode(trackedBarcodeView, trackedBarcode);
 		window.overlay.setAnchorForTrackedBarcode(
-			Scandit.Anchor.TopCenter,
+			Anchor.TopCenter,
 			trackedBarcode
 		);
 		window.overlay.setOffsetForTrackedBarcode(
-			new Scandit.PointWithUnit(
-				new Scandit.NumberWithUnit(0, Scandit.MeasureUnit.Fraction),
-				new Scandit.NumberWithUnit(-1, Scandit.MeasureUnit.Fraction)
+			new PointWithUnit(
+				new NumberWithUnit(0, MeasureUnit.Fraction),
+				new NumberWithUnit(-1, MeasureUnit.Fraction)
 			),
 			trackedBarcode
 		);

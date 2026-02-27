@@ -20,16 +20,16 @@ That means certain data from certain fields won’t be returned, even if it’s 
 
 ```js
 // Default value:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_ONLY);
+settings.anonymizationMode = IdAnonymizationMode.FieldsOnly;
 
 // Sensitive data is additionally covered with black boxes on returned images:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_AND_IMAGES);
+settings.anonymizationMode = IdAnonymizationMode.FieldsAndImages;
 
 // Only images are anonymized:
-settings.setAnyonymizationMode(IdAnonymizationMode.IMAGES_ONLY);
+settings.anonymizationMode = IdAnonymizationMode.ImagesOnly;
 
 // No anonymization:
-settings.setAnyonymizationMode(IdAnonymizationMode.NONE);
+settings.anonymizationMode = IdAnonymizationMode.None;
 ```
 
 ## ID Images
@@ -45,13 +45,13 @@ For the full frame of the document, you can use [`setShouldPassImageTypeToResult
 
 ```js
 // Holder's picture as printed on a document:
-settings.setShouldPassImageTypeToResult(ImageType.FACE);
+settings.setShouldPassImageTypeToResult(IdImageType.Face, true);
 
 // Cropped image of a document:
-settings.setShouldPassImageTypeToResult(ImageType.CROPPED_DOCUMENT);
+settings.setShouldPassImageTypeToResult(IdImageType.CroppedDocument, true);
 
 // Full camera frame that contains the document:
-settings.setShouldPassImageTypeToResult(ImageType.FULL_FRAME);
+settings.setShouldPassImageTypeToResult(IdImageType.Frame, true);
 ```
 
 ## Callbacks and Scanning Workflows

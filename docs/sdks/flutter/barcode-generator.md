@@ -33,49 +33,25 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 To generate barcodes, you need to create a [`DataCaptureContext`](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). 
 
-With the context you can then instantiate a [`BarcodeGeneratorBuilder`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-generator-builder.html#class-scandit.datacapture.barcode.generator.BarcodeGeneratorBuilder), and use the method of [`BarcodeGenerator`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-generator.html#class-scandit.datacapture.barcode.generator.BarcodeGenerator) for the symbology you are interested in, in this example Code 128.
+With the context you can then use the static factory method on [`BarcodeGenerator`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-generator.html#class-scandit.datacapture.barcode.generator.BarcodeGenerator) for the symbology you are interested in, in this example Code 128, to get a builder instance.
 
 You can configure the colors used in the resulting image:
 
 ```dart
-class DataCaptureContext {
-  final String licenseKey;
-
-  DataCaptureContext.forLicenseKey(this.licenseKey);
-}
-
-class BarcodeGeneratorBuilder {
-  final DataCaptureContext context;
-  final Color backgroundColor;
-  final Color foregroundColor;
-
-  BarcodeGeneratorBuilder._(this.context, this.backgroundColor, this.foregroundColor);
-
-  factory BarcodeGeneratorBuilder.code128BarcodeGeneratorBuilder(
-      DataCaptureContext context) {
-    return BarcodeGeneratorBuilder._(context, Colors.white, Colors.black);
-  }
-
-  BarcodeGeneratorBuilder withBackgroundColor(Color color) {
-    return BarcodeGeneratorBuilder._(context, color, foregroundColor);
-  }
-
-  BarcodeGeneratorBuilder withForegroundColor(Color color) {
-    return BarcodeGeneratorBuilder._(context, backgroundColor, color);
-  }
-}
+var builder = BarcodeGenerator.code128BarcodeGeneratorBuilder(dataCaptureContext)
+    .withBackgroundColor(Colors.white)
+    .withForegroundColor(Colors.black);
+var generator = builder.build();
 ```
 
-When the builder is configured get the `BarcodeGenerator` and try to generate the image:
+When the builder is configured, call `build()` to get the `BarcodeGenerator` and try to generate the image:
 
 ```dart
 try {
-    var generator = BarcodeGeneratorBuilder.build();
-    var image = generator.generateFromData(dataString, 200);
+    var image = await generator.generateFromText(dataString, 200);
     // Use the image
 } catch (e) {
     debugPrint("Error generating barcode: $e");
-    return Center(child: Text("Failed to generate barcode"));
 }
 ```
 
@@ -89,16 +65,21 @@ With the context you can then instantiate a [`QRCodeBarcodeGeneratorBuilder`](ht
 
 You can configure the colors used in the resulting image, and the two settings that can be configured for QR codes: [`QRCodeBarcodeGeneratorBuilder.errorCorrectionLevel`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-generator-builder.html#method-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder.WithErrorCorrectionLevel) and [`QRCodeBarcodeGeneratorBuilder.versionNumber`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-generator-builder.html#method-scandit.datacapture.barcode.generator.QrCodeBarcodeGeneratorBuilder.WithVersionNumber).
 
-When the builder is configured get the `BarcodeGenerator` and try to generate the image:
+```dart
+var builder = BarcodeGenerator.qrCodeBarcodeGeneratorBuilder(dataCaptureContext)
+    .withErrorCorrectionLevel(QrCodeErrorCorrectionLevel.high)
+    .withVersionNumber(4);
+var generator = builder.build();
+```
+
+When the builder is configured, call `build()` to get the `BarcodeGenerator` and try to generate the image:
 
 ```dart
 try {
-    var generator = BarcodeGeneratorBuilder.build();
-    var image = generator.generateFromData(dataString, 200);
+    var image = await generator.generateFromText(dataString, 200);
     // Use the image
 } catch (e) {
     debugPrint("Error generating barcode: $e");
-    return Center(child: Text("Failed to generate barcode"));
 }
 ```
 

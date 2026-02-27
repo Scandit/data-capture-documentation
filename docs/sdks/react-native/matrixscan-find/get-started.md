@@ -37,8 +37,8 @@ For this tutorial, we will set up Barcode Find for tracking EAN13 codes. Change 
 First create the settings:
 
 ```js
-const settings = BarcodeFindSettings();
-settings.enableSymbology(Symbology.ean13Upca, true);
+const settings = new BarcodeFindSettings();
+settings.enableSymbology(Symbology.EAN13UPCA, true);
 ```
 
 Then you have to create the list of items that will be actively searched for.
@@ -49,12 +49,13 @@ In this tutorial, let’s look up two items based on their EAN13 codes. We will 
 const items = [
 new BarcodeFindItem(new BarcodeFindItemSearchOptions("9783598215438"),
 new BarcodeFindItemContent("Mini Screwdriver Set", "(6-Piece)", null)),
-new BarcodeFindItem(new BarcodeFindItemSearchOptions("9783598215414"), null) // Item information is optional, used for
-display only
+new BarcodeFindItem(new BarcodeFindItemSearchOptions("9783598215414"), null) // Item information is optional, used for display only
 ]
+```
 
 Create the mode with the previously created settings and set the items:
 
+```js
 const mode = new BarcodeFind(settings);
 mode.setItemList(items);
 ```
@@ -75,15 +76,16 @@ const viewSettings = new BarcodeFindViewSettings();
 Construct a new BarcodeFindView. The BarcodeFindView is automatically added to the provided parent view.
 
 ```js
-let barcodeFind;
+const viewRef = useRef<BarcodeFindView | null>(null);
+
 <BarcodeFindView
-	barcodeFind={barcodeFind}
+	barcodeFind={mode}
 	context={dataCaptureContext}
 	viewSettings={viewSettings}
 	ref={(view) => {
-		barcodeFindView = view;
+		viewRef.current = view;
 		// Handle the view as needed, for example
-		barcodeFindView.startSearching();
+		view.startSearching();
 	}}
 ></BarcodeFindView>;
 ```
@@ -96,7 +98,7 @@ In this tutorial, we will then navigate back to the previous screen to finish th
 
 ```js
 barcodeFindView.barcodeFindViewUiListener = {
-	didTapFinishButton(foundItems: BarcodeFindItem[]) {
+	didTapFinishButton(foundItems) {
 		// This method is called when the user presses the
 		// finish button. It returns the list of all items that were found during
 		// the session.

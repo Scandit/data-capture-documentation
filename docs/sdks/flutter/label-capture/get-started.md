@@ -13,7 +13,7 @@ In this guide you will learn step-by-step how to add Smart Label Capture to your
 
 The general steps are:
 
-- Create a new Data Capture Context instance
+- Initialize the Data Capture Context
 - Configure the LabelCapture mode
 - Define a listener to handle captured labels
 - Visualize the scan process
@@ -34,13 +34,17 @@ import LabelCaptureModuleOverview from '../../../partials/get-started/_smart-lab
 
 <LabelCaptureModuleOverview/>
 
-## Create a Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new Data Capture Context. The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```dart
-var dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the Label Capture Mode
 
@@ -74,7 +78,7 @@ final settings = LabelCaptureSettings.builder()
 final labelCapture = LabelCapture(settings);
 
 // Add the mode to the data capture context created earlier.
-dataCaptureContext.addMode(labelCapture);
+DataCaptureContext.sharedInstance.addMode(labelCapture);
 ```
 
 ## Define a Listener to Handle Captured Labels
@@ -90,6 +94,7 @@ Depending on your app architecture and whether you use dependency injection or n
 ```dart
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:scandit_flutter_datacapture_core/scandit_flutter_datacapture_core.dart';
 import 'package:scandit_flutter_datacapture_label/scandit_flutter_datacapture_label.dart';
@@ -132,16 +137,14 @@ class _LabelCaptureListener extends LabelCaptureListener {
       final label = labels.first;
 
       // Extract the barcode field
-      final barcodeField = label.fields.firstWhere(
+      final barcodeField = label.fields.firstWhereOrNull(
         (field) => field.name == '<your-barcode-field-name>',
-        orElse: () => null,
       );
       final barcodeData = barcodeField?.barcode?.data;
 
       // Extract the expiry date field (optional)
-      final expiryDateField = label.fields.firstWhere(
+      final expiryDateField = label.fields.firstWhereOrNull(
         (field) => field.name == '<your-expiry-date-field-name>',
-        orElse: () => null,
       );
       final expiryDate = expiryDateField?.text;
 
@@ -203,10 +206,8 @@ class _LabelCaptureScreenState extends State<LabelCaptureScreen> {
     _dataCaptureView = DataCaptureView.forContext(widget.context);
 
     // Create the overlay and add it to the DataCaptureView
-    final overlay = LabelCaptureBasicOverlay.newInstance(
-      widget.labelCapture,
-      _dataCaptureView,
-    );
+    final overlay = LabelCaptureBasicOverlay(widget.labelCapture);
+    _dataCaptureView.addOverlay(overlay);
 
     // Optionally set a rectangular viewfinder
     overlay.viewfinder = RectangularViewfinder.withStyle(
@@ -245,7 +246,7 @@ Future<void> setupCamera(DataCaptureContext context) async {
   }
 
   // Apply recommended settings for LabelCapture
-  final settings = LabelCapture.recommendedCameraSettings;
+  final settings = LabelCapture.createRecommendedCameraSettings();
   await camera.applySettings(settings);
 
   // Set camera as the frame source for the context

@@ -133,10 +133,7 @@ When using the built-in camera as frame source, you will typically want to displ
 Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/6.28/data-capture-sdk/react-native/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
 
 ```js
-let overlay = IdCaptureOverlay.withTextCaptureForView(
-	idCapture,
-	this.viewRef.current
-);
+const overlay = IdCaptureOverlay.withIdCaptureForView(idCapture, this.viewRef.current);
 ```
 
 The overlay chooses the displayed UI automatically, based on the selected

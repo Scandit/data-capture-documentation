@@ -26,8 +26,8 @@ If you already know the names of the symbologies you want to scan/read, take a l
 The following lines of code show you how to enable scanning Code 128 codes for barcode capture:
 
 ```js
-const settings = new Scandit.BarcodeCaptureSettings();
-settings.enableSymbology(Scandit.Symbology.Code128, true);
+const settings = new BarcodeCaptureSettings();
+settings.enableSymbology(Symbology.Code128, true);
 ```
 
 ## Configure the Active Symbol Count
@@ -37,16 +37,8 @@ Barcode symbologies such as [Code 128](https://docs.scandit.com/6.28/data-captur
 The below lines of code show how to change the active symbol count for Code 128 to read codes with 6, 7 and 8 symbols.
 
 ```js
-const settings = new Scandit.BarcodeCaptureSettings();
-const symbologySettings = settings.settingsForSymbology(
-	Scandit.Symbology.Code128
-);
-symbologySettings.activeSymbolCounts = [6, 7, 8];
-
-const settings = new ScanditBarcode.BarcodeCaptureSettings();
-const symbologySettings = settings.settingsForSymbology(
-	ScanditBarcode.Symbology.Code128
-);
+const settings = new BarcodeCaptureSettings();
+const symbologySettings = settings.settingsForSymbology(Symbology.Code128);
 symbologySettings.activeSymbolCounts = [6, 7, 8];
 ```
 
@@ -59,10 +51,8 @@ Calculating the active symbol count is symbology-specific as each symbology has 
 Most barcodes are printed using dark ink on a bright background. Some symbologies allow the colors to be inverted and can also be printed using bright ink on a dark background. This is not possible for all symbologies as it could lead to false reads when the symbology is not designed for this use case. Which symbologies allow color inversion can be seen in the documentation on [symbology properties](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/symbology-properties.html). When you enable a symbology as described above, only dark-on-bright codes are enabled (see [SymbologySettings.isEnabled](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.IsEnabled 'SymbologySettings.isEnabled property')). When you also want to read bright-on-dark codes, color-inverted reading for that symbology must also be enabled (see [SymbologySettings.isColorInvertedEnabled](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.IsColorInvertedEnabled)):
 
 ```js
-const settings = new Scandit.BarcodeCaptureSettings();
-const symbologySettings = settings.settingsForSymbology(
-	Scandit.Symbology.Code128
-);
+const settings = new BarcodeCaptureSettings();
+const symbologySettings = settings.settingsForSymbology(Symbology.Code128);
 symbologySettings.isColorInvertedEnabled = true;
 ```
 
@@ -72,11 +62,9 @@ Some symbologies have a mandatory checksum that will always be enforced while ot
 [SymbologySettings.checksums](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/symbology-settings.html#property-scandit.datacapture.barcode.SymbologySettings.Checksums):
 
 ```js
-const settings = new Scandit.BarcodeCaptureSettings();
-const symbologySettings = settings.settingsForSymbology(
-	Scandit.Symbology.Code39
-);
-symbologySettings.checksums = [Scandit.Checksum.Mod43];
+const settings = new BarcodeCaptureSettings();
+const symbologySettings = settings.settingsForSymbology(Symbology.Code39);
+symbologySettings.checksums = [Checksum.Mod43];
 ```
 
 ## Enable Symbology-Specific Extensions
@@ -86,9 +74,7 @@ Some symbologies allow further configuration. These configuration options are av
 To enable/disable a symbology extension, use [SymbologySettings.setExtensionEnabled()](https://docs.scandit.com/6.28/data-capture-sdk/capacitor/barcode-capture/api/symbology-settings.html#method-scandit.datacapture.barcode.SymbologySettings.SetExtensionEnabled).
 
 ```js
-const settings = new Scandit.BarcodeCaptureSettings();
-const symbologySettings = settings.settingsForSymbology(
-	Scandit.Symbology.Code39
-);
+const settings = new BarcodeCaptureSettings();
+const symbologySettings = settings.settingsForSymbology(Symbology.Code39);
 symbologySettings.setExtensionEnabled('full_ascii', true);
 ```

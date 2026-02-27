@@ -9,7 +9,7 @@ keywords:
 
 In this guide you will learn step-by-step how to add SparkScan to your application. The general steps are:
 
-1. Create a new Data Capture Context instance.
+1. Initialize the Data Capture Context.
 2. Configure the Spark Scan Mode.
 3. Create the SparkScanView with the desired settings and bind it to the application’s lifecycle.
 4. Register the listener to be informed when new barcodes are scanned and update your data whenever this event occurs.
@@ -24,13 +24,17 @@ In this guide you will learn step-by-step how to add SparkScan to your applicati
 Devices running the Scandit Data Capture SDK need to have a GPU or the performance will drastically decrease.
 :::
 
-## Create a New Data Capture Context Instance
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [Data Capture Context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
-```sh
-const context = Scandit.DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+```js
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the SparkScan Mode
 
@@ -39,14 +43,14 @@ The SparkScan Mode is configured through [`SparkScanSettings`](https://docs.scan
 For this tutorial, we will set up SparkScan for scanning EAN13 codes. Change this to the correct symbologies for your use case (for example, Code 128, Code 39…).
 
 ```js
-const settings = new Scandit.SparkScanSettings();
+const settings = new SparkScanSettings();
 settings.enableSymbologies([Symbology.EAN13UPCA]);
 ```
 
 Next, create a SparkScan instance with the settings initialized in the previous step:
 
 ```js
-const sparkScan = Scandit.SparkScan.forSettings(settings);
+const sparkScan = new SparkScan(settings);
 ```
 
 ## Setup the Spark Scan View
@@ -56,7 +60,7 @@ The SparkScan built-in user interface includes the camera preview and scanning U
 The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings).
 
 ```js
-const viewSettings = new Scandit.SparkScanViewSettings();
+const viewSettings = new SparkScanViewSettings();
 // setup the desired appearance settings by updating the fields in the object above
 ```
 
@@ -67,13 +71,7 @@ By adding a `SparkScanView`, the scanning interface (camera preview and scanning
 Add a `SparkScanView` to your view hierarchy. Construct a new SparkScan view. The `SparkScan` view is automatically added to the provided parentView:
 
 ```js
-const sparkScanComponent = (
-	<SparkScanView
-		context={context}
-		sparkScan={sparkScan}
-		sparkScanViewSettings={viewSettings}
-	/>
-);
+const sparkScanView = SparkScanView.forContext(DataCaptureContext.sharedInstance, sparkScan, viewSettings);
 ```
 
 Additionally, make sure to call [SparkScanView.stopScanning()](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your app state handling logic. You have to call this for the correct functioning of the
@@ -81,12 +79,12 @@ Additionally, make sure to call [SparkScanView.stopScanning()](https://docs.scan
 
 ```js
 componentWillUnmount() {
-sparkScanComponent.stopScanning();
+sparkScanView.stopScanning();
 }
 
 handleAppStateChange = async (nextAppState) => {
 if (nextAppState.match(/inactive|background/)) {
-sparkScanComponent.stopScanning();
+sparkScanView.stopScanning();
 }
 }
 ```

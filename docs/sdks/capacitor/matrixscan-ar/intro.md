@@ -1,11 +1,15 @@
 ---
-description: "This functionality is not currently supported in the selected framework.                                                                                          "
+description: "import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.mdx'                                                                                                "
 
-displayed_sidebar: capacitorSidebar
+sidebar_position: 1
+pagination_prev: null
+framework: capacitor
+keywords:
+  - capacitor
 ---
 
-# Page Unavailable
+# About MatrixScan AR
 
-This functionality is not currently supported in the selected framework.
+import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.mdx'
 
----
+<AboutMatrixScanCheck />

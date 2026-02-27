@@ -21,7 +21,7 @@ The fastest way to get started is by running our sample application, so we'll co
 
 Before you start, make sure you have the following:
 
-- Capacitor Version 5-7 [and other related tools and dependencies](https://capacitorjs.com/docs/getting-started).
+- Capacitor Version 5-8 [and other related tools and dependencies](https://capacitorjs.com/docs/getting-started).
 - A project with minimum iOS deployment target of 15.0 or higher. Or an Android project with target SDK version 24 (Android 7, Nougat) or higher.
 - A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
 
@@ -47,9 +47,13 @@ cd datacapture-capacitor-samples/ListBuildingSample
 
 ```js
 ...
-const context = DataCaptureContext.forLicenseKey('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ...
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 4. Install the dependencies:
 
@@ -81,13 +85,17 @@ npm install scandit-capacitor-datacapture-core
 npm install scandit-capacitor-datacapture-barcode
 ```
 
-### 2. Create the Context
+### 2. Initialize the Data Capture Context
 
-The first step is to create a context for the Data Capture tasks. This is done by creating an instance of the `DataCaptureContext` class:
+The first step is to initialize the Data Capture Context with your license key:
 
 ```js
-const context = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ### 3. Configure SparkScan Settings
 
@@ -95,10 +103,9 @@ Next, you need to configure your desired settings for SparkScan, such as the sym
 
 ```js
 const settings = new SparkScanSettings();
-settings.enabledSymbologies = [Symbology.EAN13, Symbology.Code128];
+settings.enableSymbologies([Symbology.EAN13UPCA, Symbology.Code128]);
 settings.codeDuplicateFilter = 0;
-settings.ScanIntention = ScanIntention.Smart;
-await sparkScan.applySettings(settings);
+settings.scanIntention = ScanIntention.Smart;
 ```
 
 In this example, we're:
@@ -107,15 +114,13 @@ In this example, we're:
 - Setting the code duplicate filter to 0, meaning the same code can be reported multiple times
 - Using the Smart [scan intention](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/scan-intention.html#enum-scandit.datacapture.core.ScanIntention) algorithm, to reduce the likelihood of unintended scans
 
-Lastly, we apply the settings to the SparkScan instance.
-
 ### 4. Setup the SparkScanView
 
 Now we'll create and configure the scanner view and it's settings. This is done via the `SparkScanView` and `SparkScanViewSettings` classes:
 
 ```js
 const viewSettings = new SparkScanViewSettings();
-viewSettings.defaultScanningMode = SparkScanScanningModeTarget;
+viewSettings.defaultScanningMode = new SparkScanScanningModeTarget(SparkScanScanningBehavior.Single);
 viewSettings.soundEnabled = true;
 viewSettings.hapticEnabled = false;
 ```
@@ -129,25 +134,19 @@ In this example, we're:
 Next, we create the `SparkScanView` instance, adding the scanning interface to the application:
 
 ```js
-const sparkScanComponent = (
-	<SparkScanView
-		context={context}
-		sparkScan={sparkScan}
-		sparkScanViewSettings={viewSettings}
-	/>
-);
+const sparkScanView = SparkScanView.forContext(DataCaptureContext.sharedInstance, sparkScan, viewSettings);
 ```
 
 In your application's state handling logic, you must also call the `stopScanning` method when the scanner is no longer needed:
 
 ```js
 componentWillUnmount() {
-sparkScanComponent.stopScanning();
+sparkScanView.stopScanning();
 }
 
 handleAppStateChange = async (nextAppState) => {
 if (nextAppState.match(/inactive|background/)) {
-sparkScanComponent.stopScanning();
+sparkScanView.stopScanning();
 }
 };
 ```

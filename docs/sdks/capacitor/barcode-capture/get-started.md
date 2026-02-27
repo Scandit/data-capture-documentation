@@ -15,7 +15,7 @@ In this guide you will learn step-by-step how to add Barcode Capture to your app
 The general steps are:
 
 - Include the ScanditBarcodeCapture library and its dependencies to your project, if any.
-- Create a new [data capture context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) instance, initialized with your license key.
+- Initialize the [data capture context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with your license key.
 - Create a [barcode capture settings](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-capture-settings.html#class-scandit.datacapture.barcode.BarcodeCaptureSettings) and enable the [barcode symbologies](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology) you want to read in your application.
 - Create a new [barcode capture mode](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance and initialize it with the settings created above.
 - Register a [barcode capture listener](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) to receive scan events. Process the successful scans according to your application’s needs, e.g. by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
@@ -23,15 +23,17 @@ The general steps are:
 - Display the camera preview by creating a [data capture view](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 - If displaying a preview, optionally create a new [overlay](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) and add it to [data capture view](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) for a better visual feedback.
 
-## Create the Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [data capture context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```js
-const context = Scandit.DataCaptureContext.forLicenseKey(
-	'-- ENTER YOUR SCANDIT LICENSE KEY HERE --'
-);
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the Barcode Scanning Behavior
 
@@ -40,14 +42,14 @@ Barcode scanning is orchestrated by the [BarcodeCapture](https://docs.scandit.co
 For this tutorial, we will setup barcode scanning for a small list of different barcode types, called [symbologies](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology). The list of symbologies to enable is highly application specific. We recommend that you only enable the list of symbologies your application requires.
 
 ```js
-const settings = new Scandit.BarcodeCaptureSettings();
+const settings = new BarcodeCaptureSettings();
 settings.enableSymbologies([
-	Scandit.Symbology.Code128,
-	Scandit.Symbology.Code39,
-	Scandit.Symbology.QR,
-	Scandit.Symbology.EAN8,
-	Scandit.Symbology.UPCE,
-	Scandit.Symbology.EAN13UPCA,
+	Symbology.Code128,
+	Symbology.Code39,
+	Symbology.QR,
+	Symbology.EAN8,
+	Symbology.UPCE,
+	Symbology.EAN13UPCA,
 ]);
 ```
 
@@ -56,8 +58,8 @@ If you are not disabling barcode capture immediately after having scanned the fi
 Next, create a [BarcodeCapture](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance with the settings initialized in the previous step:
 
 ```js
-const barcodeCapture = new Scandit.BarcodeCapture(settings);
-context.addMode(barcodeCapture);
+const barcodeCapture = new BarcodeCapture(settings);
+DataCaptureContext.sharedInstance.addMode(barcodeCapture);
 ```
 
 ## Register the Barcode Capture Listener
@@ -90,7 +92,7 @@ The example below will only scan barcodes beginning with the digits `09` and ign
 ```js
 ...
 if (!barcode.data || !barcode.data.startsWith('09:')) {
-	window.overlay.brush = Scandit.Brush.transparent;
+	window.overlay.brush = Brush.transparent;
     return;
 }
 ...
@@ -111,11 +113,11 @@ In Android, the user must explicitly grant permission for each app to access cam
 When using the built-in camera there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
 
 ```js
-const cameraSettings = Scandit.BarcodeCapture.recommendedCameraSettings;
+const cameraSettings = BarcodeCapture.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
 
-const camera = Scandit.Camera.default;
+const camera = Camera.default;
 
 if (camera) {
 	camera.applySettings(cameraSettings);
@@ -125,13 +127,13 @@ if (camera) {
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
 ```js
-context.setFrameSource(camera);
+DataCaptureContext.sharedInstance.setFrameSource(camera);
 ```
 
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.On](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
 ```js
-camera.switchToDesiredState(Scandit.FrameSourceState.On);
+camera.switchToDesiredState(FrameSourceState.On);
 ```
 
 ## Use a Capture View to Visualize the Scan Process
@@ -139,17 +141,15 @@ camera.switchToDesiredState(Scandit.FrameSourceState.On);
 When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```js
-const view = Scandit.DataCaptureView.forContext(context);
+const view = DataCaptureView.forContext(DataCaptureContext.sharedInstance);
 view.connectToElement(htmlElement);
 ```
 
 To visualize the results of barcode scanning, the following [overlay](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) can be added:
 
 ```js
-const overlay = Scandit.BarcodeCaptureOverlay.withBarcodeCaptureForView(
-	barcodeCapture,
-	view
-);
+const overlay = new BarcodeCaptureOverlay(barcodeCapture);
+view.addOverlay(overlay);
 ```
 
 ## Disabling Barcode Capture

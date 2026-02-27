@@ -11,7 +11,7 @@ keywords:
 
 This page describes the step-by-step instructions that helps you to add SparkScan to your application:
 
-- Create a new Data Capture Context instance
+- Initialize the Data Capture Context
 - Configure the Spark Scan Mode
 - Create the SparkScanView with the desired settings and bind it to the application’s lifecycle
 - Register the listener to be informed when new barcodes are scanned and update your data whenever this event occurs
@@ -26,13 +26,17 @@ This page describes the step-by-step instructions that helps you to add SparkSca
 Devices running the Scandit Data Capture SDK need to have a GPU or the performance will drastically decrease.
 :::
 
-## Create a New Data Capture Context Instance
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new Data Capture Context. The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```dart
-var dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the SparkScan Mode
 
@@ -58,11 +62,6 @@ The SparkScan built-in user interface includes the camera preview and scanning U
 
 The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [SparkScanViewSettings](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html).
 
-```dart
-SparkScanViewSettings viewSettings = new SparkScanViewSettings();
-// setup the desired appearance settings by updating the fields in the object above
-```
-
 See the [SparkScan Workflow Options](./advanced.md#workflow-options) section for more information.
 
 By adding a [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView), the scanning interface (camera preview and scanning UI elements) gets added automatically to your application.
@@ -70,7 +69,7 @@ By adding a [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/flutter/
 You can add a [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) to your view hierarchy:
 
 ```dart
-var sparkScanView = SparkScanView.forContext(YOUR_WIDGET_TREE_BODY, widget.dataCaptureContext, sparkScan, null);
+var sparkScanView = SparkScanView.forContext(YOUR_WIDGET_TREE_BODY, DataCaptureContext.sharedInstance, sparkScan, null);
 ```
 
 Additionally, make sure to call [`SparkScanView.onPause()`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.OnPause) in your app state handling logic. You have to call this for the correct functioning of the [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView).
@@ -101,11 +100,11 @@ Note that this list only contains one barcode entry.
 
 ```dart
 @override
-void didScan(SparkScan sparkScan, SparkScanSession session, Future<FrameData?> getFrameData()) {
-  if (session.newlyRecognizedBarcode.isEmpty) return;
+Future<void> didScan(SparkScan sparkScan, SparkScanSession session, Future<FrameData> getFrameData()) async {
+  if (session.newlyRecognizedBarcode == null) return;
 
   // Gather the recognized barcode
-  var barcode = session.newlyRecognizedBarcode[0];
+  var barcode = session.newlyRecognizedBarcode!;
 
   // Do something with the recognized barcode
 }

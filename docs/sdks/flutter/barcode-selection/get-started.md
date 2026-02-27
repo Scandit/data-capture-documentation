@@ -18,7 +18,7 @@ In this guide you will learn step-by-step how to add Barcode Selection to your a
 
 The general steps are:
 
-- Create a new [data capture context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) instance, initialized with your license key.
+- Initialize the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 - Create a [barcode selection settings](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-selection-settings.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionSettings) and choose the right configuration.
 - Create a new [barcode selection mode](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) instance and initialize it with the settings created above.
 - Register a [barcode selection listener](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) to receive scan events. Process the successful scans according to your application’s needs, e.g. by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
@@ -34,13 +34,17 @@ Before starting with adding a capture mode, make sure that you have a valid Scan
 You can retrieve your Scandit Data Capture SDK license key by signing in to [your account](https://ssl.scandit.com/dashboard/sign-in).
 :::
 
-## Create the Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [data capture context](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```dart
-var context = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Configure the Barcode Selection Behavior
 
@@ -85,7 +89,7 @@ Next, create a [BarcodeSelection](https://docs.scandit.com/data-capture-sdk/flut
 
 ```dart
 var barcodeSelection = BarcodeSelection(settings);
-context.addMode(barcodeSelection);
+await DataCaptureContext.sharedInstance.addMode(barcodeSelection);
 ```
 
 ## Register the Barcode Selection Listener
@@ -124,23 +128,23 @@ In Android, the user must explicitly grant permission for each app to access cam
 When using the built-in camera there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
 
 ```dart
-var cameraSettings = BarcodeSelection.recommendedCameraSettings;
+var cameraSettings = BarcodeSelection.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
 
-var camera = Camera.defaultCamera..applySettings(cameraSettings);
+var camera = Camera.defaultCamera?..applySettings(cameraSettings);
 ```
 
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/data-capture-sdk/flutter/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
 
 ```dart
-context.setFrameSource(camera);
+DataCaptureContext.sharedInstance.setFrameSource(camera);
 ```
 
 The camera is off by default and must be turned on. This is done by calling
 [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/flutter/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.on](https://docs.scandit.com/data-capture-sdk/flutter/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
-```js
+```dart
 camera.switchToDesiredState(FrameSourceState.on);
 ```
 

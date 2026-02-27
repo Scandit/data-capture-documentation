@@ -42,8 +42,8 @@ The main entry point for the Barcode AR Mode is the `BarcodeAr` object. You can 
 Here we configure it for tracking EAN13 codes, but you should change this to the correct symbologies for your use case.
 
 ```js
-const settings = BarcodeArSettings();
-settings.enableSymbology(Symbology.ean13Upca, true);
+const settings = new BarcodeArSettings();
+settings.enableSymbology(Symbology.EAN13UPCA, true);
 ```
 
 The create the mode with the previously created settings:
@@ -73,30 +73,25 @@ const viewSettings = new BarcodeArViewSettings();
 Next, create a `BarcodeArView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeArView` is automatically added to the provided parent view.
 
 ```js
-let barcodeAr;
+let barcodeArView;
 <BarcodeArView
-	barcodeAr={barcodeAr}
+	barcodeAr={mode}
 	context={dataCaptureContext}
-	viewSettings={viewSettings}
+	settings={viewSettings}
 	ref={(view) => {
 		barcodeArView = view;
-		// Handle the view as needed, for example
-		barcodeArView.startSearching();
 	}}
 ></BarcodeArView>;
 ```
 
 ## Register the Listener
 
-The `BarcodeArView` displays a **Finish** button next to its shutter button. 
-
-Register a [BarcodeArViewUiListener](https://docs.scandit.com/7.6/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-ar-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeArViewUiListener) to be notified what items have been found once the finish button is pressed.
-
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+Register a [BarcodeArViewUiListener](https://docs.scandit.com/7.6/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-ar-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeArViewUiListener) to be notified when a highlighted barcode is tapped.
 
 ```js
-barcodeArView.barcodeArViewUiListener = {
-	didTapFinishButton(foundItems: BarcodeArItem[]) {
+barcodeArView.uiListener = {
+	didTapHighlightForBarcode(barcodeAr, barcode, highlight) {
+		// Handle the tapped barcode.
 	},
 };
 ```

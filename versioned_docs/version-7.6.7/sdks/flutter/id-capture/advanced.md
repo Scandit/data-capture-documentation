@@ -20,16 +20,16 @@ That means certain data from certain fields won’t be returned, even if it’s 
 
 ```dart
 // Default value:
-settings.anonymizationMode = IdAnonymizationMode.FIELDS_ONLY;
+settings.anonymizationMode = IdAnonymizationMode.fieldsOnly;
 
 // Sensitive data is additionally covered with black boxes on returned images:
-settings.anonymizationMode = IdAnonymizationMode.FIELDS_AND_IMAGES;
+settings.anonymizationMode = IdAnonymizationMode.fieldsAndImages;
 
 // Only images are anonymized:
-settings.anonymizationMode = IdAnonymizationMode.IMAGES_ONLY;
+settings.anonymizationMode = IdAnonymizationMode.imagesOnly;
 
 // No anonymization:
-settings.anonymizationMode = IdAnonymizationMode.NONE;
+settings.anonymizationMode = IdAnonymizationMode.none;
 ```
 
 ## Document Capture Zones
@@ -42,12 +42,12 @@ To change this, use the `scannerType` method to set the scanner type to either [
 The `FullDocumentScanner` extracts all document information by default. If using the `SingleSideScanner`, you can specify the document zones to extract:
 
 ```dart
-// To extract data from barcodes on IDs
-SingleSideScanner.barcode(true);
-// To extract data from the visual inspection zone (VIZ) on IDs
-SingleSideScanner.visualInspectionZone(true);
-// To extract data from the machine-readable zone (MRZ) on IDs
-SingleSideScanner.machineReadableZone(true);
+// To extract data from barcodes on IDs:
+settings.scanner = IdCaptureScanner(physicalDocumentScanner: SingleSideScanner(true, false, false));
+// To extract data from the visual inspection zone (VIZ) on IDs:
+settings.scanner = IdCaptureScanner(physicalDocumentScanner: SingleSideScanner(false, false, true));
+// To extract data from the machine-readable zone (MRZ) on IDs:
+settings.scanner = IdCaptureScanner(physicalDocumentScanner: SingleSideScanner(false, true, false));
 ```
 
 ## Configure Accepted and Rejected Documents
@@ -59,14 +59,14 @@ These methods are used in conjunction with the [IdCaptureDocumentType](https://d
 For example, to accept only US Driver Licenses:
 
 ```dart
-settings.acceptedDocuments.addAll([DRIVER_LICENSE, Region.US]);
+settings.acceptedDocuments.addAll([DriverLicense(IdCaptureRegion.us)]);
 ```
 
 Or to accept all Passports *except* those from the US:
 
 ```dart
-settings.acceptedDocuments.addAll([PASSPORT]);
-settings.rejectedDocuments.adAll([Region.US]);
+settings.acceptedDocuments.addAll([Passport(IdCaptureRegion.any)]);
+settings.rejectedDocuments.addAll([Passport(IdCaptureRegion.us)]);
 ```
 
 ## ID Images

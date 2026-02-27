@@ -169,10 +169,8 @@ class _LabelCaptureScreenState extends State<LabelCaptureScreen> {
     _dataCaptureView = DataCaptureView.forContext(widget.context);
 
     // Create the overlay and add it to the DataCaptureView
-    final overlay = LabelCaptureBasicOverlay.newInstance(
-      widget.labelCapture,
-      _dataCaptureView,
-    );
+    final overlay = LabelCaptureBasicOverlay(widget.labelCapture);
+    _dataCaptureView.addOverlay(overlay);
 
     // Optionally set a rectangular viewfinder
     overlay.viewfinder = RectangularViewfinder.withStyle(
@@ -211,7 +209,7 @@ Future<void> setupCamera(DataCaptureContext context) async {
   }
 
   // Apply recommended settings for LabelCapture
-  final settings = LabelCapture.recommendedCameraSettings;
+  final settings = LabelCapture.createRecommendedCameraSettings();
   await camera.applySettings(settings);
 
   // Set camera as the frame source for the context

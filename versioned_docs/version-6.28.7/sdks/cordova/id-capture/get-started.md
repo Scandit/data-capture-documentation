@@ -152,10 +152,7 @@ view.connectToElement(htmlElement);
 Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
 
 ```js
-let overlay = Scandit.IdCaptureOverlay.withTextCaptureForView(
-	idCapture,
-	dataCaptureView
-);
+const overlay = Scandit.IdCaptureOverlay.withIdCaptureForView(idCapture, view);
 ```
 
 The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/6.28/data-capture-sdk/cordova/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).

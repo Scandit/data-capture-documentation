@@ -47,12 +47,6 @@ const symbologySettings = settings.settingsForSymbology(
 	ScanditBarcode.Symbology.Code128
 );
 symbologySettings.activeSymbolCounts = [6, 7, 8];
-
-const settings = new ScanditBarcode.BarcodeCaptureSettings();
-const symbologySettings = settings.settingsForSymbology(
-	ScanditBarcode.Symbology.Code128
-);
-symbologySettings.activeSymbolCounts = [6, 7, 8];
 ```
 
 import CalculateSymbolCount from '../../../partials/configure-symbologies/_calculate-symbol-count.mdx'

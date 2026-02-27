@@ -205,7 +205,7 @@ When using the built-in camera there are recommended settings for each capture m
 ]}>
 	<TabItem value="ts">
 	```ts
-	const cameraSettings = BarcodeCapture.recommendedCameraSettings;
+	const cameraSettings = BarcodeCapture.createRecommendedCameraSettings();
 	// cameraSettings.preferredResolution = VideoResolution.FullHD; // or adjust default camera settings
 
 	const camera = Camera.withSettings(cameraSettings);
@@ -220,7 +220,7 @@ When using the built-in camera there are recommended settings for each capture m
 	</TabItem>
 	<TabItem value="js">
 	```js
-	const cameraSettings = BarcodeCapture.recommendedCameraSettings;
+	const cameraSettings = BarcodeCapture.createRecommendedCameraSettings();
 	// cameraSettings.preferredResolution = VideoResolution.FullHD; // or adjust default camera settings
 
 	const camera = Camera.withSettings(cameraSettings);
@@ -250,10 +250,8 @@ When using the built-in camera as frame source, you will typically want to displ
 To visualize the results of barcode scanning, the following [overlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) can be added:
 
 ```js
-const overlay = BarcodeCaptureOverlay.withBarcodeCaptureForView(
-	barcodeCapture,
-	view
-);
+const overlay = new BarcodeCaptureOverlay(barcodeCapture);
+view.addOverlay(overlay);
 ```
 
 ## Disabling Barcode Capture

@@ -69,53 +69,61 @@ You can also use `LabelCaptureBasicOverlay.setLabelBrush()` and `LabelCaptureBas
 For more advanced use cases, such as adding custom views or implementing Augmented Reality (AR) features, you can use the `LabelCaptureAdvancedOverlay`. The example below creates an advanced overlay, configuring it to display a styled warning message below expiry date fields when they’re close to expiring, while ignoring other fields.
 
 ```dart
-final advancedOverlay = LabelCaptureAdvancedOverlay.newInstance(
-  labelCapture,
-  dataCaptureView,
-);
+final advancedOverlay = LabelCaptureAdvancedOverlay(labelCapture);
+dataCaptureView.addOverlay(advancedOverlay);
 
-advancedOverlay.addListener(LabelCaptureAdvancedOverlayListener(
-  viewForCapturedLabel: (overlay, capturedLabel) {
+advancedOverlay.listener = MyAdvancedOverlayListener();
+```
+
+Implement `LabelCaptureAdvancedOverlayListener` as a concrete class. The `widgetForCapturedLabel` and `widgetForCapturedLabelField` callbacks must return a `LabelCaptureAdvancedOverlayWidget` subclass (or `null` to show nothing):
+
+```dart
+class MyAdvancedOverlayListener extends LabelCaptureAdvancedOverlayListener {
+  @override
+  Future<LabelCaptureAdvancedOverlayWidget?> widgetForCapturedLabel(
+      LabelCaptureAdvancedOverlay overlay, CapturedLabel capturedLabel) async {
     return null; // We only care about specific fields
-  },
-  anchorForCapturedLabel: (overlay, capturedLabel) {
+  }
+
+  @override
+  Future<Anchor> anchorForCapturedLabel(
+      LabelCaptureAdvancedOverlay overlay, CapturedLabel capturedLabel) async {
     return Anchor.center;
-  },
-  offsetForCapturedLabel: (overlay, capturedLabel, view) {
-    return PointWithUnit.withPixel(0, 0);
-  },
-  viewForCapturedLabelField: (overlay, labelField) {
+  }
+
+  @override
+  Future<PointWithUnit> offsetForCapturedLabel(
+      LabelCaptureAdvancedOverlay overlay, CapturedLabel capturedLabel) async {
+    return PointWithUnit(DoubleWithUnit(0, MeasureUnit.pixel), DoubleWithUnit(0, MeasureUnit.pixel));
+  }
+
+  @override
+  Future<LabelCaptureAdvancedOverlayWidget?> widgetForCapturedLabelField(
+      LabelCaptureAdvancedOverlay overlay, LabelField labelField) async {
     if (labelField.name.toLowerCase().contains("expiry") &&
         labelField.type == LabelFieldType.text) {
-
       final daysUntilExpiry = daysUntilExpiryFunction(labelField.text); // Your method
       const dayLimit = 3;
 
       if (daysUntilExpiry < dayLimit) {
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          color: Colors.red,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              Icon(Icons.warning, color: Colors.white),
-              SizedBox(width: 8),
-              Text("Item expires soon!", style: TextStyle(color: Colors.white)),
-            ],
-          ),
-        );
+        // Return your custom LabelCaptureAdvancedOverlayWidget subclass here
       }
     }
-
     return null;
-  },
-  anchorForCapturedLabelField: (overlay, labelField) {
+  }
+
+  @override
+  Future<Anchor> anchorForCapturedLabelField(
+      LabelCaptureAdvancedOverlay overlay, LabelField labelField) async {
     return Anchor.bottomCenter;
-  },
-  offsetForCapturedLabelField: (overlay, labelField, view) {
-    return PointWithUnit.withUnit(0, 22, MeasureUnit.dip);
-  },
-));
+  }
+
+  @override
+  Future<PointWithUnit> offsetForCapturedLabelField(
+      LabelCaptureAdvancedOverlay overlay, LabelField labelField) async {
+    return PointWithUnit(DoubleWithUnit(0, MeasureUnit.dip), DoubleWithUnit(22, MeasureUnit.dip));
+  }
+}
 ```
 
 ## Validation Flow
@@ -127,20 +135,17 @@ Implementing a validation flow in your Smart Label Capture application differs f
 Validation flow uses a different overlay, the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/ui/label-capture-validation-flow-overlay.html). This overlay provides a user interface that guides users through the label capture process, including validation steps.
 
 ```dart
-final validationFlowOverlay = LabelCaptureValidationFlowOverlay.newInstance(
-  context,
-  labelCapture,
-  dataCaptureView,
-);
+final validationFlowOverlay = LabelCaptureValidationFlowOverlay(labelCapture);
+dataCaptureView.addOverlay(validationFlowOverlay);
 
 // Set the listener
-validationFlowOverlay.addListener(MyValidationFlowListener());
+validationFlowOverlay.listener = MyValidationFlowListener();
 ```
 
 ### Adjust the Hint Messages
 
 ```dart
-final validationSettings = LabelCaptureValidationFlowSettings.newInstance();
+final validationSettings = LabelCaptureValidationFlowSettings();
 
 validationSettings.missingFieldsHintText = "Please add this field";
 validationSettings.standbyHintText = "No label detected, camera paused";
@@ -159,9 +164,9 @@ To handle validation events, implement the [LabelCaptureValidationFlowOverlayLis
 
 
 ```dart
-class MyValidationFlowListener extends LabelCaptureValidationFlowOverlayListener {
+class MyValidationFlowListener extends LabelCaptureValidationFlowListener {
   @override
-  void onValidationFlowLabelCaptured(List<LabelField> fields) {
+  void didCaptureLabelWithFields(List<LabelField> fields) {
     String? barcodeData;
     String? expiryDate;
 

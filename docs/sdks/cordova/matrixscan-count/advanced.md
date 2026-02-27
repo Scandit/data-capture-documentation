@@ -25,8 +25,8 @@ const barcodeCountCaptureListListener = {
 	},
 };
 
-const targetBarcodes = [TargetBarcode.create('data', 1)];
-const barcodeCountCaptureList = BarcodeCountCaptureList.create(
+const targetBarcodes = [Scandit.TargetBarcode.create('data', 1)];
+const barcodeCountCaptureList = Scandit.BarcodeCountCaptureList.create(
 	barcodeCountCaptureListListener,
 	targetBarcodes
 );
@@ -50,15 +50,7 @@ import Totes from '../../../partials/count/_tote-mapping.mdx'
 It can be difficult to reach the shutter button if the smart device is attached to the user’s wrist by a strap or similar. In this instance, you can enable a floating shutter button that can be positioned by the end user in a more ergonomically suitable position.
 
 ```js
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.shouldShowFloatingShutterButton = true;
-			}
-		}}
-	/>
-);
+barcodeCountView.shouldShowFloatingShutterButton = true;
 ```
 
 ## Filtering
@@ -70,10 +62,10 @@ In this case, you can filter the others out. This can be done by symbology, symb
 For example, you might want to scan only Code 128 barcodes and no PDF417 ones.
 
 ```js
-const settings = new BarcodeCountSettings();
-barcodeCountSettings.enableSymbologies(enabledSymbologies);
+const settings = new Scandit.BarcodeCountSettings();
+settings.enableSymbologies(enabledSymbologies);
 
-const excludedSymbologies = [Symbology.PDF417];
+const excludedSymbologies = [Scandit.Symbology.PDF417];
 const filterSettings = settings.filterSettings;
 filterSettings.excludedSymbologies = excludedSymbologies;
 ```
@@ -81,7 +73,7 @@ filterSettings.excludedSymbologies = excludedSymbologies;
 Or, you want to exclude all the barcodes starting with 4 numbers:
 
 ```js
-const settings = new BarcodeCountSettings();
+const settings = new Scandit.BarcodeCountSettings();
 
 const filterSettings = settings.filterSettings;
 filterSettings.excludedCodesRegex = '^1234.*';
@@ -98,15 +90,7 @@ There are situations in which the user may find it helpful to clean up their scr
 If this is the case, you can enable the “Clear screen” button.
 
 ```js
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.shouldShowClearHighlightsButton = true;
-			}
-		}}
-	/>
-);
+barcodeCountView.shouldShowClearHighlightsButton = true;
 ```
 
 ## Customize Overlay Colors
@@ -124,15 +108,7 @@ const viewListener = {
 	},
 };
 
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.listener = viewListener;
-			}
-		}}
-	/>
-);
+barcodeCountView.listener = viewListener;
 ```
 
 ## Notifications
@@ -153,15 +129,7 @@ const viewListener = {
 	},
 };
 
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.listener = viewListener;
-			}
-		}}
-	/>
-);
+barcodeCountView.listener = viewListener;
 ```
 
 ## Disable UI Elements
@@ -172,30 +140,14 @@ However, if you wish to disable UI elements you can do it as follows.
 Disable buttons:
 
 ```js
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.shouldShowListButton = false;
-				view.shouldShowExitButton = false;
-				view.shouldShowShutterButton = false;
-			}
-		}}
-	/>
-);
+barcodeCountView.shouldShowListButton = false;
+barcodeCountView.shouldShowExitButton = false;
+barcodeCountView.shouldShowShutterButton = false;
 ```
 
 Disable feedback and hints:
 
 ```js
-const barcodeCountViewComponent = (
-	<BarcodeCountView
-		ref={(view) => {
-			if (view) {
-				view.shouldShowUserGuidanceView = false;
-				view.shouldShowHints = false;
-			}
-		}}
-	/>
-);
+barcodeCountView.shouldShowUserGuidanceView = false;
+barcodeCountView.shouldShowHints = false;
 ```

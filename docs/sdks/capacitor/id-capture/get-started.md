@@ -13,7 +13,7 @@ In this guide you will learn step-by-step how to add ID Capture to your applicat
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
+- Initializing the Data Capture Context
 - Accessing a Camera
 - Configuring the Capture Settings
 - Implementing a Listener to Receive Scan Results
@@ -40,25 +40,27 @@ import IdModuleOverview from '../../../partials/get-started/_id-module-overview-
 
 <IdModuleOverview/>
 
-## Create the Data Capture Context
+## Initialize the Data Capture Context
 
-The first step to add capture capabilities to your application is to create a new [data capture context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext). The context expects a valid Scandit Data Capture SDK license key during construction.
+The first step to add capture capabilities to your application is to initialize the [data capture context](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) with a valid Scandit Data Capture SDK license key.
 
 ```js
-const context = Scandit.DataCaptureContext.forLicenseKey(
-	'-- ENTER YOUR SCANDIT LICENSE KEY HERE --'
-);
+DataCaptureContext.initialize('-- ENTER YOUR SCANDIT LICENSE KEY HERE --');
 ```
+
+:::note
+`DataCaptureContext` should be initialized only once. Use `DataCaptureContext.sharedInstance` to access it afterwards.
+:::
 
 ## Add the Camera
 
 You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/camera.html#class-scandit.datacapture.core.Camera):
 
 ```js
-const camera = Scandit.Camera.default;
-context.setFrameSource(camera);
+const camera = Camera.default;
+DataCaptureContext.sharedInstance.setFrameSource(camera);
 
-const cameraSettings = Scandit.IdCapture.recommendedCameraSettings;
+const cameraSettings = IdCapture.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
 
@@ -78,33 +80,33 @@ By default, [anonymized data](./advanced.md#configure-data-anonymization) is not
 :::
 
 ```ts
-const settings = new Scandit.IdCaptureSettings();
+const settings = new IdCaptureSettings();
 
 // Documents from any region:
-settings.acceptedDocuments.push(new Scandit.IdCard(Scandit.Region.AnyRegion));
+settings.acceptedDocuments.push(new IdCard(IdCaptureRegion.Any));
 // Only documents issued by a specific country:
-settings.acceptedDocuments.push(new Scandit.IdCard(Scandit.Region.Germany));
+settings.acceptedDocuments.push(new IdCard(IdCaptureRegion.Germany));
 // Regional documents:
-settings.acceptedDocuments.push(new Scandit.RegionSpecific.ApecBusinessTravelCard());
+settings.acceptedDocuments.push(new RegionSpecific(RegionSpecificSubtype.ApecBusinessTravelCard));
 // Reject passports from certain regions:
-settings.rejectedDocuments.push(new Scandit.Passport(Scandit.Region.Cuba));
+settings.rejectedDocuments.push(new Passport(IdCaptureRegion.Cuba));
 
 // To scan only one-sided documents and a given zone:
-settings.scannerType = new Scandit.SingleSideScanner({ barcode: true });
+settings.scanner = new SingleSideScanner(true, false, false);
 // or
-settings.scannerType = new Scandit.SingleSideScanner({ machineReadableZone: true });
+settings.scanner = new SingleSideScanner(false, true, false);
 // or
-settings.scannerType = new Scandit.SingleSideScanner({ visualInspectionZone: true });
+settings.scanner = new SingleSideScanner(false, false, true);
 
 // To scan both sides of the document:
-settings.scannerType = new Scandit.FullDocumentScanner();
+settings.scanner = new FullDocumentScanner();
 ```
 
 Create a new ID Capture mode with the chosen settings:
 
 ```ts
-const idCapture = new Scandit.IdCapture(settings);
-context.addMode(idCapture);
+const idCapture = new IdCapture(settings);
+DataCaptureContext.sharedInstance.addMode(idCapture);
 ```
 
 ## Implement the Listener
@@ -154,11 +156,11 @@ You may wish to implement the follow-up action based on the reason of failure:
 
 ```ts
 onIdRejected: (data, reason) => {
-	if (reason === Scandit.RejectionReason.Timeout) {
+	if (reason === RejectionReason.Timeout) {
 		// Ask the user to retry, or offer alternative input method.
-	} else if (reason === Scandit.RejectionReason.DocumentExpired) {
+	} else if (reason === RejectionReason.DocumentExpired) {
 		// Ask the user to provide alternative document.
-	} else if (reason === Scandit.RejectionReason.HolderUnderage) {
+	} else if (reason === RejectionReason.HolderUnderage) {
 		// Reject the process.
 	}
 }
@@ -171,17 +173,15 @@ When using the built-in camera as [frameSource](https://docs.scandit.com/data-ca
 To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```js
-const view = Scandit.DataCaptureView.forContext(context);
+const view = DataCaptureView.forContext(DataCaptureContext.sharedInstance);
 view.connectToElement(htmlElement);
 ```
 
 Then create an instance of [IdCaptureOverlay](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/ui/id-capture-overlay.html#class-scandit.datacapture.id.ui.IdCaptureOverlay) attached to the view:
 
 ```js
-let overlay = Scandit.IdCaptureOverlay.withTextCaptureForView(
-	idCapture,
-	dataCaptureView
-);
+const overlay = new IdCaptureOverlay(idCapture);
+view.addOverlay(overlay);
 ```
 
 The overlay chooses the displayed UI automatically, based on the selected [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings).
@@ -193,7 +193,7 @@ If you prefer to show a different UI or to temporarily hide it, set the appropri
 Finally, turn on the camera to start scanning:
 
 ```js
-camera.switchToDesiredState(Scandit.FrameSourceState.On);
+camera.switchToDesiredState(FrameSourceState.On);
 ```
 
 And this is it. You can now scan documents.

@@ -119,7 +119,7 @@ In Android, the user must explicitly grant permission for each app to access cam
 When using the built-in camera there are recommended settings for each capture mode. These should be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
 
 ```js
-const cameraSettings = BarcodeSelection.recommendedCameraSettings;
+const cameraSettings = BarcodeSelection.createRecommendedCameraSettings();
 
 // Depending on the use case further camera settings adjustments can be made here.
 

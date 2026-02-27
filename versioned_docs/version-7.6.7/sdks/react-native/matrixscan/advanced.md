@@ -34,10 +34,8 @@ First of all, create a new instance of [BarcodeBatchAdvancedOverlay](https://doc
 [DataCaptureView](https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 
 ```js
-const overlay = BarcodeBatchAdvancedOverlay.withBarcodeBatchForView(
-	barcodeBatch,
-	view
-);
+const overlay = new BarcodeBatchAdvancedOverlay(barcodeBatch);
+view.addOverlay(overlay);
 ```
 
 At this point, you have two options.

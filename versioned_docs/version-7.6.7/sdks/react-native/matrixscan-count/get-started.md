@@ -55,10 +55,12 @@ const barcodeCount = BarcodeCount.forContext(context, settings);
 Our recommended camera settings should be used to achieve the best performance and user experience. The following couple of lines show how to get the recommended settings for MatrixScan Count and create the camera from it:
 
 ```js
-const cameraSettings = new CameraSettings();
+const cameraSettings = BarcodeCount.createRecommendedCameraSettings();
 
 const camera = Camera.default;
-camera.applySettings(cameraSettings);
+if (camera != null) {
+	camera.applySettings(cameraSettings);
+}
 ```
 
 Because the frame source is configurable, the data capture context must be told which frame source to use. This is done with a call to [DataCaptureContext.setFrameSource()](https://docs.scandit.com/7.6/data-capture-sdk/react-native/core/api/data-capture-context.html#method-scandit.datacapture.core.DataCaptureContext.SetFrameSourceAsync):
