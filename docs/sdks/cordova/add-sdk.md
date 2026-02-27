@@ -17,7 +17,7 @@ This guide shows you how to add the Scandit Data Capture SDK to your existing pr
 
 - The latest stable version of [Cordova](https://github.com/apache/cordova-cli#installation), [Node.js and npm](https://nodejs.org/en/download/).
 - A project with:
-  - minimum iOS deployment target of 14.0 or higher (15.0 or higher for ID Capture)
+  - minimum iOS deployment target of 15.0 or higher
   - an Android project with target SDK version 23 (Android 6, Marshmallow) or higher (version 24 or higher for ID Capture)
 - A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
 
@@ -113,7 +113,7 @@ If your project is not yet configured to use Swift on iOS, you’ll need to add 
 ```jsx
 <platform name="ios">
 	...
-	<preference name="deployment-target" value="14.0" />
+	<preference name="deployment-target" value="15.0" />
   	<preference name="SwiftVersion" value="5" />
 	...
 </platform>

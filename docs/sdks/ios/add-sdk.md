@@ -22,7 +22,7 @@ This page describes how to integrate the Scandit Data Capture SDK into your iOS 
 Before you begin, make sure you have the following prerequisites in place:
 
 - Latest version of Xcode
-- iOS project with a deployment target of iOS 14.0+
+- iOS project with a deployment target of iOS 15.0+
 
   :::note
   ID Capture requires a minimum deployment target of iOS 15.0.
