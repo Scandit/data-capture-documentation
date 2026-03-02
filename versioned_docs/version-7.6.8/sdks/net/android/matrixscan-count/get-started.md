@@ -37,7 +37,7 @@ For this tutorial, we will set up Barcode Count for tracking EAN13 codes. Change
 
 ```csharp
 BarcodeCountSettings settings = new BarcodeCountSettings();
-settings.SetSymbologyEnabled(Symbology.Ean13Upca, true);
+settings.EnableSymbology(Symbology.Ean13Upca, true);
 ```
 
 If you are sure that your environment will only have unique barcodes (i.e. no duplicated values), you can also enable [BarcodeCountSettings.ExpectsOnlyUniqueBarcodes](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-count-settings.html#property-scandit.datacapture.barcode.count.BarcodeCountSettings.ExpectsOnlyUniqueBarcodes). This option improves scanning performance as long as you are sure that no duplicates will be present. Next, create a [BarcodeCount](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount) instance with the [Data Capture Context](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) and the settings initialized in the previous step:
@@ -113,18 +113,18 @@ You can configure your view in the code behind class. For example:
 ```csharp
 public partial class MyScanPage : ContentPage
 {
-public MyScanPage()
-{
-this.InitializeComponent();
+    public MyScanPage()
+    {
+        this.InitializeComponent();
 
-// Initialization of BarcodeCountView happens on handler changed event.
-this.barcodeCountView.HandlerChanged += BarcodeCountViewHandlerChanged;
-}
+        // Initialization of BarcodeCountView happens on handler changed event.
+        this.barcodeCountView.HandlerChanged += BarcodeCountViewHandlerChanged;
+    }
 
-private void BarcodeCountViewHandlerChanged(object sender, EventArgs e)
-{
-// Your BarcodeCountView configuration goes here, e.g. subscribe for buttons tap events
-}
+    private void BarcodeCountViewHandlerChanged(object sender, EventArgs e)
+    {
+        // Your BarcodeCountView configuration goes here, e.g. subscribe for buttons tap events
+    }
 }
 ```
 
@@ -137,14 +137,14 @@ The camera is not automatically turned on when you are in a scanning view. You n
 ```csharp
 protected override void OnPause()
 {
-camera.SwitchToDesiredStateAsync(FrameSourceState.Off);
-base.OnPause();
+    camera.SwitchToDesiredStateAsync(FrameSourceState.Off);
+    base.OnPause();
 }
 
 protected override void OnResume()
 {
-camera.SwitchToDesiredStateAsync(FrameSourceState.On);
-base.OnResume();
+    camera.SwitchToDesiredStateAsync(FrameSourceState.On);
+    base.OnResume();
 }
 ```
 

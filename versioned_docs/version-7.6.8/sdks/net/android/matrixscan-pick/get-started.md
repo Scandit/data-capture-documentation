@@ -49,21 +49,18 @@ settings.EnableSymbology(Symbology.Ean13Upca, true);
 Then you have to create the list of items that will be picked and quantity to be picked for each item.
 
 ```csharp
-ICollection<BarcodePickProduct> items = new HashSet<BarcodePickProduct>()
+ICollection<BarcodePickProduct> productsToPick = new List<BarcodePickProduct>()
 {
-    new BarcodePickProduct(
-        new BarcodePickProductIdentifier("9783598215438"),
-        new BarcodePickProductQuantityToPick(3),
-    new BarcodePickProduct(
-        new BarcodePickProductIdentifier("9783598215414"),
-        new BarcodePickProductQuantityToPick(3)
+    new BarcodePickProduct("9783598215438", 3),
+    new BarcodePickProduct("9783598215414", 3)
 };
+IBarcodePickProductProvider productProvider = new BarcodePickAsyncMapperProductProvider(productsToPick, callback: this);
 ```
 
 Create the mode with the previously created settings:
 
 ```csharp
-BarcodePick mode = new BarcodePick(settings);
+BarcodePick barcodePick = new BarcodePick(dataCaptureContext, settings, productProvider);
 ```
 
 ## Setup the `BarcodePickView`
@@ -90,7 +87,7 @@ BarcodePickViewSettings viewSettings = new BarcodePickViewSettings();
 Construct a new `BarcodePickView`. The `BarcodePickView` is automatically added to the provided parent view.
 
 ```csharp
-let BarcodePickView = BarcodePickView(parentView: view, context: context, BarcodePick: mode, settings: viewSettings)
+BarcodePickView barcodePickView = BarcodePickView.Create(parentView, dataCaptureContext, barcodePick, viewSettings);
 ```
 
 You can use a `BarcodePickView` from XAML in your MAUI application.
@@ -142,16 +139,16 @@ For MAUI development add the [`Scandit.DataCapture.Barcode.Maui`](https://www.nu
 Connect the `BarcodePickView` to the Android lifecycle. The view is dependent on calling `BarcodePickView.onPause()` and `BarcodePickView.onResume()` to set up the camera and its overlays properly.
 
 ```csharp
-@Override
-public void onResume() {
-    super.onResume();
-    barcodePickView.onResume();
+protected override void OnResume()
+{
+    base.OnResume();
+    barcodePickView.OnResume();
 }
 
-@Override
-public void onPause() {
-    super.onPause();
-    barcodePickView.onPause();
+protected override void OnPause()
+{
+    base.OnPause();
+    barcodePickView.OnPause();
 }
 ```
 
@@ -189,7 +186,7 @@ Subscribe to a `BarcodePickView.onFinishButtonTapped` event to be notified what 
 In this tutorial, we will then navigate back to the previous screen to finish the find session.
 
 ```csharp
-BarcodePickView.FinishButtonTapped += (object? sender, FinishButtonTappedEventArgs e) =>
+barcodePickView.FinishButtonTapped += (object? sender, FinishButtonTappedEventArgs e) =>
 {
     RequireActivity().OnBackPressed();
 };
@@ -225,7 +222,7 @@ private void FinishButtonClicked(object? sender, EventArgs args)
 With everything configured, you can now start searching for items. This is done by calling `BarcodePickView.start()`.
 
 ```csharp
-BarcodePickView.start();
+barcodePickView.Start();
 ```
 
 This is the equivalent of pressing the Play button programmatically. It will start the search process, turn on the camera, and hide the item carousel.

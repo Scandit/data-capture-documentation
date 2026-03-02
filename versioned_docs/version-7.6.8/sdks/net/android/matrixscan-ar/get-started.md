@@ -49,13 +49,13 @@ Here we configure it for tracking EAN13 codes, but you should change this to the
 
 ```csharp
 BarcodeArSettings settings = new BarcodeArSettings();
-settings.SetSymbologyEnabled(Symbology.EAN13_UPCA, true);
+settings.EnableSymbology(Symbology.Ean13Upca, true);
 ```
 
 Then create the mode with the previously created settings:
 
 ```csharp
-BarcodeAr mode = new BarcodeAr(dataCaptureContext, settings);
+BarcodeAr barcodeAr = new BarcodeAr(dataCaptureContext, settings);
 ```
 
 ## Setup the `BarcodeArView`
@@ -75,41 +75,41 @@ The `BarcodeArView` appearance can be customized through [`BarcodeArViewSettings
 
 ```csharp
 BarcodeArViewSettings viewSettings = new BarcodeArViewSettings();
-viewSettings.HapticEnabled(false);
-viewSettings.SoundEnabled(false);
-viewSettings.DefaultCameraPosition(CameraPosition.USER_FACING);
+viewSettings.HapticEnabled = false;
+viewSettings.SoundEnabled = false;
+viewSettings.DefaultCameraPosition = CameraPosition.UserFacing;
 ```
 
 Next, create a `BarcodeArView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeArView` is automatically added to the provided parent view.
 
 ```csharp
-BarcodeArView barcodeArView = BarcodeArView(parentView, barcodeAr, dataCaptureContext, viewSettings);
-barcodeArView.ShouldShowCameraSwitchControl(true);
-barcodeArView.ShouldShowTorchControl(true);
-barcodeArView.ShouldShowZoomControl(true);
-barcodeArView.CameraSwitchControlPosition(Anchor.TOP_RIGHT);
-barcodeArView.TorchControlPosition(Anchor.BOTTOM_RIGHT);
-barcodeArView.ZoomControlPosition(Anchor.TOP_LEFT);
+BarcodeArView barcodeArView = BarcodeArView.Create(parentView, dataCaptureContext, barcodeAr, viewSettings);
+barcodeArView.ShouldShowCameraSwitchControl = true;
+barcodeArView.ShouldShowTorchControl = true;
+barcodeArView.ShouldShowZoomControl = true;
+barcodeArView.CameraSwitchControlPosition = Anchor.TopRight;
+barcodeArView.TorchControlPosition = Anchor.BottomRight;
+barcodeArView.ZoomControlPosition = Anchor.TopLeft;
 ```
 
 Configure the [`highlightProvider`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.HighlightProvider) and/or [`annotationProvider`](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/barcode-capture/api/ui/barcode-ar-view.html#property-scandit.datacapture.barcode.check.ui.BarcodeArView.AnnotationProvider).
 
 ```csharp
-public class AnnotationProvider : BarcodeArAnnotationProvider
+public class AnnotationProvider : IBarcodeArAnnotationProvider
 {
-    public void AnnotationForBarcode(Context context, Barcode barcode, ICallback callback)
+    public Task<BarcodeArAnnotation?> AnnotationForBarcode(Barcode barcode)
     {
-        var annotation = new BarcodeArStatusIconAnnotation(context, barcode);
+        var annotation = new BarcodeArStatusIconAnnotation(barcode);
         annotation.Text = "Example annotation";
-        callback.OnData(annotation);
+        return Task.FromResult<BarcodeArAnnotation?>(annotation);
     }
 }
 
-public class HighlightProvider : BarcodeArHighlightProvider
+public class HighlightProvider : IBarcodeArHighlightProvider
 {
-    public void HighlightForBarcode(Context context, Barcode barcode, ICallback callback)
+    public Task<BarcodeArHighlight?> HighlightForBarcode(Barcode barcode)
     {
-        callback.OnData(new BarcodeArRectangleHighlight(context, barcode));
+        return Task.FromResult<BarcodeArHighlight?>(new BarcodeArRectangleHighlight(barcode));
     }
 }
 ```
@@ -117,8 +117,8 @@ public class HighlightProvider : BarcodeArHighlightProvider
 And set them to the view:
 
 ```csharp
-barcodeArView.HighlightProvider(new HighlightProvider());
-barcodeArView.AnnotationProvider(new AnnotationProvider());
+barcodeArView.HighlightProvider = new HighlightProvider();
+barcodeArView.AnnotationProvider = new AnnotationProvider();
 ```
 
 ## Register the Listener
@@ -126,15 +126,10 @@ barcodeArView.AnnotationProvider(new AnnotationProvider());
 If you want a callback when a highlight is tapped, register a [BarcodeArViewUiListener](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/barcode-capture/api/ui/barcode-ar-view.html#interface-scandit.datacapture.barcode.check.ui.IBarcodeArViewUiListener).
 
 ```csharp
-barcodeArView.SetUiListener(new BarcodeArViewUiListener());
-
-public class BarcodeArViewUiListener : BarcodeArViewUiListener
+barcodeArView.HighlightForBarcodeTapped += (object sender, HighlightForBarcodeTappedEventArgs args) =>
 {
-    public void OnHighlightForBarcodeTapped(BarcodeAr barcodeAr, Barcode barcode, BarcodeArHighlight highlight, View highlightView)
-    {
-        // Handle tap
-    }
-}
+    // Handle tap
+};
 ```
 
 ## Start Searching
