@@ -32,7 +32,7 @@ For this tutorial, we will set up SparkScan for scanning EAN13 codes. Change thi
 SparkScanSettings settings = new SparkScanSettings();
 HashSet<Symbology> symbologies = new HashSet<Symbology>()
 {
-Symbology.Ean13Upca
+    Symbology.Ean13Upca
 };
 settings.EnableSymbologies(symbologies);
 ```
@@ -89,14 +89,14 @@ When developing on MAUI, make sure to call SparkScanView.OnAppearing and SparkSc
 ```csharp
 protected override void OnAppearing()
 {
-base.OnAppearing();
-this.SparkScanView.OnAppearing();
+    base.OnAppearing();
+    this.SparkScanView.OnAppearing();
 }
 
 protected override void OnDisappearing()
 {
-base.OnDisappearing();
-this.SparkScanView.OnDisappearing();
+    base.OnDisappearing();
+    this.SparkScanView.OnDisappearing();
 }
 ```
 
@@ -105,14 +105,14 @@ Additionally, make sure to call sparkScanView.onPause() and sparkScanView.onResu
 ```csharp
 protected override void OnPause()
 {
-sparkScanView.OnPause();
-base.OnPause();
+    sparkScanView.OnPause();
+    base.OnPause();
 }
 
 protected override void OnResume()
 {
-sparkScanView.OnResume();
-base.OnResume();
+    sparkScanView.OnResume();
+    base.OnResume();
 }
 ```
 
@@ -130,21 +130,19 @@ sparkScan.AddListener(this);
 ```csharp
 public void OnBarcodeScanned(SparkScan sparkScan, SparkScanSession session, IFrameData? data)
 {
-if (session.NewlyRecognizedBarcode.Count == 0)
-{
-return;
-}
+    Barcode? barcode = session.NewlyRecognizedBarcode;
+    if (barcode == null)
+    {
+        return;
+    }
 
-// Gather the recognized barcode
-Barcode barcode = session.NewlyRecognizedBarcode[0];
-
-// This method is invoked from a recognition internal thread.
-// Run the specified action in the UI thread to update the internal barcode list.
-RunOnUiThread(() =>
-{
-// Update the internal list and the UI with the barcode retrieved above
-this.latestBarcode = barcode;
-});
+    // This method is invoked from a recognition internal thread.
+    // Run the specified action in the UI thread to update the internal barcode list.
+    RunOnUiThread(() =>
+    {
+        // Update the internal list and the UI with the barcode retrieved above
+        this.latestBarcode = barcode;
+    });
 }
 ```
 
@@ -153,25 +151,23 @@ Alternatively to register [ISparkScanListener](https://docs.scandit.com/7.6/data
 ```csharp
 sparkScan.BarcodeScanned += (object sender, SparkScanEventArgs args) =>
 {
-if (args.Session.NewlyRecognizedBarcode.Count == 0)
-{
-return;
-}
+    Barcode? barcode = args.Session.NewlyRecognizedBarcode;
+    if (barcode == null)
+    {
+        return;
+    }
 
-// Gather the recognized barcode
-Barcode barcode = args.Session.NewlyRecognizedBarcode[0];
+    // This method is invoked from a recognition internal thread.
+    // Run the specified action in the UI thread to update the internal barcode list.
+    RunOnUiThread(() =>
+    {
+        // Update the internal list and the UI with the barcode retrieved above
+        this.latestBarcode = barcode;
 
-// This method is invoked from a recognition internal thread.
-// Run the specified action in the UI thread to update the internal barcode list.
-RunOnUiThread(() =>
-{
-// Update the internal list and the UI with the barcode retrieved above
-this.latestBarcode = barcode;
-
-// Emit sound and vibration feedback
-this.sparkScanView.EmitFeedback(new SparkScanViewSuccessFeedback());
-});
-}
+        // Emit sound and vibration feedback
+        this.sparkScanView.EmitFeedback(new SparkScanViewSuccessFeedback());
+    });
+};
 ```
 
 ## Scan Some Barcodes

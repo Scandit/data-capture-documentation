@@ -19,25 +19,25 @@ Be aware that these listeners will be called from a background thread.
 ```csharp
 public class BarcodeFindListener : IBarcodeFindListener
 {
-public void OnSearchPaused(ICollection<BarcodeFindItem> foundItems)
+    public void OnSearchPaused(ICollection<BarcodeFindItem> foundItems)
     {
-    // The mode was paused
+        // The mode was paused
     }
 
     public void OnSearchStarted()
     {
-    // The mode was started
+        // The mode was started
     }
 
     public void OnSearchStopped(ICollection<BarcodeFindItem> foundItems)
-{
-// The mode was stopped after the finish button was clicked
-}
+    {
+        // The mode was stopped after the finish button was clicked
+    }
 }
 
 private void Initialize()
 {
-barcodeFind.AddListener(new BarcodeFindListener())
+    barcodeFind.AddListener(new BarcodeFindListener());
 }
 ```
 
@@ -46,15 +46,15 @@ Alternatively it is possible to subscribe to corresponding events [BarcodeFind.S
 ```csharp
 barcodeFind.SearchStarted += (object? sender, EventArgs args) =>
 {
-// The mode was started
+    // The mode was started
 };
 barcodeFind.SearchPaused += (object? sender, BarcodeFindEventArgs args) =>
 {
-// The mode was paused
+    // The mode was paused
 };
 barcodeFind.SearchStopped += (object? sender, BarcodeFindEventArgs args) =>
 {
-// The mode was stopped after the finish button was clicked
+    // The mode was stopped after the finish button was clicked
 };
 ```
 

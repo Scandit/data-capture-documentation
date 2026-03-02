@@ -90,7 +90,8 @@ Alternatively you can use a [DataCaptureView](https://docs.scandit.com/7.6/data-
 ```xml
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:scandit="clr-namespace:Scandit.DataCapture.Core.UI.Maui;assembly=ScanditCaptureCoreMaui" <ContentPage.Content>
+    xmlns:scandit="clr-namespace:Scandit.DataCapture.Core.UI.Maui;assembly=ScanditCaptureCoreMaui">
+    <ContentPage.Content>
     <AbsoluteLayout>
         <scandit:DataCaptureView x:Name="dataCaptureView" AbsoluteLayout.LayoutBounds="0,0,1,1"
             AbsoluteLayout.LayoutFlags="All" DataCaptureContext="{Binding DataCaptureContext}">
@@ -105,18 +106,18 @@ You can configure your view in the code behind class. For example:
 ```csharp
 public partial class MainPage : ContentPage
 {
-public MainPage()
-{
-InitializeComponent();
+    public MainPage()
+    {
+        InitializeComponent();
 
-// Initialization of DataCaptureView happens on handler changed event.
-dataCaptureView.HandlerChanged += DataCaptureViewHandlerChanged;
-}
+        // Initialization of DataCaptureView happens on handler changed event.
+        dataCaptureView.HandlerChanged += DataCaptureViewHandlerChanged;
+    }
 
-private void DataCaptureViewHandlerChanged(object? sender, EventArgs e)
-{
-// Your dataCaptureView configuration goes here, e.g. add overlay
-}
+    private void DataCaptureViewHandlerChanged(object? sender, EventArgs e)
+    {
+        // Your dataCaptureView configuration goes here, e.g. add overlay
+    }
 }
 ```
 
@@ -133,7 +134,7 @@ Once the overlay has been added, you should implement the [IBarcodeBatchBasicOve
 ```csharp
 public Brush BrushForTrackedBarcode(BarcodeBatchBasicOverlay overlay, TrackedBarcode trackedBarcode)
 {
-// Return a custom Brush based on the tracked barcode.
+    // Return a custom Brush based on the tracked barcode.
 }
 ```
 
@@ -142,7 +143,7 @@ If you would like to make the highlights tappable, you need to implement the [IB
 ```csharp
 public void OnTrackedBarcodeTapped(BarcodeBatchBasicOverlay overlay, TrackedBarcode trackedBarcode)
 {
-// A tracked barcode was tapped.
+    // A tracked barcode was tapped.
 }
 ```
 
@@ -153,35 +154,35 @@ Barcode Batch, unlike Barcode Capture, doesn’t emit feedback (sound or vibrati
 ```csharp
 public override void ViewDidLoad()
 {
-base.ViewDidLoad();
-feedback = Feedback.DefaultFeedback;
+    base.ViewDidLoad();
+    feedback = Feedback.DefaultFeedback;
 }
 ```
 
 Next, use this [feedback](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback) in a [IBarcodeBatchListener](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-batch-listener.html#interface-scandit.datacapture.barcode.batch.IBarcodeBatchListener):
 
 ```csharp
-public class FeedbackListener : Foundation.NSObject, IBarcodeBatchListener
+public class FeedbackListener : IBarcodeBatchListener
 {
-public void OnObservationStarted(BarcodeBatch barcodeBatch)
-{
-// Called when Barcode Batch is started.
-// We don't use this callback in this guide.
-}
+    public void OnObservationStarted(BarcodeBatch barcodeBatch)
+    {
+        // Called when Barcode Batch is started.
+        // We don't use this callback in this guide.
+    }
 
-public void OnObservationStopped(BarcodeBatch barcodeBatch)
-{
-// Called when Barcode Batch is stopped.
-// We don't use this callback in this guide.
-}
+    public void OnObservationStopped(BarcodeBatch barcodeBatch)
+    {
+        // Called when Barcode Batch is stopped.
+        // We don't use this callback in this guide.
+    }
 
-public void OnSessionUpdated(BarcodeBatch barcodeBatch, BarcodeBatchSession session, IFrameData frameData)
-{
-if (session.AddedTrackedBarcodes.Any())
-{
-this.feedback.Emit();
-}
-}
+    public void OnSessionUpdated(BarcodeBatch barcodeBatch, BarcodeBatchSession session, IFrameData frameData)
+    {
+        if (session.AddedTrackedBarcodes.Any())
+        {
+            this.feedback.Emit();
+        }
+    }
 }
 ```
 

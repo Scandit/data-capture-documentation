@@ -39,13 +39,13 @@ For this tutorial, we will setup barcode scanning for a small list of different 
 ```csharp
 BarcodeSelectionSettings settings = BarcodeSelectionSettings.Create();
 HashSet<Symbology> symbologies = new HashSet<Symbology>()
-        {
-        Symbology.Qr,
-        Symbology.Ean8,
-        Symbology.Upce,
-        Symbology.Ean13Upca
-        };
-        settings.EnableSymbologies(symbologies);
+{
+    Symbology.Qr,
+    Symbology.Ean8,
+    Symbology.Upce,
+    Symbology.Ean13Upca
+};
+settings.EnableSymbologies(symbologies);
 ```
 
 _Selection Types_
@@ -79,39 +79,39 @@ To get informed whenever a new code has been recognized, add a [IBarcodeSelectio
 First implement the [IBarcodeSelectionListener](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) interface. For example:
 
 ```csharp
-public class MyBarcodeSelectionListener : Java.Lang.Object, IBarcodeSelectionListener
+public class MyBarcodeSelectionListener : IBarcodeSelectionListener
 {
-public void OnObservationStarted(BarcodeSelection barcodeSelection)
-{
-// Called when Barcode Selection is started.
-// We don't use this callback in this guide.
-}
+    public void OnObservationStarted(BarcodeSelection barcodeSelection)
+    {
+        // Called when Barcode Selection is started.
+        // We don't use this callback in this guide.
+    }
 
-public void OnObservationStopped(BarcodeSelection barcodeSelection)
-{
-// Called when Barcode Selection is stopped.
-// We don't use this callback in this guide.
-}
+    public void OnObservationStopped(BarcodeSelection barcodeSelection)
+    {
+        // Called when Barcode Selection is stopped.
+        // We don't use this callback in this guide.
+    }
 
-public void OnSessionUpdated(
-BarcodeSelection barcodeSelection,
-BarcodeSelectionSession session,
-IFrameData frameData)
-{
-// Called every new frame.
-// We don't use this callback in this guide.
-}
+    public void OnSessionUpdated(
+        BarcodeSelection barcodeSelection,
+        BarcodeSelectionSession session,
+        IFrameData frameData)
+    {
+        // Called every new frame.
+        // We don't use this callback in this guide.
+    }
 
-public void OnSelectionUpdated(
-BarcodeSelection barcodeSelection,
-BarcodeSelectionSession session,
-IFrameData frameData)
-{
-IList<Barcode> newlySelectedBarcodes = session.NewlySelectedBarcodes;
-IList<Barcode> selectedBarcodes = session.SelectedBarcodes;
-IList<Barcode> newlyUnselectedBarcodes = session.NewlyUnselectedBarcodes;
-// Do something with the retrieved barcodes.
-}
+    public void OnSelectionUpdated(
+        BarcodeSelection barcodeSelection,
+        BarcodeSelectionSession session,
+        IFrameData frameData)
+    {
+        IList<Barcode> newlySelectedBarcodes = session.NewlySelectedBarcodes;
+        IList<Barcode> selectedBarcodes = session.SelectedBarcodes;
+        IList<Barcode> newlyUnselectedBarcodes = session.NewlyUnselectedBarcodes;
+        // Do something with the retrieved barcodes.
+    }
 }
 ```
 
@@ -126,11 +126,11 @@ Alternatively to register [IBarcodeSelectionListener](https://docs.scandit.com/7
 ```csharp
 barcodeSelection.SelectionUpdated += (object sender, BarcodeSelectionEventArgs args) =>
 {
-IList<Barcode> newlySelectedBarcodes = args.Session.NewlySelectedBarcodes;
-IList<Barcode> selectedBarcodes = args.Session.SelectedBarcodes;
-IList<Barcode> newlyUnselectedBarcodes = args.Session.NewlyUnselectedBarcodes;
-// Do something with the retrieved barcodes.
-}
+    IList<Barcode> newlySelectedBarcodes = args.Session.NewlySelectedBarcodes;
+    IList<Barcode> selectedBarcodes = args.Session.SelectedBarcodes;
+    IList<Barcode> newlyUnselectedBarcodes = args.Session.NewlyUnselectedBarcodes;
+    // Do something with the retrieved barcodes.
+};
 ```
 
 ## Use the Built-in Camera
