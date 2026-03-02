@@ -70,8 +70,7 @@ return Anchor.TopCenter;
 
 public PointWithUnit OffsetForTrackedBarcode(
 BarcodeBatchAdvancedOverlay overlay,
-TrackedBarcode trackedBarcode,
-View view)
+TrackedBarcode trackedBarcode)
 {
 // This is the offset that will be applied to the view.
 // You can use MeasureUnit.Fraction to give a measure relative to the view itself, the sdk will take care of transforming this into pixel size.

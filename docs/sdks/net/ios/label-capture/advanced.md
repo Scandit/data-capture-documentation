@@ -18,7 +18,7 @@ To customize the appearance of an overlay you can implement a [ILabelCaptureBasi
 The method [BrushForLabel()](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [BrushForField()](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
 ```csharp
-public class BasicOverlayListener : NSObject, ILabelCaptureBasicOverlayListener
+public class BasicOverlayListener : ILabelCaptureBasicOverlayListener
 {
     private readonly Brush upcBrush = new(
         fillColor: UIColor.FromRGB(46, 193, 206),    // #2EC1CE
@@ -90,7 +90,7 @@ dataCaptureView.AddOverlay(advancedOverlay);
 // Configure the advanced overlay with a listener that handles AR content creation and positioning
 advancedOverlay.Listener = new AdvancedOverlayListener();
 
-public class AdvancedOverlayListener : NSObject, ILabelCaptureAdvancedOverlayListener
+public class AdvancedOverlayListener : ILabelCaptureAdvancedOverlayListener
 {
     // This method is called when a label is detected - we return null since we're only adding AR elements to specific fields, not the entire label
     public UIView? ViewForCapturedLabel(
@@ -228,7 +228,7 @@ validationFlowOverlay.ApplySettings(validationSettings);
 To handle validation events, implement the [ILabelCaptureValidationFlowListener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-validation-flow-listener.html) interface.
 
 ```csharp
-public class ValidationFlowListener : NSObject, ILabelCaptureValidationFlowListener
+public class ValidationFlowListener : ILabelCaptureValidationFlowListener
 {
     // This is called by the validation flow overlay when a label has been fully captured and validated
     public void OnValidationFlowLabelCaptured(IList<LabelField> fields)

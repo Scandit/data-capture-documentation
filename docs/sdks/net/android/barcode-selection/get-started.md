@@ -83,7 +83,7 @@ To get informed whenever a new code has been recognized, add a [IBarcodeSelectio
 First implement the [IBarcodeSelectionListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) interface. For example:
 
 ```csharp
-public class MyBarcodeSelectionListener : Java.Lang.Object, IBarcodeSelectionListener
+public class MyBarcodeSelectionListener : IBarcodeSelectionListener
 {
 public void OnObservationStarted(BarcodeSelection barcodeSelection)
 {
@@ -100,7 +100,7 @@ public void OnObservationStopped(BarcodeSelection barcodeSelection)
 public void OnSessionUpdated(
 BarcodeSelection barcodeSelection,
 BarcodeSelectionSession session,
-IFrameData frameData)
+IFrameData? frameData)
 {
 // Called every new frame.
 // We don't use this callback in this guide.
@@ -109,7 +109,7 @@ IFrameData frameData)
 public void OnSelectionUpdated(
 BarcodeSelection barcodeSelection,
 BarcodeSelectionSession session,
-IFrameData frameData)
+IFrameData? frameData)
 {
 IList<Barcode> newlySelectedBarcodes = session.NewlySelectedBarcodes;
 IList<Barcode> selectedBarcodes = session.SelectedBarcodes;

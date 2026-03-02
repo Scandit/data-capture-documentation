@@ -72,8 +72,15 @@ By default, [anonymized data](./advanced.md#configure-data-anonymization) is not
 ```csharp
 IdCaptureSettings settings = new IdCaptureSettings
 {
-AcceptedDocuments = IdDocumentType.Passport | IdDocumentType.DriverLicense,
-RejectedDocuments = IdDocumentType.IdCard,
+AcceptedDocuments = new List<IIdCaptureDocument>
+    {
+        new Passport(IdCaptureRegion.Any),
+        new DriverLicense(IdCaptureRegion.Any),
+    },
+RejectedDocuments = new List<IIdCaptureDocument>
+    {
+        new IdCard(IdCaptureRegion.Any),
+    },
 };
 ```
 
@@ -86,59 +93,51 @@ Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-ca
 For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 ```csharp
-public class MyListener : Java.Lang.Object, IIdCaptureListener
+public class MyListener : IIdCaptureListener
 {
-public void OnIdCaptured(IdCapture mode, IdCaptureSession session, IFrameData data)
+public void OnIdCaptured(IdCapture capture, CapturedId capturedId)
 {
-CapturedId capturedId = session.NewlyCapturedId;
-
 // The recognized fields of the captured ID can vary based on the type.
-if (capturedId.CapturedResultType == CapturedResultType.MrzResult)
+if (capturedId.Mrz != null)
 {
-// Handle the information extracted.
+// Handle the information extracted from the MRZ.
 }
-else if (capturedId.CapturedResultType == CapturedResultType.VizResult)
+else if (capturedId.Viz != null)
 {
-// Handle the information extracted.
+// Handle the information extracted from the VIZ.
 }
-else if (capturedId.CapturedResultType == CapturedResultType.BarcodeResult)
+else if (capturedId.Barcode != null)
 {
-// Handle the information extracted.
+// Handle the information extracted from the barcode.
 }
 }
 
-public void OnErrorEncountered(IdCapture mode, Throwable error, IdCaptureSession session, IFrameData data)
+public void OnIdRejected(IdCapture capture, CapturedId? capturedId, RejectionReason reason)
 {
-// Implement to handle an error encountered during the capture process.
+// Implement to handle a document rejected by IdCapture.
 }
-
-public void OnObservationStarted(IdCapture mode)
-{ }
-
-public void OnObservationStopped(IdCapture mode)
-{ }
 }
 ```
 
 Alternatively to register [IIdCaptureListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener) interface it is possible to subscribe to corresponding events. For example:
 
 ```csharp
-idCapture.IdCaptured += (object sender, IdCaptureEventArgs args) =>
+idCapture.IdCaptured += (object sender, IdCapturedEventArgs args) =>
 {
-CapturedId capturedId = args.Session.NewlyCapturedId;
+CapturedId capturedId = args.CapturedId;
 
 // The recognized fields of the captured ID can vary based on the type.
-if (capturedId.CapturedResultType == CapturedResultType.MrzResult)
+if (capturedId.Mrz != null)
 {
-// Handle the information extracted.
+// Handle the information extracted from the MRZ.
 }
-else if (capturedId.CapturedResultType == CapturedResultType.VizResult)
+else if (capturedId.Viz != null)
 {
-// Handle the information extracted.
+// Handle the information extracted from the VIZ.
 }
-else if (capturedId.CapturedResultType == CapturedResultType.BarcodeResult)
+else if (capturedId.Barcode != null)
 {
-// Handle the information extracted.
+// Handle the information extracted from the barcode.
 }
 };
 ```
@@ -157,7 +156,7 @@ When using the built-in camera as [frameSource](https://docs.scandit.com/data-ca
 To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```csharp
-DataCaptureView dataCaptureView = DataCaptureView.Create(this, dataCaptureContext);
+DataCaptureView dataCaptureView = DataCaptureView.Create(dataCaptureContext);
 SetContentView(dataCaptureView);
 ```
 

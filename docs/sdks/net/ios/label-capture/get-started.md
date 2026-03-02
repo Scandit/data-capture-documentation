@@ -92,7 +92,7 @@ To get informed whenever a new label has been recognized, add a [ILabelCaptureLi
 First implement the `ILabelCaptureListener` interface. Here is an example of how to implement a listener that processes the captured labels based on the label capture settings defined above:
 
 ```csharp
-public class LabelCaptureRepository : NSObject, ILabelCaptureListener
+public class LabelCaptureRepository : ILabelCaptureListener
 {
     public void OnSessionUpdated(LabelCapture labelCapture, LabelCaptureSession session, IFrameData frameData)
     {
