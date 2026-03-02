@@ -57,7 +57,7 @@ For example, you might want to scan only Code 128 barcodes and no PDF417 ones.
 
 ```csharp
 BarcodeCountSettings settings = new BarcodeCountSettings();
-barcodeCountSettings.EnableSymbologies(enabledSymbologies);
+settings.EnableSymbologies(enabledSymbologies);
 
 settings.FilterSettings.ExcludedSymbologies = new[] { Symbology.Pdf417 };
 ```
@@ -86,15 +86,15 @@ barcodeCountView.ShouldShowClearHighlightsButton = true;
 
 ## Customize Overlay Colors
 
-MatrixScan Count comes with recommended and user-tested AR overlays. However, if you wish to customize the overlay colors, once the overlay has been added, you can conform to the [IBarcodeCountViewListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/barcode-count-view-listener.html#interface-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener) interface. The methods [IBarcodeCountViewListener.BrushForRecognizedBarcode()](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.BrushForRecognizedBarcode) and [IBarcodeCountViewListener.BrushForUnrecognizedBarcode()](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.BrushForUnrecognizedBarcode) are invoked every time a new recognized or unrecognized barcode appears. These can be used to set a brush that will be used to highlight that specific barcode in the overlay. Keep in mind that these methods are relevant only when using the style [BarcodeCountViewStyle.Dot](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/barcode-count-view.html#value-scandit.datacapture.barcode.count.ui.BarcodeCountViewStyle.Dot).
+MatrixScan Count comes with recommended and user-tested AR overlays. However, if you wish to customize the overlay colors, once the overlay has been added, you can conform to the [IBarcodeCountViewListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/barcode-count-view-listener.html#interface-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener) interface. The methods [IBarcodeCountViewListener.BrushForRecognizedBarcode()](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.BrushForRecognizedBarcode) and [IBarcodeCountViewListener.BrushForRecognizedBarcodeNotInList()](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/barcode-count-view-listener.html#method-scandit.datacapture.barcode.count.ui.IBarcodeCountViewListener.BrushForRecognizedBarcodeNotInList) are invoked every time a new recognized or not-in-list barcode appears. These can be used to set a brush that will be used to highlight that specific barcode in the overlay. Keep in mind that these methods are relevant only when using the style [BarcodeCountViewStyle.Dot](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/barcode-count-view.html#value-scandit.datacapture.barcode.count.ui.BarcodeCountViewStyle.Dot).
 
 ```csharp
-public Brush BrushForRecognizedBarcode(BarcodeCountView view, TrackedBarcode trackedBarcode)
+public Brush? BrushForRecognizedBarcode(BarcodeCountView view, TrackedBarcode trackedBarcode)
 {
 // Return a custom brush
 }
 
-public Brush BrushForUnrecognizedBarcode(BarcodeCountView view, TrackedBarcode trackedBarcode)
+public Brush? BrushForRecognizedBarcodeNotInList(BarcodeCountView view, TrackedBarcode trackedBarcode)
 {
 // Return a custom brush
 }
