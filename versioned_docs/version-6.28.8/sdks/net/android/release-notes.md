@@ -11,7 +11,7 @@ keywords:
 
 ## 6.28.8
 
-**Released**: February 27, 2026
+**Released**: March 3, 2026
 
 ### Bug Fixes
 
