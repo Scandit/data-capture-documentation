@@ -18,16 +18,16 @@ That means certain data from certain fields won’t be returned, even if it’s 
 
 ```csharp
 // Default value:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_ONLY);
+settings.AnonymizationMode = IdAnonymizationMode.FieldsOnly;
 
 // Sensitive data is additionally covered with black boxes on returned images:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_AND_IMAGES);
+settings.AnonymizationMode = IdAnonymizationMode.FieldsAndImages;
 
 // Only images are anonymized:
-settings.setAnyonymizationMode(IdAnonymizationMode.IMAGES_ONLY);
+settings.AnonymizationMode = IdAnonymizationMode.ImagesOnly;
 
 // No anonymization:
-settings.setAnyonymizationMode(IdAnonymizationMode.NONE);
+settings.AnonymizationMode = IdAnonymizationMode.None;
 ```
 
 ## Document Capture Zones
@@ -41,11 +41,11 @@ The `FullDocumentScanner` extracts all document information by default. If using
 
 ```csharp
 // To extract data from barcodes on IDs
-SingleSideScanner.barcode(true);
+settings.Scanner = new IdCaptureScanner(new SingleSideScanner(barcode: true, machineReadableZone: false, visualInspectionZone: false), mobileDocument: null);
 // To extract data from the visual inspection zone (VIZ) on IDs
-SingleSideScanner.visualInspectionZone(true);
+settings.Scanner = new IdCaptureScanner(new SingleSideScanner(barcode: false, machineReadableZone: false, visualInspectionZone: true), mobileDocument: null);
 // To extract data from the machine-readable zone (MRZ) on IDs
-SingleSideScanner.machineReadableZone(true);
+settings.Scanner = new IdCaptureScanner(new SingleSideScanner(barcode: false, machineReadableZone: true, visualInspectionZone: false), mobileDocument: null);
 ```
 
 ## Configure Accepted and Rejected Documents

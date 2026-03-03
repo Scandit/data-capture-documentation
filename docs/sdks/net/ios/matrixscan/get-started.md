@@ -90,7 +90,8 @@ Alternatively you can use a [DataCaptureView](https://docs.scandit.com/data-capt
 ```xml
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:scandit="clr-namespace:Scandit.DataCapture.Core.UI.Maui;assembly=ScanditCaptureCoreMaui" <ContentPage.Content>
+    xmlns:scandit="clr-namespace:Scandit.DataCapture.Core.UI.Maui;assembly=ScanditCaptureCoreMaui">
+	<ContentPage.Content>
     <AbsoluteLayout>
         <scandit:DataCaptureView x:Name="dataCaptureView" AbsoluteLayout.LayoutBounds="0,0,1,1"
             AbsoluteLayout.LayoutFlags="All" DataCaptureContext="{Binding DataCaptureContext}">
@@ -161,7 +162,7 @@ feedback = Feedback.DefaultFeedback;
 Next, use this [feedback](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/feedback.html#class-scandit.datacapture.core.Feedback) in a [IBarcodeBatchListener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-batch-listener.html#interface-scandit.datacapture.barcode.batch.IBarcodeBatchListener):
 
 ```csharp
-public class FeedbackListener : Foundation.NSObject, IBarcodeBatchListener
+public class FeedbackListener : IBarcodeBatchListener
 {
 public void OnObservationStarted(BarcodeBatch barcodeBatch)
 {

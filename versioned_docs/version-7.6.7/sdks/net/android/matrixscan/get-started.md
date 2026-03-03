@@ -105,18 +105,18 @@ You can configure your view in the code behind class. For example:
 ```csharp
 public partial class MainPage : ContentPage
 {
-public MainPage()
-{
-InitializeComponent();
+    public MainPage()
+    {
+        InitializeComponent();
 
-// Initialization of DataCaptureView happens on handler changed event.
-dataCaptureView.HandlerChanged += DataCaptureViewHandlerChanged;
-}
+        // Initialization of DataCaptureView happens on handler changed event.
+        dataCaptureView.HandlerChanged += DataCaptureViewHandlerChanged;
+    }
 
-private void DataCaptureViewHandlerChanged(object? sender, EventArgs e)
-{
-// Your dataCaptureView configuration goes here, e.g. add overlay
-}
+    private void DataCaptureViewHandlerChanged(object? sender, EventArgs e)
+    {
+        // Your dataCaptureView configuration goes here, e.g. add overlay
+    }
 }
 ```
 
@@ -154,41 +154,41 @@ Barcode Batch, unlike Barcode Capture, doesn’t emit feedback (sound or vibrati
 ```csharp
 protected override void OnResume()
 {
-base.OnResume();
-feedback = Feedback.DefaultFeedback;
+    base.OnResume();
+    feedback = Feedback.DefaultFeedback;
 }
 
 protected override void OnPause()
 {
-base.OnPause();
-feedback.Dispose();
+    base.OnPause();
+    feedback.Dispose();
 }
 ```
 
 Next, use this [feedback](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/core/api/feedback.html#class-scandit.datacapture.core.Feedback) in a [IBarcodeBatchListener](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-batch-listener.html#interface-scandit.datacapture.barcode.batch.IBarcodeBatchListener):
 
 ```csharp
-public class FeedbackListener : Java.Lang.Object, IBarcodeBatchListener
+public class FeedbackListener : IBarcodeBatchListener
 {
-public void OnObservationStarted(BarcodeBatch barcodeBatch)
-{
-// Called when Barcode Batch is started.
-// We don't use this callback in this guide.
-}
+    public void OnObservationStarted(BarcodeBatch barcodeBatch)
+    {
+        // Called when Barcode Batch is started.
+        // We don't use this callback in this guide.
+    }
 
-public void OnObservationStopped(BarcodeBatch barcodeBatch)
-{
-// Called when Barcode Batch is stopped.
-// We don't use this callback in this guide.
-}
+    public void OnObservationStopped(BarcodeBatch barcodeBatch)
+    {
+        // Called when Barcode Batch is stopped.
+        // We don't use this callback in this guide.
+    }
 
-public void OnSessionUpdated(BarcodeBatch barcodeBatch, BarcodeBatchSession session, IFrameData frameData)
-{
-if (session.AddedTrackedBarcodes.Any())
-{
-this.feedback.Emit();
-}
-}
+    public void OnSessionUpdated(BarcodeBatch barcodeBatch, BarcodeBatchSession session, IFrameData frameData)
+    {
+        if (session.AddedTrackedBarcodes.Any())
+        {
+            this.feedback.Emit();
+        }
+    }
 }
 ```
 

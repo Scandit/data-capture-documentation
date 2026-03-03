@@ -80,7 +80,7 @@ camera?.SwitchToDesiredStateAsync(FrameSourceState.On);
 When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```csharp
-DataCaptureView dataCaptureView = DataCaptureView.Create(this, dataCaptureContext);
+DataCaptureView dataCaptureView = DataCaptureView.Create(dataCaptureContext);
 SetContentView(dataCaptureView);
 ```
 
@@ -168,7 +168,7 @@ feedback.Dispose();
 Next, use this [feedback](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/feedback.html#class-scandit.datacapture.core.Feedback) in a [IBarcodeBatchListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-batch-listener.html#interface-scandit.datacapture.barcode.batch.IBarcodeBatchListener):
 
 ```csharp
-public class FeedbackListener : Java.Lang.Object, IBarcodeBatchListener
+public class FeedbackListener : IBarcodeBatchListener
 {
 public void OnObservationStarted(BarcodeBatch barcodeBatch)
 {

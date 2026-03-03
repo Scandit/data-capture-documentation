@@ -46,21 +46,21 @@ In this tutorial, let’s look up two items based on their EAN13 codes. We will 
 
 ```csharp
 ICollection<BarcodeFindItem> items = new HashSet<BarcodeFindItem>()
-        {
-        new BarcodeFindItem(
+{
+    new BarcodeFindItem(
         new BarcodeFindItemSearchOptions("9783598215438"),
         new BarcodeFindItemContent("Mini Screwdriver Set", "(6-Piece)", null)),
-        new BarcodeFindItem(
+    new BarcodeFindItem(
         new BarcodeFindItemSearchOptions("9783598215414"),
         null) // Item information is optional, used for display only
-        };
+};
 ```
 
 Create the mode with the previously created settings and set the items:
 
 ```csharp
-BarcodeFind mode = new BarcodeFind(settings);
-mode.SetItemList(items);
+BarcodeFind barcodeFind = new BarcodeFind(settings);
+barcodeFind.SetItemList(items);
 ```
 
 ## Setup the BarcodeFindView
@@ -88,14 +88,14 @@ Connect the BarcodeFindView to the iOS view controller lifecycle. In particular,
 ```csharp
 public override void ViewWillAppear(bool animated)
 {
-base.ViewWillAppear(animated);
-barcodeFindView.PrepareSearching();
+    base.ViewWillAppear(animated);
+    barcodeFindView.PrepareSearching();
 }
 
 public override void ViewWillDisappear(bool animated)
 {
-base.ViewWillDisappear(animated);
-barcodeFindView.StopSearching();
+    base.ViewWillDisappear(animated);
+    barcodeFindView.StopSearching();
 }
 ```
 
@@ -108,7 +108,7 @@ In this tutorial, we will then navigate back to the previous screen to finish th
 ```csharp
 barcodeFindView.FinishButtonTapped += (object? sender, FinishButtonTappedEventArgs e) =>
 {
-RequireActivity().OnBackPressed();
+    NavigationController?.PopViewController(animated: true);
 };
 ```
 

@@ -18,53 +18,52 @@ That means certain data from certain fields won’t be returned, even if it’s 
 
 ```csharp
 // Default value:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_ONLY);
+settings.AnonymizationMode = IdAnonymizationMode.FieldsOnly;
 
 // Sensitive data is additionally covered with black boxes on returned images:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_AND_IMAGES);
+settings.AnonymizationMode = IdAnonymizationMode.FieldsAndImages;
 
 // Only images are anonymized:
-settings.setAnyonymizationMode(IdAnonymizationMode.IMAGES_ONLY);
+settings.AnonymizationMode = IdAnonymizationMode.ImagesOnly;
 
 // No anonymization:
-settings.setAnyonymizationMode(IdAnonymizationMode.NONE);
+settings.AnonymizationMode = IdAnonymizationMode.None;
 ```
 
 ## Document Capture Zones
 
 By default, a new instance of [IdCaptureSettings](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-settings.html#class-scandit.datacapture.id.IdCaptureSettings) creates a single-sided scanner type with no accepted or rejected documents. 
 
-To change this, use the `scannerType` method to set the scanner type to either [SingleSideScanner](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-scanner.html#single-side-scanner) or [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-scanner.html#full-document-scanner).
+To change this, set the `Scanner` property on `IdCaptureSettings` to an [IdCaptureScanner](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-scanner.html) configured with either a [SingleSideScanner](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-scanner.html#single-side-scanner) or [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-scanner.html#full-document-scanner).
 
-
-The `FullDocumentScanner` extracts all document information by default. If using the `SingleSideScanner`, you can specify the document zones to extract:
+The `FullDocumentScanner` extracts all document information by default. If using the `SingleSideScanner`, you can specify the document zones to extract via its constructor parameters:
 
 ```csharp
 // To extract data from barcodes on IDs
-SingleSideScanner.barcode(true);
+settings.Scanner = new IdCaptureScanner(new SingleSideScanner(barcode: true, machineReadableZone: false, visualInspectionZone: false), mobileDocument: null);
 // To extract data from the visual inspection zone (VIZ) on IDs
-SingleSideScanner.visualInspectionZone(true);
+settings.Scanner = new IdCaptureScanner(new SingleSideScanner(barcode: false, machineReadableZone: false, visualInspectionZone: true), mobileDocument: null);
 // To extract data from the machine-readable zone (MRZ) on IDs
-SingleSideScanner.machineReadableZone(true);
+settings.Scanner = new IdCaptureScanner(new SingleSideScanner(barcode: false, machineReadableZone: true, visualInspectionZone: false), mobileDocument: null);
 ```
 
 ## Configure Accepted and Rejected Documents
 
-To configure the documents that should be accepted and/or rejected, use the `acceptedDocuments` and `rejectedDocuments` methods in `IdCaptureSettings`.
+To configure the documents that should be accepted and/or rejected, set the `AcceptedDocuments` and `RejectedDocuments` properties in `IdCaptureSettings`.
 
-These methods are used in conjunction with the [IdCaptureDocumentType](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-document.html#enum-scandit.datacapture.id.IdCaptureDocumentType) and [IdCaptureRegion](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enums to enable highly flexible document filtering as may be desired in your application.
+These properties take a list of [IIdCaptureDocument](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-document.html) instances (e.g. `Passport`, `DriverLicense`, `IdCard`) combined with the [IdCaptureRegion](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enum to enable highly flexible document filtering.
 
 For example, to accept only US Driver Licenses:
 
 ```csharp
-settings.AcceptedDocuments = IdDocumentType.DriverLicense | IdDocumentType.Region.US;
+settings.AcceptedDocuments = new List<IIdCaptureDocument> { new DriverLicense(IdCaptureRegion.Us) };
 ```
 
 Or to accept all Passports *except* those from the US:
 
 ```csharp
-settings.AcceptedDocuments = IdDocumentType.Passport;
-settings.RejectedDocuments = IdDocumentType.Region.US;
+settings.AcceptedDocuments = new List<IIdCaptureDocument> { new Passport(IdCaptureRegion.Any) };
+settings.RejectedDocuments = new List<IIdCaptureDocument> { new Passport(IdCaptureRegion.Us) };
 ```
 
 ## ID Images

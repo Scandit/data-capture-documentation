@@ -17,21 +17,16 @@ You may want more fine-grained knowledge over the different events happening dur
 To do this, you can directly register a [`BarcodePickListener`](https://docs.scandit.com/7.6/data-capture-sdk/android/barcode-capture/api/barcode-pick-listener.html#interface-scandit.datacapture.barcode.pick.IBarcodePickListener) on the mode itself, keeping in mind that these listeners are called from a background thread.
 
 ```csharp
-public class BarcodePickListener : IBarcodePickListener
+public class MyBarcodePickListener : IBarcodePickListener
 {
-	public void onObservationStopped(ICollection<BarcodePickProduct> foundItems)
-	{
-		// The mode was paused
-	}
-
-	public void onObservationStarted()
-	{
-		// The mode was started
-	}
+    public void OnSessionUpdated(BarcodePick barcodePick, BarcodePickSession session)
+    {
+        // Handle session update
+    }
 }
 
 private void Initialize()
 {
-	BarcodePick.AddListener(new BarcodePickListener())
+    barcodePick.AddListener(new MyBarcodePickListener());
 }
 ```
