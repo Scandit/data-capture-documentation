@@ -18,7 +18,7 @@ This guide shows you how to add the Scandit Data Capture SDK to current existing
 
 - The latest stable version of [Visual Studio](https://visualstudio.microsoft.com/).
 - A [.NET SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0).
-- A .NET for iOS project with minimum iOS deployment target of 14.0 or higher.
+- A .NET for iOS project with minimum iOS deployment target of 15.0 or higher.
 
   :::note
   ID Capture requires a minimum iOS deployment target of 15.0.
