@@ -10,6 +10,20 @@ keywords:
   - ios
 ---
 
+## 8.2.1
+
+**Released**: March 4, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Sanitized name fields on ACT DL. Splits FullName to populate first and last name properties
+
+#### Smart Label Capture
+
+* Fixed a rare race condition
+
 ## 8.2.0
 
 **Released**: February 13, 2026

@@ -10,6 +10,26 @@ keywords:
   - web
 ---
 
+## 8.2.1
+
+**Released**: March 4, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Corrected Mexican Voter ID parent names to map to firstName and lastName
+* Sanitized name fields on ACT DL. Splits FullName to populate first and last name properties
+
+#### Smart Label Capture
+
+* Fixed `LabelCaptureValidationFlowOverlay` not reflecting Label Capture settings if reused
+* Fixed `LabelCaptureValidationFlowOverlay` not correctly resuming if user changes view when in pause and comes back
+* Fixed some issues with keyboard handling in Validation Flow
+* Fixed camera being incorrectly paused while cloud backup started in Validation Flow
+* Fixed runtime error thrown in Validation Flow when screen was tapped while a cloud backup request was running
+* Fixed a rare race condition
+
 ## 8.2.0
 
 **Released**: February 13, 2026
