@@ -258,7 +258,7 @@ const config: Config = {
           lastVersion: "current",
           versions: {
             current: {
-              label: '8.2.0',
+              label: '8.2.1',
               banner: 'none',
               badge: false,
             },
