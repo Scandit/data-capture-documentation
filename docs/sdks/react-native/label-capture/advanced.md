@@ -7,6 +7,12 @@ keywords:
   - react-native
 ---
 
+import ValidationFlowHowItWorks from '../../../partials/advanced/_validation-flow-how-it-works.mdx';
+import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-flow-custom-buttons.mdx';
+import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
+import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
+import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
+
 # Advanced Configurations
 
 ## Customize the Overlay Appearance
@@ -182,11 +188,7 @@ useEffect(() => {
 
 ## Validation Flow
 
-Implementing a validation flow in your Smart Label Capture application differs from the [Get Started](/sdks/react-native/label-capture/get-started.md) steps outlined earlier as follows:
-
-### Visualize the Scan Process
-
-Validation flow uses a different overlay, the `LabelCaptureValidationFlowOverlay`. This overlay provides a user interface that guides users through the label capture process, including validation steps.
+<ValidationFlowHowItWorks/>
 
 ```jsx
 import React, { useMemo } from 'react';
@@ -198,39 +200,16 @@ const validationFlowOverlay = useMemo(() => {
 // Set the listener to receive validation events
 useEffect(() => {
   validationFlowOverlay.listener = validationFlowListener;
-  
+
   return () => {
     validationFlowOverlay.listener = null;
   };
 }, [validationFlowOverlay, validationFlowListener]);
 ```
 
-### Adjust the Hint Messages
-
-```jsx
-import React, { useMemo } from 'react';
-
-const validationSettings = useMemo(() => {
-  const settings = new LabelCaptureValidationFlowSettings();
-  settings.missingFieldsHintText = "Please add this field";
-  settings.standbyHintText = "No label detected, camera paused";
-  settings.validationHintText = "fields captured"; // X/Y (X fields out of total Y) is shown in front of this string
-  settings.validationErrorText = "Input not valid";
-  settings.requiredFieldErrorText = "This field is required";
-  settings.manualInputButtonText = "Add info manually";
-  
-  return settings;
-}, []);
-
-// Apply the settings to the overlay
-useEffect(() => {
-  validationFlowOverlay.applySettings(validationSettings);
-}, [validationFlowOverlay, validationSettings]);
-```
-
 ### Define a Listener
 
-To handle validation events, implement the `LabelCaptureValidationFlowOverlayListener` interface.
+When the user has verified that all fields are correctly captured and presses the finish button, the Validation Flow triggers a callback with the final results. To receive these results, implement the `LabelCaptureValidationFlowOverlayListener` interface:
 
 ```jsx
 const validationFlowListener = useMemo(() => ({
@@ -251,3 +230,42 @@ const validationFlowListener = useMemo(() => ({
   }
 }), []);
 ```
+
+<ValidationFlowRequiredOptional/>
+
+<ValidationFlowCloudVLM/>
+
+<!-- TODO: Add React Native code snippet for adaptive recognition -->
+
+<ValidationFlowTypingHints/>
+
+<!-- TODO: Add React Native code snippet for typing hints -->
+
+<ValidationFlowCustomButtons/>
+
+#### Adjust Hint Messages
+
+```jsx
+import React, { useMemo } from 'react';
+
+const validationSettings = useMemo(() => {
+  const settings = new LabelCaptureValidationFlowSettings();
+  settings.missingFieldsHintText = "Please add this field";
+  settings.standbyHintText = "No label detected, camera paused";
+  settings.validationHintText = "fields captured"; // X/Y (X fields out of total Y) is shown in front of this string
+  settings.validationErrorText = "Input not valid";
+  settings.requiredFieldErrorText = "This field is required";
+  settings.manualInputButtonText = "Add info manually";
+
+  return settings;
+}, []);
+
+// Apply the settings to the overlay
+useEffect(() => {
+  validationFlowOverlay.applySettings(validationSettings);
+}, [validationFlowOverlay, validationSettings]);
+```
+
+#### Customize Button Text
+
+<!-- TODO: Add React Native code snippet for custom button text -->

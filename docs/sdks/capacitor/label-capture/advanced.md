@@ -7,6 +7,12 @@ keywords:
   - capacitor
 ---
 
+import ValidationFlowHowItWorks from '../../../partials/advanced/_validation-flow-how-it-works.mdx';
+import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-flow-custom-buttons.mdx';
+import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
+import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
+import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
+
 # Advanced Configurations
 
 ## Customize the Overlay Appearance
@@ -68,4 +74,20 @@ Use brush colors with transparency (alpha < 100%) to not occlude the captured ba
 
 ## Validation Flow
 
-Validation Flow is a workflow available in Smart Label Capture to improve the accuracy and completeness of scanned label data in real-world environments. See the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-validation-flow-overlay.html) and [LabelCaptureValidationFlowSettings](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-validation-flow-settings.html) API references for implementation details.
+<ValidationFlowHowItWorks/>
+
+See the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-validation-flow-overlay.html) and [LabelCaptureValidationFlowSettings](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-validation-flow-settings.html) API references for implementation details.
+
+<ValidationFlowRequiredOptional/>
+
+<ValidationFlowCloudVLM/>
+
+<!-- TODO: Add Capacitor code snippet for adaptive recognition -->
+
+<ValidationFlowTypingHints/>
+
+<!-- TODO: Add Capacitor code snippet for typing hints -->
+
+<ValidationFlowCustomButtons/>
+
+<!-- TODO: Add Capacitor code snippets for customization -->

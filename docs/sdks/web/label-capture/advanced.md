@@ -7,6 +7,12 @@ keywords:
   - web
 ---
 
+import ValidationFlowHowItWorks from '../../../partials/advanced/_validation-flow-how-it-works.mdx';
+import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-flow-custom-buttons.mdx';
+import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
+import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
+import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
+
 # Advanced Configurations
 
 ## Customize the Overlay Appearance
@@ -70,4 +76,89 @@ Use brush colors with transparency (alpha < 100%) to not occlude the captured ba
 
 ## Validation Flow
 
-Validation Flow is a workflow available in Smart Label Capture to improve the accuracy and completeness of scanned label data in real-world environments. See the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/ui/label-capture-validation-flow-overlay.html) and [LabelCaptureValidationFlowSettings](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/ui/label-capture-validation-flow-settings.html) API references for implementation details.
+<ValidationFlowHowItWorks/>
+
+```js
+// Create the overlay
+const validationFlowOverlay = await LabelCaptureValidationFlowOverlay.withLabelCaptureForView(
+    labelCapture,
+    dataCaptureView
+);
+
+// Set the listener to receive validation events
+validationFlowOverlay.listener = validationFlowListener;
+```
+
+### Define a Listener
+
+When the user has verified that all fields are correctly captured and presses the finish button, the Validation Flow triggers a callback with the final results. To receive these results, implement the [LabelCaptureValidationFlowOverlayListener](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/ui/label-capture-validation-flow-listener.html) interface:
+
+```js
+const validationFlowListener = {
+    // This is called by the validation flow overlay when a label has been fully captured and validated
+    onValidationFlowLabelCaptured: (fields) => {
+        const barcodeData = fields.find(f => f.name === "<your-barcode-field-name>")?.barcode?.data;
+        const expiryDate = fields.find(f => f.name === "<your-expiry-date-field-name>")?.text;
+
+        // Handle the captured values
+    }
+};
+```
+
+<ValidationFlowRequiredOptional/>
+
+<ValidationFlowCloudVLM/>
+
+```js
+const retailItem = await new LabelDefinitionBuilder()
+  .addCustomBarcode(
+    await new CustomBarcodeBuilder()
+      .isOptional(false)
+      .setSymbologies([Symbology.EAN13UPCA, Symbology.GS1DatabarExpanded, Symbology.Code128])
+      .build("Barcode")
+  )
+  .addExpiryDateText(
+    await new ExpiryDateTextBuilder()
+      .isOptional(true)
+      .setLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY))
+      .build("Expiry Date")
+  )
+  .adaptiveRecognitionMode(AdaptiveRecognitionMode.Auto)
+  .build("Perishable Product");
+```
+
+<ValidationFlowTypingHints/>
+
+```js
+const overlaySettings = await LabelCaptureValidationFlowSettings.create();
+await overlaySettings.setPlaceholderTextForLabelDefinition("Expiry Date", "MM/DD/YYYY")
+
+overlay.applySettings(overlaySettings)
+```
+
+<ValidationFlowCustomButtons/>
+
+#### Adjust Hint Messages
+
+```js
+const validationSettings = await LabelCaptureValidationFlowSettings.create();
+await validationSettings.setMissingFieldsHintText("Please add this field");
+await validationSettings.setStandbyHintText("No label detected, camera paused");
+await validationSettings.setValidationHintText("fields captured"); // X/Y (X fields out of total Y) is shown in front of this string
+await validationSettings.setValidationErrorText("Input not valid");
+await validationSettings.setRequiredFieldErrorText("This field is required");
+await validationSettings.setManualInputButtonText("Add info manually");
+
+validationFlowOverlay.applySettings(validationSettings);
+```
+
+#### Customize Button Text
+
+```js
+const overlaySettings = await LabelCaptureValidationFlowSettings.create();
+await overlaySettings.setRestartButtonText("Borrar todo")
+await overlaySettings.setPauseButtonText("Pausar")
+await overlaySettings.setFinishButtonText("Finalizar")
+
+overlay.applySettings(overlaySettings)
+```
