@@ -10,6 +10,22 @@ keywords:
   - android
 ---
 
+## 8.2.1
+
+**Released**: March 5, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Sanitized name fields on ACT DL. Splits FullName to populate first and last name properties
+
+#### Smart Label Capture
+
+* Fixed LabelCaptureValidationFlowOverlay possible issue with Jetpack Compose that caused focus loss when opening the keyboard
+* Added LabelCaptureValidationFlowOverlay::ShouldHandleKeyboardInsetsInternally in case customers don't want to follow official Android guidelines for edge-to-edge and insets
+* Fixed a rare race condition
+
 ## 8.2.0
 
 **Released**: February 13, 2026
