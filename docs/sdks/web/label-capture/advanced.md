@@ -12,6 +12,8 @@ import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-
 import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
 import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
 import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
+import ValidationFlowCustomToasts from '../../../partials/advanced/_validation-flow-custom-toasts.mdx';
+import ValidationFlowCustomField from '../../../partials/advanced/_validation-flow-custom-field.mdx';
 
 # Advanced Configurations
 
@@ -123,42 +125,47 @@ const retailItem = await new LabelDefinitionBuilder()
       .setLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY))
       .build("Expiry Date")
   )
-  .adaptiveRecognitionMode(AdaptiveRecognitionMode.Auto)
+  .adaptiveRecognitionMode(AdaptiveRecognitionMode.Auto) // Enable cloud-based VLM scanning for this label definition
   .build("Perishable Product");
 ```
 
 <ValidationFlowTypingHints/>
 
 ```js
-const overlaySettings = await LabelCaptureValidationFlowSettings.create();
-await overlaySettings.setPlaceholderTextForLabelDefinition("Expiry Date", "MM/DD/YYYY")
+const validationFlowOverlaySettings = await LabelCaptureValidationFlowSettings.create();
+await validationFlowOverlaySettings.setPlaceholderTextForLabelDefinition("Expiry Date", "MM/DD/YYYY")
 
-overlay.applySettings(overlaySettings)
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
 ```
 
 <ValidationFlowCustomButtons/>
 
-#### Adjust Hint Messages
-
 ```js
-const validationSettings = await LabelCaptureValidationFlowSettings.create();
-await validationSettings.setMissingFieldsHintText("Please add this field");
-await validationSettings.setStandbyHintText("No label detected, camera paused");
-await validationSettings.setValidationHintText("fields captured"); // X/Y (X fields out of total Y) is shown in front of this string
-await validationSettings.setValidationErrorText("Input not valid");
-await validationSettings.setRequiredFieldErrorText("This field is required");
-await validationSettings.setManualInputButtonText("Add info manually");
+const validationFlowOverlaySettings = await LabelCaptureValidationFlowSettings.create();
+await validationFlowOverlaySettings.setRestartButtonText("Borrar todo")
+await validationFlowOverlaySettings.setPauseButtonText("Pausar")
+await validationFlowOverlaySettings.setFinishButtonText("Finalizar")
 
-validationFlowOverlay.applySettings(validationSettings);
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
 ```
 
-#### Customize Button Text
+<ValidationFlowCustomToasts/>
 
 ```js
-const overlaySettings = await LabelCaptureValidationFlowSettings.create();
-await overlaySettings.setRestartButtonText("Borrar todo")
-await overlaySettings.setPauseButtonText("Pausar")
-await overlaySettings.setFinishButtonText("Finalizar")
+const validationFlowOverlaySettings = await LabelCaptureValidationFlowSettings.create();
+await validationFlowOverlaySettings.setStandbyHintText("No label detected, camera paused");
+await validationFlowOverlaySettings.setValidationHintText("data fields collected"); // X/Y (X fields out of total Y) is shown in front of this string
 
-overlay.applySettings(overlaySettings)
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCustomField/>
+
+```js
+const validationFlowOverlaySettings = await LabelCaptureValidationFlowSettings.create();
+await validationFlowOverlaySettings.setValidationErrorText("Incorrect format.");
+await validationFlowOverlaySettings.setScanningText("Scan in progress");
+await validationFlowOverlaySettings.setAdaptiveScanningText("Processing");
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
 ```

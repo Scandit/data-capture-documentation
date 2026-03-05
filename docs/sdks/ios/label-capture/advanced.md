@@ -12,6 +12,8 @@ import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-
 import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
 import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
 import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
+import ValidationFlowCustomToasts from '../../../partials/advanced/_validation-flow-custom-toasts.mdx';
+import ValidationFlowCustomField from '../../../partials/advanced/_validation-flow-custom-field.mdx';
 
 # Advanced Configurations
 
@@ -201,7 +203,7 @@ let labelCaptureSettings = try LabelCaptureSettings {
                 )
             )
     }
-    .adaptiveRecognition(.auto)
+    .adaptiveRecognition(.auto) // Enable cloud-based VLM scanning for this label definition
 }
 ```
 
@@ -216,22 +218,6 @@ validationFlowOverlay.apply(validationFlowOverlaySettings)
 
 <ValidationFlowCustomButtons/>
 
-#### Adjust Hint Messages
-
-```swift
-let validationSettings = LabelCaptureValidationFlowSettings()
-validationSettings.missingFieldsHintText = "Please add this field"
-validationSettings.standbyHintText = "No label detected, camera paused"
-validationSettings.validationHintText = "fields captured" // X/Y (X fields out of total Y) is shown in front of this string
-validationSettings.validationErrorText = "Input not valid"
-validationSettings.requiredFieldErrorText = "This field is required"
-validationSettings.manualInputButtonText = "Add info manually"
-
-validationFlowOverlay.applySettings(validationSettings)
-```
-
-#### Customize Button Text
-
 ```swift
 let validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.init()
 validationFlowOverlaySettings.restartButtonText = "Borrar todo"
@@ -239,5 +225,26 @@ validationFlowOverlaySettings.pauseButtonText = "Pausar"
 validationFlowOverlaySettings.finishButtonText = "Finalizar"
 
 validationFlowOverlay.apply(validationFlowOverlaySettings)
+```
+
+<ValidationFlowCustomToasts/>
+
+```swift
+let validationFlowOverlaySettings = LabelCaptureValidationFlowSettings()
+validationFlowOverlaySettings.standbyHintText = "No label detected, camera paused"
+validationFlowOverlaySettings.validationHintText = "data fields collected" // X/Y (X fields out of total Y) is shown in front of this string
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
+```
+
+<ValidationFlowCustomField/>
+
+```swift
+let validationFlowOverlaySettings = LabelCaptureValidationFlowSettings()
+validationFlowOverlaySettings.validationErrorText = "Incorrect format."
+validationFlowOverlaySettings.scanningText = "Scan in progress"
+validationFlowOverlaySettings.adaptiveScanningText = "Processing"
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
 ```
 

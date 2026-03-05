@@ -12,6 +12,8 @@ import ValidationFlowCustomButtons from '../../../../partials/advanced/_validati
 import ValidationFlowTypingHints from '../../../../partials/advanced/_validation-flow-typing-hints.mdx';
 import ValidationFlowCloudVLM from '../../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
 import ValidationFlowRequiredOptional from '../../../../partials/advanced/_validation-flow-required-optional.mdx';
+import ValidationFlowCustomToasts from '../../../../partials/advanced/_validation-flow-custom-toasts.mdx';
+import ValidationFlowCustomField from '../../../../partials/advanced/_validation-flow-custom-field.mdx';
 
 # Advanced Configurations
 
@@ -243,28 +245,71 @@ public class ValidationFlowListener : NSObject, ILabelCaptureValidationFlowListe
 
 <ValidationFlowCloudVLM/>
 
-<!-- TODO: Add C# code snippet for adaptive recognition -->
+```csharp
+private LabelCaptureSettings BuildLabelCaptureSettings()
+{
+    var fields = new List<LabelFieldDefinition>();
+
+    var customBarcode = CustomBarcode.Builder()
+        .SetSymbologies(new List<Symbology>
+        {
+            Symbology.Ean13Upca,
+            Symbology.Gs1DatabarExpanded,
+            Symbology.Code128
+        })
+        .Build(FIELD_BARCODE);
+    fields.Add(customBarcode);
+
+    var expiryDateText = ExpiryDateText.Builder()
+        .SetLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY, acceptPartialDates: false))
+        .Build(FIELD_EXPIRY_DATE);
+    fields.Add(expiryDateText);
+
+    var labelDefinition = LabelDefinition.Create(LABEL_RETAIL_ITEM, fields);
+    labelDefinition.AdaptiveRecognitionMode = AdaptiveRecognitionMode.Auto; // Enable cloud-based VLM scanning for this label definition
+
+    var settings = LabelCaptureSettings.Create(new List<LabelDefinition> { labelDefinition });
+    return settings;
+}
+```
 
 <ValidationFlowTypingHints/>
 
-<!-- TODO: Add C# code snippet for typing hints -->
+```csharp
+var validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.Create();
+validationFlowOverlaySettings.SetPlaceholderText("MM/DD/YYYY", "Expiry Date");
+
+validationFlowOverlay.ApplySettings(validationFlowOverlaySettings);
+```
 
 <ValidationFlowCustomButtons/>
 
-#### Adjust Hint Messages
-
 ```csharp
-var validationSettings = LabelCaptureValidationFlowSettings.Create();
-validationSettings.MissingFieldsHintText = "Please add this field";
-validationSettings.StandbyHintText = "No label detected, camera paused";
-validationSettings.ValidationHintText = "fields captured"; // X/Y (X fields out of total Y) is shown in front of this string
-validationSettings.ValidationErrorText = "Input not valid";
-validationSettings.RequiredFieldErrorText = "This field is required";
-validationSettings.ManualInputButtonText = "Add info manually";
+var validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.Create();
+validationFlowOverlaySettings.RestartButtonText = "Borrar todo";
+validationFlowOverlaySettings.PauseButtonText = "Pausar";
+validationFlowOverlaySettings.FinishButtonText = "Finalizar";
 
-validationFlowOverlay.ApplySettings(validationSettings);
+validationFlowOverlay.ApplySettings(validationFlowOverlaySettings);
 ```
 
-#### Customize Button Text
+<ValidationFlowCustomToasts/>
 
-<!-- TODO: Add C# code snippet for custom button text -->
+```csharp
+var validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.Create();
+validationFlowOverlaySettings.StandbyHintText = "No label detected, camera paused";
+validationFlowOverlaySettings.ValidationHintText = "data fields collected"; // X/Y (X fields out of total Y) is shown in front of this string
+
+validationFlowOverlay.ApplySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCustomField/>
+
+```csharp
+var validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.Create();
+validationFlowOverlaySettings.ValidationErrorText = "Incorrect format.";
+validationFlowOverlaySettings.ScanningText = "Scan in progress";
+validationFlowOverlaySettings.AdaptiveScanningText = "Processing";
+
+validationFlowOverlay.ApplySettings(validationFlowOverlaySettings);
+```

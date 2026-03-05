@@ -12,6 +12,8 @@ import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-
 import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
 import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
 import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
+import ValidationFlowCustomToasts from '../../../partials/advanced/_validation-flow-custom-toasts.mdx';
+import ValidationFlowCustomField from '../../../partials/advanced/_validation-flow-custom-field.mdx';
 
 # Advanced Configurations
 
@@ -76,7 +78,30 @@ Use brush colors with transparency (alpha < 100%) to not occlude the captured ba
 
 <ValidationFlowHowItWorks/>
 
-See the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-validation-flow-overlay.html) and [LabelCaptureValidationFlowSettings](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-validation-flow-settings.html) API references for implementation details.
+```js
+// Create the overlay
+const validationFlowOverlay = new LabelCaptureValidationFlowOverlay(labelCapture);
+dataCaptureView.addOverlay(validationFlowOverlay);
+
+// Set the listener to receive validation events
+validationFlowOverlay.listener = validationFlowListener;
+```
+
+### Define a Listener
+
+When the user has verified that all fields are correctly captured and presses the finish button, the Validation Flow triggers a callback with the final results. To receive these results, implement the [LabelCaptureValidationFlowListener](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/ui/label-capture-validation-flow-listener.html) interface:
+
+```js
+const validationFlowListener = {
+    // This is called by the validation flow overlay when a label has been fully captured and validated
+    didCaptureLabelWithFields: (fields) => {
+        const barcodeData = fields.find(f => f.name === "<your-barcode-field-name>")?.barcode?.data;
+        const expiryDate = fields.find(f => f.name === "<your-expiry-date-field-name>")?.text;
+
+        // Handle the captured values
+    }
+};
+```
 
 <ValidationFlowRequiredOptional/>
 
@@ -86,8 +111,41 @@ See the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-captur
 
 <ValidationFlowTypingHints/>
 
-<!-- TODO: Add Capacitor code snippet for typing hints -->
+```js
+const validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.create();
+validationFlowOverlaySettings.setPlaceholderTextForLabelDefinition("Expiry Date", "MM/DD/YYYY");
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+```
 
 <ValidationFlowCustomButtons/>
 
-<!-- TODO: Add Capacitor code snippets for customization -->
+```js
+const validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.create();
+validationFlowOverlaySettings.restartButtonText = "Borrar todo";
+validationFlowOverlaySettings.pauseButtonText = "Pausar";
+validationFlowOverlaySettings.finishButtonText = "Finalizar";
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCustomToasts/>
+
+```js
+const validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.create();
+validationFlowOverlaySettings.standbyHintText = "No label detected, camera paused";
+validationFlowOverlaySettings.validationHintText = "data fields collected"; // X/Y (X fields out of total Y) is shown in front of this string
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCustomField/>
+
+```js
+const validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.create();
+validationFlowOverlaySettings.validationErrorText = "Incorrect format.";
+validationFlowOverlaySettings.scanningText = "Scan in progress";
+validationFlowOverlaySettings.adaptiveScanningText = "Processing";
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+```

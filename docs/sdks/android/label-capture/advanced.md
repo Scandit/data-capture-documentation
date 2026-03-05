@@ -12,6 +12,8 @@ import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-
 import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
 import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
 import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
+import ValidationFlowCustomToasts from '../../../partials/advanced/_validation-flow-custom-toasts.mdx';
+import ValidationFlowCustomField from '../../../partials/advanced/_validation-flow-custom-field.mdx';
 
 # Advanced Configurations
 
@@ -199,7 +201,7 @@ val settings = labelCaptureSettings {
                 )
             )
         }
-        adaptiveRecognition(adaptiveRecognitionMode = AdaptiveRecognitionMode.AUTO)
+        adaptiveRecognition(adaptiveRecognitionMode = AdaptiveRecognitionMode.AUTO) // Enable cloud-based VLM scanning for this label definition
     }
 }
 ```
@@ -207,32 +209,39 @@ val settings = labelCaptureSettings {
 <ValidationFlowTypingHints/>
 
 ```kotlin
-val settings = LabelCaptureValidationFlowSettings.newInstance()
-settings.setPlaceholderTextForLabelDefinition(FIELD_EXPIRY_DATE, "MM/DD/YYYY")
+val validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.newInstance()
+validationFlowOverlaySettings.setPlaceholderTextForLabelDefinition(FIELD_EXPIRY_DATE, "MM/DD/YYYY")
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
 ```
 
 <ValidationFlowCustomButtons/>
 
-#### Adjust Hint Messages
-
 ```kotlin
-val validationSettings = LabelCaptureValidationFlowSettings.newInstance().apply {
-    missingFieldsHintText = "Please add this field"
-    standbyHintText = "No label detected, camera paused"
-    validationHintText = "fields captured" // X/Y (X fields out of total Y) is shown in front of this string
-    validationErrorText = "Input not valid"
-    requiredFieldErrorText = "This field is required"
-    manualInputButtonText = "Add info manually"
-}
+val validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.newInstance()
+validationFlowOverlaySettings.restartButtonText = "Borrar todo"
+validationFlowOverlaySettings.pauseButtonText = "Pausar"
+validationFlowOverlaySettings.finishButtonText = "Finalizar"
 
-validationFlowOverlay.applySettings(validationSettings)
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
 ```
 
-#### Customize Button Text
+<ValidationFlowCustomToasts/>
 
 ```kotlin
-val settings = LabelCaptureValidationFlowSettings.newInstance()
-settings.restartButtonText = "Borrar todo"
-settings.pauseButtonText = "Pausar"
-settings.finishButtonText = "Finalizar"
+val validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.newInstance()
+validationFlowOverlaySettings.standbyHintText = "No label detected, camera paused"
+validationFlowOverlaySettings.validationHintText = "data fields collected" // X/Y (X fields out of total Y) is shown in front of this string
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
+```
+
+<ValidationFlowCustomField/>
+
+```kotlin
+val validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.newInstance()
+validationFlowOverlaySettings.validationErrorText = "Incorrect format."
+validationFlowOverlaySettings.scanningText = "Scan in progress"
+validationFlowOverlaySettings.adaptiveScanningText = "Processing"
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
 ```

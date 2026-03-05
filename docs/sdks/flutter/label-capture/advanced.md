@@ -12,6 +12,8 @@ import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-
 import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
 import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
 import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
+import ValidationFlowCustomToasts from '../../../partials/advanced/_validation-flow-custom-toasts.mdx';
+import ValidationFlowCustomField from '../../../partials/advanced/_validation-flow-custom-field.mdx';
 
 # Advanced Configurations
 
@@ -172,29 +174,71 @@ class MyValidationFlowListener extends LabelCaptureValidationFlowListener {
 
 <ValidationFlowCloudVLM/>
 
-<!-- TODO: Add Dart code snippet for adaptive recognition -->
+```dart
+LabelCaptureSettings _buildLabelCaptureSettings() {
+    final customBarcode = CustomBarcodeBuilder()
+        .setSymbologies([Symbology.ean13Upca, Symbology.gs1DatabarExpanded, Symbology.code128])
+        .isOptional(false)
+        .build(Constants.fieldBarcode);
+
+    final expiryDateText = ExpiryDateTextBuilder()
+        .setLabelDateFormat(
+          LabelDateFormat(
+            LabelDateComponentFormat.mdy,
+            false, // acceptPartialDates
+          ),
+        )
+        .isOptional(false)
+        .build(Constants.fieldExpiryDate);
+
+    final labelDefinition = LabelDefinitionBuilder()
+        .addCustomBarcode(customBarcode)
+        .addExpiryDateText(expiryDateText)
+        .build(Constants.labelRetailItem);
+    labelDefinition.adaptiveRecognitionMode = AdaptiveRecognitionMode.auto; // Enable cloud-based VLM scanning for this label definition
+
+    var settings = LabelCaptureSettings([labelDefinition]);
+    return settings;
+}
+```
 
 <ValidationFlowTypingHints/>
 
-<!-- TODO: Add Dart code snippet for typing hints -->
+```dart
+final validationFlowOverlaySettings = LabelCaptureValidationFlowSettings();
+validationFlowOverlaySettings.setPlaceholderTextForLabelDefinition("Expiry Date", "MM/DD/YYYY");
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+```
 
 <ValidationFlowCustomButtons/>
 
-#### Adjust Hint Messages
-
 ```dart
-final validationSettings = LabelCaptureValidationFlowSettings();
+final validationFlowOverlaySettings = LabelCaptureValidationFlowSettings();
+validationFlowOverlaySettings.restartButtonText = "Borrar todo";
+validationFlowOverlaySettings.pauseButtonText = "Pausar";
+validationFlowOverlaySettings.finishButtonText = "Finalizar";
 
-validationSettings.missingFieldsHintText = "Please add this field";
-validationSettings.standbyHintText = "No label detected, camera paused";
-validationSettings.validationHintText = "fields captured"; // X/Y (X fields out of total Y) is shown in front
-validationSettings.validationErrorText = "Input not valid";
-validationSettings.requiredFieldErrorText = "This field is required";
-validationSettings.manualInputButtonText = "Add info manually";
-
-validationFlowOverlay.applySettings(validationSettings);
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
 ```
 
-#### Customize Button Text
+<ValidationFlowCustomToasts/>
 
-<!-- TODO: Add Dart code snippet for custom button text -->
+```dart
+final validationFlowOverlaySettings = LabelCaptureValidationFlowSettings();
+validationFlowOverlaySettings.standbyHintText = "No label detected, camera paused";
+validationFlowOverlaySettings.validationHintText = "data fields collected"; // X/Y (X fields out of total Y) is shown in front
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCustomField/>
+
+```dart
+final validationFlowOverlaySettings = LabelCaptureValidationFlowSettings();
+validationFlowOverlaySettings.validationErrorText = "Incorrect format.";
+validationFlowOverlaySettings.scanningText = "Scan in progress";
+validationFlowOverlaySettings.adaptiveScanningText = "Processing";
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+```

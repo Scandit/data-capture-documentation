@@ -12,6 +12,8 @@ import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-
 import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
 import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
 import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
+import ValidationFlowCustomToasts from '../../../partials/advanced/_validation-flow-custom-toasts.mdx';
+import ValidationFlowCustomField from '../../../partials/advanced/_validation-flow-custom-field.mdx';
 
 # Advanced Configurations
 
@@ -235,37 +237,87 @@ const validationFlowListener = useMemo(() => ({
 
 <ValidationFlowCloudVLM/>
 
-<!-- TODO: Add React Native code snippet for adaptive recognition -->
+```jsx
+const customBarcode = CustomBarcode.initWithNameAndSymbologies('Barcode', [
+  Symbology.EAN13UPCA,
+  Symbology.GS1DatabarExpanded,
+  Symbology.Code128,
+]);
+customBarcode.optional = false;
+
+const expiryDateText = new ExpiryDateText('Expiry Date');
+expiryDateText.labelDateFormat = new LabelDateFormat(LabelDateComponentFormat.MDY, false);
+expiryDateText.optional = false;
+
+const label = new LabelDefinition('Retail Item');
+label.fields = [customBarcode, expiryDateText];
+label.adaptiveRecognitionMode = AdaptiveRecognitionMode.Auto; // Enable cloud-based VLM scanning for this label definition
+
+const settings = LabelCaptureSettings.settingsFromLabelDefinitions([label], {});
+```
 
 <ValidationFlowTypingHints/>
 
-<!-- TODO: Add React Native code snippet for typing hints -->
+```jsx
+const validationFlowOverlaySettings = useMemo(() => {
+  const settings = new LabelCaptureValidationFlowSettings();
+  settings.setPlaceholderTextForLabelDefinition("Expiry Date", "MM/DD/YYYY");
+  return settings;
+}, []);
+
+useEffect(() => {
+  validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+}, [validationFlowOverlay, validationFlowOverlaySettings]);
+```
 
 <ValidationFlowCustomButtons/>
 
-#### Adjust Hint Messages
-
 ```jsx
-import React, { useMemo } from 'react';
-
-const validationSettings = useMemo(() => {
+const validationFlowOverlaySettings = useMemo(() => {
   const settings = new LabelCaptureValidationFlowSettings();
-  settings.missingFieldsHintText = "Please add this field";
-  settings.standbyHintText = "No label detected, camera paused";
-  settings.validationHintText = "fields captured"; // X/Y (X fields out of total Y) is shown in front of this string
-  settings.validationErrorText = "Input not valid";
-  settings.requiredFieldErrorText = "This field is required";
-  settings.manualInputButtonText = "Add info manually";
+  settings.restartButtonText = "Borrar todo";
+  settings.pauseButtonText = "Pausar";
+  settings.finishButtonText = "Finalizar";
 
   return settings;
 }, []);
 
-// Apply the settings to the overlay
 useEffect(() => {
-  validationFlowOverlay.applySettings(validationSettings);
-}, [validationFlowOverlay, validationSettings]);
+  validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+}, [validationFlowOverlay, validationFlowOverlaySettings]);
 ```
 
-#### Customize Button Text
+<ValidationFlowCustomToasts/>
 
-<!-- TODO: Add React Native code snippet for custom button text -->
+```jsx
+import React, { useMemo } from 'react';
+
+const validationFlowOverlaySettings = useMemo(() => {
+  const settings = new LabelCaptureValidationFlowSettings();
+  settings.standbyHintText = "No label detected, camera paused";
+  settings.validationHintText = "data fields collected"; // X/Y (X fields out of total Y) is shown in front of this string
+
+  return settings;
+}, []);
+
+useEffect(() => {
+  validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+}, [validationFlowOverlay, validationFlowOverlaySettings]);
+```
+
+<ValidationFlowCustomField/>
+
+```jsx
+const validationFlowOverlaySettings = useMemo(() => {
+  const settings = new LabelCaptureValidationFlowSettings();
+  settings.validationErrorText = "Incorrect format.";
+  settings.scanningText = "Scan in progress";
+  settings.adaptiveScanningText = "Processing";
+
+  return settings;
+}, []);
+
+useEffect(() => {
+  validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+}, [validationFlowOverlay, validationFlowOverlaySettings]);
+```
