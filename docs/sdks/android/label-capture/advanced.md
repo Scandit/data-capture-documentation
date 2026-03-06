@@ -181,31 +181,6 @@ override fun onValidationFlowLabelCaptured(fields: List<LabelField>) {
 
 <ValidationFlowRequiredOptional/>
 
-<ValidationFlowCloudVLM/>
-
-```kotlin
-val settings = labelCaptureSettings {
-    label(LABEL_TITLE) {
-        customBarcode(FIELD_BARCODE) {
-            setSymbologies(
-                Symbology.EAN13_UPCA,
-                Symbology.GS1_DATABAR_EXPANDED,
-                Symbology.CODE128
-            )
-        }
-        expiryDateText(FIELD_EXPIRY_DATE) {
-            setLabelDateFormat(
-                LabelDateFormat(
-                    componentFormat = LabelDateComponentFormat.MDY,
-                    acceptPartialDates = false,
-                )
-            )
-        }
-        adaptiveRecognition(adaptiveRecognitionMode = AdaptiveRecognitionMode.AUTO) // Enable cloud-based VLM scanning for this label definition
-    }
-}
-```
-
 <ValidationFlowTypingHints/>
 
 ```kotlin
@@ -245,3 +220,30 @@ validationFlowOverlaySettings.adaptiveScanningText = "Processing"
 
 validationFlowOverlay.applySettings(validationFlowOverlaySettings)
 ```
+
+<ValidationFlowCloudVLM/>
+
+```kotlin
+val settings = labelCaptureSettings {
+    label(LABEL_TITLE) {
+        customBarcode(FIELD_BARCODE) {
+            setSymbologies(
+                Symbology.EAN13_UPCA,
+                Symbology.GS1_DATABAR_EXPANDED,
+                Symbology.CODE128
+            )
+        }
+        expiryDateText(FIELD_EXPIRY_DATE) {
+            setLabelDateFormat(
+                LabelDateFormat(
+                    componentFormat = LabelDateComponentFormat.MDY,
+                    acceptPartialDates = false,
+                )
+            )
+        }
+        adaptiveRecognition(adaptiveRecognitionMode = AdaptiveRecognitionMode.AUTO)
+    }
+}
+```
+
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.

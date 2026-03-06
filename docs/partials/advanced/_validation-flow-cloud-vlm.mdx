@@ -1,9 +1,13 @@
-### Cloud-Based Scanning
+### Cloud Fallback
 
-When the on-device models are not able to read a field, you can enhance scanning with cloud-based solutions. Adaptive Recognition uses a cloud-based Vision Language Model (VLM) to read label data from a captured image, providing a seamless fallback that avoids requiring the user to type data manually.
+:::warning Beta
+The Adaptive Recognition API is still in beta and may change in future versions of Scandit Data Capture SDK. To enable it on your subscription, please contact [support@scandit.com](mailto:support@scandit.com).
+:::
+
+The Adaptive Recognition Engine helps making Smart Label Capture more robust and scalable thanks to its larger, more capable model hosted in the cloud. Whenever Smart Label Capture's on-device model fails to capture data, the SDK will automatically trigger the Adaptive Recognition Engine to capture complex, unforeseen data and process it with high accuracy and reliability — avoiding the need for the user to type data manually.
 
 <p align="center">
-  <img src="/img/slc/validation-flow-cloud-vlm.gif" width="300px" alt="Cloud-based label reading using VLM" />
+  <img src="/img/slc/validation-flow-cloud-vlm.gif" width="300px" alt="Cloud fallback using Adaptive Recognition" />
 </p>
 
 Enable Adaptive Recognition by setting the mode to `.auto` on the label definition. This is a single extra line added to your existing label definition configuration:

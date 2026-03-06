@@ -109,26 +109,6 @@ const validationFlowListener = {
 
 <ValidationFlowRequiredOptional/>
 
-<ValidationFlowCloudVLM/>
-
-```js
-const retailItem = await new LabelDefinitionBuilder()
-  .addCustomBarcode(
-    await new CustomBarcodeBuilder()
-      .isOptional(false)
-      .setSymbologies([Symbology.EAN13UPCA, Symbology.GS1DatabarExpanded, Symbology.Code128])
-      .build("Barcode")
-  )
-  .addExpiryDateText(
-    await new ExpiryDateTextBuilder()
-      .isOptional(true)
-      .setLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY))
-      .build("Expiry Date")
-  )
-  .adaptiveRecognitionMode(AdaptiveRecognitionMode.Auto) // Enable cloud-based VLM scanning for this label definition
-  .build("Perishable Product");
-```
-
 <ValidationFlowTypingHints/>
 
 ```js
@@ -169,3 +149,25 @@ await validationFlowOverlaySettings.setAdaptiveScanningText("Processing");
 
 validationFlowOverlay.applySettings(validationFlowOverlaySettings);
 ```
+
+<ValidationFlowCloudVLM/>
+
+```js
+const retailItem = await new LabelDefinitionBuilder()
+  .addCustomBarcode(
+    await new CustomBarcodeBuilder()
+      .isOptional(false)
+      .setSymbologies([Symbology.EAN13UPCA, Symbology.GS1DatabarExpanded, Symbology.Code128])
+      .build("Barcode")
+  )
+  .addExpiryDateText(
+    await new ExpiryDateTextBuilder()
+      .isOptional(true)
+      .setLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY))
+      .build("Expiry Date")
+  )
+  .adaptiveRecognitionMode(AdaptiveRecognitionMode.Auto)
+  .build("Perishable Product");
+```
+
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.

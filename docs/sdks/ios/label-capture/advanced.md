@@ -186,27 +186,6 @@ extension YourScanViewController: LabelCaptureValidationFlowDelegate {
 
 <ValidationFlowRequiredOptional/>
 
-<ValidationFlowCloudVLM/>
-
-```swift
-let labelCaptureSettings = try LabelCaptureSettings {
-    LabelDefinition("Retail Item") {
-        CustomBarcode(
-            name: "Barcode",
-            symbologies: [.ean13UPCA, .gs1DatabarExpanded, .code128]
-        )
-        ExpiryDateText(name: "Expiry Date")
-            .labelDateFormat(
-                LabelDateFormat(
-                    componentFormat: LabelDateComponentFormat.MDY,
-                    acceptPartialDates: false
-                )
-            )
-    }
-    .adaptiveRecognition(.auto) // Enable cloud-based VLM scanning for this label definition
-}
-```
-
 <ValidationFlowTypingHints/>
 
 ```swift
@@ -247,4 +226,27 @@ validationFlowOverlaySettings.adaptiveScanningText = "Processing"
 
 validationFlowOverlay.applySettings(validationFlowOverlaySettings)
 ```
+
+<ValidationFlowCloudVLM/>
+
+```swift
+let labelCaptureSettings = try LabelCaptureSettings {
+    LabelDefinition("Retail Item") {
+        CustomBarcode(
+            name: "Barcode",
+            symbologies: [.ean13UPCA, .gs1DatabarExpanded, .code128]
+        )
+        ExpiryDateText(name: "Expiry Date")
+            .labelDateFormat(
+                LabelDateFormat(
+                    componentFormat: LabelDateComponentFormat.MDY,
+                    acceptPartialDates: false
+                )
+            )
+    }
+    .adaptiveRecognition(.auto)
+}
+```
+
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
 

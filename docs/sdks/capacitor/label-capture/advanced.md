@@ -105,10 +105,6 @@ const validationFlowListener = {
 
 <ValidationFlowRequiredOptional/>
 
-<ValidationFlowCloudVLM/>
-
-<!-- TODO: Add Capacitor code snippet for adaptive recognition -->
-
 <ValidationFlowTypingHints/>
 
 ```js
@@ -149,3 +145,9 @@ validationFlowOverlaySettings.adaptiveScanningText = "Processing";
 
 validationFlowOverlay.applySettings(validationFlowOverlaySettings);
 ```
+
+<ValidationFlowCloudVLM/>
+
+<!-- TODO: Add Capacitor code snippet for adaptive recognition -->
+
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.

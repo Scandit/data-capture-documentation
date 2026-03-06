@@ -172,36 +172,6 @@ class MyValidationFlowListener extends LabelCaptureValidationFlowListener {
 
 <ValidationFlowRequiredOptional/>
 
-<ValidationFlowCloudVLM/>
-
-```dart
-LabelCaptureSettings _buildLabelCaptureSettings() {
-    final customBarcode = CustomBarcodeBuilder()
-        .setSymbologies([Symbology.ean13Upca, Symbology.gs1DatabarExpanded, Symbology.code128])
-        .isOptional(false)
-        .build(Constants.fieldBarcode);
-
-    final expiryDateText = ExpiryDateTextBuilder()
-        .setLabelDateFormat(
-          LabelDateFormat(
-            LabelDateComponentFormat.mdy,
-            false, // acceptPartialDates
-          ),
-        )
-        .isOptional(false)
-        .build(Constants.fieldExpiryDate);
-
-    final labelDefinition = LabelDefinitionBuilder()
-        .addCustomBarcode(customBarcode)
-        .addExpiryDateText(expiryDateText)
-        .build(Constants.labelRetailItem);
-    labelDefinition.adaptiveRecognitionMode = AdaptiveRecognitionMode.auto; // Enable cloud-based VLM scanning for this label definition
-
-    var settings = LabelCaptureSettings([labelDefinition]);
-    return settings;
-}
-```
-
 <ValidationFlowTypingHints/>
 
 ```dart
@@ -242,3 +212,35 @@ validationFlowOverlaySettings.adaptiveScanningText = "Processing";
 
 validationFlowOverlay.applySettings(validationFlowOverlaySettings);
 ```
+
+<ValidationFlowCloudVLM/>
+
+```dart
+LabelCaptureSettings _buildLabelCaptureSettings() {
+    final customBarcode = CustomBarcodeBuilder()
+        .setSymbologies([Symbology.ean13Upca, Symbology.gs1DatabarExpanded, Symbology.code128])
+        .isOptional(false)
+        .build(Constants.fieldBarcode);
+
+    final expiryDateText = ExpiryDateTextBuilder()
+        .setLabelDateFormat(
+          LabelDateFormat(
+            LabelDateComponentFormat.mdy,
+            false, // acceptPartialDates
+          ),
+        )
+        .isOptional(false)
+        .build(Constants.fieldExpiryDate);
+
+    final labelDefinition = LabelDefinitionBuilder()
+        .addCustomBarcode(customBarcode)
+        .addExpiryDateText(expiryDateText)
+        .build(Constants.labelRetailItem);
+    labelDefinition.adaptiveRecognitionMode = AdaptiveRecognitionMode.auto;
+
+    var settings = LabelCaptureSettings([labelDefinition]);
+    return settings;
+}
+```
+
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.

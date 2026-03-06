@@ -254,36 +254,6 @@ public class ValidationFlowListener : Java.Lang.Object, ILabelCaptureValidationF
 
 <ValidationFlowRequiredOptional/>
 
-<ValidationFlowCloudVLM/>
-
-```csharp
-private LabelCaptureSettings BuildLabelCaptureSettings()
-{
-    var fields = new List<LabelFieldDefinition>();
-
-    var customBarcode = CustomBarcode.Builder()
-        .SetSymbologies(new List<Symbology>
-        {
-            Symbology.Ean13Upca,
-            Symbology.Gs1DatabarExpanded,
-            Symbology.Code128
-        })
-        .Build(FIELD_BARCODE);
-    fields.Add(customBarcode);
-
-    var expiryDateText = ExpiryDateText.Builder()
-        .SetLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY, acceptPartialDates: false))
-        .Build(FIELD_EXPIRY_DATE);
-    fields.Add(expiryDateText);
-
-    var labelDefinition = LabelDefinition.Create(LABEL_RETAIL_ITEM, fields);
-    labelDefinition.AdaptiveRecognitionMode = AdaptiveRecognitionMode.Auto; // Enable cloud-based VLM scanning for this label definition
-
-    var settings = LabelCaptureSettings.Create(new List<LabelDefinition> { labelDefinition });
-    return settings;
-}
-```
-
 <ValidationFlowTypingHints/>
 
 ```csharp
@@ -324,3 +294,35 @@ validationFlowOverlaySettings.AdaptiveScanningText = "Processing";
 
 validationFlowOverlay.ApplySettings(validationFlowOverlaySettings);
 ```
+
+<ValidationFlowCloudVLM/>
+
+```csharp
+private LabelCaptureSettings BuildLabelCaptureSettings()
+{
+    var fields = new List<LabelFieldDefinition>();
+
+    var customBarcode = CustomBarcode.Builder()
+        .SetSymbologies(new List<Symbology>
+        {
+            Symbology.Ean13Upca,
+            Symbology.Gs1DatabarExpanded,
+            Symbology.Code128
+        })
+        .Build(FIELD_BARCODE);
+    fields.Add(customBarcode);
+
+    var expiryDateText = ExpiryDateText.Builder()
+        .SetLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY, acceptPartialDates: false))
+        .Build(FIELD_EXPIRY_DATE);
+    fields.Add(expiryDateText);
+
+    var labelDefinition = LabelDefinition.Create(LABEL_RETAIL_ITEM, fields);
+    labelDefinition.AdaptiveRecognitionMode = AdaptiveRecognitionMode.Auto;
+
+    var settings = LabelCaptureSettings.Create(new List<LabelDefinition> { labelDefinition });
+    return settings;
+}
+```
+
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
