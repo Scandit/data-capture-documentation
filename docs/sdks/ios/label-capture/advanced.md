@@ -7,6 +7,14 @@ keywords:
   - ios
 ---
 
+import ValidationFlowHowItWorks from '../../../partials/advanced/_validation-flow-how-it-works.mdx';
+import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-flow-custom-buttons.mdx';
+import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
+import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
+import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
+import ValidationFlowCustomToasts from '../../../partials/advanced/_validation-flow-custom-toasts.mdx';
+import ValidationFlowCustomField from '../../../partials/advanced/_validation-flow-custom-field.mdx';
+
 # Advanced Configurations
 
 
@@ -145,11 +153,7 @@ extension YourScanViewController: LabelCaptureAdvancedOverlayDelegate {
 
 ## Validation Flow
 
-Implementing a validation flow in your Smart Label Capture application differs from the [Get Started](/sdks/ios/label-capture/get-started.md) steps outlined earlier as follows:
-
-### Visualize the Scan Process
-
-Validation flow uses a different overlay, the `LabelCaptureValidationFlowOverlay`. This overlay provides a user interface that guides users through the label capture process, including validation steps.
+<ValidationFlowHowItWorks/>
 
 ```swift
 // Create the overlay
@@ -162,37 +166,87 @@ let validationFlowOverlay = LabelCaptureValidationFlowOverlay(
 validationFlowOverlay.delegate = self
 ```
 
-### Adjust the Hint Messages
-
-```swift
-// Configure the validation flow with custom settings
-let validationSettings = LabelCaptureValidationFlowSettings()
-validationSettings.missingFieldsHintText = "Please add this field"
-validationSettings.standbyHintText = "No label detected, camera paused"
-validationSettings.validationHintText = "fields captured" // X/Y (X fields out of total Y) is shown in front of this string
-validationSettings.validationErrorText = "Input not valid"
-validationSettings.requiredFieldErrorText = "This field is required"
-validationSettings.manualInputButtonText = "Add info manually"
-
-// Apply the settings to the overlay
-validationFlowOverlay.applySettings(validationSettings)
-```
-
 ### Define a Listener
 
-To handle validation events, implement the `LabelCaptureValidationFlowOverlayDelegate` protocol.
+When the user has verified that all fields are correctly captured and presses the finish button, the Validation Flow triggers a callback with the final results. To receive these results, implement the `LabelCaptureValidationFlowOverlayDelegate` protocol:
 
 ```swift
 extension YourScanViewController: LabelCaptureValidationFlowDelegate {
     // This is called by the validation flow overlay when a label has been fully captured and validated
     func labelCaptureValidationFlowOverlay(_ overlay: LabelCaptureValidationFlowOverlay,
                                            didCaptureLabelWith fields: [LabelField]) {
-        
+
         let barcodeData = fields.first { $0.name == "<your-barcode-field-name>" }?.barcode?.data
         let expiryDate = fields.first { $0.name == "<your-expiry-date-field-name>" }?.text
-        
+
         // Handle the captured values
     }
 }
 ```
+
+<ValidationFlowRequiredOptional/>
+
+<ValidationFlowTypingHints/>
+
+```swift
+let validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.init()
+validationFlowOverlaySettings.setPlaceholderText("MM/DD/YYYY", forLabelDefinition: "Expiry Date")
+
+validationFlowOverlay.apply(validationFlowOverlaySettings)
+```
+
+<ValidationFlowCustomButtons/>
+
+```swift
+let validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.init()
+validationFlowOverlaySettings.restartButtonText = "Borrar todo"
+validationFlowOverlaySettings.pauseButtonText = "Pausar"
+validationFlowOverlaySettings.finishButtonText = "Finalizar"
+
+validationFlowOverlay.apply(validationFlowOverlaySettings)
+```
+
+<ValidationFlowCustomToasts/>
+
+```swift
+let validationFlowOverlaySettings = LabelCaptureValidationFlowSettings()
+validationFlowOverlaySettings.standbyHintText = "No label detected, camera paused"
+validationFlowOverlaySettings.validationHintText = "data fields collected" // X/Y (X fields out of total Y) is shown in front of this string
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
+```
+
+<ValidationFlowCustomField/>
+
+```swift
+let validationFlowOverlaySettings = LabelCaptureValidationFlowSettings()
+validationFlowOverlaySettings.validationErrorText = "Incorrect format."
+validationFlowOverlaySettings.scanningText = "Scan in progress"
+validationFlowOverlaySettings.adaptiveScanningText = "Processing"
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
+```
+
+<ValidationFlowCloudVLM/>
+
+```swift
+let labelCaptureSettings = try LabelCaptureSettings {
+    LabelDefinition("Retail Item") {
+        CustomBarcode(
+            name: "Barcode",
+            symbologies: [.ean13UPCA, .gs1DatabarExpanded, .code128]
+        )
+        ExpiryDateText(name: "Expiry Date")
+            .labelDateFormat(
+                LabelDateFormat(
+                    componentFormat: LabelDateComponentFormat.MDY,
+                    acceptPartialDates: false
+                )
+            )
+    }
+    .adaptiveRecognition(.auto)
+}
+```
+
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
 

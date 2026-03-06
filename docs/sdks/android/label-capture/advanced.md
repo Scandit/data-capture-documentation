@@ -7,6 +7,14 @@ keywords:
   - android
 ---
 
+import ValidationFlowHowItWorks from '../../../partials/advanced/_validation-flow-how-it-works.mdx';
+import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-flow-custom-buttons.mdx';
+import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
+import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
+import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
+import ValidationFlowCustomToasts from '../../../partials/advanced/_validation-flow-custom-toasts.mdx';
+import ValidationFlowCustomField from '../../../partials/advanced/_validation-flow-custom-field.mdx';
+
 # Advanced Configurations
 
 ## Customization of the Overlays
@@ -143,11 +151,7 @@ advancedOverlay.listener = object : LabelCaptureAdvancedOverlayListener {
 
 ## Validation Flow
 
-Implementing a validation flow in your Smart Label Capture application differs from the [Get Started](/sdks/android/label-capture/get-started.md) steps outlined earlier as follows:
-
-### Visualize the Scan Process
-
-Validation flow uses a different overlay, the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-validation-flow-overlay.html). This overlay provides a user interface that guides users through the label capture process, including validation steps.
+<ValidationFlowHowItWorks/>
 
 ```kotlin
 // Create the overlay
@@ -161,33 +165,85 @@ val validationFlowOverlay = LabelCaptureValidationFlowOverlay.newInstance(
 validationFlowOverlay.listener = this
 ```
 
-### Adjust the Hint Messages
-
-```kotlin
-// Configure the validation flow with custom settings
-val validationSettings = LabelCaptureValidationFlowSettings.newInstance().apply {
-    missingFieldsHintText = "Please add this field"
-    standbyHintText = "No label detected, camera paused"
-    validationHintText = "fields captured" // X/Y (X fields out of total Y) is  shown in front of this string
-    validationErrorText = "Input not valid"
-    requiredFieldErrorText = "This field is required"
-    manualInputButtonText = "Add info manually"
-}
-
-// Apply the settings to the overlay
-validationFlowOverlay.applySettings(validationSettings)
-```
-
 ### Define a Listener
 
-To handle validation events, implement the [LabelCaptureValidationFlowOverlayListener](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-validation-flow-listener.html) interface.
+When the user has verified that all fields are correctly captured and presses the finish button, the Validation Flow triggers a callback with the final results. To receive these results, implement the [LabelCaptureValidationFlowOverlayListener](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-validation-flow-listener.html) interface:
 
 ```kotlin
 // This is called by the validation flow overlay when a label has been fully captured and validated
 override fun onValidationFlowLabelCaptured(fields: List<LabelField>) {
-    
+
     val barcodeData = fields.find { it.name == "<your-barcode-field-name>" }?.barcode?.data
-        
+
     val expiryDate = fields.find { it.name == "<your-expiry-date-field-name>" }?.text
 }
 ```
+
+<ValidationFlowRequiredOptional/>
+
+<ValidationFlowTypingHints/>
+
+```kotlin
+val validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.newInstance()
+validationFlowOverlaySettings.setPlaceholderTextForLabelDefinition(FIELD_EXPIRY_DATE, "MM/DD/YYYY")
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
+```
+
+<ValidationFlowCustomButtons/>
+
+```kotlin
+val validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.newInstance()
+validationFlowOverlaySettings.restartButtonText = "Borrar todo"
+validationFlowOverlaySettings.pauseButtonText = "Pausar"
+validationFlowOverlaySettings.finishButtonText = "Finalizar"
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
+```
+
+<ValidationFlowCustomToasts/>
+
+```kotlin
+val validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.newInstance()
+validationFlowOverlaySettings.standbyHintText = "No label detected, camera paused"
+validationFlowOverlaySettings.validationHintText = "data fields collected" // X/Y (X fields out of total Y) is shown in front of this string
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
+```
+
+<ValidationFlowCustomField/>
+
+```kotlin
+val validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.newInstance()
+validationFlowOverlaySettings.validationErrorText = "Incorrect format."
+validationFlowOverlaySettings.scanningText = "Scan in progress"
+validationFlowOverlaySettings.adaptiveScanningText = "Processing"
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings)
+```
+
+<ValidationFlowCloudVLM/>
+
+```kotlin
+val settings = labelCaptureSettings {
+    label(LABEL_TITLE) {
+        customBarcode(FIELD_BARCODE) {
+            setSymbologies(
+                Symbology.EAN13_UPCA,
+                Symbology.GS1_DATABAR_EXPANDED,
+                Symbology.CODE128
+            )
+        }
+        expiryDateText(FIELD_EXPIRY_DATE) {
+            setLabelDateFormat(
+                LabelDateFormat(
+                    componentFormat = LabelDateComponentFormat.MDY,
+                    acceptPartialDates = false,
+                )
+            )
+        }
+        adaptiveRecognition(adaptiveRecognitionMode = AdaptiveRecognitionMode.AUTO)
+    }
+}
+```
+
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
