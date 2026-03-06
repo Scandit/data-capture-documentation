@@ -14,6 +14,16 @@ import DeprecationNotice from '/versioned_docs/version-7.6.8/partials/_xamarin-d
 <DeprecationNotice/>
 
 
+## 7.6.8
+
+**Released**: March 6, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a stability issue that could cause a crash when tracked barcodes were removed or expired during a scanning session
+
 ## 7.6.7
 
 **Released**: February 2, 2026
