@@ -96,17 +96,17 @@ function DropdownNavbarItemDesktop({
 
   // Get the version from the current path for Xamarin links
   const xamarinVersion = useMemo(() => {
-    if (!currentPath) return "/7.6.7";
-    if (currentPath.includes("/7.6.7")) return "/7.6.7";
+    if (!currentPath) return "/7.6.8";
+    if (currentPath.includes("/7.6.8")) return "/7.6.8";
     if (currentPath.includes("/6.28.8")) return "/6.28.8";
-    if (currentPath.includes("/7.6.")) return "/7.6.7";
+    if (currentPath.includes("/7.6.")) return "/7.6.8";
     if (currentPath.includes("/6.28.")) return "/6.28.8";
-    return "/7.6.7"; // Default to 7.6.7 for Xamarin
+    return "/7.6.8"; // Default to 7.6.8 for Xamarin
   }, [currentPath]);
 
   useEffect(() => {
     if (!currentPath) return;
-    const possibleVersions = ["/next", "/6.28.8", "/7.6.7"];
+    const possibleVersions = ["/next", "/6.28.8", "/7.6.8"];
     const match = currentPath.match(/(.*)(?=\/sdks)/);
     setLinkVersion(match && match[0] ? `${match[0]}/sdks` : "/sdks");
 

@@ -29,9 +29,9 @@ export default function DocsVersionDropdownNavbarItem({
   // Check if we're currently viewing Xamarin documentation
   const isViewingXamarin = pathname.includes('/xamarin/');
 
-  // Filter versions for Xamarin - only show 7.6.7 and 6.28.8
+  // Filter versions for Xamarin - only show 7.6.8 and 6.28.8
   const filteredVersions = isViewingXamarin
-    ? versions.filter(version => version.name === '7.6.7' || version.name === '6.28.8')
+    ? versions.filter(version => version.name === '7.6.8' || version.name === '6.28.8')
     : versions;
 
   const versionLinks = filteredVersions.map((version) => {
