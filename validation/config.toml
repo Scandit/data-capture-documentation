@@ -1,0 +1,5 @@
+import_exclude = [
+    "docs/partials/_migrate-5-to-6.mdx",
+    "docs/partials/_migrate-6-to-7.mdx",
+    "docs/partials/_migrate-7-to-8.mdx",
+]
