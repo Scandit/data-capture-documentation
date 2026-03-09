@@ -15,6 +15,7 @@ Usage:
 import json
 import re
 import sys
+import tomllib
 from pathlib import Path
 
 # Add the validation/ directory to sys.path so language plugins can import _android
@@ -41,8 +42,14 @@ DOCUSAURUS_CONFIG = REPO_ROOT / "docusaurus.config.ts"
 VALIDATION_DIR = Path(__file__).parent
 CACHE_DIR = VALIDATION_DIR / "cache"
 BASELINES_DIR = VALIDATION_DIR / "baselines"
+CONFIG_FILE = VALIDATION_DIR / "config.toml"
 
 LANGUAGE_PLUGINS = {p.value: p for p in [java_plugin, kotlin_plugin]}
+
+def _load_config() -> dict:
+    with CONFIG_FILE.open("rb") as f:
+        return tomllib.load(f)
+
 
 # =============================================================================
 # SDK version — read from docusaurus.config.ts
@@ -91,13 +98,37 @@ def _extract_snippets(path: Path, fence: re.Pattern) -> list[Snippet]:
     return snippets
 
 
+_IMPORT_RE = re.compile(r"""^import\s+\w+\s+from\s+['"](\.[^'"]+\.mdx?)['"];?\s*$""", re.MULTILINE)
+_IMPORT_EXCLUDE = {(REPO_ROOT / p).resolve() for p in _load_config().get("import_exclude", [])}
+
+
+def _resolve_imports(path: Path) -> list[Path]:
+    """Return resolved paths for any MDX/MD files imported from *path*."""
+    text = path.read_text(encoding="utf-8")
+    imported: list[Path] = []
+    for m in _IMPORT_RE.finditer(text):
+        rel = m.group(1)
+        resolved = (path.parent / rel).resolve()
+        if resolved in _IMPORT_EXCLUDE:
+            continue
+        if resolved.is_file():
+            imported.append(resolved)
+    return imported
+
+
 def _collect_snippets(fence: re.Pattern) -> list[Snippet]:
     all_snippets: list[Snippet] = []
+    seen: set[Path] = set()
     for docs_dir in DOCS_DIRS:
         if not docs_dir.exists():
             continue
         for path in sorted(docs_dir.rglob("*.md")) + sorted(docs_dir.rglob("*.mdx")):
+            seen.add(path.resolve())
             all_snippets.extend(_extract_snippets(path, fence))
+            for imported in _resolve_imports(path):
+                if imported not in seen:
+                    seen.add(imported)
+                    all_snippets.extend(_extract_snippets(imported, fence))
     return all_snippets
 
 
