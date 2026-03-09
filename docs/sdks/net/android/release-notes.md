@@ -68,6 +68,16 @@ keywords:
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
 
+## 8.1.2
+
+**Released**: March 9, 2026
+
+### Bug Fixes
+
+#### Smart Label Capture
+
+* Fixed a rare race condition
+
 ## 8.1.1
 
 **Released**: February 5, 2026

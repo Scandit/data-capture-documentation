@@ -41,6 +41,16 @@ No updates for this framework in this release.
 * Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 
+## 8.1.2
+
+**Released**: March 9, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a stability issue that could cause a crash when tracked barcodes were removed or expired during a scanning session
+
 ## 8.1.1
 
 **Released**: February 5, 2026
