@@ -148,6 +148,23 @@ validationFlowOverlay.applySettings(validationFlowOverlaySettings);
 
 <ValidationFlowCloudVLM/>
 
-<!-- TODO: Add Capacitor code snippet for adaptive recognition -->
+```js
+const customBarcode = CustomBarcode.initWithNameAndSymbologies('Barcode', [
+  Symbology.EAN13UPCA,
+  Symbology.GS1DatabarExpanded,
+  Symbology.Code128,
+]);
+customBarcode.optional = false;
+
+const expiryDateText = new ExpiryDateText('Expiry Date');
+expiryDateText.labelDateFormat = new LabelDateFormat(LabelDateComponentFormat.MDY, false);
+expiryDateText.optional = false;
+
+const label = new LabelDefinition('Retail Item');
+label.fields = [customBarcode, expiryDateText];
+label.adaptiveRecognitionMode = AdaptiveRecognitionMode.Auto;
+
+const settings = LabelCaptureSettings.settingsFromLabelDefinitions([label], {});
+```
 
 See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
