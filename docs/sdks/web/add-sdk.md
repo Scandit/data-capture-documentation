@@ -162,13 +162,13 @@ In alternative to jsdeliver, unpkg can be used:
     <script type="importmap">
       {
         "imports": {
-          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js",
-          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js",
-          "@scandit/web-datacapture-parser": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/build/js/index.js",
+          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8/build/js/index.js",
+          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/build/js/index.js",
+          "@scandit/web-datacapture-parser": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8/build/js/index.js",
 
-          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/",
-          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/",
-          "@scandit/web-datacapture-parser/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/"
+          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/",
+          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8/",
+          "@scandit/web-datacapture-parser/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8/"
         }
       }
     </script>
@@ -178,15 +178,15 @@ In alternative to jsdeliver, unpkg can be used:
     -->
     <link
       rel="modulepreload"
-      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8/build/js/index.js"
     />
     <link
       rel="modulepreload"
-      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/build/js/index.js"
     />
     <link
       rel="modulepreload"
-      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/build/js/index.js"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8/build/js/index.js"
     />
     <style>
       html,
@@ -217,6 +217,7 @@ In alternative to jsdeliver, unpkg can be used:
         BarcodeCaptureSettings,
         BarcodeCapture,
         Symbology,
+        SymbologyDescription,
       } from "@scandit/web-datacapture-barcode";
 
       let view = new DataCaptureView();
@@ -225,7 +226,7 @@ In alternative to jsdeliver, unpkg can be used:
 
       const context = await DataCaptureContext.forLicenseKey("-- ENTER LICENSE KEY HERE --", {
         libraryLocation:
-          "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/",
+          "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/sdc-lib/",
         moduleLoaders: [barcodeCaptureLoader()],
       });
       view.hideProgressBar();
@@ -284,7 +285,7 @@ If you installed the library through npm, **these files should be copied and ser
 The configuration option that you provide should then point to the folder containing these files, either as a path of your website or an absolute URL (like the CDN one). **By default the library will look at the root of your website**.
 
 :::caution Version Matching Required
-The npm package version and the `sdc-lib` files must be from the exact same SDK version. For example, if you have `@scandit/web-datacapture-barcode@8.0.0` in your `package.json`, you must serve the `sdc-lib` folder from `node_modules/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/`. **Mismatched versions will cause runtime errors and unexpected behavior.**
+The npm package version and the `sdc-lib` files must be from the exact same SDK version. For example, if you have `@scandit/web-datacapture-barcode@8.0.0` in your `package.json`, you must serve the `sdc-lib` folder from `node_modules/@scandit/web-datacapture-barcode@8/sdc-lib/`. **Mismatched versions will cause runtime errors and unexpected behavior.**
 :::
 
 In case a common CDN is used (jsDelivr or UNPKG) the library will automatically, internally set up the correct URLs pointing to the files needed for the matching library version.
@@ -296,7 +297,7 @@ This will aid in faster loading.
 We recommend serving the `sdc-lib` folder yourself.
 
 :::caution Important: Full Folder Copy and Version Matching
-You must copy the **entire `sdc-lib` folder recursively** from the installed Scandit package to your server. This includes all subdirectories and files. The `sdc-lib` folder must come from a package version that exactly matches your npm package version. For example, if you have `@scandit/web-datacapture-barcode@8.0.0`, you must copy the `sdc-lib` from `node_modules/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/`.
+You must copy the **entire `sdc-lib` folder recursively** from the installed Scandit package to your server. This includes all subdirectories and files. The `sdc-lib` folder must come from a package version that exactly matches your npm package version. For example, if you have `@scandit/web-datacapture-barcode@8.0.0`, you must copy the `sdc-lib` from `node_modules/@scandit/web-datacapture-barcode@8/sdc-lib/`.
 
 Additionally, you should copy `sdc-lib` from all installed Scandit packages (`@scandit/web-datacapture-core`, `@scandit/web-datacapture-barcode`, `@scandit/web-datacapture-id`, `@scandit/web-datacapture-parser`, etc.) to the same location.
 :::
@@ -584,8 +585,8 @@ const crypto = require("node:crypto");
 const fs = require("node:fs/promises");
 
 (async function createLicenseAndPublicKey() {
-  const data = process.env.SDC_LICENSE_KEY;
-  if (data == null || data === "") {
+  const licenseText = process.env.SDC_LICENSE_KEY;
+  if (licenseText == null || licenseText === "") {
     throw new Error("could not encrypt empty or null string");
   }
 
@@ -594,10 +595,10 @@ const fs = require("node:fs/promises");
   const keyAndIV = `${key.toString("base64")}:${iv.toString("base64")}`;
 
   const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
-  let encryptedText = cipher.update(text, "utf8", "hex");
-  encryptedText += cipher.final("hex");
+  let licenseEncryptedText = cipher.update(licenseText, "utf8", "hex");
+  licenseEncryptedText += cipher.final("hex");
 
-  await fs.writeFile("sdc-license.data", Buffer.from(encryptedText), "utf8");
+  await fs.writeFile("sdc-license.data", Buffer.from(licenseEncryptedText), "utf8");
   // Save the key to a file
   await fs.writeFile("sdc-public-key", keyAndIV, "utf8");
 })();

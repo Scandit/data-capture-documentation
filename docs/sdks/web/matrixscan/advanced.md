@@ -106,7 +106,8 @@ barcodeBatch.addListener({
         new PointWithUnit(
           new NumberWithUnit(0, MeasureUnit.Fraction), new NumberWithUnit(-1, MeasureUnit.Fraction)
         ), trackedBarcode);
-    })
+    });
+  }
 });
 ```
 

@@ -111,27 +111,27 @@ For important information about CDN risks and recommendations for production env
     <script type="importmap">
       {
         "imports": {
-          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js",
-          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js",
-          "@scandit/web-datacapture-parser": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/build/js/index.js",
+          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8/build/js/index.js",
+          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/build/js/index.js",
+          "@scandit/web-datacapture-parser": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8/build/js/index.js",
 
-          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/",
-          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/",
-          "@scandit/web-datacapture-parser/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/"
+          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/",
+          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8/",
+          "@scandit/web-datacapture-parser/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8/"
         }
       }
     </script>
     <link
       rel="modulepreload"
-      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8.0.0/build/js/index.js"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8/build/js/index.js"
     />
     <link
       rel="modulepreload"
-      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/build/js/index.js"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/build/js/index.js"
     />
     <link
       rel="modulepreload"
-      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/build/js/index.js"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8/build/js/index.js"
     />
     <style>
       html,
@@ -188,10 +188,10 @@ For important information about CDN risks and recommendations for production env
      import { parserLoader, Parser, ParserDataFormat } from "@scandit/web-datacapture-parser";
 
      const context = await DataCaptureContext.forLicenseKey('-- ENTER LICENSE KEY HERE --', {
-      libraryLocation: "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/",
+      libraryLocation: "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/sdc-lib/",
       moduleLoaders: [
-        barcodeCaptureLoader({ libraryLocation: "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8.0.0/sdc-lib/" }),
-        parserLoader({ libraryLocation: "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8.0.0/sdc-lib/" })],
+        barcodeCaptureLoader({ libraryLocation: "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/sdc-lib/" }),
+        parserLoader({ libraryLocation: "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@8/sdc-lib/" })],
       logLevel: Logger.Level.Quiet,
      });
 

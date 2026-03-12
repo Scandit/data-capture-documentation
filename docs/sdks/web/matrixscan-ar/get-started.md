@@ -35,7 +35,7 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to [you
 The first step to add capture capabilities to your application is to create a new Data Capture Context. Sdk must be configured first with a valid Scandit Data Capture SDK license key.
 
 ```typescript
-    const context = await DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+    const context = await DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --", {
       libraryLocation: new URL("library/engine/", document.baseURI).toString(),
       moduleLoaders: [barcodeCaptureLoader({ highEndBlurryRecognition: false })],
     });
@@ -109,7 +109,8 @@ barcodeArView.annotationProvider= {
     //... other properties
     infoAnnotation.listener = annotationArInfoListener;
     callback(infoAnnotation);
-}
+  }
+};
 ```
 
 ## Register a listener for highlights click
@@ -124,6 +125,8 @@ const barcodeArViewUiListener: BarcodeArViewUiListener = {
 }
 
 barcodeArView.listener = barcodeArViewUiListener;
+```
+
 ## Start Scanning
 
 With everything configured, you can now start scanning:

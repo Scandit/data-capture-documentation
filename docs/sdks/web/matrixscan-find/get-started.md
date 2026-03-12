@@ -51,7 +51,7 @@ Here we configure it for tracking EAN13 codes, but you should change this to the
 
 ```typescript
     const settings = new BarcodeFindSettings();
-    settings.enableSymbologies([Symbology.EAN13_UPCA]);
+    settings.enableSymbologies([Symbology.EAN13UPCA]);
     const barcodeFind = await BarcodeFind.forSettings(settings);
 ```
 

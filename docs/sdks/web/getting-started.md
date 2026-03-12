@@ -85,7 +85,10 @@ npm install --save @scandit/web-datacapture-barcode
 The first step is to create a context for the Data Capture tasks. This is done by creating an instance of the `DataCaptureContext` class:
 
 ```typescript
-const context = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+const context = await DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --", {
+  libraryLocation: new URL("library/engine/", document.baseURI).toString(),
+  moduleLoaders: [barcodeCaptureLoader()],
+});
 ```
 
 ### 3. Configure SparkScan Settings
@@ -94,10 +97,9 @@ Next, you need to configure your desired settings for SparkScan, such as the sym
 
 ```typescript
 const settings = new SparkScanSettings();
-settings.enabledSymbologies = [Symbology.EAN13, Symbology.Code128];
+settings.enableSymbologies([Symbology.EAN13UPCA, Symbology.Code128]);
 settings.codeDuplicateFilter = 0;
-settings.ScanIntention = ScanIntention.Smart;
-await sparkScan.applySettings(settings);
+settings.scanIntention = ScanIntention.Smart;
 ```
 
 In this example, we're:
@@ -125,31 +127,47 @@ In this example, we're:
 - Enabling sound feedback
 - Disabling haptic feedback
 
-Next, we create the `SparkScanView` instance, adding the scanning interface to the application:
+Next, we create the `SparkScanView` instance, adding the scanning interface to the application.
+
+There are two valid ways to instantiate the `SparkScanView`:
+
+**Option 1 — Web Component (recommended for React and other frameworks):**
+
+Register the web component once, then use the `<spark-scan-view>` custom element:
 
 ```typescript
-const sparkScanComponent = (
-	<SparkScanView
-		context={context}
-		sparkScan={sparkScan}
-		sparkScanViewSettings={viewSettings}
-	/>
+SparkScanView.register();
+
+// In your render/component:
+(context && sparkScan) && <spark-scan-view
+  dataCaptureContext={context}
+  sparkScan={sparkScan}
+  sparkScanViewSettings={viewSettings}
+/>
+```
+
+**Option 2 — `SparkScanView.forElement()` (vanilla JS):**
+
+```typescript
+const sparkScanView = SparkScanView.forElement(
+  document.getElementById("spark-scan-ui"),
+  context,
+  sparkScan,
+  viewSettings
 );
 ```
 
 In your application's state handling logic, you must also call the `stopScanning` method when the scanner is no longer needed:
 
 ```typescript
-componentWillUnmount() {
-sparkScanComponent.stopScanning();
-}
-
-handleAppStateChange = async (nextAppState) => {
-if (nextAppState.match(/inactive|background/)) {
-sparkScanComponent.stopScanning();
-}
-};
+useEffect(() => {
+  return () => {
+    sparkScanViewRef.current?.stopScanning().catch(console.error);
+  };
+}, []);
 ```
+
+For a complete React integration example, see the [SparkScan React Sample](https://github.com/Scandit/datacapture-web-samples/tree/master/05_Framework_Integration_Samples/SparkScanReactSample).
 
 ### 5. Implement the Listener
 

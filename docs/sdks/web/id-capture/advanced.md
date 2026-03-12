@@ -20,16 +20,16 @@ That means certain data from certain fields won’t be returned, even if it’s 
 
 ```js
 // Default value:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_ONLY);
+settings.anonymizationMode = IdAnonymizationMode.FIELDS_ONLY;
 
 // Sensitive data is additionally covered with black boxes on returned images:
-settings.setAnyonymizationMode(IdAnonymizationMode.FIELDS_AND_IMAGES);
+settings.anonymizationMode = IdAnonymizationMode.FIELDS_AND_IMAGES;
 
 // Only images are anonymized:
-settings.setAnyonymizationMode(IdAnonymizationMode.IMAGES_ONLY);
+settings.anonymizationMode = IdAnonymizationMode.IMAGES_ONLY;
 
 // No anonymization:
-settings.setAnyonymizationMode(IdAnonymizationMode.NONE);
+settings.anonymizationMode = IdAnonymizationMode.NONE;
 ```
 
 ## ID Images
@@ -44,23 +44,25 @@ In the case of `FullDocumentScanner`, if the front & the back side of a document
 For the full frame of the document, you can use [`setShouldPassImageTypeToResult`](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#method-scandit.datacapture.id.IdCaptureSettings.SetShouldPassImageTypeToResult) when creating the `IdCaptureSettings` object. This will pass the image type to the result, which you can then access in the `CapturedId` object.
 
 ```js
+import { IdImageType } from "@scandit/web-datacapture-id";
+
 // Holder's picture as printed on a document:
-settings.setShouldPassImageTypeToResult(ImageType.FACE);
+settings.setShouldPassImageTypeToResult(IdImageType.Face, true);
 
 // Cropped image of a document:
-settings.setShouldPassImageTypeToResult(ImageType.CROPPED_DOCUMENT);
+settings.setShouldPassImageTypeToResult(IdImageType.CroppedDocument, true);
 
 // Full camera frame that contains the document:
-settings.setShouldPassImageTypeToResult(ImageType.FULL_FRAME);
+settings.setShouldPassImageTypeToResult(IdImageType.Frame, true);
 ```
 
 ## Callbacks and Scanning Workflows
 
-The ID Capture Listener provides two callbacks: `onIdCaptured` and `onIdRejected`. The `onIdCaptured` callback is called when an acceptable document is successfully captured, while the `onIdRejected` callback is called when a document is captured but rejected.
+The ID Capture Listener provides two callbacks: `didCaptureId` and `didRejectId`. The `didCaptureId` callback is called when an acceptable document is successfully captured, while the `didRejectId` callback is called when a document is captured but rejected.
 
-For a successful capture, the `onIdCaptured` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
+For a successful capture, the `didCaptureId` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
 
-For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
+For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `didRejectId` callback to help you understand why the document was rejected and to take appropriate action. These are:
 
 * NOT_ACCEPTED_DOCUMENT_TYPE: The document is not in the list of accepted documents. In this scenario, you could direct the user to scan a different document.
 * INVALID_FORMAT: The document is in the list of accepted documents, but the format is invalid. In this scenario, you could direct the user to scan the document again.

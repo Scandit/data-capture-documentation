@@ -97,9 +97,9 @@ You need to also create the [Camera](https://docs.scandit.com/data-capture-sdk/w
 import { Camera } from "@scandit/web-datacapture-core";
 import { IdCapture } from "@scandit/web-datacapture-id";
 
-# let the SDK pick the best camera for ID Capture
+// let the SDK pick the best camera for ID Capture
 const camera = Camera.pickBestGuess();
-# apply the optimized camera settings from ID Capture
+// apply the optimized camera settings from ID Capture
 await camera.applySettings(IdCapture.recommendedCameraSettings);
 await context.setFrameSource(camera);
 ```
@@ -117,6 +117,7 @@ By default, [anonymized data](./advanced.md#configure-data-anonymization) is not
 ```ts
 import {
   IdCapture,
+  IdCaptureScanner,
   IdCaptureSettings,
   IdCard,
   Region,
