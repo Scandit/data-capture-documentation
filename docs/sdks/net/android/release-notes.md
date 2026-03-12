@@ -9,6 +9,47 @@ keywords:
   - netAndroid
 ---
 
+## 8.3.0-beta.1
+
+**Released**: March 13, 2026
+
+### New Features
+
+#### Barcode
+
+* Added support for composite codes in SparkScan
+* Added the `LabelCaptureButtonVisible` property and `LabelCaptureButtonTapped` event to `SparkScanView`, allowing users to navigate from SparkScan to Smart Label Capture
+
+#### Id
+
+* Added support for OCR scanning of the 2026 version of Victoria mobile driver licenses
+* Added IdCaptureSettings.anonymizeDefaultFields setting that controls whether the SDK applies default anonymization rules for specific document types and regions
+
+#### Smart Label Capture
+
+* Fixed a rare race condition
+
+#### Core
+
+* Introduced .NET 10 support on Scandit SDK for .NET
+* Added LabelCapture Validation Flow Manual input support for allowing developers to receive a callback when the users trigger the manual input, as well as placeholder support for the overlay’s text fields. Existing users of the Validation Flow must implement the new interface when upgrading to this version.
+
+### Bug Fixes
+
+#### Id
+
+* Fixed support for UAE Esaad card
+* Sanitized name fields on ACT driver license to split FullName and populate first and last name properties
+
+#### Smart Label Capture
+
+* Fixed an issue in the `LabelCaptureValidationFlowOverlay` when using it with Jetpack Compose that caused focus loss when opening the keyboard
+* Added `LabelCaptureValidationFlowOverlay.ShouldHandleKeyboardInsetsInternally` for cases when customers don't want to follow official Android edge-to-edge and inset guidelines
+
+#### Core
+
+* Fixed issue where Camera now always returns a valid instance (backed by NoOpCamera when no native camera is available)
+
 ## 8.2.1
 
 **Released**: March 5, 2026

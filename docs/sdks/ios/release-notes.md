@@ -10,6 +10,35 @@ keywords:
   - ios
 ---
 
+## 8.3.0-beta.1
+
+**Released**: March 13, 2026
+
+### New Features
+
+#### Barcode
+
+* Added support for composite codes in SparkScan
+* Added PDF417 barcode generation support with configurable options like error correction level, compaction mode, and dimensions through the new `Pdf417BarcodeGeneratorBuilder`.
+
+#### Id
+
+* Added support for OCR scanning of the 2026 version of Victoria mobile driver licenses
+* Added IdCaptureSettings.anonymizeDefaultFields setting that controls whether the SDK applies default anonymization rules for specific document types and regions
+* US, EU/ Schengen + UK passports no longer fallback to MRZ only. Now, US, EU/ Schengen + UK passports must capture VIZ instead of returning MRZ values after the configurable timeout has elapsed.
+
+#### Smart Label Capture
+
+* Fixed a rare race condition
+
+### Bug Fixes
+
+#### Id
+
+* Fixed BarcodeDictionary anonymization setting for iOS and Web
+* Fixed support for UAE Esaad card
+* Sanitized name fields on ACT driver license to split FullName and populate first and last name properties
+
 ## 8.2.1
 
 **Released**: March 5, 2026

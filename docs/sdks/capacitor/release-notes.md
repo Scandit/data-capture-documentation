@@ -9,6 +9,47 @@ keywords:
   - capacitor
 ---
 
+## 8.3.0-beta.1
+
+**Released**: March 13, 2026
+
+### New Features
+
+#### Barcode
+
+* Added support for composite codes in SparkScan
+
+#### Id
+
+* Added support for OCR scanning of the 2026 version of Victoria mobile driver licenses
+* Added IdCaptureSettings.anonymizeDefaultFields setting that controls whether the SDK applies default anonymization rules for specific document types and regions
+
+#### Smart Label Capture
+
+* Fixed a rare race condition
+
+#### Core
+
+* Added Camera-related APIs for macro mode, torch, accessibility hints, as well as ImageBuffer and Timestamp for FrameData.
+* Added shouldShowZoomNotification and setProperty to DataCaptureView
+* Added new SparkScan APIs related to feedback, scanning mode change, and periscope mode.
+* Added BarcodeFilterSettings public constructor and exposed excludedSymbolCounts property for JavaScript frameworks
+* Added BarcodeCount-related APIs for BarcodeCountNotInListActionSettings, BarcodeCountToolbarSettings, BarcodeCountMappingFlowSettings, status mode and accessibility properties on BarcodeCountView, BarcodeCountStatusProvider with status items and callbacks, cluster support, capture list completion listener, and session update listener
+* Added moduleCountX and moduleCountY to Barcode API
+
+### Bug Fixes
+
+#### Id
+
+* Fixed BarcodeDictionary anonymization setting for iOS and Web
+* Fixed support for UAE Esaad card
+* Sanitized name fields on ACT driver license to split FullName and populate first and last name properties
+
+#### Smart Label Capture
+
+* Fixed an issue in the `LabelCaptureValidationFlowOverlay` when using it with Jetpack Compose that caused focus loss when opening the keyboard
+* Added `LabelCaptureValidationFlowOverlay.ShouldHandleKeyboardInsetsInternally` for cases when customers don't want to follow official Android edge-to-edge and inset guidelines
+
 ## 8.2.1
 
 **Released**: March 5, 2026

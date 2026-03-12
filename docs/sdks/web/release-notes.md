@@ -10,6 +10,43 @@ keywords:
   - web
 ---
 
+## 8.3.0-beta.1
+
+**Released**: March 13, 2026
+
+### New Features
+
+#### Barcode
+
+* Added support for composite codes in SparkScan
+
+#### Id
+
+* Corrected Mexican Voter ID parent names to firstName and lastName
+* Added support for OCR scanning of the 2026 version of Victoria mobile driver licenses
+* Added IdCaptureSettings.anonymizeDefaultFields setting that controls whether the SDK applies default anonymization rules for specific document types and regions
+* US, EU/ Schengen + UK passports no longer fallback to MRZ only. Now, US, EU/ Schengen + UK passports must capture VIZ instead of returning MRZ values after the configurable timeout has elapsed.
+
+#### Smart Label Capture
+
+* Fixed a rare race condition
+* Fixed some issues with keyboard handling in Validation Flow
+
+### Bug Fixes
+
+#### Id
+
+* Fixed BarcodeDictionary anonymization setting for iOS and Web
+* Fixed support for UAE Esaad card
+* Sanitized name fields on ACT driver license to split FullName and populate first and last name properties
+
+#### Smart Label Capture
+
+* Fixed issue where the `LabelCaptureValidationFlowOverlay` sometimes did not reflect label capture settings when reused
+* Enhanced the `LabelCaptureValidationFlowOverlay` to resume when the mode is enabled and Validation Flow is paused.
+* Fixed camera being incorrectly paused while cloud backup started in Validation Flow
+* Fixed runtime error that sometimes occurred during cloud backup request when screen was tapped in validation flow
+
 ## 8.2.1
 
 **Released**: March 5, 2026
