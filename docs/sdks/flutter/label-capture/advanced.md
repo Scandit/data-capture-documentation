@@ -7,6 +7,14 @@ keywords:
   - flutter
 ---
 
+import ValidationFlowHowItWorks from '../../../partials/advanced/_validation-flow-how-it-works.mdx';
+import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-flow-custom-buttons.mdx';
+import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
+import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
+import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
+import ValidationFlowCustomToasts from '../../../partials/advanced/_validation-flow-custom-toasts.mdx';
+import ValidationFlowCustomField from '../../../partials/advanced/_validation-flow-custom-field.mdx';
+
 # Advanced Configurations
 
 ## Customization of the Overlays
@@ -128,11 +136,7 @@ class MyAdvancedOverlayListener extends LabelCaptureAdvancedOverlayListener {
 
 ## Validation Flow
 
-Implementing a validation flow in your Smart Label Capture application differs from the [Get Started](/sdks/flutter/label-capture/get-started.md) steps outlined earlier as follows:
-
-### Visualize the Scan Process
-
-Validation flow uses a different overlay, the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/ui/label-capture-validation-flow-overlay.html). This overlay provides a user interface that guides users through the label capture process, including validation steps.
+<ValidationFlowHowItWorks/>
 
 ```dart
 final validationFlowOverlay = LabelCaptureValidationFlowOverlay(labelCapture);
@@ -142,26 +146,9 @@ dataCaptureView.addOverlay(validationFlowOverlay);
 validationFlowOverlay.listener = MyValidationFlowListener();
 ```
 
-### Adjust the Hint Messages
-
-```dart
-final validationSettings = LabelCaptureValidationFlowSettings();
-
-validationSettings.missingFieldsHintText = "Please add this field";
-validationSettings.standbyHintText = "No label detected, camera paused";
-validationSettings.validationHintText = "fields captured"; // X/Y (X fields out of total Y) is shown in front
-validationSettings.validationErrorText = "Input not valid";
-validationSettings.requiredFieldErrorText = "This field is required";
-validationSettings.manualInputButtonText = "Add info manually";
-
-// Apply the settings
-validationFlowOverlay.applySettings(validationSettings);
-```
-
 ### Define a Listener
 
-To handle validation events, implement the [LabelCaptureValidationFlowOverlayListener](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/ui/label-capture-validation-flow-listener.html) interface.
-
+When the user has verified that all fields are correctly captured and presses the finish button, the Validation Flow triggers a callback with the final results. To receive these results, implement the [LabelCaptureValidationFlowOverlayListener](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/ui/label-capture-validation-flow-listener.html) interface:
 
 ```dart
 class MyValidationFlowListener extends LabelCaptureValidationFlowListener {
@@ -182,3 +169,78 @@ class MyValidationFlowListener extends LabelCaptureValidationFlowListener {
   }
 }
 ```
+
+<ValidationFlowRequiredOptional/>
+
+<ValidationFlowTypingHints/>
+
+```dart
+final validationFlowOverlaySettings = LabelCaptureValidationFlowSettings();
+validationFlowOverlaySettings.setPlaceholderTextForLabelDefinition("Expiry Date", "MM/DD/YYYY");
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCustomButtons/>
+
+```dart
+final validationFlowOverlaySettings = LabelCaptureValidationFlowSettings();
+validationFlowOverlaySettings.restartButtonText = "Borrar todo";
+validationFlowOverlaySettings.pauseButtonText = "Pausar";
+validationFlowOverlaySettings.finishButtonText = "Finalizar";
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCustomToasts/>
+
+```dart
+final validationFlowOverlaySettings = LabelCaptureValidationFlowSettings();
+validationFlowOverlaySettings.standbyHintText = "No label detected, camera paused";
+validationFlowOverlaySettings.validationHintText = "data fields collected"; // X/Y (X fields out of total Y) is shown in front
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCustomField/>
+
+```dart
+final validationFlowOverlaySettings = LabelCaptureValidationFlowSettings();
+validationFlowOverlaySettings.validationErrorText = "Incorrect format.";
+validationFlowOverlaySettings.scanningText = "Scan in progress";
+validationFlowOverlaySettings.adaptiveScanningText = "Processing";
+
+validationFlowOverlay.applySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCloudVLM/>
+
+```dart
+LabelCaptureSettings _buildLabelCaptureSettings() {
+    final customBarcode = CustomBarcodeBuilder()
+        .setSymbologies([Symbology.ean13Upca, Symbology.gs1DatabarExpanded, Symbology.code128])
+        .isOptional(false)
+        .build(Constants.fieldBarcode);
+
+    final expiryDateText = ExpiryDateTextBuilder()
+        .setLabelDateFormat(
+          LabelDateFormat(
+            LabelDateComponentFormat.mdy,
+            false, // acceptPartialDates
+          ),
+        )
+        .isOptional(false)
+        .build(Constants.fieldExpiryDate);
+
+    final labelDefinition = LabelDefinitionBuilder()
+        .addCustomBarcode(customBarcode)
+        .addExpiryDateText(expiryDateText)
+        .build(Constants.labelRetailItem);
+    labelDefinition.adaptiveRecognitionMode = AdaptiveRecognitionMode.auto;
+
+    var settings = LabelCaptureSettings([labelDefinition]);
+    return settings;
+}
+```
+
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.

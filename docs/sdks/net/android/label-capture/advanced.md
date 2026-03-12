@@ -7,6 +7,14 @@ keywords:
   - net-android
 ---
 
+import ValidationFlowHowItWorks from '../../../../partials/advanced/_validation-flow-how-it-works.mdx';
+import ValidationFlowCustomButtons from '../../../../partials/advanced/_validation-flow-custom-buttons.mdx';
+import ValidationFlowTypingHints from '../../../../partials/advanced/_validation-flow-typing-hints.mdx';
+import ValidationFlowCloudVLM from '../../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
+import ValidationFlowRequiredOptional from '../../../../partials/advanced/_validation-flow-required-optional.mdx';
+import ValidationFlowCustomToasts from '../../../../partials/advanced/_validation-flow-custom-toasts.mdx';
+import ValidationFlowCustomField from '../../../../partials/advanced/_validation-flow-custom-field.mdx';
+
 # Advanced Configurations
 
 ## Customization of the Overlays
@@ -204,11 +212,7 @@ public class AdvancedOverlayListener : Java.Lang.Object, ILabelCaptureAdvancedOv
 
 ## Validation Flow
 
-Implementing a validation flow in your Smart Label Capture application differs from the [Get Started](/sdks/net/android/label-capture/get-started.md) steps outlined earlier as follows:
-
-### Visualize the Scan Process
-
-Validation flow uses a different overlay, the [LabelCaptureValidationFlowOverlay](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-validation-flow-overlay.html). This overlay provides a user interface that guides users through the label capture process, including validation steps.
+<ValidationFlowHowItWorks/>
 
 ```csharp
 // Create the validation flow overlay with the label capture mode and data capture view
@@ -218,25 +222,9 @@ var validationFlowOverlay = LabelCaptureValidationFlowOverlay.Create(labelCaptur
 validationFlowOverlay.Listener = new ValidationFlowListener();
 ```
 
-### Adjust the Hint Messages
-
-```csharp
-// Configure the validation flow with custom settings
-var validationSettings = LabelCaptureValidationFlowSettings.Create();
-validationSettings.MissingFieldsHintText = "Please add this field";
-validationSettings.StandbyHintText = "No label detected, camera paused";
-validationSettings.ValidationHintText = "fields captured"; // X/Y (X fields out of total Y) is shown in front of this string
-validationSettings.ValidationErrorText = "Input not valid";
-validationSettings.RequiredFieldErrorText = "This field is required";
-validationSettings.ManualInputButtonText = "Add info manually";
-
-// Apply the settings to the overlay
-validationFlowOverlay.ApplySettings(validationSettings);
-```
-
 ### Define a Listener
 
-To handle validation events, implement the [ILabelCaptureValidationFlowListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-validation-flow-listener.html) interface.
+When the user has verified that all fields are correctly captured and presses the finish button, the Validation Flow triggers a callback with the final results. To receive these results, implement the [ILabelCaptureValidationFlowListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-validation-flow-listener.html) interface:
 
 ```csharp
 public class ValidationFlowListener : Java.Lang.Object, ILabelCaptureValidationFlowListener
@@ -263,3 +251,78 @@ public class ValidationFlowListener : Java.Lang.Object, ILabelCaptureValidationF
     }
 }
 ```
+
+<ValidationFlowRequiredOptional/>
+
+<ValidationFlowTypingHints/>
+
+```csharp
+var validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.Create();
+validationFlowOverlaySettings.SetPlaceholderText("MM/DD/YYYY", "Expiry Date");
+
+validationFlowOverlay.ApplySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCustomButtons/>
+
+```csharp
+var validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.Create();
+validationFlowOverlaySettings.RestartButtonText = "Borrar todo";
+validationFlowOverlaySettings.PauseButtonText = "Pausar";
+validationFlowOverlaySettings.FinishButtonText = "Finalizar";
+
+validationFlowOverlay.ApplySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCustomToasts/>
+
+```csharp
+var validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.Create();
+validationFlowOverlaySettings.StandbyHintText = "No label detected, camera paused";
+validationFlowOverlaySettings.ValidationHintText = "data fields collected"; // X/Y (X fields out of total Y) is shown in front of this string
+
+validationFlowOverlay.ApplySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCustomField/>
+
+```csharp
+var validationFlowOverlaySettings = LabelCaptureValidationFlowSettings.Create();
+validationFlowOverlaySettings.ValidationErrorText = "Incorrect format.";
+validationFlowOverlaySettings.ScanningText = "Scan in progress";
+validationFlowOverlaySettings.AdaptiveScanningText = "Processing";
+
+validationFlowOverlay.ApplySettings(validationFlowOverlaySettings);
+```
+
+<ValidationFlowCloudVLM/>
+
+```csharp
+private LabelCaptureSettings BuildLabelCaptureSettings()
+{
+    var fields = new List<LabelFieldDefinition>();
+
+    var customBarcode = CustomBarcode.Builder()
+        .SetSymbologies(new List<Symbology>
+        {
+            Symbology.Ean13Upca,
+            Symbology.Gs1DatabarExpanded,
+            Symbology.Code128
+        })
+        .Build(FIELD_BARCODE);
+    fields.Add(customBarcode);
+
+    var expiryDateText = ExpiryDateText.Builder()
+        .SetLabelDateFormat(new LabelDateFormat(LabelDateComponentFormat.MDY, acceptPartialDates: false))
+        .Build(FIELD_EXPIRY_DATE);
+    fields.Add(expiryDateText);
+
+    var labelDefinition = LabelDefinition.Create(LABEL_RETAIL_ITEM, fields);
+    labelDefinition.AdaptiveRecognitionMode = AdaptiveRecognitionMode.Auto;
+
+    var settings = LabelCaptureSettings.Create(new List<LabelDefinition> { labelDefinition });
+    return settings;
+}
+```
+
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
