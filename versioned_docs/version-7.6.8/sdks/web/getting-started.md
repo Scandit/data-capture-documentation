@@ -82,10 +82,16 @@ npm install --save @scandit/web-datacapture-barcode
 
 ### 2. Create the Context
 
-The first step is to create a context for the Data Capture tasks. This is done by creating an instance of the `DataCaptureContext` class:
+The first step is to create a context for the Data Capture tasks. This is done by calling `configure()` and then creating an instance of the `DataCaptureContext` class:
 
 ```typescript
-const context = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --");
+await configure({
+  licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+  libraryLocation: new URL("library/engine/", document.baseURI).toString(),
+  moduleLoaders: [barcodeCaptureLoader()],
+});
+
+const context = await DataCaptureContext.create();
 ```
 
 ### 3. Configure SparkScan Settings
@@ -94,10 +100,9 @@ Next, you need to configure your desired settings for SparkScan, such as the sym
 
 ```typescript
 const settings = new SparkScanSettings();
-settings.enabledSymbologies = [Symbology.EAN13, Symbology.Code128];
+settings.enableSymbologies([Symbology.EAN13UPCA, Symbology.Code128]);
 settings.codeDuplicateFilter = 0;
-settings.ScanIntention = ScanIntention.Smart;
-await sparkScan.applySettings(settings);
+settings.scanIntention = ScanIntention.Smart;
 ```
 
 In this example, we're:
@@ -114,7 +119,7 @@ Now we'll create and configure the scanner view and it's settings. This is done 
 
 ```typescript
 const viewSettings = new SparkScanViewSettings();
-viewSettings.defaultScanningMode = SparkScanScanningModeTarget;
+viewSettings.defaultScanningMode = new SparkScanScanningModeTarget();
 viewSettings.soundEnabled = true;
 viewSettings.hapticEnabled = false;
 ```
@@ -125,31 +130,30 @@ In this example, we're:
 - Enabling sound feedback
 - Disabling haptic feedback
 
-Next, we create the `SparkScanView` instance, adding the scanning interface to the application:
+Next, we create the `SparkScanView` instance, adding the scanning interface to the application.
+
+Create the `SparkScanView` instance using `SparkScanView.forElement()`:
 
 ```typescript
-const sparkScanComponent = (
-	<SparkScanView
-		context={context}
-		sparkScan={sparkScan}
-		sparkScanViewSettings={viewSettings}
-	/>
+const sparkScanView = SparkScanView.forElement(
+  document.getElementById("spark-scan-ui"),
+  context,
+  sparkScan,
+  viewSettings
 );
 ```
 
 In your application's state handling logic, you must also call the `stopScanning` method when the scanner is no longer needed:
 
 ```typescript
-componentWillUnmount() {
-sparkScanComponent.stopScanning();
-}
-
-handleAppStateChange = async (nextAppState) => {
-if (nextAppState.match(/inactive|background/)) {
-sparkScanComponent.stopScanning();
-}
-};
+useEffect(() => {
+  return () => {
+    sparkScanViewRef.current?.stopScanning().catch(console.error);
+  };
+}, []);
 ```
+
+For a complete React integration example, see the [SparkScan React Sample](https://github.com/Scandit/datacapture-web-samples/tree/master/05_Framework_Integration_Samples/SparkScanReactSample).
 
 ### 5. Implement the Listener
 
@@ -157,12 +161,12 @@ Lastly, you need to implement the listener to handle the scanned data. This is d
 
 ```typescript
 const listener = {
-	didScan: (sparkScan, session, getFrameData) => {
-		// Gather the recognized barcode
-		const barcode = session.newlyRecognizedBarcode[0];
+  didScan: (sparkScan, session, getFrameData) => {
+    // Gather the recognized barcode
+    const barcode = session.newlyRecognizedBarcode;
 
-		// Handle the barcode
-	},
+    // Handle the barcode
+  },
 };
 
 sparkScan.addListener(listener);

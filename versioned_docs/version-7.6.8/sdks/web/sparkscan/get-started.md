@@ -58,13 +58,13 @@ For this tutorial, we will set up SparkScan for scanning EAN13 codes. Change thi
 
 ```js
 const sparkScanSettings = new SparkScanSettings();
-const sparkScanSettings.enableSymbologies([Symbology.EAN13UPCA]);
+sparkScanSettings.enableSymbologies([Symbology.EAN13UPCA]);
 ```
 
 Next, create a SparkScan instance with the settings initialized in the previous step:
 
 ```js
-const sparkScan = SparkScan.forSettings(this.sparkScanSettings);
+const sparkScan = SparkScan.forSettings(sparkScanSettings);
 ```
 
 ## Setup the Spark Scan View

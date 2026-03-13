@@ -187,6 +187,7 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
         BarcodeCaptureSettings,
         BarcodeCapture,
         Symbology,
+        SymbologyDescription,
       } from "@scandit/web-datacapture-barcode";
 
       let view = new DataCaptureView();
@@ -564,8 +565,8 @@ const crypto = require("node:crypto");
 const fs = require("node:fs/promises");
 
 (async function createLicenseAndPublicKey() {
-  const data = process.env.SDC_LICENSE_KEY;
-  if (data == null || data === "") {
+  const licenseText = process.env.SDC_LICENSE_KEY;
+  if (licenseText == null || licenseText === "") {
     throw new Error("could not encrypt empty or null string");
   }
 
@@ -574,10 +575,10 @@ const fs = require("node:fs/promises");
   const keyAndIV = `${key.toString("base64")}:${iv.toString("base64")}`;
 
   const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
-  let encryptedText = cipher.update(text, "utf8", "hex");
-  encryptedText += cipher.final("hex");
+  let licenseEncryptedText = cipher.update(licenseText, "utf8", "hex");
+  licenseEncryptedText += cipher.final("hex");
 
-  await fs.writeFile("sdc-license.data", Buffer.from(encryptedText), "utf8");
+  await fs.writeFile("sdc-license.data", Buffer.from(licenseEncryptedText), "utf8");
   // Save the key to a file
   await fs.writeFile("sdc-public-key", keyAndIV, "utf8");
 })();

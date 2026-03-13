@@ -191,7 +191,7 @@ First implement the [BarcodeCaptureListener](https://docs.scandit.com/7.6/data-c
 
 ```js
 const listener = {
-	didScan: (barcodeCapture, session) => {
+	didScan: (barcodeCapture, session, frameData) => {
 		const recognizedBarcodes = session.newlyRecognizedBarcode;
 		// Do something with the barcodes
 	},
@@ -210,13 +210,35 @@ To prevent scanning unwanted codes, you can reject them by adding the desired lo
 
 The example below will only scan barcodes beginning with the digits `09` and ignore all others, using a transparent brush to distinguish a rejected barcode from a recognized one:
 
-```js
-...
-if (!barcode.data || !barcode.data.startsWith('09:')) {
-	window.overlay.brush = Scandit.Brush.transparent;
-    return;
+```ts
+import { Brush } from '@scandit/web-datacapture-core';
+import type { FrameData } from '@scandit/web-datacapture-core';
+import type { BarcodeCaptureListener, BarcodeCapture, BarcodeCaptureSession, Barcode } from '@scandit/web-datacapture-barcode';
+
+function onBarcodeCaptured(barcode: Barcode): void {
+  // Handle the captured barcode, e.g. look up information in a database
 }
-...
+
+const defaultBrush = overlay.getBrush();
+
+const listener: BarcodeCaptureListener = {
+  didScan: (barcodeCapture: BarcodeCapture, session: BarcodeCaptureSession, frameData: FrameData) => {
+    const barcode = session.newlyRecognizedBarcode;
+
+    if (!barcode?.data?.startsWith('09')) {
+      // Barcode does not match — make it transparent and continue scanning
+      await overlay.setBrush(Brush.transparent);
+      return;
+    }
+
+    // Valid barcode: restore the default brush, stop scanning and process the result
+    await overlay.setBrush(defaultBrush);
+    await barcodeCapture.setEnabled(false);
+    onBarcodeCaptured(barcode);
+  },
+};
+
+barcodeCapture.addListener(listener);
 ```
 
 ## Use the Built-in Camera
@@ -246,7 +268,7 @@ await context.setFrameSource(camera);
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.On](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
 ```js
-await context.frameSource.switchToDesiredState(Scandit.FrameSourceState.On);
+await context.frameSource.switchToDesiredState(FrameSourceState.On);
 ```
 
 ## Use a Capture View to Visualize the Scan Process

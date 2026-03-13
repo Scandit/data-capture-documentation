@@ -51,22 +51,26 @@ It is configured through [LabelCaptureSettings](https://docs.scandit.com/7.6/dat
 import { Symbology } from "@scandit/web-datacapture-barcode"
 import {
   CustomBarcodeBuilder,
-  LabelCapture,
-  LabelCaptureSettings,
-  LabelDefinitionBuilder,
-  TotalPriceTextBuilder,
-  UnitPriceTextBuilder,
-  LabelDateFormat,
-  WeightTextBuilder,
+  ExpiryDateTextBuilder,
   ImeiOneBarcodeBuilder,
   ImeiTwoBarcodeBuilder,
+  LabelCapture,
+  LabelCaptureFeedback,
+  LabelCaptureSettingsBuilder,
+  LabelDateComponentFormat,
+  LabelDateFormat,
+  LabelDefinitionBuilder,
   SerialNumberBarcodeBuilder,
+  TotalPriceTextBuilder,
+  UnitPriceTextBuilder,
+  WeightTextBuilder,
+  labelCaptureLoader,
 } from "@scandit/web-datacapture-label"
 
 const isofLabel = await new LabelDefinitionBuilder()
   .addCustomBarcode(
     // Create a barcode field with the expected symbologies
-    await new CustomBarcodeBuilder().isOptional(false).setSymbology(Symbology.EAN13UPCA).build("Barcode")
+    await new CustomBarcodeBuilder().isOptional(false).setSymbologies([Symbology.EAN13UPCA]).build("Barcode")
   )
   .addTotalPriceText(await new TotalPriceTextBuilder().isOptional(false).build("Total Price"))
   .addUnitPriceText(await new UnitPriceTextBuilder().isOptional(false).build("Unit Price"))
@@ -81,20 +85,20 @@ const isofLabel = await new LabelDefinitionBuilder()
 
 const smartDeviceLabel = await new LabelDefinitionBuilder()
   .addImeiOneBarcode(
-    await new ImeiOneBarcodeBuilder().isOptional(false).setSymbology(Symbology.Code128).build("IMEI")
+    await new ImeiOneBarcodeBuilder().isOptional(false).setSymbologies([Symbology.Code128]).build("IMEI")
   )
   .addImeiTwoBarcode(
-    await new ImeiTwoBarcodeBuilder().isOptional(false).setSymbology(Symbology.Code128).build("IMEI2")
+    await new ImeiTwoBarcodeBuilder().isOptional(false).setSymbologies([Symbology.Code128]).build("IMEI2")
   )
   .addSerialNumberBarcode(
-    await new SerialNumberBarcodeBuilder().isOptional(false).setSymbology(Symbology.Code128).build("Serial Number")
+    await new SerialNumberBarcodeBuilder().isOptional(false).setSymbologies([Symbology.Code128]).build("Serial Number")
   )
-  .addCustomBarcode(await new CustomBarcodeBuilder().isOptional(false).setSymbology(Symbology.Code128).build("EID"))
+  .addCustomBarcode(await new CustomBarcodeBuilder().isOptional(false).setSymbologies([Symbology.Code128]).build("EID"))
   .build("Smart Device Label");
 
 const settings = await new LabelCaptureSettingsBuilder().addLabel(isofLabel).addLabel(smartDeviceLabel).build();
 // Create the label capture mode with the settings and data capture context created earlier
-const mode = await LabelCapture.forContext(dataCaptureContext, settings);
+const labelCapture = await LabelCapture.forContext(dataCaptureContext, settings);
 ```
 
 ## Implement a Listener to Handle Captured Labels
@@ -152,7 +156,7 @@ const labelCaptureListener: LabelCaptureListener = {
      * You may want to communicate a successful scan with vibration and audio feedback.
      * See the Feedback section for more information on how to customize the feedback.
      */
-    Feedback.defaultFeedback.emit();
+    LabelCaptureFeedback.default.success.emit();
   }
 }
 ```
@@ -171,8 +175,7 @@ import { LabelCapture, LabelCaptureBasicOverlay } from "@scandit/web-datacapture
 
 
 // Create the overlay with the label capture mode created earlier
-const overlay = await LabelCaptureBasicOverlay.withLabelCapture(mode);
-await view.addOverlay(overlay);
+const overlay = await LabelCaptureBasicOverlay.withLabelCaptureForView(mode, view);
 
 // Add a square viewfinder to the overlay to guide users through the capture process
 const viewfinder = new RectangularViewfinder(RectangularViewfinderStyle.Square)
@@ -218,6 +221,8 @@ If you already have a [Feedback](https://docs.scandit.com/7.6/data-capture-sdk/w
 :::
 
 ```js
+import { LabelCaptureFeedback } from "@scandit/web-datacapture-label";
+
 const feedback = LabelCaptureFeedback.default;
 ```
 
