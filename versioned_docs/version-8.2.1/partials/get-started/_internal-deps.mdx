@@ -1,0 +1,18 @@
+import { useLocation } from '@docusaurus/router';
+
+Some of the Scandit Data Capture SDK modules depend on others to work:
+
+| Module      | Dependencies | Optional Dependencies |
+| ----------- | ----------- | ----------- |
+| *ScanditCaptureCore*      | None | None |
+| *ScanditBarcodeCapture*   | *ScanditCaptureCore* | None |
+| *ScanditParser*           | None | None |
+| *ScanditLabelCapture*     | *ScanditCaptureCore* <br/>*ScanditBarcodeCapture* | *ScanditLabelCaptureText* <br/>*ScanditPriceLabel* |
+| *ScanditIdCapture*        | *ScanditCaptureCore*        | *ScanditIdCaptureBackend*<br/>*ScanditIdEuropeDrivingLicense*<br/>*ScanditIdAamvaBarcodeVerification* <br/>*ScanditIdVoidedDetection* |
+
+
+:::tip
+When using ID Capture or Label Capture, consult the respective module's getting started guides to identify the optional dependencies required for your use case. The modules you need to include will vary based on the features you intend to use.
+
+Please be aware that your license may only cover a subset of Barcode and/or ID Capture features. If you require additional features, [contact us](mailto:support@scandit.com).
+:::

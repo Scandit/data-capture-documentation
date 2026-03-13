@@ -10,6 +10,12 @@ keywords:
   - titanium
 ---
 
+## 8.3.0-beta.1
+
+**Released**: March 13, 2026
+
+No updates for this framework in this release.
+
 ## 8.2.1
 
 **Released**: March 5, 2026

@@ -255,13 +255,17 @@ const config: Config = {
           },
           showLastUpdateTime: false,
           includeCurrentVersion: true,
-          lastVersion: "current",
+          lastVersion: "8.2.1",
           versions: {
             current: {
-              label: '8.2.1',
-              banner: 'none',
+              label: '8.3.0',
+              banner: 'unreleased',
               badge: false,
             },
+          '8.2.1': {
+            banner: 'none',
+            badge: false,
+          },
             '7.6.8': {
               banner: 'none',
               badge: false,
