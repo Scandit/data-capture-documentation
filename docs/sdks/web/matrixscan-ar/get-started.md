@@ -56,7 +56,7 @@ Here we configure it for tracking EAN13 codes, but you should change this to the
 ```typescript
     const settings = new BarcodeArSettings();
     settings.enableSymbologies([Symbology.EAN13UPCA]);
-    const barcodeAr = await BarcodeAr.forSettings(settings);
+    const barcodeAr = await BarcodeAr.forContext(context, settings);
 ```
 
 ## Setup the `BarcodeArView`
@@ -74,10 +74,9 @@ The `BarcodeArView` appearance can be customized through [`BarcodeArViewSettings
 - The size, colors, and styles of the highlight and annotation overlays
 
 ```typescript
-const soundEnabled = true;
-const hapticEnabled = true;
-
-const viewSettings = new BarcodeArViewSettings(soundEnabled, hapticEnabled);
+const viewSettings = new BarcodeArViewSettings();
+viewSettings.soundEnabled = true;
+viewSettings.hapticEnabled = true;
 ```
 
 Next, create a `BarcodeArView` instance with the Data Capture Context and the settings initialized in the previous step. The `BarcodeArView` is automatically added to the provided parent view.

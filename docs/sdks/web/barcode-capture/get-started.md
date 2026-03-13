@@ -99,7 +99,7 @@ First implement the [BarcodeCaptureListener](https://docs.scandit.com/data-captu
 import type { BarcodeCaptureListener, BarcodeCapture, BarcodeCaptureSession, Barcode } from '@scandit/web-datacapture-barcode';
 
 const listener: BarcodeCaptureListener = {
- didScan: (barcodeCapture: BarcodeCapture, session: BarcodeCaptureSession) => {
+ didScan: (barcodeCapture: BarcodeCapture, session: BarcodeCaptureSession, frameData: FrameData) => {
   const recognizedBarcode: Barcode = session.newlyRecognizedBarcode;
   // Do something with the barcode
  },
@@ -116,6 +116,7 @@ The example below will only scan barcodes beginning with the digits `09` and ign
 
 ```ts
 import { Brush } from '@scandit/web-datacapture-core';
+import type { FrameData } from '@scandit/web-datacapture-core';
 import type { BarcodeCaptureListener, BarcodeCapture, BarcodeCaptureSession, Barcode } from '@scandit/web-datacapture-barcode';
 
 function onBarcodeCaptured(barcode: Barcode): void {
@@ -125,7 +126,7 @@ function onBarcodeCaptured(barcode: Barcode): void {
 const defaultBrush = overlay.getBrush();
 
 const listener: BarcodeCaptureListener = {
-  didScan: async (barcodeCapture: BarcodeCapture, session: BarcodeCaptureSession) => {
+  didScan: (barcodeCapture: BarcodeCapture, session: BarcodeCaptureSession, frameData: FrameData) => {
     const barcode = session.newlyRecognizedBarcode;
 
     if (!barcode?.data?.startsWith('09')) {

@@ -20,16 +20,16 @@ That means certain data from certain fields won’t be returned, even if it’s 
 
 ```js
 // Default value:
-settings.anonymizationMode = IdAnonymizationMode.FIELDS_ONLY;
+settings.anonymizationMode = IdAnonymizationMode.FieldsOnly;
 
 // Sensitive data is additionally covered with black boxes on returned images:
-settings.anonymizationMode = IdAnonymizationMode.FIELDS_AND_IMAGES;
+settings.anonymizationMode = IdAnonymizationMode.FieldsAndImages;
 
 // Only images are anonymized:
-settings.anonymizationMode = IdAnonymizationMode.IMAGES_ONLY;
+settings.anonymizationMode = IdAnonymizationMode.ImagesOnly;
 
 // No anonymization:
-settings.anonymizationMode = IdAnonymizationMode.NONE;
+settings.anonymizationMode = IdAnonymizationMode.None;
 ```
 
 ## ID Images

@@ -116,7 +116,7 @@ Now we'll create and configure the scanner view and it's settings. This is done 
 
 ```typescript
 const viewSettings = new SparkScanViewSettings();
-viewSettings.defaultScanningMode = SparkScanScanningModeTarget;
+viewSettings.defaultScanningMode = new SparkScanScanningModeTarget();
 viewSettings.soundEnabled = true;
 viewSettings.hapticEnabled = false;
 ```
@@ -177,7 +177,7 @@ Lastly, you need to implement the listener to handle the scanned data. This is d
 const listener = {
 	didScan: (sparkScan, session, getFrameData) => {
 		// Gather the recognized barcode
-		const barcode = session.newlyRecognizedBarcode[0];
+		const barcode = session.newlyRecognizedBarcode;
 
 		// Handle the barcode
 	},
