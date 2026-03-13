@@ -52,21 +52,21 @@ Or consume it in your `.html` page through a CDN like [JSdelivr](https://www.jsd
 <script type="importmap">
     {
       "imports": {
-        "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/build/js/index.js",
-        "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/build/js/index.js",
+        "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/build/js/index.js",
+        "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/build/js/index.js",
 
-        "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/",
-        "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/",
+        "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/",
+        "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/",
         
-        "@scandit/web-datacapture-parser": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@7.0.0/build/js/index.js",
-        "@scandit/web-datacapture-parser/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@7.0.0/",
+        "@scandit/web-datacapture-parser": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@7/build/js/index.js",
+        "@scandit/web-datacapture-parser/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@7/",
         
       }
     }
 </script>
-<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.0.0/build/js/index.js" />
-<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/build/js/index.js" />
-<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@7.0.0/build/js/index.js" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/build/js/index.js" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/build/js/index.js" />
+<link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-parser@7/build/js/index.js" />
 
 <!-- Check the latest version here https://github.com/guybedford/es-module-shims/releases -->
 <script async src="https://ga.jspm.io/npm:es-module-shims@1.10.0/dist/es-module-shims.js"></script>

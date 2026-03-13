@@ -42,7 +42,7 @@ import {
 
 await configure({
   libraryLocation: new URL("sdc-lib-self-hosted-path", document.baseURI).toString(),
-  // or use the cdn https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/sdc-lib/
+  // or use the cdn https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/sdc-lib/
   licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
   moduleLoaders: [barcodeCaptureLoader()],
 });

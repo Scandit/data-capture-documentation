@@ -73,11 +73,11 @@ More info about this feature here https://developer.mozilla.org/en-US/docs/Web/H
 -->
 <link
   rel="modulepreload"
-  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/build/js/index.js"
+  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/build/js/index.js"
 />
 <link
   rel="modulepreload"
-  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/build/js/index.js"
+  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/build/js/index.js"
 />
 <!-- polyfill browsers not supporting import maps. use the latest version from here https://github.com/guybedford/es-module-shims/releases -->
 <script
@@ -87,10 +87,10 @@ More info about this feature here https://developer.mozilla.org/en-US/docs/Web/H
 <script type="importmap">
   {
     "imports": {
-      "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/build/js/index.js",
-      "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/build/js/index.js",
-      "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/",
-      "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/"
+      "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/build/js/index.js",
+      "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/build/js/index.js",
+      "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/",
+      "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/"
     }
   }
 </script>
@@ -141,21 +141,21 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
     <script type="importmap">
       {
         "imports": {
-          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/build/js/index.js",
-          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/build/js/index.js",
+          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/build/js/index.js",
+          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/build/js/index.js",
 
-          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/",
-          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/"
+          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/",
+          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/"
         }
       }
     </script>
     <link
       rel="modulepreload"
-      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/build/js/index.js"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/build/js/index.js"
     />
     <link
       rel="modulepreload"
-      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/build/js/index.js"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/build/js/index.js"
     />
     <style>
       html,
@@ -197,7 +197,7 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
       await configure({
         licenseKey: "-- ENTER LICENSE KEY HERE --",
         libraryLocation:
-          "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/sdc-lib/",
+          "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/sdc-lib/",
         moduleLoaders: [barcodeCaptureLoader()],
       });
       view.hideProgressBar();

@@ -53,9 +53,9 @@ If you added and installed the library, these files should be put in a path that
 By default, the library will look at the root of your website. 
 If you use a CDN to access the library, you will want to set this to the following values depending on the data capture mode you are using:
 
-- for barcode capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-barcode@7.0.0/sdc-lib/, or similar.
+- for barcode capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-barcode@7/sdc-lib/, or similar.
 
-- for ID capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7.0.0/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-id@7.0.0/sdc-lib/, or similar.
+- for ID capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-id@7/sdc-lib/, or similar.
 
 :::note
 Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the `libraryLocation` option, either by ensuring the served files are up-to-date or the path/URL specifies a specific version.
@@ -290,10 +290,10 @@ To visualize the results of barcode scanning, the following [overlay](https://do
 import { BarcodeCaptureOverlay } from '@scandit/web-datacapture-barcode';
 
 const overlay =
-	await BarcodeCaptureOverlay.withBarcodeCaptureForView(
-		barcodeCapture,
-		view
-	);
+  await BarcodeCaptureOverlay.withBarcodeCaptureForView(
+    barcodeCapture,
+    view
+  );
 ```
 
 ## Disabling Barcode Capture
@@ -302,7 +302,7 @@ const overlay =
 await barcodeCapture.setEnabled(false);
 ```
 
-To disable barcode capture, for instance, as a consequence of a barcode 
+To disable barcode capture, for instance, as a consequence of a barcode
 being recognized call [BarcodeCapture.setEnabled()](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/barcode-capture.html#method-scandit.datacapture.barcode.BarcodeCapture.SetEnabled) passing false.
 
 The effect is immediate: no more frames will be processed after the change. However, if a frame is currently being processed, this frame will be completely processed and deliver any results/callbacks to the registered listeners.
