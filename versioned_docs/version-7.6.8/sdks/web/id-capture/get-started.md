@@ -131,6 +131,7 @@ By default, [anonymized data](./advanced.md#configure-data-anonymization) is not
 ```ts
 import {
 	IdCapture,
+	IdCaptureScanner,
 	IdCaptureSettings,
 	IdCard,
 	Region,
@@ -224,7 +225,7 @@ Note that some data may still have been captured, you will find them in the firs
 You may wish to implement the follow-up action based on the reason of failure:
 
 ```ts
-onIdRejected: (capturedId: CapturedId, reason: RejectionReason) => {
+didRejectId: (capturedId: CapturedId, reason: RejectionReason) => {
 	if (reason === RejectionReason.Timeout) {
 		// Ask the user to retry, or offer alternative input method.
 	} else if (reason === RejectionReason.DocumentExpired) {

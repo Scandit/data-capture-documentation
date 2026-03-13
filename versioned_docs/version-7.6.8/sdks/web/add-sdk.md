@@ -73,11 +73,11 @@ More info about this feature here https://developer.mozilla.org/en-US/docs/Web/H
 -->
 <link
   rel="modulepreload"
-  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/build/js/index.js"
+  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/build/js/index.js"
 />
 <link
   rel="modulepreload"
-  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/build/js/index.js"
+  href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/build/js/index.js"
 />
 <!-- polyfill browsers not supporting import maps. use the latest version from here https://github.com/guybedford/es-module-shims/releases -->
 <script
@@ -87,10 +87,10 @@ More info about this feature here https://developer.mozilla.org/en-US/docs/Web/H
 <script type="importmap">
   {
     "imports": {
-      "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/build/js/index.js",
-      "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/build/js/index.js",
-      "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/",
-      "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/"
+      "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/build/js/index.js",
+      "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/build/js/index.js",
+      "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/",
+      "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/"
     }
   }
 </script>
@@ -141,21 +141,21 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
     <script type="importmap">
       {
         "imports": {
-          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/build/js/index.js",
-          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/build/js/index.js",
+          "@scandit/web-datacapture-core": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/build/js/index.js",
+          "@scandit/web-datacapture-barcode": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/build/js/index.js",
 
-          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/",
-          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/"
+          "@scandit/web-datacapture-barcode/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/",
+          "@scandit/web-datacapture-core/": "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/"
         }
       }
     </script>
     <link
       rel="modulepreload"
-      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7.3.0/build/js/index.js"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@7/build/js/index.js"
     />
     <link
       rel="modulepreload"
-      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/build/js/index.js"
+      href="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/build/js/index.js"
     />
     <style>
       html,
@@ -187,6 +187,7 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
         BarcodeCaptureSettings,
         BarcodeCapture,
         Symbology,
+        SymbologyDescription,
       } from "@scandit/web-datacapture-barcode";
 
       let view = new DataCaptureView();
@@ -196,7 +197,7 @@ Alternatively, you can also put the same JavaScript/TypeScript code in a separat
       await configure({
         licenseKey: "-- ENTER LICENSE KEY HERE --",
         libraryLocation:
-          "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.3.0/sdc-lib/",
+          "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/sdc-lib/",
         moduleLoaders: [barcodeCaptureLoader()],
       });
       view.hideProgressBar();
@@ -564,8 +565,8 @@ const crypto = require("node:crypto");
 const fs = require("node:fs/promises");
 
 (async function createLicenseAndPublicKey() {
-  const data = process.env.SDC_LICENSE_KEY;
-  if (data == null || data === "") {
+  const licenseText = process.env.SDC_LICENSE_KEY;
+  if (licenseText == null || licenseText === "") {
     throw new Error("could not encrypt empty or null string");
   }
 
@@ -574,10 +575,10 @@ const fs = require("node:fs/promises");
   const keyAndIV = `${key.toString("base64")}:${iv.toString("base64")}`;
 
   const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
-  let encryptedText = cipher.update(text, "utf8", "hex");
-  encryptedText += cipher.final("hex");
+  let licenseEncryptedText = cipher.update(licenseText, "utf8", "hex");
+  licenseEncryptedText += cipher.final("hex");
 
-  await fs.writeFile("sdc-license.data", Buffer.from(encryptedText), "utf8");
+  await fs.writeFile("sdc-license.data", Buffer.from(licenseEncryptedText), "utf8");
   // Save the key to a file
   await fs.writeFile("sdc-public-key", keyAndIV, "utf8");
 })();

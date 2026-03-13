@@ -28,7 +28,7 @@ First of all, create a new instance of [BarcodeBatchAdvancedOverlay](https://doc
 [DataCaptureView](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 
 ```js
-const overlay = BarcodeBatchAdvancedOverlay.withBarcodeBatchForView(
+const overlay = await BarcodeBatchAdvancedOverlay.withBarcodeBatchForView(
 	barcodeBatch,
 	view
 );
@@ -106,7 +106,8 @@ barcodeBatch.addListener({
         new PointWithUnit(
           new NumberWithUnit(0, MeasureUnit.Fraction), new NumberWithUnit(-1, MeasureUnit.Fraction)
         ), trackedBarcode);
-    })
+    });
+  }
 });
 ```
 

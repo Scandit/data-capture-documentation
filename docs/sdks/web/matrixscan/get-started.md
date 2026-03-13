@@ -472,7 +472,11 @@ The camera is off by default and must be turned on. This is done by calling
 [FrameSourceState.On](https://docs.scandit.com/data-capture-sdk/web/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
 ```js
-await camera.switchToDesiredState(Scandit.FrameSourceState.On);
+import { FrameSourceState } from "@scandit/web-datacapture-core";
+
+[...]
+
+await camera.switchToDesiredState(FrameSourceState.On);
 ```
 
 ## Use a Capture View to Visualize the Scan Process
@@ -526,6 +530,10 @@ Barcode Batch, unlike Barcode Capture, doesn’t emit feedback (sound or vibrati
 Next, use this [feedback](https://docs.scandit.com/data-capture-sdk/web/core/api/feedback.html#class-scandit.datacapture.core.Feedback) in a [BarcodeBatchListener](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-batch-listener.html#interface-scandit.datacapture.barcode.batch.IBarcodeBatchListener):
 
 ```js
+import { Feedback } from "@scandit/web-datacapture-core";
+
+const feedback = Feedback.defaultFeedback;
+
 const feedbackListener = {
  didUpdateSession: (barcodeBatch, session) => {
   if (session.addedTrackedBarcodes.length > 0) {

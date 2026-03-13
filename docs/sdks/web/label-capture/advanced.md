@@ -24,52 +24,32 @@ To customize the appearance of the overlay, you can implement a [LabelCaptureBas
 The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label captured and [brushForField()](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
 ```js
-const overlayListener = LabelCaptureBasicOverlayListener>(() => ({
-    brushForFieldOfLabel: (_, field) => {
-      switch (field.name) {
+import { Brush, Color } from "@scandit/web-datacapture-core";
+
+overlay.listener = {
+  brushForField: (overlay, field, label) => {
+    switch (field.name) {
       case "<your-barcode-field-name>":
         return new Brush(
-          "rgba(0, 255, 255, 0.5)",
-          "rgba(0, 255, 255, 0.5)",
-          0)
+          Color.fromRGBA(0, 255, 255, 0.5),
+          Color.fromRGBA(0, 255, 255, 0.5),
+          0
+        );
       case "<your-expiry-date-field-name>":
         return new Brush(
-          "rgba(255, 165, 0, 0.5)",
-          "rgba(255, 165, 0, 0.5)",
-          0)
+          Color.fromRGBA(255, 165, 0, 0.5),
+          Color.fromRGBA(255, 165, 0, 0.5),
+          0
+        );
       default:
-        return new Brush(
-          Colors.transparentColor,
-          Colors.transparentColor,
-          0)
-    },
-    brushForLabel() {
-      return new Brush(Colors.transparentColor, Colors.transparentColor, 0)
-    },
-    didTapLabel() {
-      /*
-       * Handle user tap gestures on the label.
-       */
+        return Brush.transparent;
     }
-  }), [])
-
-useEffect(() => {
-    /*
-     * Assign the overlay listener to the overlay
-     * before adding it to the data capture view.
-     */
-    overlay.listener = overlayListener
-    const dataCaptureView = dataCaptureViewRef.current
-    dataCaptureView.addOverlay(overlay)
-    return () => {
-        /*
-         * Unassign the overlay listener from the overlay
-         * before removing it from the data capture view.
-         */
-        overlay.listener = null
-        dataCaptureView?.removeOverlay(overlay)
-    }
-}, [])
+  },
+  brushForLabel: (overlay, label) => Brush.transparent,
+  onLabelTapped: (overlay, label) => {
+    // Handle user tap gestures on the label.
+  },
+};
 ```
 
 :::tip

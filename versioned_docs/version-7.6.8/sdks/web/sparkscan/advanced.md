@@ -39,7 +39,7 @@ In the [`SparkScanFeedbackDelegate.getFeedbackForBarcode()`](https://docs.scandi
 
 ```js
 const sparkScanFeedbackDelegate = {
-      feedbackForBarcode: (barcode: Barcode) => {
+      getFeedbackForBarcode: (barcode: Barcode) => {
           if (isValidBarcode(barcode)) {
               return new SparkScanBarcodeSuccessFeedback();
           } else {

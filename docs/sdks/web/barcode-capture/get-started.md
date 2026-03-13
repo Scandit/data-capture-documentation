@@ -99,7 +99,7 @@ First implement the [BarcodeCaptureListener](https://docs.scandit.com/data-captu
 import type { BarcodeCaptureListener, BarcodeCapture, BarcodeCaptureSession, Barcode } from '@scandit/web-datacapture-barcode';
 
 const listener: BarcodeCaptureListener = {
- didScan: (barcodeCapture: BarcodeCapture, session: BarcodeCaptureSession) => {
+ didScan: (barcodeCapture: BarcodeCapture, session: BarcodeCaptureSession, frameData: FrameData) => {
   const recognizedBarcode: Barcode = session.newlyRecognizedBarcode;
   // Do something with the barcode
  },
@@ -116,13 +116,33 @@ The example below will only scan barcodes beginning with the digits `09` and ign
 
 ```ts
 import { Brush } from '@scandit/web-datacapture-core';
+import type { FrameData } from '@scandit/web-datacapture-core';
+import type { BarcodeCaptureListener, BarcodeCapture, BarcodeCaptureSession, Barcode } from '@scandit/web-datacapture-barcode';
 
-// ...
-if (!barcode.data || !barcode.data.startsWith('09:')) {
-    overlay.brush = Brush.transparent;
-    return;
+function onBarcodeCaptured(barcode: Barcode): void {
+  // Handle the captured barcode, e.g. look up information in a database
 }
-// ...
+
+const defaultBrush = overlay.getBrush();
+
+const listener: BarcodeCaptureListener = {
+  didScan: (barcodeCapture: BarcodeCapture, session: BarcodeCaptureSession, frameData: FrameData) => {
+    const barcode = session.newlyRecognizedBarcode;
+
+    if (!barcode?.data?.startsWith('09')) {
+      // Barcode does not match — make it transparent and continue scanning
+      await overlay.setBrush(Brush.transparent);
+      return;
+    }
+
+    // Valid barcode: restore the default brush, stop scanning and process the result
+    await overlay.setBrush(defaultBrush);
+    await barcodeCapture.setEnabled(false);
+    onBarcodeCaptured(barcode);
+  },
+};
+
+barcodeCapture.addListener(listener);
 ```
 
 ## Use the Built-in Camera

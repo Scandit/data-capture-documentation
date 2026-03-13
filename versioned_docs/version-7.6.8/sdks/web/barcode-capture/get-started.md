@@ -53,9 +53,9 @@ If you added and installed the library, these files should be put in a path that
 By default, the library will look at the root of your website. 
 If you use a CDN to access the library, you will want to set this to the following values depending on the data capture mode you are using:
 
-- for barcode capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7.0.0/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-barcode@7.0.0/sdc-lib/, or similar.
+- for barcode capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@7/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-barcode@7/sdc-lib/, or similar.
 
-- for ID capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7.0.0/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-id@7.0.0/sdc-lib/, or similar.
+- for ID capture: https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-id@7/sdc-lib/, https://unpkg.com/browse/@scandit/web-datacapture-id@7/sdc-lib/, or similar.
 
 :::note
 Please ensure that the library version of the imported library corresponds to the version of the external Scandit Data Capture library/engine files retrieved via the `libraryLocation` option, either by ensuring the served files are up-to-date or the path/URL specifies a specific version.
@@ -191,7 +191,7 @@ First implement the [BarcodeCaptureListener](https://docs.scandit.com/7.6/data-c
 
 ```js
 const listener = {
-	didScan: (barcodeCapture, session) => {
+	didScan: (barcodeCapture, session, frameData) => {
 		const recognizedBarcodes = session.newlyRecognizedBarcode;
 		// Do something with the barcodes
 	},
@@ -210,13 +210,35 @@ To prevent scanning unwanted codes, you can reject them by adding the desired lo
 
 The example below will only scan barcodes beginning with the digits `09` and ignore all others, using a transparent brush to distinguish a rejected barcode from a recognized one:
 
-```js
-...
-if (!barcode.data || !barcode.data.startsWith('09:')) {
-	window.overlay.brush = Scandit.Brush.transparent;
-    return;
+```ts
+import { Brush } from '@scandit/web-datacapture-core';
+import type { FrameData } from '@scandit/web-datacapture-core';
+import type { BarcodeCaptureListener, BarcodeCapture, BarcodeCaptureSession, Barcode } from '@scandit/web-datacapture-barcode';
+
+function onBarcodeCaptured(barcode: Barcode): void {
+  // Handle the captured barcode, e.g. look up information in a database
 }
-...
+
+const defaultBrush = overlay.getBrush();
+
+const listener: BarcodeCaptureListener = {
+  didScan: (barcodeCapture: BarcodeCapture, session: BarcodeCaptureSession, frameData: FrameData) => {
+    const barcode = session.newlyRecognizedBarcode;
+
+    if (!barcode?.data?.startsWith('09')) {
+      // Barcode does not match — make it transparent and continue scanning
+      await overlay.setBrush(Brush.transparent);
+      return;
+    }
+
+    // Valid barcode: restore the default brush, stop scanning and process the result
+    await overlay.setBrush(defaultBrush);
+    await barcodeCapture.setEnabled(false);
+    onBarcodeCaptured(barcode);
+  },
+};
+
+barcodeCapture.addListener(listener);
 ```
 
 ## Use the Built-in Camera
@@ -246,7 +268,7 @@ await context.setFrameSource(camera);
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.On](https://docs.scandit.com/7.6/data-capture-sdk/web/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
 ```js
-await context.frameSource.switchToDesiredState(Scandit.FrameSourceState.On);
+await context.frameSource.switchToDesiredState(FrameSourceState.On);
 ```
 
 ## Use a Capture View to Visualize the Scan Process
@@ -268,10 +290,10 @@ To visualize the results of barcode scanning, the following [overlay](https://do
 import { BarcodeCaptureOverlay } from '@scandit/web-datacapture-barcode';
 
 const overlay =
-	await BarcodeCaptureOverlay.withBarcodeCaptureForView(
-		barcodeCapture,
-		view
-	);
+  await BarcodeCaptureOverlay.withBarcodeCaptureForView(
+    barcodeCapture,
+    view
+  );
 ```
 
 ## Disabling Barcode Capture
@@ -280,7 +302,7 @@ const overlay =
 await barcodeCapture.setEnabled(false);
 ```
 
-To disable barcode capture, for instance, as a consequence of a barcode 
+To disable barcode capture, for instance, as a consequence of a barcode
 being recognized call [BarcodeCapture.setEnabled()](https://docs.scandit.com/7.6/data-capture-sdk/web/barcode-capture/api/barcode-capture.html#method-scandit.datacapture.barcode.BarcodeCapture.SetEnabled) passing false.
 
 The effect is immediate: no more frames will be processed after the change. However, if a frame is currently being processed, this frame will be completely processed and deliver any results/callbacks to the registered listeners.
