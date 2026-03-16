@@ -38,15 +38,15 @@ For this tutorial, we will setup barcode scanning for a small list of different 
 ```csharp
 BarcodeCaptureSettings settings = BarcodeCaptureSettings.Create();
 HashSet<Symbology> symbologies = new HashSet<Symbology>()
-        {
-        Symbology.Code128,
-        Symbology.Code39,
-        Symbology.Qr,
-        Symbology.Ean8,
-        Symbology.Upce,
-        Symbology.Ean13Upca
-        };
-        settings.EnableSymbologies(symbologies);
+{
+    Symbology.Code128,
+    Symbology.Code39,
+    Symbology.Qr,
+    Symbology.Ean8,
+    Symbology.Upce,
+    Symbology.Ean13Upca
+};
+settings.EnableSymbologies(symbologies);
 ```
 
 If you are not disabling barcode capture immediately after having scanned the first code, consider setting the [BarcodeCaptureSettings.CodeDuplicateFilter](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) to around 500 or even \-1 if you do not want codes to be scanned more than once.
@@ -66,12 +66,12 @@ First implement the [IBarcodeCaptureListener](https://docs.scandit.com/7.6/data-
 ```csharp
 public void OnBarcodeScanned(BarcodeCapture barcodeCapture, BarcodeCaptureSession session, IFrameData frameData)
 {
-IList<Barcode> barcodes = session?.NewlyRecognizedBarcode;
-// Do something with the barcodes
+    Barcode? barcode = session.NewlyRecognizedBarcode;
+    // Do something with the barcode
 
-// Dispose the frame when you have finished processing it. If the frame is not properly disposed,
-// different issues could arise, e.g. a frozen, non-responsive, or "severely stuttering" video feed.
-frameData.Dispose();
+    // Dispose the frame when you have finished processing it. If the frame is not properly disposed,
+    // different issues could arise, e.g. a frozen, non-responsive, or "severely stuttering" video feed.
+    frameData.Dispose();
 }
 ```
 
@@ -86,9 +86,9 @@ Alternatively to register [IBarcodeCaptureListener](https://docs.scandit.com/7.6
 ```csharp
 barcodeCapture.BarcodeScanned += (object sender, BarcodeCaptureEventArgs args) =>
 {
-IList<Barcode> barcodes = args.Session?.NewlyRecognizedBarcode;
-// Do something with the barcodes
-}
+    Barcode? barcode = args.Session.NewlyRecognizedBarcode;
+    // Do something with the barcode
+};
 ```
 
 ### Rejecting Barcodes
@@ -166,18 +166,18 @@ You can configure your view in the code behind class. For example:
 ```csharp
 public partial class MainPage : ContentPage
 {
-public MainPage()
-{
-InitializeComponent();
+    public MainPage()
+    {
+        InitializeComponent();
 
-// Initialization of DataCaptureView happens on handler changed event.
-dataCaptureView.HandlerChanged += DataCaptureViewHandlerChanged;
-}
+        // Initialization of DataCaptureView happens on handler changed event.
+        dataCaptureView.HandlerChanged += DataCaptureViewHandlerChanged;
+    }
 
-private void DataCaptureViewHandlerChanged(object? sender, EventArgs e)
-{
-// Your dataCaptureView configuration goes here, e.g. add overlay
-}
+    private void DataCaptureViewHandlerChanged(object? sender, EventArgs e)
+    {
+        // Your dataCaptureView configuration goes here, e.g. add overlay
+    }
 }
 ```
 

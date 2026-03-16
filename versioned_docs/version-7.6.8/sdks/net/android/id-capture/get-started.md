@@ -53,9 +53,9 @@ camera = Camera.GetDefaultCamera();
 
 if (camera != null)
 {
-// Use the settings recommended by id capture.
-camera.ApplySettingsAsync(IdCapture.RecommendedCameraSettings);
-context.SetFrameSourceAsync(camera);
+    // Use the settings recommended by id capture.
+    camera.ApplySettingsAsync(IdCapture.RecommendedCameraSettings);
+    context.SetFrameSourceAsync(camera);
 }
 ```
 
@@ -86,37 +86,35 @@ Capture results are delivered as a [CapturedId](https://docs.scandit.com/7.6/dat
 For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/7.6/data-capture-sdk/dotnet.android/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 ```csharp
-public class MyListener : Java.Lang.Object, IIdCaptureListener
+public class MyListener : IIdCaptureListener
 {
-public void OnIdCaptured(IdCapture mode, IdCaptureSession session, IFrameData data)
-{
-CapturedId capturedId = session.NewlyCapturedId;
+    public void OnIdCaptured(IdCapture mode, IdCaptureSession session, IFrameData data)
+    {
+        CapturedId capturedId = session.NewlyCapturedId;
 
-// The recognized fields of the captured ID can vary based on the type.
-if (capturedId.CapturedResultType == CapturedResultType.MrzResult)
-{
-// Handle the information extracted.
-}
-else if (capturedId.CapturedResultType == CapturedResultType.VizResult)
-{
-// Handle the information extracted.
-}
-else if (capturedId.CapturedResultType == CapturedResultType.BarcodeResult)
-{
-// Handle the information extracted.
-}
-}
+        // The recognized fields of the captured ID can vary based on the type.
+        if (capturedId.CapturedResultType == CapturedResultType.MrzResult)
+        {
+            // Handle the information extracted.
+        }
+        else if (capturedId.CapturedResultType == CapturedResultType.VizResult)
+        {
+            // Handle the information extracted.
+        }
+        else if (capturedId.CapturedResultType == CapturedResultType.BarcodeResult)
+        {
+            // Handle the information extracted.
+        }
+    }
 
-public void OnErrorEncountered(IdCapture mode, Throwable error, IdCaptureSession session, IFrameData data)
-{
-// Implement to handle an error encountered during the capture process.
-}
+    public void OnErrorEncountered(IdCapture mode, Throwable error, IdCaptureSession session, IFrameData data)
+    {
+        // Implement to handle an error encountered during the capture process.
+    }
 
-public void OnObservationStarted(IdCapture mode)
-{ }
+    public void OnObservationStarted(IdCapture mode) { }
 
-public void OnObservationStopped(IdCapture mode)
-{ }
+    public void OnObservationStopped(IdCapture mode) { }
 }
 ```
 
@@ -125,21 +123,21 @@ Alternatively to register [IIdCaptureListener](https://docs.scandit.com/7.6/data
 ```csharp
 idCapture.IdCaptured += (object sender, IdCaptureEventArgs args) =>
 {
-CapturedId capturedId = args.Session.NewlyCapturedId;
+    CapturedId capturedId = args.Session.NewlyCapturedId;
 
-// The recognized fields of the captured ID can vary based on the type.
-if (capturedId.CapturedResultType == CapturedResultType.MrzResult)
-{
-// Handle the information extracted.
-}
-else if (capturedId.CapturedResultType == CapturedResultType.VizResult)
-{
-// Handle the information extracted.
-}
-else if (capturedId.CapturedResultType == CapturedResultType.BarcodeResult)
-{
-// Handle the information extracted.
-}
+    // The recognized fields of the captured ID can vary based on the type.
+    if (capturedId.CapturedResultType == CapturedResultType.MrzResult)
+    {
+        // Handle the information extracted.
+    }
+    else if (capturedId.CapturedResultType == CapturedResultType.VizResult)
+    {
+        // Handle the information extracted.
+    }
+    else if (capturedId.CapturedResultType == CapturedResultType.BarcodeResult)
+    {
+        // Handle the information extracted.
+    }
 };
 ```
 
@@ -182,18 +180,18 @@ You can configure your view in the code behind class. For example:
 ```csharp
 public partial class MainPage : ContentPage
 {
-public MainPage()
-{
-InitializeComponent();
+    public MainPage()
+    {
+        InitializeComponent();
 
-// Initialization of DataCaptureView happens on handler changed event.
-dataCaptureView.HandlerChanged += DataCaptureViewHandlerChanged;
-}
+        // Initialization of DataCaptureView happens on handler changed event.
+        dataCaptureView.HandlerChanged += DataCaptureViewHandlerChanged;
+    }
 
-private void DataCaptureViewHandlerChanged(object? sender, EventArgs e)
-{
-// Your dataCaptureView configuration goes here, e.g. add overlay
-}
+    private void DataCaptureViewHandlerChanged(object? sender, EventArgs e)
+    {
+        // Your dataCaptureView configuration goes here, e.g. add overlay
+    }
 }
 ```
 

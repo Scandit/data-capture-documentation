@@ -92,7 +92,7 @@ To get informed whenever a new label has been recognized, add a [ILabelCaptureLi
 First implement the `ILabelCaptureListener` interface. Here is an example of how to implement a listener that processes the captured labels based on the label capture settings defined above:
 
 ```csharp
-public class LabelCaptureRepository : Java.Lang.Object, ILabelCaptureListener
+public class LabelCaptureRepository : ILabelCaptureListener
 {
     public void OnSessionUpdated(LabelCapture labelCapture, LabelCaptureSession session, IFrameData frameData)
     {
@@ -183,7 +183,7 @@ Here is an example of how to add a `LabelCaptureBasicOverlay` to the `DataCaptur
 /*
  * Create the data capture view and attach it to the data capture context created earlier.
  */
-var dataCaptureView = DataCaptureView.Create(this, dataCaptureContext);
+var dataCaptureView = DataCaptureView.Create(dataCaptureContext);
 
 /*
  * Add the data capture view to your view hierarchy

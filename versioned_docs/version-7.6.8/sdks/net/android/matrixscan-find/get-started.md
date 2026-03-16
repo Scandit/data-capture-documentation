@@ -59,8 +59,8 @@ ICollection<BarcodeFindItem> items = new HashSet<BarcodeFindItem>()
 Create the mode with the previously created settings and set the items:
 
 ```csharp
-BarcodeFind mode = new BarcodeFind(settings);
-mode.SetItemList(items);
+BarcodeFind barcodeFind = new BarcodeFind(settings);
+barcodeFind.SetItemList(items);
 ```
 
 ## Setup the BarcodeFindView
@@ -89,14 +89,14 @@ Connect the BarcodeFindView to the Android lifecycle. The view is dependent on c
 ```csharp
 public override void OnResume()
 {
-base.OnResume();
-barcodeFindView.OnResume();
+    base.OnResume();
+    barcodeFindView.OnResume();
 }
 
 public override void OnPause()
 {
-base.OnPause();
-barcodeFindView.OnPause();
+    base.OnPause();
+    barcodeFindView.OnPause();
 }
 ```
 
@@ -109,7 +109,7 @@ In this tutorial, we will then navigate back to the previous screen to finish th
 ```csharp
 barcodeFindView.FinishButtonTapped += (object? sender, FinishButtonTappedEventArgs e) =>
 {
-RequireActivity().OnBackPressed();
+    RequireActivity().OnBackPressed();
 };
 ```
 

@@ -32,7 +32,7 @@ For this tutorial, we will set up SparkScan for scanning EAN13 codes. Change thi
 SparkScanSettings settings = new SparkScanSettings();
 HashSet<Symbology> symbologies = new HashSet<Symbology>()
 {
-Symbology.Ean13Upca
+    Symbology.Ean13Upca
 };
 settings.EnableSymbologies(symbologies);
 ```
@@ -89,14 +89,14 @@ When developing on MAUI, make sure to call SparkScanView.OnAppearing and SparkSc
 ```csharp
 protected override void OnAppearing()
 {
-base.OnAppearing();
-this.SparkScanView.OnAppearing();
+    base.OnAppearing();
+    this.SparkScanView.OnAppearing();
 }
 
 protected override void OnDisappearing()
 {
-base.OnDisappearing();
-this.SparkScanView.OnDisappearing();
+    base.OnDisappearing();
+    this.SparkScanView.OnDisappearing();
 }
 ```
 
@@ -105,14 +105,14 @@ Additionally, make sure to call sparkScanView.onPause() and sparkScanView.onResu
 ```csharp
 protected override void OnPause()
 {
-sparkScanView.OnPause();
-base.OnPause();
+    sparkScanView.OnPause();
+    base.OnPause();
 }
 
 protected override void OnResume()
 {
-sparkScanView.OnResume();
-base.OnResume();
+    sparkScanView.OnResume();
+    base.OnResume();
 }
 ```
 
@@ -125,26 +125,24 @@ To keep track of the barcodes that have been scanned, implement the [ISparkScanL
 sparkScan.AddListener(this);
 ```
 
-[ISparkScanListener.OnBarcodeScanned()](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list: [SparkScanSession.NewlyRecognizedBarcode](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode). Please note that this list only contains one barcode entry.
+[ISparkScanListener.OnBarcodeScanned()](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from [SparkScanSession.NewlyRecognizedBarcode](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode).
 
 ```csharp
 public void OnBarcodeScanned(SparkScan sparkScan, SparkScanSession session, IFrameData? data)
 {
-if (session.NewlyRecognizedBarcode.Count == 0)
-{
-return;
-}
+    Barcode? barcode = session.NewlyRecognizedBarcode;
+    if (barcode == null)
+    {
+        return;
+    }
 
-// Gather the recognized barcode
-Barcode barcode = session.NewlyRecognizedBarcode[0];
-
-// This method is invoked from a recognition internal thread.
-// Run the specified action in the UI thread to update the internal barcode list.
-RunOnUiThread(() =>
-{
-// Update the internal list and the UI with the barcode retrieved above
-this.latestBarcode = barcode;
-});
+    // This method is invoked from a recognition internal thread.
+    // Run the specified action in the UI thread to update the internal barcode list.
+    RunOnUiThread(() =>
+    {
+        // Update the internal list and the UI with the barcode retrieved above
+        this.latestBarcode = barcode;
+    });
 }
 ```
 
@@ -153,25 +151,20 @@ Alternatively to register [ISparkScanListener](https://docs.scandit.com/data-cap
 ```csharp
 sparkScan.BarcodeScanned += (object sender, SparkScanEventArgs args) =>
 {
-if (args.Session.NewlyRecognizedBarcode.Count == 0)
-{
-return;
-}
+    Barcode? barcode = args.Session.NewlyRecognizedBarcode;
+    if (barcode == null)
+    {
+        return;
+    }
 
-// Gather the recognized barcode
-Barcode barcode = args.Session.NewlyRecognizedBarcode[0];
-
-// This method is invoked from a recognition internal thread.
-// Run the specified action in the UI thread to update the internal barcode list.
-RunOnUiThread(() =>
-{
-// Update the internal list and the UI with the barcode retrieved above
-this.latestBarcode = barcode;
-
-// Emit sound and vibration feedback
-this.sparkScanView.EmitFeedback(new SparkScanViewSuccessFeedback());
-});
-}
+    // This method is invoked from a recognition internal thread.
+    // Run the specified action in the UI thread to update the internal barcode list.
+    RunOnUiThread(() =>
+    {
+        // Update the internal list and the UI with the barcode retrieved above
+        this.latestBarcode = barcode;
+    });
+};
 ```
 
 ## Scan Some Barcodes

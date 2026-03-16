@@ -49,21 +49,20 @@ settings.EnableSymbology(Symbology.Ean13Upca, true);
 Then you have to create the list of items that will be picked and quantity to be picked for each item.
 
 ```csharp
-ICollection<BarcodePickProduct> items = new HashSet<BarcodePickProduct>()
+ICollection<BarcodePickProduct> productsToPick = new List<BarcodePickProduct>()
 {
-    new BarcodePickProduct(
-        new BarcodePickProductIdentifier("9783598215438"),
-        new BarcodePickProductQuantityToPick(3),
-    new BarcodePickProduct(
-        new BarcodePickProductIdentifier("9783598215414"),
-        new BarcodePickProductQuantityToPick(3)
+    new BarcodePickProduct("9783598215438", 3),
+    new BarcodePickProduct("9783598215414", 3)
 };
 ```
 
-Create the mode with the previously created settings:
+Create a product provider that maps scanned barcodes to your product list, and then the mode with the previously created settings:
 
 ```csharp
-BarcodePick mode = new BarcodePick(settings);
+// 'this' must implement IBarcodePickAsyncMapperProductProviderCallback
+IBarcodePickProductProvider productProvider = new BarcodePickAsyncMapperProductProvider(productsToPick, callback: this);
+
+BarcodePick barcodePick = new BarcodePick(dataCaptureContext, settings, productProvider);
 ```
 
 ## Setup the `BarcodePickView`
@@ -90,7 +89,7 @@ BarcodePickViewSettings viewSettings = new BarcodePickViewSettings();
 Construct a new `BarcodePickView`. The `BarcodePickView` is automatically added to the provided parent view.
 
 ```csharp
-let BarcodePickView = BarcodePickView(parentView: view, context: context, BarcodePick: mode, settings: viewSettings)
+BarcodePickView barcodePickView = BarcodePickView.Create(parentView, dataCaptureContext, barcodePick, viewSettings);
 ```
 
 You can use a `BarcodePickView` from XAML in your MAUI application.
@@ -224,7 +223,7 @@ private void FinishButtonClicked(object? sender, EventArgs args)
 With everything configured, you can now start searching for items. This is done by calling `BarcodePickView.start()`.
 
 ```csharp
-BarcodePickView.start();
+barcodePickView.Start();
 ```
 
 This is the equivalent of pressing the Play button programmatically. It will start the search process, turn on the camera, and hide the item carousel.

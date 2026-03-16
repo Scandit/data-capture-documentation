@@ -26,7 +26,7 @@ To customize the appearance of an overlay you can implement a [ILabelCaptureBasi
 The method [BrushForLabel()](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [BrushForField()](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
 ```csharp
-public class BasicOverlayListener : Java.Lang.Object, ILabelCaptureBasicOverlayListener
+public class BasicOverlayListener : ILabelCaptureBasicOverlayListener
 {
     private readonly Context context;
 
@@ -103,7 +103,7 @@ dataCaptureView.AddOverlay(advancedOverlay);
 // Configure the advanced overlay with a listener that handles AR content creation and positioning
 advancedOverlay.Listener = new AdvancedOverlayListener(this);
 
-public class AdvancedOverlayListener : Java.Lang.Object, ILabelCaptureAdvancedOverlayListener
+public class AdvancedOverlayListener : ILabelCaptureAdvancedOverlayListener
 {
     private readonly Context context;
 
@@ -227,7 +227,7 @@ validationFlowOverlay.Listener = new ValidationFlowListener();
 When the user has verified that all fields are correctly captured and presses the finish button, the Validation Flow triggers a callback with the final results. To receive these results, implement the [ILabelCaptureValidationFlowListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-validation-flow-listener.html) interface:
 
 ```csharp
-public class ValidationFlowListener : Java.Lang.Object, ILabelCaptureValidationFlowListener
+public class ValidationFlowListener : ILabelCaptureValidationFlowListener
 {
     // This is called by the validation flow overlay when a label has been fully captured and validated
     public void OnValidationFlowLabelCaptured(IList<LabelField> fields)
@@ -248,6 +248,18 @@ public class ValidationFlowListener : Java.Lang.Object, ILabelCaptureValidationF
         }
 
         // Process the captured and validated data
+    }
+
+    // Called when the user manually submits a value for a field through the validation flow UI
+    public void OnManualInputSubmitted(LabelField field, string? oldValue, string newValue)
+    {
+        // Handle the manual input submission, e.g. for analytics
+    }
+
+    // Called when the validation flow results are updated (for both sync and async scanning)
+    public void OnValidationFlowResultUpdate(LabelResultUpdateType type, long asyncId, IList<LabelField> fields, IFrameData? frameData)
+    {
+        // Handle intermediate result updates during the validation flow
     }
 }
 ```

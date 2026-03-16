@@ -59,8 +59,8 @@ ICollection<BarcodeFindItem> items = new HashSet<BarcodeFindItem>()
 Create the mode with the previously created settings and set the items:
 
 ```csharp
-BarcodeFind mode = new BarcodeFind(settings);
-mode.SetItemList(items);
+BarcodeFind barcodeFind = new BarcodeFind(settings);
+barcodeFind.SetItemList(items);
 ```
 
 ## Setup the BarcodeFindView

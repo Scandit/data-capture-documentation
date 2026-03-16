@@ -49,7 +49,7 @@ Symbology.Ean13Upca
 settings.EnableSymbologies(symbologies);
 ```
 
-If you are not disabling barcode capture immediately after having scanned the first code, consider setting the [BarcodeCaptureSettings.CodeDuplicateFilter](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) to around 500 or even \-1 if you do not want codes to be scanned more than once.
+If you are not disabling barcode capture immediately after having scanned the first code, consider setting the [BarcodeCaptureSettings.CodeDuplicateFilter](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-capture-settings.html#property-scandit.datacapture.barcode.BarcodeCaptureSettings.CodeDuplicateFilter) to `TimeSpan.FromMilliseconds(500)` or even `CodeDuplicate.ReportDataAndSymbologyOnlyOnce` (equivalent to `TimeSpan.FromSeconds(-1)`) if you do not want codes to be scanned more than once.
 
 Next, create a [BarcodeCapture](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance with the settings initialized in the previous step:
 
@@ -66,8 +66,8 @@ First implement the [IBarcodeCaptureListener](https://docs.scandit.com/data-capt
 ```csharp
 public void OnBarcodeScanned(BarcodeCapture barcodeCapture, BarcodeCaptureSession session, IFrameData frameData)
 {
-IList<Barcode> barcodes = session?.NewlyRecognizedBarcode;
-// Do something with the barcodes
+Barcode? barcode = session.NewlyRecognizedBarcode;
+// Do something with the barcode
 }
 ```
 
@@ -82,8 +82,8 @@ Alternatively to register [IBarcodeCaptureListener](https://docs.scandit.com/dat
 ```csharp
 barcodeCapture.BarcodeScanned += (object sender, BarcodeCaptureEventArgs args) =>
 {
-IList<Barcode> barcodes = args.Session?.NewlyRecognizedBarcode;
-// Do something with the barcodes
+Barcode? barcode = args.Session.NewlyRecognizedBarcode;
+// Do something with the barcode
 }
 ```
 
@@ -137,7 +137,7 @@ camera?.SwitchToDesiredStateAsync(FrameSourceState.On);
 When using the built-in camera as frame source, you will typically want to display the camera preview on the screen together with UI elements that guide the user through the capturing process. To do that, add a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) to your view hierarchy:
 
 ```csharp
-DataCaptureView dataCaptureView = DataCaptureView.Create(this, dataCaptureContext);
+DataCaptureView dataCaptureView = DataCaptureView.Create(dataCaptureContext);
 SetContentView(dataCaptureView);
 ```
 

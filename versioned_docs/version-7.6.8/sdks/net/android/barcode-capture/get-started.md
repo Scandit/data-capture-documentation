@@ -39,12 +39,12 @@ For this tutorial, we will setup barcode scanning for a small list of different 
 BarcodeCaptureSettings settings = BarcodeCaptureSettings.Create();
 HashSet<Symbology> symbologies = new HashSet<Symbology>()
 {
-Symbology.Code128,
-Symbology.Code39,
-Symbology.Qr,
-Symbology.Ean8,
-Symbology.Upce,
-Symbology.Ean13Upca
+    Symbology.Code128,
+    Symbology.Code39,
+    Symbology.Qr,
+    Symbology.Ean8,
+    Symbology.Upce,
+    Symbology.Ean13Upca
 };
 settings.EnableSymbologies(symbologies);
 ```
@@ -66,8 +66,8 @@ First implement the [IBarcodeCaptureListener](https://docs.scandit.com/7.6/data-
 ```csharp
 public void OnBarcodeScanned(BarcodeCapture barcodeCapture, BarcodeCaptureSession session, IFrameData frameData)
 {
-IList<Barcode> barcodes = session?.NewlyRecognizedBarcode;
-// Do something with the barcodes
+    Barcode? barcode = session.NewlyRecognizedBarcode;
+    // Do something with the barcode
 }
 ```
 
@@ -82,9 +82,9 @@ Alternatively to register [IBarcodeCaptureListener](https://docs.scandit.com/7.6
 ```csharp
 barcodeCapture.BarcodeScanned += (object sender, BarcodeCaptureEventArgs args) =>
 {
-IList<Barcode> barcodes = args.Session?.NewlyRecognizedBarcode;
-// Do something with the barcodes
-}
+    Barcode? barcode = args.Session.NewlyRecognizedBarcode;
+    // Do something with the barcode
+};
 ```
 
 ### Rejecting Barcodes
@@ -162,18 +162,18 @@ You can configure your view in the code behind class. For example:
 ```csharp
 public partial class MainPage : ContentPage
 {
-public MainPage()
-{
-InitializeComponent();
+    public MainPage()
+    {
+        InitializeComponent();
 
-// Initialization of DataCaptureView happens on handler changed event.
-dataCaptureView.HandlerChanged += DataCaptureViewHandlerChanged;
-}
+        // Initialization of DataCaptureView happens on handler changed event.
+        dataCaptureView.HandlerChanged += DataCaptureViewHandlerChanged;
+    }
 
-private void DataCaptureViewHandlerChanged(object? sender, EventArgs e)
-{
-// Your dataCaptureView configuration goes here, e.g. add overlay
-}
+    private void DataCaptureViewHandlerChanged(object? sender, EventArgs e)
+    {
+        // Your dataCaptureView configuration goes here, e.g. add overlay
+    }
 }
 ```
 
