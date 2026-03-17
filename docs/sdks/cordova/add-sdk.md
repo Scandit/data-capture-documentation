@@ -132,6 +132,32 @@ cordova plugin remove <id of the plugin being updated>
 cordova plugin add <local path, id or GitHub repo url of the plugin being updated>
 ```
 
+### iOS Setup
+
+For iOS development, Cordova uses CocoaPods to manage native dependencies. You'll need to set up Scandit's private CocoaPods repository:
+
+**Important:** This project uses Scandit's private CocoaPods repository. First-time setup:
+
+```sh
+# Add Scandit's private CocoaPods repository (one-time setup)
+pod repo add scandit-private-specs https://github.com/Scandit/scandit-cocoapods-specs.git
+```
+
+After adding plugins, build your iOS project to install the CocoaPods dependencies:
+
+```sh
+cordova build ios
+```
+
+:::note
+As of March 2025, the public CocoaPods trunk repository is becoming read-only. Scandit has migrated to a private CocoaPods specs repository to ensure continued support and updates for iOS framework integrations. The repository is publicly accessible at https://github.com/Scandit/scandit-cocoapods-specs.
+
+**Troubleshooting**: If you encounter issues:
+- Verify the repo is added: `pod repo list | grep scandit-private-specs`
+- Update the repo: `pod repo update scandit-private-specs` 
+- For CI/CD, add the repo setup command before `pod install`
+:::
+
 ## Additional Information
 
 ### Android Configuration

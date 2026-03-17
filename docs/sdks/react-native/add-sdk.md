@@ -218,11 +218,29 @@ Navigate to your React Native project root directory and install the plugins usi
 
 ![Info file](./img/info-file.png)
 
-2. Then, install the iOS Cocoapods after installing the React Native `node_modules`:
+2. Then, install the iOS CocoaPods after installing the React Native `node_modules`.
 
-```sh
-cd ios && pod install && cd ..
-```
+   **Important:** This project uses Scandit's private CocoaPods repository. First-time setup:
+
+   ```sh
+   # Add Scandit's private CocoaPods repository (one-time setup)
+   pod repo add scandit-private-specs https://github.com/Scandit/scandit-cocoapods-specs.git
+   ```
+
+   Then, install the CocoaPods dependencies:
+
+   ```sh
+   cd ios && pod install && cd ..
+   ```
+
+   :::note
+   As of March 2025, the public CocoaPods trunk repository is becoming read-only. Scandit has migrated to a private CocoaPods specs repository to ensure continued support and updates for iOS framework integrations. The repository is publicly accessible at https://github.com/Scandit/scandit-cocoapods-specs.
+
+   **Troubleshooting**: If you encounter issues:
+   - Verify the repo is added: `pod repo list | grep scandit-private-specs`
+   - Update the repo: `pod repo update scandit-private-specs` 
+   - For CI/CD, add the repo setup command before `pod install`
+   :::
 
 ## Additional Information
 
