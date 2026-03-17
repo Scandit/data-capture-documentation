@@ -10,6 +10,17 @@ keywords:
   - ios
 ---
 
+## 7.6.9
+
+**Released**: March 17, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled
+* Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up
+
 ## 7.6.8
 
 **Released**: March 6, 2026

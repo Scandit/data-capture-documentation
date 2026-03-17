@@ -10,6 +10,16 @@ keywords:
   - web
 ---
 
+## 7.6.9
+
+**Released**: March 17, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled
+
 ## 7.6.8
 
 **Released**: March 6, 2026
