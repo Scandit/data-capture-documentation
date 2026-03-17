@@ -272,9 +272,17 @@ def update_file_cross_references(file_path: Path, old_version: str, new_version:
 
         # Skip release notes section headers (## X.Y.Z)
         if not re.match(r'^\s*##\s+\d+\.\d+\.\d+', line):
-            # Replace version paths
+            # Replace version paths (with trailing slash)
             line = line.replace(f'/{old_version}/', f'/{new_version}/')
+            # Replace version directory names (e.g. version-7.6.8)
             line = line.replace(f'version-{old_version}', f'version-{new_version}')
+            # Replace version string in all other contexts: path without trailing slash,
+            # string literals, comments (e.g. "/7.6.8", '7.6.8', // show 7.6.8)
+            line = re.sub(
+                rf'(?<![.\d]){re.escape(old_version)}(?![.\d])',
+                new_version,
+                line
+            )
 
         if line != original_line:
             changes += 1
@@ -295,6 +303,8 @@ def update_cross_references(old_version: str, new_version: str) -> None:
     - Release notes files: /7.6.5/ → /7.6.6/
     - Partial files: /7.6.5/ → /7.6.6/
     - Component files: /7.6.5/ → /7.6.6/
+    - Theme files (e.g. Xamarin version navbar): /7.6.5/ → /7.6.6/
+    - Partials in other versioned docs (e.g. Xamarin links): /7.6.5/ → /7.6.6/
     - Import statements: version-7.6.5 → version-7.6.6
 
     EXCLUDES: Release notes section headers (## 7.6.5)
@@ -308,6 +318,8 @@ def update_cross_references(old_version: str, new_version: str) -> None:
         "docs/partials/*.mdx",
         "src/components/HomePage/data/frameworkCardsArr.tsx",
         "src/components/**/*.tsx",
+        "src/theme/**/*.js",
+        "versioned_docs/**/partials/*.mdx",
         f"versioned_docs/version-{new_version}/**/*.md",
         f"versioned_docs/version-{new_version}/**/*.mdx",
     ]
