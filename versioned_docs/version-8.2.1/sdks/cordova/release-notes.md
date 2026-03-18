@@ -260,4 +260,4 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.8/sdks/cordova/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.9/sdks/cordova/release-notes)

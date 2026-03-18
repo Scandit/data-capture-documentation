@@ -319,9 +319,8 @@ def update_cross_references(old_version: str, new_version: str) -> None:
         "src/components/HomePage/data/frameworkCardsArr.tsx",
         "src/components/**/*.tsx",
         "src/theme/**/*.js",
-        "versioned_docs/**/partials/*.mdx",
-        f"versioned_docs/version-{new_version}/**/*.md",
-        f"versioned_docs/version-{new_version}/**/*.mdx",
+        "versioned_docs/**/*.md",
+        "versioned_docs/**/*.mdx",
     ]
 
     processed_files = set()
