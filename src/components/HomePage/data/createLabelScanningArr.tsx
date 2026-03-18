@@ -28,7 +28,7 @@ export function createLabelScanningArr(framework: string) {
 
   function buildLink(basePath: string): string {
     const path = getFrameworkPath(frameworkData);
-    // If path starts with a version (e.g., "/7.6.8/"), use it as-is
+    // If path starts with a version (e.g., "/7.6.9/"), use it as-is
     if (path && path.startsWith('/')) {
       return `${path}${basePath}`;
     }
