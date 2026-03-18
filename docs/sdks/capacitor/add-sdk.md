@@ -92,7 +92,18 @@ yarn add <path to scandit-capacitor-datacapture-id plugin>
 
 ### Update the project
 
-After adding the plugins, you’ll want to make sure they’re added to your project properly:
+After adding the plugins, you'll want to make sure they're added to your project properly.
+
+**For iOS, first set up Scandit's private CocoaPods repository:**
+
+**Important:** This project uses Scandit's private CocoaPods repository. First-time setup:
+
+```sh
+# Add Scandit's private CocoaPods repository (one-time setup)
+pod repo add scandit-private-specs https://github.com/Scandit/scandit-cocoapods-specs.git
+```
+
+Then sync your project:
 
 ```sh
 # iOS
@@ -102,6 +113,14 @@ npx cap sync
 npx cap update android
 npx cap sync
 ```
+
+:::note
+As of March 2025, the public CocoaPods trunk repository is becoming read-only. Scandit has migrated to a private CocoaPods specs repository to ensure continued support and updates for iOS framework integrations. The repository is publicly accessible at https://github.com/Scandit/scandit-cocoapods-specs.
+
+**Troubleshooting**: If you encounter issues:
+- Verify the repo is added: `pod repo list | grep scandit-private-specs`
+- Update the repo: `pod repo update scandit-private-specs`
+:::
 
 ## Additional Information
 
