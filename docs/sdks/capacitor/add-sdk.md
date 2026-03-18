@@ -119,8 +119,7 @@ As of March 2025, the public CocoaPods trunk repository is becoming read-only. S
 
 **Troubleshooting**: If you encounter issues:
 - Verify the repo is added: `pod repo list | grep scandit-private-specs`
-- Update the repo: `pod repo update scandit-private-specs` 
-- For CI/CD, add the repo setup command before `pod install`
+- Update the repo: `pod repo update scandit-private-specs`
 :::
 
 ## Additional Information

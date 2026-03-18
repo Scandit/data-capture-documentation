@@ -238,8 +238,7 @@ Navigate to your React Native project root directory and install the plugins usi
 
    **Troubleshooting**: If you encounter issues:
    - Verify the repo is added: `pod repo list | grep scandit-private-specs`
-   - Update the repo: `pod repo update scandit-private-specs` 
-   - For CI/CD, add the repo setup command before `pod install`
+   - Update the repo: `pod repo update scandit-private-specs`
    :::
 
 ## Additional Information
