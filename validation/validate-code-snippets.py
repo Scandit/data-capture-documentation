@@ -22,8 +22,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from android import (
-    _load_cache,
-    _save_cache,
+    load_cache,
+    save_cache,
     ensure_gradle_wrapper,
 )
 from base import CompileResult, Failure, LanguagePlugin, Snippet
@@ -93,8 +93,7 @@ def _restore_hidden_lines(content: str) -> str:
     return _HIDDEN_LINE.sub("", content)
 
 
-def _extract_snippets(path: Path, fence: re.Pattern) -> list[Snippet]:
-    text = path.read_text(encoding="utf-8")
+def _extract_snippets(text: str, path: Path, fence: re.Pattern) -> list[Snippet]:
     snippets = []
     for i, match in enumerate(fence.finditer(text)):
         content = _restore_hidden_lines(match.group(1).rstrip())
@@ -110,9 +109,8 @@ _IMPORT_RE = re.compile(r"""^import\s+\w+\s+from\s+['"](\.[^'"]+\.mdx?)['"];?\s*
 _IMPORT_EXCLUDE = {(REPO_ROOT / p).resolve() for p in _load_config().get("import_exclude", [])}
 
 
-def _resolve_imports(path: Path) -> list[Path]:
+def _resolve_imports(text: str, path: Path) -> list[Path]:
     """Return resolved paths for any MDX/MD files imported from *path*."""
-    text = path.read_text(encoding="utf-8")
     imported: list[Path] = []
     for m in _IMPORT_RE.finditer(text):
         rel = m.group(1)
@@ -132,11 +130,13 @@ def _collect_snippets(fence: re.Pattern) -> list[Snippet]:
             continue
         for path in sorted(docs_dir.rglob("*.md")) + sorted(docs_dir.rglob("*.mdx")):
             seen.add(path.resolve())
-            all_snippets.extend(_extract_snippets(path, fence))
-            for imported in _resolve_imports(path):
+            text = path.read_text(encoding="utf-8")
+            all_snippets.extend(_extract_snippets(text, path, fence))
+            for imported in _resolve_imports(text, path):
                 if imported not in seen:
                     seen.add(imported)
-                    all_snippets.extend(_extract_snippets(imported, fence))
+                    imported_text = imported.read_text(encoding="utf-8")
+                    all_snippets.extend(_extract_snippets(imported_text, imported, fence))
     return all_snippets
 
 
@@ -179,7 +179,7 @@ def _run_compile(
     plugin: LanguagePlugin, snippets: list[Snippet], sdk_version: str
 ) -> CompileResult:
     """Load cache, filter already-compiled snippets, compile the rest, save cache."""
-    cache = _load_cache(sdk_version, _cache_file_for(plugin))
+    cache = load_cache(sdk_version, _cache_file_for(plugin))
     cached_failures: list[Failure] = []
     to_compile: list[Snippet] = []
     preserved: dict = {}
@@ -204,7 +204,7 @@ def _run_compile(
         for snippet in to_compile:
             new_cache[snippet.hash] = failed_hashes.get(snippet.hash, [])
 
-    _save_cache(new_cache, sdk_version, _cache_file_for(plugin))
+    save_cache(new_cache, sdk_version, _cache_file_for(plugin))
     return CompileResult(failures=cached_failures + new_failures)
 
 
@@ -335,7 +335,7 @@ def main():
             _save_baseline(failed_entries, baseline_file)
             print(
                 f"Baseline saved: {len(failed_entries)} failing snippet(s) → "
-                f"{(BASELINES_DIR / f'baseline-{plugin.value}.json').relative_to(REPO_ROOT)}"
+                f"{baseline_file.relative_to(REPO_ROOT)}"
             )
         else:
             if baseline_file.exists():

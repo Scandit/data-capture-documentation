@@ -2,7 +2,6 @@
 Kotlin-specific validation plugin.
 """
 
-import os
 import re
 import shutil
 import subprocess
@@ -13,10 +12,10 @@ from android import (
     ANDROID_PROJECT_DIR,
     GENERATED_DIR,
     VALIDATION_BASE_KOTLIN,
-    _export_classpath,
-    _KOTLIN_ERROR_RE,
-    _split_imports,
-    _ELLIPSIS_LINE,
+    export_classpath,
+    find_compiler,
+    split_imports,
+    ELLIPSIS_LINE,
 )
 from base import CompileResult, Failure, LanguagePlugin, Snippet
 
@@ -25,6 +24,7 @@ from base import CompileResult, Failure, LanguagePlugin, Snippet
 # =============================================================================
 
 KOTLIN_CLASSES_DIR = ANDROID_PROJECT_DIR / "build" / "snippet-kotlin-classes"
+_KOTLIN_ERROR_RE = re.compile(r"([^\s:]+\.kt):(\d+):\d+:\s*error:\s*(.+)")
 
 # Matches a top-level Kotlin object declaration (column 0, optional visibility
 # modifier), e.g. `object BuildConfig {` or `private object Foo {`.
@@ -35,15 +35,6 @@ _COMPANION_OBJECT_DECL = re.compile(r"^companion\s+object")
 # =============================================================================
 # Kotlin compiler utilities
 # =============================================================================
-
-
-def _find_kotlinc() -> str:
-    kotlin_home = os.environ.get("KOTLIN_HOME")
-    if kotlin_home:
-        kotlinc = Path(kotlin_home) / "bin" / "kotlinc"
-        if kotlinc.exists():
-            return str(kotlinc)
-    return "kotlinc"
 
 
 def _extract_block(lines: list[str], start: int) -> tuple[str, int]:
@@ -105,8 +96,8 @@ class KotlinPlugin(LanguagePlugin):
         return "kotlin"
 
     def _generate_source(self, class_name: str, snippet: Snippet) -> str:
-        extra_imports, body = _split_imports(snippet.content)
-        body = _ELLIPSIS_LINE.sub("// ...", body)
+        extra_imports, body = split_imports(snippet.content)
+        body = ELLIPSIS_LINE.sub("// ...", body)
         top_level_objects, companion_objects, body = _split_object_blocks(body)
 
         extra_block = ("\n" + "\n".join(extra_imports)) if extra_imports else ""
@@ -150,8 +141,8 @@ class KotlinPlugin(LanguagePlugin):
 
     def compile(self, snippets: list[Snippet], sdk_version: str) -> CompileResult:
         """Compile all Kotlin snippets in a single kotlinc invocation."""
-        kotlinc = _find_kotlinc()
-        sdk_classpath = _export_classpath(sdk_version)
+        kotlinc = find_compiler("KOTLIN_HOME", "kotlinc")
+        sdk_classpath = export_classpath(sdk_version)
 
         KOTLIN_CLASSES_DIR.mkdir(parents=True, exist_ok=True)
 

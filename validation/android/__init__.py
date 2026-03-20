@@ -3,6 +3,7 @@ Shared Gradle infrastructure for all JVM language validation plugins.
 """
 
 import json
+import os
 import re
 import subprocess
 import sys
@@ -60,7 +61,7 @@ def ensure_gradle_wrapper():
 # =============================================================================
 
 
-def _export_classpath(sdk_version: str) -> str:
+def export_classpath(sdk_version: str) -> str:
     """Run the exportClasspath Gradle task and return the resolved classpath."""
     gradlew = str(ANDROID_PROJECT_DIR / "gradlew")
     r = subprocess.run(
@@ -80,10 +81,10 @@ def _export_classpath(sdk_version: str) -> str:
 # Snippet text utilities (used by language plugins during source generation)
 # =============================================================================
 
-_ELLIPSIS_LINE = re.compile(r"^\s*\.\.\.\s*$", re.MULTILINE)
+ELLIPSIS_LINE = re.compile(r"^\s*\.\.\.\s*$", re.MULTILINE)
 
 
-def _split_imports(content: str) -> tuple[list[str], str]:
+def split_imports(content: str) -> tuple[list[str], str]:
     """Peel off any `import …` lines the snippet itself contains.
     Returns (imports_list, remaining_content)."""
     imports: list[str] = []
@@ -98,7 +99,7 @@ def _split_imports(content: str) -> tuple[list[str], str]:
 # =============================================================================
 
 
-def _load_cache(sdk_version: str, cache_file: Path) -> dict:
+def load_cache(sdk_version: str, cache_file: Path) -> dict:
     try:
         data = json.loads(cache_file.read_text(encoding="utf-8"))
         if data.get("sdk_version") != sdk_version:
@@ -108,11 +109,18 @@ def _load_cache(sdk_version: str, cache_file: Path) -> dict:
         return {}
 
 
-def _save_cache(cache: dict, sdk_version: str, cache_file: Path):
+def save_cache(cache: dict, sdk_version: str, cache_file: Path):
     cache_file.parent.mkdir(parents=True, exist_ok=True)
     cache_file.write_text(
         json.dumps({"sdk_version": sdk_version, "entries": cache}), encoding="utf-8"
     )
 
 
-_KOTLIN_ERROR_RE = re.compile(r"([^\s:]+\.kt):(\d+):\d+:\s*error:\s*(.+)")
+def find_compiler(env_var: str, binary: str) -> str:
+    """Locate a JVM compiler binary via env var or PATH."""
+    home = os.environ.get(env_var)
+    if home:
+        path = Path(home) / "bin" / binary
+        if path.exists():
+            return str(path)
+    return binary

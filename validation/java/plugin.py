@@ -14,9 +14,10 @@ from android import (
     ANDROID_PROJECT_DIR,
     GENERATED_DIR,
     VALIDATION_BASE_JAVA,
-    _export_classpath,
-    _split_imports,
-    _ELLIPSIS_LINE,
+    export_classpath,
+    find_compiler,
+    split_imports,
+    ELLIPSIS_LINE,
 )
 from base import CompileResult, Failure, LanguagePlugin, Snippet
 
@@ -43,15 +44,6 @@ _ERROR_RE = re.compile(r"([^\s:]+\.java):(\d+):\s*error:\s*(.+)")
 # =============================================================================
 # Java compiler utilities
 # =============================================================================
-
-
-def _find_javac() -> str:
-    java_home = os.environ.get("JAVA_HOME")
-    if java_home:
-        javac = Path(java_home) / "bin" / "javac"
-        if javac.exists():
-            return str(javac)
-    return "javac"
 
 
 def _compile_file(javac: str, classpath: str, java_file: Path) -> list[str]:
@@ -97,8 +89,8 @@ class JavaPlugin(LanguagePlugin):
         return "java"
 
     def _generate_source(self, class_name: str, snippet: Snippet) -> str:
-        extra_imports, body = _split_imports(snippet.content)
-        body = _ELLIPSIS_LINE.sub("// ...", body)
+        extra_imports, body = split_imports(snippet.content)
+        body = ELLIPSIS_LINE.sub("// ...", body)
         body = _PUBLIC_LOCAL_CLASS.sub(r"\1\2", body)
 
         extra_block = ("\n" + "\n".join(extra_imports)) if extra_imports else ""
@@ -132,11 +124,15 @@ class JavaPlugin(LanguagePlugin):
 
     def compile(self, snippets: list[Snippet], sdk_version: str) -> CompileResult:
         """Compile each Java snippet in its own javac process, run in parallel."""
-        javac = _find_javac()
-        sdk_classpath = _export_classpath(sdk_version)
+        javac = find_compiler("JAVA_HOME", "javac")
+        sdk_classpath = export_classpath(sdk_version)
 
         JAVA_CLASSES_DIR.mkdir(parents=True, exist_ok=True)
-        _compile_file(javac, sdk_classpath, VALIDATION_BASE_JAVA)
+        base_errors = _compile_file(javac, sdk_classpath, VALIDATION_BASE_JAVA)
+        if base_errors:
+            raise RuntimeError(
+                f"ValidationBaseJava failed to compile:\n" + "\n".join(base_errors)
+            )
 
         full_classpath = sdk_classpath + os.pathsep + str(JAVA_CLASSES_DIR)
         failures: list[Failure] = []
