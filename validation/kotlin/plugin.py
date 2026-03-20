@@ -7,6 +7,7 @@ import re
 import shutil
 import subprocess
 from pathlib import Path
+from textwrap import indent
 
 from android import (
     ANDROID_PROJECT_DIR,
@@ -103,11 +104,6 @@ class KotlinPlugin(LanguagePlugin):
     def value(self) -> str:
         return "kotlin"
 
-    def _class_name(self, snippet: Snippet) -> str:
-        slug = re.sub(r"[^A-Za-z0-9]", "_", str(snippet.source_file))
-        slug = re.sub(r"_+", "_", slug).strip("_")
-        return f"Snippet_kotlin_{slug}_{snippet.index:03d}"
-
     def _generate_source(self, class_name: str, snippet: Snippet) -> str:
         extra_imports, body = _split_imports(snippet.content)
         body = _ELLIPSIS_LINE.sub("// ...", body)
@@ -121,13 +117,10 @@ class KotlinPlugin(LanguagePlugin):
         # Companion objects live inside the class but outside validate(), indented one level.
         companion_section = ""
         if companion_objects:
-            indented = "\n\n".join(
-                "\n".join(f"    {line}" for line in obj.split("\n"))
-                for obj in companion_objects
-            )
+            indented = "\n\n".join(indent(obj, "    ") for obj in companion_objects)
             companion_section = "\n" + indented + "\n"
 
-        indented_body = "\n".join(f"        {line}" for line in body.split("\n"))
+        indented_body = indent(body, "        ")
 
         return (
             f"package com.scandit.validation\n\n"

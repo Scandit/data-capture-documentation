@@ -275,8 +275,8 @@ def main():
 
     plugin = LANGUAGE_PLUGINS[args.language]
 
-    if (args.clean or args.baseline) and _cache_file_for(plugin).exists():
-        _cache_file_for(plugin).unlink()
+    if args.clean or args.baseline:
+        _cache_file_for(plugin).unlink(missing_ok=True)
         print("Cleaned snippet cache.")
 
     sdk_version = _read_sdk_version()

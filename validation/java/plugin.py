@@ -8,6 +8,7 @@ import shutil
 import subprocess
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
+from textwrap import indent
 
 from android import (
     ANDROID_PROJECT_DIR,
@@ -95,18 +96,13 @@ class JavaPlugin(LanguagePlugin):
     def value(self) -> str:
         return "java"
 
-    def _class_name(self, snippet: Snippet) -> str:
-        slug = re.sub(r"[^A-Za-z0-9]", "_", str(snippet.source_file))
-        slug = re.sub(r"_+", "_", slug).strip("_")
-        return f"Snippet_java_{slug}_{snippet.index:03d}"
-
     def _generate_source(self, class_name: str, snippet: Snippet) -> str:
         extra_imports, body = _split_imports(snippet.content)
         body = _ELLIPSIS_LINE.sub("// ...", body)
         body = _PUBLIC_LOCAL_CLASS.sub(r"\1\2", body)
 
         extra_block = ("\n" + "\n".join(extra_imports)) if extra_imports else ""
-        indented_body = "\n".join(f"        {line}" for line in body.split("\n"))
+        indented_body = indent(body, "        ")
 
         return (
             f"package com.scandit.validation;\n\n"

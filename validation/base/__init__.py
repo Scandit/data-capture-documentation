@@ -3,6 +3,7 @@ Base types shared across all language validation plugins.
 """
 
 import hashlib
+import re
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -44,6 +45,11 @@ class LanguagePlugin(ABC):
     @abstractmethod
     def value(self) -> str:
         """CLI argument value, e.g. 'java'."""
+
+    def _class_name(self, snippet: "Snippet") -> str:
+        slug = re.sub(r"[^A-Za-z0-9]", "_", str(snippet.source_file))
+        slug = re.sub(r"_+", "_", slug).strip("_")
+        return f"Snippet_{self.value}_{slug}_{snippet.index:03d}"
 
     @abstractmethod
     def generate_sources(self, snippets: list[Snippet]) -> None:
