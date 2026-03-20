@@ -59,6 +59,10 @@ _CURRENT_VERSION_RE = re.compile(
     r"current\s*:\s*\{[^}]*?label\s*:\s*['\"]([^'\"]+)['\"]",
     re.DOTALL,
 )
+_CURRENT_BANNER_RE = re.compile(
+    r"current\s*:\s*\{[^}]*?banner\s*:\s*['\"]([^'\"]+)['\"]",
+    re.DOTALL,
+)
 
 
 def _read_sdk_version() -> str:
@@ -68,7 +72,11 @@ def _read_sdk_version() -> str:
     if not m:
         print("ERROR: could not find current version label in docusaurus.config.ts")
         sys.exit(1)
-    return m.group(1)
+    version = m.group(1)
+    banner_m = _CURRENT_BANNER_RE.search(text)
+    if banner_m and banner_m.group(1) == "unreleased" and "-beta." not in version:
+        version += "-beta.1"
+    return version
 
 
 # =============================================================================
