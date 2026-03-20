@@ -1,13 +1,11 @@
 """
-Shared Android/Gradle infrastructure for all JVM language validation plugins.
+Shared Gradle infrastructure for all JVM language validation plugins.
 """
 
 import json
-import os
 import re
 import subprocess
 import sys
-import zipfile
 from pathlib import Path
 
 # =============================================================================
@@ -34,8 +32,6 @@ _VALIDATION_BASE_DIR = (
 )
 VALIDATION_BASE_KOTLIN = _VALIDATION_BASE_DIR / "ValidationBaseKotlin.kt"
 VALIDATION_BASE_JAVA = _VALIDATION_BASE_DIR / "ValidationBaseJava.java"
-
-_COMPILE_SDK = 35
 
 # =============================================================================
 # Gradle
@@ -64,60 +60,8 @@ def ensure_gradle_wrapper():
 # =============================================================================
 
 
-def _find_android_jar() -> str:
-    """Locate android.jar from the local Android SDK installation."""
-    candidates = []
-    for env_var in ("ANDROID_HOME", "ANDROID_SDK_ROOT"):
-        sdk_root = os.environ.get(env_var)
-        if sdk_root:
-            candidates.append(
-                Path(sdk_root) / "platforms" / f"android-{_COMPILE_SDK}" / "android.jar"
-            )
-    # Common macOS path when ANDROID_HOME is not set
-    candidates.append(
-        Path.home()
-        / "Library/Android/sdk/platforms"
-        / f"android-{_COMPILE_SDK}"
-        / "android.jar"
-    )
-    for candidate in candidates:
-        if candidate.exists():
-            return str(candidate)
-    print(
-        f"ERROR: android.jar for API {_COMPILE_SDK} not found.\n"
-        "       Set ANDROID_HOME to your Android SDK root."
-    )
-    sys.exit(1)
-
-
-def _resolve_classpath(raw_cp: str) -> str:
-    """Convert .aar entries to their embedded classes.jar; keep .jar entries as-is.
-    Also appends android.jar so the compiler can resolve Android framework types."""
-    extract_dir = ANDROID_PROJECT_DIR / "build" / "aar-classes"
-    extract_dir.mkdir(parents=True, exist_ok=True)
-
-    resolved = []
-    for entry in raw_cp.split(os.pathsep):
-        if not entry:
-            continue
-        p = Path(entry)
-        if p.suffix == ".aar":
-            jar_out = extract_dir / f"{p.stem}.jar"
-            if not jar_out.exists():
-                with zipfile.ZipFile(entry) as zf:
-                    if "classes.jar" in zf.namelist():
-                        jar_out.write_bytes(zf.read("classes.jar"))
-            if jar_out.exists():
-                resolved.append(str(jar_out))
-        else:
-            resolved.append(entry)
-
-    resolved.append(_find_android_jar())
-    return os.pathsep.join(resolved)
-
-
 def _export_classpath(sdk_version: str) -> str:
-    """Run the exportClasspath Gradle task and return the fully-resolved classpath."""
+    """Run the exportClasspath Gradle task and return the resolved classpath."""
     gradlew = str(ANDROID_PROJECT_DIR / "gradlew")
     r = subprocess.run(
         [gradlew, f"-PscanditSdkVersion={sdk_version}", ":app:exportClasspath", "-q"],
@@ -129,7 +73,7 @@ def _export_classpath(sdk_version: str) -> str:
         print("ERROR: could not export SDK classpath.")
         print(r.stderr)
         sys.exit(1)
-    return _resolve_classpath(CLASSPATH_FILE.read_text().strip())
+    return CLASSPATH_FILE.read_text().strip()
 
 
 # =============================================================================
@@ -172,5 +116,3 @@ def _save_cache(cache: dict, sdk_version: str, cache_file: Path):
 
 
 _KOTLIN_ERROR_RE = re.compile(r"([^\s:]+\.kt):(\d+):\d+:\s*error:\s*(.+)")
-
-
