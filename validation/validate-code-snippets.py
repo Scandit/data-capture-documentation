@@ -17,7 +17,7 @@ import re
 import sys
 from pathlib import Path
 
-# Add the validation/ directory to sys.path so language plugins can import _android
+# Add the validation/ directory to sys.path so language plugins can import android
 sys.path.insert(0, str(Path(__file__).parent))
 
 from android import (

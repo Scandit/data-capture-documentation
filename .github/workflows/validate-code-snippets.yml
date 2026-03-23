@@ -24,7 +24,7 @@ jobs:
           java-version: '17'
 
       - name: Set up Kotlin
-        uses: fwilhe2/setup-kotlin@main
+        uses: fwilhe2/setup-kotlin@v1
 
       - name: Set up Python
         uses: actions/setup-python@v5
