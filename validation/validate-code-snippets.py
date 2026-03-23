@@ -15,7 +15,6 @@ Usage:
 import json
 import re
 import sys
-import tomllib
 from pathlib import Path
 
 # Add the validation/ directory to sys.path so language plugins can import _android
@@ -42,13 +41,13 @@ DOCUSAURUS_CONFIG = REPO_ROOT / "docusaurus.config.ts"
 VALIDATION_DIR = Path(__file__).parent
 CACHE_DIR = VALIDATION_DIR / "cache"
 BASELINES_DIR = VALIDATION_DIR / "baselines"
-CONFIG_FILE = VALIDATION_DIR / "config.toml"
+CONFIG_FILE = VALIDATION_DIR / "config.json"
 
 LANGUAGE_PLUGINS = {p.value: p for p in [java_plugin, kotlin_plugin]}
 
 def _load_config() -> dict:
-    with CONFIG_FILE.open("rb") as f:
-        return tomllib.load(f)
+    with CONFIG_FILE.open("r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 # =============================================================================

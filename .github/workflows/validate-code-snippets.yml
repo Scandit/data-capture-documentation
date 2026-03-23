@@ -9,18 +9,24 @@ on:
       - main
 
 jobs:
-  validate-snippets:
+  validate-code-snippets:
     name: Validate Code Snippets
     runs-on: ubuntu-latest
-    container:
-      image: mingc/android-build-box:latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Configure Android SDK path
-        run: echo "sdk.dir=$ANDROID_HOME" > validation/android-test-bed/local.properties
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
       - name: Cache Gradle packages
         uses: actions/cache@v4
