@@ -30,6 +30,9 @@ This example describes the steps to add a view above each barcode showing its co
 First, create a new instance of `BarcodeBatchAdvancedOverlay` and add it to your `DataCaptureView`:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.batch.capture.BarcodeBatch
+# import com.scandit.datacapture.barcode.batch.ui.overlay.BarcodeBatchAdvancedOverlay
+# lateinit var barcodeBatch: BarcodeBatch
 val overlay = BarcodeBatchAdvancedOverlay.newInstance(barcodeBatch, dataCaptureView)
 ```
 

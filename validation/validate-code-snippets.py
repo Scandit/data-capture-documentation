@@ -295,22 +295,6 @@ def main():
     n_files = len({s.source_file for s in snippets})
     print(f"  {len(snippets)} snippets across {n_files} files")
 
-    # In normal mode, skip snippets already covered by the baseline entirely
-    # so we don't generate or compile them at all.
-    baseline_skipped = 0
-    if not args.baseline:
-        baseline = _load_baseline(BASELINES_DIR / f"baseline-{plugin.value}.json")
-        if baseline:
-            before = len(snippets)
-            snippets = [
-                s
-                for s in snippets
-                if (s.hash, str(s.source_file), s.index) not in baseline
-            ]
-            baseline_skipped = before - len(snippets)
-            if baseline_skipped:
-                print(f"  {baseline_skipped} skipped (baseline)")
-
     print(f"Generating {plugin.name} source files…")
 
     ensure_gradle_wrapper()
@@ -345,8 +329,32 @@ def main():
         returncode = 1 if result.failures else 0
         sys.exit(_report(snippets, result, plugin, returncode))
 
+    # Filter out baseline failures, but report if any baseline entries are now fixed.
+    baseline = _load_baseline(BASELINES_DIR / f"baseline-{plugin.value}.json")
+    baseline_ignored = 0
+    if baseline:
+        failed_keys = {
+            (f.snippet.hash, str(f.snippet.source_file), f.snippet.index)
+            for f in result.failures
+        }
+        still_baseline = failed_keys & baseline
+        fixed_in_baseline = baseline - failed_keys
+
+        if fixed_in_baseline:
+            print(f"\n{len(fixed_in_baseline)} baseline snippet(s) now compile successfully — consider updating the baseline:")
+            for h, file, idx in sorted(fixed_in_baseline, key=lambda e: (e[1], e[2])):
+                print(f"  {file}  (snippet {idx})")
+
+        baseline_ignored = len(still_baseline)
+        result = CompileResult(
+            failures=[
+                f for f in result.failures
+                if (f.snippet.hash, str(f.snippet.source_file), f.snippet.index) not in baseline
+            ]
+        )
+
     returncode = 1 if result.failures else 0
-    sys.exit(_report(snippets, result, plugin, returncode, baseline_skipped))
+    sys.exit(_report(snippets, result, plugin, returncode, baseline_ignored))
 
 
 if __name__ == "__main__":

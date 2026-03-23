@@ -93,16 +93,29 @@ tasks.register("exportClasspath") {
 // Dependencies
 // ---------------------------------------------------------------------------
 
+// Resolve Scandit AARs through a dedicated configuration so the artifact
+// transform (AAR → JAR) is applied *before* IntelliJ sees the dependencies.
+// This avoids IDE errors caused by IntelliJ trying to consume .aar directly.
+val scanditJars by configurations.creating {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+    attributes {
+        attribute(artifactType, "jar")
+    }
+}
+
 dependencies {
+    scanditJars("com.scandit.datacapture:core:$scanditSdkVersion")
+    scanditJars("com.scandit.datacapture:barcode:$scanditSdkVersion")
+    scanditJars("com.scandit.datacapture:id:$scanditSdkVersion")
+    scanditJars("com.scandit.datacapture:label:$scanditSdkVersion")
+    scanditJars("com.scandit.datacapture:parser:$scanditSdkVersion")
+
     // Android framework stubs via Robolectric — replaces local android.jar
     compileOnly("org.robolectric:android-all:14-robolectric-10818077")
 
-    // All SDK modules as compileOnly — we only need the types, not the runtime
-    compileOnly("com.scandit.datacapture:core:$scanditSdkVersion")
-    compileOnly("com.scandit.datacapture:barcode:$scanditSdkVersion")
-    compileOnly("com.scandit.datacapture:id:$scanditSdkVersion")
-    compileOnly("com.scandit.datacapture:label:$scanditSdkVersion")
-    compileOnly("com.scandit.datacapture:parser:$scanditSdkVersion")
+    // Scandit SDK — consumed as transformed JARs from the scanditJars configuration
+    compileOnly(files(scanditJars))
 
     compileOnly("androidx.annotation:annotation:1.9.1")
     compileOnly("androidx.appcompat:appcompat:1.7.1")
