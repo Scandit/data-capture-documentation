@@ -24,7 +24,7 @@ from base import CompileResult, Failure, LanguagePlugin, Snippet
 # =============================================================================
 
 KOTLIN_CLASSES_DIR = ANDROID_PROJECT_DIR / "build" / "snippet-kotlin-classes"
-_KOTLIN_ERROR_RE = re.compile(r"([^\s:]+\.kt):(\d+):\d+:\s*error:\s*(.+)")
+_KOTLIN_ERROR_RE = re.compile(r"(.+?\.kt):(\d+):\d+:\s*error:\s*(.+)")
 
 # Matches a top-level Kotlin object declaration (column 0, optional visibility
 # modifier), e.g. `object BuildConfig {` or `private object Foo {`.

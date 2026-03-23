@@ -13,7 +13,7 @@ from pathlib import Path
 # Paths and constants
 # =============================================================================
 
-ANDROID_PROJECT_DIR = Path(__file__).parent.parent / "android-test-bed"
+ANDROID_PROJECT_DIR = Path(__file__).parent / "test-bed"
 CLASSPATH_FILE = ANDROID_PROJECT_DIR / "app" / "build" / "compile-classpath.txt"
 
 # Both Java and Kotlin generated sources share the same directory
@@ -123,4 +123,10 @@ def find_compiler(env_var: str, binary: str) -> str:
         path = Path(home) / "bin" / binary
         if path.exists():
             return str(path)
-    return binary
+    import shutil
+
+    if shutil.which(binary):
+        return binary
+    raise FileNotFoundError(
+        f"'{binary}' not found. Set {env_var} or add {binary} to PATH."
+    )

@@ -39,7 +39,7 @@ import java.util.List;"""
 _PUBLIC_LOCAL_CLASS = re.compile(
     r"(?m)^(\s*)(?:public|private|protected)\s+(class|interface|enum)\b"
 )
-_ERROR_RE = re.compile(r"([^\s:]+\.java):(\d+):\s*error:\s*(.+)")
+_ERROR_RE = re.compile(r"(.+?\.java):(\d+):\s*error:\s*(.+)")
 
 # =============================================================================
 # Java compiler utilities

@@ -23,6 +23,9 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - name: Set up Kotlin
+        uses: fwilhe2/setup-kotlin@main
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -34,7 +37,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-${{ hashFiles('validation/android-test-bed/**/*.gradle*', 'validation/android-test-bed/**/gradle-wrapper.properties') }}
+          key: gradle-${{ hashFiles('validation/android/test-bed/**/*.gradle*', 'validation/android/test-bed/**/gradle-wrapper.properties') }}
 
       - name: Cache Kotlin snippet compilation results
         uses: actions/cache@v4
