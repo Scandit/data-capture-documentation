@@ -5,6 +5,95 @@ import * as dotenv from 'dotenv';
 import { version } from "react";
 dotenv.config();  // Load environment variables from .env file
 
+/**
+ * docusaurus-plugin-llms reads only docs/ and emits one entry per markdown file (v0.1.5 strips HTML only).
+ * For pages that only re-export a shared partial, keep the sdks/web copy and omit other SDK
+ * copies so llms-full.txt does not list duplicate stub pages (import + component only).
+ *
+ * Also ignore `docs/partials/**`: those MDX files are not routed as standalone pages (broken llms links).
+ *
+ * Measured `npm run build` (2026-03-24): 628 → 453 docs after dedup + partials; llms-full.txt dropped
+ * to ~1.90 MB (~291 KiB vs original 2.21 MB). docusaurus-plugin-llms@0.1.5 does not inline partial bodies.
+ */
+const llmsSharedPartialPageNames = [
+  "core-concepts.mdx",
+  "features-by-framework.mdx",
+  "barcode-symbologies.mdx",
+  "extension-codes.mdx",
+  "scanning-composite-codes.mdx",
+  "symbology-properties.mdx",
+  "system-requirements.mdx",
+  "ai-powered-barcode-scanning.md",
+  "single-scanning.md",
+  "batch-scanning.md",
+  "label-scanning.md",
+  "migrate-5-to-6.mdx",
+  "migrate-6-to-7.mdx",
+  "migrate-7-to-8.mdx",
+] as const;
+
+const llmsNonWebSdkRoots = [
+  "sdks/android",
+  "sdks/ios",
+  "sdks/react-native",
+  "sdks/flutter",
+  "sdks/cordova",
+  "sdks/capacitor",
+  "sdks/linux",
+  "sdks/net/ios",
+  "sdks/net/android",
+] as const;
+
+/** Entire platform omitted from llms export (deprecated / not needed for assistant context). */
+const llmsIgnoredSdkTrees = ["docs/sdks/titanium/**"] as const;
+
+/**
+ * Linux: omit MatrixScan family, ID, Parser, SparkScan, label-capture, barcode-selection from llms;
+ * keep barcode-capture/*, barcode-generator, overview, samples, release-notes (symbology top-level
+ * pages deduped to Web elsewhere).
+ */
+const llmsLinuxPartialIgnore = [
+  "docs/sdks/linux/matrixscan/**",
+  "docs/sdks/linux/matrixscan-ar/**",
+  "docs/sdks/linux/matrixscan-count/**",
+  "docs/sdks/linux/matrixscan-find/**",
+  "docs/sdks/linux/matrixscan-pick/**",
+  "docs/sdks/linux/id-capture/**",
+  "docs/sdks/linux/parser/**",
+  "docs/sdks/linux/sparkscan/**",
+  // Stubs only on Linux today (“Page Unavailable”); not real barcode docs.
+  "docs/sdks/linux/label-capture/**",
+  "docs/sdks/linux/barcode-selection/**",
+] as const;
+
+/** Top-level docs/*.mdx that only <Redirect /> to /sdks/web/... or hub pages — omit from llms (canonical is sdks/web). */
+const llmsRootRedirectOnlyDocs: string[] = [
+  "docs/barcode-scanning.mdx",
+  "docs/barcode-symbologies.mdx",
+  "docs/core-concepts.mdx",
+  "docs/extension-codes.mdx",
+  "docs/features-by-framework.mdx",
+  "docs/id-scanning.mdx",
+  "docs/migrate-5-to-6.mdx",
+  "docs/migrate-6-to-7.mdx",
+  "docs/migrate-7-to-8.mdx",
+  "docs/scanning-composite-codes.mdx",
+  "docs/symbology-properties.mdx",
+  "docs/system-requirements.mdx",
+];
+
+// Paths are matched by docusaurus-plugin-llms relative to siteDir (e.g. docs/...).
+const llmsIgnoreFiles: string[] = [
+  "docs/connector-guides/**",
+  // Partials are imported into real pages, not standalone doc routes; omit so llms.txt URLs work.
+  "docs/partials/**",
+  ...llmsRootRedirectOnlyDocs,
+  ...llmsIgnoredSdkTrees,
+  ...llmsLinuxPartialIgnore,
+  ...llmsNonWebSdkRoots.flatMap((root) =>
+    llmsSharedPartialPageNames.map((name) => `docs/${root}/${name}`),
+  ),
+];
 
 const config: Config = {
   title: "Scandit Developer Documentation",
@@ -232,7 +321,12 @@ const config: Config = {
     },
   ],
   "docusaurus-plugin-sass",
-  'docusaurus-plugin-llms',
+  [
+    "docusaurus-plugin-llms",
+    {
+      ignoreFiles: llmsIgnoreFiles,
+    },
+  ],
 ],
 
   presets: [
