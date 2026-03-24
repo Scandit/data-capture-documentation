@@ -1,7 +1,8 @@
 ---
-sidebar_position: 5
-pagination_prev: null
+description: "Label scanning enables you to capture and extract data from labels containing multiple barcodes and printed text, making it ideal for retail, logistics, and inventory management applications."
 toc_max_heading_level: 4
+pagination_prev: null
+sidebar_position: 5
 displayed_sidebar: netIosSidebar
 framework: net-ios
 keywords:
@@ -11,8 +12,6 @@ keywords:
 
 # Label Scanning
 
-import DocCardList from '@theme/DocCardList';
+import LabelScanning from '../../../partials/_label-scanning.mdx';
 
-Smart Label Capture is a feature that enables you to capture and extract information from complex labels with multiple fields, such as barcodes, text, and dates. It uses advanced machine learning technology to enhance scanning accuracy and speed.
-
-<DocCardList className="clean-grid-cards"/>
+<LabelScanning/>
