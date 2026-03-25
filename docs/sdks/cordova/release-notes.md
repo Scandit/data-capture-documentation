@@ -129,6 +129,17 @@ keywords:
 * Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates.
 * Fixed a Cordova iOS compilation error due to missing header files
 
+## 8.1.3
+
+**Released**: March 25, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled.
+* Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
+
 ## 8.1.2
 
 **Released**: March 9, 2026

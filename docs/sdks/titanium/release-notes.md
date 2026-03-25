@@ -47,6 +47,17 @@ No updates for this framework in this release.
 * Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 
+## 8.1.3
+
+**Released**: March 25, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled.
+* Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
+
 ## 8.1.2
 
 **Released**: March 9, 2026
