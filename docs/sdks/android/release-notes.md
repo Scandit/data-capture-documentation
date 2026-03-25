@@ -10,9 +10,9 @@ keywords:
   - android
 ---
 
-## 8.3.0-beta.1
+## 8.3.0
 
-**Released**: March 13, 2026
+**Released**: March 26, 2026
 
 ### New Features
 
@@ -25,7 +25,7 @@ keywords:
 
 * Added support for OCR scanning of the 2026 version of Victoria mobile driver licenses
 * Added IdCaptureSettings.anonymizeDefaultFields setting that controls whether the SDK applies default anonymization rules for specific document types and regions
-* US, EU/ Schengen + UK passports no longer fallback to MRZ only. Now, US, EU/ Schengen + UK passports must capture VIZ instead of returning MRZ values after the configurable timeout has elapsed.
+* US, EU/ Schengen + UK passports no longer fallback to MRZ only. Now, US, EU/ Schengen + UK passports must capture VIZ instead of returning MRZ values after the configurable timeout has elapsed. This applies to FullDocumentScanner or SingleSideScanner when both VIZ and MRZ zones are enabled.
 
 #### Smart Label Capture
 
@@ -36,6 +36,11 @@ keywords:
 * Deprecated outdated DataCaptureViewListener
 
 ### Performance Improvements
+
+#### Barcode
+
+* Improved EAN8 false positive filtering in strict mode
+* Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
 
 #### Core
 
@@ -49,15 +54,25 @@ keywords:
 
 ### Bug Fixes
 
+#### Barcode
+
+* Fixed an issue in BarcodeCount where the floating shutter button was not visible after setting shouldShowFloatingShutterButton to true.
+* Fixed a bug that was causing BarcodeFind to render barcodes filtered out by the Transformer as if they were valid targets.
+
 #### Id
 
 * Fixed support for UAE Esaad card
 * Sanitized name fields on ACT driver license to split FullName and populate first and last name properties
+* Added support for scanning MRZ from the back of Argentinian DN when using `FullDocumentScanner`
 
 #### Smart Label Capture
 
 * Fixed an issue in the `LabelCaptureValidationFlowOverlay` when using it with Jetpack Compose that caused focus loss when opening the keyboard
 * Added `LabelCaptureValidationFlowOverlay.ShouldHandleKeyboardInsetsInternally` for cases when customers don't want to follow official Android edge-to-edge and inset guidelines
+
+#### Core
+
+* Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled.
 
 ## 8.2.1
 

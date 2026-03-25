@@ -10,9 +10,9 @@ keywords:
   - flutter
 ---
 
-## 8.3.0-beta.1
+## 8.3.0
 
-**Released**: March 13, 2026
+**Released**: March 26, 2026
 
 ### New Features
 
@@ -39,13 +39,28 @@ keywords:
 * Added BarcodeCount-related APIs for BarcodeCountNotInListActionSettings, BarcodeCountToolbarSettings, BarcodeCountMappingFlowSettings, status mode and accessibility properties on BarcodeCountView, BarcodeCountStatusProvider with status items and callbacks, cluster support, capture list completion listener, and session update listener
 * Added moduleCountX and moduleCountY to Barcode API
 
+### Performance Improvements
+
+#### Barcode
+
+* Improved EAN8 false positive filtering in strict mode
+* Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
+
 ### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue in BarcodeCount where the floating shutter button was not visible after setting shouldShowFloatingShutterButton to true.
+* Fixed a bug that was causing BarcodeFind to render barcodes filtered out by the Transformer as if they were valid targets.
+* Fixed a stability issue that could cause a crash when tracked barcodes were removed or expired during a scanning session.
 
 #### Id
 
 * Fixed BarcodeDictionary anonymization setting for iOS and Web
 * Fixed support for UAE Esaad card
 * Sanitized name fields on ACT driver license to split FullName and populate first and last name properties
+* Added support for scanning MRZ from the back of Argentinian DN when using `FullDocumentScanner`
+* Fixed misplaced MRZ anonymization on FullFrame images.
 
 #### Smart Label Capture
 
@@ -55,6 +70,8 @@ keywords:
 #### Core
 
 * Fixed GetLastFrameData call in LabelCaptureListener not returning any frame
+* Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled.
+* Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
 
 ## 8.2.1
 

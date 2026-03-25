@@ -10,9 +10,9 @@ keywords:
   - ios
 ---
 
-## 8.3.0-beta.1
+## 8.3.0
 
-**Released**: March 13, 2026
+**Released**: March 26, 2026
 
 ### New Features
 
@@ -25,19 +25,37 @@ keywords:
 
 * Added support for OCR scanning of the 2026 version of Victoria mobile driver licenses
 * Added IdCaptureSettings.anonymizeDefaultFields setting that controls whether the SDK applies default anonymization rules for specific document types and regions
-* US, EU/ Schengen + UK passports no longer fallback to MRZ only. Now, US, EU/ Schengen + UK passports must capture VIZ instead of returning MRZ values after the configurable timeout has elapsed.
+* US, EU/ Schengen + UK passports no longer fallback to MRZ only. Now, US, EU/ Schengen + UK passports must capture VIZ instead of returning MRZ values after the configurable timeout has elapsed. This applies to FullDocumentScanner or SingleSideScanner when both VIZ and MRZ zones are enabled.
 
 #### Smart Label Capture
 
 * Fixed a rare race condition
 
+### Performance Improvements
+
+#### Barcode
+
+* Improved EAN8 false positive filtering in strict mode
+* Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
+
 ### Bug Fixes
+
+#### Barcode
+
+* Fixed a stability issue that could cause a crash when tracked barcodes were removed or expired during a scanning session.
 
 #### Id
 
 * Fixed BarcodeDictionary anonymization setting for iOS and Web
 * Fixed support for UAE Esaad card
 * Sanitized name fields on ACT driver license to split FullName and populate first and last name properties
+* Added support for scanning MRZ from the back of Argentinian DN when using `FullDocumentScanner`
+* Fixed misplaced MRZ anonymization on FullFrame images.
+
+#### Core
+
+* Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled.
+* Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
 
 ## 8.2.1
 

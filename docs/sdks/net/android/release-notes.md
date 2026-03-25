@@ -9,9 +9,9 @@ keywords:
   - netAndroid
 ---
 
-## 8.3.0-beta.1
+## 8.3.0
 
-**Released**: March 13, 2026
+**Released**: March 26, 2026
 
 ### New Features
 
@@ -34,12 +34,25 @@ keywords:
 * Introduced .NET 10 support on Scandit SDK for .NET
 * Added LabelCapture Validation Flow Manual input support for allowing developers to receive a callback when the users trigger the manual input, as well as placeholder support for the overlay’s text fields. Existing users of the Validation Flow must implement the new interface when upgrading to this version.
 
+### Performance Improvements
+
+#### Barcode
+
+* Improved EAN8 false positive filtering in strict mode
+* Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
+
 ### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue in BarcodeCount where the floating shutter button was not visible after setting shouldShowFloatingShutterButton to true.
+* Fixed a bug that was causing BarcodeFind to render barcodes filtered out by the Transformer as if they were valid targets.
 
 #### Id
 
 * Fixed support for UAE Esaad card
 * Sanitized name fields on ACT driver license to split FullName and populate first and last name properties
+* Added support for scanning MRZ from the back of Argentinian DN when using `FullDocumentScanner`
 
 #### Smart Label Capture
 
@@ -49,6 +62,7 @@ keywords:
 #### Core
 
 * Fixed issue where Camera now always returns a valid instance (backed by NoOpCamera when no native camera is available)
+* Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled.
 
 ## 8.2.1
 

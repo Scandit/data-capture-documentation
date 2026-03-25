@@ -10,9 +10,9 @@ keywords:
   - web
 ---
 
-## 8.3.0-beta.1
+## 8.3.0
 
-**Released**: March 13, 2026
+**Released**: March 26, 2026
 
 ### New Features
 
@@ -25,20 +25,34 @@ keywords:
 * Corrected Mexican Voter ID parent names to firstName and lastName
 * Added support for OCR scanning of the 2026 version of Victoria mobile driver licenses
 * Added IdCaptureSettings.anonymizeDefaultFields setting that controls whether the SDK applies default anonymization rules for specific document types and regions
-* US, EU/ Schengen + UK passports no longer fallback to MRZ only. Now, US, EU/ Schengen + UK passports must capture VIZ instead of returning MRZ values after the configurable timeout has elapsed.
+* US, EU/ Schengen + UK passports no longer fallback to MRZ only. Now, US, EU/ Schengen + UK passports must capture VIZ instead of returning MRZ values after the configurable timeout has elapsed. This applies to FullDocumentScanner or SingleSideScanner when both VIZ and MRZ zones are enabled.
 
 #### Smart Label Capture
 
 * Fixed a rare race condition
 * Fixed some issues with keyboard handling in Validation Flow
 
+### Performance Improvements
+
+#### Barcode
+
+* Improved EAN8 false positive filtering in strict mode
+* Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
+
 ### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue that caused the SparkScan camera to stop working when disposing the context and re-initializing it.
+* Fixed an issue causing the SparkScan toolbar buttons to be aligned incorrectly.
 
 #### Id
 
 * Fixed BarcodeDictionary anonymization setting for iOS and Web
 * Fixed support for UAE Esaad card
 * Sanitized name fields on ACT driver license to split FullName and populate first and last name properties
+* Added support for scanning MRZ from the back of Argentinian DN when using `FullDocumentScanner`
+* Fixed misplaced MRZ anonymization on FullFrame images.
 
 #### Smart Label Capture
 
@@ -46,6 +60,11 @@ keywords:
 * Enhanced the `LabelCaptureValidationFlowOverlay` to resume when the mode is enabled and Validation Flow is paused.
 * Fixed camera being incorrectly paused while cloud backup started in Validation Flow
 * Fixed runtime error that sometimes occurred during cloud backup request when screen was tapped in validation flow
+
+#### Core
+
+* Fixed sound feedback playback in multi-tab scenarios
+* Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled.
 
 ## 8.2.1
 
