@@ -141,6 +141,22 @@ keywords:
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
 
+## 8.1.3
+
+**Released**: March 25, 2026
+
+### New Features
+
+#### Barcode
+
+* Added `shouldShowShutterButton` flag in `BarcodeSequenceView` to hide the main shutter button and blinking indicator; a, Added `BarcodeSequenceView::startSequencing()` and `BarcodeSequenceView::stopSequencing()` to programmatically replicate the shutter button behavior; e, Exposed `BarcodeSequenceState` enum as well as `BarcodeSequenceViewUIListener::onStateChanged` to be notified when a state change occurs; exposed `BarcodeSequenceView::state` to retrieve the current state; exposed `BarcodeSequenceView::sequencedShelfModule` to retrieve the scanned shelf module.
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled.
+
 ## 8.1.2
 
 **Released**: March 9, 2026
