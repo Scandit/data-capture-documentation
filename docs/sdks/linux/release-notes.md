@@ -9,11 +9,16 @@ keywords:
   - linux
 ---
 
-## 8.3.0-beta.1
+## 8.3.0
 
-**Released**: March 13, 2026
+**Released**: March 26, 2026
 
-No updates for this framework in this release.
+### Performance Improvements
+
+#### Barcode
+
+* Improved EAN8 false positive filtering in strict mode
+* Fixed incorrect smart scan intention setup for the barcode scanner settings preset `SC_PRESET_SINGLE_CODE_HAND_HELD`
 
 ## 8.2.1
 
