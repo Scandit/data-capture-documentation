@@ -120,7 +120,7 @@ keywords:
 
 #### Barcode
 
-* Added `shouldShowShutterButton` flag in `BarcodeSequenceView` to hide the main shutter button and blinking indicator; a, Added `BarcodeSequenceView::startSequencing()` and `BarcodeSequenceView::stopSequencing()` to programmatically replicate the shutter button behavior; e, Exposed `BarcodeSequenceState` enum as well as `BarcodeSequenceViewUIListener::onStateChanged` to be notified when a state change occurs; exposed `BarcodeSequenceView::state` to retrieve the current state; exposed `BarcodeSequenceView::sequencedShelfModule` to retrieve the scanned shelf module.
+* Added `shouldShowShutterButton` flag in `BarcodeSequenceView` to hide the main shutter button and blinking indicator; added `BarcodeSequenceView::startSequencing()` and `BarcodeSequenceView::pauseSequencing()` to programmatically replicate the shutter button behavior; exposed `BarcodeSequenceState` enum as well as `BarcodeSequenceViewUIListener::onStateChanged` to be notified when a state change occurs; exposed `BarcodeSequenceView::state` to retrieve the current state; exposed `BarcodeSequenceView::sequencedShelfModule` to retrieve the scanned shelf module.
 
 ### Bug Fixes
 
