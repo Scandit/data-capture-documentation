@@ -234,7 +234,7 @@ Navigate to your React Native project root directory and install the plugins usi
    ```
 
    :::note
-   As of March 2025, the public CocoaPods trunk repository is becoming read-only. Scandit has migrated to a private CocoaPods specs repository to ensure continued support and updates for iOS framework integrations. The repository is publicly accessible at https://github.com/Scandit/scandit-cocoapods-specs.
+   The public CocoaPods trunk repository is becoming read-only. Scandit has migrated to a private CocoaPods specs repository to ensure continued support and updates for iOS framework integrations. The repository is publicly accessible at https://github.com/Scandit/scandit-cocoapods-specs.
 
    **Troubleshooting**: If you encounter issues:
    - Verify the repo is added: `pod repo list | grep scandit-private-specs`
