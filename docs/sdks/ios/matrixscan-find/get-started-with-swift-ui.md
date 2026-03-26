@@ -39,11 +39,6 @@ class MatrixScanFindViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        barcodeFindView.prepareSearching()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         barcodeFindView.startSearching()
     }
 
@@ -57,7 +52,8 @@ class MatrixScanFindViewController: UIViewController {
         // 1. Create data capture context
         // 2. Configure the Barcode Find Mode
         // 3. Setup the Barcode Find View
-        // 4. Register the UI delegate to handle finish button
+        // 4. Call prepareSearching() on the view
+        // 5. Register the UI delegate to handle finish button
     }
 }
 
@@ -143,26 +139,25 @@ struct MatrixScanFindView: UIViewRepresentable {
     }
 
     func makeUIView(context: Context) -> UIView {
+        let coordinator = context.coordinator
         let view = UIView()
 
-        // Set the callback on the coordinator
-        context.coordinator.onFinishButtonTapped = onFinishButtonTapped
-
-        // Set the items to find on the mode
-        context.coordinator.barcodeFind.setItemList(itemsToFind)
+        coordinator.onFinishButtonTapped = onFinishButtonTapped
+        coordinator.barcodeFind.setItemList(itemsToFind)
 
         // Configure Barcode Find view settings
         let viewSettings = BarcodeFindViewSettings()
         // ...
 
-        // Create the Barcode Find view
+        // Create the Barcode Find view (automatically added to parent view)
         let barcodeFindView = BarcodeFindView(parentView: view,
-                                              context: context.coordinator.dataCaptureContext,
-                                              barcodeFind: context.coordinator.barcodeFind,
+                                              context: coordinator.dataCaptureContext,
+                                              barcodeFind: coordinator.barcodeFind,
                                               settings: viewSettings)
-        barcodeFindView.uiDelegate = context.coordinator
+        barcodeFindView.uiDelegate = coordinator
+        coordinator.barcodeFindView = barcodeFindView
 
-        // Prepare and start searching
+        // Prepare then start searching
         barcodeFindView.prepareSearching()
         barcodeFindView.startSearching()
 
@@ -170,16 +165,18 @@ struct MatrixScanFindView: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
-        // Update callback
         context.coordinator.onFinishButtonTapped = onFinishButtonTapped
-
-        // Update items
         context.coordinator.barcodeFind.setItemList(itemsToFind)
+    }
+
+    static func dismantleUIView(_ uiView: UIView, coordinator: Coordinator) {
+        coordinator.barcodeFindView?.stopSearching()
     }
 
     class Coordinator: NSObject, BarcodeFindViewUIDelegate {
         let dataCaptureContext: DataCaptureContext
         let barcodeFind: BarcodeFind
+        var barcodeFindView: BarcodeFindView?
         var onFinishButtonTapped: ((Set<BarcodeFindItem>) -> Void)?
 
         override init() {
@@ -189,9 +186,9 @@ struct MatrixScanFindView: UIViewRepresentable {
 
             // Configure Barcode Find settings
             let settings = BarcodeFindSettings()
-            settings.set(symbology: .ean13UPCA, enabled: true)
+            // ...
 
-            // Create Barcode Find mode (items will be set later)
+            // Create Barcode Find mode (items will be set in makeUIView)
             barcodeFind = BarcodeFind(settings: settings)
 
             super.init()
@@ -199,9 +196,7 @@ struct MatrixScanFindView: UIViewRepresentable {
 
         func barcodeFindView(_ view: BarcodeFindView,
                             didTapFinishButton foundItems: Set<BarcodeFindItem>) {
-            DispatchQueue.main.async {
-                self.onFinishButtonTapped?(foundItems)
-            }
+            onFinishButtonTapped?(foundItems)
         }
     }
 }
@@ -213,15 +208,13 @@ You can then use this view directly in your SwiftUI app:
 struct ContentView: View {
     var body: some View {
         NavigationView {
-            VStack {
-                MatrixScanFindView(
-                    itemsToFind: itemsToFind,
-                    onFinishButtonTapped: { foundItems in
-                        // Handle found items
-                    }
-                )
-                .edgesIgnoringSafeArea(.all)
-            }
+            MatrixScanFindView(
+                itemsToFind: itemsToFind,
+                onFinishButtonTapped: { foundItems in
+                    // Handle found items
+                }
+            )
+            .navigationTitle("MatrixScan Find")
         }
     }
 }
