@@ -6,6 +6,9 @@ const FRAMEWORK_FALLBACK_PATH = {
   linux: "overview/",
 };
 const DEFAULT_FALLBACK_PATH = "core-concepts/";
+// Older versioned docs don't have core-concepts within framework pages
+const OLD_VERSION_FALLBACK_PATH = "add-sdk/";
+const OLD_VERSIONS = new Set(["7.6.9", "6.28.8"]);
 
 function getFallbackUrl(pathname) {
   // Matches optional version prefix + /sdks/ + framework (including compound like net/ios, xamarin/ios)
@@ -16,8 +19,10 @@ function getFallbackUrl(pathname) {
 
   const versionPrefix = match[1];
   const framework = match[2];
-  const fallbackPath =
-    FRAMEWORK_FALLBACK_PATH[framework] ?? DEFAULT_FALLBACK_PATH;
+  const version = versionPrefix.replace(/^\//, "");
+  const fallbackPath = OLD_VERSIONS.has(version)
+    ? OLD_VERSION_FALLBACK_PATH
+    : (FRAMEWORK_FALLBACK_PATH[framework] ?? DEFAULT_FALLBACK_PATH);
 
   // Avoid redirect loop if already on the fallback page
   const normalizedPathname = pathname.endsWith("/") ? pathname : pathname + "/";
