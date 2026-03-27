@@ -6,9 +6,9 @@ const FRAMEWORK_FALLBACK_PATH = {
   linux: "overview/",
 };
 const DEFAULT_FALLBACK_PATH = "core-concepts/";
-// Older versioned docs don't have core-concepts within framework pages
+// Older versioned docs (6.28.x and 7.6.x) don't have core-concepts within framework pages
 const OLD_VERSION_FALLBACK_PATH = "add-sdk/";
-const OLD_VERSIONS = new Set(["7.6.9", "6.28.8"]);
+const OLD_VERSION_PATTERN = /^(?:6\.28|7\.6)\./;
 
 function getFallbackUrl(pathname) {
   // Matches optional version prefix + /sdks/ + framework (including compound like net/ios, xamarin/ios)
@@ -20,7 +20,7 @@ function getFallbackUrl(pathname) {
   const versionPrefix = match[1];
   const framework = match[2];
   const version = versionPrefix.replace(/^\//, "");
-  const fallbackPath = OLD_VERSIONS.has(version)
+  const fallbackPath = OLD_VERSION_PATTERN.test(version)
     ? OLD_VERSION_FALLBACK_PATH
     : (FRAMEWORK_FALLBACK_PATH[framework] ?? DEFAULT_FALLBACK_PATH);
 
