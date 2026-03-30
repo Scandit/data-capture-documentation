@@ -22,6 +22,8 @@ import EnableSymbologies from '../../../partials/configure-symbologies/_enable-s
 The following code shows how to enable scanning Code 128 codes for Barcode Capture:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSettings
+# import com.scandit.datacapture.barcode.data.Symbology
 val settings = BarcodeCaptureSettings()
 settings.enableSymbology(Symbology.CODE128, true)
 ```
@@ -41,6 +43,8 @@ If you want to read codes that are shorter/longer than the specified default ran
 The below code shows how to change the active symbol count for Code 128 to read codes with 6, 7 and 8 symbols.
 
 ```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSettings
+# import com.scandit.datacapture.barcode.data.Symbology
 val settings = BarcodeCaptureSettings()
 val symbologySettings = settings.getSymbologySettings(Symbology.CODE128)
 val activeSymbolCounts = mutableSetOf<Short>(6, 7, 8)
@@ -62,6 +66,8 @@ When you enable a symbology as described above, only dark-on-bright codes are en
 The following code shows how to enable color-inverted reading for Code 128:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSettings
+# import com.scandit.datacapture.barcode.data.Symbology
 val settings = BarcodeCaptureSettings()
 val symbologySettings = settings.getSymbologySettings(Symbology.CODE128)
 symbologySettings.isColorInvertedEnabled = true
@@ -76,6 +82,10 @@ When enabling a checksum you have to make sure that the data of your codes conta
 You can enforce a specific checksum by setting it through `SymbologySettings.checksums`:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSettings
+# import com.scandit.datacapture.barcode.data.Checksum
+# import com.scandit.datacapture.barcode.data.Symbology
+# import java.util.EnumSet
 val settings = BarcodeCaptureSettings()
 val symbologySettings = settings.getSymbologySettings(Symbology.CODE39)
 symbologySettings.checksums = EnumSet.of(Checksum.MOD43)
@@ -92,6 +102,8 @@ To enable/disable a symbology extension, use `SymbologySettings.setExtensionEnab
 The following code shows how to enable the full ASCII extension for Code 39.
 
 ```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSettings
+# import com.scandit.datacapture.barcode.data.Symbology
 val settings = BarcodeCaptureSettings()
 val symbologySettings = settings.getSymbologySettings(Symbology.CODE39)
 symbologySettings.setExtensionEnabled("full_ascii", true)

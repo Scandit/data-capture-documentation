@@ -61,6 +61,8 @@ Barcode selection is orchestrated by the [BarcodeSelection](https://docs.scandit
 For this task, we setup barcode scanning for a small list of different barcode types, called [symbologies](../barcode-symbologies.mdx). The list of symbologies to enable is highly application specific. It is recommended that you **only enable the list of symbologies your application requires**.
 
 ```kotlin
+# import com.scandit.datacapture.barcode.data.Symbology
+# import com.scandit.datacapture.barcode.selection.capture.BarcodeSelectionSettings
 val settings = BarcodeSelectionSettings().apply {
     enableSymbology(Symbology.QR, true)
     enableSymbology(Symbology.EAN8, true)
@@ -96,6 +98,9 @@ If you want to automatically select a barcode when it is the only one on screen,
 Next, create a `BarcodeSelection` instance with the settings initialized in the previous step:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.selection.capture.BarcodeSelection
+# import com.scandit.datacapture.barcode.selection.capture.BarcodeSelectionSettings
+# val settings = BarcodeSelectionSettings()
 val barcodeSelection = BarcodeSelection.forDataCaptureContext(dataCaptureContext, settings)
 ```
 
@@ -106,6 +111,10 @@ To get informed whenever a new code has been recognized, add a [BarcodeSelection
 First implement the `BarcodeSelectionListener` interface. For example:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.selection.capture.BarcodeSelection
+# import com.scandit.datacapture.barcode.selection.capture.BarcodeSelectionListener
+# import com.scandit.datacapture.barcode.selection.capture.BarcodeSelectionSession
+# import com.scandit.datacapture.core.data.FrameData
 class MyBarcodeSelectionListener: BarcodeSelectionListener {
     override fun onObservationStarted(barcodeSelection: BarcodeSelection) {
         // Called when Barcode Selection is started.
@@ -142,6 +151,11 @@ class MyBarcodeSelectionListener: BarcodeSelectionListener {
 Then add the listener to the `BarcodeSelection` instance:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.selection.capture.BarcodeSelection
+# import com.scandit.datacapture.barcode.selection.capture.BarcodeSelectionListener
+# class MyBarcodeSelectionListener : BarcodeSelectionListener
+# lateinit var barcodeSelection: BarcodeSelection
+#
 barcodeSelection.addListener(MyBarcodeSelectionListener())
 ```
 
@@ -156,6 +170,8 @@ In Android, the user must explicitly grant permission for each app to access cam
 When using the built-in camera there are recommended settings for each capture mode. These must be used to achieve the best performance and user experience for the respective mode. The following couple of lines show how to get the recommended settings and create the camera from it:
 
 ```kotlin
+# import com.scandit.datacapture.barcode.selection.capture.BarcodeSelection
+# import com.scandit.datacapture.core.source.Camera
 val cameraSettings = BarcodeSelection.createRecommendedCameraSettings()
 
 // Depending on the use case further camera settings adjustments can be made here.
@@ -173,6 +189,7 @@ dataCaptureContext.setFrameSource(camera)
 The camera is off by default and must be turned on. This is done by calling [FrameSource.switchToDesiredState()](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#method-scandit.datacapture.core.IFrameSource.SwitchToDesiredStateAsync) with a value of [FrameSourceState.ON](https://docs.scandit.com/data-capture-sdk/android/core/api/frame-source.html#value-scandit.datacapture.core.FrameSourceState.On):
 
 ```kotlin
+# import com.scandit.datacapture.core.source.FrameSourceState
 camera?.switchToDesiredState(FrameSourceState.ON)
 ```
 
