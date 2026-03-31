@@ -77,7 +77,7 @@ import SwiftUI
 import ScanditBarcodeCapture
 
 struct ContentView: View {
-    let sparkScanViewController = SparkScanViewController()
+    @State private var sparkScanViewController = SparkScanViewController()
     
     var body: some View {
         VStack {
@@ -113,7 +113,7 @@ Or integrate it into more complex view hierarchies:
 
 ```swift
 struct MainView: View {
-    let sparkScanViewController = SparkScanViewController()
+    @State private var sparkScanViewController = SparkScanViewController()
     
     var body: some View {
         NavigationView {
