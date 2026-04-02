@@ -9,6 +9,12 @@ keywords:
   - flutter
 ---
 
+## 6.28.9
+
+**Released**: April 2, 2026
+
+No updates for this framework in this release.
+
 ## 6.28.8
 
 **Released**: March 3, 2026

@@ -363,4 +363,4 @@ In 7.0, we removed several APIs that were deprecated during the lifetime of 6.0.
 
 ## 6.28.8
 
-Find earlier versions in the [release notes section of version 6](/6.28.8/sdks/titanium/release-notes)
+Find earlier versions in the [release notes section of version 6](/6.28.9/sdks/titanium/release-notes)
