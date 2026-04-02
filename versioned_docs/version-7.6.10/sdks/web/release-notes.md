@@ -10,6 +10,16 @@ keywords:
   - web
 ---
 
+## 7.6.10
+
+**Released**: April 2, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed JavaScript syntax in the sdc-lib folder that was not correctly downleveled to respect the minimum browser version
+
 ## 7.6.9
 
 **Released**: March 17, 2026
