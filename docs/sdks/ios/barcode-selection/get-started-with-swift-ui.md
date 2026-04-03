@@ -124,83 +124,88 @@ struct ContentView: View {
 
 ## Alternative: Using UIViewRepresentable
 
-As an alternative to wrapping a `UIViewController`, you can implement the barcode selection functionality directly using `UIViewRepresentable`. This approach creates the capture view directly without an intermediate view controller:
+As an alternative to wrapping a `UIViewController`, you can implement the barcode selection functionality directly using `UIViewRepresentable`. This approach uses a `Coordinator` to hold the SDK objects, ensuring they are created once and persist across SwiftUI updates:
 
 ```swift
 import ScanditBarcodeCapture
 import SwiftUI
 
 struct BarcodeSelectionView: UIViewRepresentable {
-    private let dataCaptureContext: DataCaptureContext
-    private let barcodeSelection: BarcodeSelection
-    private let listener: Listener
+    let onBarcodeSelectionUpdated: ([Barcode]) -> Void
 
-    init(onBarcodeSelectionUpdated: @escaping ([Barcode]) -> Void) {
-        // Create the data capture context
-        DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-        dataCaptureContext = DataCaptureContext.shared
-
-        // Configure barcode selection settings
-        let settings = BarcodeSelectionSettings()
-        // ...
-
-        // Create barcode selection mode
-        barcodeSelection = BarcodeSelection(context: dataCaptureContext, settings: settings)
-
-        // Create the listener instance.
-        // IMPORTANT: You must assign the listener to a strong property
-        // to prevent it from being deallocated
-        listener = Listener(onBarcodeSelectionUpdated: onBarcodeSelectionUpdated)
-        barcodeSelection.addListener(listener)
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
     }
 
     func makeUIView(context: Context) -> UIView {
+        let coordinator = context.coordinator
+        coordinator.onSelectionUpdated = onBarcodeSelectionUpdated
+
         if let camera = Camera.default {
             // Apply recommended camera settings
             let cameraSettings = BarcodeSelection.recommendedCameraSettings
             camera.apply(cameraSettings)
 
             // Turn on the camera
-            dataCaptureContext.setFrameSource(camera)
+            coordinator.dataCaptureContext.setFrameSource(camera)
             camera.switch(toDesiredState: .on)
-        } else {
-            print("Camera not available")
+            coordinator.camera = camera
         }
 
         // Enable barcode selection
-        barcodeSelection.isEnabled = true
+        coordinator.barcodeSelection.isEnabled = true
 
         // Create the capture view
-        let captureView = DataCaptureView(context: dataCaptureContext, frame: .zero)
+        let captureView = DataCaptureView(context: coordinator.dataCaptureContext, frame: .zero)
         captureView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
         // Create the overlay
-        let overlay = BarcodeSelectionBasicOverlay(barcodeSelection: barcodeSelection,
-                                                   view: captureView,
-                                                   style: .frame)
-        captureView.addOverlay(overlay)
+        coordinator.overlay = BarcodeSelectionBasicOverlay(barcodeSelection: coordinator.barcodeSelection,
+                                                           view: captureView,
+                                                           style: .frame)
 
         return captureView
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
-        // Update the view if needed
-    }
-}
-
-private class Listener: NSObject, BarcodeSelectionListener {
-    private let onBarcodeSelectionUpdated: ([Barcode]) -> Void
-
-    init(onBarcodeSelectionUpdated: @escaping ([Barcode]) -> Void) {
-        self.onBarcodeSelectionUpdated = onBarcodeSelectionUpdated
+        context.coordinator.onSelectionUpdated = onBarcodeSelectionUpdated
     }
 
-    func barcodeSelection(_ barcodeSelection: BarcodeSelection,
-                          didUpdateSelection session: BarcodeSelectionSession,
-                          frameData: FrameData?) {
-        let selectedBarcodes = session.selectedBarcodes
-        DispatchQueue.main.async {
-            self.onBarcodeSelectionUpdated(selectedBarcodes)
+    static func dismantleUIView(_ uiView: UIView, coordinator: Coordinator) {
+        coordinator.barcodeSelection.isEnabled = false
+        coordinator.camera?.switch(toDesiredState: .off)
+    }
+
+    class Coordinator: NSObject, BarcodeSelectionListener {
+        let dataCaptureContext: DataCaptureContext
+        let barcodeSelection: BarcodeSelection
+        var overlay: BarcodeSelectionBasicOverlay?
+        var camera: Camera?
+        var onSelectionUpdated: (([Barcode]) -> Void)?
+
+        override init() {
+            // Create the data capture context
+            DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+            dataCaptureContext = DataCaptureContext.shared
+
+            // Configure barcode selection settings
+            let settings = BarcodeSelectionSettings()
+            // ...
+
+            // Create barcode selection mode
+            barcodeSelection = BarcodeSelection(context: dataCaptureContext, settings: settings)
+
+            super.init()
+            barcodeSelection.addListener(self)
+        }
+
+        nonisolated func barcodeSelection(_ barcodeSelection: BarcodeSelection,
+                                          didUpdateSelection session: BarcodeSelectionSession,
+                                          frameData: FrameData?) {
+            let selectedBarcodes = session.selectedBarcodes
+            DispatchQueue.main.async {
+                self.onSelectionUpdated?(selectedBarcodes)
+            }
         }
     }
 }
@@ -212,12 +217,10 @@ You can then use this view directly in your SwiftUI app:
 struct ContentView: View {
     var body: some View {
         NavigationView {
-            VStack {
-                BarcodeSelectionView { barcodes in
-                    // Handle the selected barcodes
-                }
-                .navigationTitle("Barcode Selection")
+            BarcodeSelectionView { barcodes in
+                // Handle the selected barcodes
             }
+            .navigationTitle("Barcode Selection")
         }
     }
 }

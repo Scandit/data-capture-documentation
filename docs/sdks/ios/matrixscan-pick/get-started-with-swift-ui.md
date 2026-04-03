@@ -145,56 +145,37 @@ struct ContentView: View {
 
 ## Alternative: Using UIViewRepresentable
 
-As an alternative to wrapping a `UIViewController`, you can implement the MatrixScan Pick functionality directly using `UIViewRepresentable`. This approach creates the pick view directly without an intermediate view controller:
+As an alternative to wrapping a `UIViewController`, you can implement the MatrixScan Pick functionality directly using `UIViewRepresentable`. This approach uses a `Coordinator` to hold the SDK objects, ensuring they are created once and persist across SwiftUI updates:
 
 ```swift
 import ScanditBarcodeCapture
 import SwiftUI
 
 struct MatrixScanPickView: UIViewRepresentable {
-    private let dataCaptureContext: DataCaptureContext
-    private let barcodePick: BarcodePick
-    private let productProviderDelegate: ProductProviderDelegate
-    private let uiDelegate: UIDelegate
+    let products: Set<BarcodePickProduct>
+    let productMapper: ([String]) async -> [BarcodePickProductProviderCallbackItem]
+    let onFinishButtonTapped: () -> Void
 
-    init(products: Set<BarcodePickProduct>,
-         productMapper: @escaping ([String]) async -> [BarcodePickProductProviderCallbackItem],
-         onFinishButtonTapped: @escaping () -> Void) {
-        // Create the data capture context
-        DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-        dataCaptureContext = DataCaptureContext.shared
-
-        // Configure Barcode Pick settings
-        let settings = BarcodePickSettings()
-        // ...
-
-        // Create product provider with delegate.
-        // IMPORTANT: You must assign the delegate to a strong property
-        // to prevent it from being deallocated
-        productProviderDelegate = ProductProviderDelegate(productMapper: productMapper)
-        let productProvider = BarcodePickAsyncMapperProductProvider(products: products,
-                                                                    providerDelegate: productProviderDelegate)
-
-        // Create Barcode Pick mode with product provider
-        barcodePick = BarcodePick(context: dataCaptureContext,
-                                  settings: settings,
-                                  productProvider: productProvider)
-
-        // Create the UI delegate
-        uiDelegate = UIDelegate(onFinishButtonTapped: onFinishButtonTapped)
+    func makeCoordinator() -> Coordinator {
+        Coordinator(products: products,
+                    productMapper: productMapper,
+                    onFinishButtonTapped: onFinishButtonTapped)
     }
 
-    func makeUIView(context: Context) -> UIView {
+    func makeUIView(context: Context) -> BarcodePickView {
+        let coordinator = context.coordinator
+
         // Configure Barcode Pick view settings
         let viewSettings = BarcodePickViewSettings()
         // ...
 
         // Create the Barcode Pick view
         let barcodePickView = BarcodePickView(frame: .zero,
-                                              context: dataCaptureContext,
-                                              barcodePick: barcodePick,
+                                              context: coordinator.dataCaptureContext,
+                                              barcodePick: coordinator.barcodePick,
                                               settings: viewSettings)
-        barcodePickView.uiDelegate = uiDelegate
+        barcodePickView.uiDelegate = coordinator
+        barcodePickView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
         // Start the pick view
         barcodePickView.start()
@@ -202,34 +183,62 @@ struct MatrixScanPickView: UIViewRepresentable {
         return barcodePickView
     }
 
-    func updateUIView(_ uiView: UIView, context: Context) {
-        // Update the view if needed
+    func updateUIView(_ uiView: BarcodePickView, context: Context) {
+        context.coordinator.onFinishButtonTapped = onFinishButtonTapped
+    }
+
+    static func dismantleUIView(_ uiView: BarcodePickView, coordinator: Coordinator) {
+        uiView.stop()
+    }
+
+    class Coordinator: NSObject, BarcodePickViewUIDelegate {
+        let dataCaptureContext: DataCaptureContext
+        let barcodePick: BarcodePick
+        private let providerDelegate: ProviderDelegate
+        var onFinishButtonTapped: () -> Void
+
+        init(products: Set<BarcodePickProduct>,
+             productMapper: @escaping ([String]) async -> [BarcodePickProductProviderCallbackItem],
+             onFinishButtonTapped: @escaping () -> Void) {
+            // Create the data capture context
+            DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+            dataCaptureContext = DataCaptureContext.shared
+            self.onFinishButtonTapped = onFinishButtonTapped
+
+            // Configure Barcode Pick settings
+            let settings = BarcodePickSettings()
+            // ...
+
+            // Create product provider
+            providerDelegate = ProviderDelegate(productMapper: productMapper)
+            let productProvider = BarcodePickAsyncMapperProductProvider(products: products,
+                                                                        providerDelegate: providerDelegate)
+
+            // Create Barcode Pick mode
+            barcodePick = BarcodePick(context: dataCaptureContext,
+                                      settings: settings,
+                                      productProvider: productProvider)
+            super.init()
+        }
+
+        func barcodePickViewDidTapFinishButton(_ view: BarcodePickView) {
+            onFinishButtonTapped()
+        }
     }
 }
 
-private class ProductProviderDelegate: NSObject, BarcodePickAsyncMapperProductProviderDelegate {
-    private let productMapper: ([String]) async -> [BarcodePickProductProviderCallbackItem]
+private class ProviderDelegate: NSObject, BarcodePickAsyncMapperProductProviderDelegate {
+    let productMapper: ([String]) async -> [BarcodePickProductProviderCallbackItem]
 
     init(productMapper: @escaping ([String]) async -> [BarcodePickProductProviderCallbackItem]) {
         self.productMapper = productMapper
         super.init()
     }
 
-    func mapItems(_ items: [String]) async -> [BarcodePickProductProviderCallbackItem] {
-        return await productMapper(items)
-    }
-}
-
-private class UIDelegate: NSObject, BarcodePickViewUIDelegate {
-    private let onFinishButtonTapped: () -> Void
-
-    init(onFinishButtonTapped: @escaping () -> Void) {
-        self.onFinishButtonTapped = onFinishButtonTapped
-    }
-
-    func barcodePickViewDidTapFinishButton(_ view: BarcodePickView) {
-        DispatchQueue.main.async {
-            self.onFinishButtonTapped()
+    func mapItems(_ items: [String], completionHandler: @escaping ([BarcodePickProductProviderCallbackItem]) -> Void) {
+        Task {
+            let result = await productMapper(items)
+            completionHandler(result)
         }
     }
 }
@@ -241,19 +250,18 @@ You can then use this view directly in your SwiftUI app:
 struct ContentView: View {
     var body: some View {
         NavigationView {
-            VStack {
-                MatrixScanPickView(
-                    products: productsToPick,
-                    productMapper: { items in
-                        // Map scanned items to products
-                        // ...
-                    },
-                    onFinishButtonTapped: {
-                        // Handle finish button tap
-                    },
-                )
-                .navigationTitle("MatrixScan Pick")
-            }
+            MatrixScanPickView(
+                products: productsToPick,
+                productMapper: { items in
+                    // Map scanned items to products
+                    // ...
+                    return []
+                },
+                onFinishButtonTapped: {
+                    // Handle finish button tap
+                }
+            )
+            .navigationTitle("MatrixScan Pick")
         }
     }
 }

@@ -124,80 +124,86 @@ struct ContentView: View {
 
 ## Alternative: Using UIViewRepresentable
 
-As an alternative to wrapping a `UIViewController`, you can implement the barcode scanning functionality directly using `UIViewRepresentable`. This approach creates the capture view directly without an intermediate view controller:
+As an alternative to wrapping a `UIViewController`, you can implement the barcode scanning functionality directly using `UIViewRepresentable`. This approach uses a `Coordinator` to hold the SDK objects, ensuring they are created once and persist across SwiftUI updates:
 
 ```swift
 import ScanditBarcodeCapture
 import SwiftUI
 
 struct BarcodeCaptureView: UIViewRepresentable {
-    private let dataCaptureContext: DataCaptureContext
-    private let barcodeCapture: BarcodeCapture
-    private let listener: Listener
+    let onBarcodeScanned: (Barcode) -> Void
 
-    init(onBarcodeScanned: @escaping (Barcode) -> Void) {
-        // Create the data capture context
-        DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-        dataCaptureContext = DataCaptureContext.shared
-
-        // Configure barcode capture settings
-        let settings = BarcodeCaptureSettings()
-        // ...
-
-        // Create barcode capture mode
-        barcodeCapture = BarcodeCapture(context: dataCaptureContext, settings: settings)
-
-        // Create the listener instance.
-        // IMPORTANT: You must assign the listener to a strong property
-        // to prevent it from being deallocated
-        listener = Listener(onBarcodeScanned: onBarcodeScanned)
-        barcodeCapture.addListener(listener)
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
     }
 
     func makeUIView(context: Context) -> UIView {
+        let coordinator = context.coordinator
+        coordinator.onBarcodeScanned = onBarcodeScanned
+
         if let camera = Camera.default {
             // Apply recommended camera settings
             let cameraSettings = BarcodeCapture.recommendedCameraSettings
             camera.apply(cameraSettings)
 
             // Turn on the camera
-            dataCaptureContext.setFrameSource(camera)
+            coordinator.dataCaptureContext.setFrameSource(camera)
             camera.switch(toDesiredState: .on)
-        } else {
-            print("Camera not available")
+            coordinator.camera = camera
         }
 
         // Enable barcode capture
-        barcodeCapture.isEnabled = true
+        coordinator.barcodeCapture.isEnabled = true
 
         // Create the capture view
-        let captureView = DataCaptureView(context: dataCaptureContext, frame: .zero)
+        let captureView = DataCaptureView(context: coordinator.dataCaptureContext, frame: .zero)
         captureView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
-        // Create the overlay if desired
-        // ...
+        // Create the overlay
+        coordinator.overlay = BarcodeCaptureOverlay(barcodeCapture: coordinator.barcodeCapture, view: captureView)
 
         return captureView
     }
 
     func updateUIView(_ uiView: UIView, context: Context) {
-        // Update the view if needed
-    }
-}
-
-private class Listener: NSObject, BarcodeCaptureListener {
-    private let onBarcodeScanned: (Barcode) -> Void
-
-    init(onBarcodeScanned: @escaping (Barcode) -> Void) {
-        self.onBarcodeScanned = onBarcodeScanned
+        context.coordinator.onBarcodeScanned = onBarcodeScanned
     }
 
-    func barcodeCapture(_ barcodeCapture: BarcodeCapture,
-                        didScanIn session: BarcodeCaptureSession,
-                        frameData: FrameData) {
-        guard let barcode = session.newlyRecognizedBarcode else { return }
-        DispatchQueue.main.async {
-            self.onBarcodeScanned(barcode)
+    static func dismantleUIView(_ uiView: UIView, coordinator: Coordinator) {
+        coordinator.barcodeCapture.isEnabled = false
+        coordinator.camera?.switch(toDesiredState: .off)
+    }
+
+    class Coordinator: NSObject, BarcodeCaptureListener {
+        let dataCaptureContext: DataCaptureContext
+        let barcodeCapture: BarcodeCapture
+        var overlay: BarcodeCaptureOverlay?
+        var camera: Camera?
+        var onBarcodeScanned: ((Barcode) -> Void)?
+
+        override init() {
+            // Create the data capture context
+            DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+            dataCaptureContext = DataCaptureContext.shared
+
+            // Configure barcode capture settings
+            let settings = BarcodeCaptureSettings()
+            // ...
+
+            // Create barcode capture mode
+            barcodeCapture = BarcodeCapture(context: dataCaptureContext, settings: settings)
+
+            super.init()
+            barcodeCapture.addListener(self)
+        }
+
+        nonisolated func barcodeCapture(_ barcodeCapture: BarcodeCapture,
+                                        didScanIn session: BarcodeCaptureSession,
+                                        frameData: FrameData) {
+            guard let barcode = session.newlyRecognizedBarcode else { return }
+            DispatchQueue.main.async {
+                self.onBarcodeScanned?(barcode)
+            }
         }
     }
 }
@@ -209,12 +215,10 @@ You can then use this view directly in your SwiftUI app:
 struct ContentView: View {
     var body: some View {
         NavigationView {
-            VStack {
-                BarcodeCaptureView { barcode in
-                    // Handle the scanned barcode
-                }
-                .navigationTitle("Barcode Scanner")
+            BarcodeCaptureView { barcode in
+                // Handle the scanned barcode
             }
+            .navigationTitle("Barcode Scanner")
         }
     }
 }

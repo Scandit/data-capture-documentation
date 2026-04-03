@@ -57,18 +57,18 @@ class MatrixScanArViewController: UIViewController {
 }
 
 extension MatrixScanArViewController: BarcodeArAnnotationProvider {
-    func annotation(for barcode: Barcode,
-                    completionHandler: @escaping ((any UIView & BarcodeArAnnotation)?) -> Void) {
+    func annotation(for barcode: Barcode) async -> (any UIView & BarcodeArAnnotation)? {
         // Provide annotations for barcodes
         // See the main Get Started guide
+        return nil
     }
 }
 
 extension MatrixScanArViewController: BarcodeArHighlightProvider {
-    func highlight(for barcode: Barcode,
-                   completionHandler: @escaping ((any UIView & BarcodeArHighlight)?) -> Void) {
+    func highlight(for barcode: Barcode) async -> (any UIView & BarcodeArHighlight)? {
         // Provide highlights for barcodes
         // See the main Get Started guide
+        return nil
     }
 }
 
@@ -134,36 +134,19 @@ struct ContentView: View {
 
 ## Alternative: Using UIViewRepresentable
 
-As an alternative to wrapping a `UIViewController`, you can implement the MatrixScan AR functionality directly using `UIViewRepresentable`. This approach creates the AR view directly without an intermediate view controller:
+As an alternative to wrapping a `UIViewController`, you can implement the MatrixScan AR functionality directly using `UIViewRepresentable`. This approach uses a `Coordinator` to hold the SDK objects and implement the highlight and annotation providers:
 
 ```swift
 import ScanditBarcodeCapture
 import SwiftUI
 
 struct MatrixScanArView: UIViewRepresentable {
-    private let dataCaptureContext: DataCaptureContext
-    private let barcodeAr: BarcodeAr
-    private let highlightProvider: HighlightProvider
-    private let annotationProvider: AnnotationProvider
-
-    init() {
-        // Create the data capture context
-        DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
-        dataCaptureContext = DataCaptureContext.shared
-
-        // Configure Barcode AR settings
-        let settings = BarcodeArSettings()
-        // ...
-
-        // Create Barcode AR mode
-        barcodeAr = BarcodeAr(context: dataCaptureContext, settings: settings)
-
-        // Create providers
-        highlightProvider = HighlightProvider()
-        annotationProvider = AnnotationProvider()
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
     }
 
     func makeUIView(context: Context) -> UIView {
+        let coordinator = context.coordinator
         let view = UIView()
 
         // Configure Barcode AR view settings
@@ -172,11 +155,12 @@ struct MatrixScanArView: UIViewRepresentable {
 
         // Create the Barcode AR view
         let barcodeArView = BarcodeArView(parentView: view,
-                                          barcodeAr: barcodeAr,
+                                          barcodeAr: coordinator.barcodeAr,
                                           settings: viewSettings,
                                           cameraSettings: nil)
-        barcodeArView.highlightProvider = highlightProvider
-        barcodeArView.annotationProvider = annotationProvider
+        barcodeArView.highlightProvider = coordinator
+        barcodeArView.annotationProvider = coordinator
+        coordinator.barcodeArView = barcodeArView
 
         // Start the AR view
         barcodeArView.start()
@@ -184,22 +168,41 @@ struct MatrixScanArView: UIViewRepresentable {
         return view
     }
 
-    func updateUIView(_ uiView: UIView, context: Context) {
-        // Update the view if needed
-    }
-}
+    func updateUIView(_ uiView: UIView, context: Context) {}
 
-private class HighlightProvider: NSObject, BarcodeArHighlightProvider {
-    func highlight(for barcode: Barcode) async -> (any UIView & BarcodeArHighlight)? {
-        // Provide highlights for barcodes
-        // ...
+    static func dismantleUIView(_ uiView: UIView, coordinator: Coordinator) {
+        coordinator.barcodeArView?.stop()
     }
-}
 
-private class AnnotationProvider: NSObject, BarcodeArAnnotationProvider {
-    func annotation(for barcode: Barcode) async -> (any UIView & BarcodeArAnnotation)? {
-        // Provide annotations for barcodes
-        // ...
+    class Coordinator: NSObject, BarcodeArHighlightProvider, BarcodeArAnnotationProvider {
+        let dataCaptureContext: DataCaptureContext
+        let barcodeAr: BarcodeAr
+        var barcodeArView: BarcodeArView?
+
+        override init() {
+            // Create the data capture context
+            DataCaptureContext.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+            dataCaptureContext = DataCaptureContext.shared
+
+            // Configure Barcode AR settings
+            let settings = BarcodeArSettings()
+            // ...
+
+            // Create Barcode AR mode
+            barcodeAr = BarcodeAr(context: dataCaptureContext, settings: settings)
+
+            super.init()
+        }
+
+        func highlight(for barcode: Barcode) async -> (any UIView & BarcodeArHighlight)? {
+            return BarcodeArRectangleHighlight(barcode: barcode)
+        }
+
+        func annotation(for barcode: Barcode) async -> (any UIView & BarcodeArAnnotation)? {
+            let annotation = BarcodeArStatusIconAnnotation(barcode: barcode)
+            annotation.text = "Example annotation"
+            return annotation
+        }
     }
 }
 ```
@@ -210,10 +213,8 @@ You can then use this view directly in your SwiftUI app:
 struct ContentView: View {
     var body: some View {
         NavigationView {
-            VStack {
-                MatrixScanArView()
-                    .navigationTitle("MatrixScan AR")
-            }
+            MatrixScanArView()
+                .navigationTitle("MatrixScan AR")
         }
     }
 }
