@@ -18,7 +18,7 @@ SparkScan is optimized by default for efficiency, accuracy, and a seamless user 
 
 Allowing the end user to control the scanner with hardware buttons can be useful if your users typically wear gloves. It can also improve ergonomics in some workflows.
 
-SparkScan offers a built-in API to let you do this via [`SDCSparkScanViewSettings.hardwareTriggerEnabled`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
+SparkScan offers a built-in API to let you do this via [`SDCSparkScanViewSettings.isHardwareTriggerEnabled`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
 
 ### Trigger Error State
 
@@ -33,7 +33,7 @@ You can customize:
     A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\<2s) could allow the user to scan again without having to interact with the app, just momentarily pausing the workflow to acknowledge that a “special” barcode has been scanned.
     :::
  
-* The color of the flashing screen upon scan. You can enable or disable the visual feedback via [`SDCSparkScanViewSettings.visualFeedbackEnabled`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.VisualFeedbackEnabled) and you can control the color via [`SDCSparkScanViewFeedback`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-feedback.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewFeedback).
+* The color of the flashing screen upon scan. You can enable or disable the visual feedback via [`SDCSparkScanViewSettings.isVisualFeedbackEnabled`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.VisualFeedbackEnabled) and you can control the color via [`SparkScanBarcodeFeedback`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-barcode-feedback.html#sparkscan-barcode-feedback).
 * The color of the highlight for the scanned barcode.
 * The feedback (sound, vibration).
 
@@ -79,6 +79,59 @@ Please refer to [SDCSparkScanView](https://docs.scandit.com/data-capture-sdk/ios
 
 import Customization from '../../../partials/advanced/_sparkscan-customization.mdx';
 
+#### State-Based Customization
+
+You can customize your UI dynamically by observing SparkScan view state changes. Implement [`SparkScanViewUIDelegate`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html?highlight=sparkscanviewuilisten#interface-scandit.datacapture.barcode.spark.ui.ISparkScanViewUiListener) to receive callbacks whenever the scanner transitions between states, then update your UI accordingly.
+
+The scanner can be in one of the following states:
+
+| State | Description |
+| --- | --- |
+| **Initial** | The view has just been created. |
+| **Idle** | The scanner is not running. Reached via `pauseScanning()`, closing the preview, or `triggerButtonCollapseTimeout`. |
+| **Inactive** | The scanner is not running. Reached after a scan or via `inactiveStateTimeout`. |
+| **Active** | The scanner is running. Reached via `startScanning()` or after a scan in continuous mode. |
+| **Error** | The scanner is not running. Reached after triggering `SparkScanBarcodeErrorFeedback`. |
+
+For example, if you have implemented a custom trigger button, you can dynamically update its label based on the current state:
+
+```swift
+sparkScanView.uiDelegate = self
+```
+
+Use the delegate callback to update the button label when the state changes:
+
+```swift
+private var sparkScanState: SparkScanViewState = .idle
+
+extension ViewController: SparkScanViewUIDelegate {
+    func sparkScanView(_ sparkScanView: SparkScanView, didChange viewState: SparkScanViewState) {
+        sparkScanState = viewState
+        switch viewState {
+        case .initial, .idle, .inactive:
+            triggerButton.setTitle("START SCANNING", for: .normal)
+        case .active:
+            triggerButton.setTitle("STOP SCANNING", for: .normal)
+        case .error:
+            triggerButton.setTitle("RESUME SCANNING", for: .normal)
+        }
+    }
+}
+```
+
+In your button's action handler, use the tracked state to decide whether to start or pause scanning:
+
+```swift
+@objc func triggerButtonTapped() {
+    switch sparkScanState {
+    case .initial, .idle, .inactive, .error:
+        sparkScanView.startScanning()
+    case .active:
+        sparkScanView.pauseScanning()
+    }
+}
+```
+
 <Customization/>
 
 ## Workflow Options
@@ -110,7 +163,7 @@ The scanning behavior determines how barcodes are scanned - one at a time or con
 | **Continuous scan** | Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.  |
 
 :::tip
-Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SDCSparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
+Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SDCSparkScanViewSettings.isHoldToScanEnabled`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
 :::
 
 ### Preview Behavior
