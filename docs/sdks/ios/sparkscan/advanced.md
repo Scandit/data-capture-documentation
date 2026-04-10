@@ -79,6 +79,59 @@ Please refer to [SDCSparkScanView](https://docs.scandit.com/data-capture-sdk/ios
 
 import Customization from '../../../partials/advanced/_sparkscan-customization.mdx';
 
+#### State-Based Customization
+
+You can customize your UI dynamically by observing SparkScan view state changes. Implement [`SparkScanViewUIDelegate`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html?highlight=sparkscanviewuilisten#interface-scandit.datacapture.barcode.spark.ui.ISparkScanViewUiListener) to receive callbacks whenever the scanner transitions between states, then update your UI accordingly.
+
+The scanner can be in one of the following states:
+
+| State | Description |
+| --- | --- |
+| **Initial** | The view has just been created. |
+| **Idle** | The scanner is not running. Reached via `pauseScanning()`, closing the preview, or `triggerButtonCollapseTimeout`. |
+| **Inactive** | The scanner is not running. Reached after a scan or via `inactiveStateTimeout`. |
+| **Active** | The scanner is running. Reached via `startScanning()` or after a scan in continuous mode. |
+| **Error** | The scanner is not running. Reached after triggering `SparkScanBarcodeErrorFeedback`. |
+
+For example, if you have implemented a custom trigger button, you can dynamically update its label based on the current state:
+
+```swift
+sparkScanView.uiDelegate = self
+```
+
+Use the delegate callback to update the button label when the state changes:
+
+```swift
+private var sparkScanState: SparkScanViewState = .idle
+
+extension ViewController: SparkScanViewUIDelegate {
+    func sparkScanView(_ sparkScanView: SparkScanView, didChange viewState: SparkScanViewState) {
+        sparkScanState = viewState
+        switch viewState {
+        case .initial, .idle, .inactive:
+            triggerButton.setTitle("START SCANNING", for: .normal)
+        case .active:
+            triggerButton.setTitle("STOP SCANNING", for: .normal)
+        case .error:
+            triggerButton.setTitle("RESUME SCANNING", for: .normal)
+        }
+    }
+}
+```
+
+In your button's action handler, use the tracked state to decide whether to start or pause scanning:
+
+```swift
+@objc func triggerButtonTapped() {
+    switch sparkScanState {
+    case .initial, .idle, .inactive, .error:
+        sparkScanView.startScanning()
+    case .active:
+        sparkScanView.pauseScanning()
+    }
+}
+```
+
 <Customization/>
 
 ## Workflow Options
