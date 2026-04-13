@@ -23,10 +23,7 @@
           "type": "category",
           "label": "Migration Guides",
           "collapsed": false,
-          "items": [
-            "migrate-6-to-7",
-            "migrate-5-to-6"
-          ]
+          "items": ["migrate-6-to-7", "migrate-5-to-6"]
         }
       ]
     }
@@ -40,10 +37,7 @@
         {
           "type": "category",
           "label": "Getting Started",
-          "items": [
-            "hosted/express/getting-started/installation",
-            "hosted/express/getting-started/rollout"
-          ]
+          "items": ["hosted/express/getting-started/installation", "hosted/express/getting-started/rollout"]
         },
         {
           "type": "category",
@@ -85,37 +79,6 @@
             "hosted/express/workflows/task-management",
             "hosted/express/workflows/markdown"
           ]
-        }
-      ]
-    }
-  ],
-  "boltSidebar": [
-    {
-      "type": "category",
-      "label": "ID Bolt",
-      "items": [
-        "hosted/id-bolt/overview",
-        "hosted/id-bolt/getting-started",
-        {
-          "type": "category",
-          "label": "API Reference",
-          "items": [
-            "hosted/id-bolt/api-overview",
-            "hosted/id-bolt/document-selection",
-            "hosted/id-bolt/validators",
-            "hosted/id-bolt/data-handling",
-            "hosted/id-bolt/callbacks",
-            "hosted/id-bolt/workflow",
-            "hosted/id-bolt/theming",
-            "hosted/id-bolt/text-overrides",
-            "hosted/id-bolt/advanced"
-          ]
-        },
-        "hosted/id-bolt/release-notes",
-        {
-          "type": "link",
-          "label": "Try the Demo",
-          "href": "https://id-travel.demos.scandit.com/"
         }
       ]
     }
@@ -171,10 +134,7 @@
             {
               "type": "category",
               "label": "Barcode Capture API",
-              "items": [
-                "sdks/ios/barcode-capture/get-started",
-                "sdks/ios/barcode-capture/get-started-with-swift-ui"
-              ]
+              "items": ["sdks/ios/barcode-capture/get-started", "sdks/ios/barcode-capture/get-started-with-swift-ui"]
             }
           ]
         },
@@ -257,16 +217,12 @@
             {
               "type": "category",
               "label": "Parser",
-              "items": [
-                "sdks/ios/parser/get-started"
-              ]
+              "items": ["sdks/ios/parser/get-started"]
             },
             {
               "type": "category",
               "label": "Barcode Generator",
-              "items": [
-                "sdks/ios/barcode-generator"
-              ]
+              "items": ["sdks/ios/barcode-generator"]
             }
           ]
         },
@@ -386,9 +342,7 @@
             {
               "type": "category",
               "label": "Barcode Capture API",
-              "items": [
-                "sdks/android/barcode-capture/get-started"
-              ]
+              "items": ["sdks/android/barcode-capture/get-started"]
             }
           ]
         },
@@ -413,10 +367,7 @@
             {
               "type": "category",
               "label": "MatrixScan AR",
-              "items": [
-                "sdks/android/matrixscan-ar/intro",
-                "sdks/android/matrixscan-ar/get-started"
-              ]
+              "items": ["sdks/android/matrixscan-ar/intro", "sdks/android/matrixscan-ar/get-started"]
             },
             {
               "type": "category",
@@ -465,16 +416,12 @@
             {
               "type": "category",
               "label": "Parser",
-              "items": [
-                "sdks/android/parser/get-started"
-              ]
+              "items": ["sdks/android/parser/get-started"]
             },
             {
               "type": "category",
               "label": "Barcode Generator",
-              "items": [
-                "sdks/android/barcode-generator"
-              ]
+              "items": ["sdks/android/barcode-generator"]
             }
           ]
         },
@@ -584,18 +531,12 @@
             {
               "type": "category",
               "label": "SparkScan",
-              "items": [
-                "sdks/web/sparkscan/intro",
-                "sdks/web/sparkscan/get-started",
-                "sdks/web/sparkscan/advanced"
-              ]
+              "items": ["sdks/web/sparkscan/intro", "sdks/web/sparkscan/get-started", "sdks/web/sparkscan/advanced"]
             },
             {
               "type": "category",
               "label": "Barcode Capture API",
-              "items": [
-                "sdks/web/barcode-capture/get-started"
-              ]
+              "items": ["sdks/web/barcode-capture/get-started"]
             }
           ]
         },
@@ -611,19 +552,12 @@
             {
               "type": "category",
               "label": "MatrixScan Batch",
-              "items": [
-                "sdks/web/matrixscan/intro",
-                "sdks/web/matrixscan/get-started",
-                "sdks/web/matrixscan/advanced"
-              ]
+              "items": ["sdks/web/matrixscan/intro", "sdks/web/matrixscan/get-started", "sdks/web/matrixscan/advanced"]
             },
             {
               "type": "category",
               "label": "MatrixScan AR",
-              "items": [
-                "sdks/web/matrixscan-ar/intro",
-                "sdks/web/matrixscan-ar/get-started"
-              ]
+              "items": ["sdks/web/matrixscan-ar/intro", "sdks/web/matrixscan-ar/get-started"]
             },
             {
               "type": "category",
@@ -654,9 +588,7 @@
             {
               "type": "category",
               "label": "Parser",
-              "items": [
-                "sdks/web/parser/get-started"
-              ]
+              "items": ["sdks/web/parser/get-started"]
             }
           ]
         },
@@ -775,9 +707,7 @@
             {
               "type": "category",
               "label": "Barcode Capture API",
-              "items": [
-                "sdks/cordova/barcode-capture/get-started"
-              ]
+              "items": ["sdks/cordova/barcode-capture/get-started"]
             }
           ]
         },
@@ -836,16 +766,12 @@
             {
               "type": "category",
               "label": "Parser",
-              "items": [
-                "sdks/cordova/parser/get-started"
-              ]
+              "items": ["sdks/cordova/parser/get-started"]
             },
             {
               "type": "category",
               "label": "Barcode Generator",
-              "items": [
-                "sdks/cordova/barcode-generator"
-              ]
+              "items": ["sdks/cordova/barcode-generator"]
             }
           ]
         },
@@ -959,9 +885,7 @@
             {
               "type": "category",
               "label": "Barcode Capture API",
-              "items": [
-                "sdks/react-native/barcode-capture/get-started"
-              ]
+              "items": ["sdks/react-native/barcode-capture/get-started"]
             }
           ]
         },
@@ -986,10 +910,7 @@
             {
               "type": "category",
               "label": "MatrixScan AR",
-              "items": [
-                "sdks/react-native/matrixscan-ar/intro",
-                "sdks/react-native/matrixscan-ar/get-started"
-              ]
+              "items": ["sdks/react-native/matrixscan-ar/intro", "sdks/react-native/matrixscan-ar/get-started"]
             },
             {
               "type": "category",
@@ -1038,16 +959,12 @@
             {
               "type": "category",
               "label": "Parser",
-              "items": [
-                "sdks/react-native/parser/get-started"
-              ]
+              "items": ["sdks/react-native/parser/get-started"]
             },
             {
               "type": "category",
               "label": "Barcode Generator",
-              "items": [
-                "sdks/react-native/barcode-generator"
-              ]
+              "items": ["sdks/react-native/barcode-generator"]
             }
           ]
         },
@@ -1166,9 +1083,7 @@
             {
               "type": "category",
               "label": "Barcode Capture API",
-              "items": [
-                "sdks/flutter/barcode-capture/get-started"
-              ]
+              "items": ["sdks/flutter/barcode-capture/get-started"]
             }
           ]
         },
@@ -1193,10 +1108,7 @@
             {
               "type": "category",
               "label": "MatrixScan AR",
-              "items": [
-                "sdks/flutter/matrixscan-ar/intro",
-                "sdks/flutter/matrixscan-ar/get-started"
-              ]
+              "items": ["sdks/flutter/matrixscan-ar/intro", "sdks/flutter/matrixscan-ar/get-started"]
             },
             {
               "type": "category",
@@ -1245,9 +1157,7 @@
             {
               "type": "category",
               "label": "Parser",
-              "items": [
-                "sdks/flutter/parser/get-started"
-              ]
+              "items": ["sdks/flutter/parser/get-started"]
             }
           ]
         },
@@ -1366,9 +1276,7 @@
             {
               "type": "category",
               "label": "Barcode Capture API",
-              "items": [
-                "sdks/capacitor/barcode-capture/get-started"
-              ]
+              "items": ["sdks/capacitor/barcode-capture/get-started"]
             }
           ]
         },
@@ -1427,16 +1335,12 @@
             {
               "type": "category",
               "label": "Parser",
-              "items": [
-                "sdks/capacitor/parser/get-started"
-              ]
+              "items": ["sdks/capacitor/parser/get-started"]
             },
             {
               "type": "category",
               "label": "Barcode Generator",
-              "items": [
-                "sdks/capacitor/barcode-generator"
-              ]
+              "items": ["sdks/capacitor/barcode-generator"]
             }
           ]
         },
@@ -1623,9 +1527,7 @@
             {
               "type": "category",
               "label": "Barcode Capture API",
-              "items": [
-                "sdks/xamarin/ios/barcode-capture/get-started"
-              ]
+              "items": ["sdks/xamarin/ios/barcode-capture/get-started"]
             }
           ]
         },
@@ -1666,9 +1568,7 @@
             {
               "type": "category",
               "label": "Parser",
-              "items": [
-                "sdks/xamarin/ios/parser/get-started"
-              ]
+              "items": ["sdks/xamarin/ios/parser/get-started"]
             }
           ]
         },
@@ -1782,9 +1682,7 @@
             {
               "type": "category",
               "label": "Barcode Capture API",
-              "items": [
-                "sdks/xamarin/android/barcode-capture/get-started"
-              ]
+              "items": ["sdks/xamarin/android/barcode-capture/get-started"]
             }
           ]
         },
@@ -1825,9 +1723,7 @@
             {
               "type": "category",
               "label": "Parser",
-              "items": [
-                "sdks/xamarin/android/parser/get-started"
-              ]
+              "items": ["sdks/xamarin/android/parser/get-started"]
             }
           ]
         },
@@ -1941,9 +1837,7 @@
             {
               "type": "category",
               "label": "Barcode Capture API",
-              "items": [
-                "sdks/xamarin/forms/barcode-capture/get-started"
-              ]
+              "items": ["sdks/xamarin/forms/barcode-capture/get-started"]
             }
           ]
         },
@@ -1984,9 +1878,7 @@
             {
               "type": "category",
               "label": "Parser",
-              "items": [
-                "sdks/xamarin/forms/parser/get-started"
-              ]
+              "items": ["sdks/xamarin/forms/parser/get-started"]
             }
           ]
         },
@@ -2100,9 +1992,7 @@
             {
               "type": "category",
               "label": "Barcode Capture API",
-              "items": [
-                "sdks/net/ios/barcode-capture/get-started"
-              ]
+              "items": ["sdks/net/ios/barcode-capture/get-started"]
             }
           ]
         },
@@ -2127,10 +2017,7 @@
             {
               "type": "category",
               "label": "MatrixScan AR",
-              "items": [
-                "sdks/net/ios/matrixscan-ar/intro",
-                "sdks/net/ios/matrixscan-ar/get-started"
-              ]
+              "items": ["sdks/net/ios/matrixscan-ar/intro", "sdks/net/ios/matrixscan-ar/get-started"]
             },
             {
               "type": "category",
@@ -2169,9 +2056,7 @@
             {
               "type": "category",
               "label": "Parser",
-              "items": [
-                "sdks/net/ios/parser/get-started"
-              ]
+              "items": ["sdks/net/ios/parser/get-started"]
             }
           ]
         },
@@ -2285,9 +2170,7 @@
             {
               "type": "category",
               "label": "Barcode Capture API",
-              "items": [
-                "sdks/net/android/barcode-capture/get-started"
-              ]
+              "items": ["sdks/net/android/barcode-capture/get-started"]
             }
           ]
         },
@@ -2312,10 +2195,7 @@
             {
               "type": "category",
               "label": "MatrixScan AR",
-              "items": [
-                "sdks/net/android/matrixscan-ar/intro",
-                "sdks/net/android/matrixscan-ar/get-started"
-              ]
+              "items": ["sdks/net/android/matrixscan-ar/intro", "sdks/net/android/matrixscan-ar/get-started"]
             },
             {
               "type": "category",
@@ -2354,9 +2234,7 @@
             {
               "type": "category",
               "label": "Parser",
-              "items": [
-                "sdks/net/android/parser/get-started"
-              ]
+              "items": ["sdks/net/android/parser/get-started"]
             }
           ]
         },
@@ -2425,11 +2303,7 @@
       "type": "category",
       "label": "Scandit SDK for C / Linux",
       "collapsed": false,
-      "items": [
-        "sdks/linux/overview",
-        "sdks/linux/add-sdk",
-        "sdks/linux/samples"
-      ]
+      "items": ["sdks/linux/overview", "sdks/linux/add-sdk", "sdks/linux/samples"]
     },
     {
       "type": "category",
@@ -2446,9 +2320,7 @@
       "type": "category",
       "label": "Barcode Generation",
       "collapsed": false,
-      "items": [
-        "sdks/linux/barcode-generator"
-      ]
+      "items": ["sdks/linux/barcode-generator"]
     },
     {
       "type": "category",
