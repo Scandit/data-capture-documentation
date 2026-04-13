@@ -24,18 +24,34 @@ The `workflow` option allows you to customize the user interface flow:
 const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   // other options...
   workflow: {
-    showWelcomeScreen: true,
-    showResultScreen: true
-  }
+    showWelcomeScreenDesktop: false,
+    showResultScreen: true,
+  },
 });
 ```
 
 ### Available Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `showWelcomeScreen` | `boolean` | `true` | When enabled: Always shown on both desktop and mobile. When disabled: Only shown on desktop to allow users to select between scanning on local device or handing over. |
-| `showResultScreen` | `boolean` | `true` | Determines whether to show the result screen at the end of the workflow. |
+| Option                     | Type      | Default | Description                                                                                                                                                          | Since |
+| -------------------------- | --------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `showWelcomeScreenDesktop` | `boolean` | `true`  | When disabled, skip the welcome screen and immediately opens the QR code page. Other scanning methods are reachable.                                                 | 2.3   |
+| `showWelcomeScreenMobile`  | `boolean` | `true`  | When disabled: skip the welcome screen and immediately opens the scanner page. Note that the image upload will not be available on mobile if this option is `false`. | 2.3   |
+| `showResultScreen`         | `boolean` | `true`  | Determines whether to show the result screen at the end of the workflow.                                                                                             | 1.3   |
+| `allowImageUpload`         | `boolean` | `false` | When enabled, let the user the possibility to upload an image or a PDF file from their device to be scanned.                                                         | 2.3   |
+
+### Deprecated options
+
+| Option                  | Type      | Default | Description                                                                                                                      | Since |
+| ----------------------- | --------- | ------- | -------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| ~~`showWelcomeScreen`~~ | `boolean` | `true`  | **Deprecated since 2.3**. <br/> When `false`, equivalent to `showWelcomeScreenDesktop=true` and `showWelcomeScreenMobile=false`. | 1.3   |
+
+### Image Upload
+
+Available since version `2.3`.
+
+When `allowImageUpload` is enabled, the user is offered an additional way of processing their document by uploading an image or a pdf from their device.
+
+This option is also compatible with the `FullDocumentScanner` option (see scanner options below): when the front side has been scanned and depending on the type of document, the back side may be required and must also be uploaded. If one of the sides is not recognized, the flow is completely restarted and the user must start over with different images or PDF files.
 
 ### Example:
 
