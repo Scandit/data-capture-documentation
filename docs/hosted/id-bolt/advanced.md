@@ -1,8 +1,8 @@
 ---
 description: "This page covers advanced features and options for ID Bolt that help optimize performance and handle specific use cases.                                                                                 "
 
-sidebar_label: 'Advanced Options'
-title: 'Advanced Options'
+sidebar_label: "Advanced Options"
+title: "Advanced Options"
 displayed_sidebar: boltSidebar
 toc_max_heading_level: 4
 framework: bolt
@@ -18,20 +18,22 @@ This page covers advanced features and options for ID Bolt that help optimize pe
 
 ## Keep Alive
 
+Available since version `1.6`.
+
 When running ID Bolt multiple times in sequence (such as scanning multiple passports in a batch), you can improve performance by keeping resources alive between sessions:
 
 ```ts
 // first scan
 let idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   // other options...
-  keepAliveForNextSession: true
+  keepAliveForNextSession: true,
 });
 
 // second scan
 
 idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   // other options...
-  keepAliveForNextSession: true
+  keepAliveForNextSession: true,
 });
 
 // more scans...
@@ -53,12 +55,14 @@ IdBoltSession.terminate();
 
 ## Browser Navigation Control
 
+Available since version `1.14`.
+
 By default, ID Bolt closes when users press the browser's back button. You can disable this behavior:
 
 ```ts
 const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   // other options...
-  disableCloseOnBrowserBack: true
+  disableCloseOnBrowserBack: true,
 });
 ```
 
@@ -72,12 +76,14 @@ When `disableCloseOnBrowserBack` is `false` (default), pressing the back button 
 
 ## Transaction Tracking
 
+Available since version `1.17`.
+
 You can associate ID Bolt sessions with your internal tracking identifiers for analytics and debugging:
 
 ```ts
 const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   // other options...
-  externalTransactionId: "booking-12345" // your booking, order, or transaction ID
+  externalTransactionId: "booking-12345", // your booking, order, or transaction ID
 });
 ```
 

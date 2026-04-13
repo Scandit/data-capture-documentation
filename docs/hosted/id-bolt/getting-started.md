@@ -1,8 +1,8 @@
 ---
 description: "ID Bolt can be integrated into your existing application or website with minimal time and effort, often ready to test in your staging environment in just one hour.                                                                        "
 
-sidebar_label: 'Getting Started'
-title: 'Getting Started'
+sidebar_label: "Getting Started"
+title: "Getting Started"
 hide_title: false
 displayed_sidebar: boltSidebar
 framework: bolt
@@ -47,14 +47,14 @@ A valid license key is required for ID Bolt. You can sign up for a free [test ac
 
 Your specific application needs and design define when the ID Bolt pop-up should opened. In this example, we open it after a click on a button present on the page:
 
-```javascript
+```ts
 import {
-	DocumentSelection,
-	IdBoltSession,
-	Region,
-	Passport,
-	ReturnDataMode,
-	Validators,
+  DocumentSelection,
+  IdBoltSession,
+  Region,
+  Passport,
+  ReturnDataMode,
+  Validators,
 } from "@scandit/web-id-bolt";
 
 const ID_BOLT_URL = "https://app.id-scanning.com";
@@ -62,28 +62,28 @@ const ID_BOLT_URL = "https://app.id-scanning.com";
 const LICENSE_KEY = "-- YOUR LICENSE KEY HERE --";
 
 async function startIdBolt() {
-	// define which documents are allowed to be scanned. More complex rules can be added.
-	const documentSelection = DocumentSelection.create({
-		accepted: [new Passport(Region.Any)],
-	});
-	// initialization of the ID Bolt session
-	const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
-		licenseKey: LICENSE_KEY,
-		documentSelection,
-		// define what data you expect in the onCompletion callback
-		returnDataMode: ReturnDataMode.Full,
-		// add validation rules on the scanned document
-		validation: [Validators.notExpired()],
-		locale: "en-US",
-		onCompletion: (result) => {
-			// the ID has been captured and validation was successful.
-		},
-		onCancellation: (reason) => {
-			// the ID Bolt pop-up has been closed by the user without finishing the scan process.
-		},
-	});
-	// open the pop-up
-	await idBoltSession.start();
+  // define which documents are allowed to be scanned. More complex rules can be added.
+  const documentSelection = DocumentSelection.create({
+    accepted: [new Passport(Region.Any)],
+  });
+  // initialization of the ID Bolt session
+  const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
+    licenseKey: LICENSE_KEY,
+    documentSelection,
+    // define what data you expect in the onCompletion callback
+    returnDataMode: ReturnDataMode.Full,
+    // add validation rules on the scanned document
+    validation: [Validators.notExpired()],
+    locale: "en-US",
+    onCompletion: (result) => {
+      // the ID has been captured and validation was successful.
+    },
+    onCancellation: (reason) => {
+      // the ID Bolt pop-up has been closed by the user without finishing the scan process.
+    },
+  });
+  // open the pop-up
+  await idBoltSession.start();
 }
 
 // open ID Bolt when some button is clicked

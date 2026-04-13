@@ -1,8 +1,8 @@
 ---
 description: "ID Bolt allows you to customize both the user interface flow and the scanning behavior to meet your specific requirements.                                                                                "
 
-sidebar_label: 'Workflow Options'
-title: 'Workflow & Scanner Options'
+sidebar_label: "Workflow Options"
+title: "Workflow & Scanner Options"
 displayed_sidebar: boltSidebar
 toc_max_heading_level: 4
 framework: bolt
@@ -61,12 +61,14 @@ Do not show the result screen:
 const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   // other options...
   workflow: {
-    showResultScreen: false
-  }
+    showResultScreen: false,
+  },
 });
 ```
 
 ## Scanner Options
+
+Available since version `1.2`.
 
 The scanner behavior can be customized using the `scanner` option. First, import the scanner classes:
 
@@ -74,7 +76,7 @@ The scanner behavior can be customized using the `scanner` option. First, import
 import {
   IdBoltSession,
   SingleSideScanner,
-  FullDocumentScanner
+  FullDocumentScanner,
 } from "@scandit/web-id-bolt";
 ```
 
@@ -92,9 +94,9 @@ const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
     true, // Enable reading of machine readable zone (MRZ) documents
     true, // Enable reading of visual inspection zone (VIZ) documents
     {
-      enforceVizForPassportScan: false // Optional: require VIZ for passport acceptance
-    }
-  )
+      enforceVizForPassportScan: false, // Optional: require VIZ for passport acceptance
+    },
+  ),
 });
 ```
 
@@ -106,19 +108,21 @@ You can enable or disable specific scanning modalities:
 // Only scan MRZ documents (like passports)
 const mrzOnlyScanner = new SingleSideScanner(
   false, // Disable barcode reading
-  true,  // Enable MRZ reading
-  false  // Disable VIZ reading
+  true, // Enable MRZ reading
+  false, // Disable VIZ reading
 );
 
 // Only scan barcode documents (like some driver licenses)
 const barcodeOnlyScanner = new SingleSideScanner(
-  true,  // Enable barcode reading
+  true, // Enable barcode reading
   false, // Disable MRZ reading
-  false  // Disable VIZ reading
+  false, // Disable VIZ reading
 );
 ```
 
 #### Passport VIZ Enforcement
+
+Available since version `1.17`.
 
 By default, passports can be accepted when only the Machine Readable Zone (MRZ) has been successfully scanned. You can require both MRZ and Visual Inspection Zone (VIZ) to be scanned:
 
@@ -128,8 +132,8 @@ const strictPassportScanner = new SingleSideScanner(
   true, // Enable MRZ reading
   true, // Enable VIZ reading
   {
-    enforceVizForPassportScan: true // Require both MRZ and VIZ for passports
-  }
+    enforceVizForPassportScan: true, // Require both MRZ and VIZ for passports
+  },
 );
 ```
 
@@ -142,12 +146,11 @@ The `FullDocumentScanner` forces the user to scan both the front and back sides 
 ```ts
 const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   // other options...
-  scanner: new FullDocumentScanner()
+  scanner: new FullDocumentScanner(),
 });
 ```
 
 The `FullDocumentScanner` automatically enables all scanning modalities (barcode, MRZ, and VIZ).
-
 
 ## Complete Workflow Configuration Example
 
@@ -157,19 +160,21 @@ Here's an example that combines various workflow and scanner options:
 const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   licenseKey: LICENSE_KEY,
   documentSelection: DocumentSelection.create({
-    accepted: [new Passport(Region.Any), new IdCard(Region.Any)]
+    accepted: [new Passport(Region.Any), new IdCard(Region.Any)],
   }),
   returnDataMode: ReturnDataMode.Full,
   // Configure scanner to only use MRZ reading (good for e.g. passports)
   scanner: new SingleSideScanner(false, true, false),
   // skip result screen
   workflow: {
-    showResultScreen: false
+    showResultScreen: false,
+    // also offer image upload possibility
+    allowImageUpload: true,
   },
   onCompletion: (result) => {
     console.log("Successfully completed workflow", result);
-  }
+  },
 });
 
 await idBoltSession.start();
-``` 
+```
