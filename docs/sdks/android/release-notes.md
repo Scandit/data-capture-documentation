@@ -10,6 +10,23 @@ keywords:
   - android
 ---
 
+## 8.3.1
+
+**Released**: April 14, 2026
+
+### New Features
+
+#### Barcode
+
+* Added `shouldShowShutterButton` flag in `BarcodeSequenceView` to hide the main shutter button and blinking indicator; added `BarcodeSequenceView::startSequencing()` and `BarcodeSequenceView::pauseSequencing()` to programmatically replicate the shutter button behavior; exposed `BarcodeSequenceState` enum as well as `BarcodeSequenceViewUIListener::onStateChanged` to be notified when a state change occurs; exposed `BarcodeSequenceView::state` to retrieve the current state; exposed `BarcodeSequenceView::sequencedShelfModule` to retrieve the scanned shelf module.
+
+### Bug Fixes
+
+#### Smart Label Capture
+
+* Fixed the validation flow to accept dates in more formats when manually entered
+* Fixed a race condition in the validation flow
+
 ## 8.3.0
 
 **Released**: March 26, 2026
