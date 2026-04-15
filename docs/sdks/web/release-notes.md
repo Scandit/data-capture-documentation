@@ -10,6 +10,25 @@ keywords:
   - web
 ---
 
+## 8.3.1
+
+**Released**: April 14, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Fixed an issue with browsers that don't support `createImageBitmap` in ID Capture
+
+#### Smart Label Capture
+
+* Fixed the validation flow to accept dates in more formats when manually entered
+* Fixed a race condition in the validation flow
+
+#### Core
+
+* Fixed JavaScript syntax in the sdc-lib folder that was not correctly downleveled to respect the minimum browser version
+
 ## 8.3.0
 
 **Released**: March 26, 2026

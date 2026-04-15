@@ -10,6 +10,17 @@ keywords:
   - react
 ---
 
+## 8.3.1
+
+**Released**: April 14, 2026
+
+### Bug Fixes
+
+#### Smart Label Capture
+
+* Fixed the validation flow to accept dates in more formats when manually entered
+* Fixed a race condition in the validation flow
+
 ## 8.3.0
 
 **Released**: March 26, 2026
