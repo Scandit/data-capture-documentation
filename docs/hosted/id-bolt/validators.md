@@ -1,8 +1,8 @@
 ---
 description: "Validators allow you to run checks on scanned ID documents to ensure they meet specific criteria. They are only run on documents that are on the list of accepted documents.                                                                      "
 
-sidebar_label: 'Validators'
-title: 'Validators'
+sidebar_label: "Validators"
+title: "Validators"
 displayed_sidebar: boltSidebar
 toc_max_heading_level: 4
 framework: bolt
@@ -23,10 +23,7 @@ Validators are specified in the `validation` array when creating an ID Bolt sess
 ```ts
 const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   // other options...
-  validation: [
-    Validators.notExpired(),
-    Validators.notExpiredIn({ months: 6 })
-  ]
+  validation: [Validators.notExpired(), Validators.notExpiredIn({ months: 6 })],
 });
 ```
 
@@ -39,16 +36,15 @@ You can use multiple validators together. All validators must pass for the scan 
 The `notExpired` validator checks that the scanned document has not expired. This validator will not pass if the expiration date could not be determined from the extracted data.
 
 ```ts
-validation: [Validators.notExpired()]
+validation: [Validators.notExpired()];
 ```
-
 
 ### Not Expired In
 
 The `notExpiredIn` validator checks that the scanned document will not expire within a specified time period. This validator will not pass if the expiration date could not be determined from the extracted data.
 
 ```ts
-validation: [Validators.notExpiredIn({ months: 12 })]
+validation: [Validators.notExpiredIn({ months: 12 })];
 ```
 
 The `notExpiredIn` validator accepts a `Duration` object with the following properties:
@@ -57,20 +53,20 @@ The `notExpiredIn` validator accepts a `Duration` object with the following prop
 type Duration = {
   days?: number;
   months?: number;
-}
+};
 ```
 
 You can specify either days, months, or both:
 
 ```ts
 // Document must not expire in the next 30 days
-Validators.notExpiredIn({ days: 30 })
+Validators.notExpiredIn({ days: 30 });
 
 // Document must not expire in the next 6 months
-Validators.notExpiredIn({ months: 6 })
+Validators.notExpiredIn({ months: 6 });
 
 // Document must not expire in the next 1 year and 30 days
-Validators.notExpiredIn({ months: 12, days: 30 })
+Validators.notExpiredIn({ months: 12, days: 30 });
 ```
 
 ### US Real ID
@@ -78,11 +74,10 @@ Validators.notExpiredIn({ months: 12, days: 30 })
 The `US.isRealID` validator checks that the scanned driver license is compliant with the REAL ID Act defined by the American Association of Motor Vehicle Administrators (AAMVA). This validator will not pass if the scanned document is not an AAMVA document.
 
 ```ts
-validation: [Validators.US.isRealID()]
+validation: [Validators.US.isRealID()];
 ```
 
 A REAL ID compliant license has a star marking in the upper portion of the card.
-
 
 ## Combining Validators
 
@@ -94,21 +89,15 @@ Check that a supplied drivers license is both RealID-compliant as well as not ex
 
 ```ts
 const documentSelection = DocumentSelection.create({
-  accepted: [
-    new DriverLicense(Region.USA)
-  ]
+  accepted: [new DriverLicense(Region.USA)],
 });
 
 const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   documentSelection,
-  validation: [
-    Validators.notExpired(),
-    Validators.US.isRealID()
-  ],
+  validation: [Validators.notExpired(), Validators.US.isRealID()],
   // other options...
 });
 ```
-
 
 ## Custom Validators
 
@@ -120,7 +109,7 @@ An external validator is a function that takes a `ValidatorCapturedId` object an
 
 ```ts
 type ExternalValidatorFunction = (
-  capturedId: ValidatorCapturedId
+  capturedId: ValidatorCapturedId,
 ) => ExternalValidatorResult | Promise<ExternalValidatorResult>;
 ```
 
@@ -129,18 +118,20 @@ type ExternalValidatorFunction = (
 The external validator must return an `ExternalValidatorResult` with the following structure:
 
 ```ts
-export type ExternalValidatorResult = {
-    type: "external";
-    name: string;
-    valid: true;
-} | {
-    type: "external";
-    name: string;
-    valid: false;
-    details: {
+export type ExternalValidatorResult =
+  | {
+      type: "external";
+      name: string;
+      valid: true;
+    }
+  | {
+      type: "external";
+      name: string;
+      valid: false;
+      details: {
         message?: string;
+      };
     };
-};
 ```
 
 - **`type`**: Always set to `"external"` to identify this as an external validator result
@@ -155,7 +146,7 @@ Here's an example validator that ensures the document's issuing country matches 
 ```ts
 function countryMatchValidator(capturedId: ValidatorCapturedId): ExternalValidatorResult {
   const { issuingCountry, nationality } = capturedId;
-  
+
   // Check if both fields are present
   if (!issuingCountry || !nationality) {
     return {
@@ -163,17 +154,17 @@ function countryMatchValidator(capturedId: ValidatorCapturedId): ExternalValidat
       name: "country_verification",
       valid: false,
       details: {
-        message: "Document issuing country and nationality information are required"
-      }
+        message: "Document issuing country and nationality information are required",
+      },
     };
   }
-  
+
   // Check if they match
   if (issuingCountry === nationality) {
     return {
       type: "external",
       name: "country_verification",
-      valid: true
+      valid: true,
     };
   } else {
     return {
@@ -181,18 +172,15 @@ function countryMatchValidator(capturedId: ValidatorCapturedId): ExternalValidat
       name: "country_verification",
       valid: false,
       details: {
-        message: `Document issuing country (${issuingCountry}) does not match nationality (${nationality})`
-      }
+        message: `Document issuing country (${issuingCountry}) does not match nationality (${nationality})`,
+      },
     };
   }
 }
 
 // Use the country matching validator
 const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
-  validation: [
-    Validators.notExpired(),
-    countryMatchValidator
-  ],
+  validation: [Validators.notExpired(), countryMatchValidator],
   // other options...
 });
 ```
@@ -203,27 +191,26 @@ External validators can also be asynchronous, allowing you to perform API calls 
 
 ```ts
 async function blacklistValidator(capturedId: ValidatorCapturedId): Promise<ExternalValidatorResult> {
-    const documentNumber = capturedId.documentNumber;
+  const documentNumber = capturedId.documentNumber;
   try {
     const isBlacklisted = await asyncCheckBlacklistFunction(documentNumber);
-    
+
     if (isBlacklisted) {
       return {
         type: "external",
         name: "blacklist_check",
         valid: false,
         details: {
-          message: "Document is not accepted"
-        }
+          message: "Document is not accepted",
+        },
       };
     }
-    
+
     return {
       type: "external",
       name: "blacklist_check",
-      valid: true
+      valid: true,
     };
-    
   } catch (error) {
     // Handle API errors gracefully
     return {
@@ -231,22 +218,18 @@ async function blacklistValidator(capturedId: ValidatorCapturedId): Promise<Exte
       name: "Blacklist Check",
       valid: false,
       details: {
-        message: "Unable to verify document at this time"
-      }
+        message: "Unable to verify document at this time",
+      },
     };
   }
 }
 
 // Use the async validator
 const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
-  validation: [
-    Validators.notExpired(),
-    blacklistValidator
-  ],
+  validation: [Validators.notExpired(), blacklistValidator],
   // other options...
 });
 ```
-
 
 ### ValidatorCapturedId Interface
 

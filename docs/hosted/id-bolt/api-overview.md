@@ -1,8 +1,8 @@
 ---
 description: "ID Bolt is built around the concept of a **session** - a complete user journey from starting the ID scanning process to either successful completion or cancellation. The main class `IdBoltSession` represents this session and manages the entire workflow.                                                             "
 
-sidebar_label: 'API Overview'
-title: 'API Overview'
+sidebar_label: "API Overview"
+title: "API Overview"
 displayed_sidebar: boltSidebar
 toc_max_heading_level: 4
 framework: bolt
@@ -14,14 +14,13 @@ keywords:
 
 ID Bolt is built around the concept of a **session** - a complete user journey from starting the ID scanning process to either successful completion or cancellation. The main class `IdBoltSession` represents this session and manages the entire workflow.
 
-
 ## Quick Start Example
 
 ```ts
 const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   licenseKey: LICENSE_KEY,
   documentSelection: DocumentSelection.create({
-    accepted: [new Passport(Region.Any)]
+    accepted: [new Passport(Region.Any)],
   }),
   returnDataMode: ReturnDataMode.Full,
   validation: [Validators.notExpired()],
@@ -30,7 +29,7 @@ const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
   },
   onCancellation: (reason) => {
     console.log("Scanning cancelled", reason);
-  }
+  },
 });
 await idBoltSession.start();
 ```
@@ -46,6 +45,7 @@ IdBoltSession.create(serviceUrl: string, options: IdBoltCreateSessionOptions): I
 Creates a new ID Bolt session with your configuration. The session is not started until you call `start()`.
 
 **Parameters:**
+
 - `serviceUrl`: Your ID Bolt service URL from the Scandit dashboard
 - `options`: [Configuration object defining the session behavior](#configuration-options)
 
@@ -66,32 +66,32 @@ Launches the ID Bolt user interface and begins the scanning workflow. Returns a 
 ```ts
 IdBoltSession.terminate(): void
 ```
-When the `keepAliveForNextSession` (default: false) option is selected, this method can be used to clean up resources after the last session ended. If this option is not selected, there is no need to call this method. 
+
+When the `keepAliveForNextSession` (default: false) option is selected, this method can be used to clean up resources after the last session ended. If this option is not selected, there is no need to call this method.
 
 ## Configuration Options
 
 The following options can be configured when creating an ID Bolt session:
 
-| Option | Type | Required | Description | Details |
-|--------|------|----------|-------------|---------|
-| `licenseKey` | `string` | Yes | Your Scandit license key | |
-| `documentSelection` | `DocumentSelection` | Yes | Defines acceptable documents | [Document Selection](../document-selection) |
-| `returnDataMode` | `ReturnDataMode` | Yes | Controls what data is returned | [Data Handling](../data-handling) |
-| `anonymizationMode` | `AnonymizationMode` | No | Controls data anonymization | [Data Handling](../data-handling) |
-| `anonymizedFields` | `AnonymizedFields` | No | Fine-grained control over which fields to anonymize | [Data Handling](../data-handling) |
-| `scanner` | `Scanner` | No | Customizes scanner behavior | [Workflow Options](../workflow) |
-| `validation` | `Validators[]` | No | Validators to verify ID | [Validators](../validators) |
-| `locale` | `string` | No | Interface language | [Supported Locales](#supported-locales) |
-| `workflow` | `WorkflowOptions` | No | Customizes workflow UI | [Workflow Options](../workflow) |
-| `theme` | `Theme` | No | Customizes visual appearance | [Theming](../theming) |
-| `textOverrides` | `TextOverrides` | No | Customizes displayed text | [Text Overrides](../text-overrides) |
-| `keepAliveForNextSession` | `boolean` | No | Keeps resources for multiple sessions | [Advanced Options](../advanced) |
-| `disableCloseOnBrowserBack` | `boolean` | No | Prevents closing on browser back | [Advanced Options](../advanced) |
-| `externalTransactionId` | `string` | No | Your tracking ID for analytics | [Advanced Options](../advanced) |
-| `learnMore` | `LearnMore` | No | Customize the "learn more" section | |
-| `onCompletion` | `Function` | Yes | Completion callback | [Callbacks](../callbacks) |
-| `onCancellation` | `Function` | No | Cancellation callback | [Callbacks](../callbacks) |
-
+| Option                      | Type                | Required | Description                                         | Details                                     | Since |
+| --------------------------- | ------------------- | -------- | --------------------------------------------------- | ------------------------------------------- | ----- |
+| `licenseKey`                | `string`            | Yes      | Your Scandit license key                            |                                             | 1.0   |
+| `documentSelection`         | `DocumentSelection` | Yes      | Defines acceptable documents                        | [Document Selection](../document-selection) | 1.0   |
+| `returnDataMode`            | `ReturnDataMode`    | Yes      | Controls what data is returned                      | [Data Handling](../data-handling)           | 1.0   |
+| `anonymizationMode`         | `AnonymizationMode` | No       | Controls data anonymization                         | [Data Handling](../data-handling)           | 1.3   |
+| `anonymizedFields`          | `AnonymizedFields`  | No       | Fine-grained control over which fields to anonymize | [Data Handling](../data-handling)           | 2.2   |
+| `scanner`                   | `Scanner`           | No       | Customizes scanner behavior                         | [Workflow Options](../workflow)             | 1.2   |
+| `validation`                | `Validators[]`      | No       | Validators to verify ID                             | [Validators](../validators)                 | 1.0   |
+| `locale`                    | `string`            | No       | Interface language                                  | [Supported Locales](#supported-locales)     | 1.1   |
+| `workflow`                  | `WorkflowOptions`   | No       | Customizes workflow UI                              | [Workflow Options](../workflow)             | 1.1   |
+| `theme`                     | `Theme`             | No       | Customizes visual appearance                        | [Theming](../theming)                       | 1.1   |
+| `textOverrides`             | `TextOverrides`     | No       | Customizes displayed text                           | [Text Overrides](../text-overrides)         | 1.2   |
+| `keepAliveForNextSession`   | `boolean`           | No       | Keeps resources for multiple sessions               | [Advanced Options](../advanced)             | 1.6   |
+| `disableCloseOnBrowserBack` | `boolean`           | No       | Prevents closing on browser back                    | [Advanced Options](../advanced)             | 1.14  |
+| `externalTransactionId`     | `string`            | No       | Your tracking ID for analytics                      | [Advanced Options](../advanced)             | 1.17  |
+| `learnMore`                 | `LearnMore`         | No       | Customize the "learn more" section                  |                                             | 2.0   |
+| `onCompletion`              | `Function`          | Yes      | Completion callback                                 | [Callbacks](../callbacks)                   | 1.0   |
+| `onCancellation`            | `Function`          | No       | Cancellation callback                               | [Callbacks](../callbacks)                   | 1.0   |
 
 ## Supported Locales
 
@@ -106,4 +106,4 @@ The following languages are supported:
 - `nl-NL` (Dutch, Netherlands)
 - `pl-PL` (Polish, Poland)
 - `pt-PT` (Portuguese, Portugal)
-- `da-DK` (Danish, Denmark) 
+- `da-DK` (Danish, Denmark)

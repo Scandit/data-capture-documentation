@@ -1,8 +1,8 @@
 ---
 description: "ID Bolt allows you to specify which types of documents are acceptable for scanning. Documents are selected using the `DocumentSelection` class.                                                                               "
 
-sidebar_label: 'Document Selection'
-title: 'Document Selection'
+sidebar_label: "Document Selection"
+title: "Document Selection"
 displayed_sidebar: boltSidebar
 toc_max_heading_level: 4
 framework: bolt
@@ -24,11 +24,11 @@ const documentSelection = DocumentSelection.create({
   accepted: [
     new Passport(Region.Any),
     new IdCard(Region.FRA),
-    new DriverLicense(Region.France)
+    new DriverLicense(Region.France),
   ],
   rejected: [
     // You can explicitly reject certain documents that would otherwise be included
-    new Passport(Region.Switzerland)
+    new Passport(Region.Switzerland),
   ],
 });
 ```
@@ -42,8 +42,8 @@ Documents not on the list may trigger the scanner, but will not be accepted.
 Includes all passports.
 
 ```ts
-new Passport(Region.USA) // US passports only
-new Passport(Region.Any) // Any passport
+new Passport(Region.USA); // US passports only
+new Passport(Region.Any); // Any passport
 ```
 
 ### ID Card
@@ -51,8 +51,8 @@ new Passport(Region.Any) // Any passport
 Includes national identity cards.
 
 ```ts
-new IdCard(Region.Germany) // German identity cards only
-new IdCard(Region.Any) // Identity cards from any country
+new IdCard(Region.Germany); // German identity cards only
+new IdCard(Region.Any); // Identity cards from any country
 ```
 
 ### Driver License
@@ -60,8 +60,8 @@ new IdCard(Region.Any) // Identity cards from any country
 Includes driver licenses.
 
 ```ts
-new DriverLicense(Region.France) // French driver licenses only
-new DriverLicense(Region.Any) // Driver licenses from any country
+new DriverLicense(Region.France); // French driver licenses only
+new DriverLicense(Region.Any); // Driver licenses from any country
 ```
 
 ### Visa (ICAO)
@@ -69,8 +69,8 @@ new DriverLicense(Region.Any) // Driver licenses from any country
 Includes visas that comply with International Civil Aviation Organization (ICAO) standards.
 
 ```ts
-new VisaIcao(Region.USA) // US ICAO-compliant visas
-new VisaIcao(Region.Any) // Any ICAO-compliant visa
+new VisaIcao(Region.USA); // US ICAO-compliant visas
+new VisaIcao(Region.Any); // Any ICAO-compliant visa
 ```
 
 ### Residence Permit
@@ -78,8 +78,8 @@ new VisaIcao(Region.Any) // Any ICAO-compliant visa
 Includes residence permits.
 
 ```ts
-new ResidencePermit(Region.USA) // US residence permits
-new ResidencePermit(Region.Any) // Residence permits from any country
+new ResidencePermit(Region.USA); // US residence permits
+new ResidencePermit(Region.Any); // Residence permits from any country
 ```
 
 ### Health Insurance Card
@@ -87,8 +87,8 @@ new ResidencePermit(Region.Any) // Residence permits from any country
 Includes health insurance cards.
 
 ```ts
-new HealthInsuranceCard(Region.Germany) // German health insurance cards
-new HealthInsuranceCard(Region.Any) // Health insurance cards from any country
+new HealthInsuranceCard(Region.Germany); // German health insurance cards
+new HealthInsuranceCard(Region.Any); // Health insurance cards from any country
 ```
 
 ## Region Specific Documents
@@ -96,8 +96,8 @@ new HealthInsuranceCard(Region.Any) // Health insurance cards from any country
 For specialized document types that are specific to certain regions, use the `RegionSpecific` class with a `RegionSpecificSubtype` argument:
 
 ```ts
-new RegionSpecific(RegionSpecificSubtype.BelgiumMinorsId) // Belgian minors ID
-new RegionSpecific(RegionSpecificSubtype.MexicoTaxId) // Mexican tax ID
+new RegionSpecific(RegionSpecificSubtype.BelgiumMinorsId); // Belgian minors ID
+new RegionSpecific(RegionSpecificSubtype.MexicoTaxId); // Mexican tax ID
 ```
 
 ### Supported Region Specific Documents
@@ -106,83 +106,83 @@ The following region-specific document types are supported:
 
 #### United States
 
-* `UsBorderCrossingCard`
-* `UsGlobalEntryCard`
-* `UsNexusCard`
-* `UsCommonAccessCard`
-* `UsUniformedServicesId`
-* `UsVeteranId`
-* `UsWorkPermit`
-* `UsSocialSecurityCard`
-* `UsTwicCard`
-* `UsWeaponPermit`
-* `UsMedicalMarijuanaCard`
-* `UsMunicipalId`
+- `UsBorderCrossingCard`
+- `UsGlobalEntryCard`
+- `UsNexusCard`
+- `UsCommonAccessCard`
+- `UsUniformedServicesId`
+- `UsVeteranId`
+- `UsWorkPermit`
+- `UsSocialSecurityCard`
+- `UsTwicCard`
+- `UsWeaponPermit`
+- `UsMedicalMarijuanaCard`
+- `UsMunicipalId`
 
 #### Asia
 
-* `ChinaExitEntryPermit`
-* `ChinaMainlandTravelPermitTaiwan`
-* `ChinaMainlandTravelPermitHongKongMacau`
-* `ChinaOneWayPermit`
-* `PakistanAfghanCitizenCard`
-* `PakistanProofOfRegistration`
-* `PakistanConsularId`
-* `SingaporeFinCard`
-* `SingaporeWorkPermit`
-* `SingaporeEmploymentPass`
-* `SingaporeSPass`
-* `IndiaPanCard`
-* `MalaysiaIkad`
-* `MalaysiaMykad`
-* `MalaysiaMypr`
-* `MalaysiaMykas`
-* `MalaysiaMykid`
-* `MalaysiaMytentera`
-* `MalaysiaRefugeeId`
-* `MalaysiaMypolis`
-* `PhilippinesMultipurposeId`
-* `PhilippinesWorkPermit`
-* `PhilippinesSocialSecurityCard`
-* `PhilippinesNbiClearance`
-* `PhilippinesPostalId`
-* `PhilippinesTaxId`
+- `ChinaExitEntryPermit`
+- `ChinaMainlandTravelPermitTaiwan`
+- `ChinaMainlandTravelPermitHongKongMacau`
+- `ChinaOneWayPermit`
+- `PakistanAfghanCitizenCard`
+- `PakistanProofOfRegistration`
+- `PakistanConsularId`
+- `SingaporeFinCard`
+- `SingaporeWorkPermit`
+- `SingaporeEmploymentPass`
+- `SingaporeSPass`
+- `IndiaPanCard`
+- `MalaysiaIkad`
+- `MalaysiaMykad`
+- `MalaysiaMypr`
+- `MalaysiaMykas`
+- `MalaysiaMykid`
+- `MalaysiaMytentera`
+- `MalaysiaRefugeeId`
+- `MalaysiaMypolis`
+- `PhilippinesMultipurposeId`
+- `PhilippinesWorkPermit`
+- `PhilippinesSocialSecurityCard`
+- `PhilippinesNbiClearance`
+- `PhilippinesPostalId`
+- `PhilippinesTaxId`
 
 #### Europe
 
-* `GermanyEid`
-* `BelgiumMinorsId`
-* `HungaryAddressCard`
-* `UkAsylumRequest`
-* `UkMilitaryId`
-* `SwedenSocialSecurityCard`
-* `SwedenSisId`
-* `IrelandPublicServicesCard`
+- `GermanyEid`
+- `BelgiumMinorsId`
+- `HungaryAddressCard`
+- `UkAsylumRequest`
+- `UkMilitaryId`
+- `SwedenSocialSecurityCard`
+- `SwedenSisId`
+- `IrelandPublicServicesCard`
 
 #### Americas
 
-* `MexicoConsularVoterId`
-* `MexicoProfessionalId`
-* `MexicoConsularId`
-* `MexicoTaxId`
-* `CanadaTribalId`
-* `CanadaSocialSecurityCard`
-* `CanadaCitizenshipCertificate`
-* `CanadaMinorsPublicServicesCard`
-* `CanadaWeaponPermit`
-* `CanadaPublicServicesCard`
-* `ColombiaMinorsId`
-* `ColombiaTemporaryProtectionPermit`
-* `PeruMinorsId`
-* `BoliviaMinorsId`
-* `GuatemalaConsularId`
+- `MexicoConsularVoterId`
+- `MexicoProfessionalId`
+- `MexicoConsularId`
+- `MexicoTaxId`
+- `CanadaTribalId`
+- `CanadaSocialSecurityCard`
+- `CanadaCitizenshipCertificate`
+- `CanadaMinorsPublicServicesCard`
+- `CanadaWeaponPermit`
+- `CanadaPublicServicesCard`
+- `ColombiaMinorsId`
+- `ColombiaTemporaryProtectionPermit`
+- `PeruMinorsId`
+- `BoliviaMinorsId`
+- `GuatemalaConsularId`
 
 #### Other
 
-* `ApecBusinessTravelCard`
-* `AustraliaAsicCard`
-* `UaeVehicleRegistrationCard`
-* `UaeEsaadCard`
+- `ApecBusinessTravelCard`
+- `AustraliaAsicCard`
+- `UaeVehicleRegistrationCard`
+- `UaeEsaadCard`
 
 ## Working with Regions
 
@@ -192,7 +192,7 @@ Regions are used to define the geographic scope of a document. They can be speci
 // These are equivalent
 Region.FRA;
 Region.France;
-"FRA";
+("FRA");
 
 // For any region
 Region.Any;
@@ -207,4 +207,4 @@ const region = Region.fromShortCode("FR"); // == Region.France == "FRA"
 const shortCode = Region.toShortCode(Region.FRA); // == "FR"
 ```
 
-If the provided short code is invalid, the methods will throw an exception. 
+If the provided short code is invalid, the methods will throw an exception.
