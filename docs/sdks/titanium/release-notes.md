@@ -209,4 +209,4 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.10/sdks/titanium/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.11/sdks/titanium/release-notes)
