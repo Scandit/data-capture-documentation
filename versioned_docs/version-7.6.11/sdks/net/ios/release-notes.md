@@ -9,6 +9,20 @@ keywords:
   - netIos
 ---
 
+## 7.6.11
+
+**Released**: April 16, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+
+#### Core
+
+* Fixed a rare issue that was causing a crash when the app moved to the background
+
 ## 7.6.10
 
 **Released**: April 2, 2026

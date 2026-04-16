@@ -9,6 +9,21 @@ keywords:
   - netAndroid
 ---
 
+## 7.6.11
+
+**Released**: April 16, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+
+#### Core
+
+* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
+* Fixed a rare deadlock issue that occurred when an activity was stopped.
+
 ## 7.6.10
 
 **Released**: April 2, 2026

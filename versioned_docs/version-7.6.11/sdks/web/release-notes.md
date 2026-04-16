@@ -10,6 +10,16 @@ keywords:
   - web
 ---
 
+## 7.6.11
+
+**Released**: April 16, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+
 ## 7.6.10
 
 **Released**: April 2, 2026
