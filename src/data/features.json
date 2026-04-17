@@ -162,6 +162,24 @@
     }
   },
   {
+    "name": "DateText",
+    "description": "A generic date text field for capturing dates from labels, allowing flexible date format configuration via `LabelDateFormat`.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Fields",
+    "tag": "Date and Custom Text Fields",
+    "frameworks": {
+      "iOS": { "version": "7.6", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/date-text.html#date-text" },
+      "Android": { "version": "7.6", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/date-text.html#date-text" },
+      "Web": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/date-text.html#date-text" },
+      "React Native": { "version": "8.3", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/date-text.html#date-text" },
+      "Flutter": { "version": "8.3", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/date-text.html#date-text" },
+      "Capacitor": { "version": "8.3", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/date-text.html#date-text" },
+      "Cordova": { "version": "8.3", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/date-text.html#date-text" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/date-text.html#date-text" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/date-text.html#date-text" }
+    }
+  },
+  {
     "name": "Price Label",
     "description": "This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `SKU` and `priceText` fields.",
     "product": "smart-label-capture",
@@ -213,6 +231,24 @@
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
       ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
       ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" }
+    }
+  },
+  {
+    "name": "Receipt Scanning",
+    "description": "Extracts structured data from receipts including store information, payment details, and line items. Requires the Adaptive Recognition Engine (beta). See the Advanced Configurations page for setup details.",
+    "product": "smart-label-capture",
+    "category": "Pre-built Labels",
+    "tag": "Label Definitions",
+    "frameworks": {
+      "iOS": { "version": "7.6", "apiUrl": "https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" },
+      "Android": { "version": "7.6", "apiUrl": "https://docs.scandit.com/data-capture-sdk/android/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" },
+      "Web": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/web/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" },
+      "React Native": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/react-native/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" },
+      "Flutter": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/flutter/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" },
+      "Capacitor": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" },
+      "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" },
+      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" },
+      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" }
     }
   },
   {
