@@ -160,6 +160,23 @@ keywords:
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
 
+## 8.1.4
+
+**Released**: April 21, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+* Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
+
+#### Core
+
+* Fixed a rare issue that was causing a crash when the app moved to the background.
+* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
+* Fixed crashes caused by RuntimeExceptions thrown by OEM camera code that are not part of the standard Android Camera API contract; these exceptions are now caught and logged instead of crashing.
+
 ## 8.1.3
 
 **Released**: March 25, 2026

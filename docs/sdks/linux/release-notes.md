@@ -55,6 +55,16 @@ No updates for this framework in this release.
 
 * Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
 
+## 8.1.4
+
+**Released**: April 21, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+
 ## 8.1.3
 
 **Released**: March 25, 2026
