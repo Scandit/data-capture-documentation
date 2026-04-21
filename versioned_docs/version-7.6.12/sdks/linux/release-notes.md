@@ -9,6 +9,12 @@ keywords:
   - linux
 ---
 
+## 7.6.12
+
+**Released**: April 21, 2026
+
+No updates for this framework in this release.
+
 ## 7.6.11
 
 **Released**: April 16, 2026

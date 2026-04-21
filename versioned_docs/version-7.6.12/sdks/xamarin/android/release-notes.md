@@ -14,6 +14,48 @@ import DeprecationNotice from '/versioned_docs/version-7.6.12/partials/_xamarin-
 <DeprecationNotice/>
 
 
+## 7.6.12
+
+**Released**: April 21, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
+* Fixed crashes caused by RuntimeExceptions thrown by OEM camera code that are not part of the standard Android Camera API contract; these exceptions are now caught and logged instead of crashing.
+
+## 7.6.11
+
+**Released**: April 16, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+
+#### Core
+
+* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
+* Fixed a rare deadlock issue that occurred when an activity was stopped.
+
+## 7.6.10
+
+**Released**: April 2, 2026
+
+No updates for this framework in this release.
+
+## 7.6.9
+
+**Released**: March 17, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled
+
 ## 7.6.8
 
 **Released**: March 6, 2026

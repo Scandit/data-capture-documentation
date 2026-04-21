@@ -10,6 +10,17 @@ keywords:
   - flutter
 ---
 
+## 7.6.12
+
+**Released**: April 21, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
+* Fixed crashes caused by RuntimeExceptions thrown by OEM camera code that are not part of the standard Android Camera API contract; these exceptions are now caught and logged instead of crashing.
+
 ## 7.6.11
 
 **Released**: April 16, 2026

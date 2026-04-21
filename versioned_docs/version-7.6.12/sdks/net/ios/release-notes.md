@@ -9,6 +9,16 @@ keywords:
   - netIos
 ---
 
+## 7.6.12
+
+**Released**: April 21, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
+
 ## 7.6.11
 
 **Released**: April 16, 2026

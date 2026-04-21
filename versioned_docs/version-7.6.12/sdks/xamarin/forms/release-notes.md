@@ -14,6 +14,47 @@ import DeprecationNotice from '/versioned_docs/version-7.6.12/partials/_xamarin-
 <DeprecationNotice/>
 
 
+## 7.6.12
+
+**Released**: April 21, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
+
+## 7.6.11
+
+**Released**: April 16, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+
+#### Core
+
+* Fixed a rare issue that was causing a crash when the app moved to the background
+
+## 7.6.10
+
+**Released**: April 2, 2026
+
+No updates for this framework in this release.
+
+## 7.6.9
+
+**Released**: March 17, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled
+* Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up
+
 ## 7.6.8
 
 **Released**: March 6, 2026
