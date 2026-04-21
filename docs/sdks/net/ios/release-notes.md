@@ -124,6 +124,21 @@ keywords:
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 * Fixed `BarcodeBatchBasicOverlayStyle.Frame` such that it now correctly displays as a frame on iOS and MAUI iOS platforms, where previously setting the style to `Frame` would incorrectly render as a dot due to an enum value mismatch in the iOS binding layer
 
+## 8.1.4
+
+**Released**: April 21, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+* Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
+
+#### Core
+
+* Fixed a rare issue that was causing a crash when the app moved to the background.
+
 ## 8.1.3
 
 **Released**: March 25, 2026
