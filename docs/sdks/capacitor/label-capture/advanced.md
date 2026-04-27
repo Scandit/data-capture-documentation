@@ -11,6 +11,7 @@ import ValidationFlowHowItWorks from '../../../partials/advanced/_validation-flo
 import ValidationFlowCustomButtons from '../../../partials/advanced/_validation-flow-custom-buttons.mdx';
 import ValidationFlowTypingHints from '../../../partials/advanced/_validation-flow-typing-hints.mdx';
 import ValidationFlowCloudVLM from '../../../partials/advanced/_validation-flow-cloud-vlm.mdx';
+import ReceiptScanning from '../../../partials/advanced/_receipt-scanning.mdx';
 import ValidationFlowRequiredOptional from '../../../partials/advanced/_validation-flow-required-optional.mdx';
 import ValidationFlowCustomToasts from '../../../partials/advanced/_validation-flow-custom-toasts.mdx';
 import ValidationFlowCustomField from '../../../partials/advanced/_validation-flow-custom-field.mdx';
@@ -168,3 +169,5 @@ const settings = LabelCaptureSettings.settingsFromLabelDefinitions([label], {});
 ```
 
 See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
+
+<ReceiptScanning/>
