@@ -1,0 +1,106 @@
+.callout {
+  display: block;
+  margin: 0 0 2rem 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 8px;
+  background: var(--light-blue-60, #f0f5ff);
+  border-left: 4px solid var(--light-blue-100, #2385ec);
+  border-top: 1px solid rgba(35, 133, 236, 0.15);
+  border-right: 1px solid rgba(35, 133, 236, 0.15);
+  border-bottom: 1px solid rgba(35, 133, 236, 0.15);
+  font-family: var(--font-family, inherit);
+}
+
+.title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ifm-color-content, #1a1a1a);
+}
+
+.description {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--ifm-color-content-secondary, #444);
+}
+
+.commandBlock {
+  position: relative;
+  margin: 0 0 0.75rem 0;
+}
+
+.command {
+  margin: 0;
+  padding: 0.75rem 4.5rem 0.75rem 1rem;
+  background: rgba(15, 23, 35, 0.92);
+  color: #f5f5f5;
+  border-radius: 6px;
+  font-family: var(--third-family, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.command code {
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  border: 0;
+}
+
+.copyButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.25rem 0.625rem;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f5f5f5;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.copyButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.footer {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--ifm-color-content-secondary, #444);
+}
+
+.callout a {
+  color: var(--light-blue-100, #2385ec);
+  text-decoration: underline;
+}
+
+html[data-theme='dark'] .callout {
+  background: rgba(35, 133, 236, 0.08);
+  border-left-color: var(--dark-blue-accent, #2385ec);
+  border-top-color: rgba(35, 133, 236, 0.2);
+  border-right-color: rgba(35, 133, 236, 0.2);
+  border-bottom-color: rgba(35, 133, 236, 0.2);
+}
+
+html[data-theme='dark'] .title {
+  color: var(--ifm-color-content, #f5f5f5);
+}
+
+html[data-theme='dark'] .description,
+html[data-theme='dark'] .footer {
+  color: var(--ifm-color-content-secondary, #c8c8c8);
+}
+
+html[data-theme='dark'] .callout a {
+  color: var(--dark-blue-accent, #2385ec);
+}

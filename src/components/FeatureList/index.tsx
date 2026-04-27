@@ -6,20 +6,7 @@ import { FeatureListProps, Feature, Product, FilteredFeature } from './types';
 // Import data files
 import productsData from '@site/src/data/products.json';
 import featuresData from '@site/src/data/features.json';
-
-// Framework mapping for context detection - matches FRAMEWORKS from types.ts
-const FRAMEWORK_MAPPING: { [key: string]: string } = {
-  'ios': 'iOS',
-  'android': 'Android',
-  'cordova': 'Cordova',
-  'react-native': 'React Native',
-  'flutter': 'Flutter',
-  'capacitor': 'Capacitor',
-  'titanium': 'Titanium',
-  'web': 'Web',
-  'net-ios': '.NET iOS',
-  'net-android': '.NET Android'
-};
+import { FRAMEWORK_MAPPING } from '../utils/frameworks';
 
 // Function to render description with inline code formatting
 const renderDescription = (description: string) => {

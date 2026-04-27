@@ -2,10 +2,10 @@ import { useState } from "react";
 import CardsPart from "../components/HomePage/CardsPart/CardsPart";
 import DataCapture from "../components/HomePage/DataCapture/DataCapture";
 import Footer from "../components/HomePage/Footer/Footer";
-import FrameworkExplore from "../components/HomePage/FrameworkExplore/FrameworkExplore";
 import Frameworks from "../components/HomePage/Frameworks/Frameworks";
 import Header from "../components/HomePage/Header/Header";
 import Slogan from "../components/HomePage/Slogan/Slogan";
+import SkillsCallout from "../components/SkillsCallout";
 import style from "./index.module.css";
 import FrameworksMobile from "../components/HomePage/Frameworks/FrameworksMobile";
 
@@ -27,6 +27,10 @@ export default function HomePage() {
       <div className={`${style.body} ${isFlashing ? style.flash : ""}`}>
         <Slogan></Slogan>
 
+        <div className={style.skillsCalloutWrapper}>
+          <SkillsCallout variant="shared" />
+        </div>
+
         <div className={style.frameworksMobile}>
           <FrameworksMobile handleFrameworkClick={handleFrameworkClick}></FrameworksMobile>
         </div>
@@ -37,7 +41,6 @@ export default function HomePage() {
 
         <CardsPart></CardsPart>
         <DataCapture></DataCapture>
-        <FrameworkExplore></FrameworkExplore>
       </div>
       <Footer></Footer>
     </div>
