@@ -1,0 +1,14 @@
+{
+  "repo": "https://github.com/scandit/scandit-sdk-skills",
+  "shared": "data-capture-sdk",
+  "products": {
+    "sparkscan": {
+      "iOS": "sparkscan-ios",
+      "Web": "sparkscan-web",
+      "Cordova": "sparkscan-cordova",
+      "Capacitor": "sparkscan-capacitor",
+      "Flutter": "sparkscan-flutter",
+      "React Native": "sparkscan-rn"
+    }
+  }
+}

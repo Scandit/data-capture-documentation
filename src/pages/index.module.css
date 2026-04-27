@@ -26,6 +26,11 @@
   padding: clamp(30px, 5vw, 40px) clamp(16px, 4vw, 80px);
 }
 
+.skillsCalloutWrapper {
+  max-width: 960px;
+  margin: 1.5rem auto 2.5rem;
+}
+
 .frameworksMobile {
   display: none;
 }
