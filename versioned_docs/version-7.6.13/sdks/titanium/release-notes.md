@@ -10,6 +10,20 @@ keywords:
   - titanium
 ---
 
+## 7.6.13
+
+**Released**: April 27, 2026
+
+### Bug Fixes
+
+#### Smart Label Capture
+
+* Fixed a memory leak in LabelCapture.
+
+#### Core
+
+* Fixed a rare crash when opening screens with the Scandit SDK.
+
 ## 7.6.12
 
 **Released**: April 21, 2026

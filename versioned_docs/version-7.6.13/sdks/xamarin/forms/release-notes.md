@@ -14,6 +14,16 @@ import DeprecationNotice from '/versioned_docs/version-7.6.13/partials/_xamarin-
 <DeprecationNotice/>
 
 
+## 7.6.13
+
+**Released**: April 27, 2026
+
+### Bug Fixes
+
+#### Smart Label Capture
+
+* Fixed a memory leak in LabelCapture.
+
 ## 7.6.12
 
 **Released**: April 21, 2026

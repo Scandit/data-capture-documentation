@@ -9,6 +9,16 @@ keywords:
   - netIos
 ---
 
+## 7.6.13
+
+**Released**: April 27, 2026
+
+### Bug Fixes
+
+#### Smart Label Capture
+
+* Fixed a memory leak in LabelCapture.
+
 ## 7.6.12
 
 **Released**: April 21, 2026
