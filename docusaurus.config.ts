@@ -358,7 +358,7 @@ const config: Config = {
               banner: 'none',
               badge: false,
             },
-            '7.6.12': {
+            '7.6.13': {
               banner: 'none',
               badge: false,
             },
