@@ -22,7 +22,7 @@ keywords:
 
 #### Core
 
-* Fixed a rare crash when opening screens with the Scandit SDK.
+* Fixed a rare crash when opening the camera.
 
 ## 7.6.12
 
