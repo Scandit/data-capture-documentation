@@ -3,6 +3,10 @@
     display: flex;
     gap: 14px;
 
+    & code {
+      overflow-wrap: anywhere;
+    }
+
     &.theme-admonition-important span svg path {
       fill: var(--light-yellow-100);
     }

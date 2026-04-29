@@ -9,8 +9,8 @@ This technology is particularly beneficial in scenarios where labels contain var
 
 ## Understanding Labels in Smart Label Capture
 
-The first step to using Smart Label Capture is to define the labels that you want to capture.
-A label is a collection of text and barcode fields that are meant to be scanned in one scan process.
+The first step to using Smart Label Capture is to [define the labels](../label-definitions) that you want to capture.
+A label is a collection of text and barcode fields that are meant to be scanned in one scan process. It can include any number of **barcode fields** (defined by their symbology, pattern, or textual context) and **text fields** (defined by their pattern, relative position, or textual context).
 
 To intelligently extract only the fields that are relevant, Smart Label Capture relies on a combination of multiple cues:
 
@@ -18,37 +18,6 @@ To intelligently extract only the fields that are relevant, Smart Label Capture 
 * The barcode symbology (e.g. QR code, UPC, EAN13, etc.)
 * The relative position of fields
 * Textual context, i.e. text that is close to the field and describes it's meaning (e.g. "BEST BEFORE" next to an expiry date text)
-  :::tip
-  The following characters are recognized: `0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ()-./:,$¶"`.
-  :::
-
-import LabelCapture from "@site/src/components/IconComponents/LabelCapture";
-
-<CustomDocCardsWrapper>
-
-<CustomDocCard 
-  title="Label Definition" 
-  description={
-    <>
-      <strong>Barcode fields<em> - zero or more</em></strong> 
-      <br />
-      Defined by their symbology, pattern or textual context.
-      <br />
-      <strong>Text fields<em> - zero or more</em></strong> 
-      <br />
-      Defined by their pattern, relative position or textual context.
-    </>
-  } 
-  smallIcon
->
-  <div className="icon-wrapper"><LabelCapture/></div>
-</CustomDocCard>
-
-</CustomDocCardsWrapper>
-
-:::tip
-Label fields can be defined as optional, so that they are only captured if they are present and readable.
-:::
 
 ## Applications and Use Cases
 
