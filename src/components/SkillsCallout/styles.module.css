@@ -33,8 +33,9 @@
 .command {
   margin: 0;
   padding: 0.75rem 4.5rem 0.75rem 1rem;
-  background: rgba(15, 23, 35, 0.92);
-  color: #f5f5f5;
+  background: #fff;
+  color: var(--light-black, #121619);
+  border: 1px solid var(--light-blue-80, #c2cce3);
   border-radius: 6px;
   font-family: var(--third-family, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
   font-size: 0.8125rem;
@@ -58,9 +59,9 @@
   top: 0.5rem;
   right: 0.5rem;
   padding: 0.25rem 0.625rem;
-  background: rgba(255, 255, 255, 0.12);
-  color: #f5f5f5;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--light-blue-60, #f0f5ff);
+  color: var(--light-blue-100, #0a3390);
+  border: 1px solid var(--light-blue-80, #c2cce3);
   border-radius: 4px;
   font-size: 0.75rem;
   font-family: inherit;
@@ -69,6 +70,22 @@
 }
 
 .copyButton:hover {
+  background: var(--light-blue-80, #c2cce3);
+}
+
+html[data-theme='dark'] .command {
+  background: var(--dark-blue-100, #0f1722);
+  color: #f5f5f5;
+  border-color: var(--dark-blue-70, rgba(35, 133, 236, 0.3));
+}
+
+html[data-theme='dark'] .copyButton {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f5f5f5;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+html[data-theme='dark'] .copyButton:hover {
   background: rgba(255, 255, 255, 0.2);
 }
 
@@ -137,13 +154,6 @@
   text-decoration: none !important;
 }
 
-.footer {
-  margin: 0;
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  color: var(--ifm-color-content-secondary, #444);
-}
-
 .callout a {
   color: var(--light-blue-100, #2385ec);
   text-decoration: underline;
@@ -162,7 +172,6 @@ html[data-theme='dark'] .title {
 }
 
 html[data-theme='dark'] .description,
-html[data-theme='dark'] .footer,
 html[data-theme='dark'] .tabHint,
 html[data-theme='dark'] .tab {
   color: var(--ifm-color-content-secondary, #c8c8c8);

@@ -27,10 +27,6 @@ export default function HomePage() {
       <div className={`${style.body} ${isFlashing ? style.flash : ""}`}>
         <Slogan></Slogan>
 
-        <div className={style.skillsCalloutWrapper}>
-          <SkillsCallout variant="shared" />
-        </div>
-
         <div className={style.frameworksMobile}>
           <FrameworksMobile handleFrameworkClick={handleFrameworkClick}></FrameworksMobile>
         </div>
@@ -40,6 +36,11 @@ export default function HomePage() {
         </div>
 
         <CardsPart></CardsPart>
+
+        <div className={style.skillsCalloutWrapper}>
+          <SkillsCallout variant="shared" />
+        </div>
+
         <DataCapture></DataCapture>
       </div>
       <Footer></Footer>
