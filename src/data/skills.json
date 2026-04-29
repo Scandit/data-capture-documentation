@@ -9,6 +9,37 @@
       "Capacitor": "sparkscan-capacitor",
       "Flutter": "sparkscan-flutter",
       "React Native": "sparkscan-rn"
+    },
+    "barcode-capture": {
+      "Cordova": "barcode-capture-cordova",
+      "Capacitor": "barcode-capture-capacitor",
+      "Flutter": "barcode-capture-flutter",
+      "React Native": "barcode-capture-rn"
+    },
+    "smart-label-capture": {
+      "Web": "label-capture-web",
+      "Cordova": "label-capture-cordova",
+      "Capacitor": "label-capture-capacitor",
+      "Flutter": "label-capture-flutter",
+      "React Native": "label-capture-rn"
+    },
+    "matrixscan-ar": {
+      "Cordova": "matrixscan-ar-cordova",
+      "Capacitor": "matrixscan-ar-capacitor",
+      "Flutter": "matrixscan-ar-flutter",
+      "React Native": "matrixscan-ar-rn"
+    },
+    "matrixscan-batch": {
+      "Cordova": "matrixscan-batch-cordova",
+      "Capacitor": "matrixscan-batch-capacitor",
+      "Flutter": "matrixscan-batch-flutter",
+      "React Native": "matrixscan-batch-rn"
+    },
+    "matrixscan-count": {
+      "Cordova": "matrixscan-count-cordova",
+      "Capacitor": "matrixscan-count-capacitor",
+      "Flutter": "matrixscan-count-flutter",
+      "React Native": "matrixscan-count-rn"
     }
   }
 }
