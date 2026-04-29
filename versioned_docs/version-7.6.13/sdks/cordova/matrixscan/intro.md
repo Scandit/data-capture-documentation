@@ -8,7 +8,7 @@ keywords:
   - cordova
 ---
 
-# About MatrixScan
+# About MatrixScan Batch
 
 import AboutMatrixScan from '../../../partials/intro/_about-matrixscan.mdx'
 
