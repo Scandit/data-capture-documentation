@@ -13,6 +13,7 @@ export const FRAMEWORK_MAPPING: { [urlSlug: string]: string } = {
 
 export const URL_PRODUCT_MAPPING: { [urlSlug: string]: string } = {
   'label-capture': 'smart-label-capture',
+  'matrixscan': 'matrixscan-batch',
 };
 
 export interface SdksRouteInfo {
