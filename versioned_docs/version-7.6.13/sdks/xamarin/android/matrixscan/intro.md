@@ -12,7 +12,7 @@ import DeprecationNotice from '/versioned_docs/version-7.6.13/partials/_xamarin-
 <DeprecationNotice/>
 
 
-# About MatrixScan
+# About MatrixScan Batch
 
 import AboutMatrixScan from '../../../../partials/intro/_about-matrixscan.mdx'
 
