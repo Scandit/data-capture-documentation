@@ -1,0 +1,31 @@
+## Receipt Scanning
+
+:::warning Beta
+Receipt Scanning requires the Adaptive Recognition Engine, which is still in beta and may change in future versions of Scandit Data Capture SDK. To enable it on your subscription, please contact [support@scandit.com](mailto:support@scandit.com).
+:::
+
+The Adaptive Recognition Engine can also be used for receipt scanning. Unlike standard label capture, Receipt Scanning extracts structured data from receipts in the cloud, including store information, payment details, and individual line items.
+
+Receipt Scanning uses a different integration pattern than other label types:
+
+- The `LabelCaptureAdaptiveRecognitionOverlay` instead of the standard overlay
+- A `LabelCaptureAdaptiveRecognitionListener` to receive the results
+
+The `onRecognized` callback returns a `ReceiptScanningResult` object containing:
+
+<div style={{display: 'flex', justifyContent: 'center'}}>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `storeName` | String? | The store or merchant name as it appears on the receipt |
+| `storeAddress` | String? | Full address of the store |
+| `storeCity` | String? | The city where the store is located |
+| `date` | String? | The transaction date |
+| `time` | String? | The transaction time |
+| `paymentPreTaxTotal` | Float? | Total balance before taxes |
+| `paymentTax` | Float? | Total tax amount |
+| `paymentTotal` | Float? | Total amount paid |
+| `loyaltyNumber` | Int? | Loyalty program identifier |
+| `lineItems` | List | Purchased items, each with `name`, `unitPrice`, `discount`, `quantity`, and `totalPrice` |
+
+</div>

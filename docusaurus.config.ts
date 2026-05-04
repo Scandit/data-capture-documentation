@@ -351,13 +351,17 @@ const config: Config = {
           },
           showLastUpdateTime: false,
           includeCurrentVersion: true,
-          lastVersion: "current",
+          lastVersion: "8.3.1",
           versions: {
             current: {
-              label: '8.3.1',
-              banner: 'none',
+              label: '8.4.0',
+              banner: 'unreleased',
               badge: false,
             },
+          '8.3.1': {
+            banner: 'none',
+            badge: false,
+          },
             '7.6.13': {
               banner: 'none',
               badge: false,
