@@ -9,6 +9,84 @@ keywords:
   - netAndroid
 ---
 
+## 8.4.0-beta.1
+
+**Released**: May 5, 2026
+
+### New Features
+
+#### Barcode
+
+* Added `dotRadius` property to `BarcodeBatchBasicOverlay` to allow customizing the size of dots when using the Dot overlay style.
+
+#### Id
+
+* Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.
+* Added support for new versions of USA, California – Driver's License; USA, North Carolina – Driver's License; and USA, Texas – Driver's License.
+
+#### Core
+
+* Redesigned `ZoomSwitchControl` to support multiple configurable zoom levels; the control now displays as a compact button that expands to show all available zoom levels, automatically filtered to those supported by the device hardware.
+* Added a new `PinchToZoom` gesture.
+* Enhanced `CameraSettings` to support `ZoomLevels` for the .NET API.
+* Added Camera Switch Control component to .NET.
+* `DataCaptureView.DataCaptureContext` can now be reassigned at runtime in MAUI, both via code-behind and XAML data binding. Previously, the context could only be set once during view initialization.
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved Code 128 scan robustness for codes with uneven blur and geometric distortions. Available on all platforms except WebAssembly without SIMD and ARM without FP16.
+* Improved 1D barcode scanning speed and reduced false positives for linear symbologies.
+* Further improved scanning of square DataMatrix codes with damaged or occluded timing patterns.
+
+### Behavioral Changes
+
+#### Barcode
+
+* Smart Scan Intention now continuously adapts between Single Scan and Selection modes during a scanning session when Smart Scan Selection is enabled, switching back to Single Scan when the scene no longer requires Selection mode. Previously, once Selection mode was activated it remained active for the rest of the session.
+* Changed ITF scanning to reduce false positives by introducing checksum-dependent scoring. ITF has an optional checksum which is mandated to be enabled by many of the standards that use ITF as the data carrier. Starting with this release, checksum-passing ITF codes are scanned with more relaxed conditions than codes that don't pass the checksum test. This happens even if the optional mod 10 checksum isn't enabled. To disable this behavior, enable the `no_checksum_dependent_validation` symbology extension for the ITF symbology.
+* Removed the Abseil library dependency.
+* Reduced Code 39 false positives.
+
+#### Core
+
+* Updated mbedtls from version 3.6.5 to 3.6.6.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue in `BarcodeCount` where the floating shutter button was not visible after setting `shouldShowFloatingShutterButton` to `true`.
+* Fixed an issue preventing `BarcodeFind` from finding binary barcodes.
+* Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
+* Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+
+#### Id
+
+* Fixed an issue where the US Permanent Residence Card was not processed through the VizMrz flow.
+
+#### Smart Label Capture
+
+* Fixed a memory leak in LabelCapture
+* Fixed an issue where the validation flow viewfinder was not displayed.
+* Fixed a race condition in the validation flow.
+* Fixed a bug that caused error messages in `DataCaptureView` to be rendered partially out-of-view.
+* Fixed a rare race condition in Label Capture.
+* Added `.asDate()` support to `ExpiryDate` and `PackingDate` label fields when the text is provided as manual input or as an Adaptive-Recognition-Engine response.
+
+#### Core
+
+* Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
+* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
+* Fixed custom sound not working in Barcode Find on Android.
+
+### Deprecations
+
+#### Core
+
+* Added `PinchToZoom` class for the .NET API; deprecated the `ZoomGesture` property in favor of `ZoomGestures`.
+
 ## 8.3.1
 
 **Released**: April 14, 2026

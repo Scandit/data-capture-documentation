@@ -9,6 +9,34 @@ keywords:
   - linux
 ---
 
+## 8.4.0-beta.1
+
+**Released**: May 5, 2026
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved Code 128 scan robustness for codes with uneven blur and geometric distortions. Available on all platforms except WebAssembly without SIMD and ARM without FP16.
+* Improved 1D barcode scanning speed and reduced false positives for linear symbologies.
+* Further improved scanning of square DataMatrix codes with damaged or occluded timing patterns.
+
+### Behavioral Changes
+
+#### Barcode
+
+* Smart Scan Intention now continuously adapts between Single Scan and Selection modes during a scanning session when Smart Scan Selection is enabled, switching back to Single Scan when the scene no longer requires Selection mode. Previously, once Selection mode was activated it remained active for the rest of the session.
+* Changed ITF scanning to reduce false positives by introducing checksum-dependent scoring. ITF has an optional checksum which is mandated to be enabled by many of the standards that use ITF as the data carrier. Starting with this release, checksum-passing ITF codes are scanned with more relaxed conditions than codes that don't pass the checksum test. This happens even if the optional mod 10 checksum isn't enabled. To disable this behavior, enable the `no_checksum_dependent_validation` symbology extension for the ITF symbology.
+* Removed the Abseil library dependency.
+* Reduced Code 39 false positives.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
+* Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+
 ## 8.3.1
 
 **Released**: April 14, 2026
