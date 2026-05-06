@@ -10,6 +10,99 @@ keywords:
   - web
 ---
 
+## 8.4.0-beta.1
+
+**Released**: May 5, 2026
+
+### New Features
+
+#### Barcode
+
+* Added `dotRadius` property to `BarcodeBatchBasicOverlay` to allow customizing the size of dots when using the Dot overlay style.
+
+#### Id
+
+* Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.
+* Added support for new versions of USA, California – Driver's License; USA, North Carolina – Driver's License; and USA, Texas – Driver's License.
+
+#### Smart Label Capture
+
+* Added the `numberOfMandatoryInstances` property to the Web platform.
+
+#### Core
+
+* Redesigned `ZoomSwitchControl` to support multiple configurable zoom levels; the control now displays as a compact button that expands to show all available zoom levels, automatically filtered to those supported by the device hardware.
+* Added a new `PinchToZoom` gesture.
+* Introduced a new `ZoomListener` on the Camera object.
+* Added support for the `SwipeToZoom` gesture.
+* Added a default value to the `ZoomSwitchOrientation` enum.
+* Adjusted control colors for better visibility on dark and light backgrounds.
+* Fixed a bug where sound feedback was not correctly played in a multi-tab scenario.
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved Code 128 scan robustness for codes with uneven blur and geometric distortions. Available on all platforms except WebAssembly without SIMD and ARM without FP16.
+* Improved 1D barcode scanning speed and reduced false positives for linear symbologies.
+* Further improved scanning of square DataMatrix codes with damaged or occluded timing patterns.
+
+#### Core
+
+* Improved worker loading.
+
+### Behavioral Changes
+
+#### Barcode
+
+* Smart Scan Intention now continuously adapts between Single Scan and Selection modes during a scanning session when Smart Scan Selection is enabled, switching back to Single Scan when the scene no longer requires Selection mode. Previously, once Selection mode was activated it remained active for the rest of the session.
+* Changed ITF scanning to reduce false positives by introducing checksum-dependent scoring. ITF has an optional checksum which is mandated to be enabled by many of the standards that use ITF as the data carrier. Starting with this release, checksum-passing ITF codes are scanned with more relaxed conditions than codes that don't pass the checksum test. This happens even if the optional mod 10 checksum isn't enabled. To disable this behavior, enable the `no_checksum_dependent_validation` symbology extension for the ITF symbology.
+* Removed the Abseil library dependency.
+* Reduced Code 39 false positives.
+
+#### Core
+
+* Updated mbedtls from version 3.6.5 to 3.6.6.
+* Updated the `CameraSwitchControl` and `TorchSwitchControl` UI.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue where zoom notifications were not shown when zooming in and out.
+* Fixed an issue causing the SparkScan mini preview to have an incorrect size in landscape orientation.
+* Fixed an issue that caused the SparkScan camera to stop working when disposing the context and re-initializing it.
+* Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
+* Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+
+#### Id
+
+* Fixed an issue where the US Permanent Residence Card was not processed through the VizMrz flow.
+* Fixed an issue with browsers that don't support `createImageBitmap` in ID Capture.
+
+#### Smart Label Capture
+
+* Fixed a memory leak in LabelCapture
+* Fixed an issue where the validation flow viewfinder was not displayed.
+* Fixed a race condition in the validation flow.
+* Fixed an issue where adaptive scanning text was sometimes not correctly shown in the validation flow overlay.
+* Fixed a bug in the validation flow where input was not fully visible when focused in landscape orientation.
+* Fixed a bug that caused error messages in `DataCaptureView` to be rendered partially out-of-view.
+* Fixed a rare race condition in Label Capture.
+* Added `.asDate()` support to `ExpiryDate` and `PackingDate` label fields when the text is provided as manual input or as an Adaptive-Recognition-Engine response.
+
+#### Core
+
+* Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
+* Fixed a bug where setting the same `DataCaptureContext` instance twice on a `DataCaptureView` would lead to a crash.
+
+### Deprecations
+
+#### Core
+
+* Added `zoomLevels` property to `CameraSettings` and deprecated `zoomGestureZoomFactor`.
+* Deprecated `CameraFOVSwitchControl` in favor of `ZoomSwitchControl`.
+
 ## 8.3.1
 
 **Released**: April 14, 2026
