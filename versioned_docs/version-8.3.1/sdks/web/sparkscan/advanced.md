@@ -76,7 +76,15 @@ Please refer to [SparkScanView](https://docs.scandit.com/data-capture-sdk/web/ba
 
 import Customization from '../../../partials/advanced/_sparkscan-customization.mdx';
 
-<Customization/>
+<Customization
+  triggerButtonApi="sparkScanView.triggerButtonVisible"
+  showHardwareTrigger={false}
+  labelCaptureButtonApi="sparkScanView.labelCaptureButtonVisible"
+  barcodeFindButtonApi="sparkScanView.barcodeFindButtonVisible"
+  showBarcodeCountButton={false}
+  codeLanguage="js"
+  uiDelegateApi="sparkScanView.setListener()"
+/>
 
 ## Workflow Options
 
