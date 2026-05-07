@@ -98,6 +98,28 @@ Run from terminal:
 flutter pub get
 ```
 
+### iOS Setup
+
+For iOS development, Flutter uses CocoaPods to manage native dependencies. You'll need to set up Scandit's private CocoaPods repository:
+
+**Important:** This project uses Scandit's private CocoaPods repository. First-time setup:
+
+```sh
+# Add Scandit's private CocoaPods repository (one-time setup)
+pod repo add scandit-private-specs https://github.com/Scandit/scandit-cocoapods-specs.git
+
+# Navigate to iOS directory and install dependencies
+cd ios && pod install && cd ..
+```
+
+:::note
+The public CocoaPods trunk repository is becoming read-only. Scandit has migrated to a private CocoaPods specs repository to ensure continued support and updates for iOS framework integrations. The repository is publicly accessible at https://github.com/Scandit/scandit-cocoapods-specs.
+
+**Troubleshooting**: If you encounter issues:
+- Verify the repo is added: `pod repo list | grep scandit-private-specs`
+- Update the repo: `pod repo update scandit-private-specs`
+:::
+
 ## Additional Information
 
 ### Android Configuration
