@@ -9,6 +9,12 @@ keywords:
   - cordova
 ---
 
+## 6.28.10
+
+**Released**: May 8, 2026
+
+No updates for this framework in this release.
+
 ## 6.28.9
 
 **Released**: April 2, 2026
