@@ -1,0 +1,19 @@
+---
+sidebar_position: 1
+pagination_prev: null
+framework: xamarinAndroid
+keywords:
+  - xamarinAndroid
+title: About MatrixScan
+---
+
+import DeprecationNotice from '/versioned_docs/version-7.6.14/partials/_xamarin-deprecation-notice.mdx';
+
+<DeprecationNotice/>
+
+
+# About MatrixScan Batch
+
+import AboutMatrixScan from '../../../../partials/intro/_about-matrixscan.mdx'
+
+<AboutMatrixScan />
