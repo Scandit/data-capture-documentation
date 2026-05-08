@@ -98,15 +98,15 @@ function DropdownNavbarItemDesktop({
   const xamarinVersion = useMemo(() => {
     if (!currentPath) return "/7.6.14";
     if (currentPath.includes("/7.6.14")) return "/7.6.14";
-    if (currentPath.includes("/6.28.9")) return "/6.28.9";
+    if (currentPath.includes("/6.28.10")) return "/6.28.10";
     if (currentPath.includes("/7.6.")) return "/7.6.14";
-    if (currentPath.includes("/6.28.")) return "/6.28.9";
+    if (currentPath.includes("/6.28.")) return "/6.28.10";
     return "/7.6.14"; // Default to 7.6.14 for Xamarin
   }, [currentPath]);
 
   useEffect(() => {
     if (!currentPath) return;
-    const possibleVersions = ["/next", "/6.28.9", "/7.6.14"];
+    const possibleVersions = ["/next", "/6.28.10", "/7.6.14"];
     const match = currentPath.match(/(.*)(?=\/sdks)/);
     setLinkVersion(match && match[0] ? `${match[0]}/sdks` : "/sdks");
 
