@@ -98,10 +98,12 @@
       { "slug": "label-capture-rn", "product": "smart-label-capture" }
     ],
     ".NET iOS": [
-      { "slug": "barcode-capture-net-ios", "product": "barcode-capture" }
+      { "slug": "barcode-capture-net-ios", "product": "barcode-capture" },
+      { "slug": "barcode-capture-maui", "product": "barcode-capture", "label": "Barcode Capture for .NET MAUI (cross-platform iOS + Android)" }
     ],
     ".NET Android": [
-      { "slug": "barcode-capture-net-android", "product": "barcode-capture" }
+      { "slug": "barcode-capture-net-android", "product": "barcode-capture" },
+      { "slug": "barcode-capture-maui", "product": "barcode-capture", "label": "Barcode Capture for .NET MAUI (cross-platform iOS + Android)" }
     ]
   }
 }
