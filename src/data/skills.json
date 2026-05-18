@@ -1,5 +1,5 @@
 {
-  "repo": "https://github.com/scandit/scandit-sdk-skills",
+  "repo": "https://github.com/scandit/skills",
   "shared": "data-capture-sdk",
   "products": {
     "sparkscan": {

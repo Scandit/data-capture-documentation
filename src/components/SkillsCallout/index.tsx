@@ -35,7 +35,7 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, varia
 
   if (variant === 'shared') {
     return (
-      <aside className={styles.callout} aria-label="Install Scandit SDK Skills">
+      <aside className={styles.callout} aria-label="Install Scandit Agent Skills">
         <h3 className={styles.title}>Not sure which Scandit product fits your use case?</h3>
         <p className={styles.description}>
           Install our <code>{skillsData.shared}</code> skill so your coding
@@ -66,7 +66,7 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, varia
   const moreInfoUrl = frameworkPath ? `/sdks/${frameworkPath}/agent-skills` : null;
 
   return (
-    <aside className={styles.callout} aria-label="Install Scandit SDK Skills">
+    <aside className={styles.callout} aria-label="Install Scandit Agent Skills">
       <h3 className={styles.title}>Speed up {productName} integration with Agent Skills</h3>
       <p className={styles.description}>
         Install the official skill to help your coding agent (Claude Code,

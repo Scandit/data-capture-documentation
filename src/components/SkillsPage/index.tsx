@@ -27,7 +27,7 @@ interface FrameworkSkillEntry {
   label?: string;
 }
 
-const REPO_URL = 'https://github.com/scandit/scandit-sdk-skills';
+const REPO_URL = 'https://github.com/scandit/skills';
 
 const SKILL_DESCRIPTIONS: Record<string, string> = {
   sparkscan: 'SparkScan integration & migration.',
@@ -151,7 +151,7 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
       <ul className={styles.learnMore}>
         <li>
           <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
-            Scandit SDK Skills repository
+            scandit/skills repository
           </a>{' '}
           — source code and full catalog of Scandit skills.
         </li>

@@ -7,7 +7,7 @@ type TabKey = 'any' | 'claude-code' | 'cursor';
 
 const CURSOR_INSTALL_URL = 'https://cursor.com/marketplace/scandit';
 
-const CLAUDE_CODE_MARKETPLACE_COMMAND = '/plugin marketplace add Scandit/scandit-sdk-skills';
+const CLAUDE_CODE_MARKETPLACE_COMMAND = '/plugin marketplace add scandit/skills';
 const CLAUDE_CODE_INSTALL_COMMAND = '/plugin install scandit-sdk@scandit-plugins';
 
 const CommandBlock: React.FC<{ command: string }> = ({ command }) => {
