@@ -173,6 +173,10 @@ const config: Config = {
         },
         redirects: [
           {
+            to: '/sdks/ios/agent-skills',
+            from: ['/connector-guides/windsurf', '/connector-guides/cursor'],
+          },
+          {
             to: '/sdks/ios/add-sdk',
             from: ['/data-capture-sdk/ios', '/data-capture-sdk/ios/add-sdk.html'],
           },
