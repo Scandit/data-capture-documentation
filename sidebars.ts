@@ -159,6 +159,7 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/ios/add-sdk',
+        'sdks/ios/agent-skills',
         {
           type: "link",
           label: "Samples",
@@ -419,6 +420,7 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/android/add-sdk',
+        'sdks/android/agent-skills',
         {
           type: "link",
           label: "Samples",
@@ -671,6 +673,7 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/web/add-sdk',
+        'sdks/web/agent-skills',
         {
           type: "link",
           label: "Samples",
@@ -898,6 +901,7 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/cordova/add-sdk',
+        'sdks/cordova/agent-skills',
         {
           type: "link",
           label: "Samples",
@@ -1142,6 +1146,7 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/react-native/add-sdk',
+        'sdks/react-native/agent-skills',
         {
           type: "link",
           label: "Samples",
@@ -1394,6 +1399,7 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/flutter/add-sdk',
+        'sdks/flutter/agent-skills',
         {
           type: "link",
           label: "Samples",
@@ -1639,6 +1645,7 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/capacitor/add-sdk',
+        'sdks/capacitor/agent-skills',
         {
           type: "link",
           label: "Samples",
@@ -1985,6 +1992,7 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/net/ios/add-sdk',
+        'sdks/net/ios/agent-skills',
         {
           type: "link",
           label: "Samples",
@@ -2230,6 +2238,7 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/net/android/add-sdk',
+        'sdks/net/android/agent-skills',
         {
           type: "link",
           label: "Samples",
