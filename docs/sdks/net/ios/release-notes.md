@@ -9,9 +9,9 @@ keywords:
   - netIos
 ---
 
-## 8.4.0-beta.1
+## 8.4.0
 
-**Released**: May 5, 2026
+**Released**: May 18, 2026
 
 ### New Features
 
@@ -62,10 +62,12 @@ keywords:
 * Fixed an unnecessary second scan callback that occurs after freezing barcode recognition.
 * Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
 * Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+* Fixed an issue where the Smart Scan Selection aimer would become too small when scan-area margins restricted the visible scan area; the aimer is now sized relative to the view, keeping a consistent on-screen size regardless of margins.
 
 #### Id
 
 * Fixed an issue where the US Permanent Residence Card was not processed through the VizMrz flow.
+* Fixed an issue where AAMVA verification was being performed even when no AAMVA document types were enabled in the accepted documents.
 
 #### Smart Label Capture
 
@@ -76,6 +78,7 @@ keywords:
 * Fixed a bug that caused error messages in `DataCaptureView` to be rendered partially out-of-view.
 * Fixed a rare race condition in Label Capture.
 * Added `.asDate()` support to `ExpiryDate` and `PackingDate` label fields when the text is provided as manual input or as an Adaptive-Recognition-Engine response.
+* Fixed a bug where the receipt scanning overlay and validation flow overlay could not be used on the same LabelCapture mode instance.
 
 #### Core
 

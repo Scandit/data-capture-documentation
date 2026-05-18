@@ -10,9 +10,9 @@ keywords:
   - android
 ---
 
-## 8.4.0-beta.1
+## 8.4.0
 
-**Released**: May 5, 2026
+**Released**: May 18, 2026
 
 ### New Features
 
@@ -62,10 +62,13 @@ keywords:
 * Fixed an issue preventing `BarcodeFind` from finding binary barcodes.
 * Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
 * Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+* Fixed an issue where the Smart Scan Selection aimer would become too small when scan-area margins restricted the visible scan area; the aimer is now sized relative to the view, keeping a consistent on-screen size regardless of margins.
+* Fixed an issue in BarcodeCount where the strap mode setting would not be saved in all cases.
 
 #### Id
 
 * Fixed an issue where the US Permanent Residence Card was not processed through the VizMrz flow.
+* Fixed an issue where AAMVA verification was being performed even when no AAMVA document types were enabled in the accepted documents.
 
 #### Smart Label Capture
 
@@ -76,12 +79,15 @@ keywords:
 * Fixed a bug that would cause the buttons in the `LabelCaptureValidationFlowOverlay` to overlap when applying a long custom text.
 * Fixed a rare race condition in Label Capture.
 * Added `.asDate()` support to `ExpiryDate` and `PackingDate` label fields when the text is provided as manual input or as an Adaptive-Recognition-Engine response.
+* Fixed a bug where the receipt scanning overlay and validation flow overlay could not be used on the same LabelCapture mode instance.
 
 #### Core
 
 * Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
+* Fixed a rare crash when opening the camera.
 * Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
 * Fixed custom sound not working in Barcode Find on Android.
+* Fixed a rare crash when starting camera capture while under memory pressure.
 
 ## 8.3.1
 
