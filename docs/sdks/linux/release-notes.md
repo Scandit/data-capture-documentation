@@ -9,9 +9,9 @@ keywords:
   - linux
 ---
 
-## 8.4.0-beta.1
+## 8.4.0
 
-**Released**: May 5, 2026
+**Released**: May 18, 2026
 
 ### Performance Improvements
 

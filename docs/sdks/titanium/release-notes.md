@@ -10,9 +10,9 @@ keywords:
   - titanium
 ---
 
-## 8.4.0-beta.1
+## 8.4.0
 
-**Released**: May 5, 2026
+**Released**: May 18, 2026
 
 ### New Features
 
@@ -57,6 +57,7 @@ keywords:
 * Fixed an unnecessary second scan callback that occurs after freezing barcode recognition.
 * Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
 * Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
+* Fixed an issue where the Smart Scan Selection aimer would become too small when scan-area margins restricted the visible scan area; the aimer is now sized relative to the view, keeping a consistent on-screen size regardless of margins.
 
 #### Id
 
@@ -72,8 +73,10 @@ keywords:
 #### Core
 
 * Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
+* Fixed a rare crash when opening the camera.
 * Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
 * Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
+* Fixed a rare crash when starting camera capture while under memory pressure.
 
 ## 8.3.1
 
