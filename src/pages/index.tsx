@@ -38,7 +38,7 @@ export default function HomePage() {
         <CardsPart></CardsPart>
 
         <div className={style.skillsCalloutWrapper}>
-          <SkillsCallout variant="shared" />
+          <SkillsCallout variant="shared" banner />
         </div>
 
         <DataCapture></DataCapture>

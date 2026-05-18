@@ -11,16 +11,25 @@
   font-family: var(--font-family, inherit);
 }
 
+.banner {
+  margin: 0;
+  padding: 1.75rem 2rem;
+}
+
+.bannerContent {
+  max-width: 100%;
+}
+
 .title {
   margin: 0 0 0.5rem 0;
-  font-size: 1rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: var(--ifm-color-content, #1a1a1a);
 }
 
 .description {
   margin: 0 0 0.75rem 0;
-  font-size: 0.875rem;
+  font-size: 1rem;
   line-height: 1.5;
   color: var(--ifm-color-content-secondary, #444);
 }
@@ -38,7 +47,7 @@
   border: 1px solid var(--light-blue-80, #c2cce3);
   border-radius: 6px;
   font-family: var(--third-family, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
-  font-size: 0.8125rem;
+  font-size: 1rem;
   line-height: 1.5;
   overflow-x: auto;
   white-space: pre-wrap;
@@ -56,15 +65,19 @@
 
 .copyButton {
   position: absolute;
-  top: 0.5rem;
+  top: 50%;
   right: 0.5rem;
-  padding: 0.25rem 0.625rem;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
   background: var(--light-blue-60, #f0f5ff);
   color: var(--light-blue-100, #0a3390);
   border: 1px solid var(--light-blue-80, #c2cce3);
   border-radius: 4px;
-  font-size: 0.75rem;
-  font-family: inherit;
   cursor: pointer;
   transition: background 120ms ease;
 }
@@ -107,7 +120,7 @@ html[data-theme='dark'] .copyButton:hover {
   color: var(--ifm-color-content-secondary, #444);
   border: 0;
   border-bottom: 2px solid transparent;
-  font-size: 0.8125rem;
+  font-size: 1rem;
   font-family: inherit;
   font-weight: 500;
   cursor: pointer;
@@ -130,15 +143,18 @@ html[data-theme='dark'] .copyButton:hover {
 
 .tabHint {
   margin: 0 0 0.5rem 0;
-  font-size: 0.8125rem;
+  font-size: 1rem;
   line-height: 1.5;
   color: var(--ifm-color-content-secondary, #444);
 }
 
 .cursorButton {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin: 0 0 0.75rem 0;
   padding: 0.625rem 1.25rem;
+  text-align: center;
   background: var(--light-blue-100, #2385ec);
   color: #fff !important;
   border-radius: 6px;
