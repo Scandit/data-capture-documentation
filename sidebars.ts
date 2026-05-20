@@ -140,19 +140,12 @@ const sidebars: SidebarsConfig = {
   iosSidebar: [
     {
       type: 'category',
-      label: 'Data Capture SDK for iOS',
+      label: 'Data Capture SDK',
       collapsed: false,
       items: [
-        {
-          type: 'category',
-          label: 'Data Capture Basics',
-          collapsed: true,
-          items: [
-            'sdks/ios/core-concepts',
-            'sdks/ios/features-by-framework',
-            'sdks/ios/system-requirements',
-          ],
-        },
+        'sdks/ios/core-concepts',
+        'sdks/ios/features-by-framework',
+        'sdks/ios/system-requirements',
         {
           type: "link",
           label: "FAQs",
@@ -306,21 +299,12 @@ const sidebars: SidebarsConfig = {
             "sdks/ios/barcode-capture/configure-barcode-symbologies",
           ],
         },
-        {
-          type: "link",
-          label: "Scandit Express Documentation",
-          href: "https://docs.scandit.com/hosted/express/overview/",
-        }, 
       ],
     },
     {
       type: "category",
       label: "Label Scanning",
       collapsed: false,
-      link: {
-        type: 'doc',
-        id: 'sdks/ios/label-scanning',
-      },
       items: [
         "sdks/ios/label-capture/intro",
         "sdks/ios/label-capture/get-started",
@@ -338,11 +322,23 @@ const sidebars: SidebarsConfig = {
         "sdks/ios/id-capture/get-started",
         "sdks/ios/id-capture/supported-documents",
         "sdks/ios/id-capture/advanced",
-          {
-            type: "link",
-            label: "ID Bolt Documentation",
-            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
-          },
+      ],
+    },
+    {
+      type: "category",
+      label: "Plug & Play Solutions",
+      collapsed: false,
+      items: [
+        {
+          type: "link",
+          label: "ID Bolt Documentation",
+          href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
+        },
       ],
     },
     {
@@ -401,19 +397,12 @@ const sidebars: SidebarsConfig = {
   androidSidebar: [
     {
       type: 'category',
-      label: 'Data Capture SDK for Android',
+      label: 'Data Capture SDK',
       collapsed: false,
       items: [
-        {
-          type: 'category',
-          label: 'Data Capture Basics',
-          collapsed: true,
-          items: [
-            'sdks/android/core-concepts',
-            'sdks/android/features-by-framework',
-            'sdks/android/system-requirements',
-          ],
-        },
+        'sdks/android/core-concepts',
+        'sdks/android/features-by-framework',
+        'sdks/android/system-requirements',
         {
           type: "link",
           label: "Frequently Asked Questions",
@@ -560,21 +549,12 @@ const sidebars: SidebarsConfig = {
             "sdks/android/barcode-capture/configure-barcode-symbologies",
           ],
         },
-        {
-          type: "link",
-          label: "Scandit Express Documentation",
-          href: "https://docs.scandit.com/hosted/express/overview/",
-        }, 
       ],
     },
     {
       type: "category",
       label: "Label Scanning",
       collapsed: false,
-      link: {
-        type: 'doc',
-        id: 'sdks/android/label-scanning',
-      },
       items: [
         "sdks/android/label-capture/intro",
         "sdks/android/label-capture/get-started",
@@ -591,11 +571,23 @@ const sidebars: SidebarsConfig = {
           "sdks/android/id-capture/get-started",
           "sdks/android/id-capture/supported-documents",
           "sdks/android/id-capture/advanced",
-          {
-            type: "link",
-            label: "ID Bolt Documentation",
-            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
-          },
+      ],
+    },
+    {
+      type: "category",
+      label: "Plug & Play Solutions",
+      collapsed: false,
+      items: [
+        {
+          type: "link",
+          label: "ID Bolt Documentation",
+          href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
+        },
       ],
     },
     {
@@ -654,19 +646,12 @@ const sidebars: SidebarsConfig = {
   webSidebar: [
     {
       type: 'category',
-      label: 'Data Capture SDK for Web',
+      label: 'Data Capture SDK',
       collapsed: false,
       items: [
-        {
-          type: 'category',
-          label: 'Data Capture Basics',
-          collapsed: true,
-          items: [
-            'sdks/web/core-concepts',
-            'sdks/web/features-by-framework',
-            'sdks/web/system-requirements',
-          ],
-        },
+        'sdks/web/core-concepts',
+        'sdks/web/features-by-framework',
+        'sdks/web/system-requirements',
         {
           type: "link",
           label: "Frequently Asked Questions",
@@ -788,21 +773,12 @@ const sidebars: SidebarsConfig = {
             "sdks/web/barcode-capture/configure-barcode-symbologies",
           ],
         },
-        {
-          type: "link",
-          label: "Scandit Express Documentation",
-          href: "https://docs.scandit.com/hosted/express/overview/",
-        }, 
       ],
     },
     {
       type: "category",
       label: "Label Scanning",
       collapsed: false,
-      link: {
-        type: 'doc',
-        id: 'sdks/web/label-scanning',
-      },
       items: [
         "sdks/web/label-capture/intro",
         "sdks/web/label-capture/get-started",
@@ -819,11 +795,23 @@ const sidebars: SidebarsConfig = {
             "sdks/web/id-capture/get-started",
             "sdks/web/id-capture/supported-documents",
             "sdks/web/id-capture/advanced",
-          {
-            type: "link",
-            label: "ID Bolt Documentation",
-            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
-          },
+      ],
+    },
+    {
+      type: "category",
+      label: "Plug & Play Solutions",
+      collapsed: false,
+      items: [
+        {
+          type: "link",
+          label: "ID Bolt Documentation",
+          href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
+        },
       ],
     },
     {
@@ -882,19 +870,12 @@ const sidebars: SidebarsConfig = {
   cordovaSidebar: [
     {
       type: 'category',
-      label: 'Data Capture SDK for Cordova',
+      label: 'Data Capture SDK',
       collapsed: false,
       items: [
-        {
-          type: 'category',
-          label: 'Data Capture Basics',
-          collapsed: true,
-          items: [
-            'sdks/cordova/core-concepts',
-            'sdks/cordova/features-by-framework',
-            'sdks/cordova/system-requirements',
-          ],
-        },
+        'sdks/cordova/core-concepts',
+        'sdks/cordova/features-by-framework',
+        'sdks/cordova/system-requirements',
         {
           type: "link",
           label: "Frequently Asked Questions",
@@ -1033,21 +1014,12 @@ const sidebars: SidebarsConfig = {
             "sdks/cordova/barcode-capture/configure-barcode-symbologies",
           ],
         },
-        {
-          type: "link",
-          label: "Scandit Express Documentation",
-          href: "https://docs.scandit.com/hosted/express/overview/",
-        }, 
       ],
     },
     {
       type: "category",
       label: "Label Scanning",
       collapsed: false,
-      link: {
-        type: 'doc',
-        id: 'sdks/cordova/label-scanning',
-      },
       items: [
         "sdks/cordova/label-capture/intro",
         "sdks/cordova/label-capture/get-started",
@@ -1064,11 +1036,23 @@ const sidebars: SidebarsConfig = {
             "sdks/cordova/id-capture/get-started",
             "sdks/cordova/id-capture/supported-documents",
             "sdks/cordova/id-capture/advanced",
-            {
-              type: "link",
-              label: "ID Bolt Documentation",
-              href: "https://docs.scandit.com/hosted/id-bolt/overview/",
-            },
+      ],
+    },
+    {
+      type: "category",
+      label: "Plug & Play Solutions",
+      collapsed: false,
+      items: [
+        {
+          type: "link",
+          label: "ID Bolt Documentation",
+          href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
+        },
       ],
     },
     {
@@ -1127,19 +1111,12 @@ const sidebars: SidebarsConfig = {
   reactnativeSidebar: [
     {
       type: 'category',
-      label: 'Data Capture SDK for React Native',
+      label: 'Data Capture SDK',
       collapsed: false,
       items: [
-        {
-          type: 'category',
-          label: 'Data Capture Basics',
-          collapsed: true,
-          items: [
-            'sdks/react-native/core-concepts',
-            'sdks/react-native/features-by-framework',
-            'sdks/react-native/system-requirements',
-          ],
-        },
+        'sdks/react-native/core-concepts',
+        'sdks/react-native/features-by-framework',
+        'sdks/react-native/system-requirements',
         {
           type: "link",
           label: "Frequently Asked Questions",
@@ -1286,21 +1263,12 @@ const sidebars: SidebarsConfig = {
             "sdks/react-native/barcode-capture/configure-barcode-symbologies",
           ],
         },
-        {
-          type: "link",
-          label: "Scandit Express Documentation",
-          href: "https://docs.scandit.com/hosted/express/overview/",
-        }, 
       ],
     },
     {
       type: "category",
       label: "Label Scanning",
       collapsed: false,
-      link: {
-        type: 'doc',
-        id: 'sdks/react-native/label-scanning',
-      },
       items: [
         "sdks/react-native/label-capture/intro",
         "sdks/react-native/label-capture/get-started",
@@ -1317,11 +1285,23 @@ const sidebars: SidebarsConfig = {
             "sdks/react-native/id-capture/get-started",
             "sdks/react-native/id-capture/supported-documents",
             "sdks/react-native/id-capture/advanced",
-          {
-            type: "link",
-            label: "ID Bolt Documentation",
-            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
-          },
+      ],
+    },
+    {
+      type: "category",
+      label: "Plug & Play Solutions",
+      collapsed: false,
+      items: [
+        {
+          type: "link",
+          label: "ID Bolt Documentation",
+          href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
+        },
       ],
     },
     {
@@ -1380,19 +1360,12 @@ const sidebars: SidebarsConfig = {
   flutterSidebar: [
     {
       type: 'category',
-      label: 'Data Capture SDK for Flutter',
+      label: 'Data Capture SDK',
       collapsed: false,
       items: [
-        {
-          type: 'category',
-          label: 'Data Capture Basics',
-          collapsed: true,
-          items: [
-            'sdks/flutter/core-concepts',
-            'sdks/flutter/features-by-framework',
-            'sdks/flutter/system-requirements',
-          ],
-        },
+        'sdks/flutter/core-concepts',
+        'sdks/flutter/features-by-framework',
+        'sdks/flutter/system-requirements',
         {
           type: "link",
           label: "Frequently Asked Questions",
@@ -1532,21 +1505,12 @@ const sidebars: SidebarsConfig = {
             "sdks/flutter/barcode-capture/configure-barcode-symbologies",
           ],
         },
-        {
-          type: "link",
-          label: "Scandit Express Documentation",
-          href: "https://docs.scandit.com/hosted/express/overview/",
-        }, 
       ],
     },
     {
       type: "category",
       label: "Label Scanning",
       collapsed: false,
-      link: {
-        type: 'doc',
-        id: 'sdks/flutter/label-scanning',
-      },
       items: [
         "sdks/flutter/label-capture/intro",
         "sdks/flutter/label-capture/get-started",
@@ -1563,11 +1527,23 @@ const sidebars: SidebarsConfig = {
             "sdks/flutter/id-capture/get-started",
             "sdks/flutter/id-capture/supported-documents",
             "sdks/flutter/id-capture/advanced",
-          {
-            type: "link",
-            label: "ID Bolt Documentation",
-            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
-          },
+      ],
+    },
+    {
+      type: "category",
+      label: "Plug & Play Solutions",
+      collapsed: false,
+      items: [
+        {
+          type: "link",
+          label: "ID Bolt Documentation",
+          href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
+        },
       ],
     },
     {
@@ -1626,19 +1602,12 @@ const sidebars: SidebarsConfig = {
   capacitorSidebar: [
     {
       type: 'category',
-      label: 'Data Capture SDK for Capacitor',
+      label: 'Data Capture SDK',
       collapsed: false,
       items: [
-        {
-          type: 'category',
-          label: 'Data Capture Basics',
-          collapsed: true,
-          items: [
-            'sdks/capacitor/core-concepts',
-            'sdks/capacitor/features-by-framework',
-            'sdks/capacitor/system-requirements',
-          ],
-        },
+        'sdks/capacitor/core-concepts',
+        'sdks/capacitor/features-by-framework',
+        'sdks/capacitor/system-requirements',
         {
           type: "link",
           label: "Frequently Asked Questions",
@@ -1777,21 +1746,12 @@ const sidebars: SidebarsConfig = {
             "sdks/capacitor/barcode-capture/configure-barcode-symbologies",
           ],
         },
-        {
-          type: "link",
-          label: "Scandit Express Documentation",
-          href: "https://docs.scandit.com/hosted/express/overview/",
-        }, 
       ],
     },
     {
       type: "category",
       label: "Label Scanning",
       collapsed: false,
-      link: {
-        type: 'doc',
-        id: 'sdks/capacitor/label-scanning',
-      },
       items: [
         "sdks/capacitor/label-capture/intro",
         "sdks/capacitor/label-capture/get-started",
@@ -1808,11 +1768,23 @@ const sidebars: SidebarsConfig = {
             "sdks/capacitor/id-capture/get-started",
             "sdks/capacitor/id-capture/supported-documents",
             "sdks/capacitor/id-capture/advanced",
-          {
-            type: "link",
-            label: "ID Bolt Documentation",
-            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
-          },
+      ],
+    },
+    {
+      type: "category",
+      label: "Plug & Play Solutions",
+      collapsed: false,
+      items: [
+        {
+          type: "link",
+          label: "ID Bolt Documentation",
+          href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
+        },
       ],
     },
     {
@@ -1866,19 +1838,12 @@ const sidebars: SidebarsConfig = {
   titaniumSidebar: [
     {
       type: 'category',
-      label: 'Data Capture SDK for Titanium',
+      label: 'Data Capture SDK',
       collapsed: false,
       items: [
-        {
-          type: 'category',
-          label: 'Data Capture Basics',
-          collapsed: true,
-          items: [
-            'sdks/titanium/core-concepts',
-            'sdks/titanium/features-by-framework',
-            'sdks/titanium/system-requirements',
-          ],
-        },
+        'sdks/titanium/core-concepts',
+        'sdks/titanium/features-by-framework',
+        'sdks/titanium/system-requirements',
         {
           type: "link",
           label: "Frequently Asked Questions",
@@ -1926,6 +1891,13 @@ const sidebars: SidebarsConfig = {
             "sdks/titanium/barcode-capture/configure-barcode-symbologies",
           ],
         },
+      ],
+    },
+    {
+      type: "category",
+      label: "Plug & Play Solutions",
+      collapsed: false,
+      items: [
         {
           type: "link",
           label: "Scandit Express Documentation",
@@ -1973,19 +1945,12 @@ const sidebars: SidebarsConfig = {
   netIosSidebar: [
     {
       type: 'category',
-      label: 'Data Capture SDK for .NET iOS',
+      label: 'Data Capture SDK',
       collapsed: false,
       items: [
-        {
-          type: 'category',
-          label: 'Data Capture Basics',
-          collapsed: true,
-          items: [
-            'sdks/net/ios/core-concepts',
-            'sdks/net/ios/features-by-framework',
-            'sdks/net/ios/system-requirements',
-          ],
-        },
+        'sdks/net/ios/core-concepts',
+        'sdks/net/ios/features-by-framework',
+        'sdks/net/ios/system-requirements',
         {
           type: "link",
           label: "Frequently Asked Questions",
@@ -2125,21 +2090,12 @@ const sidebars: SidebarsConfig = {
             "sdks/net/ios/barcode-capture/configure-barcode-symbologies",
           ],
         },
-        {
-          type: "link",
-          label: "Scandit Express Documentation",
-          href: "https://docs.scandit.com/hosted/express/overview/",
-        }, 
       ],
     },
     {
       type: "category",
       label: "Label Scanning",
       collapsed: false,
-      link: {
-        type: 'doc',
-        id: 'sdks/net/ios/label-scanning',
-      },
       items: [
         "sdks/net/ios/label-capture/intro",
         "sdks/net/ios/label-capture/get-started",
@@ -2156,11 +2112,23 @@ const sidebars: SidebarsConfig = {
             "sdks/net/ios/id-capture/get-started",
             "sdks/net/ios/id-capture/supported-documents",
             "sdks/net/ios/id-capture/advanced",
-          {
-            type: "link",
-            label: "ID Bolt Documentation",
-            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
-          },
+      ],
+    },
+    {
+      type: "category",
+      label: "Plug & Play Solutions",
+      collapsed: false,
+      items: [
+        {
+          type: "link",
+          label: "ID Bolt Documentation",
+          href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
+        },
       ],
     },
     {
@@ -2219,19 +2187,12 @@ const sidebars: SidebarsConfig = {
   netAndroidSidebar: [
     {
       type: 'category',
-      label: 'Data Capture SDK for .NET Android',
+      label: 'Data Capture SDK',
       collapsed: false,
       items: [
-        {
-          type: 'category',
-          label: 'Data Capture Basics',
-          collapsed: true,
-          items: [
-            'sdks/net/android/core-concepts',
-            'sdks/net/android/features-by-framework',
-            'sdks/net/android/system-requirements',
-          ],
-        },
+        'sdks/net/android/core-concepts',
+        'sdks/net/android/features-by-framework',
+        'sdks/net/android/system-requirements',
         {
           type: "link",
           label: "Frequently Asked Questions",
@@ -2371,21 +2332,12 @@ const sidebars: SidebarsConfig = {
             "sdks/net/android/barcode-capture/configure-barcode-symbologies",
           ],
         },
-        {
-          type: "link",
-          label: "Scandit Express Documentation",
-          href: "https://docs.scandit.com/hosted/express/overview/",
-        }, 
       ],
     },
     {
       type: "category",
       label: "Label Scanning",
       collapsed: false,
-      link: {
-        type: 'doc',
-        id: 'sdks/net/android/label-scanning',
-      },
       items: [
         "sdks/net/android/label-capture/intro",
         "sdks/net/android/label-capture/get-started",
@@ -2402,11 +2354,23 @@ const sidebars: SidebarsConfig = {
             "sdks/net/android/id-capture/get-started",
             "sdks/net/android/id-capture/supported-documents",
             "sdks/net/android/id-capture/advanced",
-          {
-            type: "link",
-            label: "ID Bolt Documentation",
-            href: "https://docs.scandit.com/hosted/id-bolt/overview/",
-          },
+      ],
+    },
+    {
+      type: "category",
+      label: "Plug & Play Solutions",
+      collapsed: false,
+      items: [
+        {
+          type: "link",
+          label: "ID Bolt Documentation",
+          href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
+        },
       ],
     },
     {
