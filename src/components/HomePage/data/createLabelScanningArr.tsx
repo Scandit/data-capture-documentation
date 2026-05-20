@@ -28,18 +28,17 @@ export function createLabelScanningArr(framework: string) {
 
   function buildLink(basePath: string): string {
     const path = getFrameworkPath(frameworkData);
-    // If path starts with a version (e.g., "/7.6.14/"), use it as-is
     if (path && path.startsWith('/')) {
       return `${path}${basePath}`;
     }
-    // Otherwise prepend /sdks/
     return `/sdks/${path}${basePath}`;
   }
 
-  const allCardsArray = [
+  return [
     {
       name: LabelScanning.LabelScanning,
-      text: "Capture Multiple Barcodes and Text from Labels",
+      text: "Capture expiry dates, prices, weights, VIN, IMEI, or serial numbers",
+      apis: "Label Capture",
       icon: <LabelCapture />,
       isActive: frameworkData?.labelScanning?.includes(
         LabelScanning.LabelScanning
@@ -47,7 +46,4 @@ export function createLabelScanningArr(framework: string) {
       link: buildLink('/label-capture/intro'),
     },
   ];
-
-  return allCardsArray;
 }
-

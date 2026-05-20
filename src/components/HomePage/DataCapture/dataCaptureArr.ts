@@ -16,7 +16,11 @@ export const dataCaptureArr = [
     link: "/barcode-symbologies",
   },
   {
-    title: "Supported Documents",
+    title: "Supported ID Documents",
     link: "/id-documents",
+  },
+  {
+    title: "Supported Labels",
+    link: "/label-definitions",
   },
 ];

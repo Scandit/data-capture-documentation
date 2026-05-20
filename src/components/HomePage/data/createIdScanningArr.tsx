@@ -1,4 +1,4 @@
-import { Bolt, IDValidate, IdCapture } from "../../IconComponents";
+import { IDValidate } from "../../IconComponents";
 import { frameworkCards } from "./frameworkCardsArr";
 import { IDScanning } from "../../constants/scanningEnums";
 import { FrameworkCardType } from "../../constants/types";
@@ -27,30 +27,22 @@ export function createIdScanningArr(framework: string) {
 
   function buildLink(basePath: string): string {
     const path = getFrameworkPath(frameworkData);
-    // If path starts with a version (e.g., "/7.6.14/"), use it as-is
     if (path && path.startsWith('/')) {
       return `${path}${basePath}`;
     }
-    // Otherwise prepend /sdks/
     return `/sdks/${path}${basePath}`;
   }
 
   return [
     {
       name: IDScanning.IDCaptureValidation,
-      text: "Capture and Validate ID Data in One Step",
+      text: "Extract data from 2,500+ IDs and run authenticity checks",
+      apis: "ID Capture",
       icon: <IDValidate />,
       isActive: frameworkData.IDScanning.includes(
         IDScanning.IDCaptureValidation
       ),
       link: buildLink('/id-capture/intro'),
-    },
-    {
-      name: IDScanning.IdBolt,
-      text: "Add ID Scanning to Any Site",
-      icon: <Bolt />,
-      isActive: frameworkData.IDScanning.includes(IDScanning.IdBolt),
-      link: `/hosted/id-bolt/overview`,
     },
   ];
 }

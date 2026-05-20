@@ -7,6 +7,7 @@ export interface CardType {
   name: string;
   text: string;
   icon: ReactElement;
+  apis?: string;
 }
 
 export interface FrameworkCardType {

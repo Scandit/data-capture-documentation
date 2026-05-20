@@ -8,6 +8,11 @@
   cursor: pointer;
 }
 
+.card:only-child {
+  width: 100%;
+  height: 100%;
+}
+
 .cardNotActive {
   background: transparent;
   border: 1px solid var(--nav-border);
@@ -43,6 +48,17 @@
   margin: 0;
   font-size: clamp(12px, 1.1vw, 16px);
   line-height: 1.2em;
+}
+
+.cardApiList {
+  color: var(--light-gray-100);
+  margin: 8px 0 0;
+  font-size: clamp(11px, 1vw, 14px);
+  line-height: 1.3em;
+}
+
+.cardApiLabel {
+  font-weight: 700;
 }
 
 [data-theme="dark"] .cardIcon {

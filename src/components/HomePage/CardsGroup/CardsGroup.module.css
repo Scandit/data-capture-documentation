@@ -1,3 +1,9 @@
+.cardsGroupWrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .cardsGroupWrapper ul {
   padding: 0;
 }
@@ -53,4 +59,5 @@
   flex-wrap: wrap;
   gap: clamp(12px, 3.5vw, 35px) 40px;
   margin: 30px 0;
+  flex: 1;
 }

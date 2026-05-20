@@ -174,7 +174,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Single Scanning',
+          label: 'Single Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/ios/single-scanning',
@@ -204,7 +204,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Batch Scanning',
+          label: 'Multiple Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/ios/batch-scanning',
@@ -264,22 +264,6 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "category",
-          label: "Label Scanning",
-          link: {
-            type: 'doc',
-            id: 'sdks/ios/label-scanning',
-          },
-          collapsed: true,
-          items: [
-            "sdks/ios/label-capture/intro",
-            "sdks/ios/label-capture/get-started",
-            "sdks/ios/label-capture/get-started-with-swift-ui",
-            "sdks/ios/label-capture/label-definitions",
-            "sdks/ios/label-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
           label: "Additional Functionalities",
           collapsed: true,
           items: [
@@ -331,7 +315,23 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Capture and Validation",
+      label: "Label Scanning",
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'sdks/ios/label-scanning',
+      },
+      items: [
+        "sdks/ios/label-capture/intro",
+        "sdks/ios/label-capture/get-started",
+        "sdks/ios/label-capture/get-started-with-swift-ui",
+        "sdks/ios/label-capture/label-definitions",
+        "sdks/ios/label-capture/advanced",
+      ],
+    },
+    {
+      type: "category",
+      label: "ID Scanning",
       collapsed: false,
       items: [
         "sdks/ios/id-capture/intro",
@@ -435,7 +435,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Single Scanning',
+          label: 'Single Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/android/single-scanning',
@@ -463,7 +463,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Batch Scanning',
+          label: 'Multiple Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/android/batch-scanning',
@@ -514,21 +514,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/android/matrixscan-pick/advanced",
               ],
             },
-          ],
-        },
-        {
-          type: "category",
-          label: "Label Scanning",
-          link: {
-            type: 'doc',
-            id: 'sdks/android/label-scanning',
-          },
-          collapsed: true,
-          items: [
-            "sdks/android/label-capture/intro",
-            "sdks/android/label-capture/get-started",
-            "sdks/android/label-capture/label-definitions",
-            "sdks/android/label-capture/advanced",
           ],
         },
         {
@@ -584,7 +569,22 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Scanning and Validation",
+      label: "Label Scanning",
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'sdks/android/label-scanning',
+      },
+      items: [
+        "sdks/android/label-capture/intro",
+        "sdks/android/label-capture/get-started",
+        "sdks/android/label-capture/label-definitions",
+        "sdks/android/label-capture/advanced",
+      ],
+    },
+    {
+      type: "category",
+      label: "ID Scanning",
       collapsed: false,
       items: [
           "sdks/android/id-capture/intro",
@@ -688,7 +688,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Single Scanning',
+          label: 'Single Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/web/single-scanning',
@@ -716,7 +716,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Batch Scanning',
+          label: 'Multiple Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/web/batch-scanning',
@@ -749,21 +749,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/web/matrixscan-find/advanced",
               ],
             },
-          ],
-        },
-        {
-          type: "category",
-          label: "Label Scanning",
-          link: {
-            type: 'doc',
-            id: 'sdks/web/label-scanning',
-          },
-          collapsed: true,
-          items: [
-            "sdks/web/label-capture/intro",
-            "sdks/web/label-capture/get-started",
-            "sdks/web/label-capture/label-definitions",
-            "sdks/web/label-capture/advanced",
           ],
         },
         {
@@ -812,7 +797,22 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Capture and Validation",
+      label: "Label Scanning",
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'sdks/web/label-scanning',
+      },
+      items: [
+        "sdks/web/label-capture/intro",
+        "sdks/web/label-capture/get-started",
+        "sdks/web/label-capture/label-definitions",
+        "sdks/web/label-capture/advanced",
+      ],
+    },
+    {
+      type: "category",
+      label: "ID Scanning",
       collapsed: false,
       items: [
             "sdks/web/id-capture/intro",
@@ -916,7 +916,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Single Scanning',
+          label: 'Single Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/cordova/single-scanning',
@@ -944,7 +944,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Batch Scanning',
+          label: 'Multiple Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/cordova/batch-scanning',
@@ -1042,7 +1042,22 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Capture and Validation",
+      label: "Label Scanning",
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'sdks/cordova/label-scanning',
+      },
+      items: [
+        "sdks/cordova/label-capture/intro",
+        "sdks/cordova/label-capture/get-started",
+        "sdks/cordova/label-capture/label-definitions",
+        "sdks/cordova/label-capture/advanced",
+      ],
+    },
+    {
+      type: "category",
+      label: "ID Scanning",
       collapsed: false,
       items: [
           "sdks/cordova/id-capture/intro",
@@ -1054,21 +1069,6 @@ const sidebars: SidebarsConfig = {
               label: "ID Bolt Documentation",
               href: "https://docs.scandit.com/hosted/id-bolt/overview/",
             },
-      ],
-    },
-    {
-      type: "category",
-      label: "Label Scanning",
-      link: {
-        type: 'doc',
-        id: 'sdks/cordova/label-scanning',
-      },
-      collapsed: true,
-      items: [
-        "sdks/cordova/label-capture/intro",
-        "sdks/cordova/label-capture/get-started",
-        "sdks/cordova/label-capture/label-definitions",
-        "sdks/cordova/label-capture/advanced",
       ],
     },
     {
@@ -1161,7 +1161,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Single Scanning',
+          label: 'Single Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/react-native/single-scanning',
@@ -1189,7 +1189,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Batch Scanning',
+          label: 'Multiple Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/react-native/batch-scanning',
@@ -1240,21 +1240,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/react-native/matrixscan-pick/advanced",
               ],
             },
-          ],
-        },
-        {
-          type: "category",
-          label: "Label Scanning",
-          link: {
-            type: 'doc',
-            id: 'sdks/react-native/label-scanning',
-          },
-          collapsed: true,
-          items: [
-            "sdks/react-native/label-capture/intro",
-            "sdks/react-native/label-capture/get-started",
-            "sdks/react-native/label-capture/label-definitions",
-            "sdks/react-native/label-capture/advanced",
           ],
         },
         {
@@ -1310,7 +1295,22 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Capture and Validation",
+      label: "Label Scanning",
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'sdks/react-native/label-scanning',
+      },
+      items: [
+        "sdks/react-native/label-capture/intro",
+        "sdks/react-native/label-capture/get-started",
+        "sdks/react-native/label-capture/label-definitions",
+        "sdks/react-native/label-capture/advanced",
+      ],
+    },
+    {
+      type: "category",
+      label: "ID Scanning",
       collapsed: false,
       items: [
             "sdks/react-native/id-capture/intro",
@@ -1414,7 +1414,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Single Scanning',
+          label: 'Single Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/flutter/single-scanning',
@@ -1442,7 +1442,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Batch Scanning',
+          label: 'Multiple Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/flutter/batch-scanning',
@@ -1497,21 +1497,6 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "category",
-          label: "Label Scanning",
-          link: {
-            type: 'doc',
-            id: 'sdks/flutter/label-scanning',
-          },
-          collapsed: true,
-          items: [
-            "sdks/flutter/label-capture/intro",
-            "sdks/flutter/label-capture/get-started",
-            "sdks/flutter/label-capture/label-definitions",
-            "sdks/flutter/label-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
           label: "Additional Functionalities",
           collapsed: true,
           items: [
@@ -1556,7 +1541,22 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Capture and Validation",
+      label: "Label Scanning",
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'sdks/flutter/label-scanning',
+      },
+      items: [
+        "sdks/flutter/label-capture/intro",
+        "sdks/flutter/label-capture/get-started",
+        "sdks/flutter/label-capture/label-definitions",
+        "sdks/flutter/label-capture/advanced",
+      ],
+    },
+    {
+      type: "category",
+      label: "ID Scanning",
       collapsed: false,
       items: [
             "sdks/flutter/id-capture/intro",
@@ -1660,7 +1660,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Single Scanning',
+          label: 'Single Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/capacitor/single-scanning',
@@ -1688,7 +1688,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Batch Scanning',
+          label: 'Multiple Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/capacitor/batch-scanning',
@@ -1731,21 +1731,6 @@ const sidebars: SidebarsConfig = {
                 "sdks/capacitor/matrixscan-pick/advanced",
               ],
             },
-          ],
-        },
-        {
-          type: "category",
-          label: "Label Scanning",
-          link: {
-            type: 'doc',
-            id: 'sdks/capacitor/label-scanning',
-          },
-          collapsed: true,
-          items: [
-            "sdks/capacitor/label-capture/intro",
-            "sdks/capacitor/label-capture/get-started",
-            "sdks/capacitor/label-capture/label-definitions",
-            "sdks/capacitor/label-capture/advanced",
           ],
         },
         {
@@ -1801,7 +1786,22 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Capture and Validation",
+      label: "Label Scanning",
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'sdks/capacitor/label-scanning',
+      },
+      items: [
+        "sdks/capacitor/label-capture/intro",
+        "sdks/capacitor/label-capture/get-started",
+        "sdks/capacitor/label-capture/label-definitions",
+        "sdks/capacitor/label-capture/advanced",
+      ],
+    },
+    {
+      type: "category",
+      label: "ID Scanning",
       collapsed: false,
       items: [
             "sdks/capacitor/id-capture/intro",
@@ -1899,7 +1899,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Single Scanning',
+          label: 'Single Barcode Scanning',
           collapsed: false,
           items: [
             {
@@ -2007,7 +2007,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Single Scanning',
+          label: 'Single Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/net/ios/single-scanning',
@@ -2035,7 +2035,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Batch Scanning',
+          label: 'Multiple Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/net/ios/batch-scanning',
@@ -2134,7 +2134,22 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Capture and Validation",
+      label: "Label Scanning",
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'sdks/net/ios/label-scanning',
+      },
+      items: [
+        "sdks/net/ios/label-capture/intro",
+        "sdks/net/ios/label-capture/get-started",
+        "sdks/net/ios/label-capture/label-definitions",
+        "sdks/net/ios/label-capture/advanced",
+      ],
+    },
+    {
+      type: "category",
+      label: "ID Scanning",
       collapsed: false,
       items: [
             "sdks/net/ios/id-capture/intro",
@@ -2146,21 +2161,6 @@ const sidebars: SidebarsConfig = {
             label: "ID Bolt Documentation",
             href: "https://docs.scandit.com/hosted/id-bolt/overview/",
           },
-      ],
-    },
-    {
-      type: "category",
-      label: "Label Scanning",
-      link: {
-        type: 'doc',
-        id: 'sdks/net/ios/label-scanning',
-      },
-      collapsed: true,
-      items: [
-        "sdks/net/ios/label-capture/intro",
-        "sdks/net/ios/label-capture/get-started",
-        "sdks/net/ios/label-capture/label-definitions",
-        "sdks/net/ios/label-capture/advanced",
       ],
     },
     {
@@ -2253,7 +2253,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Single Scanning',
+          label: 'Single Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/net/android/single-scanning',
@@ -2281,7 +2281,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Batch Scanning',
+          label: 'Multiple Barcode Scanning',
           link: {
             type: 'doc',
             id: 'sdks/net/android/batch-scanning',
@@ -2336,21 +2336,6 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: "category",
-          label: "Label Scanning",
-          link: {
-            type: 'doc',
-            id: 'sdks/net/android/label-scanning',
-          },
-          collapsed: true,
-          items: [
-            "sdks/net/android/label-capture/intro",
-            "sdks/net/android/label-capture/get-started",
-            "sdks/net/android/label-capture/label-definitions",
-            "sdks/net/android/label-capture/advanced",
-          ],
-        },
-        {
-          type: "category",
           label: "Additional Functionalities",
           collapsed: true,
           items: [
@@ -2395,7 +2380,22 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
-      label: "ID Capture and Validation",
+      label: "Label Scanning",
+      collapsed: false,
+      link: {
+        type: 'doc',
+        id: 'sdks/net/android/label-scanning',
+      },
+      items: [
+        "sdks/net/android/label-capture/intro",
+        "sdks/net/android/label-capture/get-started",
+        "sdks/net/android/label-capture/label-definitions",
+        "sdks/net/android/label-capture/advanced",
+      ],
+    },
+    {
+      type: "category",
+      label: "ID Scanning",
       collapsed: false,
       items: [
             "sdks/net/android/id-capture/intro",

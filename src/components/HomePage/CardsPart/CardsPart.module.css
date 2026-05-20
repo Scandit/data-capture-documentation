@@ -1,11 +1,31 @@
 .cardsPartWrapper {
   display: flex;
-  justify-content: space-between;
-  gap: clamp(20px, 6.3vw, 90px);
+  flex-direction: column;
+  gap: clamp(28px, 4vw, 56px);
 }
 
 .cardsGroupWrapper {
+  width: 100%;
+}
+
+.cardsRow {
+  display: flex;
+  gap: clamp(20px, 4vw, 56px);
+}
+
+.cardsGroupHalf {
   width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (width < 768px) {
+  .cardsRow {
+    flex-direction: column;
+  }
+  .cardsGroupHalf {
+    width: 100%;
+  }
 }
 
 .hiddenBtn {
@@ -29,13 +49,3 @@
 .reversIcon {
   transform: rotateZ(180deg);
 }
-
-@media (width < 600px) {
-  .cardsPartWrapper {
-    flex-direction: column;
-  }
-  .cardsGroupWrapper {
-    width: 100%;
-  }
-}
-
