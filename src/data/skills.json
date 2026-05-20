@@ -4,6 +4,7 @@
   "products": {
     "sparkscan": {
       "iOS": "sparkscan-ios",
+      "Android": "sparkscan-android",
       "Web": "sparkscan-web",
       "Cordova": "sparkscan-cordova",
       "Capacitor": "sparkscan-capacitor",
@@ -11,12 +12,18 @@
       "React Native": "sparkscan-rn"
     },
     "barcode-capture": {
+      "Android": "barcode-capture-android",
+      "Web": "barcode-capture-web",
       "Cordova": "barcode-capture-cordova",
       "Capacitor": "barcode-capture-capacitor",
       "Flutter": "barcode-capture-flutter",
-      "React Native": "barcode-capture-rn"
+      "React Native": "barcode-capture-rn",
+      ".NET iOS": "barcode-capture-net-ios",
+      ".NET Android": "barcode-capture-net-android"
     },
     "smart-label-capture": {
+      "iOS": "label-capture-ios",
+      "Android": "label-capture-android",
       "Web": "label-capture-web",
       "Cordova": "label-capture-cordova",
       "Capacitor": "label-capture-capacitor",
@@ -24,12 +31,18 @@
       "React Native": "label-capture-rn"
     },
     "matrixscan-ar": {
+      "iOS": "matrixscan-ar-ios",
+      "Android": "matrixscan-ar-android",
+      "Web": "matrixscan-ar-web",
       "Cordova": "matrixscan-ar-cordova",
       "Capacitor": "matrixscan-ar-capacitor",
       "Flutter": "matrixscan-ar-flutter",
       "React Native": "matrixscan-ar-rn"
     },
     "matrixscan-batch": {
+      "iOS": "matrixscan-batch-ios",
+      "Android": "matrixscan-batch-android",
+      "Web": "matrixscan-batch-web",
       "Cordova": "matrixscan-batch-cordova",
       "Capacitor": "matrixscan-batch-capacitor",
       "Flutter": "matrixscan-batch-flutter",
