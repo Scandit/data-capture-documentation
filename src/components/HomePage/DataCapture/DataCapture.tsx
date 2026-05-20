@@ -7,11 +7,7 @@ export default function DataCapture() {
   return (
     <div className={style.dataCapture}>
       <h2 className={style.dataCaptureTitle}>Quick Reference</h2>
-      <p className={style.dataCaptureText}>
-        Release notes and sample apps for your selected framework, plus
-        reference tables for system requirements, supported symbologies, ID
-        documents, and labels.
-      </p>
+      <p className={style.dataCaptureText}>Some useful links.</p>
       <BrowserOnly>
         {() => {
           const paramsURL = Object.fromEntries(
