@@ -120,6 +120,9 @@ const config: Config = {
     defaultLocale: "en",
     locales: ["en"],
   },
+  clientModules: [
+    require.resolve('./src/clientModules/agentSkillsNavLink.ts'),
+  ],
   plugins: [
     [
       '@docusaurus/plugin-client-redirects',
@@ -414,7 +417,7 @@ const config: Config = {
     navbar: {
       logo: {
         alt: "Scandit Logo",
-        src: "img/logo2.png",
+        src: "img/logo-light.svg",
         srcDark: "img/logo-dark.svg",
       },
       title: "Docs",
@@ -515,9 +518,10 @@ const config: Config = {
           position: "right",
         },
         {
-          href: "https://github.com/Scandit/",
-          label: "Github Samples",
+          to: "/sdks/ios/agent-skills",
+          label: "Agent Skills",
           position: "right",
+          className: "navbar-agent-skills",
         },
       ],
     },

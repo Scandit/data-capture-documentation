@@ -1,6 +1,7 @@
 import style from "./Header.module.css";
 import logo from "../../../../static/img/logo-dark.svg";
-import { GitHub, Logo } from "../../IconComponents";
+import { Logo } from "../../IconComponents";
+import Sparkles from "../../IconComponents/Sparkles";
 import Link from "@docusaurus/Link";
 import ThemeBtn from "../../ThemeBtn/ThemeBtn";
 
@@ -23,8 +24,8 @@ export default function Header() {
           Sign Up
         </Link>
         <span className={style.delimiter}></span>
-        <Link className={style.btnGitHub} to="https://github.com/Scandit/">
-          <GitHub iconClass={style.gitHubIcon}/><span>Github Samples</span>
+        <Link className={style.btnSkills} to="/sdks/ios/agent-skills">
+          <Sparkles iconClass={style.skillsIcon}/><span>Agent Skills</span>
         </Link>
         <ThemeBtn />
       </div>

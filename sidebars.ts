@@ -155,7 +155,7 @@ const sidebars: SidebarsConfig = {
         'sdks/ios/agent-skills',
         {
           type: "link",
-          label: "Samples",
+          label: "GitHub Samples",
           href: "https://github.com/Scandit/datacapture-ios-samples",
         },
       ],
@@ -412,7 +412,7 @@ const sidebars: SidebarsConfig = {
         'sdks/android/agent-skills',
         {
           type: "link",
-          label: "Samples",
+          label: "GitHub Samples",
           href: "https://github.com/Scandit/datacapture-android-samples",
         },
       ],
@@ -661,7 +661,7 @@ const sidebars: SidebarsConfig = {
         'sdks/web/agent-skills',
         {
           type: "link",
-          label: "Samples",
+          label: "GitHub Samples",
           href: "https://github.com/Scandit/datacapture-web-samples",
         },
       ],
@@ -885,7 +885,7 @@ const sidebars: SidebarsConfig = {
         'sdks/cordova/agent-skills',
         {
           type: "link",
-          label: "Samples",
+          label: "GitHub Samples",
           href: "https://github.com/Scandit/datacapture-cordova-samples",
         },
       ],
@@ -1126,7 +1126,7 @@ const sidebars: SidebarsConfig = {
         'sdks/react-native/agent-skills',
         {
           type: "link",
-          label: "Samples",
+          label: "GitHub Samples",
           href: "https://github.com/Scandit/datacapture-react-native-samples",
         },
       ],
@@ -1375,7 +1375,7 @@ const sidebars: SidebarsConfig = {
         'sdks/flutter/agent-skills',
         {
           type: "link",
-          label: "Samples",
+          label: "GitHub Samples",
           href: "https://github.com/Scandit/datacapture-flutter-samples",
         },
       ],
@@ -1617,7 +1617,7 @@ const sidebars: SidebarsConfig = {
         'sdks/capacitor/agent-skills',
         {
           type: "link",
-          label: "Samples",
+          label: "GitHub Samples",
           href: "https://github.com/Scandit/datacapture-capacitor-samples",
         },
       ],
@@ -1852,7 +1852,7 @@ const sidebars: SidebarsConfig = {
         'sdks/titanium/add-sdk',
         {
           type: "link",
-          label: "Samples",
+          label: "GitHub Samples",
           href: "https://github.com/Scandit/datacapture-titanium-samples",
         },
       ],
@@ -1960,7 +1960,7 @@ const sidebars: SidebarsConfig = {
         'sdks/net/ios/agent-skills',
         {
           type: "link",
-          label: "Samples",
+          label: "GitHub Samples",
           href: "https://github.com/Scandit/datacapture-dotnet-samples/tree/master",
         },
       ],
@@ -2202,7 +2202,7 @@ const sidebars: SidebarsConfig = {
         'sdks/net/android/agent-skills',
         {
           type: "link",
-          label: "Samples",
+          label: "GitHub Samples",
           href: "https://github.com/Scandit/datacapture-dotnet-samples/tree/master",
         },
       ],

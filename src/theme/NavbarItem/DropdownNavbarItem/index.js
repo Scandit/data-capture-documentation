@@ -14,7 +14,6 @@ import NavbarItem from "@theme/NavbarItem";
 import styles from "./styles.module.css";
 import { useLocation } from "@docusaurus/router";
 import { FrameworksName } from "@site/src/components/constants/frameworksName";
-import { ArrowDown } from "@site/src/components/IconComponents";
 
 function isItemActive(item, localPathname) {
   if (isSamePath(item.to, localPathname)) {
@@ -240,15 +239,20 @@ function DropdownNavbarItemDesktop({
     return newItems;
   }, [newItems, isXamarinAvailable]);
 
-  const combinedItems =
-    items && items.some((item) => item.type === "docsVersion")
-      ? filteredItems
-      : items;
+  const headerItem = (label) => ({
+    type: "html",
+    value: `<div class="navbar-dropdown-header">${label}</div>`,
+    className: "navbar-dropdown-header-item",
+  });
 
   const hasDocsVersionItems =
     items && items.some((item) => item.type === "docsVersion");
   const hasSDKsItems =
     items && items.some((item) => item.type !== "docsVersion");
+
+  const combinedItems = hasDocsVersionItems
+    ? [headerItem("Framework"), ...filteredItems]
+    : items;
   const shouldShowDropdownMenu =
     hasSDKsItems || (hasDocsVersionItems && currentFramework);
 
@@ -263,11 +267,16 @@ function DropdownNavbarItemDesktop({
         style={{ height: "36px" }}
       >
         {hasDocsVersionItems && currentFramework && (
-          <p className={styles.frameworkName}>
-            Framework:
-            <p className={styles.framework}>{currentFramework}</p>
-            <ArrowDown iconClass={styles.iconArrow}></ArrowDown>
-          </p>
+          <a
+            className={clsx("navbar__link", styles.frameworkName)}
+            href="#"
+            role="button"
+            aria-haspopup="true"
+            aria-expanded={showDropdown}
+            onClick={(e) => e.preventDefault()}
+          >
+            {currentFramework}
+          </a>
         )}
 
         {items.some((item) => item.type !== "docsVersion") && !isHostedPage && (
@@ -298,14 +307,17 @@ function DropdownNavbarItemDesktop({
 
         {shouldShowDropdownMenu && !isHostedPage && (
           <ul className="dropdown__menu">
-            {combinedItems.map((childItemProps, i) => (
-              <NavbarItem
-                isDropdownItem
-                activeClassName="dropdown__link--active"
-                {...childItemProps}
-                key={i}
-              />
-            ))}
+            {combinedItems.map((childItemProps, i) => {
+              const { sidebarId, ...rest } = childItemProps;
+              return (
+                <NavbarItem
+                  isDropdownItem
+                  activeClassName="dropdown__link--active"
+                  {...rest}
+                  key={i}
+                />
+              );
+            })}
           </ul>
         )}
       </div>
