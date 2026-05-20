@@ -21,12 +21,14 @@ function pickHref(pathname: string): string {
   return DEFAULT_HREF;
 }
 
+let currentHref = DEFAULT_HREF;
+
 function updateLink(pathname: string) {
   if (typeof document === 'undefined') return;
+  currentHref = pickHref(pathname);
   const links = document.querySelectorAll<HTMLAnchorElement>('a.navbar-agent-skills');
-  const href = pickHref(pathname);
   links.forEach((link) => {
-    link.setAttribute('href', href);
+    link.setAttribute('href', currentHref);
   });
 }
 
@@ -41,6 +43,42 @@ function scheduleUpdate(pathname: string) {
   });
 }
 
+// The navbar entry uses `to:` in docusaurus.config.ts, so React Router's
+// <Link to=...> handles plain clicks and ignores any DOM href we patch in.
+// Intercept the click in capture phase and navigate to the framework-aware
+// URL ourselves. Middle/modifier clicks still use the patched href via the
+// browser's default new-tab behavior.
+let clickHandlerInstalled = false;
+
+function installClickHandler() {
+  if (clickHandlerInstalled || typeof document === 'undefined') return;
+  clickHandlerInstalled = true;
+  document.addEventListener(
+    'click',
+    (event) => {
+      const target = event.target as Element | null;
+      if (!target) return;
+      const link = target.closest('a.navbar-agent-skills') as HTMLAnchorElement | null;
+      if (!link) return;
+      const mouseEvent = event as MouseEvent;
+      if (
+        mouseEvent.button !== 0 ||
+        mouseEvent.metaKey ||
+        mouseEvent.ctrlKey ||
+        mouseEvent.shiftKey ||
+        mouseEvent.altKey
+      ) {
+        return;
+      }
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      window.location.assign(currentHref);
+    },
+    true,
+  );
+}
+
 export function onRouteDidUpdate({ location }: { location: Location }) {
+  installClickHandler();
   scheduleUpdate(location.pathname);
 }
