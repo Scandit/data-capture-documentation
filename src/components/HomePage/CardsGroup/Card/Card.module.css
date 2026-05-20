@@ -43,7 +43,7 @@
   display: flex;
   align-items: center;
   gap: 18px;
-  font-size: clamp(14px, 1.3vw, 20px);
+  font-size: 20px;
   font-weight: 700;
   line-height: 20px;
   margin: clamp(14px, 1.3vw, 20px) 0 clamp(8px, 0.8vw, 12px);
@@ -52,14 +52,14 @@
 .cardApi {
   color: var(--light-gray-100);
   margin: 0;
-  font-size: clamp(12px, 1.1vw, 16px);
+  font-size: 16px;
   line-height: 1.2em;
 }
 
 .cardApiList {
   color: var(--light-gray-100);
   margin: clamp(14px, 1.5vw, 22px) 0 0;
-  font-size: clamp(10px, 0.8vw, 12px);
+  font-size: 12px;
   line-height: 1.3em;
 }
 

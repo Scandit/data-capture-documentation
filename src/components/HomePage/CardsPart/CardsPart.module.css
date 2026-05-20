@@ -19,7 +19,7 @@
   flex-direction: column;
 }
 
-@media (width < 768px) {
+@media (width < 1050px) {
   .cardsRow {
     flex-direction: column;
   }
