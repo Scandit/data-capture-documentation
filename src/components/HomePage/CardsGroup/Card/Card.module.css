@@ -33,28 +33,34 @@
   text-decoration: none;
 }
 
+.cardIcon {
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+
 .cardTitle {
   display: flex;
   align-items: center;
   gap: 18px;
-  font-size: clamp(14px, 1.3vw, 20px);
+  font-size: clamp(18px, 1.3vw, 20px);
   font-weight: 700;
-  line-height: 20px;
+  line-height: 1.25;
   margin: clamp(14px, 1.3vw, 20px) 0 clamp(8px, 0.8vw, 12px);
 }
 
 .cardApi {
   color: var(--light-gray-100);
   margin: 0;
-  font-size: clamp(12px, 1.1vw, 16px);
-  line-height: 1.2em;
+  font-size: clamp(14px, 1.1vw, 16px);
+  line-height: 1.35;
 }
 
 .cardApiList {
   color: var(--light-gray-100);
   margin: clamp(14px, 1.5vw, 22px) 0 0;
-  font-size: clamp(10px, 0.8vw, 12px);
-  line-height: 1.3em;
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .cardApiLabel {

@@ -53,6 +53,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: clamp(12px, 3.5vw, 35px) 40px;
-  margin: 30px 0;
+  margin: 12px 0 30px;
   flex: 1;
 }
