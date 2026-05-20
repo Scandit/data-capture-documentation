@@ -43,7 +43,7 @@ const CheckIcon: React.FC = () => (
   </svg>
 );
 
-const CommandBlock: React.FC<{ command: string }> = ({ command }) => {
+const CommandBlock: React.FC<{ command: string; trackingId: string }> = ({ command, trackingId }) => {
   const [copied, setCopied] = useState(false);
   const handleCopy = async () => {
     if (typeof navigator === 'undefined' || !navigator.clipboard) return;
@@ -63,6 +63,7 @@ const CommandBlock: React.FC<{ command: string }> = ({ command }) => {
         className={styles.copyButton}
         onClick={handleCopy}
         aria-label={copied ? 'Command copied' : 'Copy command'}
+        data-skills-install={trackingId}
       >
         {copied ? <CheckIcon /> : <CopyIcon />}
       </button>
@@ -110,7 +111,7 @@ const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug }) => {
               Run this in a terminal in your project directory, then
               follow the instructions to select your coding agent.
             </p>
-            <CommandBlock command={npxCommand} />
+            <CommandBlock command={npxCommand} trackingId="cli" />
             {skillSlug && (
               <p className={styles.tabHint}>
                 Your coding agent loads the skill automatically based on
@@ -126,8 +127,8 @@ const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug }) => {
               Paste these commands directly in Claude Code, one at a time, to
               install the Scandit plugin.
             </p>
-            <CommandBlock command={CLAUDE_CODE_MARKETPLACE_COMMAND} />
-            <CommandBlock command={CLAUDE_CODE_INSTALL_COMMAND} />
+            <CommandBlock command={CLAUDE_CODE_MARKETPLACE_COMMAND} trackingId="claude-code-marketplace" />
+            <CommandBlock command={CLAUDE_CODE_INSTALL_COMMAND} trackingId="claude-code-plugin" />
             {skillSlug && (
               <p className={styles.tabHint}>
                 The plugin bundles every Scandit skill. Claude Code picks the
@@ -149,6 +150,7 @@ const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug }) => {
               href={CURSOR_INSTALL_URL}
               target="_blank"
               rel="noopener noreferrer"
+              data-skills-install="cursor"
             >
               Install in Cursor
             </a>
