@@ -43,7 +43,22 @@ const CheckIcon: React.FC = () => (
   </svg>
 );
 
-const CommandBlock: React.FC<{ command: string; trackingId: string }> = ({ command, trackingId }) => {
+interface CommandBlockProps {
+  command: string;
+  trackingId: string;
+  product?: string;
+  framework?: string;
+}
+
+type PostHogCapture = (event: string, props?: Record<string, unknown>) => void;
+
+function capturePostHogEvent(event: string, props?: Record<string, unknown>): void {
+  if (typeof window === 'undefined') return;
+  const ph = (window as unknown as { posthog?: { capture?: PostHogCapture } }).posthog;
+  ph?.capture?.(event, props);
+}
+
+const CommandBlock: React.FC<CommandBlockProps> = ({ command, trackingId, product, framework }) => {
   const [copied, setCopied] = useState(false);
   const handleCopy = async () => {
     if (typeof navigator === 'undefined' || !navigator.clipboard) return;
@@ -51,19 +66,37 @@ const CommandBlock: React.FC<{ command: string; trackingId: string }> = ({ comma
       await navigator.clipboard.writeText(command);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
+      capturePostHogEvent('skills_command_copied', {
+        method: 'button',
+        variant: trackingId,
+        product,
+        framework,
+      });
     } catch {
       // ignore
     }
   };
+  // Fires when the user selects the text and copies via keyboard/menu —
+  // navigator.clipboard.writeText from the button does NOT trigger this.
+  const handleTextCopy = () => {
+    capturePostHogEvent('skills_command_copied', {
+      method: 'selection',
+      variant: trackingId,
+      product,
+      framework,
+    });
+  };
   return (
     <div className={styles.commandBlock}>
-      <pre className={styles.command}><code>{command}</code></pre>
+      <pre className={styles.command} onCopy={handleTextCopy}><code>{command}</code></pre>
       <button
         type="button"
         className={styles.copyButton}
         onClick={handleCopy}
         aria-label={copied ? 'Command copied' : 'Copy command'}
         data-skills-install={trackingId}
+        data-skills-callout-product={product}
+        data-skills-callout-framework={framework}
       >
         {copied ? <CheckIcon /> : <CopyIcon />}
       </button>
@@ -74,9 +107,11 @@ const CommandBlock: React.FC<{ command: string; trackingId: string }> = ({ comma
 export interface InstallTabsProps {
   /** When provided, installs only this skill via `--skill`. Otherwise installs the full bundle. */
   skillSlug?: string;
+  product?: string;
+  framework?: string;
 }
 
-const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug }) => {
+const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug, product, framework }) => {
   const [tab, setTab] = useState<TabKey>('any');
   const tabs: { key: TabKey; label: string }[] = [
     { key: 'any', label: 'Any AI coding agent' },
@@ -111,7 +146,7 @@ const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug }) => {
               Run this in a terminal in your project directory, then
               follow the instructions to select your coding agent.
             </p>
-            <CommandBlock command={npxCommand} trackingId="cli" />
+            <CommandBlock command={npxCommand} trackingId="cli" product={product} framework={framework} />
             {skillSlug && (
               <p className={styles.tabHint}>
                 Your coding agent loads the skill automatically based on
@@ -127,8 +162,8 @@ const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug }) => {
               Paste these commands directly in Claude Code, one at a time, to
               install the Scandit plugin.
             </p>
-            <CommandBlock command={CLAUDE_CODE_MARKETPLACE_COMMAND} trackingId="claude-code-marketplace" />
-            <CommandBlock command={CLAUDE_CODE_INSTALL_COMMAND} trackingId="claude-code-plugin" />
+            <CommandBlock command={CLAUDE_CODE_MARKETPLACE_COMMAND} trackingId="claude-code-marketplace" product={product} framework={framework} />
+            <CommandBlock command={CLAUDE_CODE_INSTALL_COMMAND} trackingId="claude-code-plugin" product={product} framework={framework} />
             {skillSlug && (
               <p className={styles.tabHint}>
                 The plugin bundles every Scandit skill. Claude Code picks the
@@ -151,6 +186,8 @@ const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug }) => {
               target="_blank"
               rel="noopener noreferrer"
               data-skills-install="cursor"
+              data-skills-callout-product={product}
+              data-skills-callout-framework={framework}
             >
               Install in Cursor
             </a>

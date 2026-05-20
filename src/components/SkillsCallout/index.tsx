@@ -31,6 +31,19 @@ const FRAMEWORK_URL_PATH: Record<string, string> = {
   '.NET Android': 'net/android',
 };
 
+// Analytics-friendly slug for the framework, used as the data-skills-callout-framework attribute.
+const FRAMEWORK_SLUG: Record<string, string> = {
+  iOS: 'ios',
+  Android: 'android',
+  Web: 'web',
+  Cordova: 'cordova',
+  Capacitor: 'capacitor',
+  Flutter: 'flutter',
+  'React Native': 'react-native',
+  '.NET iOS': 'net-ios',
+  '.NET Android': 'net-android',
+};
+
 // Maps the ?framework= query slug used on the homepage to an agent-skills URL path.
 const QUERY_FRAMEWORK_TO_PATH: Record<string, string> = {
   ios: 'ios',
@@ -44,10 +57,14 @@ const QUERY_FRAMEWORK_TO_PATH: Record<string, string> = {
   'net-android': 'net/android',
 };
 
-function getSharedMoreInfoUrl(search: string): string {
+function getSharedFrameworkSlug(search: string): string {
   const params = new URLSearchParams(search);
   const fw = params.get('framework') || '';
-  const path = QUERY_FRAMEWORK_TO_PATH[fw] || 'ios';
+  return QUERY_FRAMEWORK_TO_PATH[fw] ? fw : 'ios';
+}
+
+function getSharedMoreInfoUrl(search: string): string {
+  const path = QUERY_FRAMEWORK_TO_PATH[getSharedFrameworkSlug(search)];
   return `/sdks/${path}/agent-skills`;
 }
 
@@ -58,6 +75,7 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, varia
   const contentClass = banner ? styles.bannerContent : undefined;
 
   if (variant === 'shared') {
+    const sharedFrameworkSlug = getSharedFrameworkSlug(search);
     const sharedMoreInfoUrl = getSharedMoreInfoUrl(search);
     return (
       <aside className={calloutClass} aria-label="Install Scandit Agent Skills">
@@ -69,7 +87,11 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, varia
             the right one for your use case, directly from your editor.{' '}
             <a href={sharedMoreInfoUrl}>More info →</a>
           </p>
-          <InstallTabs skillSlug={skillsData.shared} />
+          <InstallTabs
+            skillSlug={skillsData.shared}
+            product="shared"
+            framework={sharedFrameworkSlug}
+          />
         </div>
       </aside>
     );
@@ -91,6 +113,7 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, varia
   const productName = productEntry?.name || resolvedProduct;
 
   const frameworkPath = FRAMEWORK_URL_PATH[resolvedFramework];
+  const frameworkSlug = FRAMEWORK_SLUG[resolvedFramework];
   const moreInfoUrl = frameworkPath ? `/sdks/${frameworkPath}/agent-skills` : null;
 
   return (
@@ -108,7 +131,11 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, varia
           </a>
         )}
       </p>
-      <InstallTabs skillSlug={productSkill} />
+      <InstallTabs
+        skillSlug={productSkill}
+        product={resolvedProduct}
+        framework={frameworkSlug}
+      />
     </aside>
   );
 };
