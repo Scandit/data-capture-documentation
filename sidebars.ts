@@ -21,7 +21,6 @@ const sidebars: SidebarsConfig = {
 			label: 'Scandit Smart Data Capture',
 			items: [
         'core-concepts',
-				'features-by-framework',
         'system-requirements',
 				{
 					type: 'category',
@@ -144,7 +143,6 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/ios/core-concepts',
-        'sdks/ios/features-by-framework',
         'sdks/ios/system-requirements',
         {
           type: "link",
@@ -401,7 +399,6 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/android/core-concepts',
-        'sdks/android/features-by-framework',
         'sdks/android/system-requirements',
         {
           type: "link",
@@ -650,7 +647,6 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/web/core-concepts',
-        'sdks/web/features-by-framework',
         'sdks/web/system-requirements',
         {
           type: "link",
@@ -874,7 +870,6 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/cordova/core-concepts',
-        'sdks/cordova/features-by-framework',
         'sdks/cordova/system-requirements',
         {
           type: "link",
@@ -1115,7 +1110,6 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/react-native/core-concepts',
-        'sdks/react-native/features-by-framework',
         'sdks/react-native/system-requirements',
         {
           type: "link",
@@ -1364,7 +1358,6 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/flutter/core-concepts',
-        'sdks/flutter/features-by-framework',
         'sdks/flutter/system-requirements',
         {
           type: "link",
@@ -1606,7 +1599,6 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/capacitor/core-concepts',
-        'sdks/capacitor/features-by-framework',
         'sdks/capacitor/system-requirements',
         {
           type: "link",
@@ -1842,7 +1834,6 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/titanium/core-concepts',
-        'sdks/titanium/features-by-framework',
         'sdks/titanium/system-requirements',
         {
           type: "link",
@@ -1949,7 +1940,6 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/net/ios/core-concepts',
-        'sdks/net/ios/features-by-framework',
         'sdks/net/ios/system-requirements',
         {
           type: "link",
@@ -2191,7 +2181,6 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/net/android/core-concepts',
-        'sdks/net/android/features-by-framework',
         'sdks/net/android/system-requirements',
         {
           type: "link",
