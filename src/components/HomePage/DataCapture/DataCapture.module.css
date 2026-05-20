@@ -9,15 +9,7 @@
   line-height: 39px;
   font-weight: 700;
   color: var(--light-black);
-  margin: 56px 0 8px;
-}
-
-.dataCaptureText {
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 21px;
-  max-width: 700px;
-  margin-bottom: 32px;
+  margin: 56px 0 32px;
 }
 
 .dataCaptureList {

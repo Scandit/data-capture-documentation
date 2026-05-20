@@ -8,11 +8,6 @@
   padding: 0;
 }
 
-.cardsGroupHeader {
-  border-bottom: 1px solid var(--nav-border);
-  padding-bottom: 20px;
-}
-
 .cardsGroupBtn {
   display: flex;
   align-items: center;

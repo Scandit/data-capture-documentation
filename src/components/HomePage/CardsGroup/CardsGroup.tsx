@@ -17,9 +17,7 @@ export default function CardsGroup({
 }: CardsGroupProps) {
   return (
     <div className={style.cardsGroupWrapper}>
-      <div className={style.cardsGroupHeader}>
-        <h2 className={style.cardsGroupTitle}>{title}</h2>
-      </div>
+      <h2 className={style.cardsGroupTitle}>{title}</h2>
       <ul className={style.cardsList}>
         {content.map((card, index: number) => {
           return (
