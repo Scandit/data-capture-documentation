@@ -38,7 +38,7 @@ export function createLabelScanningArr(framework: string) {
     {
       name: LabelScanning.LabelScanning,
       text: "Capture expiry dates, prices, weights, VIN, IMEI, or serial numbers",
-      apis: "Label Capture",
+      apis: "Smart Label Capture",
       icon: <LabelCapture />,
       isActive: frameworkData?.labelScanning?.includes(
         LabelScanning.LabelScanning

@@ -43,6 +43,7 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
   const fwSkills = frameworks[framework] || [];
   const products = productsData as ProductEntry[];
   const productsByKey = Object.fromEntries(products.map((p) => [p.key, p]));
+  const exampleSkillSlug = fwSkills[0]?.slug || 'sparkscan';
 
   return (
     <div className={styles.page}>
@@ -71,7 +72,8 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
           real customer integrations.
         </li>
         <li>
-          The matching product-and-framework skill takes over and writes the
+          The matching product-and-framework skill (e.g.{' '}
+          <code>{exampleSkillSlug}</code>) takes over and writes the
           integration directly into your codebase. Review the result and ship.
         </li>
       </ol>
@@ -84,7 +86,7 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
         you can invoke a specific skill explicitly with <code>/skill-name</code>{' '}
         followed by your task.
       </p>
-      <InstallTabs />
+      <InstallTabs framework={framework} />
 
       <h2>Available skills for {framework}</h2>
       <p>

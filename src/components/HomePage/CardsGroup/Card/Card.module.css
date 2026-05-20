@@ -52,8 +52,8 @@
 
 .cardApiList {
   color: var(--light-gray-100);
-  margin: 8px 0 0;
-  font-size: clamp(11px, 1vw, 14px);
+  margin: clamp(14px, 1.5vw, 22px) 0 0;
+  font-size: clamp(10px, 0.8vw, 12px);
   line-height: 1.3em;
 }
 
