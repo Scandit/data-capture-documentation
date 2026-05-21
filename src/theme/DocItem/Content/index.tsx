@@ -24,7 +24,7 @@ export default function ContentWrapper(props: Props): JSX.Element {
   } else if (isOnFallbackDenylist(pathname)) {
     callout = null;
   } else {
-    callout = <SkillsCallout variant="fallback" />;
+    callout = <SkillsCallout variant="shared" />;
   }
 
   return (

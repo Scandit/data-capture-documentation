@@ -206,17 +206,27 @@ html[data-theme='dark'] .tabActive {
   color: var(--dark-blue-accent, #2385ec);
 }
 
-.fallbackSummary {
+/* Beat Docusaurus's "#__docusaurus [class^=docMainContainer_] details { background-color: transparent }"
+   override that would otherwise wipe the blue callout background on doc pages. */
+details.callout {
+  background: var(--light-blue-60, #f0f5ff) !important;
+}
+
+html[data-theme='dark'] details.callout {
+  background: rgba(35, 133, 236, 0.08) !important;
+}
+
+.calloutSummary {
   margin: 0;
   list-style: none;
   cursor: pointer;
 }
 
-.fallbackSummary::-webkit-details-marker {
+.calloutSummary::-webkit-details-marker {
   display: none;
 }
 
-.fallbackSummary::before {
+.calloutSummary::before {
   content: '▸';
   display: inline-block;
   margin-right: 0.5rem;
@@ -224,14 +234,14 @@ html[data-theme='dark'] .tabActive {
   color: var(--light-blue-100, #2385ec);
 }
 
-.fallbackDetails[open] .fallbackSummary::before {
+details.callout[open] .calloutSummary::before {
   transform: rotate(90deg);
 }
 
-.fallbackBody {
+.calloutBody {
   padding: 0.75rem 0 0;
 }
 
-html[data-theme='dark'] .fallbackSummary::before {
+html[data-theme='dark'] .calloutSummary::before {
   color: var(--dark-blue-accent, #2385ec);
 }

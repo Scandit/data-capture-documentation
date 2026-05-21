@@ -25,6 +25,10 @@ export default function HomePage() {
     <div className={style.homeWrapper}>
       <Header></Header>
       <div className={`${style.body} ${isFlashing ? style.flash : ""}`}>
+        <div className={style.skillsCalloutWrapper}>
+          <SkillsCallout variant="shared" banner />
+        </div>
+
         <Slogan></Slogan>
 
         <div className={style.frameworksMobile}>
@@ -36,10 +40,6 @@ export default function HomePage() {
         </div>
 
         <CardsPart></CardsPart>
-
-        <div className={style.skillsCalloutWrapper}>
-          <SkillsCallout variant="shared" banner />
-        </div>
 
         <DataCapture></DataCapture>
       </div>

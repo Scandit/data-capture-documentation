@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import skillsData from '@site/src/data/skills.json';
+import { capturePostHogEvent } from './analytics';
 import styles from './styles.module.css';
 
 type TabKey = 'any' | 'claude-code' | 'cursor';
@@ -48,14 +49,6 @@ interface CommandBlockProps {
   trackingId: string;
   product?: string;
   framework?: string;
-}
-
-type PostHogCapture = (event: string, props?: Record<string, unknown>) => void;
-
-function capturePostHogEvent(event: string, props?: Record<string, unknown>): void {
-  if (typeof window === 'undefined') return;
-  const ph = (window as unknown as { posthog?: { capture?: PostHogCapture } }).posthog;
-  ph?.capture?.(event, props);
 }
 
 const CommandBlock: React.FC<CommandBlockProps> = ({ command, trackingId, product, framework }) => {

@@ -4,6 +4,7 @@ import { useLocation } from '@docusaurus/router';
 import skillsData from '@site/src/data/skills.json';
 import productsData from '@site/src/data/products.json';
 import { parseSdksRoute } from '../utils/frameworks';
+import { capturePostHogEvent } from './analytics';
 import InstallTabs from './InstallTabs';
 import styles from './styles.module.css';
 
@@ -13,7 +14,7 @@ const PRODUCT_DISAMBIGUATION_HEADING =
 interface SkillsCalloutProps {
   product?: string;
   framework?: string;
-  variant?: 'product' | 'shared' | 'fallback';
+  variant?: 'product' | 'shared';
   banner?: boolean;
 }
 
@@ -71,6 +72,37 @@ function getSharedMoreInfoUrl(search: string): string {
   return `/sdks/${path}/agent-skills`;
 }
 
+interface CalloutDetailsProps {
+  heading: string;
+  banner?: boolean;
+  trackingProps: Record<string, unknown>;
+  children: React.ReactNode;
+}
+
+const CalloutDetails: React.FC<CalloutDetailsProps> = ({
+  heading,
+  banner = false,
+  trackingProps,
+  children,
+}) => {
+  const className = banner ? `${styles.callout} ${styles.banner}` : styles.callout;
+  const handleToggle: React.ReactEventHandler<HTMLDetailsElement> = (e) => {
+    if (!e.currentTarget.open) return;
+    capturePostHogEvent('skills_callout_expanded', trackingProps);
+  };
+  return (
+    <details className={className} onToggle={handleToggle}>
+      <summary
+        className={`${styles.title} ${styles.calloutSummary}`}
+        aria-label="Install Scandit Agent Skills"
+      >
+        {heading}
+      </summary>
+      <div className={styles.calloutBody}>{children}</div>
+    </details>
+  );
+};
+
 interface SharedBodyProps {
   sharedFrameworkSlug: string;
   sharedMoreInfoUrl: string;
@@ -98,38 +130,24 @@ const SharedBody: React.FC<SharedBodyProps> = ({
 const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, variant = 'product', banner = false }) => {
   const { pathname, search } = useLocation();
 
-  const calloutClass = banner ? `${styles.callout} ${styles.banner}` : styles.callout;
-  const contentClass = banner ? styles.bannerContent : undefined;
-  const sharedFrameworkSlug = getSharedFrameworkSlug(search);
-  const sharedMoreInfoUrl = getSharedMoreInfoUrl(search);
-
   if (variant === 'shared') {
+    const sharedFrameworkSlug = getSharedFrameworkSlug(search);
+    const sharedMoreInfoUrl = getSharedMoreInfoUrl(search);
     return (
-      <aside className={calloutClass} aria-label="Install Scandit Agent Skills">
-        <div className={contentClass}>
-          <h3 className={styles.title}>{PRODUCT_DISAMBIGUATION_HEADING}</h3>
-          <SharedBody
-            sharedFrameworkSlug={sharedFrameworkSlug}
-            sharedMoreInfoUrl={sharedMoreInfoUrl}
-          />
-        </div>
-      </aside>
-    );
-  }
-
-  if (variant === 'fallback') {
-    return (
-      <details className={`${styles.callout} ${styles.fallbackDetails}`}>
-        <summary className={`${styles.title} ${styles.fallbackSummary}`}>
-          {PRODUCT_DISAMBIGUATION_HEADING}
-        </summary>
-        <div className={styles.fallbackBody}>
-          <SharedBody
-            sharedFrameworkSlug={sharedFrameworkSlug}
-            sharedMoreInfoUrl={sharedMoreInfoUrl}
-          />
-        </div>
-      </details>
+      <CalloutDetails
+        heading={PRODUCT_DISAMBIGUATION_HEADING}
+        banner={banner}
+        trackingProps={{
+          variant: 'shared',
+          pathname,
+          framework: sharedFrameworkSlug,
+        }}
+      >
+        <SharedBody
+          sharedFrameworkSlug={sharedFrameworkSlug}
+          sharedMoreInfoUrl={sharedMoreInfoUrl}
+        />
+      </CalloutDetails>
     );
   }
 
@@ -153,8 +171,15 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, varia
   const moreInfoUrl = frameworkPath ? `/sdks/${frameworkPath}/agent-skills` : null;
 
   return (
-    <aside className={styles.callout} aria-label="Install Scandit Agent Skills">
-      <h3 className={styles.title}>Speed up {productName} integration with Agent Skills</h3>
+    <CalloutDetails
+      heading={`Speed up ${productName} integration with Agent Skills`}
+      trackingProps={{
+        variant: 'product',
+        pathname,
+        product: resolvedProduct,
+        framework: frameworkSlug,
+      }}
+    >
       <p className={styles.description}>
         Install the official skill to help your coding agent (Claude Code,
         Codex, Cursor, etc.) integrate, debug, and customize{' '}
@@ -172,7 +197,7 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, varia
         product={resolvedProduct}
         framework={frameworkSlug}
       />
-    </aside>
+    </CalloutDetails>
   );
 };
 
