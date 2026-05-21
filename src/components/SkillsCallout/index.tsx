@@ -10,7 +10,7 @@ import styles from './styles.module.css';
 interface SkillsCalloutProps {
   product?: string;
   framework?: string;
-  variant?: 'product' | 'shared';
+  variant?: 'product' | 'shared' | 'fallback';
   banner?: boolean;
 }
 
@@ -68,6 +68,30 @@ function getSharedMoreInfoUrl(search: string): string {
   return `/sdks/${path}/agent-skills`;
 }
 
+interface SharedBodyProps {
+  sharedFrameworkSlug: string;
+  sharedMoreInfoUrl: string;
+}
+
+const SharedBody: React.FC<SharedBodyProps> = ({
+  sharedFrameworkSlug,
+  sharedMoreInfoUrl,
+}) => (
+  <>
+    <p className={styles.description}>
+      Install our <code>{skillsData.shared}</code> skill so your coding
+      agent can answer questions about Scandit products and recommend
+      the right one for your use case, directly from your editor.{' '}
+      <a href={sharedMoreInfoUrl}>More info →</a>
+    </p>
+    <InstallTabs
+      skillSlug={skillsData.shared}
+      product="shared"
+      framework={sharedFrameworkSlug}
+    />
+  </>
+);
+
 const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, variant = 'product', banner = false }) => {
   const { pathname, search } = useLocation();
 
@@ -81,19 +105,30 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, varia
       <aside className={calloutClass} aria-label="Install Scandit Agent Skills">
         <div className={contentClass}>
           <h3 className={styles.title}>Not sure which Scandit product fits your use case?</h3>
-          <p className={styles.description}>
-            Install our <code>{skillsData.shared}</code> skill so your coding
-            agent can answer questions about Scandit products and recommend
-            the right one for your use case, directly from your editor.{' '}
-            <a href={sharedMoreInfoUrl}>More info →</a>
-          </p>
-          <InstallTabs
-            skillSlug={skillsData.shared}
-            product="shared"
-            framework={sharedFrameworkSlug}
+          <SharedBody
+            sharedFrameworkSlug={sharedFrameworkSlug}
+            sharedMoreInfoUrl={sharedMoreInfoUrl}
           />
         </div>
       </aside>
+    );
+  }
+
+  if (variant === 'fallback') {
+    const sharedFrameworkSlug = getSharedFrameworkSlug(search);
+    const sharedMoreInfoUrl = getSharedMoreInfoUrl(search);
+    return (
+      <details className={styles.fallbackDetails}>
+        <summary className={styles.fallbackSummary}>
+          Not sure which Scandit product fits your use case?
+        </summary>
+        <div className={styles.fallbackBody}>
+          <SharedBody
+            sharedFrameworkSlug={sharedFrameworkSlug}
+            sharedMoreInfoUrl={sharedMoreInfoUrl}
+          />
+        </div>
+      </details>
     );
   }
 
