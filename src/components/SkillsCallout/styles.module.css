@@ -65,7 +65,7 @@
   inset: 0;
   background: radial-gradient(
     480px circle at var(--callout-mx) var(--callout-my),
-    rgba(35, 133, 236, 0.22),
+    rgba(35, 133, 236, 0.12),
     rgba(35, 133, 236, 0) 55%
   );
   opacity: 0;
@@ -81,7 +81,7 @@ details.callout:hover::before {
 html[data-theme='dark'] .callout::before {
   background: radial-gradient(
     480px circle at var(--callout-mx) var(--callout-my),
-    rgba(35, 133, 236, 0.32),
+    rgba(35, 133, 236, 0.18),
     rgba(35, 133, 236, 0) 55%
   );
 }
@@ -323,8 +323,8 @@ html[data-theme='dark'] details.callout {
   transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.calloutSummary:hover .calloutHint,
-.calloutSummary:focus-visible .calloutHint {
+details.callout:not([open]) .calloutSummary:hover .calloutHint,
+details.callout:not([open]) .calloutSummary:focus-visible .calloutHint {
   transform: translateX(4px);
 }
 
@@ -357,7 +357,7 @@ details.callout[open] .calloutChevron {
 /* Focus state for keyboard users — the spotlight does the visual work
    for hover, so we only need an explicit focus indicator here. */
 
-details.callout:not([open]) .calloutSummary:focus-visible {
+.calloutSummary:focus-visible {
   outline: 2px solid var(--light-blue-100, #2385ec);
   outline-offset: 2px;
   border-radius: 4px;
