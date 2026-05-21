@@ -1,7 +1,11 @@
 .callout {
   display: block;
   margin: 0 0 2rem 0;
-  padding: 1.25rem 1.5rem;
+  /* Asymmetric vertical padding compensates for the font line box being
+     taller than the visible glyphs (cap-height/descender asymmetry).
+     The [open] selector below restores symmetric padding once the body
+     content is visible and provides its own visual balance. */
+  padding: 1.3rem 1.5rem 1.05rem;
   border-radius: 8px;
   background: var(--light-blue-60, #f0f5ff);
   border-left: 4px solid var(--light-blue-100, #2385ec);
@@ -9,6 +13,11 @@
   border-right: 1px solid rgba(35, 133, 236, 0.15);
   border-bottom: 1px solid rgba(35, 133, 236, 0.15);
   font-family: var(--font-family, inherit);
+}
+
+details.callout[open] {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
 }
 
 .banner {
