@@ -9,7 +9,7 @@ keywords:
   - web
 ---
 
-# Batch Scanning
+# Multiple Barcode Scanning
 
 import BatchScanning from '../../partials/_batch-scanning.mdx';
 

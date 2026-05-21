@@ -37,6 +37,16 @@ export default function Card({ card, cardColor, mainColor }: CardProps) {
         >
           {card.text}
         </p>
+        {card.apis && (
+          <p
+            className={style.cardApiList}
+            style={{
+              color: mainColor === "var(--IDScanningColor)" ? "#91BFC3" : "",
+            }}
+          >
+            <span className={style.cardApiLabel}>APIs:</span> {card.apis}
+          </p>
+        )}
       </Link>
     </li>
   );

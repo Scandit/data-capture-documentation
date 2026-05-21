@@ -9,7 +9,7 @@ keywords:
   - titanium
 ---
 
-# Single Scanning
+# Single Barcode Scanning
 
 :::note
 SparkScan is not available for Titanium.

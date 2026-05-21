@@ -34,22 +34,43 @@ export default function DocsVersionDropdownNavbarItem({
     ? versions.filter(version => version.name === '7.6.14' || version.name === '6.28.10')
     : versions;
 
+  // Categorize each version so we can render an inline tag in the dropdown.
+  // 'current' = latest stable; add a version name as 'beta' to surface it.
+  const VERSION_CATEGORY = {
+    current: 'stable',
+    '7.6.12': 'legacy',
+    '6.28.9': 'legacy',
+  };
+  const TAG_LABEL = { stable: 'Stable', beta: 'Beta', legacy: 'Legacy' };
+
   const versionLinks = filteredVersions.map((version) => {
-    // We try to link to the same doc, in another version
-    // When not possible, fallback to the "main doc" of the version
     const versionDoc =
       activeDocContext?.alternateDocVersions[version.name] ??
       getVersionMainDoc(version);
+    const category = VERSION_CATEGORY[version.name] || 'legacy';
     return {
-      label: version.label,
-      // preserve ?search#hash suffix on version switches
+      label: (
+        <span className="version-link-content">
+          <span className="version-link-label">{version.label}</span>
+          <span className={`version-tag version-tag-${category}`}>
+            {TAG_LABEL[category]}
+          </span>
+        </span>
+      ),
       to: `${versionDoc.path}${search}${hash}`,
       isActive: () => version === activeDocContext?.activeVersion,
       onClick: () => savePreferredVersionName(version.name),
     };
   });
 
+  const sectionHeader = {
+    type: 'html',
+    value: `<div class="navbar-dropdown-header">SDK Version</div>`,
+    className: 'navbar-dropdown-header-item',
+  };
+
   const items = [
+    sectionHeader,
     ...dropdownItemsBefore,
     ...versionLinks,
     ...dropdownItemsAfter,

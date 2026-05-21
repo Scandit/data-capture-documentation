@@ -1,0 +1,207 @@
+.callout {
+  display: block;
+  margin: 0 0 2rem 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 8px;
+  background: var(--light-blue-60, #f0f5ff);
+  border-left: 4px solid var(--light-blue-100, #2385ec);
+  border-top: 1px solid rgba(35, 133, 236, 0.15);
+  border-right: 1px solid rgba(35, 133, 236, 0.15);
+  border-bottom: 1px solid rgba(35, 133, 236, 0.15);
+  font-family: var(--font-family, inherit);
+}
+
+.banner {
+  margin: 0;
+  padding: 1.75rem 2rem;
+}
+
+.bannerContent {
+  max-width: 100%;
+}
+
+.title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--ifm-color-content, #1a1a1a);
+}
+
+.description {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ifm-color-content-secondary, #444);
+}
+
+.commandBlock {
+  position: relative;
+  margin: 0 0 0.75rem 0;
+}
+
+.command {
+  margin: 0;
+  padding: 0.75rem 4.5rem 0.75rem 1rem;
+  background: #fff;
+  color: var(--light-black, #121619);
+  border: 1px solid var(--light-blue-80, #c2cce3);
+  border-radius: 6px;
+  font-family: var(--third-family, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.command code {
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  border: 0;
+}
+
+.copyButton {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: var(--light-blue-60, #f0f5ff);
+  color: var(--light-blue-100, #0a3390);
+  border: 1px solid var(--light-blue-80, #c2cce3);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 120ms ease;
+}
+
+.copyButton:hover {
+  background: var(--light-blue-80, #c2cce3);
+}
+
+html[data-theme='dark'] .command {
+  background: var(--dark-blue-100, #0f1722);
+  color: #f5f5f5;
+  border-color: var(--dark-blue-70, rgba(35, 133, 236, 0.3));
+}
+
+html[data-theme='dark'] .copyButton {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f5f5f5;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+html[data-theme='dark'] .copyButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.tabs {
+  margin: 0 0 0.75rem 0;
+}
+
+.tabList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  border-bottom: 1px solid rgba(35, 133, 236, 0.2);
+  margin-bottom: 0.75rem;
+}
+
+.tab {
+  padding: 0.5rem 0.875rem;
+  background: transparent;
+  color: var(--ifm-color-content-secondary, #444);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  font-size: 1rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 120ms ease, border-color 120ms ease;
+  margin-bottom: -1px;
+}
+
+.tab:hover {
+  color: var(--light-blue-100, #2385ec);
+}
+
+.tabActive {
+  color: var(--light-blue-100, #2385ec);
+  border-bottom-color: var(--light-blue-100, #2385ec);
+}
+
+.tabPanel {
+  margin-top: 0.5rem;
+}
+
+.tabHint {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ifm-color-content-secondary, #444);
+}
+
+.cursorButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 0.75rem 0;
+  padding: 0.625rem 1.25rem;
+  text-align: center;
+  background: var(--light-blue-100, #2385ec);
+  color: #fff !important;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background 120ms ease;
+}
+
+.cursorButton:hover {
+  background: #1a6bc4;
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+.callout a {
+  color: var(--light-blue-100, #2385ec);
+  text-decoration: underline;
+}
+
+html[data-theme='dark'] .callout {
+  background: rgba(35, 133, 236, 0.08);
+  border-left-color: var(--dark-blue-accent, #2385ec);
+  border-top-color: rgba(35, 133, 236, 0.2);
+  border-right-color: rgba(35, 133, 236, 0.2);
+  border-bottom-color: rgba(35, 133, 236, 0.2);
+}
+
+html[data-theme='dark'] .title {
+  color: var(--ifm-color-content, #f5f5f5);
+}
+
+html[data-theme='dark'] .description,
+html[data-theme='dark'] .tabHint,
+html[data-theme='dark'] .tab {
+  color: var(--ifm-color-content-secondary, #c8c8c8);
+}
+
+html[data-theme='dark'] .callout a {
+  color: var(--dark-blue-accent, #2385ec);
+}
+
+html[data-theme='dark'] .tabList {
+  border-bottom-color: rgba(35, 133, 236, 0.3);
+}
+
+html[data-theme='dark'] .tab:hover,
+html[data-theme='dark'] .tabActive {
+  color: var(--dark-blue-accent, #2385ec);
+}

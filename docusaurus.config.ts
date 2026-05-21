@@ -27,7 +27,6 @@ const llmsSharedPartialPageNames = [
   "ai-powered-barcode-scanning.md",
   "single-scanning.md",
   "batch-scanning.md",
-  "label-scanning.md",
   "migrate-5-to-6.mdx",
   "migrate-6-to-7.mdx",
   "migrate-7-to-8.mdx",
@@ -75,6 +74,7 @@ const llmsRootRedirectOnlyDocs: string[] = [
   "docs/extension-codes.mdx",
   "docs/features-by-framework.mdx",
   "docs/id-scanning.mdx",
+  "docs/label-definitions.mdx",
   "docs/migrate-5-to-6.mdx",
   "docs/migrate-6-to-7.mdx",
   "docs/migrate-7-to-8.mdx",
@@ -121,6 +121,9 @@ const config: Config = {
     defaultLocale: "en",
     locales: ["en"],
   },
+  clientModules: [
+    require.resolve('./src/clientModules/agentSkillsNavLink.ts'),
+  ],
   plugins: [
     [
       '@docusaurus/plugin-client-redirects',
@@ -172,6 +175,10 @@ const config: Config = {
           return undefined; // Return undefined when no redirects should be created
         },
         redirects: [
+          {
+            to: '/sdks/ios/agent-skills',
+            from: ['/connector-guides/windsurf', '/connector-guides/cursor'],
+          },
           {
             to: '/sdks/ios/add-sdk',
             from: ['/data-capture-sdk/ios', '/data-capture-sdk/ios/add-sdk.html'],
@@ -317,7 +324,16 @@ const config: Config = {
           },
           // Note: Root-level pages (core-concepts, features-by-framework, etc.) already have
           // <Redirect> components in their MDX files, so we don't need redirect plugin entries here.
-          // The redirect plugin cannot override existing files, so these redirects are removed.     
+          // The redirect plugin cannot override existing files, so these redirects are removed.
+          { to: '/sdks/ios/label-capture/intro', from: '/sdks/ios/label-scanning' },
+          { to: '/sdks/android/label-capture/intro', from: '/sdks/android/label-scanning' },
+          { to: '/sdks/web/label-capture/intro', from: '/sdks/web/label-scanning' },
+          { to: '/sdks/cordova/label-capture/intro', from: '/sdks/cordova/label-scanning' },
+          { to: '/sdks/react-native/label-capture/intro', from: '/sdks/react-native/label-scanning' },
+          { to: '/sdks/flutter/label-capture/intro', from: '/sdks/flutter/label-scanning' },
+          { to: '/sdks/capacitor/label-capture/intro', from: '/sdks/capacitor/label-scanning' },
+          { to: '/sdks/net/ios/label-capture/intro', from: '/sdks/net/ios/label-scanning' },
+          { to: '/sdks/net/android/label-capture/intro', from: '/sdks/net/android/label-scanning' },
       ],
     },
   ],
@@ -402,7 +418,7 @@ const config: Config = {
     navbar: {
       logo: {
         alt: "Scandit Logo",
-        src: "img/logo2.png",
+        src: "img/logo-light.svg",
         srcDark: "img/logo-dark.svg",
       },
       title: "Docs",
@@ -503,9 +519,10 @@ const config: Config = {
           position: "right",
         },
         {
-          href: "https://github.com/Scandit/",
-          label: "Github Samples",
+          to: "/sdks/ios/agent-skills",
+          label: "Agent Skills",
           position: "right",
+          className: "navbar-agent-skills",
         },
       ],
     },

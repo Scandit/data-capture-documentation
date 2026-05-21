@@ -6,7 +6,7 @@ keywords:
   - netIos
 ---
 
-# Single Scanning
+# Single Barcode Scanning
 
 import SingleScanning from '../../../partials/_single-scanning.mdx';
 

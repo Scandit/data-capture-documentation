@@ -13,7 +13,7 @@
   align-items: center;
   gap: clamp(6px, 2vw, 35px);
   padding: 0;
-  margin-bottom: 140px;
+  margin-bottom: 90px;
 }
 
 .additionalFrameworks {

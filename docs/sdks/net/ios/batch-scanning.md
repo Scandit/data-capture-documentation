@@ -5,7 +5,7 @@ keywords:
   - netIos
 ---
 
-# Batch Scanning
+# Multiple Barcode Scanning
 
 import BatchScanning from '../../../partials/_batch-scanning.mdx';
 

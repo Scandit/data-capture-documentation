@@ -1,6 +1,6 @@
-import { BarcodeScanning, LabelScanning } from "../../constants/scanningEnums";
+import { BarcodeScanning } from "../../constants/scanningEnums";
 import { frameworkCards } from "./frameworkCardsArr";
-import { BarcodeCapture, Express, Ms, LabelCapture } from "../../IconComponents";
+import { BarcodeCapture, Ms } from "../../IconComponents";
 import { FrameworkCardType } from "../../constants/types";
 
 export function createBarcodeScanningArr(framework: string) {
@@ -40,6 +40,7 @@ export function createBarcodeScanningArr(framework: string) {
     {
       name: BarcodeScanning.SingleScanning,
       text: "Ready-to-use workflows and APIs for single barcode scanning",
+      apis: "SparkScan, Barcode Capture",
       icon: <BarcodeCapture />,
       isActive: frameworkData?.barcodeScanning.includes(
         BarcodeScanning.SingleScanning
@@ -51,7 +52,8 @@ export function createBarcodeScanningArr(framework: string) {
     },
     {
       name: BarcodeScanning.BatchScanning,
-      text: "MatrixScan workflows and APIs for multiple barcode scanning",
+      text: "MatrixScan workflows and APIs for capturing multiple barcodes",
+      apis: "MatrixScan Batch, MatrixScan AR, MatrixScan Count, MatrixScan Find, MatrixScan Pick",
       icon: <Ms />,
       isActive: frameworkData?.barcodeScanning.includes(
         BarcodeScanning.BatchScanning
@@ -60,24 +62,6 @@ export function createBarcodeScanningArr(framework: string) {
         framework === "linux"
           ? `/sdks/linux/add-sdk/`
           : buildLink('/batch-scanning'),
-    },
-    {
-      name: LabelScanning.LabelScanning,
-      text: "Workflows and APIs to capture barcodes and text simultaneously from labels",
-      icon: <LabelCapture />,
-      isActive: frameworkData?.labelScanning?.includes(
-        LabelScanning.LabelScanning
-      ),
-      link: buildLink('/label-capture/intro'),
-    },
-    {
-      name: BarcodeScanning.ScanditExpress,
-      text: "No-Code Scanning in Any App",
-      icon: <Express />,
-      isActive: frameworkData?.barcodeScanning.includes(
-        BarcodeScanning.ScanditExpress
-      ),
-      link: `/hosted/express/overview`,
     },
   ];
 

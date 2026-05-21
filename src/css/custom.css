@@ -495,7 +495,7 @@
      background: transparent;
    }
    #__docusaurus aside .theme-doc-sidebar-menu > li{
-     margin-bottom: 40px;
+     margin-bottom: 16px;
    }
    #__docusaurus aside .theme-doc-sidebar-menu .theme-doc-sidebar-item-category .menu__list-item-collapsible button{
      position: absolute;

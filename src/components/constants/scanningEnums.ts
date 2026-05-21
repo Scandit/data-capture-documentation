@@ -1,6 +1,6 @@
 export enum BarcodeScanning {
-  SingleScanning = "Single Scanning",
-  BatchScanning = "Batch Scanning",
+  SingleScanning = "Single Barcode Scanning",
+  BatchScanning = "Multiple Barcode Scanning",
   ScanditExpress = "Scandit Express",
 }
 
@@ -10,5 +10,5 @@ export enum IDScanning {
 }
 
 export enum LabelScanning {
-  LabelScanning = "Label Scanning",
+  LabelScanning = "Label Capture",
 }

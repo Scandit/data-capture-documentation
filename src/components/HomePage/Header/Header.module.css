@@ -16,6 +16,7 @@
   padding: 10px clamp(16px, 4vw, 80px);
   height: clamp(68px, 7.6vw, 76px);
   border-bottom: 1px solid var(--nav-border);
+  font-family: var(--font-family);
 }
 
 .logo {
@@ -35,7 +36,7 @@
   border-left: 1px solid var(--nav-border);
   font-size: clamp(16px, 2vw, 20px);
   font-weight: 400;
-  line-height: 23px;
+  line-height: 1.2;
   color: var(--light-blue-100);
 }
 
@@ -45,9 +46,9 @@
 }
 
 .btnLogin {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 500;
-  line-height: 20px;
+  line-height: 1.25;
   color: var(--light-black);
   margin-right: 16px;
 }
@@ -57,7 +58,9 @@
 }
 
 .btnSignUp {
-  font-size: 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.25;
   padding: clamp(4px, 0.6vw, 8px) clamp(10px, 1.8vw, 18px);
   border-radius: 100px;
   color: var(--light-white);
@@ -70,29 +73,32 @@
   color: var(--light-white);
 }
 
-.btnGitHub {
+.btnSkills {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: clamp(4px, 0.6vw, 8px) clamp(10px, 1.2vw, 12px);
+  gap: 6px;
+  padding: clamp(4px, 0.6vw, 8px) clamp(10px, 1.8vw, 18px);
   border: 1px solid var(--nav-border);
   border-radius: 100px;
   color: var(--light-black);
   cursor: pointer;
   margin-right: 12px;
-  font-size: 12px;
-  font-weight: 400;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.25;
   transition: border-color 250ms linear;
 }
 
-.btnGitHub:hover {
+.btnSkills:hover {
   color: var(--light-black);
   text-decoration: none;
   border-color: var(--light-gray-80);
 }
 
-.gitHubIcon {
+.skillsIcon {
   color: var(--light-black);
+  width: 18px;
+  height: 18px;
 }
 
 .delimiter {
@@ -103,7 +109,7 @@
 }
 
 @media (width < 650px) {
-  .btnGitHub,
+  .btnSkills,
   .delimiter {
     display: none;
   }

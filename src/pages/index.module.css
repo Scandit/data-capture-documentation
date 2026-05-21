@@ -23,7 +23,13 @@
 }
 
 .body {
+  max-width: 1280px;
+  margin: 0 auto;
   padding: clamp(30px, 5vw, 40px) clamp(16px, 4vw, 80px);
+}
+
+.skillsCalloutWrapper {
+  margin: 2rem 0 2.5rem;
 }
 
 .frameworksMobile {
