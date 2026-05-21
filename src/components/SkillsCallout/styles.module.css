@@ -245,6 +245,11 @@ html[data-theme='dark'] .tabActive {
   padding: 0.75rem 0 0.25rem 0;
 }
 
+.fallbackDetails a {
+  color: var(--light-blue-100, #2385ec);
+  text-decoration: underline;
+}
+
 html[data-theme='dark'] .fallbackDetails {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(35, 133, 236, 0.25);
@@ -255,5 +260,9 @@ html[data-theme='dark'] .fallbackSummary {
 }
 
 html[data-theme='dark'] .fallbackSummary::before {
+  color: var(--dark-blue-accent, #2385ec);
+}
+
+html[data-theme='dark'] .fallbackDetails a {
   color: var(--dark-blue-accent, #2385ec);
 }
