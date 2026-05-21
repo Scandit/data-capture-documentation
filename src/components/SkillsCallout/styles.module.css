@@ -1,23 +1,97 @@
 .callout {
   display: block;
+  position: relative;
+  overflow: hidden;
   margin: 0 0 2rem 0;
-  padding: 1.25rem 1.5rem;
+  /* padding-top is constant across collapsed/open so the title doesn't
+     shift vertically when expanding. padding-bottom flexes via [open]
+     below: tighter in the collapsed state for optical centering of the
+     single summary line, restored when there's body content beneath. */
+  padding: 1.3rem 1.5rem 1.05rem;
   border-radius: 8px;
   background: var(--light-blue-60, #f0f5ff);
-  border-left: 4px solid var(--light-blue-100, #2385ec);
-  border-top: 1px solid rgba(35, 133, 236, 0.15);
-  border-right: 1px solid rgba(35, 133, 236, 0.15);
-  border-bottom: 1px solid rgba(35, 133, 236, 0.15);
+  border: 1px solid rgba(35, 133, 236, 0.18);
   font-family: var(--font-family, inherit);
+  /* Default spotlight origin (centered) before the first mousemove. */
+  --callout-mx: 50%;
+  --callout-my: 50%;
+  /* Enable height: auto ↔ 0 transitions on the ::details-content
+     pseudo-element below (Chrome 129+, Safari 18+). Older browsers
+     gracefully snap open with no animation. */
+  interpolate-size: allow-keywords;
+}
+
+/* Smooth open/close animation. ::details-content is the pseudo-element
+   the browser provides for the disclosure body; transitioning its height
+   and opacity (with content-visibility transitioning as a discrete
+   property so the content is rendered during the animation) gives a
+   clean slide-and-fade. @starting-style defines the "entering" state.
+   Longhand transition syntax — the shorthand with `allow-discrete` is
+   stripped by the build's CSS minifier. */
+.callout::details-content {
+  overflow-y: clip;
+  height: 0;
+  opacity: 0;
+  transition-property: height, opacity, content-visibility;
+  transition-duration: 280ms, 220ms, 280ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-behavior: allow-discrete;
+}
+
+.callout[open]::details-content {
+  height: auto;
+  opacity: 1;
+}
+
+@starting-style {
+  .callout[open]::details-content {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .callout::details-content {
+    transition: none;
+  }
+}
+
+/* Cursor-follow spotlight. Sits above the background, below the content.
+   Only revealed when collapsed + hovered — once expanded, the user is
+   reading and we don't want chrome competing with content. */
+.callout::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    480px circle at var(--callout-mx) var(--callout-my),
+    rgba(35, 133, 236, 0.12),
+    rgba(35, 133, 236, 0) 55%
+  );
+  opacity: 0;
+  transition: opacity 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+details.callout:hover::before {
+  opacity: 1;
+}
+
+html[data-theme='dark'] .callout::before {
+  background: radial-gradient(
+    480px circle at var(--callout-mx) var(--callout-my),
+    rgba(35, 133, 236, 0.18),
+    rgba(35, 133, 236, 0) 55%
+  );
+}
+
+details.callout[open] {
+  padding-bottom: 1.25rem;
 }
 
 .banner {
   margin: 0;
-  padding: 1.75rem 2rem;
-}
-
-.bannerContent {
-  max-width: 100%;
 }
 
 .title {
@@ -30,7 +104,7 @@
 .description {
   margin: 0 0 0.75rem 0;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.65;
   color: var(--ifm-color-content-secondary, #444);
 }
 
@@ -47,7 +121,9 @@
   border: 1px solid var(--light-blue-80, #c2cce3);
   border-radius: 6px;
   font-family: var(--third-family, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
-  font-size: 1rem;
+  /* Monospace at 1rem optically reads larger than proportional body text;
+     scaling to 0.9375rem matches the body visually. */
+  font-size: 0.9375rem;
   line-height: 1.5;
   overflow-x: auto;
   white-space: pre-wrap;
@@ -144,7 +220,7 @@ html[data-theme='dark'] .copyButton:hover {
 .tabHint {
   margin: 0 0 0.5rem 0;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.65;
   color: var(--ifm-color-content-secondary, #444);
 }
 
@@ -177,10 +253,7 @@ html[data-theme='dark'] .copyButton:hover {
 
 html[data-theme='dark'] .callout {
   background: rgba(35, 133, 236, 0.08);
-  border-left-color: var(--dark-blue-accent, #2385ec);
-  border-top-color: rgba(35, 133, 236, 0.2);
-  border-right-color: rgba(35, 133, 236, 0.2);
-  border-bottom-color: rgba(35, 133, 236, 0.2);
+  border-color: rgba(35, 133, 236, 0.22);
 }
 
 html[data-theme='dark'] .title {
@@ -203,5 +276,93 @@ html[data-theme='dark'] .tabList {
 
 html[data-theme='dark'] .tab:hover,
 html[data-theme='dark'] .tabActive {
+  color: var(--dark-blue-accent, #2385ec);
+}
+
+/* Beat Docusaurus's "#__docusaurus [class^=docMainContainer_] details { background-color: transparent }"
+   override that would otherwise wipe the blue callout background on doc pages. */
+details.callout {
+  background: var(--light-blue-60, #f0f5ff) !important;
+}
+
+html[data-theme='dark'] details.callout {
+  background: rgba(35, 133, 236, 0.08) !important;
+}
+
+.calloutSummary {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.calloutSummary::-webkit-details-marker {
+  display: none;
+}
+
+.calloutHeading {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.calloutHint {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--light-blue-100, #2385ec);
+  transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+details.callout:not([open]) .calloutSummary:hover .calloutHint,
+details.callout:not([open]) .calloutSummary:focus-visible .calloutHint {
+  transform: translateX(4px);
+}
+
+.calloutHintText::before {
+  content: 'Show';
+}
+
+details.callout[open] .calloutHintText::before {
+  content: 'Hide';
+}
+
+.calloutChevron {
+  display: inline-block;
+  font-size: 1rem;
+  line-height: 1;
+  transform: rotate(90deg);
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+details.callout[open] .calloutChevron {
+  transform: rotate(-90deg);
+}
+
+.calloutBody {
+  position: relative;
+  z-index: 1;
+  padding: 0.75rem 0 0;
+}
+
+/* Focus state for keyboard users — the spotlight does the visual work
+   for hover, so we only need an explicit focus indicator here. */
+
+.calloutSummary:focus-visible {
+  outline: 2px solid var(--light-blue-100, #2385ec);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+html[data-theme='dark'] .calloutHint {
   color: var(--dark-blue-accent, #2385ec);
 }

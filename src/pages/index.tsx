@@ -35,11 +35,11 @@ export default function HomePage() {
           <Frameworks handleFrameworkClick={handleFrameworkClick}></Frameworks>
         </div>
 
-        <CardsPart></CardsPart>
-
         <div className={style.skillsCalloutWrapper}>
           <SkillsCallout variant="shared" banner />
         </div>
+
+        <CardsPart></CardsPart>
 
         <DataCapture></DataCapture>
       </div>
