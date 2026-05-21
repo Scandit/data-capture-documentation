@@ -74,6 +74,7 @@ const llmsRootRedirectOnlyDocs: string[] = [
   "docs/extension-codes.mdx",
   "docs/features-by-framework.mdx",
   "docs/id-scanning.mdx",
+  "docs/label-definitions.mdx",
   "docs/migrate-5-to-6.mdx",
   "docs/migrate-6-to-7.mdx",
   "docs/migrate-7-to-8.mdx",

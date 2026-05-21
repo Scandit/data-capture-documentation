@@ -53,7 +53,7 @@ export function createBarcodeScanningArr(framework: string) {
     {
       name: BarcodeScanning.BatchScanning,
       text: "MatrixScan workflows and APIs for capturing multiple barcodes",
-      apis: "MatrixScan Batch, MatrixScan Count, MatrixScan Find, MatrixScan AR, MatrixScan Pick",
+      apis: "MatrixScan Batch, MatrixScan AR, MatrixScan Count, MatrixScan Find, MatrixScan Pick",
       icon: <Ms />,
       isActive: frameworkData?.barcodeScanning.includes(
         BarcodeScanning.BatchScanning

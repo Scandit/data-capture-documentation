@@ -4,25 +4,18 @@ import { LabelCapture } from "../../IconComponents";
 import { FrameworkCardType } from "../../constants/types";
 
 export function createLabelScanningArr(framework: string) {
-  function findFrameworkData() {
-    const frameworkData: FrameworkCardType = frameworkCards.find(
-      (item) => item.framework === framework
+  function findFrameworkData(): FrameworkCardType | undefined {
+    return (
+      frameworkCards.find((item) => item.framework === framework) ??
+      frameworkCards
+        .flatMap((item) => item.additional ?? [])
+        .find((item) => item.framework === framework)
     );
-
-    if (frameworkData) {
-      return frameworkData;
-    }
-
-    const additionalFrameworkData = frameworkCards
-      .filter((item) => item.additional && Array.isArray(item.additional))
-      .flatMap((item) => item.additional)
-      .find((additionalItem) => additionalItem.framework === framework);
-    return additionalFrameworkData || null;
   }
 
   const frameworkData = findFrameworkData();
 
-  function getFrameworkPath(frameworkData: FrameworkCardType): string {
+  function getFrameworkPath(frameworkData: FrameworkCardType | undefined): string {
     return frameworkData?.link ? frameworkData.link : framework;
   }
 
@@ -42,7 +35,7 @@ export function createLabelScanningArr(framework: string) {
       icon: <LabelCapture />,
       isActive: frameworkData?.labelScanning?.includes(
         LabelScanning.LabelScanning
-      ),
+      ) ?? false,
       link: buildLink('/label-capture/intro'),
     },
   ];

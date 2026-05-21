@@ -17,11 +17,12 @@ import {
 } from "../../IconComponents";
 import style from "../Frameworks/FrameworkCard.module.css";
 import { BarcodeScanning, IDScanning, LabelScanning } from "../../constants/scanningEnums";
+import type { FrameworkCardType } from "../../constants/types";
 
 //the framework name in this array is used exactly as it appears in the FrameworksName enum
 //The framework key of the object in the frameworkCards array is also used to form the link.
 
-export const frameworkCards = [
+export const frameworkCards: FrameworkCardType[] = [
   {
     framework: "ios",
     icon: <ScanditIOS iconClass={style.iconStyle} />,
