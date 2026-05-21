@@ -96,7 +96,11 @@ const CalloutDetails: React.FC<CalloutDetailsProps> = ({
         className={`${styles.title} ${styles.calloutSummary}`}
         aria-label="Install Scandit Agent Skills"
       >
-        {heading}
+        <span className={styles.calloutHeading}>{heading}</span>
+        <span className={styles.calloutHint} aria-hidden="true">
+          <span className={styles.calloutHintText} />
+          <span className={styles.calloutChevron}>›</span>
+        </span>
       </summary>
       <div className={styles.calloutBody}>{children}</div>
     </details>
