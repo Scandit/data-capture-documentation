@@ -74,7 +74,7 @@
   z-index: 0;
 }
 
-details.callout:not([open]):hover::before {
+details.callout:hover::before {
   opacity: 1;
 }
 

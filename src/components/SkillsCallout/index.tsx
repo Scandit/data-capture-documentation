@@ -91,10 +91,8 @@ const CalloutDetails: React.FC<CalloutDetailsProps> = ({
     capturePostHogEvent('skills_callout_expanded', trackingProps);
   };
   // Cursor-follow spotlight: write the mouse position into CSS variables on
-  // the element so the radial-gradient ::before can read them. Only meaningful
-  // while collapsed; once expanded we let the user read in peace.
+  // the element so the radial-gradient ::before can read them.
   const handleMouseMove: React.MouseEventHandler<HTMLDetailsElement> = (e) => {
-    if (e.currentTarget.open) return;
     const rect = e.currentTarget.getBoundingClientRect();
     e.currentTarget.style.setProperty('--callout-mx', `${e.clientX - rect.left}px`);
     e.currentTarget.style.setProperty('--callout-my', `${e.clientY - rect.top}px`);
