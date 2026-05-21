@@ -15,6 +15,45 @@
   /* Default spotlight origin (centered) before the first mousemove. */
   --callout-mx: 50%;
   --callout-my: 50%;
+  /* Enable height: auto ↔ 0 transitions on the ::details-content
+     pseudo-element below (Chrome 129+, Safari 18+). Older browsers
+     gracefully snap open with no animation. */
+  interpolate-size: allow-keywords;
+}
+
+/* Smooth open/close animation. ::details-content is the pseudo-element
+   the browser provides for the disclosure body; transitioning its height
+   and opacity (with content-visibility transitioning as a discrete
+   property so the content is rendered during the animation) gives a
+   clean slide-and-fade. @starting-style defines the "entering" state.
+   Longhand transition syntax — the shorthand with `allow-discrete` is
+   stripped by the build's CSS minifier. */
+.callout::details-content {
+  overflow-y: clip;
+  height: 0;
+  opacity: 0;
+  transition-property: height, opacity, content-visibility;
+  transition-duration: 280ms, 220ms, 280ms;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  transition-behavior: allow-discrete;
+}
+
+.callout[open]::details-content {
+  height: auto;
+  opacity: 1;
+}
+
+@starting-style {
+  .callout[open]::details-content {
+    height: 0;
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .callout::details-content {
+    transition: none;
+  }
 }
 
 /* Cursor-follow spotlight. Sits above the background, below the content.
@@ -65,7 +104,7 @@ details.callout[open] {
 .description {
   margin: 0 0 0.75rem 0;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.65;
   color: var(--ifm-color-content-secondary, #444);
 }
 
@@ -82,7 +121,9 @@ details.callout[open] {
   border: 1px solid var(--light-blue-80, #c2cce3);
   border-radius: 6px;
   font-family: var(--third-family, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
-  font-size: 1rem;
+  /* Monospace at 1rem optically reads larger than proportional body text;
+     scaling to 0.9375rem matches the body visually. */
+  font-size: 0.9375rem;
   line-height: 1.5;
   overflow-x: auto;
   white-space: pre-wrap;
@@ -179,7 +220,7 @@ html[data-theme='dark'] .copyButton:hover {
 .tabHint {
   margin: 0 0 0.5rem 0;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.65;
   color: var(--ifm-color-content-secondary, #444);
 }
 
@@ -282,7 +323,7 @@ html[data-theme='dark'] details.callout {
   transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-details.callout:not([open]):hover .calloutHint {
+details.callout:hover .calloutHint {
   transform: translateX(4px);
 }
 
