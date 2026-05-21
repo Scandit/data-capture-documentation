@@ -7,6 +7,9 @@ import { parseSdksRoute } from '../utils/frameworks';
 import InstallTabs from './InstallTabs';
 import styles from './styles.module.css';
 
+const PRODUCT_DISAMBIGUATION_HEADING =
+  'Not sure which Scandit product fits your use case?';
+
 interface SkillsCalloutProps {
   product?: string;
   framework?: string;
@@ -97,14 +100,14 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, varia
 
   const calloutClass = banner ? `${styles.callout} ${styles.banner}` : styles.callout;
   const contentClass = banner ? styles.bannerContent : undefined;
+  const sharedFrameworkSlug = getSharedFrameworkSlug(search);
+  const sharedMoreInfoUrl = getSharedMoreInfoUrl(search);
 
   if (variant === 'shared') {
-    const sharedFrameworkSlug = getSharedFrameworkSlug(search);
-    const sharedMoreInfoUrl = getSharedMoreInfoUrl(search);
     return (
       <aside className={calloutClass} aria-label="Install Scandit Agent Skills">
         <div className={contentClass}>
-          <h3 className={styles.title}>Not sure which Scandit product fits your use case?</h3>
+          <h3 className={styles.title}>{PRODUCT_DISAMBIGUATION_HEADING}</h3>
           <SharedBody
             sharedFrameworkSlug={sharedFrameworkSlug}
             sharedMoreInfoUrl={sharedMoreInfoUrl}
@@ -115,12 +118,10 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, varia
   }
 
   if (variant === 'fallback') {
-    const sharedFrameworkSlug = getSharedFrameworkSlug(search);
-    const sharedMoreInfoUrl = getSharedMoreInfoUrl(search);
     return (
       <details className={styles.fallbackDetails}>
         <summary className={styles.fallbackSummary}>
-          Not sure which Scandit product fits your use case?
+          {PRODUCT_DISAMBIGUATION_HEADING}
         </summary>
         <div className={styles.fallbackBody}>
           <SharedBody
