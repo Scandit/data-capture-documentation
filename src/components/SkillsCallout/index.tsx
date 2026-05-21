@@ -119,8 +119,8 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({ product, framework, varia
 
   if (variant === 'fallback') {
     return (
-      <details className={styles.fallbackDetails}>
-        <summary className={styles.fallbackSummary}>
+      <details className={`${styles.callout} ${styles.fallbackDetails}`}>
+        <summary className={`${styles.title} ${styles.fallbackSummary}`}>
           {PRODUCT_DISAMBIGUATION_HEADING}
         </summary>
         <div className={styles.fallbackBody}>

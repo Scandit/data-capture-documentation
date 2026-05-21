@@ -206,23 +206,10 @@ html[data-theme='dark'] .tabActive {
   color: var(--dark-blue-accent, #2385ec);
 }
 
-.fallbackDetails {
-  display: block;
-  margin: 0 0 2rem 0;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  background: var(--ifm-background-surface-color, #f7f8fa);
-  border: 1px solid rgba(35, 133, 236, 0.15);
-  font-family: var(--font-family, inherit);
-}
-
 .fallbackSummary {
+  margin: 0;
   list-style: none;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--ifm-color-content, #1a1a1a);
-  padding: 0.25rem 0;
 }
 
 .fallbackSummary::-webkit-details-marker {
@@ -242,27 +229,9 @@ html[data-theme='dark'] .tabActive {
 }
 
 .fallbackBody {
-  padding: 0.75rem 0 0.25rem 0;
-}
-
-.fallbackDetails a {
-  color: var(--light-blue-100, #2385ec);
-  text-decoration: underline;
-}
-
-html[data-theme='dark'] .fallbackDetails {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(35, 133, 236, 0.25);
-}
-
-html[data-theme='dark'] .fallbackSummary {
-  color: var(--ifm-color-content, #f5f5f5);
+  padding: 0.75rem 0 0;
 }
 
 html[data-theme='dark'] .fallbackSummary::before {
-  color: var(--dark-blue-accent, #2385ec);
-}
-
-html[data-theme='dark'] .fallbackDetails a {
   color: var(--dark-blue-accent, #2385ec);
 }
