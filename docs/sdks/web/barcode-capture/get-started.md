@@ -38,9 +38,9 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Create the Data Capture Context
 
-To initialize the library and create a data capture context, see the [Installation guide](../add-sdk.md#configure-the-library) for detailed information about configuration options, hosting the `sdc-lib` files, and loading status handling.
+Initialize the library and create a data capture context as shown below.
 
-For barcode capture, create the context like this:
+For configuration options, `sdc-lib` hosting, and loading-status handling, see the [Installation guide](../add-sdk.md#configure-the-library).
 
 ```ts
 import { DataCaptureContext } from '@scandit/web-datacapture-core';

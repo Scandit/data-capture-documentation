@@ -17,10 +17,12 @@ In this guide you will learn step-by-step how to add MatrixScan AR to your appli
 
 The general steps are:
 
-- Creating a new Data Capture Context instance
-- Configuring the Barcode AR Mode
-- Setup the Barcode AR View
-- Registering the Listener to notify about found items
+- [Create a Data Capture Context](#create-a-data-capture-context) initialized with your license key.
+- [Configure the Barcode AR Mode](#configure-the-barcode-ar-mode) with the symbologies you want to track.
+- [Set up the BarcodeArView](#setup-the-barcodearview) to render the AR overlay.
+- [Register a Listener](#register-a-listener) to receive annotation events.
+- [Register a listener for highlights click](#register-a-listener-for-highlights-click) to handle taps on highlighted barcodes.
+- [Start Scanning](#start-scanning).
 
 ## Prerequisites
 
