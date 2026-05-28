@@ -24,7 +24,7 @@ keywords:
 #### Id
 
 * Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.
-* Added support for new versions of USA, California – Driver's License; USA, North Carolina – Driver's License; and USA, Texas – Driver's License.
+* Added support for new versions of USA, California – Driver's License; USA, North Carolina – Driver's License; USA, Texas – Driver's License; and USA, Oklahoma – Driver's License.
 
 #### Core
 
