@@ -27,39 +27,32 @@ extension ViewController: BarcodePickListener {
 }
 ```
 
-## BarcodePickAction Listener
+## BarcodePickView Listener
 
-You may want to be notified when a user interacts with the UI of the `BarcodePick` mode, which can then be used to reject specific pick/unpick actions.
+For lifecycle events on the `BarcodePickView` itself — when scanning starts, freezes, pauses, or stops — register a [`BarcodePickViewListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-pick-view-listener.html#interface-scandit.datacapture.barcode.pick.ui.BarcodePickViewListener) on the view. All callbacks are optional; implement only the ones you need.
 
 ```swift
-extension ViewController: BarcodePickActionListener {
-    func didPickItem(withData data: String, completionHandler: @escaping (Bool) -> Void) {
-        // Perform the needed checks, and invoke completionHandler(true/false) to allow/reject
-        // the current pick action
-        completionHandler(true)
+extension ViewController: BarcodePickViewListener {
+    func barcodePickViewDidStartScanning(_ view: BarcodePickView) {
+        // Invoked when the view starts scanning (e.g. after a call to start()).
     }
-    
-    func didUnpickItem(withData data: String, completionHandler: @escaping (Bool) -> Void) {
-        // Perform the needed checks, and invoke completionHandler(true/false) to allow/reject
-        // the current unpick action
-        completionHandler(true)
+
+    func barcodePickViewDidFreezeScanning(_ view: BarcodePickView) {
+        // Invoked when the view freezes the current frame (e.g. after a call to freeze()).
+    }
+
+    func barcodePickViewDidPauseScanning(_ view: BarcodePickView) {
+        // Invoked when the view pauses scanning (e.g. after a call to pause()).
+    }
+
+    func barcodePickViewDidStopScanning(_ view: BarcodePickView) {
+        // Invoked when the view stops scanning (e.g. after a call to stop()).
     }
 }
 ```
 
-## BarcodePickScanning Listener
-
-You can register a [`BarcodePickScanningListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-pick-scanning-listener.html#interface-scandit.datacapture.barcode.pick.IBarcodePickScanningListener) on the mode, which can be used to listen to every time the pick state changes.
+Register it on the view:
 
 ```swift
-extension ViewController: BarcodePickScanningListener {
-    func barcodePick(_ barcodePick: BarcodePick, didUpdate scanningSession: BarcodePickScanningSession) {
-        // This callback will be invoked on a background thread every time the picked state of some item changes.
-        // The session object contains the list of picked and scanned items.
-    }
-
-    func barcodePick(_ barcodePick: BarcodePick, didComplete scanningSession: BarcodePickScanningSession) {
-        // This callback is invoked when all the registered items needing picking have been picked.
-    }
-}
+barcodePickView.addListener(self)
 ```

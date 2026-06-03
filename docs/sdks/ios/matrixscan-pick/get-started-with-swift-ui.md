@@ -73,21 +73,24 @@ extension MatrixScanPickViewController: BarcodePickViewUIDelegate {
     }
 }
 
-extension MatrixScanPickViewController: BarcodePickViewListener {
-    func barcodePickViewDidStartScanning(_ view: BarcodePickView) {
-        // Handle scanning started
+extension MatrixScanPickViewController: BarcodePickActionListener {
+    func didPickItem(withData data: String, completionHandler: @escaping (Bool) -> Void) {
+        // Confirm or reject the pick — required for picks to complete.
+        completionHandler(true)
     }
 
-    func barcodePickViewDidFreezeScanning(_ view: BarcodePickView) {
-        // Handle scanning frozen
+    func didUnpickItem(withData data: String, completionHandler: @escaping (Bool) -> Void) {
+        completionHandler(true)
+    }
+}
+
+extension MatrixScanPickViewController: BarcodePickScanningListener {
+    func barcodePick(_ barcodePick: BarcodePick, didUpdate scanningSession: BarcodePickScanningSession) {
+        // Invoked on a background thread every time the picked state of an item changes.
     }
 
-    func barcodePickViewDidPauseScanning(_ view: BarcodePickView) {
-        // Handle scanning paused
-    }
-
-    func barcodePickViewDidStopScanning(_ view: BarcodePickView) {
-        // Handle scanning stopped
+    func barcodePick(_ barcodePick: BarcodePick, didComplete scanningSession: BarcodePickScanningSession) {
+        // Invoked when all the registered items needing picking have been picked.
     }
 }
 ```
