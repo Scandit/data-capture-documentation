@@ -46,6 +46,13 @@ let settings = BarcodePickSettings()
 settings.set(symbology: .ean13UPCA, enabled: true)
 ```
 
+Sound and haptic feedback are also configured on `BarcodePickSettings` (not on the view settings) — both are on by default:
+
+```swift
+settings.isSoundEnabled = false       // mute the beep
+settings.isHapticsEnabled = false     // mute the vibration
+```
+
 Then you have to create the product provider for the Barcode Pick mode. This provider is responsible for providing the items that should be highlighted in the AR view. Note that in this example we are using a hardcoded list of items, but in a real-world scenario, you would fetch this list from your backend.
 
 ```swift
@@ -118,7 +125,6 @@ MatrixScan Pick’s built-in AR user interface includes buttons and overlays tha
 The `BarcodePickView` appearance can be customized through [`BarcodePickViewSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-pick-view-settings.html#class-scandit.datacapture.barcode.pick.ui.BarcodePickViewSettings) to match your application’s look and feel. The following settings can be customized:
 
 * Colors of dots in augmented reality overlay
-* Enable sound and haptic alerts
 * Guidelines text
 * Showing hints
 * Finish button
@@ -137,7 +143,7 @@ Next, create a `BarcodePickView` instance with the Data Capture Context and the 
 let barcodePickView = BarcodePickView(frame: view.bounds, context: context, barcodePick: mode, settings: viewSettings)
 ```
 
-Connect the `BarcodePickView` to the iOS view controller lifecycle. In particular, make sure to call `BarcodePickView.prepareSearching()` on your UIViewController’s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) method to make sure that start up time is optimal.
+Connect the `BarcodePickView` to the iOS view controller lifecycle. Call `start()` in [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear), `pause()` in [`viewWillDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621504-viewwilldisappear), and `stop()` only when `isMovingFromParent` is `true` — so the camera is released when the screen is truly being popped, not just covered by another view.
 
 ```swift
 override func viewWillAppear(_ animated: Bool) {
@@ -159,38 +165,58 @@ And the BarcodePickViewUIDelegate:
 ```swift
 extension ViewController: BarcodePickViewUIDelegate {
     func barcodePickViewDidTapFinishButton(_ view: BarcodePickView) {
-        navigationController?.popViewController(animated: true)
+        // Handle the user tapping the finish button — pop, dismiss, present a summary, etc.
+        // The right call depends on how this screen was presented.
     }
 }
 ```
 
-## Register the Listener
+## BarcodePickAction Listener
 
-The `BarcodePickView` displays a **Finish** button next to its shutter button. 
+`BarcodePick` does not auto-finalize a pick. When the user taps a code, the SDK calls your [`BarcodePickActionListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-pick-action-listener.html) and waits for `completionHandler(true)` before transitioning the highlight to "picked". This indirection is what lets you validate against a backend (stock check, task assignment) before committing the action.
 
-Register a [BarcodePickViewListener](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-pick-view-listener.html#interface-scandit.datacapture.barcode.pick.ui.BarcodePickViewListener) to be notified what items have been found once the finish button is pressed.
+This listener is required.
 
 ```swift
-extension ViewController: BarcodePickViewListener {
-    func barcodePickViewDidStartScanning(_ view: BarcodePickView) {}
+extension ViewController: BarcodePickActionListener {
+    func didPickItem(withData data: String, completionHandler: @escaping (Bool) -> Void) {
+        // Perform any checks (e.g. backend validation) and invoke completionHandler(true)
+        // to confirm the pick, or completionHandler(false) to reject it.
+        completionHandler(true)
+    }
 
-    func barcodePickViewDidFreezeScanning(_ view: BarcodePickView) {}
-
-    func barcodePickViewDidPauseScanning(_ view: BarcodePickView) {}
-
-    func barcodePickViewDidStopScanning(_ view: BarcodePickView) {}
+    func didUnpickItem(withData data: String, completionHandler: @escaping (Bool) -> Void) {
+        // Same contract for un-picking — call completionHandler(true) to confirm.
+        completionHandler(true)
+    }
 }
 ```
 
-## Start Searching
-
-With everything configured, you can now start searching for items. This is done by calling `barcodePickView.start()`.
+Register it on the view:
 
 ```swift
-override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    barcodePickView.start()
+barcodePickView.addActionListener(self)
+```
+
+## Register the Scanning Listener
+
+Register a [`BarcodePickScanningListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-pick-scanning-listener.html#interface-scandit.datacapture.barcode.pick.IBarcodePickScanningListener) on the mode to be notified every time the pick state changes. The session object contains the list of picked and scanned items.
+
+```swift
+extension ViewController: BarcodePickScanningListener {
+    func barcodePick(_ barcodePick: BarcodePick, didUpdate scanningSession: BarcodePickScanningSession) {
+        // Invoked on a background thread every time the picked state of an item changes.
+        // The session object contains the list of picked and scanned items.
+    }
+
+    func barcodePick(_ barcodePick: BarcodePick, didComplete scanningSession: BarcodePickScanningSession) {
+        // Invoked when all the registered items needing picking have been picked.
+    }
 }
 ```
 
-This is the equivalent of pressing the Play button programmatically. It will start the search process, turn on the camera, and hide the item carousel.
+Register it on the mode:
+
+```swift
+barcodePick.addScanningListener(self)
+```
