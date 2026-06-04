@@ -166,6 +166,16 @@ val validationFlowOverlay = LabelCaptureValidationFlowOverlay.newInstance(
 validationFlowOverlay.listener = this
 ```
 
+:::note
+  The validation flow overlay uses input fields, so window insets must be handled
+  as described in the [official edge-to-edge Android
+  guidelines](https://developer.android.com/develop/ui/views/layout/edge-to-edge)
+  to keep the software keyboard from covering them.
+
+  When that is not an option, setting `validationFlowOverlay.shouldHandleKeyboardInsetsInternally = true`
+  lets the overlay handle window insets internally and should resolve the issue in most scenarios.
+:::
+
 ### Define a Listener
 
 When the user has verified that all fields are correctly captured and presses the finish button, the Validation Flow triggers a callback with the final results. To receive these results, implement the [LabelCaptureValidationFlowOverlayListener](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-validation-flow-listener.html) interface:
