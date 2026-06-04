@@ -120,3 +120,21 @@ The preview behavior determines how the camera preview behaves when the scanner 
 | -------------- | -------------------------- |
 | **Default**    | Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.                 |
 | **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode. |
+
+### Configuring the default scanning mode
+
+Combine a scanning mode, scanning behavior, and preview behavior and assign it to
+[`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-view-settings.html). For example, to start in continuous scanning with the preview always visible:
+
+```ts
+const viewSettings = new SparkScanViewSettings();
+viewSettings.defaultScanningMode = new SparkScanScanningModeDefault(
+  SparkScanScanningBehavior.Continuous, // or .Single
+  SparkScanPreviewBehavior.Persistent,  // or .Default
+);
+```
+
+Pass both arguments — the single-argument constructor is deprecated. Use
+`SparkScanScanningModeTarget` instead of `SparkScanScanningModeDefault` to force the
+aimer (target mode).
+
