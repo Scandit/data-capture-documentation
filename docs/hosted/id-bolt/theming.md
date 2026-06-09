@@ -113,6 +113,38 @@ const theme = {
   - `data:image/svg+xml`
   - `data:image/webp`
 
+## Banner (mobile only)
+
+Available since version `2.5`.
+
+To reinforce user trust, you can display a banner at the top of ID Bolt on mobile devices. The banner supports a maximum height of 80 pixels and can be horizontally aligned to the left, center, or right. You can also define a background color, which is visible when the image does not span the full available width.
+
+:::note
+The banner is not displayed on non-mobile devices, where your website and branding remain visible to the user while ID Bolt is open, making a banner unnecessary.
+:::
+
+```ts
+const theme = {
+  banner: {
+    image: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...",
+    backgroundColor: "#05164d",
+    horizontalAlignment: "left",
+  },
+};
+```
+
+### Banner Properties
+
+| Property              | Type                            | Description                                                                                                                                      | Since |
+| --------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `image`               | `string`                        | Base64 encoded image. Its height must not be larger than 80 pixels, its size must not exceed 50KB and its type should be PNG, JPEG, SVG or WebP. | 2.5   |
+| `backgroundColor`     | `string`                        | CSS color to display behind the image. `transparent` by default.                                                                                 | 2.5   |
+| `horizontalAlignment` | `"left" \| "center" \| "right"` | Horizontal alignment of the image. Default is `center`.                                                                                          | 2.5   |
+
+### CSS Customization of the banner
+
+If you need further customization of the banner, you can add CSS rules to `theme.styleOverrides.banner` using style overrides. Check out the [style overrides section](#style-overrides) to get more details.
+
 ## Font Customization
 
 Available since version `1.8`.
@@ -195,21 +227,27 @@ const theme = {
         letter-spacing: 0.05em;
       }
     `,
+    banner: `
+      .bolt-banner {
+        padding-left: 10px;
+      }
+    `,
   },
 };
 ```
 
 ### Available Style Override Properties
 
-| Property | Type     | Description            | Since |
-| -------- | -------- | ---------------------- | ----- |
-| `button` | `string` | CSS styles for buttons | 1.9   |
-| `link`   | `string` | CSS styles for links   | 1.9   |
-| `title`  | `string` | CSS styles for titles  | 1.9   |
+| Property | Type     | Description               | Since |
+| -------- | -------- | ------------------------- | ----- |
+| `button` | `string` | CSS styles for buttons    | 1.9   |
+| `link`   | `string` | CSS styles for links      | 1.9   |
+| `title`  | `string` | CSS styles for titles     | 1.9   |
+| `banner` | `string` | CSS styles for the banner | 2.5   |
 
 #### CSS class names
 
-Use the `.bolt-button`, `.bolt-link` and `.bolt-title` selectors for the styling rule. You can also create additional rules for pseudo-states like `.bolt-button:hover` etc.
+Use the `.bolt-button`, `.bolt-link`, `.bolt-title` and `.bolt-banner` selectors for the styling rule. You can also create additional rules for pseudo-states like `.bolt-button:hover` etc.
 When a style override is specified, the element is rendered in its own shadow-DOM, with the provided style sheet attached.
 
 The element will have many more CSS classes attached, but since it is rendered in a shadow DOM, these don't have an effect, unless you choose to use them in the style-override.

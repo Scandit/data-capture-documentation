@@ -9,6 +9,18 @@ hide_title: true
 title: Release Notes
 ---
 
+## 2.5.0
+
+**Released**: June 4, 2026
+
+### New Features
+
+- Added support for a configurable banner displayed at the top of ID Bolt on mobile devices. You can set the banner image, background color, horizontal alignment, and optional custom styling.
+
+### Bug fixes
+
+- Fixed a license key domain validation issue in the ID Bolt configurator within the Scandit dashboard.
+
 ## 2.3.0
 
 **Released**: April 14, 2026
