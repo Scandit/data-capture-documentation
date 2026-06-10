@@ -206,6 +206,27 @@ keywords:
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 * Fixed `BarcodeBatchBasicOverlayStyle.Frame` such that it now correctly displays as a frame on iOS and MAUI iOS platforms, where previously setting the style to `Frame` would incorrectly render as a dot due to an enum value mismatch in the iOS binding layer
 
+## 8.1.5
+
+**Released**: June 10, 2026
+
+### New Features
+
+#### Barcode
+
+* Added an option to configure the duration of BarcodeSequence's idle timeout.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed BarcodeAR not displaying an overlay for every scanned barcode when duplicate barcode values are present.
+* Fixed a memory leak in item-based scanning.
+
+#### Smart Label Capture
+
+* Fixed a memory leak in LabelCapture.
+
 ## 8.1.4
 
 **Released**: April 21, 2026

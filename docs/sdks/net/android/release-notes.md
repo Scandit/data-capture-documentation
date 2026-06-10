@@ -218,6 +218,32 @@ keywords:
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
 
+## 8.1.5
+
+**Released**: June 10, 2026
+
+### New Features
+
+#### Barcode
+
+* Added an option to configure the duration of BarcodeSequence's idle timeout.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a memory leak in item-based scanning.
+
+#### Smart Label Capture
+
+* Fixed a memory leak in LabelCapture.
+
+#### Core
+
+* Fixed a rare crash when starting camera capture while under memory pressure.
+* Fixed a rare crash when opening the camera.
+* Fixed a rare native crash (SIGABRT in BitTube::recvObjects) that could occur on Android during camera preview rendering.
+
 ## 8.1.4
 
 **Released**: April 21, 2026

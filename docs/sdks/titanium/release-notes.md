@@ -132,6 +132,26 @@ No updates for this framework in this release.
 * Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 
+## 8.1.5
+
+**Released**: June 10, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a memory leak in item-based scanning.
+
+#### Smart Label Capture
+
+* Fixed a memory leak in LabelCapture.
+
+#### Core
+
+* Fixed a rare crash when starting camera capture while under memory pressure.
+* Fixed a rare crash when opening the camera.
+* Fixed a rare native crash (SIGABRT in BitTube::recvObjects) that could occur on Android during camera preview rendering.
+
 ## 8.1.4
 
 **Released**: April 21, 2026

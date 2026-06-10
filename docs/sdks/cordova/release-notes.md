@@ -246,6 +246,27 @@ keywords:
 * Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates.
 * Fixed a Cordova iOS compilation error due to missing header files
 
+## 8.1.5
+
+**Released**: June 10, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a memory leak in item-based scanning.
+
+#### Smart Label Capture
+
+* Fixed a memory leak in LabelCapture.
+
+#### Core
+
+* Fixed a TypeError: `frameSource.setNativeFrameSourceIsBeingCreated is not a function` thrown when calling `DataCaptureContext.setFrameSource()` with an `ImageFrameSource` on Cordova, Capacitor, and React Native SDKs.
+* Fixed a rare crash when starting camera capture while under memory pressure.
+* Fixed a rare crash when opening the camera.
+* Fixed a rare native crash (SIGABRT in BitTube::recvObjects) that could occur on Android during camera preview rendering.
+
 ## 8.1.4
 
 **Released**: April 21, 2026
