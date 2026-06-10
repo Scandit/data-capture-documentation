@@ -83,6 +83,12 @@ No updates for this framework in this release.
 
 * Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
 
+## 8.1.5
+
+**Released**: May 18, 2026
+
+No updates for this framework in this release.
+
 ## 8.1.4
 
 **Released**: April 21, 2026

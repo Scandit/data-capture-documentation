@@ -239,6 +239,28 @@ keywords:
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
 
+## 8.1.5
+
+**Released**: May 18, 2026
+
+### New Features
+
+#### Barcode
+
+* Added `shouldShowTrayIndicatorText` to `BarcodeSequenceView` to toggle the per-row tray indicator label (e.g. "Row 1").
+* Added an option to configure the duration of BarcodeSequence's idle timeout.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed BarcodeAR not displaying an overlay for every scanned barcode when duplicate barcode values are present.
+* Fixed a memory leak in item-based scanning.
+
+#### Smart Label Capture
+
+* Fixed a memory leak in LabelCapture.
+
 ## 8.1.4
 
 **Released**: April 21, 2026
