@@ -25,7 +25,7 @@ export function createNoCodeArr(framework: string) {
   return [
     {
       name: "ID Bolt",
-      text: "A drop-in web component that adds compliant passport, visa, and ID scanning to any website",
+      text: "A pre-built web component that adds compliant passport, visa, and ID scanning to any website",
       icon: <Bolt />,
       isActive: frameworkData?.IDScanning?.includes(IDScanning.IdBolt),
       link: `/hosted/id-bolt/overview`,
