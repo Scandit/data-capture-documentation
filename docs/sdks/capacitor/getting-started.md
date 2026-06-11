@@ -1,5 +1,5 @@
 ---
-description: "This quick start guide will help you get up and running with SparkScan, the easiest way to get started with Scandit barcode scanning.                                                                             "
+description: "Get up and running with SparkScan, the easiest way to start with Scandit barcode scanning."
 
 toc_max_heading_level: 2
 pagination_next: null
@@ -9,9 +9,9 @@ keywords:
   - capacitor
 ---
 
-# Quick Start Guide
+# Get Started
 
-This quick start guide will help you get up and running with SparkScan, the easiest way to get started with Scandit barcode scanning.
+Get up and running with SparkScan, the easiest way to start with Scandit barcode scanning.
 
 SparkScan provides top performance and optimized scanning UX with just a few lines of code, incorporating the best practices developed by Scandit across years of experience and billions of scans. The intentionally minimalistic UI floats on top of any smartphone application, without the need to adapt the existing app.
 

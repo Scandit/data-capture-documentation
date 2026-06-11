@@ -1,9 +1,8 @@
 ---
+description: "Smart Label Capture is not available on the Linux SDK."
 displayed_sidebar: linuxSidebar
 ---
 
-# Page Unavailable
+# Smart Label Capture is not available on Linux
 
-This functionality is not currently supported in the selected framework.
-
----
+The Smart Label Capture module is not available for the Linux SDK. To view documentation for a platform that supports Smart Label Capture, use the framework switcher at the top of the page.
