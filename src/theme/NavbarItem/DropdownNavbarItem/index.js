@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import clsx from "clsx";
 import {
   isRegexpStringMatch,
@@ -13,7 +13,7 @@ import NavbarNavLink from "@theme/NavbarItem/NavbarNavLink";
 import NavbarItem from "@theme/NavbarItem";
 import styles from "./styles.module.css";
 import { useLocation } from "@docusaurus/router";
-import { FrameworksName } from "@site/src/components/constants/frameworksName";
+import { useFrameworkItems } from "@site/src/utils/useFrameworkItems";
 
 function isItemActive(item, localPathname) {
   if (isSamePath(item.to, localPathname)) {
@@ -39,12 +39,11 @@ function DropdownNavbarItemDesktop({
 }) {
   const dropdownRef = useRef(null);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [link, setLink] = useState("/add-sdk");
-  const [linkVersion, setLinkVersion] = useState("sdks");
   const location = useLocation();
   const currentPath = location.pathname;
   const regex = /\/hosted\//;
   const isHostedPage = regex.test(currentPath);
+  const { currentFramework, frameworkItems } = useFrameworkItems();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -63,182 +62,6 @@ function DropdownNavbarItemDesktop({
     };
   }, [dropdownRef]);
 
-  const currentFramework = useMemo(() => {
-    const regex = /(?<=\/sdks\/)(\w+)(?:\/(\w+))?/;
-    const match = currentPath.match(regex);
-    if (match) {
-      const primaryKey = match[1];
-      const secondaryKey = match[2];
-      if (primaryKey === "xamarin" || primaryKey === "net") {
-        const frameworkKey = secondaryKey
-          ? `${primaryKey}/${secondaryKey}`
-          : primaryKey;
-        const frameworksMap = {
-          "xamarin/ios": "Xamarin iOS",
-          "xamarin/android": "Xamarin Android",
-          "xamarin/forms": "Xamarin Forms",
-          "net/android": ".NET Android",
-          "net/ios": ".NET iOS",
-        };
-        return frameworksMap[frameworkKey] || null;
-      }
-      return FrameworksName[primaryKey] || null;
-    }
-  }, [currentPath]);
-
-  // Detect if we're on an older version that still has Xamarin
-  const isXamarinAvailable = useMemo(() => {
-    if (!currentPath) return false;
-    // Xamarin is only available in versions 7.6.x and 6.28.x
-    return currentPath.includes("/7.6.") || currentPath.includes("/6.28.");
-  }, [currentPath]);
-
-  // Get the version from the current path for Xamarin links
-  const xamarinVersion = useMemo(() => {
-    if (!currentPath) return "/7.6.14";
-    if (currentPath.includes("/7.6.14")) return "/7.6.14";
-    if (currentPath.includes("/6.28.10")) return "/6.28.10";
-    if (currentPath.includes("/7.6.")) return "/7.6.14";
-    if (currentPath.includes("/6.28.")) return "/6.28.10";
-    return "/7.6.14"; // Default to 7.6.14 for Xamarin
-  }, [currentPath]);
-
-  useEffect(() => {
-    if (!currentPath) return;
-    const possibleVersions = ["/next", "/6.28.10", "/7.6.14"];
-    const match = currentPath.match(/(.*)(?=\/sdks)/);
-    setLinkVersion(match && match[0] ? `${match[0]}/sdks` : "/sdks");
-
-    const activeBasePath = newItems.find((item) =>
-      currentPath.includes(item.activeBasePath)
-    )?.activeBasePath;
-
-    let trimmedPath = activeBasePath
-      ? currentPath.replace(activeBasePath, "")
-      : currentPath;
-
-    possibleVersions.forEach((version) => {
-      trimmedPath = trimmedPath.replace(version, "");
-    });
-
-    trimmedPath = trimmedPath.endsWith("/")
-      ? trimmedPath.slice(0, -1)
-      : trimmedPath;
-
-    setLink(trimmedPath || "/add-sdk");
-  }, [currentPath]);
-
-  const newItems = [
-    {
-      type: "docsVersion",
-      label: "iOS",
-      sidebarId: "iosSidebar",
-      to: `${linkVersion}/ios${link}`,
-      activeBasePath: "sdks/ios/",
-    },
-    {
-      type: "docsVersion",
-      label: "Android",
-      sidebarId: "androidSidebar",
-      to: `${linkVersion}/android${link}`,
-      activeBasePath: "sdks/android/",
-    },
-    {
-      type: "docsVersion",
-      label: "Web",
-      sidebarId: "webSidebar",
-      to: `${linkVersion}/web${link}`,
-      activeBasePath: "sdks/web/",
-    },
-    {
-      type: "docsVersion",
-      label: "Cordova",
-      sidebarId: "cordovaSidebar",
-      to: `${linkVersion}/cordova${link}`,
-      activeBasePath: "sdks/cordova/",
-    },
-    {
-      type: "docsVersion",
-      label: "React Native",
-      sidebarId: "reactnativeSidebar",
-      to: `${linkVersion}/react-native${link}`,
-      activeBasePath: "sdks/react-native/",
-    },
-    {
-      type: "docsVersion",
-      label: "Flutter",
-      sidebarId: "flutterSidebar",
-      to: `${linkVersion}/flutter${link}`,
-      activeBasePath: "sdks/flutter/",
-    },
-    {
-      type: "docsVersion",
-      label: "Capacitor",
-      sidebarId: "capacitorSidebar",
-      to: `${linkVersion}/capacitor${link}`,
-      activeBasePath: "sdks/capacitor/",
-    },
-    {
-      type: "docsVersion",
-      label: "Titanium",
-      sidebarId: "titaniumSidebar",
-      to: `${linkVersion}/titanium${link}`,
-      activeBasePath: "sdks/titanium/",
-    },
-    {
-      type: "docsVersion",
-      label: "Xamarin iOS",
-      sidebarId: "xamarinIosSidebar",
-      to: `${xamarinVersion}/sdks/xamarin/ios${link}`,
-      activeBasePath: "sdks/xamarin/ios/",
-    },
-    {
-      type: "docsVersion",
-      label: "Xamarin Android",
-      sidebarId: "xamarinAndroidSidebar",
-      to: `${xamarinVersion}/sdks/xamarin/android${link}`,
-      activeBasePath: "sdks/xamarin/android/",
-    },
-    {
-      type: "docsVersion",
-      label: "Xamarin Forms",
-      sidebarId: "xamarinFormsSidebar",
-      to: `${xamarinVersion}/sdks/xamarin/forms${link}`,
-      activeBasePath: "sdks/xamarin/forms/",
-    },
-    {
-      type: "docsVersion",
-      label: ".NET iOS",
-      sidebarId: "netIosSidebar",
-      to: `${linkVersion}/net/ios${link}`,
-      activeBasePath: "sdks/net/ios/",
-    },
-    {
-      type: "docsVersion",
-      label: ".NET Android",
-      sidebarId: "netAndroidSidebar",
-      to: `${linkVersion}/net/android${link}`,
-      activeBasePath: "sdks/net/android/",
-    },
-    {
-      type: "docsVersion",
-      label: "Linux",
-      sidebarId: "linuxSidebar",
-      to: `${linkVersion}/linux${link}`,
-      activeBasePath: "sdks/linux/",
-    },
-  ];
-
-  // Filter out Xamarin items for versions where Xamarin is deprecated (8.0+)
-  const filteredItems = useMemo(() => {
-    if (!isXamarinAvailable) {
-      return newItems.filter(
-        (item) => !item.label.startsWith("Xamarin")
-      );
-    }
-    return newItems;
-  }, [newItems, isXamarinAvailable]);
-
   const headerItem = (label) => ({
     type: "html",
     value: `<div class="navbar-dropdown-header">${label}</div>`,
@@ -251,7 +74,7 @@ function DropdownNavbarItemDesktop({
     items && items.some((item) => item.type !== "docsVersion");
 
   const combinedItems = hasDocsVersionItems
-    ? [headerItem("Framework"), ...filteredItems]
+    ? [headerItem("Framework"), ...frameworkItems]
     : items;
   const shouldShowDropdownMenu =
     hasSDKsItems || (hasDocsVersionItems && currentFramework);
@@ -332,7 +155,14 @@ function DropdownNavbarItemMobile({
   ...props
 }) {
   const localPathname = useLocalPathname();
-  const containsActive = containsActiveItems(items, localPathname);
+  const { frameworkItems } = useFrameworkItems();
+  // The SDKs dropdown (docsVersion items) gets the dynamically built framework
+  // links so switching frameworks on mobile keeps the current page and version.
+  const hasDocsVersionItems = items.some(
+    (item) => item.type === "docsVersion"
+  );
+  const effectiveItems = hasDocsVersionItems ? frameworkItems : items;
+  const containsActive = containsActiveItems(effectiveItems, localPathname);
   const { collapsed, toggleCollapsed, setCollapsed } = useCollapsible({
     initialState: () => !containsActive,
   });
@@ -365,16 +195,19 @@ function DropdownNavbarItemMobile({
         {props.children ?? props.label}
       </NavbarNavLink>
       <Collapsible lazy as="ul" className="menu__list" collapsed={collapsed}>
-        {items.map((childItemProps, i) => (
-          <NavbarItem
-            mobile
-            isDropdownItem
-            onClick={onClick}
-            activeClassName="menu__link--active"
-            {...childItemProps}
-            key={i}
-          />
-        ))}
+        {effectiveItems.map((childItemProps, i) => {
+          const { sidebarId, ...rest } = childItemProps;
+          return (
+            <NavbarItem
+              mobile
+              isDropdownItem
+              onClick={onClick}
+              activeClassName="menu__link--active"
+              {...rest}
+              key={i}
+            />
+          );
+        })}
       </Collapsible>
     </li>
   );

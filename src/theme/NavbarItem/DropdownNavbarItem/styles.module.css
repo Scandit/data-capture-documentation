@@ -2,7 +2,8 @@
   cursor: pointer;
 }
 
-@media (width < 997px) {
+/* Below tablet width the in-page selector replaces the navbar dropdowns */
+@media (width < 768px) {
   .frameworkName {
     display: none;
   }

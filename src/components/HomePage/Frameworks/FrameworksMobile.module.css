@@ -46,7 +46,8 @@
   max-height: 440px;
   overflow-y: auto;
   top: 50px;
-  z-index: 1;
+  /* Above in-page content like the SkillsCallout, whose summary/body are z-index 1 */
+  z-index: 20;
 }
 
 /* Styles for the scrollbar */

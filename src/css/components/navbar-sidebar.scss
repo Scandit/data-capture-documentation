@@ -91,3 +91,9 @@
 html[data-theme="dark"] .navbar-sidebar {
   background-color: var(--dark-blue-90);
 }
+
+/* The in-page framework/version selector replaced the primary-menu detour
+   on doc pages, so the "Back to main menu" button only adds noise. */
+#__docusaurus .navbar-sidebar__back {
+  display: none;
+}
