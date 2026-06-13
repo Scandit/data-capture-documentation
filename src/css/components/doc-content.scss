@@ -116,6 +116,16 @@
   #__docusaurus [class*="docMainContainer"] {
     max-width: 100%;
     overflow: hidden;
+
+    & .container {
+      padding-top: 16px !important;
+    }
+  }
+
+  /* On mobile the breadcrumbs make way for the framework selector; the
+     sidebar menu still highlights the open page for orientation. */
+  #__docusaurus .theme-doc-breadcrumbs {
+    display: none;
   }
 }
 
