@@ -131,6 +131,9 @@ function DropdownNavbarItemDesktop({
         {shouldShowDropdownMenu && !isHostedPage && (
           <ul className="dropdown__menu">
             {combinedItems.map((childItemProps, i) => {
+              // Drop sidebarId so the framework item's explicit `to` is used:
+              // a docsVersion item with sidebarId resolves to the sidebar's
+              // main doc instead, which would lose the current page.
               const { sidebarId, ...rest } = childItemProps;
               return (
                 <NavbarItem
@@ -196,6 +199,10 @@ function DropdownNavbarItemMobile({
       </NavbarNavLink>
       <Collapsible lazy as="ul" className="menu__list" collapsed={collapsed}>
         {effectiveItems.map((childItemProps, i) => {
+          // Drop sidebarId: for a docsVersion item, Docusaurus resolves the
+          // link from the sidebar's main doc when sidebarId is present, which
+          // would override our page-preserving `to`. Stripping it lets the
+          // explicit `to` win (matches the desktop path above).
           const { sidebarId, ...rest } = childItemProps;
           return (
             <NavbarItem

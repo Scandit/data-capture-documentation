@@ -95,16 +95,21 @@ export default function FrameworkSelectorMobile() {
     : versions;
   const activeVersion = activeDocContext?.activeVersion;
 
-  const versionLinks = filteredVersions.map((v) => ({
-    name: v.name,
-    label: v.label,
-    category: VERSION_CATEGORY[v.name] || "legacy",
-    to: `${
-      (activeDocContext?.alternateDocVersions[v.name] ?? getVersionMainDoc(v))
-        .path
-    }${search}${hash}`,
-    isActive: v === activeVersion,
-  }));
+  const versionLinks = filteredVersions.map((v) => {
+    // Prefer the equivalent of the current page in version v; fall back to that
+    // version's main doc, and finally to "/" if neither resolves.
+    const versionDoc =
+      activeDocContext?.alternateDocVersions[v.name] ?? getVersionMainDoc(v);
+    return {
+      name: v.name,
+      label: v.label,
+      category: VERSION_CATEGORY[v.name] || "legacy",
+      to: `${versionDoc?.path ?? "/"}${search}${hash}`,
+      // v (from useVersions) and activeVersion (from useActiveDocContext) come
+      // from different hooks, so compare by name rather than reference.
+      isActive: v.name === activeVersion?.name,
+    };
+  });
 
   const versionTag = (category: string) => (
     <span className={`version-tag version-tag-${category}`}>
