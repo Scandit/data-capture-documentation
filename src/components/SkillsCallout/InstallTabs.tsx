@@ -4,12 +4,15 @@ import skillsData from '@site/src/data/skills.json';
 import { capturePostHogEvent } from './analytics';
 import styles from './styles.module.css';
 
-type TabKey = 'any' | 'claude-code' | 'cursor';
+type TabKey = 'any' | 'claude-code' | 'codex' | 'cursor';
 
 const CURSOR_INSTALL_URL = 'https://cursor.com/marketplace/scandit';
 
 const CLAUDE_CODE_MARKETPLACE_COMMAND = '/plugin marketplace add scandit/skills';
 const CLAUDE_CODE_INSTALL_COMMAND = '/plugin install scandit-sdk@scandit-plugins';
+
+const CODEX_MARKETPLACE_COMMAND = 'codex plugin marketplace add scandit/skills';
+const CODEX_INSTALL_COMMAND = 'codex plugin add scandit-sdk@scandit-plugins';
 
 const CopyIcon: React.FC = () => (
   <svg
@@ -109,6 +112,7 @@ const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug, product, framework
   const tabs: { key: TabKey; label: string }[] = [
     { key: 'any', label: 'Any AI coding agent' },
     { key: 'claude-code', label: 'Claude Code' },
+    { key: 'codex', label: 'Codex' },
     { key: 'cursor', label: 'Cursor' },
   ];
 
@@ -160,6 +164,24 @@ const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug, product, framework
             {skillSlug && (
               <p className={styles.tabHint}>
                 The plugin bundles every Scandit skill. Claude Code picks the
+                right one automatically based on your prompt; to invoke this
+                one explicitly, call <code>/{skillSlug}</code> followed by
+                your task.
+              </p>
+            )}
+          </>
+        )}
+        {tab === 'codex' && (
+          <>
+            <p className={styles.tabHint}>
+              Run these commands in your terminal, one at a time, to install
+              the Scandit plugin in Codex.
+            </p>
+            <CommandBlock command={CODEX_MARKETPLACE_COMMAND} trackingId="codex-marketplace" product={product} framework={framework} />
+            <CommandBlock command={CODEX_INSTALL_COMMAND} trackingId="codex-plugin" product={product} framework={framework} />
+            {skillSlug && (
+              <p className={styles.tabHint}>
+                The plugin bundles every Scandit skill. Codex picks the
                 right one automatically based on your prompt; to invoke this
                 one explicitly, call <code>/{skillSlug}</code> followed by
                 your task.
