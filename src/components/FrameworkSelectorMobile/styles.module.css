@@ -1,0 +1,119 @@
+.selectorMobile {
+  position: relative;
+  margin-bottom: 20px;
+  /* Full width on phones, but don't stretch across tablet-width viewports
+     (Docusaurus treats everything under 997px as mobile) */
+  max-width: 420px;
+}
+
+/* From tablet width up, the navbar shows the version + framework dropdowns
+   (see navbar.scss), so the in-page selector is only for narrow screens */
+@media (min-width: 768px) {
+  .selectorMobile {
+    display: none;
+  }
+}
+
+.fieldsRow {
+  display: flex;
+  gap: 8px;
+}
+
+.field {
+  width: 100%;
+  border-radius: 100px;
+  border: 1px solid var(--nav-border);
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 20px;
+  color: var(--light-black);
+  font-size: 16px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+/* The version pill only needs to fit its short label.
+   Declared after .field so its width override wins. */
+.versionField {
+  flex: 0 0 auto;
+  width: auto;
+  gap: 10px;
+}
+
+.fieldLabel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fieldIcon,
+.open {
+  height: 20px;
+}
+
+.open {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+.optionsMain {
+  margin-top: 8px;
+  box-shadow: 0 0 6px #10233223;
+  border-radius: 10px;
+  padding: 16px 20px;
+  position: absolute;
+  background-color: var(--frameworksBgLight);
+  width: 100%;
+  max-height: 440px;
+  overflow-y: auto;
+  top: 48px;
+  /* Above in-page content like the SkillsCallout, whose summary/body are z-index 1 */
+  z-index: 20;
+}
+
+.optionsMain::-webkit-scrollbar {
+  width: 8px;
+}
+
+.optionsMain::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+.optionsMain::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 8px;
+  color: var(--light-black);
+}
+
+.option:hover {
+  background-color: var(--frameworksBgHover);
+  text-decoration: none;
+  color: var(--light-black);
+}
+
+.optionsIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+/* Same selected style as the homepage framework selector */
+.checkedFramework,
+.checkedFramework:hover {
+  background-color: #121619;
+  color: #fff;
+}
