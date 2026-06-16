@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import skillsData from '@site/src/data/skills.json';
+import { frameworkToSlug } from '../utils/frameworks';
 import { capturePostHogEvent } from './analytics';
 import styles from './styles.module.css';
 
@@ -107,7 +108,11 @@ export interface InstallTabsProps {
   framework?: string;
 }
 
-const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug, product, framework }) => {
+const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug, product, framework: frameworkProp }) => {
+  // Canonicalize to the URL slug so analytics never splits one platform across
+  // casings — callers pass either a slug (SkillsCallout) or a display name
+  // (SkillsPage, from MDX). See frameworkToSlug.
+  const framework = frameworkToSlug(frameworkProp);
   const [tab, setTab] = useState<TabKey>('any');
   const tabs: { key: TabKey; label: string }[] = [
     { key: 'any', label: 'Any AI coding agent' },
