@@ -16,6 +16,23 @@ export const URL_PRODUCT_MAPPING: { [urlSlug: string]: string } = {
   'matrixscan': 'matrixscan-batch',
 };
 
+// Inverse of FRAMEWORK_MAPPING: display name -> canonical URL slug.
+const FRAMEWORK_DISPLAY_TO_SLUG: { [displayName: string]: string } = Object.fromEntries(
+  Object.entries(FRAMEWORK_MAPPING).map(([slug, display]) => [display, slug]),
+);
+
+/**
+ * Canonicalizes a framework identifier to its URL slug (e.g. `iOS` -> `ios`,
+ * `.NET Android` -> `net-android`). Idempotent: an already-canonical slug is
+ * returned unchanged. Use this anywhere a framework is reported to analytics
+ * so the same platform isn't split across casings (`ios` vs `iOS`).
+ */
+export function frameworkToSlug(framework?: string): string | undefined {
+  if (!framework) return framework;
+  if (FRAMEWORK_MAPPING[framework]) return framework; // already a canonical slug
+  return FRAMEWORK_DISPLAY_TO_SLUG[framework] || framework.toLowerCase();
+}
+
 export interface SdksRouteInfo {
   framework?: string;
   product?: string;
