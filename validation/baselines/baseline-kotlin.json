@@ -563,5 +563,25 @@
     "hash": "b355d727130f8eba029d33570b91a31e611db7cd192bf90044f4eddb9ac40ae9",
     "file": "docs/sdks/android/sparkscan/get-started.md",
     "snippet": 7
+  },
+  {
+    "hash": "8ce77fa476ed30aa74a85005228071ced297e697bbc66e36313d843071740dec",
+    "file": "docs/sdks/web/webview.md",
+    "snippet": 0
+  },
+  {
+    "hash": "59f6c48f6c6515608ba7bb761ebfe296fea58ba194150a74fb63e670f2dfa347",
+    "file": "docs/sdks/web/webview.md",
+    "snippet": 1
+  },
+  {
+    "hash": "fd2dc9d98539d25869f068147437224d4b45abede071ed8afb49444d36fa198b",
+    "file": "docs/sdks/web/webview.md",
+    "snippet": 2
+  },
+  {
+    "hash": "7aa7cc2a4af4b2e166c00b04fba1372956eca6705471ad1b61dbdd46af22a17f",
+    "file": "docs/sdks/web/webview.md",
+    "snippet": 3
   }
 ]

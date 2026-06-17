@@ -47,11 +47,11 @@ Add the `CAMERA` permission to your `AndroidManifest.xml`:
 Request the OS-level camera permission before loading the WebView. Using the Activity Result Contracts API:
 
 ```kotlin
-import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Bundle
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
+# import android.Manifest
+# import android.content.pm.PackageManager
+# import android.os.Bundle
+# import androidx.activity.result.contract.ActivityResultContracts
+# import androidx.core.content.ContextCompat
 
 private val cameraPermission = registerForActivityResult(
     ActivityResultContracts.RequestPermission()
@@ -79,8 +79,8 @@ override fun onCreate(savedInstanceState: Bundle?) {
 When the web SDK calls `getUserMedia`, the WebView triggers `WebChromeClient.onPermissionRequest`. Override this method to forward the permission to the web content. It is safe to grant automatically here because the native app has already received the OS camera permission in the previous step:
 
 ```kotlin
-import android.webkit.PermissionRequest
-import android.webkit.WebChromeClient
+# import android.webkit.PermissionRequest
+# import android.webkit.WebChromeClient
 
 webView.webChromeClient = object : WebChromeClient() {
     override fun onPermissionRequest(request: PermissionRequest) {
@@ -97,8 +97,8 @@ webView.webChromeClient = object : WebChromeClient() {
 Enable JavaScript and allow media autoplay so the SDK can start the camera without requiring a user gesture:
 
 ```kotlin
-import android.webkit.WebSettings
-import android.webkit.WebView
+# import android.webkit.WebSettings
+# import android.webkit.WebView
 
 webView.settings.apply {
     javaScriptEnabled = true
@@ -112,7 +112,7 @@ webView.settings.apply {
 Load the web app from a local server to satisfy the secure context requirement:
 
 ```kotlin
-import android.webkit.WebView
+# import android.webkit.WebView
 
 webView.loadUrl("http://localhost:$port/")
 ```
