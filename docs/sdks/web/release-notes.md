@@ -10,6 +10,88 @@ keywords:
   - web
 ---
 
+## 8.5.0-beta.1
+
+**Released**: June 18, 2026
+
+### New Features
+
+#### Barcode
+
+* Added an option to configure the duration of BarcodeSequence's idle timeout.
+* Updated `SymbologyDescription.forIdentifier` to return `null` for unrecognized identifiers (e.g. `"EAN-8"` instead of `"ean8"`); previously such input was silently mapped to `Codabar`.
+* Added `selectionMode` property to Barcode Capture and SparkScan settings.
+* Added `logoStyle` and `logoAnchor` customization properties to `BarcodeArView`, `BarcodeCountView`, `BarcodeFindView`, `BarcodePickView`, and `BarcodeSequenceView`.
+
+#### Id
+
+* Added Irish Garda Age Card as `RegionSpecificSubtype.IrelandAgeCard`.
+* Added a new `PassportType` property to `MrzResult`.
+* Added double-sided support for the Oman residence card.
+* Added single-sided support for extraction of issue date and birth date from the 2025 NYC Municipal ID.
+* Added Web support for: Australia ACT Driver's License, USA Oklahoma Driver's License, and USA Puerto Rico ID.
+
+#### Smart Label Capture
+
+* Extended VIN label capture to also scan Code 128 barcodes (in addition to QR, Code 39, and Data Matrix) via `createVinLabelDefinition()`.
+* Extended LabelCapture to accept label definitions where both "barcode" and "text" field types use the "semantics" feature simultaneously; previously this was restricted to only one field type at a time.
+* Improved the add/remove lifecycle handling of the validation flow overlay.
+
+### Performance Improvements
+
+#### Barcode
+
+* Enhanced detection of low-resolution QR codes is now enabled by default, improving scan rates for challenging QR codes with degraded print quality or unfavorable capture conditions.
+* Improved scanning of micro-QR codes affected by quiet zone violations and perspective distortion.
+
+#### Smart Label Capture
+
+* Improved Receipt Scanning efficiency by optimizing receipt image processing before extraction.
+
+#### Core
+
+* Improved worker loading.
+
+### Behavioral Changes
+
+#### Barcode
+
+* Reduced Code 128 minimum symbol count from 6 to 4; short codes (4 & 5 symbols) use stricter matching rules than longer codes. To explicitly exclude short codes, disable symbol counts 4 & 5 via `sc_symbology_settings_set_active_symbol_counts()` for Code 128. Note that if you previously enabled short code scanning, more strict settings are now in effect to reduce the chance of false positives, which are more likely for very short codes.
+* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a memory leak in item-based scanning.
+* Fixed BarcodeAR view settings not being taken into account.
+* Fixed recommended BarcodeAR camera settings not being applied correctly.
+* Fixed a `BarcodeFind` view issue where overlay dots were sometimes not rendered correctly after pausing.
+* Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
+
+#### Id
+
+* Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
+* Corrected the orientation of cropped Visa document images that were being rotated incorrectly when scanned using a single-frame image source.
+* Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning "Invalid Format".
+
+#### Smart Label Capture
+
+* Fixed a memory leak in LabelCapture.
+
+#### Core
+
+* Fixed the Web SDK camera preview expanding to full-screen in iOS WebViews by setting `playsinline` and `webkit-playsinline` attributes on the video element; the host `WKWebView` must also enable `allowsInlineMediaPlayback`.
+* Fixed a bug that caused the zoom notification to not be shown when using the `ZoomSwitchControl`.
+* Fixed a crash when the `DataCaptureContext` singleton was initialized more than once.
+* Fixed an issue that caused the torch to turn off after minimizing the browser or switching tabs.
+
+### Deprecations
+
+#### Barcode
+
+* Added `selectionMode` (off/on/auto) to `BarcodeCaptureSettings` and `SparkScanSettings` in the Flutter binding, and deprecated the SparkScan target-mode APIs and `ScanIntention.smartSelection` in favour of `selectionMode`.
+
 ## 8.4.0
 
 **Released**: May 18, 2026
