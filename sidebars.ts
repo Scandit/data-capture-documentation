@@ -654,6 +654,7 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/web/add-sdk',
+        'sdks/web/webview',
         'sdks/web/agent-skills',
         {
           type: "link",

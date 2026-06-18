@@ -475,6 +475,8 @@ For information on how to improve runtime performance, see [Improve Runtime Perf
 When using the Scandit Data Capture SDK you will likely want to set the camera as the frame source for various capture modes.
 The camera permissions are handled by the browser, and can only be granted if a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts) is used and have been accepted by the user explicitly.
 
+If you are embedding the Web SDK inside a native WebView (Android or iOS), the host application must request and delegate camera permissions to the web content. See the [WebView Integration](./webview.md) guide for step-by-step instructions.
+
 ### Progressive Web App (PWA)
 
 You can configure the scanner to work offline making the web app progressive (Progressive Web App). There are some settings to consider. If you use Workbox, a tool that uses workbox under the hood like [Vite PWA](https://vite-pwa-org.netlify.app/) plugin, you must also set these options:
