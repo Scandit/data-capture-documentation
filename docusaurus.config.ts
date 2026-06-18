@@ -367,13 +367,17 @@ const config: Config = {
           },
           showLastUpdateTime: false,
           includeCurrentVersion: true,
-          lastVersion: "current",
+          lastVersion: "8.4.0",
           versions: {
             current: {
-              label: '8.4.0',
-              banner: 'none',
+              label: '8.5.0',
+              banner: 'unreleased',
               badge: false,
             },
+          '8.4.0': {
+            banner: 'none',
+            badge: false,
+          },
             '7.6.14': {
               banner: 'none',
               badge: false,
