@@ -222,6 +222,13 @@ const InstallTabs: React.FC<InstallTabsProps> = ({ skillSlug, product, framework
           </>
         )}
       </div>
+      <p className={styles.tabHint}>
+        Already installed? Update steps differ by agent — see{' '}
+        <a href={skillsData.repo} target="_blank" rel="noopener noreferrer">
+          how to keep your skills up to date
+        </a>
+        .
+      </p>
     </div>
   );
 };
