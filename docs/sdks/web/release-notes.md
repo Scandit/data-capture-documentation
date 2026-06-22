@@ -92,6 +92,26 @@ keywords:
 
 * Added `selectionMode` (off/on/auto) to `BarcodeCaptureSettings` and `SparkScanSettings` in the Flutter binding, and deprecated the SparkScan target-mode APIs and `ScanIntention.smartSelection` in favour of `selectionMode`.
 
+## 8.4.1
+
+**Released**: June 22, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed BarcodeAR view settings not being taken into account.
+* Fixed recommended BarcodeAR camera settings not being applied correctly.
+* Fixed a memory leak in SparkScan when using the item-based API.
+
+#### Id
+
+* Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
+
+#### Core
+
+* Fixed WebKit 26.x bugs causing pthreads WASM crashes (WebKit bug #303387) and SIMD corruption in barcode/ID scanning (Apple Radar 176035764) by pinning memory and disabling SIMD on affected versions.
+
 ## 8.4.0
 
 **Released**: May 18, 2026
