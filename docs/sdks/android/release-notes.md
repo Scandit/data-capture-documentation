@@ -10,6 +10,90 @@ keywords:
   - android
 ---
 
+## 8.5.0-beta.1
+
+**Released**: June 18, 2026
+
+### New Features
+
+#### Barcode
+
+* Added an option to configure the duration of BarcodeSequence's idle timeout.
+* Added `BarcodeSequenceSettings.shelfSequencingOrientation` to Barcode Sequence on Android to configure the accepted device orientation; defaults to `LANDSCAPE_ONLY`, with `PORTRAIT_ONLY` and `ANY` also available. The rotate-device prompt's default text now reflects the configured orientation.
+* Added `shouldShowTrayIndicatorText` to `BarcodeSequenceView` to toggle the per-row tray indicator label (e.g. "Row 1").
+* Added group scanning to MatrixScan Count, enabled via `BarcodeCountSettings`; this allows the user to follow a new flow that focuses on scanning several barcode groups in sequence, decluttering the screen between groups.
+* Updated `SymbologyDescription.forIdentifier` to return `null` for unrecognized identifiers (e.g. `"EAN-8"` instead of `"ean8"`); previously such input was silently mapped to `Codabar`.
+* Added `selectionMode` property to Barcode Capture and SparkScan settings.
+* Added support for `ScanditIcon` in MatrixScan Count highlights.
+* Added `logoStyle` and `logoAnchor` customization properties to `BarcodeArView`, `BarcodeCountView`, `BarcodeFindView`, `BarcodePickView`, and `BarcodeSequenceView`.
+* Updated `BarcodeCountView` clusters to show normal indicators when no status is provided in status mode.
+* Added `BarcodeCountSettings.ExpectedNumberOfBarcodesPerCluster` to set expected number of barcodes per cluster and highlight any deviation
+
+#### Id
+
+* Added Irish Garda Age Card as `RegionSpecificSubtype.IrelandAgeCard`.
+* Added a new `PassportType` property to `MrzResult`.
+* Added double-sided support for the Oman residence card.
+* Added single-sided support for extraction of issue date and birth date from the 2025 NYC Municipal ID.
+
+#### Smart Label Capture
+
+* Extended VIN label capture to also scan Code 128 barcodes (in addition to QR, Code 39, and Data Matrix) via `createVinLabelDefinition()`.
+* Extended LabelCapture to accept label definitions where both "barcode" and "text" field types use the "semantics" feature simultaneously; previously this was restricted to only one field type at a time.
+
+### Performance Improvements
+
+#### Barcode
+
+* Enhanced detection of low-resolution QR codes is now enabled by default, improving scan rates for challenging QR codes with degraded print quality or unfavorable capture conditions.
+* Improved scanning of micro-QR codes affected by quiet zone violations and perspective distortion.
+
+#### Smart Label Capture
+
+* Improved Receipt Scanning efficiency by optimizing receipt image processing before extraction.
+* Improved lifecycle handling of `LabelCaptureValidationFlowOverlay` in unexpected scenarios.
+
+### Behavioral Changes
+
+#### Barcode
+
+* Reduced Code 128 minimum symbol count from 6 to 4; short codes (4 & 5 symbols) use stricter matching rules than longer codes. To explicitly exclude short codes, disable symbol counts 4 & 5 via `sc_symbology_settings_set_active_symbol_counts()` for Code 128. Note that if you previously enabled short code scanning, more strict settings are now in effect to reduce the chance of false positives, which are more likely for very short codes.
+* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue where the "Remove" button in the sequence popover would sometimes not work.
+* Fixed a memory leak in item-based scanning.
+* Fixed an issue in BarcodeCount where the strap mode setting would not be saved in all cases.
+* Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
+
+#### Id
+
+* Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
+* Corrected the orientation of cropped Visa document images that were being rotated incorrectly when scanned using a single-frame image source.
+* Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning "Invalid Format".
+
+#### Smart Label Capture
+
+* Fixed a memory leak in LabelCapture.
+
+#### Core
+
+* Fixed an Android camera issue where zoom values outside the device-supported range were sent to Camera2 on Android R+ (API 30+) without clamping, which could cause the capture request to fail and stall the preview.
+* Fixed a rare crash when starting camera capture while under memory pressure.
+* Fixed a rare crash when opening the camera.
+* Fixed a crash when the `DataCaptureContext` singleton was initialized more than once.
+
+### Deprecations
+
+#### Barcode
+
+* Added `selectionMode` (off/on/auto) to `BarcodeCaptureSettings` and `SparkScanSettings` in the Flutter binding, and deprecated the SparkScan target-mode APIs and `ScanIntention.smartSelection` in favour of `selectionMode`.
+* Deprecated the `BarcodeCountView.newInstance()` overloads that accept a `DataCaptureView` on Android (will be removed in 9.0); pass a `DataCaptureContext` instead.
+* Added `ScanditIcon` support for `BarcodeCount` status mode highlights, and deprecated the `SDCBarcodeCountStatus`-based highlight API.
+
 ## 8.4.0
 
 **Released**: May 18, 2026

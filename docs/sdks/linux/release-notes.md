@@ -9,6 +9,38 @@ keywords:
   - linux
 ---
 
+## 8.5.0-beta.1
+
+**Released**: June 18, 2026
+
+### Performance Improvements
+
+#### Barcode
+
+* Enhanced detection of low-resolution QR codes is now enabled by default, improving scan rates for challenging QR codes with degraded print quality or unfavorable capture conditions.
+* Improved scanning of micro-QR codes affected by quiet zone violations and perspective distortion.
+
+#### Core
+
+* Improved Python API typing in `scanditsdk` for code-location and image-layout constants, allowing direct comparisons against `CODE_LOCATION_*` and `IMAGE_LAYOUT_*` while keeping mypy checks clean.
+
+### Behavioral Changes
+
+#### Barcode
+
+* Reduced Code 128 minimum symbol count from 6 to 4; short codes (4 & 5 symbols) use stricter matching rules than longer codes. To explicitly exclude short codes, disable symbol counts 4 & 5 via `sc_symbology_settings_set_active_symbol_counts()` for Code 128. Note that if you previously enabled short code scanning, more strict settings are now in effect to reduce the chance of false positives, which are more likely for very short codes.
+* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
+
+#### Core
+
+* Fixed camera initialization failure on devices where buffer allocation fails for the multi-planar capture interface; the camera now enumerates supported capture modes via VIDIOC_QUERYCAP and falls back to single-plane capture if multi-planar buffer allocation fails.
+
 ## 8.4.0
 
 **Released**: May 18, 2026
