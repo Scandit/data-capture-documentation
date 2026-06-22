@@ -108,6 +108,7 @@ def build_version_registry(config_path: Path, versions_json_path: Path) -> dict:
     versioned_strs = extract_versioned_versions(versions_json_path)
     return {
         'current': Version(current_str),
+        'current_banner': extract_current_banner(config_path),
         'versioned': [Version(v) for v in versioned_strs],
     }
 
@@ -133,6 +134,9 @@ def find_update_target(registry: dict, new_version: Version) -> tuple[str, Optio
             all_versions = [current_version] + versioned_versions
             if new_version.prerelease is None:
                 all_versions = [v for v in all_versions if v.prerelease is None]
+                # Exclude current version if it is unreleased (beta with no prerelease suffix)
+                if registry.get('current_banner') == 'unreleased':
+                    all_versions = [v for v in all_versions if v.major_minor() != current_version.major_minor()]
             latest_minor = find_latest_minor_for_major(all_versions, new_version.major)
             if latest_minor and latest_minor.major_minor() == new_version.major_minor():
                 return ('versioned', str(versioned))
