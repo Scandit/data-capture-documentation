@@ -208,16 +208,16 @@
     "name": "Barcode Sequence",
     "description": "Capture mode for scanning a predefined sequence of barcodes in order. Validates that barcodes are scanned in the correct sequence, making it ideal for workflows that require ordered item processing, assembly verification, and guided sequential scanning tasks.",
     "frameworks": {
-      "iOS": { "version": "8.1", "apiUrl": "/sdks/ios/barcode-sequence/intro" },
-      "Android": { "version": "8.0", "apiUrl": "/sdks/android/barcode-sequence/intro" },
+      "iOS": { "version": "8.1", "apiUrl": "n/a" },
+      "Android": { "version": "8.0", "apiUrl": "n/a" },
       "Cordova": { "version": "n/a" },
       "React Native": { "version": "n/a" },
       "Flutter": { "version": "n/a" },
       "Capacitor": { "version": "n/a" },
       "Titanium": { "version": "n/a" },
       "Web": { "version": "n/a" },
-      ".NET iOS": { "version": "8.6", "apiUrl": "/sdks/net/ios/barcode-sequence/intro" },
-      ".NET Android": { "version": "8.6", "apiUrl": "/sdks/net/android/barcode-sequence/intro" }
+      ".NET iOS": { "version": "8.6", "apiUrl": "n/a" },
+      ".NET Android": { "version": "8.6", "apiUrl": "n/a" }
     }
   }
 ]
