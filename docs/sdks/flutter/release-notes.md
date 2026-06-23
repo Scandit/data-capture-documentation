@@ -87,6 +87,22 @@ keywords:
 
 * Added `selectionMode` (off/on/auto) to `BarcodeCaptureSettings` and `SparkScanSettings` in the Flutter binding, and deprecated the SparkScan target-mode APIs and `ScanIntention.smartSelection` in favour of `selectionMode`.
 
+## 8.4.1
+
+**Released**: June 23, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed BarcodeAR not displaying an overlay for every scanned barcode when duplicate barcode values are present.
+* Fixed a memory leak in SparkScan when using the item-based API.
+
+#### Id
+
+* Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
+* Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
+
 ## 8.4.0
 
 **Released**: May 18, 2026

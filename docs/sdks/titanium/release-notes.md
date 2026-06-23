@@ -54,6 +54,12 @@ keywords:
 
 * Added `selectionMode` (off/on/auto) to `BarcodeCaptureSettings` and `SparkScanSettings` in the Flutter binding, and deprecated the SparkScan target-mode APIs and `ScanIntention.smartSelection` in favour of `selectionMode`.
 
+## 8.4.1
+
+**Released**: June 23, 2026
+
+No updates for this framework in this release.
+
 ## 8.4.0
 
 **Released**: May 18, 2026

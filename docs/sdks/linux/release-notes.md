@@ -41,6 +41,12 @@ keywords:
 
 * Fixed camera initialization failure on devices where buffer allocation fails for the multi-planar capture interface; the camera now enumerates supported capture modes via VIDIOC_QUERYCAP and falls back to single-plane capture if multi-planar buffer allocation fails.
 
+## 8.4.1
+
+**Released**: June 23, 2026
+
+No updates for this framework in this release.
+
 ## 8.4.0
 
 **Released**: May 18, 2026

@@ -94,6 +94,20 @@ keywords:
 * Deprecated the `BarcodeCountView.newInstance()` overloads that accept a `DataCaptureView` on Android (will be removed in 9.0); pass a `DataCaptureContext` instead.
 * Added `ScanditIcon` support for `BarcodeCount` status mode highlights, and deprecated the `SDCBarcodeCountStatus`-based highlight API.
 
+## 8.4.1
+
+**Released**: June 23, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a memory leak in SparkScan when using the item-based API.
+
+#### Id
+
+* Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
+
 ## 8.4.0
 
 **Released**: May 18, 2026
