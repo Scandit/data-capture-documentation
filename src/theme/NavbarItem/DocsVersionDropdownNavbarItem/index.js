@@ -34,20 +34,19 @@ export default function DocsVersionDropdownNavbarItem({
     ? versions.filter(version => version.name === '7.6.14' || version.name === '6.28.10')
     : versions;
 
-  // Categorize each version so we can render an inline tag in the dropdown.
-  // 'current' = latest stable; add a version name as 'beta' to surface it.
-  const VERSION_CATEGORY = {
-    current: 'stable',
-    '7.6.12': 'legacy',
-    '6.28.9': 'legacy',
-  };
   const TAG_LABEL = { stable: 'Stable', beta: 'Beta', legacy: 'Legacy' };
+
+  const getCategory = (version) => {
+    if (version.isLast) return 'stable';
+    if (version.banner === 'unreleased') return 'beta';
+    return 'legacy';
+  };
 
   const versionLinks = filteredVersions.map((version) => {
     const versionDoc =
       activeDocContext?.alternateDocVersions[version.name] ??
       getVersionMainDoc(version);
-    const category = VERSION_CATEGORY[version.name] || 'legacy';
+    const category = getCategory(version);
     return {
       label: (
         <span className="version-link-content">

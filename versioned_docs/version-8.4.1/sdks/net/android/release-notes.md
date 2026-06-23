@@ -9,6 +9,20 @@ keywords:
   - netAndroid
 ---
 
+## 8.4.1
+
+**Released**: June 23, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a memory leak in SparkScan when using the item-based API.
+
+#### Id
+
+* Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
+
 ## 8.4.0
 
 **Released**: May 18, 2026

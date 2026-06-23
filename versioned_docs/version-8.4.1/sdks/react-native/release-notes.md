@@ -10,6 +10,26 @@ keywords:
   - react
 ---
 
+## 8.4.1
+
+**Released**: June 23, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed BarcodeAR not displaying an overlay for every scanned barcode when duplicate barcode values are present.
+* Fixed a memory leak in SparkScan when using the item-based API.
+
+#### Id
+
+* Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
+* Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
+
+#### Core
+
+* Fixed an issue where the camera preview (`DataCaptureView` and other view components) could remain blank in React Native apps while scanning still worked. Native view creation no longer depends on React Native's interaction queue, which a long-running JS animation could block indefinitely.
+
 ## 8.4.0
 
 **Released**: May 18, 2026

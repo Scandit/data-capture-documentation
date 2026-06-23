@@ -10,6 +10,26 @@ keywords:
   - cordova
 ---
 
+## 8.4.1
+
+**Released**: June 23, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed BarcodeAR not displaying an overlay for every scanned barcode when duplicate barcode values are present.
+* Fixed a memory leak in SparkScan when using the item-based API.
+
+#### Id
+
+* Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
+* Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
+
+#### Core
+
+* Fixed a TypeError: `frameSource.setNativeFrameSourceIsBeingCreated is not a function` thrown when calling `DataCaptureContext.setFrameSource()` with an `ImageFrameSource` on Cordova, Capacitor, and React Native SDKs.
+
 ## 8.4.0
 
 **Released**: May 18, 2026
