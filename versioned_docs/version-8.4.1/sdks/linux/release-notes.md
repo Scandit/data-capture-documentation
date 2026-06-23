@@ -9,6 +9,12 @@ keywords:
   - linux
 ---
 
+## 8.4.1
+
+**Released**: June 23, 2026
+
+No updates for this framework in this release.
+
 ## 8.4.0
 
 **Released**: May 18, 2026
