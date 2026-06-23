@@ -85,7 +85,7 @@ keywords:
 
 ## 8.4.1
 
-**Released**: June 22, 2026
+**Released**: June 23, 2026
 
 ### Bug Fixes
 
