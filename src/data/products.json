@@ -21,14 +21,14 @@
     "name": "SparkScan",
     "description": "Pre-built, high-performance barcode scanning component with minimalistic floating UI. Integrates in minutes with just a few lines of code. Features pre-optimized ergonomic UX with continuous scanning, tap-to-scan, and target/selection modes. Includes pre-built buttons to switch to advanced modes like Barcode Count, Find, and Smart Label Capture.",
     "frameworks": {
-      "iOS": { "version": "6.15", "apiUrl": "/sdks/ios/sparkscan/intro" },
-      "Android": { "version": "6.15", "apiUrl": "/sdks/android/sparkscan/intro" },
+      "iOS": { "version": "6.8", "apiUrl": "/sdks/ios/sparkscan/intro" },
+      "Android": { "version": "6.11", "apiUrl": "/sdks/android/sparkscan/intro" },
       "Cordova": { "version": "6.23", "apiUrl": "/sdks/cordova/sparkscan/intro" },
       "React Native": { "version": "6.16", "apiUrl": "/sdks/react-native/sparkscan/intro" },
       "Flutter": { "version": "6.20", "apiUrl": "/sdks/flutter/sparkscan/intro" },
       "Capacitor": { "version": "6.22", "apiUrl": "/sdks/capacitor/sparkscan/intro" },
       "Titanium": { "version": "n/a" },
-      "Web": { "version": "6.21", "apiUrl": "/sdks/web/sparkscan/intro" },
+      "Web": { "version": "6.24", "apiUrl": "/sdks/web/sparkscan/intro" },
       ".NET iOS": { "version": "6.22", "apiUrl": "/sdks/net/ios/sparkscan/intro" },
       ".NET Android": { "version": "6.22", "apiUrl": "/sdks/net/android/sparkscan/intro" }
     }
@@ -40,12 +40,12 @@
     "frameworks": {
       "iOS": { "version": "6.0", "apiUrl": "/sdks/ios/matrixscan/intro" },
       "Android": { "version": "6.0", "apiUrl": "/sdks/android/matrixscan/intro" },
-      "Cordova": { "version": "6.1", "apiUrl": "/sdks/cordova/matrixscan/intro" },
+      "Cordova": { "version": "6.2", "apiUrl": "/sdks/cordova/matrixscan/intro" },
       "React Native": { "version": "6.5", "apiUrl": "/sdks/react-native/matrixscan/intro" },
       "Flutter": { "version": "6.7", "apiUrl": "/sdks/flutter/matrixscan/intro" },
       "Capacitor": { "version": "6.8", "apiUrl": "/sdks/capacitor/matrixscan/intro" },
-      "Titanium": { "version": "6.8", "apiUrl": "/sdks/titanium/matrixscan/intro" },
-      "Web": { "version": "6.13", "apiUrl": "/sdks/web/matrixscan/intro" },
+      "Titanium": { "version": "n/a" },
+      "Web": { "version": "6.19", "apiUrl": "/sdks/web/matrixscan/intro" },
       ".NET iOS": { "version": "6.16", "apiUrl": "/sdks/net/ios/matrixscan/intro" },
       ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/matrixscan/intro" }
     }
@@ -57,14 +57,14 @@
     "frameworks": {
       "iOS": { "version": "7.1", "apiUrl": "/sdks/ios/matrixscan-ar/intro" },
       "Android": { "version": "7.1", "apiUrl": "/sdks/android/matrixscan-ar/intro" },
-      "Cordova": { "version": "n/a" },
+      "Cordova": { "version": "8.2", "apiUrl": "/sdks/cordova/matrixscan-ar/intro" },
       "React Native": { "version": "7.1", "apiUrl": "/sdks/react-native/matrixscan-ar/intro" },
       "Flutter": { "version": "7.1", "apiUrl": "/sdks/flutter/matrixscan-ar/intro" },
-      "Capacitor": { "version": "n/a" },
+      "Capacitor": { "version": "8.2", "apiUrl": "/sdks/capacitor/matrixscan-ar/intro" },
       "Titanium": { "version": "n/a" },
       "Web": { "version": "7.1", "apiUrl": "/sdks/web/matrixscan-ar/intro" },
-      ".NET iOS": { "version": "7.1", "apiUrl": "/sdks/net/ios/matrixscan-ar/intro" },
-      ".NET Android": { "version": "7.1", "apiUrl": "/sdks/net/android/matrixscan-ar/intro" }
+      ".NET iOS": { "version": "7.2", "apiUrl": "/sdks/net/ios/matrixscan-ar/intro" },
+      ".NET Android": { "version": "7.2", "apiUrl": "/sdks/net/android/matrixscan-ar/intro" }
     }
   },
   {
@@ -72,16 +72,16 @@
     "name": "MatrixScan Count",
     "description": "Pre-built scan-and-count solution that scans multiple items at once and verifies against expected lists or manifests. Speeds up counting workflows by up to 10x with intuitive AR feedback that makes accuracy effortless. Perfect for automating inventory management, receiving goods, cycle counting, and full stock takes.",
     "frameworks": {
-      "iOS": { "version": "6.9", "apiUrl": "/sdks/ios/matrixscan-count/intro" },
-      "Android": { "version": "6.9", "apiUrl": "/sdks/android/matrixscan-count/intro" },
-      "Cordova": { "version": "6.10", "apiUrl": "/sdks/cordova/matrixscan-count/intro" },
-      "React Native": { "version": "6.10", "apiUrl": "/sdks/react-native/matrixscan-count/intro" },
-      "Flutter": { "version": "6.10", "apiUrl": "/sdks/flutter/matrixscan-count/intro" },
-      "Capacitor": { "version": "6.12", "apiUrl": "/sdks/capacitor/matrixscan-count/intro" },
+      "iOS": { "version": "6.14", "apiUrl": "/sdks/ios/matrixscan-count/intro" },
+      "Android": { "version": "6.14", "apiUrl": "/sdks/android/matrixscan-count/intro" },
+      "Cordova": { "version": "6.24", "apiUrl": "/sdks/cordova/matrixscan-count/intro" },
+      "React Native": { "version": "6.17", "apiUrl": "/sdks/react-native/matrixscan-count/intro" },
+      "Flutter": { "version": "6.17", "apiUrl": "/sdks/flutter/matrixscan-count/intro" },
+      "Capacitor": { "version": "6.18", "apiUrl": "/sdks/capacitor/matrixscan-count/intro" },
       "Titanium": { "version": "n/a" },
       "Web": { "version": "n/a" },
-      ".NET iOS": { "version": "6.16", "apiUrl": "/sdks/net/ios/matrixscan-count/intro" },
-      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/matrixscan-count/intro" }
+      ".NET iOS": { "version": "6.19", "apiUrl": "/sdks/net/ios/matrixscan-count/intro" },
+      ".NET Android": { "version": "6.19", "apiUrl": "/sdks/net/android/matrixscan-count/intro" }
     }
   },
   {
@@ -89,16 +89,16 @@
     "name": "MatrixScan Find",
     "description": "Pre-built AR component that helps users instantly locate specific items from a predefined list in visually crowded environments. Perfect for in-store order picking (click-and-collect), finding customer parcels at PUDO points, or locating specific baggage. The fastest way to deploy a \"search and find\" feature with an out-of-the-box UI.",
     "frameworks": {
-      "iOS": { "version": "6.9", "apiUrl": "/sdks/ios/matrixscan-find/intro" },
-      "Android": { "version": "6.9", "apiUrl": "/sdks/android/matrixscan-find/intro" },
-      "Cordova": { "version": "6.10", "apiUrl": "/sdks/cordova/matrixscan-find/intro" },
-      "React Native": { "version": "6.10", "apiUrl": "/sdks/react-native/matrixscan-find/intro" },
-      "Flutter": { "version": "6.10", "apiUrl": "/sdks/flutter/matrixscan-find/intro" },
-      "Capacitor": { "version": "6.12", "apiUrl": "/sdks/capacitor/matrixscan-find/intro" },
+      "iOS": { "version": "6.18", "apiUrl": "/sdks/ios/matrixscan-find/intro" },
+      "Android": { "version": "6.18", "apiUrl": "/sdks/android/matrixscan-find/intro" },
+      "Cordova": { "version": "6.24", "apiUrl": "/sdks/cordova/matrixscan-find/intro" },
+      "React Native": { "version": "6.22", "apiUrl": "/sdks/react-native/matrixscan-find/intro" },
+      "Flutter": { "version": "6.22", "apiUrl": "/sdks/flutter/matrixscan-find/intro" },
+      "Capacitor": { "version": "6.22", "apiUrl": "/sdks/capacitor/matrixscan-find/intro" },
       "Titanium": { "version": "n/a" },
-      "Web": { "version": "n/a" },
-      ".NET iOS": { "version": "6.16", "apiUrl": "/sdks/net/ios/matrixscan-find/intro" },
-      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/matrixscan-find/intro" }
+      "Web": { "version": "6.28", "apiUrl": "/sdks/web/matrixscan-find/intro" },
+      ".NET iOS": { "version": "6.22", "apiUrl": "/sdks/net/ios/matrixscan-find/intro" },
+      ".NET Android": { "version": "6.21", "apiUrl": "/sdks/net/android/matrixscan-find/intro" }
     }
   },
   {
@@ -106,16 +106,16 @@
     "name": "MatrixScan Pick",
     "description": "AR-guided workflow solution that transforms complex multi-item tasks into visual, interactive checklists. Uses distinct AR icons to assign tasks and track completion. Eliminates errors and guesswork by visually guiding users through bulk tasks like receiving with exception handling, guided restocking, and staging area audits.",
     "frameworks": {
-      "iOS": { "version": "6.9", "apiUrl": "/sdks/ios/matrixscan-pick/intro" },
-      "Android": { "version": "6.9", "apiUrl": "/sdks/android/matrixscan-pick/intro" },
-      "Cordova": { "version": "6.10", "apiUrl": "/sdks/cordova/matrixscan-pick/intro" },
-      "React Native": { "version": "6.10", "apiUrl": "/sdks/react-native/matrixscan-pick/intro" },
-      "Flutter": { "version": "6.10", "apiUrl": "/sdks/flutter/matrixscan-pick/intro" },
-      "Capacitor": { "version": "6.12", "apiUrl": "/sdks/capacitor/matrixscan-pick/intro" },
+      "iOS": { "version": "6.19", "apiUrl": "/sdks/ios/matrixscan-pick/intro" },
+      "Android": { "version": "6.19", "apiUrl": "/sdks/android/matrixscan-pick/intro" },
+      "Cordova": { "version": "6.22", "apiUrl": "/sdks/cordova/matrixscan-pick/intro" },
+      "React Native": { "version": "6.19", "apiUrl": "/sdks/react-native/matrixscan-pick/intro" },
+      "Flutter": { "version": "6.22", "apiUrl": "/sdks/flutter/matrixscan-pick/intro" },
+      "Capacitor": { "version": "6.22", "apiUrl": "/sdks/capacitor/matrixscan-pick/intro" },
       "Titanium": { "version": "n/a" },
       "Web": { "version": "n/a" },
-      ".NET iOS": { "version": "6.16", "apiUrl": "/sdks/net/ios/matrixscan-pick/intro" },
-      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/matrixscan-pick/intro" }
+      ".NET iOS": { "version": "6.26", "apiUrl": "/sdks/net/ios/matrixscan-pick/intro" },
+      ".NET Android": { "version": "6.24", "apiUrl": "/sdks/net/android/matrixscan-pick/intro" }
     }
   },
   {
@@ -123,14 +123,14 @@
     "name": "Barcode Selection",
     "description": "Precisely select one specific barcode among densely packed codes with high accuracy. Perfect when you need to capture a single barcode from labels tightly packed together, such as on shipping manifests or shelves with many item labels.",
     "frameworks": {
-      "iOS": { "version": "6.0", "apiUrl": "/sdks/ios/barcode-selection/intro" },
-      "Android": { "version": "6.0", "apiUrl": "/sdks/android/barcode-selection/intro" },
-      "Cordova": { "version": "6.1", "apiUrl": "/sdks/cordova/barcode-selection/intro" },
-      "React Native": { "version": "6.5", "apiUrl": "/sdks/react-native/barcode-selection/intro" },
-      "Flutter": { "version": "6.7", "apiUrl": "/sdks/flutter/barcode-selection/intro" },
-      "Capacitor": { "version": "6.8", "apiUrl": "/sdks/capacitor/barcode-selection/intro" },
-      "Titanium": { "version": "6.8", "apiUrl": "/sdks/titanium/barcode-selection/intro" },
-      "Web": { "version": "6.13", "apiUrl": "/sdks/web/barcode-selection/intro" },
+      "iOS": { "version": "6.6", "apiUrl": "/sdks/ios/barcode-selection/intro" },
+      "Android": { "version": "6.9", "apiUrl": "/sdks/android/barcode-selection/intro" },
+      "Cordova": { "version": "6.10", "apiUrl": "/sdks/cordova/barcode-selection/intro" },
+      "React Native": { "version": "6.10", "apiUrl": "/sdks/react-native/barcode-selection/intro" },
+      "Flutter": { "version": "6.10", "apiUrl": "/sdks/flutter/barcode-selection/intro" },
+      "Capacitor": { "version": "6.12", "apiUrl": "/sdks/capacitor/barcode-selection/intro" },
+      "Titanium": { "version": "n/a" },
+      "Web": { "version": "n/a" },
       ".NET iOS": { "version": "6.16", "apiUrl": "/sdks/net/ios/barcode-selection/intro" },
       ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/barcode-selection/intro" }
     }
@@ -157,8 +157,8 @@
     "name": "ID Capture",
     "description": "Scan and validate identity documents including passports, driver's licenses, and national IDs. Extract personal information with OCR and perform verification checks for secure identity validation in onboarding and access control workflows.",
     "frameworks": {
-      "iOS": { "version": "6.5", "apiUrl": "/sdks/ios/id-capture/intro" },
-      "Android": { "version": "6.5", "apiUrl": "/sdks/android/id-capture/intro" },
+      "iOS": { "version": "6.2", "apiUrl": "/sdks/ios/id-capture/intro" },
+      "Android": { "version": "6.2", "apiUrl": "/sdks/android/id-capture/intro" },
       "Cordova": { "version": "6.6", "apiUrl": "/sdks/cordova/id-capture/intro" },
       "React Native": { "version": "6.8", "apiUrl": "/sdks/react-native/id-capture/intro" },
       "Flutter": { "version": "6.11", "apiUrl": "/sdks/flutter/id-capture/intro" },
@@ -182,8 +182,8 @@
       "Capacitor": { "version": "6.10", "apiUrl": "/sdks/capacitor/parser/get-started" },
       "Titanium": { "version": "n/a" },
       "Web": { "version": "6.25", "apiUrl": "/sdks/web/parser/get-started" },
-      ".NET iOS": { "version": "6.22", "apiUrl": "/sdks/net/ios/parser/get-started" },
-      ".NET Android": { "version": "6.21", "apiUrl": "/sdks/net/android/parser/get-started" }
+      ".NET iOS": { "version": "6.16", "apiUrl": "/sdks/net/ios/parser/get-started" },
+      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/parser/get-started" }
     }
   },
   {
@@ -199,8 +199,25 @@
       "Capacitor": { "version": "7.0", "apiUrl": "/sdks/capacitor/barcode-generator/" },
       "Titanium": { "version": "n/a" },
       "Web": { "version": "n/a" },
-      ".NET iOS": { "version": "n/a" },
-      ".NET Android": { "version": "n/a" }
+      ".NET iOS": { "version": "8.6", "apiUrl": "/sdks/net/ios/barcode-generator/" },
+      ".NET Android": { "version": "8.6", "apiUrl": "/sdks/net/android/barcode-generator/" }
+    }
+  },
+  {
+    "key": "barcode-sequence",
+    "name": "Barcode Sequence",
+    "description": "Capture mode for scanning a predefined sequence of barcodes in order. Validates that barcodes are scanned in the correct sequence, making it ideal for workflows that require ordered item processing, assembly verification, and guided sequential scanning tasks.",
+    "frameworks": {
+      "iOS": { "version": "8.1", "apiUrl": "n/a" },
+      "Android": { "version": "8.0", "apiUrl": "n/a" },
+      "Cordova": { "version": "n/a" },
+      "React Native": { "version": "n/a" },
+      "Flutter": { "version": "n/a" },
+      "Capacitor": { "version": "n/a" },
+      "Titanium": { "version": "n/a" },
+      "Web": { "version": "n/a" },
+      ".NET iOS": { "version": "8.6", "apiUrl": "n/a" },
+      ".NET Android": { "version": "8.6", "apiUrl": "n/a" }
     }
   }
 ]
