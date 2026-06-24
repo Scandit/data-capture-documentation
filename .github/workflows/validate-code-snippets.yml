@@ -25,6 +25,8 @@ jobs:
 
       - name: Set up Kotlin
         uses: fwilhe2/setup-kotlin@v1
+        with:
+          version: 2.4.0
 
       - name: Set up Python
         uses: actions/setup-python@v5

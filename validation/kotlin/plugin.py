@@ -156,7 +156,8 @@ class KotlinPlugin(LanguagePlugin):
         ]
 
         r = subprocess.run(
-            [kotlinc, "-cp", sdk_classpath, "-d", str(KOTLIN_CLASSES_DIR)] + kt_files,
+            [kotlinc, "-jvm-target", "11", "-cp", sdk_classpath, "-d", str(KOTLIN_CLASSES_DIR)]
+            + kt_files,
             capture_output=True,
             text=True,
         )
