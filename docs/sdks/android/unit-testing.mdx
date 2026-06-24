@@ -1,0 +1,453 @@
+---
+title: Unit Testing
+sidebar_label: Unit Testing
+description: "Unit-test your scanner listener and callback logic on Android without a camera, by mocking the Scandit Data Capture SDK with MockK or Mockito."
+toc_max_heading_level: 3
+framework: android
+keywords:
+  - android
+  - testing
+  - unit test
+  - mock
+  - mockk
+  - mockito
+  - listener
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Unit Testing
+
+This page describes how to unit-test the logic inside your Scandit Data Capture SDK listener
+callbacks, such as `onBarcodeScanned`, `onSessionUpdated`, and `onIdCaptured`, without a camera,
+an emulator, or a license key.
+
+The SDK delivers results to your listener by calling its callback methods with mode, session, and
+result objects. To test your callback logic, you do the same thing the SDK does: build those
+callback arguments as mocks and call your listener directly. In production the camera drives the
+SDK, which calls your listener; in a unit test you call the listener yourself with mocked
+arguments.
+
+Your assertions target the logic in your own listener, for example that it reads the correct
+barcode data, or that it routes an expired ID to the rejection path. All you need is a way to
+produce realistic callback arguments.
+
+## What You Can and Can’t Mock
+
+There are two reasons to **mock** the SDK types rather than construct them in a local unit test:
+
+1. **They are `final` with non-public constructors.** Modes, sessions, result objects, settings,
+   and overlays ship as `final` classes you cannot subclass or instantiate from test code.
+2. **Real construction calls into native code.** Even types with a public constructor (such as
+   `BarcodeCaptureSettings`) delegate to the SDK’s native layer. Local JVM unit tests run on the
+   host JVM with no native library loaded, so real construction throws `UnsatisfiedLinkError`.
+
+The exceptions are the **listener interfaces** and **`FrameData`**, which are plain interfaces —
+implement or mock them freely.
+
+| Type group | Examples | In a local unit test |
+|---|---|---|
+| Listeners | `BarcodeCaptureListener`, `IdCaptureListener`, `SparkScanListener`, … | Implement directly, or mock |
+| `FrameData` | `FrameData` | Mock |
+| Modes | `BarcodeCapture`, `BarcodeBatch`, `IdCapture`, `SparkScan`, `BarcodePick` | Mock |
+| Sessions | `BarcodeCaptureSession`, `BarcodeBatchSession`, … | Mock; stub the accessors you read |
+| Results | `Barcode`, `TrackedBarcode`, `CapturedId` | Mock; stub the properties you read |
+| Settings | `BarcodeCaptureSettings`, `IdCaptureSettings`, … | Mock |
+| Views / overlays | `SparkScanView`, `BarcodeCaptureOverlay`, … | Test on a device (see [Testing with Real Objects](#testing-with-real-objects)) |
+
+Because these classes are `final`, you need a mocking library that can mock final types: **MockK**
+(idiomatic for Kotlin) or **Mockito** with the inline mock-maker (the default since Mockito 5).
+The plain Mockito subclass mock-maker cannot mock final classes.
+
+## Add a Mocking Library
+
+<Tabs groupId="mocking-framework">
+<TabItem value="mockk" label="MockK">
+
+```kotlin title="build.gradle.kts"
+dependencies {
+    testImplementation("io.mockk:mockk:1.13.13")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation(kotlin("test")) // kotlin.test assertions
+}
+```
+
+</TabItem>
+<TabItem value="mockito" label="Mockito">
+
+```kotlin title="build.gradle.kts"
+dependencies {
+    testImplementation("org.mockito:mockito-core:5.14.2")        // inline mock-maker is the default
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation(kotlin("test")) // kotlin.test assertions
+}
+```
+
+</TabItem>
+</Tabs>
+
+Place these tests under `src/test/...` and run them with `./gradlew testDebugUnitTest` — they run
+on the host JVM, no device required.
+
+## Keep Your Listener Thin
+
+The most robust design keeps almost no logic in the listener itself: have it extract the plain
+data it needs and hand it to a class you own, then unit-test *that* class with ordinary values
+and no mocking at all.
+
+```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCapture
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureListener
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSession
+# import com.scandit.datacapture.core.data.FrameData
+// Your own logic, free of SDK types — trivially testable.
+class ScanProcessor(private val onValidScan: (String) -> Unit) {
+    fun handle(data: String?) {
+        if (!data.isNullOrBlank()) onValidScan(data)
+    }
+}
+
+// A thin adapter that only unwraps the session.
+class BarcodeCaptureAdapter(private val processor: ScanProcessor) : BarcodeCaptureListener {
+    override fun onBarcodeScanned(
+        barcodeCapture: BarcodeCapture,
+        session: BarcodeCaptureSession,
+        data: FrameData,
+    ) {
+        processor.handle(session.newlyRecognizedBarcode?.data)
+    }
+}
+```
+
+The examples below test a listener directly by mocking the SDK callback arguments.
+
+## Example: Barcode Capture
+
+The `onBarcodeScanned` callback receives the mode, the session, and frame data. Your code reads
+`session.newlyRecognizedBarcode`.
+
+<Tabs groupId="mocking-framework">
+<TabItem value="mockk" label="MockK">
+
+```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCapture
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureListener
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSession
+# import com.scandit.datacapture.barcode.data.Barcode
+# import com.scandit.datacapture.barcode.data.Symbology
+# import com.scandit.datacapture.core.data.FrameData
+# import kotlin.test.assertEquals
+# import io.mockk.every
+# import io.mockk.mockk
+# import org.junit.Test
+class BarcodeCaptureListenerTest {
+    @Test
+    fun `forwards the scanned barcode data`() {
+        val barcode = mockk<Barcode> {
+            every { data } returns "0123456789"
+            every { symbology } returns Symbology.CODE128
+        }
+        val session = mockk<BarcodeCaptureSession> {
+            every { newlyRecognizedBarcode } returns barcode
+        }
+
+        val scanned = mutableListOf<String>()
+        val listener = object : BarcodeCaptureListener {
+            override fun onBarcodeScanned(
+                barcodeCapture: BarcodeCapture,
+                session: BarcodeCaptureSession,
+                data: FrameData,
+            ) {
+                session.newlyRecognizedBarcode?.data?.let { scanned += it }
+            }
+        }
+
+        listener.onBarcodeScanned(mockk(), session, mockk())
+
+        assertEquals(listOf("0123456789"), scanned)
+    }
+}
+```
+
+</TabItem>
+<TabItem value="mockito" label="Mockito">
+
+```kotlin
+# import com.scandit.datacapture.barcode.capture.BarcodeCapture
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureListener
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSession
+# import com.scandit.datacapture.barcode.data.Barcode
+# import com.scandit.datacapture.barcode.data.Symbology
+# import com.scandit.datacapture.core.data.FrameData
+# import kotlin.test.assertEquals
+# import org.junit.Test
+# import org.mockito.kotlin.doReturn
+# import org.mockito.kotlin.mock
+class BarcodeCaptureListenerTest {
+    @Test
+    fun `forwards the scanned barcode data`() {
+        val barcode = mock<Barcode> {
+            on { data } doReturn "0123456789"
+            on { symbology } doReturn Symbology.CODE128
+        }
+        val session = mock<BarcodeCaptureSession> { on { newlyRecognizedBarcode } doReturn barcode }
+
+        val scanned = mutableListOf<String>()
+        val listener = object : BarcodeCaptureListener {
+            override fun onBarcodeScanned(
+                barcodeCapture: BarcodeCapture,
+                session: BarcodeCaptureSession,
+                data: FrameData,
+            ) {
+                session.newlyRecognizedBarcode?.data?.let { scanned += it }
+            }
+        }
+
+        listener.onBarcodeScanned(mock(), session, mock())
+
+        assertEquals(listOf("0123456789"), scanned)
+    }
+}
+```
+
+</TabItem>
+</Tabs>
+
+## The Other Scan Modes
+
+Every mode follows the same recipe: mock the session/result the callback receives, invoke the
+listener, and assert. The callback signatures and the key objects to stub are:
+
+| Mode | Callback | Mock and stub |
+|---|---|---|
+| MatrixScan (`BarcodeBatch`) | `onSessionUpdated(mode, session, data)` | `BarcodeBatchSession.addedTrackedBarcodes` → `TrackedBarcode.barcode` |
+| ID Capture | `onIdCaptured(mode, id)` / `onIdRejected(mode, id, reason)` | `CapturedId` properties; `RejectionReason` |
+| SparkScan | `onBarcodeScanned(mode, session, data)` (`data` is nullable) | `SparkScanSession.newlyRecognizedBarcode` |
+| BarcodePick | `onSessionUpdated`, `onPick(itemData, callback)` | `BarcodePickSession`; `BarcodePickActionCallback` |
+
+### ID Capture
+
+<Tabs groupId="mocking-framework">
+<TabItem value="mockk" label="MockK">
+
+```kotlin
+# import com.scandit.datacapture.id.capture.IdCapture
+# import com.scandit.datacapture.id.capture.IdCaptureListener
+# import com.scandit.datacapture.id.data.CapturedId
+# import com.scandit.datacapture.id.data.RejectionReason
+# import io.mockk.every
+# import io.mockk.mockk
+val accepted = mutableListOf<String>()
+val rejected = mutableListOf<RejectionReason>()
+val listener = object : IdCaptureListener {
+    override fun onIdCaptured(mode: IdCapture, id: CapturedId) {
+        accepted += id.fullName.orEmpty()
+    }
+    override fun onIdRejected(mode: IdCapture, id: CapturedId?, reason: RejectionReason) {
+        rejected += reason
+    }
+}
+
+val id = mockk<CapturedId> { every { fullName } returns "Jane Doe" }
+listener.onIdCaptured(mockk(), id)
+
+listener.onIdRejected(mockk(), id = null, reason = RejectionReason.DOCUMENT_EXPIRED)
+```
+
+</TabItem>
+<TabItem value="mockito" label="Mockito">
+
+```kotlin
+# import com.scandit.datacapture.id.capture.IdCapture
+# import com.scandit.datacapture.id.capture.IdCaptureListener
+# import com.scandit.datacapture.id.data.CapturedId
+# import com.scandit.datacapture.id.data.RejectionReason
+# import org.mockito.kotlin.doReturn
+# import org.mockito.kotlin.mock
+val accepted = mutableListOf<String>()
+val rejected = mutableListOf<RejectionReason>()
+val listener = object : IdCaptureListener {
+    override fun onIdCaptured(mode: IdCapture, id: CapturedId) {
+        accepted += id.fullName.orEmpty()
+    }
+    override fun onIdRejected(mode: IdCapture, id: CapturedId?, reason: RejectionReason) {
+        rejected += reason
+    }
+}
+
+val id = mock<CapturedId> { on { fullName } doReturn "Jane Doe" }
+listener.onIdCaptured(mock(), id)
+
+listener.onIdRejected(mock(), id = null, reason = RejectionReason.DOCUMENT_EXPIRED)
+```
+
+</TabItem>
+</Tabs>
+
+### BarcodePick
+
+BarcodePick adds an asynchronous action callback: the SDK asks your listener to pick or unpick an
+item and hands you a `BarcodePickActionCallback` to report the result. Mock the callback and
+verify your listener completes it.
+
+<Tabs groupId="mocking-framework">
+<TabItem value="mockk" label="MockK">
+
+```kotlin
+# import com.scandit.datacapture.barcode.pick.capture.BarcodePickActionCallback
+# import com.scandit.datacapture.barcode.pick.capture.BarcodePickActionListener
+import io.mockk.mockk
+import io.mockk.verify
+
+val callback = mockk<BarcodePickActionCallback>(relaxUnitFun = true)
+
+val listener = object : BarcodePickActionListener {
+    override fun onPick(itemData: String, callback: BarcodePickActionCallback) {
+        callback.onFinish(itemData.isNotBlank())
+    }
+    override fun onUnpick(itemData: String, callback: BarcodePickActionCallback) {
+        callback.onFinish(true)
+    }
+}
+
+listener.onPick("item-42", callback)
+
+verify { callback.onFinish(true) }
+```
+
+</TabItem>
+<TabItem value="mockito" label="Mockito">
+
+```kotlin
+# import com.scandit.datacapture.barcode.pick.capture.BarcodePickActionCallback
+# import com.scandit.datacapture.barcode.pick.capture.BarcodePickActionListener
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+
+val callback = mock<BarcodePickActionCallback>()
+
+val listener = object : BarcodePickActionListener {
+    override fun onPick(itemData: String, callback: BarcodePickActionCallback) {
+        callback.onFinish(itemData.isNotBlank())
+    }
+    override fun onUnpick(itemData: String, callback: BarcodePickActionCallback) {
+        callback.onFinish(true)
+    }
+}
+
+listener.onPick("item-42", callback)
+
+verify(callback).onFinish(true)
+```
+
+</TabItem>
+</Tabs>
+
+## Testing with Real Objects
+
+Some types can’t be used in a local JVM unit test and must be exercised in an
+[instrumented test](https://developer.android.com/training/testing/instrumented-tests)
+(`src/androidTest`, run with `./gradlew connectedDebugAndroidTest`). On a device the SDK loads its
+native library at startup, so real construction works:
+
+```kotlin
+# import androidx.test.ext.junit.runners.AndroidJUnit4
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSettings
+# import com.scandit.datacapture.barcode.data.Symbology
+# import kotlin.test.assertTrue
+# import org.junit.Test
+# import org.junit.runner.RunWith
+@RunWith(AndroidJUnit4::class)
+class SettingsInstrumentedTest {
+    @Test
+    fun realBarcodeCaptureSettings_togglesSymbologies() {
+        val settings = BarcodeCaptureSettings()              // calls native — device only
+        settings.enableSymbology(Symbology.CODE128, true)
+        assertTrue(settings.getSymbologySettings(Symbology.CODE128).isEnabled)
+    }
+}
+```
+
+Use instrumented tests for:
+
+- Views and overlays (`SparkScanView`, `BarcodePickView`, the `*Overlay` classes) — they are
+  Android `View`s or have native-backed initializers and cannot load on the host JVM.
+- Any case where you want a real, fully-configured SDK object rather than a mock.
+
+To mock on a device, use `mockk-android` (for MockK) or `mockito-android` together with
+`dexmaker-mockito-inline` (for Mockito, API 28+).
+
+:::caution
+On a device, choose **one** mocking framework per instrumented test module. MockK and Mockito’s
+inline mock-maker each install a JVMTI agent into the bootstrap class loader and only one can
+initialize per process; having both on the same `androidTest` classpath makes the other fail. On
+the host JVM they coexist without issue.
+:::
+
+## Testing That Scanning Actually Works
+
+Mocking verifies your callback logic, but not that the SDK actually **decodes** a barcode or that
+your listener is wired up correctly. To test the real pipeline without a camera, feed a known
+image to the decoder with `BitmapFrameSource` in an instrumented test, then assert on the result.
+
+```kotlin
+# import android.graphics.BitmapFactory
+# import com.scandit.datacapture.barcode.capture.BarcodeCapture
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureListener
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSession
+# import com.scandit.datacapture.barcode.capture.BarcodeCaptureSettings
+# import com.scandit.datacapture.barcode.data.Symbology
+# import com.scandit.datacapture.core.capture.DataCaptureContext
+# import com.scandit.datacapture.core.data.FrameData
+# import com.scandit.datacapture.core.source.BitmapFrameSource
+# import com.scandit.datacapture.core.source.FrameSourceState
+# import java.util.concurrent.CountDownLatch
+# import java.util.concurrent.TimeUnit
+# import kotlin.test.assertEquals
+val dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+val settings = BarcodeCaptureSettings().apply { enableSymbology(Symbology.QR, true) }
+val barcodeCapture = BarcodeCapture.forDataCaptureContext(dataCaptureContext, settings)
+
+val latch = CountDownLatch(1)
+var scannedData: String? = null
+barcodeCapture.addListener(object : BarcodeCaptureListener {
+    override fun onBarcodeScanned(
+        barcodeCapture: BarcodeCapture,
+        session: BarcodeCaptureSession,
+        data: FrameData,
+    ) {
+        scannedData = session.newlyRecognizedBarcode?.data
+        latch.countDown()
+    }
+})
+
+// A bitmap containing a known barcode, e.g. loaded from your test assets.
+val bitmap = BitmapFactory.decodeStream(context.assets.open("test-qr.png"))
+val frameSource = BitmapFrameSource.of(bitmap)
+dataCaptureContext.setFrameSource(frameSource)
+frameSource.switchToDesiredState(FrameSourceState.ON)
+
+latch.await(10, TimeUnit.SECONDS)
+assertEquals("Scandit", scannedData) // "Scandit" is the text encoded in the test QR code
+```
+
+:::note
+Decoding is **license-gated**, so this test needs a valid Scandit license key — a placeholder key
+will not decode. Skip the test when no key is available so the suite still runs without one.
+:::
+
+## Tips and Pitfalls
+
+- **MockK:** avoid `relaxed = true` on SDK classes whose members reach native code (for example a
+  mode object). A relaxed mock auto-answers every method and can trigger an `UnsatisfiedLinkError`.
+  Prefer a plain `mockk()` and stub only the members you read. When you only need to *call* a
+  `Unit`-returning method (such as a callback's `onFinish`), use the targeted `mockk(relaxUnitFun = true)`
+  instead — it never constructs return values, so it can't reach native code.
+- **Mockito:** don’t create a mock *inside* an ongoing stubbing
+  (`on { x } doReturn mock { … }`) — it throws `UnfinishedStubbingException`. Build the inner mock
+  into a local variable first. Mockito also returns `null`/`0` for unstubbed methods, so an “empty
+  session” often needs no stubbing at all.
+- Keep camera, `DataCaptureContext`, and `DataCaptureView` setup out of unit tests — mock the
+  pieces your logic actually reads.
