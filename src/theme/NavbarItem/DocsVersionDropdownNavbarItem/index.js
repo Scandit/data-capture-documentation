@@ -38,7 +38,10 @@ export default function DocsVersionDropdownNavbarItem({
 
   const getCategory = (version) => {
     if (version.isLast) return 'stable';
-    if (version.banner === 'unreleased') return 'beta';
+    // useVersions() returns global-data version objects, which don't carry the
+    // `banner` config field — only the in-development "current" version does, so
+    // key on its name to flag the unreleased docs as beta rather than legacy.
+    if (version.name === 'current') return 'beta';
     return 'legacy';
   };
 
