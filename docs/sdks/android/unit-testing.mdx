@@ -19,9 +19,9 @@ import TabItem from '@theme/TabItem';
 
 # Unit Testing
 
-This page describes how to unit-test the logic inside your Scandit Data Capture SDK listener
-callbacks, such as `onBarcodeScanned`, `onSessionUpdated`, and `onIdCaptured`, without a camera,
-an emulator, or a license key.
+The logic inside your Scandit Data Capture SDK listener callbacks — `onBarcodeScanned`,
+`onSessionUpdated`, `onIdCaptured`, and so on — can be unit-tested without a camera, an emulator,
+or a license key.
 
 The SDK delivers results to your listener by calling its callback methods with mode, session, and
 result objects. To test your callback logic, you do the same thing the SDK does: build those
@@ -37,11 +37,11 @@ produce realistic callback arguments.
 
 There are two reasons to **mock** the SDK types rather than construct them in a local unit test:
 
-1. **They are `final` with non-public constructors.** Modes, sessions, result objects, settings,
-   and overlays ship as `final` classes you cannot subclass or instantiate from test code.
-2. **Real construction calls into native code.** Even types with a public constructor (such as
+1. **Real construction calls into native code.** Even types with a public constructor (such as
    `BarcodeCaptureSettings`) delegate to the SDK’s native layer. Local JVM unit tests run on the
    host JVM with no native library loaded, so real construction throws `UnsatisfiedLinkError`.
+2. **They are `final` with non-public constructors.** Modes, sessions, result objects, settings,
+   and overlays ship as `final` classes you cannot subclass or instantiate from test code.
 
 The exceptions are the **listener interfaces** and **`FrameData`**, which are plain interfaces —
 implement or mock them freely.
@@ -345,12 +345,27 @@ verify(callback).onFinish(true)
 </TabItem>
 </Tabs>
 
-## Testing with Real Objects
+## Instrumented Tests (On a Device)
 
-Some types can’t be used in a local JVM unit test and must be exercised in an
-[instrumented test](https://developer.android.com/training/testing/instrumented-tests)
-(`src/androidTest`, run with `./gradlew connectedDebugAndroidTest`). On a device the SDK loads its
-native library at startup, so real construction works:
+Some types can’t be exercised on the host JVM: native-backed objects (settings, sessions, results)
+throw `UnsatisfiedLinkError` when constructed off-device, and SDK views are Android `View`s. Test
+these in an [instrumented test](https://developer.android.com/training/testing/instrumented-tests)
+(`src/androidTest`, run with `./gradlew connectedDebugAndroidTest`), where the device loads the
+native library at startup and provides real Android components.
+
+To mock on a device, use `mockk-android` (for MockK) or `mockito-android` together with
+`dexmaker-mockito-inline` (for Mockito, API 28+).
+
+:::caution
+On a device, choose **one** mocking framework per instrumented test module. MockK and Mockito’s
+inline mock-maker each install a JVMTI agent into the bootstrap class loader and only one can
+initialize per process; having both on the same `androidTest` classpath makes the other fail. On
+the host JVM they coexist without issue.
+:::
+
+### Using Real SDK Objects
+
+On a device, native-backed types such as settings construct for real:
 
 ```kotlin
 # import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -370,27 +385,56 @@ class SettingsInstrumentedTest {
 }
 ```
 
-Use instrumented tests for:
+### Creating and Configuring a Real View
 
-- Views and overlays (`SparkScanView`, `BarcodePickView`, the `*Overlay` classes) — they are
-  Android `View`s or have native-backed initializers and cannot load on the host JVM.
-- Any case where you want a real, fully-configured SDK object rather than a mock.
+SDK views such as `BarcodeCountView` are Android `View`s and can't be instantiated on the host
+JVM, but you can build and configure a **real** one in an instrumented test. The view needs an
+Activity context (so create it on the UI thread, e.g. via `ActivityScenario`), a real
+`DataCaptureContext`, and its mode:
 
-To mock on a device, use `mockk-android` (for MockK) or `mockito-android` together with
-`dexmaker-mockito-inline` (for Mockito, API 28+).
+```kotlin
+# import android.app.Activity
+# import androidx.test.core.app.ActivityScenario
+# import androidx.test.ext.junit.runners.AndroidJUnit4
+# import com.scandit.datacapture.barcode.count.capture.BarcodeCount
+# import com.scandit.datacapture.barcode.count.capture.BarcodeCountSettings
+# import com.scandit.datacapture.barcode.count.ui.view.BarcodeCountView
+# import com.scandit.datacapture.barcode.count.ui.view.BarcodeCountViewStyle
+# import com.scandit.datacapture.core.capture.DataCaptureContext
+# import kotlin.test.assertEquals
+# import org.junit.Test
+# import org.junit.runner.RunWith
+# class MainActivity : Activity() // your launcher activity
+@RunWith(AndroidJUnit4::class)
+class BarcodeCountViewInstrumentedTest {
+    @Test
+    fun togglesToolbarVisibility() {
+        val dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+        val barcodeCount = BarcodeCount.forDataCaptureContext(dataCaptureContext, BarcodeCountSettings())
 
-:::caution
-On a device, choose **one** mocking framework per instrumented test module. MockK and Mockito’s
-inline mock-maker each install a JVMTI agent into the bootstrap class loader and only one can
-initialize per process; having both on the same `androidTest` classpath makes the other fail. On
-the host JVM they coexist without issue.
-:::
+        var toolbarVisible: Boolean? = null
+        ActivityScenario.launch(MainActivity::class.java).use { scenario ->
+            scenario.onActivity { activity ->
+                val view = BarcodeCountView.newInstance(
+                    activity, dataCaptureContext, barcodeCount, BarcodeCountViewStyle.ICON,
+                )
+                view.shouldShowToolbar = false
+                toolbarVisible = view.shouldShowToolbar
+            }
+        }
 
-## Testing That Scanning Actually Works
+        assertEquals(false, toolbarVisible)
+    }
+}
+```
+
+This needs a valid license key, like the decode test below.
+
+### Verifying Real Decoding
 
 Mocking verifies your callback logic, but not that the SDK actually **decodes** a barcode or that
 your listener is wired up correctly. To test the real pipeline without a camera, feed a known
-image to the decoder with `BitmapFrameSource` in an instrumented test, then assert on the result.
+image to the decoder with `BitmapFrameSource`, then assert on the result.
 
 ```kotlin
 # import android.graphics.BitmapFactory
