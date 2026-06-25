@@ -23,7 +23,7 @@ keywords:
 
 #### Id
 
-* Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
+* Fixed an issue where cropped document images were rotated when they are recovered using the getFrame API.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 
 #### Core
