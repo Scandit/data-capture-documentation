@@ -31,6 +31,9 @@ _KOTLIN_ERROR_RE = re.compile(r"(.+?\.kt):(\d+):\d+:\s*error:\s*(.+)")
 _OBJECT_DECL = re.compile(r"^(?:(?:private|internal|public)\s+)?object\s+\w+")
 # Matches a companion object declaration (named or anonymous).
 _COMPANION_OBJECT_DECL = re.compile(r"^companion\s+object")
+# Matches a top-level interface declaration (column 0). Interfaces can't be local,
+# so they must be hoisted to package scope, like objects.
+_INTERFACE_DECL = re.compile(r"^(?:(?:private|internal|public|fun)\s+)*interface\s+\w+")
 
 # =============================================================================
 # Kotlin compiler utilities
@@ -72,7 +75,7 @@ def _split_object_blocks(content: str) -> tuple[list[str], list[str], str]:
         if _COMPANION_OBJECT_DECL.match(line):
             block, i = _extract_block(lines, i)
             companion.append(block)
-        elif _OBJECT_DECL.match(line):
+        elif _OBJECT_DECL.match(line) or _INTERFACE_DECL.match(line):
             block, i = _extract_block(lines, i)
             top_level.append(block)
         else:
