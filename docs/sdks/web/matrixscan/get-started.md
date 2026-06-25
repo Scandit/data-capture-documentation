@@ -14,13 +14,12 @@ In this guide you will learn step-by-step how to add MatrixScan to your applicat
 
 The general steps are:
 
-- Include the ScanditBarcodeCapture library and its dependencies to your project, if any.
-- Create a new [data capture context](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext), initialized with your license key.
-- Create a [barcode tracking settings](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-batch-settings.html#class-scandit.datacapture.barcode.batch.BarcodeBatchSettings) instance where you enable the [barcode symbologies](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology) you want to read in your application.
-- Create a new [barcode tracking](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/barcode-batch.html#class-scandit.datacapture.barcode.batch.BarcodeBatch) object and initialize it with the settings created above.
-- Obtain a [camera](https://docs.scandit.com/data-capture-sdk/web/core/api/camera.html#class-scandit.datacapture.core.Camera) instance and set it as the frame source on the data capture context previously created.
-- Create a new [data capture view](https://docs.scandit.com/data-capture-sdk/web/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) and add a [basic overlay](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-batch-basic-overlay.html#class-scandit.datacapture.barcode.batch.ui.BarcodeBatchBasicOverlay) instance to it for visual feedback.
-- Register an [overlay listener](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#interface-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener) and implement [BrushForTrackedBarcode()](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/barcode-batch-basic-overlay-listener.html#method-scandit.datacapture.barcode.batch.ui.IBarcodeBatchBasicOverlayListener.BrushForTrackedBarcode), which is called whenever a new tracked barcode appears.
+- [Create the Data Capture Context](#create-the-data-capture-context) initialized with your license key.
+- [Configure the Barcode Batch Mode](#configure-the-barcode-batch-mode) with the symbologies you want to read.
+- [Use the Built-in Camera](#use-the-built-in-camera) as the frame source.
+- [Use a Capture View to Visualize the Scan Process](#use-a-capture-view-to-visualize-the-scan-process) by adding a basic overlay for visual feedback.
+- [Get Barcode Batch Feedback](#get-barcode-batch-feedback) by registering an overlay listener.
+- [Disable Barcode Batch](#disabling-barcode-batch) when it is no longer needed.
 
 ## Prerequisites
 
