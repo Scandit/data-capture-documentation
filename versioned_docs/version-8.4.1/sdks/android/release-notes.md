@@ -22,7 +22,7 @@ keywords:
 
 #### Id
 
-* Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
+* Fixed an issue where cropped document images were rotated when they are recovered using the getFrame API.
 
 ## 8.4.0
 

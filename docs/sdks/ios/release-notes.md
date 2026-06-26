@@ -18,16 +18,17 @@ keywords:
 
 #### Barcode
 
-* Added an option to configure the duration of BarcodeSequence's idle timeout.
-* Added `shouldShowTrayIndicatorText` to `BarcodeSequenceView` to toggle the per-row tray indicator label (e.g. "Row 1").
+* MatrixScan Sequence: Introduced several new configurations to adapt the sequencing flow:
+  - Configure  the duration of the idle timeout.
+  - Toggle the per-row tray indicator label (e.g. "Row 1") through `shouldShowTrayIndicatorText` on the `BarcodeSequenceView`.
 * Added a new standalone iOS Price Capture sample (`PriceCaptureSample`) demonstrating a (barcode, price) pair captured from a shelf price label in one shot using Smart Label Capture's pre-built Price Capture definition, validated against a bundled CSV reference database, with fields highlighted by color brushes — green (correct), red (incorrect), grey (unknown) — and the whole-label outline hidden.
-* Added group scanning to MatrixScan Count, enabled via `BarcodeCountSettings`; this allows the user to follow a new flow that focuses on scanning several barcode groups in sequence, decluttering the screen between groups.
-* Updated `SymbologyDescription.forIdentifier` to return `null` for unrecognized identifiers (e.g. `"EAN-8"` instead of `"ean8"`); previously such input was silently mapped to `Codabar`.
-* Added `selectionMode` property to Barcode Capture and SparkScan settings.
-* Added support for `ScanditIcon` in MatrixScan Count Scan Preview highlights.
+* Added group scanning to MatrixScan Count, enabled via `BarcodeCountSettings`. Group scanning lets users count items in distinct groups, for example one pallet or delivery at a time, within a single session. Three controls manage the flow: Next group saves the current group's scans and clears its AR highlights so the next group starts on a clean screen; Redo clears the scans for the current group only, leaving already-completed groups untouched; Finish ends the session.
+* Added `BarcodeCountSettings.ExpectedNumberOfBarcodesPerCluster` to MatrixScan Count to declare how many barcodes each cluster should contain (for example, 2 for labels carrying two barcodes). Any cluster that deviates from the expected count is flagged and highlighted with a default yellow brush (overridable).
 * Added support for `ScanditIcon` in MatrixScan Count highlights.
+* MatrixScan Count now offers Scan Preview, a new option that previews which barcodes will be scanned and tracks reliably across large, complex setups. Highlights appear in real time before capture, so users can position themselves for the best result. They stay anchored to their barcodes across wide areas, deep stacks, and items at varied angles and depths. Scan Preview is best suited to large surfaces or irregularly arranged groups. For standard counting on a single flat surface, the default mode remains the recommended choice. Enable via BarcodeCountSettings(scanPreviewEnabled: true)
+* Added support for `ScanditIcon` in MatrixScan Count Scan Preview highlights.
+* Added the SelectionMode API to replace the SparkScan target-mode APIs and `ScanIntention.smartSelection`: Set `selectionMode` (off/on/auto) in the `BarcodeCaptureSettings` and `SparkScanSettings` to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
 * Added `logoStyle` and `logoAnchor` customization properties to `BarcodeArView`, `BarcodeCountView`, `BarcodeFindView`, `BarcodePickView`, and `BarcodeSequenceView`.
-* Added `BarcodeCountSettings.ExpectedNumberOfBarcodesPerCluster` to set expected number of barcodes per cluster and highlight any deviation
 
 #### Id
 
@@ -48,7 +49,6 @@ keywords:
 
 * Enhanced detection of low-resolution QR codes is now enabled by default, improving scan rates for challenging QR codes with degraded print quality or unfavorable capture conditions.
 * Improved scanning of micro-QR codes affected by quiet zone violations and perspective distortion.
-* MatrixScan Count adds Scan Preview, a new option with more robust AR tracking for large and complex scanning setups. With Scan Preview enabled, items are highlighted live before capture, so users can position themselves for the best result. Tracking stays reliably anchored across wide areas, deep stacks, and items arranged at varied angles and depths, extending accurate, persistent counting to more demanding environments. Scan Preview is best suited to large surfaces or irregularly arranged groups. For standard counting on a single flat surface, the default mode remains the recommended choice. Enable via BarcodeCountSettings(scanPreviewEnabled: true)
 
 #### Smart Label Capture
 
@@ -60,6 +60,7 @@ keywords:
 
 * Reduced Code 128 minimum symbol count from 6 to 4; short codes (4 & 5 symbols) use stricter matching rules than longer codes. To explicitly exclude short codes, disable symbol counts 4 & 5 via `sc_symbology_settings_set_active_symbol_counts()` for Code 128. Note that if you previously enabled short code scanning, more strict settings are now in effect to reduce the chance of false positives, which are more likely for very short codes.
 * Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.
+* Updated `SymbologyDescription.forIdentifier` to return `null` for unrecognized identifiers (e.g. `"EAN-8"` instead of `"ean8"`); previously such input was silently mapped to `Codabar`.
 
 #### Id
 
@@ -93,7 +94,7 @@ keywords:
 
 #### Barcode
 
-* Added `selectionMode` (off/on/auto) to `BarcodeCaptureSettings` and `SparkScanSettings` in the Flutter binding, and deprecated the SparkScan target-mode APIs and `ScanIntention.smartSelection` in favour of `selectionMode`.
+* The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 * Added `ScanditIcon` support for `BarcodeCount` status mode highlights, and deprecated the `SDCBarcodeCountStatus`-based highlight API.
 
 ## 8.4.1
@@ -109,7 +110,7 @@ keywords:
 
 #### Id
 
-* Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
+* Fixed an issue where cropped document images were rotated when they are recovered using the getFrame API.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 
 ## 8.4.0
