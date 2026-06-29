@@ -1,11 +1,8 @@
 ---
-description: "This functionality is not currently supported in the selected framework.                                                                                          "
-
+description: "MatrixScan Count is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
 ---
 
-# Page Unavailable
+# MatrixScan Count is not available on Titanium
 
-This functionality is not currently supported in the selected framework.
-
----
+The MatrixScan Count module is not available for the Titanium SDK. To view documentation for a platform that supports MatrixScan Count, use the framework switcher at the top of the page.
