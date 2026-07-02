@@ -138,16 +138,18 @@ export const frameworkCards: FrameworkCardType[] = [
     labelScanning: [LabelScanning.LabelScanning],
   },
   {
-    // Only single scanning (SparkScan) is documented for kmp so far; the
-    // other categories stay inactive until their docs land. `link` routes
-    // through /next because kmp has no versioned_docs snapshot yet (same
-    // reason as the unreleased flag in src/utils/useFrameworkItems.js).
+    // `link` routes through /next because kmp has no versioned_docs snapshot
+    // yet (same reason as the unreleased flag in src/utils/useFrameworkItems.js).
     framework: "kmp",
     link: "/next/sdks/kmp",
     icon: <ScanditKmp iconClass={style.iconStyle} />,
-    barcodeScanning: [BarcodeScanning.SingleScanning],
-    IDScanning: [],
-    labelScanning: [],
+    barcodeScanning: [
+      BarcodeScanning.SingleScanning,
+      BarcodeScanning.BatchScanning,
+      BarcodeScanning.ScanditExpress,
+    ],
+    IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
+    labelScanning: [LabelScanning.LabelScanning],
   },
   {
     framework: "net",

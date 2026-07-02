@@ -1600,6 +1600,12 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/kmp/core-concepts',
+        'sdks/kmp/system-requirements',
+        {
+          type: "link",
+          label: "Frequently Asked Questions",
+          href: "https://support.scandit.com/hc/en-us",
+        },
         'sdks/kmp/add-sdk',
       ],
     },
@@ -1625,8 +1631,147 @@ const sidebars: SidebarsConfig = {
                 'sdks/kmp/sparkscan/get-started',
               ],
             },
+            {
+              type: 'category',
+              label: 'Barcode Capture API',
+              items: [
+                'sdks/kmp/barcode-capture/get-started',
+              ],
+            },
             'sdks/kmp/ai-powered-barcode-scanning',
           ],
+        },
+        {
+          type: 'category',
+          label: 'Multiple Barcode Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/kmp/batch-scanning',
+          },
+          collapsed: true,
+          items: [
+            {
+              type: "category",
+              label: "MatrixScan Batch",
+              items: [
+                'sdks/kmp/matrixscan/intro',
+                'sdks/kmp/matrixscan/get-started',
+                'sdks/kmp/matrixscan/advanced',
+              ],
+            },
+            {
+              type: "category",
+              label: "MatrixScan AR",
+              items: [
+                'sdks/kmp/matrixscan-ar/intro',
+                'sdks/kmp/matrixscan-ar/get-started',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Count',
+              items: [
+                'sdks/kmp/matrixscan-count/intro',
+                'sdks/kmp/matrixscan-count/get-started',
+                'sdks/kmp/matrixscan-count/advanced',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MatrixScan Find',
+              items: [
+                'sdks/kmp/matrixscan-find/intro',
+                'sdks/kmp/matrixscan-find/get-started',
+                'sdks/kmp/matrixscan-find/advanced',
+              ],
+            },
+            {
+              type: "category",
+              label: "MatrixScan Pick",
+              items: [
+                'sdks/kmp/matrixscan-pick/intro',
+                'sdks/kmp/matrixscan-pick/get-started',
+                'sdks/kmp/matrixscan-pick/advanced',
+              ],
+            },
+          ],
+        },
+        {
+          type: "category",
+          label: "Additional Functionalities",
+          collapsed: true,
+          items: [
+            {
+              type: "category",
+              label: "Parser",
+              items: [
+                'sdks/kmp/parser/get-started',
+              ],
+            },
+            {
+              type: "category",
+              label: "Barcode Selection",
+              items: [
+                'sdks/kmp/barcode-selection/intro',
+                'sdks/kmp/barcode-selection/get-started',
+              ],
+            },
+            'sdks/kmp/barcode-generator',
+          ],
+        },
+        {
+          type: "category",
+          label: "Barcode Symbologies",
+          link: {
+            type: 'doc',
+            id: 'sdks/kmp/barcode-symbologies',
+          },
+          collapsed: true,
+          items: [
+            'sdks/kmp/symbology-properties',
+            'sdks/kmp/extension-codes',
+            'sdks/kmp/scanning-composite-codes',
+            'sdks/kmp/barcode-capture/configure-barcode-symbologies',
+          ],
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "Label Scanning",
+      collapsed: false,
+      items: [
+        'sdks/kmp/label-capture/intro',
+        'sdks/kmp/label-capture/get-started',
+        'sdks/kmp/label-capture/label-definitions',
+        'sdks/kmp/label-capture/advanced',
+      ],
+    },
+    {
+      type: "category",
+      label: "ID Scanning",
+      collapsed: false,
+      items: [
+        'sdks/kmp/id-capture/intro',
+        'sdks/kmp/id-capture/get-started',
+        'sdks/kmp/id-capture/supported-documents',
+        'sdks/kmp/id-capture/advanced',
+      ],
+    },
+    {
+      type: "category",
+      label: "Plug & Play Solutions",
+      collapsed: false,
+      items: [
+        {
+          type: "link",
+          label: "ID Bolt Documentation",
+          href: "https://docs.scandit.com/hosted/id-bolt/overview/",
+        },
+        {
+          type: "link",
+          label: "Scandit Express Documentation",
+          href: "https://docs.scandit.com/hosted/express/overview/",
         },
       ],
     },
