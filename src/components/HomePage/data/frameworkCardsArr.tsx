@@ -138,16 +138,14 @@ export const frameworkCards: FrameworkCardType[] = [
     labelScanning: [LabelScanning.LabelScanning],
   },
   {
-    // Only SparkScan is documented for kmp so far (docs/sdks/kmp/sparkscan/*).
-    // barcodeScanning/IDScanning/labelScanning below drive the homepage
-    // "isActive" cards in CardsPart, which link to a category landing page
-    // (e.g. /sdks/kmp/single-scanning) that doesn't exist yet for kmp — every
-    // other framework marking a category active ships that landing doc.
-    // Leaving these empty avoids generating a dead client-side link; flip
-    // them on once single-scanning.md (or a kmp-specific card) ships.
+    // Only single scanning (SparkScan) is documented for kmp so far; the
+    // other categories stay inactive until their docs land. `link` routes
+    // through /next because kmp has no versioned_docs snapshot yet (same
+    // reason as the unreleased flag in src/utils/useFrameworkItems.js).
     framework: "kmp",
+    link: "/next/sdks/kmp",
     icon: <ScanditKmp iconClass={style.iconStyle} />,
-    barcodeScanning: [],
+    barcodeScanning: [BarcodeScanning.SingleScanning],
     IDScanning: [],
     labelScanning: [],
   },
