@@ -26,6 +26,7 @@
       "Cordova": { "version": "6.23", "apiUrl": "/sdks/cordova/sparkscan/intro" },
       "React Native": { "version": "6.16", "apiUrl": "/sdks/react-native/sparkscan/intro" },
       "Flutter": { "version": "6.20", "apiUrl": "/sdks/flutter/sparkscan/intro" },
+      "Kotlin Multiplatform": { "version": "8.6", "apiUrl": "/sdks/kmp/sparkscan/intro" },
       "Capacitor": { "version": "6.22", "apiUrl": "/sdks/capacitor/sparkscan/intro" },
       "Titanium": { "version": "n/a" },
       "Web": { "version": "6.24", "apiUrl": "/sdks/web/sparkscan/intro" },

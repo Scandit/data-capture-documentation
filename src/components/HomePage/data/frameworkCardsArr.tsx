@@ -8,6 +8,7 @@ import {
   ScanditCapacitor,
   ScanditCordova,
   ScanditFlutter,
+  ScanditKmp,
   ScanditIOS,
   ScanditReact,
   TitaniumFramework,
@@ -135,6 +136,20 @@ export const frameworkCards: FrameworkCardType[] = [
     ],
     IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
     labelScanning: [LabelScanning.LabelScanning],
+  },
+  {
+    // Only SparkScan is documented for kmp so far (docs/sdks/kmp/sparkscan/*).
+    // barcodeScanning/IDScanning/labelScanning below drive the homepage
+    // "isActive" cards in CardsPart, which link to a category landing page
+    // (e.g. /sdks/kmp/single-scanning) that doesn't exist yet for kmp — every
+    // other framework marking a category active ships that landing doc.
+    // Leaving these empty avoids generating a dead client-side link; flip
+    // them on once single-scanning.md (or a kmp-specific card) ships.
+    framework: "kmp",
+    icon: <ScanditKmp iconClass={style.iconStyle} />,
+    barcodeScanning: [],
+    IDScanning: [],
+    labelScanning: [],
   },
   {
     framework: "net",
