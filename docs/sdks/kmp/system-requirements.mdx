@@ -1,0 +1,53 @@
+---
+description: "System Requirements"
+sidebar_label: 'System Requirements'
+title: 'System Requirements for Kotlin Multiplatform'
+framework: kmp
+keywords:
+  - kmp
+---
+
+# System Requirements
+
+## Kotlin Multiplatform Project
+
+| Requirement | Version |
+| ----------- | ------- |
+| Kotlin      | 2.x     |
+
+## Android
+
+| Requirement            | Version |
+| ----------------------- | ------- |
+| Minimum SDK version     | 24 (Android 7.0) |
+| Compile SDK version     | 36      |
+| Target SDK version      | 36      |
+| JVM target              | 17      |
+| Android Gradle Plugin   | 8.x     |
+| Architecture             | arm64v7, arm64, x86, x86_64 |
+| Camera                  | 720p+   |
+| GPU                     | Required for full performance |
+
+:::note
+On Android hardware acceleration has to be enabled for the camera preview to work. Hardware acceleration is enabled by default since API level 14 but can potentially be turned off in the Manifest, do not do this if you use the camera.
+:::
+
+:::tip
+Android devices running the Scandit Data Capture SDK need to have a GPU or the performance will drastically decrease.
+:::
+
+## iOS
+
+| Requirement  | Version |
+| ------------ | ------- |
+| iOS          | 15.0+   |
+| Swift        | 5.9+    |
+| Architecture | arm64, x86_64 |
+| Camera       | 720p+   |
+| GPU          |    |
+
+## Compose Multiplatform
+
+Compose Multiplatform is optional. The base modules (`core`, `barcode`, `id`, `label`, …) do not require Compose; the `-compose` companion modules require a Compose Multiplatform setup compatible with the Kotlin version above.
+
+See [Installation](./add-sdk.mdx) for the full list of modules and their dependencies.
