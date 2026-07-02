@@ -4,6 +4,7 @@ export const FRAMEWORK_MAPPING: { [urlSlug: string]: string } = {
   'cordova': 'Cordova',
   'react-native': 'React Native',
   'flutter': 'Flutter',
+  'kmp': 'Kotlin Multiplatform',
   'capacitor': 'Capacitor',
   'titanium': 'Titanium',
   'web': 'Web',

@@ -1593,6 +1593,33 @@ const sidebars: SidebarsConfig = {
     },
   ],
 
+  kmpSidebar: [
+    {
+      type: 'category',
+      label: 'Data Capture SDK',
+      collapsed: false,
+      items: [
+        'sdks/kmp/core-concepts',
+        'sdks/kmp/add-sdk',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Barcode Scanning',
+      collapsed: false,
+      items: [
+        {
+          type: 'category',
+          label: 'SparkScan',
+          items: [
+            'sdks/kmp/sparkscan/intro',
+            'sdks/kmp/sparkscan/get-started',
+          ],
+        },
+      ],
+    },
+  ],
+
   capacitorSidebar: [
     {
       type: 'category',
