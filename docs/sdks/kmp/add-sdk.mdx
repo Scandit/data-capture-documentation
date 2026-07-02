@@ -100,15 +100,20 @@ Runtime model resources for optional features are separate, opt-in products from
 - `ScanditLabelCaptureText`
 - `ScanditPriceLabel`
 
-Import the product you added by its product name. The Kotlin API surfaces under the plain Scandit type names (`DataCaptureContext`, `BarcodeCapture`, …). Kotlin interfaces export to Swift as protocols, so their `companion object` factories are reached through the exported `…Companion` class's `shared` instance:
+Import the product you added by its product name. The Kotlin API surfaces under the plain Scandit type names (`DataCaptureContext`, `BarcodeCapture`, …), with `companion object` factories reached through the exported `…Companion` class's `shared` instance. Note that Kotlin default parameter values are not carried over to Swift, so every parameter must be passed explicitly:
 
 ```swift
 import ScanditKmpBarcode
 
-let context = DataCaptureContextCompanion.shared.initialize(licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
+let context = DataCaptureContextCompanion.shared.initialize(
+    licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+    deviceName: nil,
+    externalId: nil,
+    settings: nil
+)
 ```
 
-In Kotlin (shared code) the same call is simply `DataCaptureContext.initialize(licenseKey)`.
+In Kotlin (shared code) the same call is simply `DataCaptureContext.initialize(licenseKey)` — initializing the context from shared Kotlin code (as the sample apps do) keeps the Swift side free of these bridging details and is the recommended setup.
 
 ## Compose Multiplatform Support
 

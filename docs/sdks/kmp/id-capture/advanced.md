@@ -94,7 +94,7 @@ settings.rejectedDocuments = listOf(Passport(IdCaptureRegion.US))
 
 Your use case may require that you capture and extract images of the ID document. Use the `IdImageType` enum (`FACE`, `CROPPED_DOCUMENT`, `FRAME`) to specify the images you want to extract into the `CapturedId.images` object.
 
-For the full frame of the document, or any other image type, call `setShouldPassImageTypeToResult` when creating the `IdCaptureSettings` object. This will pass the image type to the result, which you can then access on the `CapturedId` object.
+For the full frame of the document, or any other image type, call `setShouldPassImageTypeToResult` on the `IdCaptureSettings` object before creating the mode. This will pass the image type to the result, which you can then access on the `CapturedId` object.
 
 ```kotlin
 import com.kmp.datacapture.id.data.IdImageType

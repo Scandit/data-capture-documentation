@@ -96,7 +96,6 @@ import com.kmp.datacapture.id.data.DriverLicense
 import com.kmp.datacapture.id.data.IdCard
 import com.kmp.datacapture.id.data.IdCaptureRegion
 import com.kmp.datacapture.id.data.Passport
-import com.kmp.datacapture.id.scanner.FullDocumentScanner
 import com.kmp.datacapture.id.scanner.SingleSideScanner
 
 val settings = IdCaptureSettings.idCaptureSettings().also {
