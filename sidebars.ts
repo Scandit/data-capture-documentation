@@ -1610,10 +1610,22 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'SparkScan',
+          label: 'Single Barcode Scanning',
+          link: {
+            type: 'doc',
+            id: 'sdks/kmp/single-scanning',
+          },
+          collapsed: true,
           items: [
-            'sdks/kmp/sparkscan/intro',
-            'sdks/kmp/sparkscan/get-started',
+            {
+              type: 'category',
+              label: 'SparkScan',
+              items: [
+                'sdks/kmp/sparkscan/intro',
+                'sdks/kmp/sparkscan/get-started',
+              ],
+            },
+            'sdks/kmp/ai-powered-barcode-scanning',
           ],
         },
       ],
