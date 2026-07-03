@@ -211,9 +211,7 @@ struct SparkScanScanner: UIViewRepresentable {
         // Push the current SwiftUI state into the running scanner.
         context.coordinator.applySymbologiesIfNeeded(symbologies)
         if isActive {
-            DispatchQueue.main.async {
-                context.coordinator.sparkScanView?.prepareScanning()
-            }
+            context.coordinator.sparkScanView?.prepareScanning()
         } else {
             context.coordinator.sparkScanView?.stopScanning()
         }
