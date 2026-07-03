@@ -273,9 +273,11 @@ The coordinator implements the [`SDCSparkScanListener`](https://docs.scandit.com
 
 ```swift
 extension SparkScanScannerCoordinator: SparkScanListener {
-    func sparkScan(_ sparkScan: SparkScan,
-                   didScanIn session: SparkScanSession,
-                   frameData: FrameData?) {
+    func sparkScan(
+        _ sparkScan: SparkScan,
+        didScanIn session: SparkScanSession,
+        frameData: FrameData?
+    ) {
         guard let barcode = session.newlyRecognizedBarcode else { return }
 
         // This method is invoked from a recognition internal thread.
