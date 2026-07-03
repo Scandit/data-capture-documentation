@@ -210,11 +210,22 @@ struct SparkScanScanner: UIViewRepresentable {
         context.coordinator.update(onScan: onScan, feedbackFor: feedbackFor)
         // Push the current SwiftUI state into the running scanner.
         context.coordinator.applySymbologiesIfNeeded(symbologies)
-        if isActive {
-            context.coordinator.sparkScanView?.prepareScanning()
-        } else {
-            context.coordinator.sparkScanView?.stopScanning()
+        // updateUIView runs on every SwiftUI state change, and prepareScanning
+        // resets the scanning state — only act on transitions.
+        if isActive != context.coordinator.isScanningActive {
+            context.coordinator.isScanningActive = isActive
+            if isActive {
+                context.coordinator.sparkScanView?.prepareScanning()
+            } else {
+                context.coordinator.sparkScanView?.stopScanning()
+            }
         }
+    }
+
+    // Stop scanning when the view is removed from the hierarchy (for example
+    // on a navigation pop) while still active.
+    static func dismantleUIView(_ uiView: UIView, coordinator: SparkScanScannerCoordinator) {
+        coordinator.sparkScanView?.stopScanning()
     }
 }
 
@@ -236,6 +247,7 @@ class SparkScanScannerCoordinator: NSObject {
     let dataCaptureContext: DataCaptureContext
     private let settings: SparkScanSettings
     weak var sparkScanView: SparkScanView?
+    var isScanningActive = false
     lazy var sparkScan: SparkScan = {
         let sparkScan = SparkScan(settings: settings)
         sparkScan.addListener(self)
@@ -290,7 +302,9 @@ extension SparkScanScannerCoordinator: SparkScanListener {
 
 extension SparkScanScannerCoordinator: SparkScanFeedbackDelegate {
     // Invoked on a background queue: the closure must only access
-    // thread-safe state.
+    // thread-safe state. Reading the stored closure without synchronization
+    // is a simplification of this example — add locking around the stored
+    // closures if your app replaces them frequently.
     func feedback(for barcode: Barcode) -> SparkScanBarcodeFeedback? {
         feedbackFor(barcode)
     }
