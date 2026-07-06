@@ -412,6 +412,10 @@ const config: Config = {
       apiKey: "8372250579ef3ea82cc637a28e50f73f",
       indexName: "scandit",
       contextualSearch: true,
+      insights: true,
+      searchParameters: {
+        clickAnalytics: true,
+      },
     },
     image: "img/social-card.jpg",
     docs: {
