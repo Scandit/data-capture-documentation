@@ -21,6 +21,7 @@ import {
 import Translate from "@docusaurus/Translate";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import translations from "@theme/SearchTranslations";
+import { capturePostHogEvent } from "@site/src/components/SkillsCallout/analytics";
 let DocSearchModal = null;
 function Hit({ hit, children }) {
   return <Link to={hit.url}>{children}</Link>;
@@ -131,7 +132,18 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
     [openModal]
   );
   const navigator = useRef({
-    navigate({ itemUrl }) {
+    navigate({ itemUrl, item }) {
+      // item is decorated by Algolia's autocomplete insights plugin once
+      // insights/clickAnalytics are enabled - property names below are the
+      // documented Algolia Autocomplete convention; verify against real
+      // runtime data after deploy (e.g. console.log(item)) since this can't
+      // be confirmed without running the live library.
+      capturePostHogEvent("docs_search_result_click", {
+        url: itemUrl,
+        object_id: item?.objectID,
+        query_id: item?.__autocomplete_queryID,
+        position: item?.__autocomplete_absolutePosition ?? item?.__position,
+      });
       // Algolia results could contain URL's from other domains which cannot
       // be served through history and should navigate with window.location
       if (isRegexpStringMatch(externalUrlRegex, itemUrl)) {
@@ -174,6 +186,23 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
     },
     [siteMetadata.docusaurusVersion]
   );
+  // DocSearch's onStateChange fires on every keystroke (Algolia's live-search
+  // behavior), so this is debounced to one event per finished search rather
+  // than one per keystroke.
+  const searchPerformedDebounceRef = useRef(null);
+  const handleStateChange = useCallback(({ state }) => {
+    if (searchPerformedDebounceRef.current) {
+      clearTimeout(searchPerformedDebounceRef.current);
+    }
+    const query = state.query;
+    if (!query) return;
+    searchPerformedDebounceRef.current = setTimeout(() => {
+      capturePostHogEvent("docs_search_performed", {
+        query,
+        nbHits: state.context?.nbHits,
+      });
+    }, 600);
+  }, []);
   useDocSearchKeyboardEvents({
     isOpen,
     onOpen: openModal,
@@ -215,6 +244,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
             transformItems={transformItems}
             hitComponent={Hit}
             transformSearchClient={transformSearchClient}
+            onStateChange={handleStateChange}
             {...(props.searchPagePath && {
               resultsFooterComponent,
             })}
