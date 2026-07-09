@@ -176,33 +176,51 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         <ResultsFooter {...footerProps} onClose={closeModal} />,
     [closeModal]
   );
+  // Searches fire on every keystroke; debounce to one docs_search_performed
+  // per finished search rather than one per keystroke.
+  const searchPerformedDebounceRef = useRef(null);
+  const captureSearchDebounced = useCallback((query, nbHits) => {
+    if (searchPerformedDebounceRef.current) {
+      clearTimeout(searchPerformedDebounceRef.current);
+    }
+    if (!query) return;
+    searchPerformedDebounceRef.current = setTimeout(() => {
+      capturePostHogEvent("docs_search_performed", { query, nbHits });
+    }, 600);
+  }, []);
   const transformSearchClient = useCallback(
     (searchClient) => {
       searchClient.addAlgoliaAgent(
         "docusaurus",
         siteMetadata.docusaurusVersion
       );
+      // DocSearchModal has no public per-search callback (an onStateChange
+      // prop is silently ignored), so intercept the search client itself:
+      // every keystroke's request passes through here.
+      const originalSearch = searchClient.search.bind(searchClient);
+      searchClient.search = (requests) => {
+        const resultPromise = originalSearch(requests);
+        const first = Array.isArray(requests) ? requests[0] : null;
+        const query =
+          first && ((first.params && first.params.query) || first.query);
+        if (query) {
+          resultPromise
+            .then((response) => {
+              const nbHits =
+                response &&
+                response.results &&
+                response.results[0] &&
+                response.results[0].nbHits;
+              captureSearchDebounced(query, nbHits);
+            })
+            .catch(() => {});
+        }
+        return resultPromise;
+      };
       return searchClient;
     },
-    [siteMetadata.docusaurusVersion]
+    [siteMetadata.docusaurusVersion, captureSearchDebounced]
   );
-  // DocSearch's onStateChange fires on every keystroke (Algolia's live-search
-  // behavior), so this is debounced to one event per finished search rather
-  // than one per keystroke.
-  const searchPerformedDebounceRef = useRef(null);
-  const handleStateChange = useCallback(({ state }) => {
-    if (searchPerformedDebounceRef.current) {
-      clearTimeout(searchPerformedDebounceRef.current);
-    }
-    const query = state.query;
-    if (!query) return;
-    searchPerformedDebounceRef.current = setTimeout(() => {
-      capturePostHogEvent("docs_search_performed", {
-        query,
-        nbHits: state.context?.nbHits,
-      });
-    }, 600);
-  }, []);
   useDocSearchKeyboardEvents({
     isOpen,
     onOpen: openModal,
@@ -244,7 +262,6 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
             transformItems={transformItems}
             hitComponent={Hit}
             transformSearchClient={transformSearchClient}
-            onStateChange={handleStateChange}
             getMissingResultsUrl={({ query }) => {
               // Most zero-result queries are exact API symbol names that the
               // main index doesn't contain (data-capture-sdk tree excluded) -
