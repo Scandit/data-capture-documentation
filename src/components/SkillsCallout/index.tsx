@@ -3,7 +3,7 @@ import { useLocation } from '@docusaurus/router';
 
 import skillsData from '@site/src/data/skills.json';
 import productsData from '@site/src/data/products.json';
-import { parseSdksRoute, frameworkToSlug } from '../utils/frameworks';
+import { parseSdksRoute, frameworkToSlug, FRAMEWORK_STORAGE_KEY } from '../utils/frameworks';
 import { capturePostHogEvent } from './analytics';
 import InstallTabs from './InstallTabs';
 import styles from './styles.module.css';
@@ -111,7 +111,7 @@ function resolveLiveBannerMoreInfoUrl(): string {
   const fromQuery = new URLSearchParams(window.location.search).get('framework');
   const fromStorage = (() => {
     try {
-      return window.localStorage.getItem('framework');
+      return window.localStorage.getItem(FRAMEWORK_STORAGE_KEY);
     } catch {
       return null;
     }
@@ -165,20 +165,42 @@ const CalloutDetails: React.FC<CalloutDetailsProps> = ({
 interface SharedBodyProps {
   sharedFrameworkSlug: string;
   sharedMoreInfoUrl: string;
-  onMoreInfoClick?: React.MouseEventHandler<HTMLAnchorElement>;
+  // On the homepage banner the framework is swapped via history.pushState (no
+  // router update), so the rendered href/useLocation are stale. When set, the
+  // "More info" target is resolved from the live URL: on plain left-click via
+  // the handler, and on middle/modifier/keyboard activations by refreshing the
+  // href just before the browser navigates (mousedown/focus both precede it).
+  liveBanner?: boolean;
 }
 
 const SharedBody: React.FC<SharedBodyProps> = ({
   sharedFrameworkSlug,
   sharedMoreInfoUrl,
-  onMoreInfoClick,
-}) => (
+  liveBanner = false,
+}) => {
+  const refreshHref: React.ReactEventHandler<HTMLAnchorElement> = (e) => {
+    e.currentTarget.href = resolveLiveBannerMoreInfoUrl();
+  };
+  const liveHandlers: React.HTMLAttributes<HTMLAnchorElement> = liveBanner
+    ? {
+        onClick: (e) => {
+          if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+            return;
+          }
+          e.preventDefault();
+          window.location.assign(resolveLiveBannerMoreInfoUrl());
+        },
+        onMouseDown: refreshHref,
+        onFocus: refreshHref,
+      }
+    : {};
+  return (
   <>
     <p className={styles.description}>
       Install our <code>{skillsData.shared}</code> skill so your coding
       agent can answer questions about Scandit products and recommend
       the right one for your use case, directly from your editor.{' '}
-      <a href={sharedMoreInfoUrl} onClick={onMoreInfoClick}>More info →</a>
+      <a href={sharedMoreInfoUrl} {...liveHandlers}>More info →</a>
     </p>
     <InstallTabs
       skillSlug={skillsData.shared}
@@ -186,7 +208,8 @@ const SharedBody: React.FC<SharedBodyProps> = ({
       framework={sharedFrameworkSlug}
     />
   </>
-);
+  );
+};
 
 const SkillsCallout: React.FC<SkillsCalloutProps> = ({
   product,
@@ -232,23 +255,6 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({
   if (variant === 'shared') {
     const sharedFrameworkSlug = getSharedFrameworkSlug(pathname, search);
     const sharedMoreInfoUrl = getSharedMoreInfoUrl(pathname, search);
-    // On the homepage banner, the framework is changed via history.pushState
-    // (no router update), so recompute the target from the live URL on click.
-    const onMoreInfoClick: React.MouseEventHandler<HTMLAnchorElement> | undefined = banner
-      ? (e) => {
-          if (
-            e.button !== 0 ||
-            e.metaKey ||
-            e.ctrlKey ||
-            e.shiftKey ||
-            e.altKey
-          ) {
-            return;
-          }
-          e.preventDefault();
-          window.location.assign(resolveLiveBannerMoreInfoUrl());
-        }
-      : undefined;
     return (
       <CalloutDetails
         heading={PRODUCT_DISAMBIGUATION_HEADING}
@@ -262,7 +268,7 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({
         <SharedBody
           sharedFrameworkSlug={sharedFrameworkSlug}
           sharedMoreInfoUrl={sharedMoreInfoUrl}
-          onMoreInfoClick={onMoreInfoClick}
+          liveBanner={banner}
         />
       </CalloutDetails>
     );
