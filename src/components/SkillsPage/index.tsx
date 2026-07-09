@@ -25,6 +25,10 @@ interface FrameworkSkillEntry {
   slug: string;
   product: string;
   label?: string;
+  /** Explicit "Covers" copy; overrides the per-product default description. */
+  description?: string;
+  /** Explicit docs URL; overrides the product's per-framework apiUrl. */
+  url?: string;
 }
 
 const REPO_URL = 'https://github.com/scandit/skills';
@@ -35,7 +39,9 @@ const SKILL_DESCRIPTIONS: Record<string, string> = {
   'matrixscan-ar': 'MatrixScan AR (Barcode AR) integration & migration.',
   'matrixscan-batch': 'MatrixScan Batch (BarcodeBatch) integration & migration.',
   'matrixscan-count': 'MatrixScan Count (BarcodeCount) integration & migration.',
+  'matrixscan-pick': 'MatrixScan Pick (BarcodePick) integration & migration.',
   'smart-label-capture': 'Smart Label Capture integration & migration.',
+  'id-capture': 'ID Capture (passport, driver’s license & ID document scanning) integration & migration.',
 };
 
 const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
@@ -115,12 +121,17 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
             </tr>
             {fwSkills.map((s) => {
               const product = productsByKey[s.product];
-              const apiUrl = product?.frameworks?.[framework]?.apiUrl;
+              const apiUrl = s.url || product?.frameworks?.[framework]?.apiUrl;
               const label = s.label || product?.name || s.product;
-              const baseDescription = SKILL_DESCRIPTIONS[s.product] || `${product?.name || s.product} integration & migration.`;
-              const description = s.label
-                ? `${baseDescription.replace(/\.$/, '')} — ${s.label.split('—')[1]?.trim() || s.label}.`
-                : baseDescription;
+              let description: string;
+              if (s.description) {
+                description = s.description;
+              } else {
+                const baseDescription = SKILL_DESCRIPTIONS[s.product] || `${product?.name || s.product} integration & migration.`;
+                description = s.label
+                  ? `${baseDescription.replace(/\.$/, '')} — ${s.label.split('—')[1]?.trim() || s.label}.`
+                  : baseDescription;
+              }
               return (
                 <tr key={s.slug}>
                   <td>

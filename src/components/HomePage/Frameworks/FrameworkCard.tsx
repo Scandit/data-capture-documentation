@@ -1,5 +1,6 @@
 import { ArrowDropDown } from "../../IconComponents";
 import { FrameworksName } from "../../constants/frameworksName";
+import { FRAMEWORK_STORAGE_KEY } from "../../utils/frameworks";
 import style from "./FrameworkCard.module.css";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
@@ -26,7 +27,7 @@ export function FrameworkCard({
           new URLSearchParams(location.search)
         );
         const selectedFramework =
-          paramsURL.framework || localStorage.getItem("framework") || "web";
+          paramsURL.framework || localStorage.getItem(FRAMEWORK_STORAGE_KEY) || "web";
         const isSelected = framework.framework === selectedFramework;
 
         return (

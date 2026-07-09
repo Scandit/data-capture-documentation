@@ -1,5 +1,6 @@
 import { FrameworksName } from "../../constants/frameworksName";
 import { FrameworkCardType } from "../../constants/types";
+import { FRAMEWORK_STORAGE_KEY } from "../../utils/frameworks";
 import style from "./CardAdditional.module.css";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
@@ -25,7 +26,7 @@ export default function CardAdditional({
     );
     setSelectedFramework();
     handleFrameworkClick();
-    localStorage.setItem("framework", framework.framework);
+    localStorage.setItem(FRAMEWORK_STORAGE_KEY, framework.framework);
   }
 
   return (

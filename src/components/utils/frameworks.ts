@@ -1,3 +1,8 @@
+// localStorage key the homepage framework selector writes and the shared
+// Agent Skills banner reads back. Both sides must use this constant so the
+// contract can't drift (a rename would otherwise silently fall back to iOS).
+export const FRAMEWORK_STORAGE_KEY = 'framework';
+
 export const FRAMEWORK_MAPPING: { [urlSlug: string]: string } = {
   'ios': 'iOS',
   'android': 'Android',
