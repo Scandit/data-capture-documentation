@@ -245,13 +245,29 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
             hitComponent={Hit}
             transformSearchClient={transformSearchClient}
             onStateChange={handleStateChange}
+            getMissingResultsUrl={({ query }) => {
+              // Most zero-result queries are exact API symbol names that the
+              // main index doesn't contain (data-capture-sdk tree excluded) -
+              // offer the API reference's built-in search as a fallback.
+              const fw = (currentFramework || '/sdks/web')
+                .replace('/sdks/', '')
+                .replace('net/', 'net.');
+              return `https://docs.scandit.com/data-capture-sdk/${fw}/search.html?q=${encodeURIComponent(query)}`;
+            }}
             {...(props.searchPagePath && {
               resultsFooterComponent,
             })}
             {...props}
             searchParameters={searchParameters}
             placeholder={translations.placeholder}
-            translations={translations.modal}
+            translations={{
+              ...translations.modal,
+              noResultsScreen: {
+                ...((translations.modal || {}).noResultsScreen || {}),
+                reportMissingResultsText: 'Looking for an API class or method?',
+                reportMissingResultsLinkText: 'Search the API Reference instead →',
+              },
+            }}
             maxResultsPerGroup={1000}
           />,
           searchContainer.current
