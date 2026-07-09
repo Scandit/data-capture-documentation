@@ -9,9 +9,12 @@
       "Cordova": "sparkscan-cordova",
       "Capacitor": "sparkscan-capacitor",
       "Flutter": "sparkscan-flutter",
-      "React Native": "sparkscan-rn"
+      "React Native": "sparkscan-rn",
+      ".NET iOS": "sparkscan-net-ios",
+      ".NET Android": "sparkscan-net-android"
     },
     "barcode-capture": {
+      "iOS": "barcode-capture-ios",
       "Android": "barcode-capture-android",
       "Web": "barcode-capture-web",
       "Cordova": "barcode-capture-cordova",
@@ -28,7 +31,9 @@
       "Cordova": "label-capture-cordova",
       "Capacitor": "label-capture-capacitor",
       "Flutter": "label-capture-flutter",
-      "React Native": "label-capture-rn"
+      "React Native": "label-capture-rn",
+      ".NET iOS": "label-capture-net-ios",
+      ".NET Android": "label-capture-net-android"
     },
     "matrixscan-ar": {
       "iOS": "matrixscan-ar-ios",
@@ -37,7 +42,9 @@
       "Cordova": "matrixscan-ar-cordova",
       "Capacitor": "matrixscan-ar-capacitor",
       "Flutter": "matrixscan-ar-flutter",
-      "React Native": "matrixscan-ar-rn"
+      "React Native": "matrixscan-ar-rn",
+      ".NET iOS": "matrixscan-ar-net-ios",
+      ".NET Android": "matrixscan-ar-net-android"
     },
     "matrixscan-batch": {
       "iOS": "matrixscan-batch-ios",
@@ -46,37 +53,65 @@
       "Cordova": "matrixscan-batch-cordova",
       "Capacitor": "matrixscan-batch-capacitor",
       "Flutter": "matrixscan-batch-flutter",
-      "React Native": "matrixscan-batch-rn"
+      "React Native": "matrixscan-batch-rn",
+      ".NET iOS": "matrixscan-batch-net-ios",
+      ".NET Android": "matrixscan-batch-net-android"
     },
     "matrixscan-count": {
+      "iOS": "matrixscan-count-ios",
+      "Android": "matrixscan-count-android",
       "Cordova": "matrixscan-count-cordova",
       "Capacitor": "matrixscan-count-capacitor",
       "Flutter": "matrixscan-count-flutter",
-      "React Native": "matrixscan-count-rn"
+      "React Native": "matrixscan-count-rn",
+      ".NET iOS": "matrixscan-count-net-ios",
+      ".NET Android": "matrixscan-count-net-android"
+    },
+    "matrixscan-pick": {
+      "iOS": "matrixscan-pick-ios"
+    },
+    "id-capture": {
+      "iOS": "id-capture-ios",
+      "Android": "id-capture-android",
+      "Web": "id-capture-web",
+      "Cordova": "id-capture-cordova",
+      "Capacitor": "id-capture-capacitor",
+      "Flutter": "id-capture-flutter",
+      "React Native": "id-capture-rn",
+      ".NET iOS": "id-capture-net-ios",
+      ".NET Android": "id-capture-net-android"
     }
   },
   "frameworks": {
     "iOS": [
       { "slug": "sparkscan-ios", "product": "sparkscan" },
+      { "slug": "barcode-capture-ios", "product": "barcode-capture" },
       { "slug": "matrixscan-batch-ios", "product": "matrixscan-batch" },
       { "slug": "matrixscan-ar-ios", "product": "matrixscan-ar" },
       { "slug": "matrixscan-ar-annotation-ios", "product": "matrixscan-ar", "label": "MatrixScan AR — Annotation overlay" },
       { "slug": "matrixscan-ar-highlight-ios", "product": "matrixscan-ar", "label": "MatrixScan AR — Highlight overlay" },
-      { "slug": "label-capture-ios", "product": "smart-label-capture" }
+      { "slug": "matrixscan-count-ios", "product": "matrixscan-count" },
+      { "slug": "matrixscan-pick-ios", "product": "matrixscan-pick" },
+      { "slug": "label-capture-ios", "product": "smart-label-capture" },
+      { "slug": "id-capture-ios", "product": "id-capture" }
     ],
     "Android": [
       { "slug": "sparkscan-android", "product": "sparkscan" },
       { "slug": "barcode-capture-android", "product": "barcode-capture" },
       { "slug": "matrixscan-batch-android", "product": "matrixscan-batch" },
       { "slug": "matrixscan-ar-android", "product": "matrixscan-ar" },
-      { "slug": "label-capture-android", "product": "smart-label-capture" }
+      { "slug": "matrixscan-count-android", "product": "matrixscan-count" },
+      { "slug": "label-capture-android", "product": "smart-label-capture" },
+      { "slug": "id-capture-android", "product": "id-capture" }
     ],
     "Web": [
       { "slug": "sparkscan-web", "product": "sparkscan" },
       { "slug": "barcode-capture-web", "product": "barcode-capture" },
       { "slug": "matrixscan-batch-web", "product": "matrixscan-batch" },
       { "slug": "matrixscan-ar-web", "product": "matrixscan-ar" },
-      { "slug": "label-capture-web", "product": "smart-label-capture" }
+      { "slug": "label-capture-web", "product": "smart-label-capture" },
+      { "slug": "id-capture-web", "product": "id-capture" },
+      { "slug": "id-bolt", "product": "id-capture", "label": "ID Bolt", "description": "ID Bolt — hosted, drop-in web ID scanning that runs in a Scandit-hosted pop-up (no camera UI to build).", "url": "/hosted/id-bolt/getting-started" }
     ],
     "Cordova": [
       { "slug": "sparkscan-cordova", "product": "sparkscan" },
@@ -84,7 +119,8 @@
       { "slug": "matrixscan-batch-cordova", "product": "matrixscan-batch" },
       { "slug": "matrixscan-ar-cordova", "product": "matrixscan-ar" },
       { "slug": "matrixscan-count-cordova", "product": "matrixscan-count" },
-      { "slug": "label-capture-cordova", "product": "smart-label-capture" }
+      { "slug": "label-capture-cordova", "product": "smart-label-capture" },
+      { "slug": "id-capture-cordova", "product": "id-capture" }
     ],
     "Capacitor": [
       { "slug": "sparkscan-capacitor", "product": "sparkscan" },
@@ -92,7 +128,8 @@
       { "slug": "matrixscan-batch-capacitor", "product": "matrixscan-batch" },
       { "slug": "matrixscan-ar-capacitor", "product": "matrixscan-ar" },
       { "slug": "matrixscan-count-capacitor", "product": "matrixscan-count" },
-      { "slug": "label-capture-capacitor", "product": "smart-label-capture" }
+      { "slug": "label-capture-capacitor", "product": "smart-label-capture" },
+      { "slug": "id-capture-capacitor", "product": "id-capture" }
     ],
     "Flutter": [
       { "slug": "sparkscan-flutter", "product": "sparkscan" },
@@ -100,7 +137,8 @@
       { "slug": "matrixscan-batch-flutter", "product": "matrixscan-batch" },
       { "slug": "matrixscan-ar-flutter", "product": "matrixscan-ar" },
       { "slug": "matrixscan-count-flutter", "product": "matrixscan-count" },
-      { "slug": "label-capture-flutter", "product": "smart-label-capture" }
+      { "slug": "label-capture-flutter", "product": "smart-label-capture" },
+      { "slug": "id-capture-flutter", "product": "id-capture" }
     ],
     "React Native": [
       { "slug": "sparkscan-rn", "product": "sparkscan" },
@@ -108,15 +146,40 @@
       { "slug": "matrixscan-batch-rn", "product": "matrixscan-batch" },
       { "slug": "matrixscan-ar-rn", "product": "matrixscan-ar" },
       { "slug": "matrixscan-count-rn", "product": "matrixscan-count" },
-      { "slug": "label-capture-rn", "product": "smart-label-capture" }
+      { "slug": "label-capture-rn", "product": "smart-label-capture" },
+      { "slug": "id-capture-rn", "product": "id-capture" }
     ],
     ".NET iOS": [
+      { "slug": "sparkscan-net-ios", "product": "sparkscan" },
       { "slug": "barcode-capture-net-ios", "product": "barcode-capture" },
-      { "slug": "barcode-capture-maui", "product": "barcode-capture", "label": "Barcode Capture for .NET MAUI (cross-platform iOS + Android)" }
+      { "slug": "matrixscan-batch-net-ios", "product": "matrixscan-batch" },
+      { "slug": "matrixscan-ar-net-ios", "product": "matrixscan-ar" },
+      { "slug": "matrixscan-count-net-ios", "product": "matrixscan-count" },
+      { "slug": "label-capture-net-ios", "product": "smart-label-capture" },
+      { "slug": "id-capture-net-ios", "product": "id-capture" },
+      { "slug": "sparkscan-maui", "product": "sparkscan", "label": "SparkScan for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "barcode-capture-maui", "product": "barcode-capture", "label": "Barcode Capture for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "matrixscan-batch-maui", "product": "matrixscan-batch", "label": "MatrixScan Batch for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "matrixscan-ar-maui", "product": "matrixscan-ar", "label": "MatrixScan AR for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "matrixscan-count-maui", "product": "matrixscan-count", "label": "MatrixScan Count for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "label-capture-net-maui", "product": "smart-label-capture", "label": "Smart Label Capture for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "id-capture-net-maui", "product": "id-capture", "label": "ID Capture for .NET MAUI (cross-platform iOS + Android)" }
     ],
     ".NET Android": [
+      { "slug": "sparkscan-net-android", "product": "sparkscan" },
       { "slug": "barcode-capture-net-android", "product": "barcode-capture" },
-      { "slug": "barcode-capture-maui", "product": "barcode-capture", "label": "Barcode Capture for .NET MAUI (cross-platform iOS + Android)" }
+      { "slug": "matrixscan-batch-net-android", "product": "matrixscan-batch" },
+      { "slug": "matrixscan-ar-net-android", "product": "matrixscan-ar" },
+      { "slug": "matrixscan-count-net-android", "product": "matrixscan-count" },
+      { "slug": "label-capture-net-android", "product": "smart-label-capture" },
+      { "slug": "id-capture-net-android", "product": "id-capture" },
+      { "slug": "sparkscan-maui", "product": "sparkscan", "label": "SparkScan for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "barcode-capture-maui", "product": "barcode-capture", "label": "Barcode Capture for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "matrixscan-batch-maui", "product": "matrixscan-batch", "label": "MatrixScan Batch for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "matrixscan-ar-maui", "product": "matrixscan-ar", "label": "MatrixScan AR for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "matrixscan-count-maui", "product": "matrixscan-count", "label": "MatrixScan Count for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "label-capture-net-maui", "product": "smart-label-capture", "label": "Smart Label Capture for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "id-capture-net-maui", "product": "id-capture", "label": "ID Capture for .NET MAUI (cross-platform iOS + Android)" }
     ]
   }
 }
