@@ -78,7 +78,7 @@ How you integrate on iOS depends on whether your app has its own shared Kotlin m
 - **You write your app in Swift and consume the Scandit KMP API directly** (no shared Kotlin module of your own): add the prebuilt umbrella package, see [Prebuilt umbrella package](#prebuilt-umbrella-package) below.
 - **You have your own `shared` Kotlin module** that depends on the Scandit KMP Maven artifacts (the typical Compose Multiplatform app): your Kotlin build produces the shared framework, and your `iosApp` must additionally link the native Scandit frameworks, see [Apps with their own shared module](#apps-with-their-own-shared-module) below.
 
-You cannot combine the two: Kotlin/Native frameworks are closed worlds, so an app with its own shared Kotlin framework cannot also link a prebuilt `ScanditKmp*` umbrella framework — two Kotlin frameworks in the same app cannot share types.
+The two approaches are mutually exclusive. Two separate Kotlin/Native frameworks linked into the same app cannot share Kotlin types with each other, so an app that already ships its own shared Kotlin framework cannot also link a prebuilt `ScanditKmp*` umbrella framework.
 
 ### Prebuilt umbrella package
 
@@ -96,7 +96,7 @@ To add the package:
 3. Select the single `ScanditKmp*` product that covers every Scandit KMP module your app uses.
 
 :::warning
-Add **exactly one** `ScanditKmp*` product to your app. Kotlin/Native frameworks are closed worlds — two Kotlin frameworks linked into the same app cannot share types with each other, even if both originate from the Scandit SDK. This differs from Android/Maven, where you add modules individually. Pick the umbrella variant that covers every module you use (for example `ScanditKmpBarcode` if you only use barcode scanning, or `ScanditKmpAll` if you also need id/label/parser).
+Add **exactly one** `ScanditKmp*` product to your app. Two Kotlin/Native frameworks linked into the same app cannot share types with each other, even when both come from the Scandit SDK — so you cannot combine several `ScanditKmp*` products the way you add individual modules on Android/Maven. Instead, pick the single umbrella variant that covers every module your app uses: `ScanditKmpBarcode` if you only scan barcodes, or `ScanditKmpAll` if you also need id, label, or parser.
 :::
 
 The native Scandit frameworks (e.g. `ScanditCaptureCore`, `ScanditBarcodeCapture`) resolve transitively — the package manifest pins an exact dependency on the native `datacapture-spm` package, so there is no manual wiring required.
@@ -109,7 +109,7 @@ Runtime model resources for optional features are separate, opt-in products from
 - `ScanditLabelCaptureText`
 - `ScanditPriceLabel`
 
-Import the product you added by its product name. The Kotlin API surfaces under the plain Scandit type names (`DataCaptureContext`, `BarcodeCapture`, …), with `companion object` factories reached through the exported `…Companion` class's `shared` instance. Note that Kotlin default parameter values are not carried over to Swift, so every parameter must be passed explicitly:
+Import the product by its product name. The Kotlin API is exposed under the plain Scandit type names (`DataCaptureContext`, `BarcodeCapture`, and so on). Kotlin `companion object` factories are reached through the exported `…Companion` class's `shared` instance. Two Swift-specific details apply: the `…Companion` indirection above, and the fact that Kotlin default parameter values are not carried over to Swift — so you must pass every parameter explicitly, even the optional ones:
 
 ```swift
 import ScanditKmpBarcode
@@ -126,7 +126,7 @@ In Kotlin (shared code) the same call is simply `DataCaptureContext.initialize(l
 
 ### Apps with their own shared module
 
-If your app has its own `shared` Kotlin module consuming the Scandit KMP Maven artifacts (group `com.scandit.datacapture.kmp`), your Kotlin build produces the shared framework — but the **native** Scandit frameworks it binds against are not bundled inside your Maven dependencies on iOS. Your `iosApp` must link them directly from the native [`datacapture-spm`](https://github.com/Scandit/datacapture-spm) Swift package, pinned to the **exact same version** as your KMP Maven dependencies. A version mismatch causes link errors or runtime crashes.
+When your app has its own `shared` Kotlin module that depends on the Scandit KMP Maven artifacts (group `com.scandit.datacapture.kmp`), your Kotlin build produces the shared framework. On iOS, however, the **native** Scandit frameworks that framework binds against are not bundled inside your Maven dependencies. Your `iosApp` must therefore link them directly from the native [`datacapture-spm`](https://github.com/Scandit/datacapture-spm) Swift package. Pin that package to the **exact same version** as your KMP Maven dependencies — a version mismatch causes link errors or runtime crashes.
 
 #### 1. Add the native SPM package to your iosApp (once)
 
