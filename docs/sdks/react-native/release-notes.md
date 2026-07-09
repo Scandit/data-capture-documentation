@@ -10,9 +10,9 @@ keywords:
   - react
 ---
 
-## 8.5.0-beta.1
+## 8.5.0
 
-**Released**: June 18, 2026
+**Released**: July 9, 2026
 
 ### New Features
 
@@ -35,7 +35,8 @@ keywords:
 
 #### Barcode
 
-* Enhanced detection of low-resolution QR codes is now enabled by default, improving scan rates for challenging QR codes with degraded print quality or unfavorable capture conditions.
+* Enhanced detection of low-resolution QR codes, improving scan rates for QR codes with degraded print quality or unfavorable capture conditions. This improvement applies to QR codes of versions 1, 2, and 3 (21×21, 25×25, and 29×29 modules).
+  - codes is now enabled by default, improving scan rates for challenging QR codes with degraded print quality or unfavorable capture conditions. This improvement applies to QR codes of versions 1, 2, and 3 (21×21, 25×25, and 29×29 modules).
 * Improved scanning of micro-QR codes affected by quiet zone violations and perspective distortion.
 
 #### Smart Label Capture
@@ -58,6 +59,7 @@ keywords:
 * Fixed a memory leak in item-based scanning.
 * Fixed an issue in BarcodeCount where the strap mode setting would not be saved in all cases.
 * Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
+* Fixed rare cases of incorrect (tiny) PDF417 location outlines.
 
 #### Id
 
@@ -65,10 +67,13 @@ keywords:
 * Added support for Business Travel Permit to Hong Kong/Macau SAR (AKCHN prefix).
 * Corrected the orientation of cropped Visa document images that were being rotated incorrectly when scanned using a single-frame image source.
 * Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning "Invalid Format".
+* Fixed an issue in ID Capture where `didCaptureId` and `didRejectId` listener callbacks were never invoked if the listener was added after the mode was set on the data capture context (e.g. awaiting `setMode` before `addListener`). Listener registration order no longer matters.
+* Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 
 #### Smart Label Capture
 
 * Fixed a memory leak in LabelCapture.
+* Fixed a bug where setting `valueRegexes` or `anchorRegexes` to null in frameworks was incorrectly treated the same as setting them to an empty list; they now correctly fall back to the definition type's defaults.
 
 #### Core
 
@@ -76,6 +81,8 @@ keywords:
 * Fixed a rare crash when starting camera capture while under memory pressure.
 * Fixed a rare crash when opening the camera.
 * Fixed a crash when the `DataCaptureContext` singleton was initialized more than once.
+* Fixed an issue where the camera preview (DataCaptureView and other view components) could remain blank while scanning still worked. Native view creation no longer depends on React Native's interaction queue, which a long-running JS animation could block indefinitely.
+* Fixed an Android build error ("Unknown CMake command target_compile_reactnative_options") that affected projects on RN < 0.81 with the New Architecture enabled; the generated CMake now falls back to equivalent compile flags on older React Native versions.
 
 ### Deprecations
 
