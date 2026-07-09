@@ -10,15 +10,16 @@ keywords:
   - titanium
 ---
 
-## 8.5.0-beta.1
+## 8.5.0
 
-**Released**: June 18, 2026
+**Released**: July 9, 2026
 
 ### Performance Improvements
 
 #### Barcode
 
-* Enhanced detection of low-resolution QR codes is now enabled by default, improving scan rates for challenging QR codes with degraded print quality or unfavorable capture conditions.
+* Enhanced detection of low-resolution QR codes, improving scan rates for QR codes with degraded print quality or unfavorable capture conditions. This improvement applies to QR codes of versions 1, 2, and 3 (21×21, 25×25, and 29×29 modules).
+  - codes is now enabled by default, improving scan rates for challenging QR codes with degraded print quality or unfavorable capture conditions. This improvement applies to QR codes of versions 1, 2, and 3 (21×21, 25×25, and 29×29 modules).
 * Improved scanning of micro-QR codes affected by quiet zone violations and perspective distortion.
 
 ### Behavioral Changes
@@ -35,6 +36,7 @@ keywords:
 
 * Fixed a memory leak in item-based scanning.
 * Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
+* Fixed rare cases of incorrect (tiny) PDF417 location outlines.
 
 #### Core
 
