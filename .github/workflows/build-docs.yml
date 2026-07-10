@@ -29,3 +29,30 @@ jobs:
 
       - name: Build documentation
         run: yarn build
+
+  trigger-search-reindex:
+    name: Trigger Algolia Crawl
+    # Docsearch tags are stamped at crawl time; a release that changes the
+    # version layout desynchronizes them from the live site until the next
+    # crawl, breaking search (see 8.5.0, 2026-07-09). Re-crawl after every
+    # merge to main so the index never lags a deploy for long.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger crawl of docs.scandit.com
+        env:
+          CRAWLER_USER_ID: ${{ secrets.ALGOLIA_CRAWLER_USER_ID }}
+          CRAWLER_API_KEY: ${{ secrets.ALGOLIA_CRAWLER_API_KEY }}
+        run: |
+          if [ -z "$CRAWLER_USER_ID" ] || [ -z "$CRAWLER_API_KEY" ]; then
+            echo "Algolia crawler credentials not set as repository secrets; skipping."
+            exit 0
+          fi
+          # Deployment runs outside this repository; give it time to publish
+          # before the crawler fetches pages.
+          sleep 600
+          curl -sf -X POST \
+            -u "$CRAWLER_USER_ID:$CRAWLER_API_KEY" \
+            "https://crawler.algolia.com/api/1/crawlers/9256529a-c31f-42fa-817f-5ed79fd38a08/reindex" \
+            || echo "Crawl trigger failed (a crawl may already be running); the scheduled crawl will catch up."
