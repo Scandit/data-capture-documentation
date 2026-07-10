@@ -24,7 +24,23 @@ import translations from "@theme/SearchTranslations";
 import { capturePostHogEvent } from "@site/src/components/SkillsCallout/analytics";
 let DocSearchModal = null;
 function Hit({ hit, children }) {
-  return <Link to={hit.url}>{children}</Link>;
+  // Mouse clicks navigate through this Link directly and never reach the
+  // modal's navigator (which only handles keyboard selection), so capture
+  // them here to count all result clicks.
+  const handleClick = () => {
+    capturePostHogEvent("docs_search_result_click", {
+      url: hit.url,
+      object_id: hit.objectID,
+      query_id: hit.__autocomplete_queryID,
+      position: hit.__autocomplete_absolutePosition ?? hit.__position,
+      interaction: "mouse",
+    });
+  };
+  return (
+    <Link to={hit.url} onClick={handleClick}>
+      {children}
+    </Link>
+  );
 }
 function ResultsFooter({ state, onClose }) {
   const createSearchLink = useSearchLinkCreator();
@@ -143,6 +159,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         object_id: item?.objectID,
         query_id: item?.__autocomplete_queryID,
         position: item?.__autocomplete_absolutePosition ?? item?.__position,
+        interaction: "keyboard",
       });
       // Algolia results could contain URL's from other domains which cannot
       // be served through history and should navigate with window.location
