@@ -666,4 +666,4 @@ The legacy ID Capture UI has been removed in 7.0. If you are using the legacy UI
 
 ## 6.28.8
 
-Find earlier versions in the [release notes section of version 6](/6.28.10/sdks/net/ios/release-notes)
+Find earlier versions in the [release notes section of version 6](/6.28.11/sdks/net/ios/release-notes)
