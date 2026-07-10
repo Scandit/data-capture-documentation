@@ -9,6 +9,12 @@ keywords:
   - xamarinForms
 ---
 
+## 6.28.11
+
+**Released**: July 10, 2026
+
+No updates for this framework in this release.
+
 ## 6.28.10
 
 **Released**: May 8, 2026
