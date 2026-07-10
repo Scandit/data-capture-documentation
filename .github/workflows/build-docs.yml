@@ -32,15 +32,33 @@ jobs:
 
   trigger-search-reindex:
     name: Trigger Algolia Crawl
-    # Docsearch tags are stamped at crawl time; a release that changes the
-    # version layout desynchronizes them from the live site until the next
-    # crawl, breaking search (see 8.5.0, 2026-07-09). Re-crawl after every
-    # merge to main so the index never lags a deploy for long.
+    # A full re-crawl takes hours, so firing one on every content merge would
+    # keep the crawler running constantly for no benefit - routine content
+    # freshness is already handled by the crawler's daily schedule. The only
+    # thing that BREAKS search is a version-layout change that desyncs the
+    # docsearch tags from the index (see 8.5.0, 2026-07-09). So trigger a crawl
+    # only when the version files change; everything else rides the daily crawl.
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Detect version-layout change
+        id: versions
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -qE '(^versions\.json$|docusaurus\.config\.(ts|js))'; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "No version-layout change in this push; the daily scheduled crawl will keep content fresh."
+          fi
+
       - name: Trigger crawl of docs.scandit.com
+        if: steps.versions.outputs.changed == 'true'
         env:
           CRAWLER_USER_ID: ${{ secrets.ALGOLIA_CRAWLER_USER_ID }}
           CRAWLER_API_KEY: ${{ secrets.ALGOLIA_CRAWLER_API_KEY }}
