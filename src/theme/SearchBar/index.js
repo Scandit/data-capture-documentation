@@ -22,6 +22,16 @@ import Translate from "@docusaurus/Translate";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import translations from "@theme/SearchTranslations";
 import { capturePostHogEvent } from "@site/src/components/SkillsCallout/analytics";
+import aa from "search-insights";
+
+// DocSearch's insights plugin loads search-insights from the jsDelivr CDN,
+// which this site's CSP blocks, so no click/view event ever reaches Algolia.
+// The plugin checks window.aa before falling back to the CDN - provide the
+// bundled client there so events flow within the existing CSP.
+if (typeof window !== "undefined" && !window.aa) {
+  window.AlgoliaAnalyticsObject = "aa";
+  window.aa = aa;
+}
 let DocSearchModal = null;
 function Hit({ hit, children }) {
   // Mouse clicks navigate through this Link directly and never reach the
