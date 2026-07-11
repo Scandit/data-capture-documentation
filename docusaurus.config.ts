@@ -378,7 +378,7 @@ const config: Config = {
               banner: 'none',
               badge: false,
             },
-            '6.28.10': {
+            '6.28.11': {
               banner: 'none',
               badge: false,
             },

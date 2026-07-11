@@ -91,7 +91,7 @@ export default function FrameworkSelectorMobile() {
 
   // Xamarin only exists in the legacy versions
   const filteredVersions = pathname.includes("/xamarin/")
-    ? versions.filter((v) => v.name === "7.6.14" || v.name === "6.28.10")
+    ? versions.filter((v) => v.name === "7.6.14" || v.name === "6.28.11")
     : versions;
   const activeVersion = activeDocContext?.activeVersion;
 

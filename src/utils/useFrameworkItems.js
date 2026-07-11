@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "@docusaurus/router";
 import { FrameworksName } from "@site/src/components/constants/frameworksName";
 
-const POSSIBLE_VERSIONS = ["/next", "/6.28.10", "/7.6.14"];
+const POSSIBLE_VERSIONS = ["/next", "/6.28.11", "/7.6.14"];
 
 const FRAMEWORKS = [
   { label: "iOS", sidebarId: "iosSidebar", slug: "ios", activeBasePath: "sdks/ios/" },
@@ -64,7 +64,7 @@ export function useFrameworkItems() {
 
   const xamarinVersion = useMemo(() => {
     if (!currentPath) return "/7.6.14";
-    if (currentPath.includes("/6.28.")) return "/6.28.10";
+    if (currentPath.includes("/6.28.")) return "/6.28.11";
     return "/7.6.14"; // Default to 7.6.14 for Xamarin
   }, [currentPath]);
 

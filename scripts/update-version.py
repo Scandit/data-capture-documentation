@@ -262,6 +262,7 @@ def update_cross_references(old_version: str, new_version: str) -> None:
         "src/components/HomePage/data/frameworkCardsArr.tsx",
         "src/components/**/*.tsx",
         "src/theme/**/*.js",
+        "src/utils/**/*.js",
         "versioned_docs/**/*.md",
         "versioned_docs/**/*.mdx",
     ]
