@@ -5,7 +5,8 @@ Some of the Scandit Data Capture SDK modules depend on others to work:
 | Module      | Dependencies | Optional Dependencies |
 | ----------- | ----------- | ----------- |
 | *ScanditCaptureCore*      | None | None |
-| *ScanditBarcodeCapture*   | *ScanditCaptureCore* | None |
+| *ScanditDesign*           | None | None |
+| *ScanditBarcodeCapture*   | *ScanditCaptureCore* <br/>*ScanditDesign* | None |
 | *ScanditParser*           | None | None |
 | *ScanditLabelCapture*     | *ScanditCaptureCore* <br/>*ScanditBarcodeCapture* | *ScanditLabelCaptureText* <br/>*ScanditPriceLabel* |
 | *ScanditIdCapture*        | *ScanditCaptureCore*        | *ScanditIdCaptureBackend*<br/>*ScanditIdEuropeDrivingLicense*<br/>*ScanditIdAamvaBarcodeVerification* <br/>*ScanditIdVoidedDetection* |
