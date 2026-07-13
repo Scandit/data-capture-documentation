@@ -182,9 +182,21 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   }).current;
   const transformItems = useCallback(
     (items) => {
-      const filteredItems = items.filter((elem) =>
-        elem.url.includes(currentFramework)
-      );
+      // The API reference lives under /data-capture-sdk/<framework>/ and does
+      // NOT contain the /sdks/<framework>/ path, so the substring rule below
+      // would drop every API result. Filter those by their own framework
+      // segment instead (the crawler stamps net.ios as net/ios, matching the
+      // /sdks/ token). Non-API (guide) results keep the original behavior.
+      const fwToken = currentFramework.replace(/^\/sdks\//, "");
+      const filteredItems = items.filter((elem) => {
+        const url = elem.url || "";
+        const apiMatch = url.match(/\/data-capture-sdk\/([^/]+)\//);
+        if (apiMatch) {
+          if (!fwToken) return true; // no framework context (e.g. home): show all
+          return apiMatch[1].replace(/\./g, "/").toLowerCase() === fwToken.toLowerCase();
+        }
+        return url.includes(currentFramework);
+      });
       return props.transformItems
         ? // Custom transformItems
           props.transformItems(filteredItems)
