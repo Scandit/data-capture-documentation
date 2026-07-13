@@ -33,6 +33,9 @@ if (typeof window !== "undefined" && !window.aa) {
   window.aa = aa;
 }
 let DocSearchModal = null;
+// Framework used for API results when the user searches from a page with no
+// framework in its URL (most-used framework by docs traffic).
+const API_FALLBACK_FRAMEWORK = "web";
 function Hit({ hit, children }) {
   // Mouse clicks navigate through this Link directly and never reach the
   // modal's navigator (which only handles keyboard selection), so capture
@@ -52,17 +55,37 @@ function Hit({ hit, children }) {
     </Link>
   );
 }
-function ResultsFooter({ state, onClose }) {
+function ResultsFooter({ state, onClose, currentFramework, hasSearchPage }) {
   const createSearchLink = useSearchLinkCreator();
+  // When searching from a framework-less page, API results are shown for the
+  // fallback framework only - tell the user, so they know to open a specific
+  // SDK's docs for another platform. Only show it when API results are present.
+  const hasApiResults = (state.collections || [])
+    .flatMap((c) => c.items || [])
+    .some((it) => (it.url || "").includes("/data-capture-sdk/"));
+  const showApiFallbackNote = !currentFramework && hasApiResults;
   return (
-    <Link to={createSearchLink(state.query)} onClick={onClose}>
-      <Translate
-        id="theme.SearchBar.seeAll"
-        values={{ count: state.context.nbHits }}
-      >
-        {"See all {count} results"}
-      </Translate>
-    </Link>
+    <>
+      {showApiFallbackNote && (
+        <div
+          className="DocSearch-ApiFallbackNote"
+          style={{ padding: "6px 12px", fontSize: "0.85em", opacity: 0.8 }}
+        >
+          Showing the {API_FALLBACK_FRAMEWORK} API reference - open a specific
+          SDK&rsquo;s docs for another platform.
+        </div>
+      )}
+      {hasSearchPage && (
+        <Link to={createSearchLink(state.query)} onClick={onClose}>
+          <Translate
+            id="theme.SearchBar.seeAll"
+            values={{ count: state.context.nbHits }}
+          >
+            {"See all {count} results"}
+          </Translate>
+        </Link>
+      )}
+    </>
   );
 }
 function mergeFacetFilters(f1, f2) {
@@ -185,14 +208,16 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   const transformItems = useCallback(
     (items) => {
       // API pages live under /data-capture-sdk/<fw>/, not /sdks/<fw>/, so match
-      // them by their own framework segment (net.ios -> net/ios).
+      // them by their own framework segment (net.ios -> net/ios). On a
+      // framework-less page (home, /hosted/, concept pages) fall back to the
+      // most-used framework so API results aren't duplicated across all SDKs.
       const fwToken = currentFramework.replace(/^\/sdks\//, "");
+      const apiFwTarget = (fwToken || API_FALLBACK_FRAMEWORK).toLowerCase();
       const filteredItems = items.filter((elem) => {
         const url = elem.url || "";
         const apiMatch = url.match(/\/data-capture-sdk\/([^/]+)\//);
         if (apiMatch) {
-          if (!fwToken) return true; // no framework context (e.g. home): show all
-          return apiMatch[1].replace(/\./g, "/").toLowerCase() === fwToken.toLowerCase();
+          return apiMatch[1].replace(/\./g, "/").toLowerCase() === apiFwTarget;
         }
         return url.includes(currentFramework);
       });
@@ -211,8 +236,15 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
     () =>
       // eslint-disable-next-line react/no-unstable-nested-components
       (footerProps) =>
-        <ResultsFooter {...footerProps} onClose={closeModal} />,
-    [closeModal]
+        (
+          <ResultsFooter
+            {...footerProps}
+            onClose={closeModal}
+            currentFramework={currentFramework}
+            hasSearchPage={Boolean(props.searchPagePath)}
+          />
+        ),
+    [closeModal, currentFramework, props.searchPagePath]
   );
   // Searches fire on every keystroke; debounce to one docs_search_performed
   // per finished search rather than one per keystroke.
@@ -309,10 +341,8 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
                 .replace('net/', 'net.');
               return `https://docs.scandit.com/data-capture-sdk/${fw}/search.html?q=${encodeURIComponent(query)}`;
             }}
-            {...(props.searchPagePath && {
-              resultsFooterComponent,
-            })}
             {...props}
+            resultsFooterComponent={resultsFooterComponent}
             searchParameters={searchParameters}
             placeholder={translations.placeholder}
             translations={{
