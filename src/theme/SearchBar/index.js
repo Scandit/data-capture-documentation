@@ -96,7 +96,9 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   }, []);
 
   const currentFramework = useMemo(() => {
-    const regex = /\/sdks\/([\w-]+(?:\/android)?)/;
+    // .NET uses two path segments (net/ios, net/android); every other framework
+    // uses one. Match the two-segment case first so it isn't cut to "net".
+    const regex = /\/sdks\/(net\/(?:ios|android)|[\w-]+)/;
     const match = currentUrl.match(regex);
     if (match) {
       return match[0];
