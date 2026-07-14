@@ -12,6 +12,11 @@ keywords:
 ## 8.5.0
 
 **Released**: July 9, 2026
+:::warning Known Issues
+
+SDK 8.5.0 has a known issue that causes ID Capture to silently fail to scan any PDF417 ID in some customer configurations. Customers using ID Capture are recommended to stay on their current versions until version 8.5.1 is released.
+
+:::
 
 ### New Features
 
