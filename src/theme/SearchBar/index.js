@@ -216,8 +216,13 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         interaction: "keyboard",
       });
       // Algolia results could contain URL's from other domains which cannot
-      // be served through history and should navigate with window.location
-      if (isRegexpStringMatch(externalUrlRegex, itemUrl)) {
+      // be served through history and should navigate with window.location.
+      // The API reference (/data-capture-sdk/) is a separate Sphinx tree on the
+      // same domain, so it also needs a full navigation, not SPA routing.
+      if (
+        isRegexpStringMatch(externalUrlRegex, itemUrl) ||
+        itemUrl.includes("/data-capture-sdk/")
+      ) {
         window.location.href = itemUrl;
       } else {
         history.push(itemUrl);
@@ -246,7 +251,12 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         : // Default transformItems
           filteredItems.map((item) => ({
             ...item,
-            url: processSearchResultUrl(item.url),
+            // API reference pages are a separate (Sphinx) tree, not Docusaurus
+            // routes - keep their absolute URL so the link navigates out to the
+            // real page instead of being rewritten into the SPA router (404).
+            url: item.url.includes("/data-capture-sdk/")
+              ? item.url
+              : processSearchResultUrl(item.url),
           }));
     },
     [currentFramework, props.transformItems]
