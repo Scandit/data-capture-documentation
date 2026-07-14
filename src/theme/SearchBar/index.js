@@ -36,6 +36,25 @@ let DocSearchModal = null;
 // Framework used for API results when the user searches from a page with no
 // framework in its URL (most-used framework by docs traffic).
 const API_FALLBACK_FRAMEWORK = "web";
+// .NET is named differently in the two doc trees - SDK guides use net/ios and
+// net/android, the API reference uses dotnet.ios and dotnet.android. Every other
+// framework uses the same token on both sides. These map between them.
+const API_TO_SDK_FRAMEWORK = {
+  "dotnet.ios": "net/ios",
+  "dotnet.android": "net/android",
+};
+const SDK_TO_API_FRAMEWORK = {
+  "net/ios": "dotnet.ios",
+  "net/android": "dotnet.android",
+};
+function apiFrameworkToSdk(apiToken) {
+  const t = (apiToken || "").toLowerCase();
+  return API_TO_SDK_FRAMEWORK[t] || t;
+}
+function sdkFrameworkToApi(sdkToken) {
+  const t = (sdkToken || "").toLowerCase();
+  return SDK_TO_API_FRAMEWORK[t] || t;
+}
 function Hit({ hit, children }) {
   // Mouse clicks navigate through this Link directly and never reach the
   // modal's navigator (which only handles keyboard selection), so capture
@@ -217,7 +236,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         const url = elem.url || "";
         const apiMatch = url.match(/\/data-capture-sdk\/([^/]+)\//);
         if (apiMatch) {
-          return apiMatch[1].replace(/\./g, "/").toLowerCase() === apiFwTarget;
+          return apiFrameworkToSdk(apiMatch[1]) === apiFwTarget;
         }
         return url.includes(currentFramework);
       });
@@ -336,9 +355,8 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
               // Most zero-result queries are exact API symbol names that the
               // main index doesn't contain (data-capture-sdk tree excluded) -
               // offer the API reference's built-in search as a fallback.
-              const fw = (currentFramework || '/sdks/web')
-                .replace('/sdks/', '')
-                .replace('net/', 'net.');
+              const sdkFw = (currentFramework || '/sdks/web').replace('/sdks/', '');
+              const fw = sdkFrameworkToApi(sdkFw);
               return `https://docs.scandit.com/data-capture-sdk/${fw}/search.html?q=${encodeURIComponent(query)}`;
             }}
             {...props}
