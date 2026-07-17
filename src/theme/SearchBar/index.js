@@ -55,6 +55,63 @@ function sdkFrameworkToApi(sdkToken) {
   const t = (sdkToken || "").toLowerCase();
   return SDK_TO_API_FRAMEWORK[t] || t;
 }
+// Frameworks a user may type in the query. An explicit framework in the query
+// overrides the page's framework (see transformItems). Two-segment .NET tokens
+// and multi-word "react native" are matched (and consumed) before the one-word
+// tokens so "net ios" isn't also counted as plain "ios".
+const QUERY_FRAMEWORK_TOKENS = [
+  { re: /\breact[\s-]?native\b/, fw: "react-native" },
+  { re: /\b(?:dot)?net[\s./]*ios\b/, fw: "net/ios" },
+  { re: /\b(?:dot)?net[\s./]*android\b/, fw: "net/android" },
+  { re: /\bios\b/, fw: "ios" },
+  { re: /\bandroid\b/, fw: "android" },
+  { re: /\bflutter\b/, fw: "flutter" },
+  { re: /\bcapacitor\b/, fw: "capacitor" },
+  { re: /\bcordova\b/, fw: "cordova" },
+  { re: /\btitanium\b/, fw: "titanium" },
+  // "web" needs stronger context ("web sdk", "on/for/in/using web"). Bare "web"
+  // is a common English word ("web view", "web socket") and would hijack
+  // routing on ordinary queries, so an accompanying cue is required.
+  { re: /\bweb\s+sdk\b|\b(?:on|for|in|using)\s+web\b/, fw: "web" },
+];
+function frameworksInQuery(query) {
+  let q = ` ${(query || "").toLowerCase()} `;
+  const found = [];
+  for (const { re, fw } of QUERY_FRAMEWORK_TOKENS) {
+    if (re.test(q)) {
+      if (!found.includes(fw)) found.push(fw);
+      q = q.replace(re, " "); // consume so a longer token isn't re-matched
+    }
+  }
+  return found;
+}
+// Major version typed in the query -> the newest docusaurus_tag on that line.
+// The map is derived from docsVersions in docusaurus.config.ts and passed in via
+// customFields (versionTagByMajor), so it can never drift from the real versions.
+const EMPTY_VERSION_MAP = {};
+function versionTagInQuery(query, versionTagByMajor) {
+  const q = (query || "").toLowerCase();
+  // Only an explicit version marker ("version 6", "ver 6", "v6", "sdk 6").
+  // A bare dotted number ("6.5", "7.1", "6.x") is too easily an incidental
+  // token in a normal query, so it must not silently switch the docs version.
+  const m = q.match(/\b(?:version|ver|v|sdk)\s*\.?\s*(\d+)\b/);
+  return m ? versionTagByMajor[m[1]] || null : null;
+}
+function rewriteVersionTag(facetFilters, targetTag) {
+  const swap = (f) => {
+    if (typeof f === "string") {
+      // Swap only the versioned docs tag (docusaurus_tag:docs-*). Leave
+      // docusaurus_tag:default (framework-agnostic / non-doc pages) and any
+      // other entry untouched, so the contextual OR isn't collapsed and those
+      // pages still match when a version is typed.
+      return f.startsWith("docusaurus_tag:docs-")
+        ? `docusaurus_tag:${targetTag}`
+        : f;
+    }
+    return Array.isArray(f) ? f.map(swap) : f;
+  };
+  return swap(facetFilters);
+}
 function Hit({ hit, children }) {
   // Mouse clicks navigate through this Link directly and never reach the
   // modal's navigator (which only handles keyboard selection), so capture
@@ -82,7 +139,12 @@ function ResultsFooter({ state, onClose, currentFramework, hasSearchPage }) {
   const hasApiResults = (state.collections || [])
     .flatMap((c) => c.items || [])
     .some((it) => (it.url || "").includes("/data-capture-sdk/"));
-  const showApiFallbackNote = !currentFramework && hasApiResults;
+  // Don't show the "web API reference" note when the user typed a framework:
+  // results are already narrowed to that framework, so the note would
+  // contradict what's shown.
+  const hasQueriedFramework = frameworksInQuery(state.query || "").length > 0;
+  const showApiFallbackNote =
+    !currentFramework && !hasQueriedFramework && hasApiResults;
   return (
     <>
       {showApiFallbackNote && (
@@ -112,12 +174,18 @@ function mergeFacetFilters(f1, f2) {
   return [...normalize(f1), ...normalize(f2)];
 }
 function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
-  const { siteMetadata } = useDocusaurusContext();
+  const { siteMetadata, siteConfig } = useDocusaurusContext();
+  // Version-routing map derived at build time from docsVersions (see config).
+  const versionTagByMajor =
+    siteConfig.customFields?.versionTagByMajor || EMPTY_VERSION_MAP;
   const processSearchResultUrl = useSearchResultUrlProcessor();
   const contextualSearchFacetFilters = useAlgoliaContextualFacetFilters();
   const configFacetFilters = props.searchParameters?.facetFilters ?? [];
   const [initialQuery, setInitialQuery] = useState(undefined);
   const [currentUrl, setCurrentUrl] = useState("");
+  // The live query text, updated on every search so transformItems (which only
+  // receives items) can route by a framework the user typed in the query.
+  const latestQueryRef = useRef("");
 
   useEffect(() => {
     const handleUrlChange = () => {
@@ -232,18 +300,45 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   const transformItems = useCallback(
     (items) => {
       // API pages live under /data-capture-sdk/<fw>/, not /sdks/<fw>/, so match
-      // them by their own framework segment (net.ios -> net/ios). On a
-      // framework-less page (home, /hosted/, concept pages) fall back to the
-      // most-used framework so API results aren't duplicated across all SDKs.
-      const fwToken = currentFramework.replace(/^\/sdks\//, "");
-      const apiFwTarget = (fwToken || API_FALLBACK_FRAMEWORK).toLowerCase();
+      // them by their own framework segment (net.ios -> net/ios).
+      //
+      // A framework typed in the query wins over the page's framework, so
+      // "barcode capture ios" from a web page returns iOS results; two typed
+      // frameworks return both. With nothing typed we keep the page framework.
+      // On a framework-less page (home, /hosted/, concept pages) we fall back to
+      // the most-used framework (web) rather than showing every framework's
+      // guide - which would spam the user - while keeping framework-agnostic
+      // pages (e.g. /hosted/, /id-documents/) that belong to no SDK.
+      const queriedFrameworks = frameworksInQuery(latestQueryRef.current);
+      const hasQueriedFramework = queriedFrameworks.length > 0;
+      const pageFwToken = currentFramework.replace(/^\/sdks\//, "");
+      const apiFwTargets = hasQueriedFramework
+        ? queriedFrameworks
+        : [(pageFwToken || API_FALLBACK_FRAMEWORK).toLowerCase()];
+      const guideSegments = hasQueriedFramework
+        ? queriedFrameworks.map((fw) => `/sdks/${fw}/`)
+        : null;
       const filteredItems = items.filter((elem) => {
         const url = elem.url || "";
         const apiMatch = url.match(/\/data-capture-sdk\/([^/]+)\//);
         if (apiMatch) {
-          return apiFrameworkToSdk(apiMatch[1]) === apiFwTarget;
+          return apiFwTargets.includes(apiFrameworkToSdk(apiMatch[1]));
         }
-        return url.includes(currentFramework);
+        // Framework-specific SDK guides (/sdks/<fw>/) are narrowed to the typed
+        // framework(s), else the page's framework, else the most-used framework
+        // (web) on a framework-less page.
+        if (url.includes("/sdks/")) {
+          if (guideSegments) {
+            return guideSegments.some((seg) => url.includes(seg));
+          }
+          if (currentFramework) {
+            return url.includes(currentFramework);
+          }
+          return url.includes(`/sdks/${API_FALLBACK_FRAMEWORK}/`);
+        }
+        // Pages tied to no SDK (/hosted/, /id-documents/, concept pages) belong
+        // to no framework, so they stay findable from any framework context.
+        return true;
       });
       return props.transformItems
         ? // Custom transformItems
@@ -298,10 +393,26 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
       // every keystroke's request passes through here.
       const originalSearch = searchClient.search.bind(searchClient);
       searchClient.search = (requests) => {
-        const resultPromise = originalSearch(requests);
         const first = Array.isArray(requests) ? requests[0] : null;
         const query =
           first && ((first.params && first.params.query) || first.query);
+        // Record the query so transformItems can route by a typed framework.
+        latestQueryRef.current = query || "";
+        // A version typed in the query overrides the page's version: swap the
+        // contextual docusaurus_tag filter to the newest tag for that major.
+        const targetTag = versionTagInQuery(query, versionTagByMajor);
+        const effectiveRequests =
+          targetTag && Array.isArray(requests)
+            ? requests.map((r) => {
+                const ff = r.params ? r.params.facetFilters : r.facetFilters;
+                if (!ff) return r;
+                const rewritten = rewriteVersionTag(ff, targetTag);
+                return r.params
+                  ? { ...r, params: { ...r.params, facetFilters: rewritten } }
+                  : { ...r, facetFilters: rewritten };
+              })
+            : requests;
+        const resultPromise = originalSearch(effectiveRequests);
         if (query) {
           resultPromise
             .then((response) => {
@@ -318,7 +429,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
       };
       return searchClient;
     },
-    [siteMetadata.docusaurusVersion, captureSearchDebounced]
+    [siteMetadata.docusaurusVersion, captureSearchDebounced, versionTagByMajor]
   );
   useDocSearchKeyboardEvents({
     isOpen,
