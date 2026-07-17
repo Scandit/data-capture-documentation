@@ -112,6 +112,21 @@ function rewriteVersionTag(facetFilters, targetTag) {
   };
   return swap(facetFilters);
 }
+// Remove the framework tokens (and, when it actually routes, the version marker)
+// from the query TEXT sent to Algolia. Routing is unaffected - it's driven by the
+// original query (framework filter in transformItems, version facet rewrite) -
+// this only stops the platform word from skewing textual relevance (e.g. lifting
+// framework-listing pages above the product's get-started guide).
+function stripRoutedTokens(query, stripVersion) {
+  let q = ` ${query || ""} `;
+  for (const { re } of QUERY_FRAMEWORK_TOKENS) {
+    q = q.replace(new RegExp(re.source, "gi"), " ");
+  }
+  if (stripVersion) {
+    q = q.replace(/\b(?:version|ver|v|sdk)\s*\.?\s*\d+\b/gi, " ");
+  }
+  return q.replace(/\s+/g, " ").trim();
+}
 function Hit({ hit, children }) {
   // Mouse clicks navigate through this Link directly and never reach the
   // modal's navigator (which only handles keyboard selection), so capture
@@ -397,19 +412,35 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         const query =
           first && ((first.params && first.params.query) || first.query);
         // Record the query so transformItems can route by a typed framework.
+        // (Original query - routing is always derived from this.)
         latestQueryRef.current = query || "";
-        // A version typed in the query overrides the page's version: swap the
-        // contextual docusaurus_tag filter to the newest tag for that major.
+        // A version typed in the query overrides the page's version (swap the
+        // docusaurus_tag facet). The framework/version tokens are also stripped
+        // from the query TEXT so the platform word doesn't skew relevance. Both
+        // are computed from the ORIGINAL query, so routing is unchanged; only
+        // the text Algolia scores against differs. Keep the original if the
+        // strip would empty the query.
         const targetTag = versionTagInQuery(query, versionTagByMajor);
+        const strippedRaw = stripRoutedTokens(query || "", !!targetTag);
+        const strippedQuery =
+          strippedRaw && strippedRaw !== (query || "").trim()
+            ? strippedRaw
+            : null;
         const effectiveRequests =
-          targetTag && Array.isArray(requests)
+          (targetTag || strippedQuery) && Array.isArray(requests)
             ? requests.map((r) => {
-                const ff = r.params ? r.params.facetFilters : r.facetFilters;
-                if (!ff) return r;
-                const rewritten = rewriteVersionTag(ff, targetTag);
-                return r.params
-                  ? { ...r, params: { ...r.params, facetFilters: rewritten } }
-                  : { ...r, facetFilters: rewritten };
+                const p = r.params || r;
+                const params = { ...p };
+                if (strippedQuery && typeof params.query === "string") {
+                  params.query = strippedQuery;
+                }
+                if (targetTag && params.facetFilters) {
+                  params.facetFilters = rewriteVersionTag(
+                    params.facetFilters,
+                    targetTag
+                  );
+                }
+                return r.params ? { ...r, params } : params;
               })
             : requests;
         const resultPromise = originalSearch(effectiveRequests);
