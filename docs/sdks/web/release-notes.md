@@ -99,6 +99,16 @@ SDK 8.5.0 has a known issue that causes ID Capture to silently fail to scan any 
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 
+## 8.4.2
+
+**Released**:
+
+### Performance Improvements
+
+#### Core
+
+* Re-enabled SIMD for iOS 26.
+
 ## 8.4.1
 
 **Released**: June 23, 2026
