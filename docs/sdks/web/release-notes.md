@@ -119,16 +119,6 @@ SDK 8.5.0 has a known issue that causes ID Capture to silently fail to scan any 
 
 * Fixed WebKit 26.x bugs causing pthreads WASM crashes (WebKit bug #303387) and SIMD corruption on affected versions (Apple Radar 176035764) by pinning memory and disabling SIMD engine-wide. This slows compute-heavy scanning on those versions, most noticeably Label Capture OCR.
 
-To detect affected devices and warn your users, you can check `BrowserHelper.isSIMDBroken()`:
-
-```ts
-import { BrowserHelper } from "@scandit/web-datacapture-core";
-
-if (BrowserHelper.isSIMDBroken()) {
-  // warn the user about slower scanning, or prompt them to update to iOS 27
-}
-```
-
 ## 8.4.0
 
 **Released**: May 18, 2026
