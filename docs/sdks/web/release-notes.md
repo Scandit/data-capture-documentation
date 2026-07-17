@@ -10,6 +10,16 @@ keywords:
   - web
 ---
 
+## 8.5.1
+
+**Released**:
+
+### Performance Improvements
+
+#### Core
+
+* Re-enabled SIMD for iOS 26.
+
 ## 8.5.0
 
 **Released**: July 9, 2026
