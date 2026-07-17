@@ -96,12 +96,78 @@ const llmsIgnoreFiles: string[] = [
   ),
 ];
 
+// Single source of truth for docs versions (consumed by the preset below and by
+// the search widget's version-routing map). `current` is the live version; its
+// major comes from `label`. Frozen versions are keyed by their version string.
+const docsVersions: Record<
+  string,
+  { label?: string; banner: "none"; badge: boolean }
+> = {
+  current: {
+    label: "8.5.0",
+    banner: "none",
+    badge: false,
+  },
+  "7.6.14": {
+    banner: "none",
+    badge: false,
+  },
+  "6.28.11": {
+    banner: "none",
+    badge: false,
+  },
+};
+
+// Derive the search widget's "major version typed in a query -> docusaurus_tag"
+// map from docsVersions so it can never drift from the actual versions. The
+// crawler stamps docusaurus_tag as `docs-default-<versionName>` (current ->
+// docs-default-current). Newest patch wins per major, and `current` always
+// wins its own major. Exposed via customFields and read in SearchBar.
+function buildVersionTagByMajor(
+  versions: Record<string, { label?: string }>,
+): Record<string, string> {
+  const comparePatch = (a: string, b: string): number => {
+    const pa = a.split(".").map(Number);
+    const pb = b.split(".").map(Number);
+    for (let i = 0; i < 3; i += 1) {
+      if ((pa[i] || 0) !== (pb[i] || 0)) return (pa[i] || 0) - (pb[i] || 0);
+    }
+    return 0;
+  };
+  const best: Record<string, { label: string; isCurrent: boolean }> = {};
+  const out: Record<string, string> = {};
+  for (const [name, cfg] of Object.entries(versions)) {
+    const isCurrent = name === "current";
+    const label = isCurrent ? cfg.label || "" : name;
+    const major = label.split(".")[0];
+    if (!major) continue;
+    const cur = best[major];
+    if (
+      !cur ||
+      isCurrent ||
+      (!cur.isCurrent && comparePatch(label, cur.label) > 0)
+    ) {
+      best[major] = { label, isCurrent };
+      out[major] = `docs-default-${name}`;
+    }
+  }
+  return out;
+}
+
+const versionTagByMajor = buildVersionTagByMajor(docsVersions);
+
 const config: Config = {
   title: "Scandit Developer Documentation",
   tagline:
     "Developer Guides, API References, and Code Samples for building with Scandit Smart Data Capture",
   favicon: "img/sdk_icon.png",
   trailingSlash: true,
+
+  // Derived from docsVersions; read by the search widget (SearchBar) to route a
+  // version typed in a query to the right docusaurus_tag without a hardcoded map.
+  customFields: {
+    versionTagByMajor,
+  },
 
   // Set the production url of your site here
   url: "https://docs.scandit.com",
@@ -368,21 +434,7 @@ const config: Config = {
           showLastUpdateTime: false,
           includeCurrentVersion: true,
           lastVersion: "current",
-          versions: {
-            current: {
-              label: '8.5.0',
-              banner: 'none',
-              badge: false,
-            },
-            '7.6.14': {
-              banner: 'none',
-              badge: false,
-            },
-            '6.28.11': {
-              banner: 'none',
-              badge: false,
-            },
-          },
+          versions: docsVersions,
         },
         blog: false,
         googleTagManager: {

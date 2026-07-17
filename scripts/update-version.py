@@ -12,6 +12,11 @@ Usage: python scripts/update-version.py <new-version>
 Example: python scripts/update-version.py 8.1.1   # patch current
 Example: python scripts/update-version.py 7.6.7   # patch versioned
 Example: python scripts/update-version.py 8.2.0   # minor beta (from production) or minor production (from beta)
+
+Note: the docs search widget derives its version-routing map from the same
+`docsVersions` / `current.label` in docusaurus.config.ts that this script edits
+(see buildVersionTagByMajor + customFields.versionTagByMajor). Version bumps
+therefore flow into search automatically - no separate update is needed here.
 """
 
 import json

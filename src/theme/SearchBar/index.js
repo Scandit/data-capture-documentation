@@ -83,19 +83,16 @@ function frameworksInQuery(query) {
   return found;
 }
 // Major version typed in the query -> the newest docusaurus_tag on that line.
-// Update when a major version's newest patch changes or a new line ships.
-const VERSION_TAG_BY_MAJOR = {
-  "6": "docs-default-6.28.11",
-  "7": "docs-default-7.6.14",
-  "8": "docs-default-current",
-};
-function versionTagInQuery(query) {
+// The map is derived from docsVersions in docusaurus.config.ts and passed in via
+// customFields (versionTagByMajor), so it can never drift from the real versions.
+const EMPTY_VERSION_MAP = {};
+function versionTagInQuery(query, versionTagByMajor) {
   const q = (query || "").toLowerCase();
   // "version 6" / "ver 6" / "v6" / "sdk 6", or a dotted form like "6.28" / "6.x".
   const m =
     q.match(/\b(?:version|ver|v|sdk)\s*\.?\s*(\d+)\b/) ||
     q.match(/\b(\d+)\.(?:x|\d+)\b/);
-  return m ? VERSION_TAG_BY_MAJOR[m[1]] || null : null;
+  return m ? versionTagByMajor[m[1]] || null : null;
 }
 function rewriteVersionTag(facetFilters, targetTag) {
   const swap = (f) => {
@@ -165,7 +162,10 @@ function mergeFacetFilters(f1, f2) {
   return [...normalize(f1), ...normalize(f2)];
 }
 function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
-  const { siteMetadata } = useDocusaurusContext();
+  const { siteMetadata, siteConfig } = useDocusaurusContext();
+  // Version-routing map derived at build time from docsVersions (see config).
+  const versionTagByMajor =
+    siteConfig.customFields?.versionTagByMajor || EMPTY_VERSION_MAP;
   const processSearchResultUrl = useSearchResultUrlProcessor();
   const contextualSearchFacetFilters = useAlgoliaContextualFacetFilters();
   const configFacetFilters = props.searchParameters?.facetFilters ?? [];
@@ -385,7 +385,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         latestQueryRef.current = query || "";
         // A version typed in the query overrides the page's version: swap the
         // contextual docusaurus_tag filter to the newest tag for that major.
-        const targetTag = versionTagInQuery(query);
+        const targetTag = versionTagInQuery(query, versionTagByMajor);
         const effectiveRequests =
           targetTag && Array.isArray(requests)
             ? requests.map((r) => {
@@ -414,7 +414,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
       };
       return searchClient;
     },
-    [siteMetadata.docusaurusVersion, captureSearchDebounced]
+    [siteMetadata.docusaurusVersion, captureSearchDebounced, versionTagByMajor]
   );
   useDocSearchKeyboardEvents({
     isOpen,
