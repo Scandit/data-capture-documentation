@@ -69,10 +69,12 @@ const QUERY_FRAMEWORK_TOKENS = [
   { re: /\bcapacitor\b/, fw: "capacitor" },
   { re: /\bcordova\b/, fw: "cordova" },
   { re: /\btitanium\b/, fw: "titanium" },
-  // "web" needs stronger context ("web sdk", "on/for/in/using web"). Bare "web"
-  // is a common English word ("web view", "web socket") and would hijack
-  // routing on ordinary queries, so an accompanying cue is required.
-  { re: /\bweb\s+sdk\b|\b(?:on|for|in|using)\s+web\b/, fw: "web" },
+  // "web" needs context: "web sdk", "on/for/in/using web", or "web" as the
+  // last word ("barcode capture web", "symbologies web"). Mid-query "web view"
+  // / "web socket" is a common English phrase and must NOT hijack routing, so
+  // bare "web" only counts with a cue or at the end of the query. (The query is
+  // space-padded in frameworksInQuery, so \s*$ matches a trailing "web".)
+  { re: /\bweb\s+sdk\b|\b(?:on|for|in|using)\s+web\b|\bweb\s*$/, fw: "web" },
 ];
 function frameworksInQuery(query) {
   let q = ` ${(query || "").toLowerCase()} `;
