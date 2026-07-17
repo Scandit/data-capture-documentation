@@ -1,0 +1,209 @@
+---
+description: "Guide to integrating the Scandit Data Capture SDK into your Kotlin Multiplatform project."
+
+sidebar_position: 1
+toc_max_heading_level: 4
+pagination_prev: null
+pagination_next: null
+framework: kmp
+keywords:
+  - kmp
+---
+
+# Installation
+
+This page describes how to integrate the Scandit Data Capture SDK into your Kotlin Multiplatform (KMP) project, both for Android/shared code via Gradle and for iOS via Swift Package Manager.
+
+## Requirements
+
+- A Kotlin Multiplatform project, optionally using Compose Multiplatform (see [Compose Multiplatform support](#compose-multiplatform-support) below).
+- **Android**: minimum SDK version 24, compile and target SDK version 36, JVM target 17, Kotlin 2.x, and Android Gradle Plugin 8.x.
+- **iOS**: iOS 15.0 or higher, and Xcode with Swift 5.9 or higher.
+- A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
+
+:::tip
+Android devices running the Scandit Data Capture SDK need to have a GPU or the performance will drastically decrease.
+:::
+
+## Modules
+
+The SDK is split into Maven artifacts under the group `com.scandit.datacapture.kmp`. Every app needs `core`; add the product modules for the capabilities you use.
+
+| Module | Provides |
+| --- | --- |
+| `core` | `DataCaptureContext`, camera/frame source handling, and the shared UI infrastructure (`DataCaptureView`, overlays, controls, gestures). Required by every app. |
+| `barcode` | Barcode scanning modes, including SparkScan and its pre-built view. |
+| `id` | ID Capture for scanning and validating identity documents. |
+| `id-aamva-barcode-verification` | Optional AAMVA barcode verification model for US/Canada driver's licenses, used with `id`. |
+| `id-europe-driving-license` | Optional model for European driving license verification, used with `id`. |
+| `id-voided-detection` | Optional model for detecting voided/altered ID documents, used with `id`. |
+| `label` | Label Capture for extracting structured data from labels combining barcodes and text/fields. |
+| `label-text` | Optional OCR text recognition model used by `label`. |
+| `parser` | Structured data parsing for supported formats (e.g. GS1, driver's license barcodes). |
+| `price-label` | Optional price-label-specific extraction model used with `label`. |
+| `core-compose` | Compose Multiplatform companion for `core`: declarative `DataCaptureView`, `rememberDataCaptureContext`, `rememberCamera`. |
+| `barcode-compose` | Compose Multiplatform companion for `barcode`: declarative `SparkScanView`. |
+| `id-compose` | Compose Multiplatform companion for `id`. |
+| `label-compose` | Compose Multiplatform companion for `label`. |
+
+## Get a License Key
+
+1. [Sign up](https://ssl.scandit.com/dashboard/sign-up?p=test) or [Sign in](https://ssl.scandit.com/dashboard/sign-in) to your Scandit account
+2. Create a project
+3. Create a license key
+
+If you have a paid subscription, please reach out to [Scandit Support](mailto:support@scandit.com) if you need a new license key.
+
+## Android / Shared Code (Gradle)
+
+The KMP modules are published to Maven Central. Make sure `mavenCentral()` is listed in your repositories, then declare the modules you need in your shared module's `commonMain` source set:
+
+```kotlin
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api("com.scandit.datacapture.kmp:core:[version]")
+            api("com.scandit.datacapture.kmp:barcode:[version]")
+        }
+    }
+}
+```
+
+Replace `[version]` with the current SDK version. Add only the product modules your app needs — every module transitively depends on `core`.
+
+## iOS (Swift Package Manager)
+
+How you integrate on iOS depends on whether your app has its own shared Kotlin module:
+
+- **You write your app in Swift and consume the Scandit KMP API directly** (no shared Kotlin module of your own): add the prebuilt umbrella package, see [Prebuilt umbrella package](#prebuilt-umbrella-package) below.
+- **You have your own `shared` Kotlin module** that depends on the Scandit KMP Maven artifacts (the typical Compose Multiplatform app): your Kotlin build produces the shared framework, and your `iosApp` must additionally link the native Scandit frameworks, see [Apps with their own shared module](#apps-with-their-own-shared-module) below.
+
+The two approaches are mutually exclusive. Two separate Kotlin/Native frameworks linked into the same app cannot share Kotlin types with each other, so an app that already ships its own shared Kotlin framework cannot also link a prebuilt `ScanditKmp*` umbrella framework.
+
+### Prebuilt umbrella package
+
+The prebuilt distribution is a Swift package hosted at [github.com/Scandit/datacapture-kmp-spm](https://github.com/Scandit/datacapture-kmp-spm). It ships prebuilt Kotlin/Native **umbrella XCFrameworks**, one per combination of modules:
+
+- `ScanditKmpAll` — barcode, id, label, parser
+- `ScanditKmpBarcode`, `ScanditKmpBarcodeParser`
+- `ScanditKmpId`, `ScanditKmpIdBarcode`, `ScanditKmpIdBarcodeParser`
+- `ScanditKmpLabel`, `ScanditKmpLabelParser`
+
+To add the package:
+
+1. In Xcode, go to **File → Add Package Dependencies**.
+2. Enter the package URL `https://github.com/Scandit/datacapture-kmp-spm` and pin the exact SDK version you want to use.
+3. Select the single `ScanditKmp*` product that covers every Scandit KMP module your app uses.
+
+:::warning
+Add **exactly one** `ScanditKmp*` product to your app. Two Kotlin/Native frameworks linked into the same app cannot share types with each other, even when both come from the Scandit SDK — so you cannot combine several `ScanditKmp*` products the way you add individual modules on Android/Maven. Instead, pick the single umbrella variant that covers every module your app uses: `ScanditKmpBarcode` if you only scan barcodes, or `ScanditKmpAll` if you also need id, label, or parser.
+:::
+
+The native Scandit frameworks (e.g. `ScanditCaptureCore`, `ScanditBarcodeCapture`) resolve transitively — the package manifest pins an exact dependency on the native `datacapture-spm` package, so there is no manual wiring required.
+
+Runtime model resources for optional features are separate, opt-in products from the `datacapture-spm` package. Add the ones you need alongside your `ScanditKmp*` product:
+
+- `ScanditIdAamvaBarcodeVerification`
+- `ScanditIdEuropeDrivingLicense`
+- `ScanditIdVoidedDetection`
+- `ScanditLabelCaptureText`
+- `ScanditPriceLabel`
+
+Import the product by its product name. The Kotlin API is exposed under the plain Scandit type names (`DataCaptureContext`, `BarcodeCapture`, and so on). Kotlin `companion object` factories are reached through the exported `…Companion` class's `shared` instance. Two Swift-specific details apply: the `…Companion` indirection above, and the fact that Kotlin default parameter values are not carried over to Swift — so you must pass every parameter explicitly, even the optional ones:
+
+```swift
+import ScanditKmpBarcode
+
+let context = DataCaptureContextCompanion.shared.initialize(
+    licenseKey: "-- ENTER YOUR SCANDIT LICENSE KEY HERE --",
+    deviceName: nil,
+    externalId: nil,
+    settings: nil
+)
+```
+
+In Kotlin (shared code) the same call is simply `DataCaptureContext.initialize(licenseKey)` — initializing the context from shared Kotlin code (as the sample apps do) keeps the Swift side free of these bridging details and is the recommended setup.
+
+### Apps with their own shared module
+
+When your app has its own `shared` Kotlin module that depends on the Scandit KMP Maven artifacts (group `com.scandit.datacapture.kmp`), your Kotlin build produces the shared framework. On iOS, however, the **native** Scandit frameworks that framework binds against are not bundled inside your Maven dependencies. Your `iosApp` must therefore link them directly from the native [`datacapture-spm`](https://github.com/Scandit/datacapture-spm) Swift package. Pin that package to the **exact same version** as your KMP Maven dependencies — a version mismatch causes link errors or runtime crashes.
+
+#### 1. Add the native SPM package to your iosApp (once)
+
+In Xcode: **File → Add Package Dependencies…** → enter `https://github.com/Scandit/datacapture-spm` → Dependency Rule: **Exact Version** → set it to the same version as your `com.scandit.datacapture.kmp:*` Maven dependencies.
+
+#### 2. Add the products your modules need
+
+Add the SPM products matching the KMP modules your `shared` module depends on. `ScanditCaptureCore` is always required:
+
+| KMP module (Maven artifact) | Native SPM product(s) to add |
+| --- | --- |
+| `core` | `ScanditCaptureCore` (always) |
+| `barcode` | `ScanditBarcodeCapture` |
+| `id` | `ScanditIdCapture` |
+| `label` | `ScanditLabelCapture` + `ScanditBarcodeCapture` |
+| `parser` | `ScanditParser` |
+| `id-aamva-barcode-verification` | `ScanditIdAamvaBarcodeVerification` |
+| `id-europe-driving-license` | `ScanditIdEuropeDrivingLicense` |
+| `id-voided-detection` | `ScanditIdVoidedDetection` |
+| `label-text` | `ScanditLabelCaptureText` |
+| `price-label` | `ScanditPriceLabel` |
+
+Add each product to your `iosApp` target (Target → **General** → **Frameworks, Libraries, and Embedded Content**).
+
+For example, a Compose Multiplatform app whose `shared` module declares:
+
+```kotlin
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api("com.scandit.datacapture.kmp:core:[version]")
+            api("com.scandit.datacapture.kmp:barcode:[version]")
+        }
+    }
+}
+```
+
+needs the `datacapture-spm` package pinned to `[version]` with the products `ScanditCaptureCore` and `ScanditBarcodeCapture` added to the `iosApp` target.
+
+#### 3. On every SDK upgrade
+
+Bump the `com.scandit.datacapture.kmp:*` version in your Gradle build **and** update the `datacapture-spm` package's **Exact Version** pin in Xcode to the same value. The two must always match.
+
+:::tip
+Keep the version in a single Gradle property or Kotlin constant so the number you copy into Xcode has one source of truth.
+:::
+
+## Compose Multiplatform Support
+
+The base modules (`core`, `barcode`, `id`, `label`, …) are deliberately Compose-free, so they can be used from SwiftUI, Android Views, or plain Kotlin without pulling in Compose. Declarative Compose Multiplatform APIs live in the `-compose` companion modules:
+
+- `core-compose` provides `@Composable DataCaptureView(...)`, `rememberDataCaptureContext(licenseKey)`, and `rememberCamera(context, position)`.
+- `barcode-compose` provides a declarative `@Composable SparkScanView(...)` that manages its own scanning lifecycle.
+
+Add the `-compose` module for each product module you use, in addition to the base module:
+
+```kotlin
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api("com.scandit.datacapture.kmp:core:[version]")
+            api("com.scandit.datacapture.kmp:core-compose:[version]")
+            api("com.scandit.datacapture.kmp:barcode:[version]")
+            api("com.scandit.datacapture.kmp:barcode-compose:[version]")
+        }
+    }
+}
+```
+
+:::note
+On Android, the Compose host for these composables must run inside a `ComponentActivity`. Rendering them elsewhere (for example inside an Android Studio preview) throws `IllegalStateException`.
+:::
+
+## Additional Information
+
+### Camera Permissions
+
+When using the Scandit Data Capture SDK you will want to set the camera as the frame source. On Android, you have to request camera permissions in your own application before starting scanning.
+
+Remember that, if you want to use the camera as the frame source, you need to set the "Privacy - Camera Usage Description" field in the `Info.plist` file for iOS.
