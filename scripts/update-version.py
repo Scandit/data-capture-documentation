@@ -79,7 +79,7 @@ class Version:
 
 def extract_current_version(config_path: Path) -> str:
     content = config_path.read_text()
-    match = re.search(r"current:\s*\{[^}]*label:\s*'([^']+)'", content, re.DOTALL)
+    match = re.search(r'current:\s*\{[^}]*label:\s*"([^"]+)"', content, re.DOTALL)
     if not match:
         raise ValueError("Could not extract current version from docusaurus.config.ts")
     return match.group(1)
@@ -87,7 +87,7 @@ def extract_current_version(config_path: Path) -> str:
 
 def extract_current_banner(config_path: Path) -> str:
     content = config_path.read_text()
-    match = re.search(r"current:\s*\{[^}]*banner:\s*'([^']+)'", content, re.DOTALL)
+    match = re.search(r'current:\s*\{[^}]*banner:\s*"([^"]+)"', content, re.DOTALL)
     return match.group(1) if match else 'none'
 
 
@@ -185,8 +185,8 @@ def validate_patch_version(current: str, new: str) -> None:
 def update_current_version_label(config_path: Path, new_version: str) -> None:
     content = config_path.read_text()
     content = re.sub(
-        r"(current:\s*\{[^}]*label:\s*')[^']+'",
-        rf"\g<1>{new_version}'",
+        r'(current:\s*\{[^}]*label:\s*")[^"]+"',
+        rf'\g<1>{new_version}"',
         content,
         flags=re.DOTALL,
     )
@@ -224,7 +224,7 @@ def update_versions_json(old_version: str, new_version: str) -> None:
 
 def update_config_version_entry(config_path: Path, old_version: str, new_version: str) -> None:
     content = config_path.read_text()
-    content = re.sub(rf"'{re.escape(old_version)}':", f"'{new_version}':", content)
+    content = re.sub(rf'"{re.escape(old_version)}":', f'"{new_version}":', content)
     content = re.sub(
         rf'(lastVersion:\s*)["\']({re.escape(old_version)})["\']',
         rf'\g<1>"{new_version}"',
@@ -320,24 +320,24 @@ def update_config_for_minor_beta(config_path: Path, current_version: str, new_ve
 
     version_label = re.sub(r'-beta\.\d+$', '', new_version)
     content = re.sub(
-        r"(current:\s*\{[^}]*label:\s*')[^']+'",
-        rf"\g<1>{version_label}'",
+        r'(current:\s*\{[^}]*label:\s*")[^"]+"',
+        rf'\g<1>{version_label}"',
         content,
         flags=re.DOTALL,
     )
 
     content = re.sub(
-        r"(current:\s*\{[^}]*banner:\s*)'[^']*'",
-        r"\g<1>'unreleased'",
+        r'(current:\s*\{[^}]*banner:\s*)"[^"]*"',
+        r'\g<1>"unreleased"',
         content,
         flags=re.DOTALL,
     )
 
     new_version_section = (
-        f"\n          '{current_version}': {{\n"
-        f"            banner: 'none',\n"
-        f"            badge: false,\n"
-        f"          }},"
+        f'\n  "{current_version}": {{\n'
+        f'    banner: "none",\n'
+        f'    badge: false,\n'
+        f'  }},'
     )
     content = re.sub(r"(current:\s*\{[^}]*\},)", rf"\g<1>{new_version_section}", content, flags=re.DOTALL)
 
@@ -371,14 +371,14 @@ def update_config_for_minor_production(config_path: Path, version: str) -> None:
     content = re.sub(r'lastVersion:\s*"[^"]+"', 'lastVersion: "current"', content)
 
     content = re.sub(
-        r"(current:\s*\{[^}]*banner:\s*)'[^']*'",
-        r"\1'none'",
+        r'(current:\s*\{[^}]*banner:\s*)"[^"]*"',
+        r'\1"none"',
         content,
         flags=re.DOTALL,
     )
 
     content = re.sub(
-        rf"\n\s*'{re.escape(version)}':\s*\{{\s*banner:\s*'none',\s*badge:\s*false,\s*\}},",
+        rf'\n\s*"{re.escape(version)}":\s*\{{\s*banner:\s*"none",\s*badge:\s*false,\s*\}},',
         "",
         content,
     )

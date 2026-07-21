@@ -10,14 +10,35 @@ keywords:
   - ios
 ---
 
+## 8.5.1
+
+**Released**: July 20, 2026
+
+### New Features
+
+#### Barcode
+
+* Added two new properties to `BarcodeSequenceSettings`: `initialOrderOnShelf` and `initialOrderOnTray`, allowing scanning to resume from a previous session.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed BarcodeCapture and SparkScan not applying a selectionMode change from On to Auto, which left the aimer visible.
+
+#### Id
+
+* Fixed an incorrect license key check that prevented scanning of documents with a PDF417 barcode or MRZ on one side, and of mDLs read via OCR.
+
+### Deprecations
+
+#### Barcode
+
+* Deprecated `BarcodeSequenceViewSettings` and the settings-taking initializers in favor of initializers without settings; `BarcodeSequenceView` settings (sound, haptics, initial guidance, tray indicator appearance, and highlight appearance) can now be changed at runtime through properties on the view.
+
 ## 8.5.0
 
 **Released**: July 9, 2026
-:::warning Known Issues
-
-SDK 8.5.0 has a known issue that causes ID Capture to silently fail to scan any PDF417 ID in some customer configurations. Customers using ID Capture are recommended to stay on their current versions until version 8.5.1 is released.
-
-:::
 
 ### New Features
 
