@@ -36,6 +36,26 @@ let DocSearchModal = null;
 // Framework used for API results when the user searches from a page with no
 // framework in its URL (most-used framework by docs traffic).
 const API_FALLBACK_FRAMEWORK = "web";
+// When no framework is specified (none typed, none in the page URL) we still
+// show only ONE framework's copy of an API symbol so the user isn't spammed
+// with the same symbol across every SDK. We prefer the most-used framework
+// (web), but some symbols have no Web SDK page (native-only products like
+// Barcode Selection / Barcode Count), so a hard "web only" fallback hides them
+// entirely. Instead we degrade per symbol down this priority order and keep the
+// first framework that actually has the page - one clean result, never empty.
+// Tokens are SDK-side (apiFrameworkToSdk output): .NET is net/ios, net/android.
+const API_FRAMEWORK_FALLBACK_ORDER = [
+  "web",
+  "ios",
+  "android",
+  "react-native",
+  "flutter",
+  "capacitor",
+  "cordova",
+  "net/ios",
+  "net/android",
+  "titanium",
+];
 // .NET is named differently in the two doc trees - SDK guides use net/ios and
 // net/android, the API reference uses dotnet.ios and dotnet.android. Every other
 // framework uses the same token on both sides. These map between them.
@@ -54,6 +74,26 @@ function apiFrameworkToSdk(apiToken) {
 function sdkFrameworkToApi(sdkToken) {
   const t = (sdkToken || "").toLowerCase();
   return SDK_TO_API_FRAMEWORK[t] || t;
+}
+// Human-readable label for a framework token taken from an API-reference URL
+// (/data-capture-sdk/<token>/...). Used by the fallback note so it names the
+// framework actually shown, which is no longer always "web".
+const API_FRAMEWORK_LABELS = {
+  web: "Web",
+  ios: "iOS",
+  android: "Android",
+  "react-native": "React Native",
+  flutter: "Flutter",
+  capacitor: "Capacitor",
+  cordova: "Cordova",
+  "dotnet.ios": ".NET iOS",
+  "dotnet.android": ".NET Android",
+  titanium: "Titanium",
+  linux: "Linux",
+};
+function frameworkLabel(apiToken) {
+  const t = (apiToken || "").toLowerCase();
+  return API_FRAMEWORK_LABELS[t] || t;
 }
 // Frameworks a user may type in the query. An explicit framework in the query
 // overrides the page's framework (see transformItems). Two-segment .NET tokens
@@ -148,15 +188,30 @@ function Hit({ hit, children }) {
 }
 function ResultsFooter({ state, onClose, currentFramework, hasSearchPage }) {
   const createSearchLink = useSearchLinkCreator();
-  // When searching from a framework-less page, API results are shown for the
-  // fallback framework only - tell the user, so they know to open a specific
-  // SDK's docs for another platform. Only show it when API results are present.
-  const hasApiResults = (state.collections || [])
+  // API results are now shown for whichever single framework each symbol
+  // resolved to (web when available, else the next in the fallback order), so
+  // the note names the framework(s) actually shown rather than a hardcoded
+  // "web". Derive them from the displayed API-reference result URLs.
+  const apiItems = (state.collections || [])
     .flatMap((c) => c.items || [])
-    .some((it) => (it.url || "").includes("/data-capture-sdk/"));
-  // Don't show the "web API reference" note when the user typed a framework:
-  // results are already narrowed to that framework, so the note would
-  // contradict what's shown.
+    .filter((it) => (it.url || "").includes("/data-capture-sdk/"));
+  const hasApiResults = apiItems.length > 0;
+  const apiFrameworks = [
+    ...new Set(
+      apiItems
+        .map((it) => {
+          const m = (it.url || "").match(/\/data-capture-sdk\/([^/]+)\//);
+          return m ? m[1] : null;
+        })
+        .filter(Boolean)
+    ),
+  ];
+  // A single resolved framework -> name it; mixed frameworks (different symbols
+  // fell back differently) -> a generic label.
+  const apiFallbackLabel =
+    apiFrameworks.length === 1 ? frameworkLabel(apiFrameworks[0]) : null;
+  // Don't show the note when the user typed a framework: results are already
+  // narrowed to that framework, so the note would contradict what's shown.
   const hasQueriedFramework = frameworksInQuery(state.query || "").length > 0;
   const showApiFallbackNote =
     !currentFramework && !hasQueriedFramework && hasApiResults;
@@ -167,8 +222,8 @@ function ResultsFooter({ state, onClose, currentFramework, hasSearchPage }) {
           className="DocSearch-ApiFallbackNote"
           style={{ padding: "6px 12px", fontSize: "0.85em", opacity: 0.8 }}
         >
-          Showing the {API_FALLBACK_FRAMEWORK} API reference - open a specific
-          SDK&rsquo;s docs for another platform.
+          Showing the {apiFallbackLabel || "closest available"} API reference -
+          open a specific SDK&rsquo;s docs for another platform.
         </div>
       )}
       {hasSearchPage && (
@@ -327,17 +382,53 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
       const queriedFrameworks = frameworksInQuery(latestQueryRef.current);
       const hasQueriedFramework = queriedFrameworks.length > 0;
       const pageFwToken = currentFramework.replace(/^\/sdks\//, "");
+      // Explicit framework context: the typed framework(s) win, else the page's
+      // framework. `null` means no context at all -> per-symbol graceful
+      // fallback (see bestFwBySymbol below) instead of a hard "web only" filter.
       const apiFwTargets = hasQueriedFramework
         ? queriedFrameworks
-        : [(pageFwToken || API_FALLBACK_FRAMEWORK).toLowerCase()];
+        : pageFwToken
+          ? [pageFwToken.toLowerCase()]
+          : null;
       const guideSegments = hasQueriedFramework
         ? queriedFrameworks.map((fw) => `/sdks/${fw}/`)
         : null;
+      // Capture (framework, symbol) from an API-reference URL. The symbol is the
+      // path after the framework segment and is identical across frameworks, so
+      // it's a stable per-symbol key (net.ios/dotnet.ios are normalised via
+      // apiFrameworkToSdk to net/ios etc.).
+      const apiMatchOf = (url) =>
+        (url || "").match(/\/data-capture-sdk\/([^/]+)\/(.+)$/);
+      // No framework context: choose exactly ONE framework per API symbol -
+      // prefer web, else the next available in API_FRAMEWORK_FALLBACK_ORDER.
+      // This keeps a single clean result (no cross-framework duplicates) while
+      // still surfacing native-only symbols that have no Web SDK page.
+      let bestFwBySymbol = null;
+      if (!apiFwTargets) {
+        bestFwBySymbol = {};
+        for (const it of items) {
+          const m = apiMatchOf(it.url);
+          if (!m) continue;
+          const fw = apiFrameworkToSdk(m[1]);
+          const symbol = m[2];
+          const rank = API_FRAMEWORK_FALLBACK_ORDER.indexOf(fw);
+          const cur = bestFwBySymbol[symbol];
+          // Prefer a framework that appears in the order (rank !== -1) and, among
+          // those, the earliest one. Unknown frameworks (rank -1) only fill in
+          // when no ranked framework exists for the symbol.
+          if (!cur || (rank !== -1 && (cur.rank === -1 || rank < cur.rank))) {
+            bestFwBySymbol[symbol] = { fw, rank };
+          }
+        }
+      }
       const filteredItems = items.filter((elem) => {
         const url = elem.url || "";
-        const apiMatch = url.match(/\/data-capture-sdk\/([^/]+)\//);
+        const apiMatch = apiMatchOf(url);
         if (apiMatch) {
-          return apiFwTargets.includes(apiFrameworkToSdk(apiMatch[1]));
+          const fw = apiFrameworkToSdk(apiMatch[1]);
+          if (apiFwTargets) return apiFwTargets.includes(fw);
+          const symbol = apiMatch[2];
+          return !!bestFwBySymbol[symbol] && bestFwBySymbol[symbol].fw === fw;
         }
         // Framework-specific SDK guides (/sdks/<fw>/) are narrowed to the typed
         // framework(s), else the page's framework, else the most-used framework
