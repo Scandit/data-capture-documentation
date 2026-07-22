@@ -127,6 +127,21 @@ function stripRoutedTokens(query, stripVersion) {
   }
   return q.replace(/\s+/g, " ").trim();
 }
+// An exact single-token "Class.Member" API query (e.g.
+// "rectangularviewfinderstyle.legacy", "scanintention.smart") has no page of
+// its own - enum members/constants are documented on their parent symbol's
+// page. Strip the trailing ".member" so a zero-result exact query can retry
+// against the parent. Only single whitespace-free tokens with a dot qualify, so
+// natural-language queries and product paths are left untouched. Returns null
+// when there's nothing safe to strip.
+function stripTrailingMember(query) {
+  const q = (query || "").trim();
+  if (!q || /\s/.test(q)) return null;
+  const m = q.match(/^(.+)\.[A-Za-z0-9_]+$/);
+  if (!m) return null;
+  const base = m[1];
+  return base.length >= 3 && base !== q ? base : null;
+}
 function Hit({ hit, children }) {
   // Mouse clicks navigate through this Link directly and never reach the
   // modal's navigator (which only handles keyboard selection), so capture
@@ -426,13 +441,16 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
           strippedRaw && strippedRaw !== (query || "").trim()
             ? strippedRaw
             : null;
-        const effectiveRequests =
-          (targetTag || strippedQuery) && Array.isArray(requests)
+        // Build a request array with an optional query-text override (routed
+        // framework/version tokens stripped, or the enum-member fallback below)
+        // and the version-facet swap. Reused for the primary search and retry.
+        const buildRequests = (queryOverride) =>
+          (queryOverride != null || targetTag) && Array.isArray(requests)
             ? requests.map((r) => {
                 const p = r.params || r;
                 const params = { ...p };
-                if (strippedQuery && typeof params.query === "string") {
-                  params.query = strippedQuery;
+                if (queryOverride != null && typeof params.query === "string") {
+                  params.query = queryOverride;
                 }
                 if (targetTag && params.facetFilters) {
                   params.facetFilters = rewriteVersionTag(
@@ -443,17 +461,31 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
                 return r.params ? { ...r, params } : params;
               })
             : requests;
-        const resultPromise = originalSearch(effectiveRequests);
+        const nbHitsOf = (response) =>
+          response && response.results && response.results[0]
+            ? response.results[0].nbHits
+            : undefined;
+        // Enum-member fallback: when an exact "Class.Member" query returns zero
+        // (the member has no page of its own), retry once with the trailing
+        // ".member" stripped so the parent symbol's page is found. Fires only on
+        // zero results and only adopts the retry when it actually finds hits, so
+        // normal queries are untouched.
+        const resultPromise = originalSearch(buildRequests(strippedQuery)).then(
+          (response) => {
+            if (nbHitsOf(response) !== 0) return response;
+            const base = strippedQuery || query || "";
+            const memberStripped = stripTrailingMember(base);
+            if (!memberStripped || memberStripped === base) return response;
+            return originalSearch(buildRequests(memberStripped)).then((retry) =>
+              nbHitsOf(retry) > 0 ? retry : response
+            );
+          }
+        );
         if (query) {
           resultPromise
-            .then((response) => {
-              const nbHits =
-                response &&
-                response.results &&
-                response.results[0] &&
-                response.results[0].nbHits;
-              captureSearchDebounced(query, nbHits);
-            })
+            .then((response) =>
+              captureSearchDebounced(query, nbHitsOf(response))
+            )
             .catch(() => {});
         }
         return resultPromise;
