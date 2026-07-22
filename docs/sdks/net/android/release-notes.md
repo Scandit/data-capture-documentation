@@ -9,14 +9,23 @@ keywords:
   - netAndroid
 ---
 
+## 8.5.1
+
+**Released**: July 20, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed BarcodeCapture and SparkScan not applying a selectionMode change from On to Auto, which left the aimer visible.
+
+#### Id
+
+* Fixed an incorrect license key check that prevented scanning of documents with a PDF417 barcode or MRZ on one side, and of mDLs read via OCR.
+
 ## 8.5.0
 
 **Released**: July 9, 2026
-:::warning Known Issues
-
-SDK 8.5.0 has a known issue that causes ID Capture to silently fail to scan any PDF417 ID in some customer configurations. Customers using ID Capture are recommended to stay on their current versions until version 8.5.1 is released.
-
-:::
 
 ### New Features
 

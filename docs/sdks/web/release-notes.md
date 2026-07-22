@@ -10,14 +10,29 @@ keywords:
   - web
 ---
 
+## 8.5.1
+
+**Released**: July 20, 2026
+
+### Performance Improvements
+
+#### Core
+
+* Re-enabled SIMD support in WebAssembly for iOS 26. Restores performance in all capture modes, noticeably Label Capture.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed BarcodeCapture and SparkScan not applying a selectionMode change from On to Auto, which left the aimer visible.
+
+#### Id
+
+* Fixed an incorrect license key check that prevented scanning of documents with a PDF417 barcode or MRZ on one side, and of mDLs read via OCR.
+
 ## 8.5.0
 
 **Released**: July 9, 2026
-:::warning Known Issues
-
-SDK 8.5.0 has a known issue that causes ID Capture to silently fail to scan any PDF417 ID in some customer configurations. Customers using ID Capture are recommended to stay on their current versions until version 8.5.1 is released.
-
-:::
 
 ### New Features
 
@@ -118,16 +133,6 @@ SDK 8.5.0 has a known issue that causes ID Capture to silently fail to scan any 
 #### Core
 
 * Fixed WebKit 26.x bugs causing pthreads WASM crashes (WebKit bug #303387) and SIMD corruption on affected versions (Apple Radar 176035764) by pinning memory and disabling SIMD engine-wide. This slows compute-heavy scanning on those versions, most noticeably Label Capture OCR.
-
-To detect affected devices and warn your users, you can check `BrowserHelper.isSIMDBroken()`:
-
-```ts
-import { BrowserHelper } from "@scandit/web-datacapture-core";
-
-if (BrowserHelper.isSIMDBroken()) {
-  // warn the user about slower scanning, or prompt them to update to iOS 27
-}
-```
 
 ## 8.4.0
 

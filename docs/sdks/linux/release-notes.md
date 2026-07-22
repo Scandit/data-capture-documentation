@@ -9,6 +9,16 @@ keywords:
   - linux
 ---
 
+## 8.5.1
+
+**Released**: July 20, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed the Python camera sample (`CommandLineBarcodeScannerCameraSample.py`) crashing at startup.
+
 ## 8.5.0
 
 **Released**: July 9, 2026

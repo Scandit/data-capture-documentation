@@ -151,6 +151,7 @@ const sidebars: SidebarsConfig = {
         },
         'sdks/ios/add-sdk',
         'sdks/ios/agent-skills',
+        'sdks/ios/testing',
         {
           type: "link",
           label: "GitHub Samples",
