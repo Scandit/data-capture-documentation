@@ -267,6 +267,120 @@ In alternative to jsdeliver, unpkg can be used:
 </html>
 ```
 
+## Install via UMD build (plain `<script>` tags)
+
+Alongside the ES module (ESM) build, every Scandit package ships a [UMD](https://github.com/umdjs/umd) build. This lets you load the SDK with plain `<script>` tags, without a bundler or an [import map](#install-via-cdn). Each package exposes its exports on a browser global:
+
+| Package | Browser global |
+| --- | --- |
+| `@scandit/web-datacapture-core` | `SDCCore` |
+| `@scandit/web-datacapture-barcode` | `SDCBarcode` |
+| `@scandit/web-datacapture-id` | `SDCId` |
+| `@scandit/web-datacapture-label` | `SDCLabel` |
+| `@scandit/web-datacapture-parser` | `SDCParser` |
+
+The UMD bundle for each package lives at `@scandit/web-datacapture-<module>/umd/index.js`. On a CDN you can also point to the bare `umd` subpath (for example `.../web-datacapture-core/umd`) and it resolves to `index.js` via the directory index.
+
+:::caution Load order matters
+Load `@scandit/web-datacapture-core` **first**. The feature packages (barcode, id, label, parser) resolve the `SDCCore` global when they load, so their `<script>` tags must come after core's.
+:::
+
+:::note
+A classic `<script>` (unlike `<script type="module">`) does not support top-level `await`, so wrap the setup code in an async function as shown below.
+:::
+
+### Complete UMD Example
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Scandit UMD Simple sample</title>
+    <!-- Load core first, then the feature packages that depend on it. -->
+    <script src="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8/umd/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/umd/index.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      #app {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      const {
+        DataCaptureView,
+        Camera,
+        DataCaptureContext,
+        FrameSourceState,
+      } = SDCCore;
+
+      const {
+        barcodeCaptureLoader,
+        BarcodeCaptureSettings,
+        BarcodeCapture,
+        Symbology,
+        SymbologyDescription,
+      } = SDCBarcode;
+
+      (async () => {
+        let view = new DataCaptureView();
+        view.connectToElement(document.getElementById("app"));
+        view.showProgressBar();
+
+        const context = await DataCaptureContext.forLicenseKey("-- ENTER LICENSE KEY HERE --", {
+          libraryLocation:
+            "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/sdc-lib/",
+          moduleLoaders: [barcodeCaptureLoader()],
+        });
+        view.hideProgressBar();
+
+        const camera = Camera.pickBestGuess();
+
+        await view.setContext(context);
+
+        // Depending on the use case further camera settings adjustments can be made here.
+        const cameraSettings = BarcodeCapture.recommendedCameraSettings;
+        await camera.applySettings(cameraSettings);
+
+        await context.setFrameSource(camera);
+        await context.frameSource.switchToDesiredState(FrameSourceState.On);
+
+        const settings = new BarcodeCaptureSettings();
+        settings.enableSymbologies([Symbology.Code128, Symbology.QR]);
+
+        let barcodeCapture = await BarcodeCapture.forContext(context, settings);
+
+        barcodeCapture.addListener({
+          didScan: async (barcodeCaptureMode, session) => {
+            const barcode = session.newlyRecognizedBarcode;
+            if (!barcode) {
+              return;
+            }
+            const symbology = new SymbologyDescription(barcode.symbology);
+            alert(`Scanned: ${barcode.data ?? ""}\n(${symbology.readableName})`);
+          },
+        });
+
+        await barcodeCapture.setEnabled(true);
+      })();
+    </script>
+  </body>
+</html>
+```
+
+:::tip
+The same production considerations described under [Install via CDN](#install-via-cdn) apply here: for production, self-host the UMD bundles and the `sdc-lib` files rather than depending on a public CDN.
+:::
+
 ## Configure the Library
 
 The library needs to be configured and initialized before it can be used, this is done via the DataCaptureContext [`forLicenseKey`](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) function.
