@@ -532,13 +532,13 @@ const config: Config = {
               // replaces the whole "SDKs" menu with useFrameworkItems() output
               // whenever any item here has type "docsVersion"; this array only
               // supplies the label set + triggers that swap. The real
-              // (page-preserving) href — including the /next/ routing needed
+              // (page-preserving) href — including the root-pinning needed
               // because KMP docs aren't in a released version snapshot yet —
               // lives in src/utils/useFrameworkItems.js.
               type: "docsVersion",
               label: "Kotlin Multiplatform",
               sidebarId: "kmpSidebar",
-              to: "next/sdks/kmp/add-sdk",
+              to: "sdks/kmp/add-sdk",
             },
             {
               type: "docsVersion",
