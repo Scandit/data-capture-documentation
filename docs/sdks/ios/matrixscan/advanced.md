@@ -1,5 +1,5 @@
 ---
-description: "In the previous section we covered how to vizualize the scan process using the . In this section we will cover how to add custom AR overlays to your MatrixScan application.                                                                     "
+description: "Advanced MatrixScan settings for iOS: tune tracking, overlays, and scanning performance."
 
 sidebar_position: 3
 pagination_next: null

@@ -1,5 +1,5 @@
 ---
-description: "import AboutLabelCapture from '../../../partials/intro/_about-smart-label-capture.mdx';                                                                                                "
+description: "Smart Label Capture reads labels that combine barcodes and text in a single scan in your Android app."
 
 sidebar_label: About Smart Label Capture
 title: About Smart Label Capture

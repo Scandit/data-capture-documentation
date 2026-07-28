@@ -1,5 +1,5 @@
 ---
-description: 'Configuration options for the ID Check workflow in Scandit Express.'
+description: "Scan and verify identity documents in Scandit Express to check age or validity for retail, hospitality, and regulated sales."
 sidebar_label: 'ID Check'
 displayed_sidebar: expressSidebar
 keywords:

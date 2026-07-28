@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step-by-step how to add Smart Label Capture to your application."
+description: "Add Smart Label Capture to your Capacitor app to scan labels that combine barcodes and text in a single step."
 sidebar_position: 2
 framework: capacitor
 keywords:

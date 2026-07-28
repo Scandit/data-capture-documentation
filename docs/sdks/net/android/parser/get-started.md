@@ -1,4 +1,5 @@
 ---
+description: "Use the Scandit parser in your .NET Android app to turn barcode data strings into key-value fields, including formats such as HIBC."
 sidebar_position: 2
 pagination_prev: null
 pagination_next: null

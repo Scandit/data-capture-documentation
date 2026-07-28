@@ -1,5 +1,5 @@
 ---
-description: "MatrixScan is not available on the Linux SDK."
+description: "Add MatrixScan to your Linux app to detect, track, and highlight multiple barcodes in the same frame."
 displayed_sidebar: linuxSidebar
 ---
 

@@ -1,5 +1,5 @@
 ---
-description: "Learn how to configure output data for the Custom Data Transfer feature in Scandit Express, enabling you to collect and manage data efficiently during scanning tasks."
+description: "Configure how Custom Data Transfer structures, transforms, and exports scanned data to external systems in Scandit Express."
 framework: express
 sidebar_label: Output Configuration
 keywords:

@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step-by-step how to add MatrixScan AR to your application. Implementing MatrixScan AR involves two primary elements:                                                                              "
+description: "Add MatrixScan AR to your Web app: set up the view and the overlays that guide users to the right items."
 
 sidebar_position: 2
 pagination_next: null

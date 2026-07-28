@@ -1,5 +1,5 @@
 ---
-description: "Follow the steps below to get started with Scandit Express."
+description: "Install Scandit Express on iOS or Android and activate it to add barcode scanning to any app."
 sidebar_label: 'Installation'
 displayed_sidebar: expressSidebar
 sidebar_position: 1

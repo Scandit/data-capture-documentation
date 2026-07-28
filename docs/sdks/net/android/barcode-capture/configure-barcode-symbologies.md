@@ -1,4 +1,5 @@
 ---
+description: "Enable and configure barcode symbologies for Barcode Capture on .NET Android."
 sidebar_position: 3
 pagination_next: null
 framework: netAndroid

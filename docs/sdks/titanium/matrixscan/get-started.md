@@ -1,5 +1,5 @@
 ---
-description: "MatrixScan is not available on the Titanium SDK."
+description: "Add MatrixScan to your Titanium app to detect, track, and highlight multiple barcodes in the same frame."
 displayed_sidebar: titaniumSidebar
 ---
 

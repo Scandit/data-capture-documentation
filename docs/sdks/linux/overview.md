@@ -1,4 +1,5 @@
 ---
+description: "Overview of the Scandit Data Capture SDK C API on Linux, a low-level interface also available on Android and iOS."
 toc_max_heading_level: 4
 pagination_next: null
 framework: linux

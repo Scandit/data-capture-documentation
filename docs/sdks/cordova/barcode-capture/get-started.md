@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step by step how to add barcode capture to your application. The general steps are:                                                                               "
+description: "Add Barcode Capture to your Cordova app: configure the mode, set up the camera and view, and handle scanned barcodes."
 
 sidebar_position: 2
 pagination_prev: null

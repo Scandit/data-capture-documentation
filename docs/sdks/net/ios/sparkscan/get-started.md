@@ -1,4 +1,5 @@
 ---
+description: "Add SparkScan to your .NET iOS app: create a data capture context, configure the mode, add the view, and handle scanned barcodes."
 sidebar_position: 2
 framework: netIos
 keywords:

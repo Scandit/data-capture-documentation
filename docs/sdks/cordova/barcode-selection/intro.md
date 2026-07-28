@@ -1,5 +1,5 @@
 ---
-description: "Barcode Selection enables you to increase scanning accuracy and prevent users from scanning the wrong code in scenarios where there are multiple barcodes present, such as a crowded shelf, an order catalog with barcodes printed closely together, or a label with multiple barcodes.                                                         "
+description: "Barcode Selection lets users tap or aim to pick one barcode among many in your Cordova app."
 
 sidebar_position: 1
 pagination_prev: null

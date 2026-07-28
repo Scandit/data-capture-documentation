@@ -1,4 +1,5 @@
 ---
+description: "Scan structured append codes, which split message data across a sequence of barcodes, in your Linux app with the Scandit SDK."
 sidebar_position: 1
 pagination_next: null
 framework: linux

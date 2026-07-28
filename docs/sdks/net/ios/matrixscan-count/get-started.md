@@ -1,4 +1,5 @@
 ---
+description: "Add MatrixScan Count to your .NET iOS app: set up the mode, scan and count multiple barcodes, and handle the results."
 sidebar_position: 2
 framework: netIos
 keywords:

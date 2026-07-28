@@ -1,5 +1,5 @@
 ---
-description: "Batch scanning enables you to capture and interact with multiple barcodes simultaneously, making it ideal for inventory management, retail, and logistics applications."
+description: "Scan and process many barcodes in one session in your Web app with the Scandit Data Capture SDK."
 toc_max_heading_level: 4
 
 

@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step-by-step how to add Barcode Capture to your application.                                                                                     "
+description: "Add Barcode Capture to your Capacitor app: configure the mode, set up the camera and view, and handle scanned barcodes."
 
 sidebar_position: 2
 pagination_prev: null

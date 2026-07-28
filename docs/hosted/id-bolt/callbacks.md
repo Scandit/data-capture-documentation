@@ -1,5 +1,5 @@
 ---
-description: "ID Bolt provides callbacks to handle session completion and cancellation, allowing your application to respond appropriately to user actions and scan results.                                                                              "
+description: "Handle ID Bolt session completion and cancellation with callbacks so your app can respond to user actions and scan results."
 
 sidebar_label: "Callbacks"
 title: "Callbacks"

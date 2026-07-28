@@ -1,4 +1,5 @@
 ---
+description: "Advanced ID Capture settings for .NET Android: configure document types, extracted fields, and verification."
 sidebar_position: 4
 pagination_next: null
 framework: netAndroid

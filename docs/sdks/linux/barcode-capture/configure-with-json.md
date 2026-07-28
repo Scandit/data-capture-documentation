@@ -1,4 +1,5 @@
 ---
+description: "Configure Scandit barcode scanner settings on Linux with JSON using the sc_barcode_scanner_settings_new_from_json() function."
 sidebar_position: 2
 pagination_prev: null
 framework: linux

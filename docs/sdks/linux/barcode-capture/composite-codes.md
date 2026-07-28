@@ -1,4 +1,5 @@
 ---
+description: "Scan composite codes that combine a linear (1D) barcode with a 2D code in your Linux app with the Scandit Data Capture SDK."
 sidebar_position: 5
 pagination_next: null
 framework: linux

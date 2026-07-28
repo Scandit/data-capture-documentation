@@ -1,5 +1,5 @@
 ---
-description: "Guide to integrating and configuring advanced AR overlays using the Scandit Cordova SDK."
+description: "Add and configure AR overlays for MatrixScan on Cordova, building on an existing MatrixScan setup."
 sidebar_position: 3
 pagination_next: null
 framework: cordova

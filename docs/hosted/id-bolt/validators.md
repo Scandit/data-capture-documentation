@@ -1,5 +1,5 @@
 ---
-description: "Validators allow you to run checks on scanned ID documents to ensure they meet specific criteria. They are only run on documents that are on the list of accepted documents.                                                                      "
+description: "Use ID Bolt validators to check scanned documents against your criteria, applied only to documents on the accepted list."
 
 sidebar_label: "Validators"
 title: "Validators"

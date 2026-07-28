@@ -1,4 +1,5 @@
 ---
+description: "Add ID Capture to your .NET iOS app to scan and extract data from IDs such as driver's licenses, passports, and ID cards."
 sidebar_position: 2
 framework: netIos
 keywords:

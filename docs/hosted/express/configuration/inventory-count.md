@@ -1,5 +1,5 @@
 ---
-description: "Learn how to use the Inventory Count feature in Scandit Express."
+description: "Use the Inventory Count mode in Scandit Express for fast, accurate stock counting."
 framework: express
 keywords:
   - express

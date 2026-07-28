@@ -1,5 +1,5 @@
 ---
-description: "SparkScan is our pre-built smartphone scanning interface designed for high-performance barcode scanning. It fits on top of any smartphone application, providing an intuitive user interface for simple, fast and ergonomic scanning in scan-intensive workflows such as inventory management in retail, or goods receiving in logistics.                                                       "
+description: "SparkScan is a prebuilt scanning UI for fast, ergonomic barcode scanning that drops on top of any Cordova app."
 
 sidebar_position: 1
 pagination_prev: null

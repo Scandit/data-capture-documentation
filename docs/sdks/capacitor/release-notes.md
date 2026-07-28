@@ -1,4 +1,5 @@
 ---
+description: "Release notes for the Scandit Data Capture SDK on Capacitor: new features, changes, and fixes by version."
 toc_max_heading_level: 3
 displayed_sidebar: capacitorSidebar
 hide_title: true

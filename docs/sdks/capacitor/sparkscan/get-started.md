@@ -1,4 +1,5 @@
 ---
+description: "Add SparkScan to your Capacitor app: create a data capture context, configure the mode, add the view, and handle scanned barcodes."
 sidebar_position: 2
 framework: capacitor
 keywords:

@@ -1,4 +1,5 @@
 ---
+description: "Identity documents and regions supported by Scandit ID Capture on .NET iOS, and the data each returns."
 sidebar_label: Supported Documents
 title: Supported Documents
 hide_title: true

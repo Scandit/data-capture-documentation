@@ -1,5 +1,5 @@
 ---
-description: "import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-count.mdx'                                                                                                "
+description: "MatrixScan Count scans and counts many barcodes at once in your Flutter app."
 
 sidebar_position: 1
 pagination_prev: null

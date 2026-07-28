@@ -1,4 +1,5 @@
 ---
+description: "Advanced MatrixScan Count settings for .NET iOS to tune counting accuracy, performance, and the user experience."
 sidebar_position: 3
 pagination_next: null
 framework: netIos

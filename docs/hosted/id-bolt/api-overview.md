@@ -1,5 +1,5 @@
 ---
-description: "ID Bolt is built around the concept of a **session** - a complete user journey from starting the ID scanning process to either successful completion or cancellation. The main class `IdBoltSession` represents this session and manages the entire workflow.                                                             "
+description: "Overview of the ID Bolt API, built around the IdBoltSession class that manages the full ID scanning journey from start to completion."
 
 sidebar_label: "API Overview"
 title: "API Overview"

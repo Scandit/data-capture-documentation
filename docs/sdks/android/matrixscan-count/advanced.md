@@ -1,5 +1,5 @@
 ---
-description: "MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.                                                                     "
+description: "Advanced MatrixScan Count settings for Android to further tune scanning efficiency, accuracy, and the user experience beyond the defaults."
 
 sidebar_position: 3
 pagination_next: null

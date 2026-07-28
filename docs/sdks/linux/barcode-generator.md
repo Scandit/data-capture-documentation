@@ -1,4 +1,5 @@
 ---
+description: "Generate barcodes and QR codes in your Linux app with the Scandit Data Capture SDK."
 displayed_sidebar: linuxSidebar
 sidebar_label: Configure barcode encoding
 ---

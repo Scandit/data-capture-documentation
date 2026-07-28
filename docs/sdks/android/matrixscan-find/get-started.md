@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step-by-step how to add MatrixScan Find to your application. Implementing MatrixScan Find involves two primary elements:                                                                              "
+description: "Add MatrixScan Find to your Android app to search for and highlight specific items with the camera."
 
 sidebar_position: 2
 framework: android

@@ -1,4 +1,5 @@
 ---
+description: "Advanced MatrixScan settings for .NET iOS: tune tracking, overlays, and scanning performance."
 sidebar_position: 3
 pagination_next: null
 framework: netIos

@@ -1,5 +1,5 @@
 ---
-description: "ID Bolt can be integrated into your existing application or website with minimal time and effort, often ready to test in your staging environment in just one hour.                                                                        "
+description: "Integrate ID Bolt into your existing app or website with minimal effort, often ready to test in your staging environment within an hour."
 
 sidebar_label: "Getting Started"
 title: "Getting Started"

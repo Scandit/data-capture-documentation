@@ -1,5 +1,5 @@
 ---
-description: 'Configuration options for the Task Management workflow in Scandit Express.'
+description: "Configure the Task Management workflow in Scandit Express to assign and track task-based scanning work."
 sidebar_label: 'Task Management Configuration'
 displayed_sidebar: expressSidebar
 keywords:

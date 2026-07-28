@@ -1,5 +1,5 @@
 ---
-description: "Guide to customizing overlays in the Scandit React Native Label Capture SDK."
+description: "Customize Smart Label Capture overlays on React Native by implementing a LabelCaptureBasicOverlayListener."
 sidebar_position: 3
 pagination_next: null
 framework: react-native

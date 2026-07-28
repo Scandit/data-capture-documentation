@@ -1,5 +1,5 @@
 ---
-description: "For production use, Scandit Express is typically distributed via a mobile device management (MDM) or enterprise mobility management (EMM) system. This page will guide you rolling out Scandit Express using such a system for either Android or iOS.                                                              "
+description: "Roll out Scandit Express to production with a mobile device management (MDM or EMM) system on Android or iOS."
 
 sidebar_label: 'Rollout via MDM/EMM'
 displayed_sidebar: expressSidebar

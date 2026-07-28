@@ -1,4 +1,5 @@
 ---
+description: "MatrixScan Count scans and counts many barcodes at once in your .NET iOS app."
 sidebar_position: 1
 pagination_prev: null
 framework: netIos
