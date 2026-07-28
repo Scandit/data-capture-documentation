@@ -13,7 +13,12 @@ keywords:
 
 | Requirement | Version |
 | ----------- | ------- |
-| Kotlin      | 2.x     |
+| Kotlin      | 2.3.21 or higher |
+| Gradle      | 8.14 or higher |
+
+:::important
+Kotlin 2.3.21 is a hard minimum, not a recommendation. The SDK's Kotlin Multiplatform artifacts are compiled with Kotlin 2.3.21, and Kotlin/Native `klib` libraries cannot be consumed by an older Kotlin compiler. Building your project with an earlier Kotlin 2.x release fails when resolving the Scandit dependencies.
+:::
 
 ## Android
 
@@ -23,7 +28,7 @@ keywords:
 | Compile SDK version     | 36      |
 | Target SDK version      | 36      |
 | JVM target              | 17      |
-| Android Gradle Plugin   | 8.x     |
+| Android Gradle Plugin   | 8.10.1 or higher |
 | Architecture             | arm64v7, arm64, x86, x86_64 |
 | Camera                  | 720p+   |
 | GPU                     | Required for full performance |
@@ -48,6 +53,10 @@ Android devices running the Scandit Data Capture SDK need to have a GPU or the p
 
 ## Compose Multiplatform
 
-Compose Multiplatform is optional. The base modules (`core`, `barcode`, `id`, `label`, …) do not require Compose; the `-compose` companion modules require a Compose Multiplatform setup compatible with the Kotlin version above.
+Compose Multiplatform is optional. The base modules (`core`, `barcode`, `id`, `label`, …) do not require Compose. The `-compose` companion modules do:
+
+| Requirement | Version |
+| ----------- | ------- |
+| Compose Multiplatform | 1.8.0 or higher |
 
 See [Installation](./add-sdk.mdx) for the full list of modules and their dependencies.
