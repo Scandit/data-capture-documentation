@@ -1,5 +1,5 @@
 ---
-description: "MatrixScan AR adds augmented-reality overlays that highlight barcodes and show extra information in your Linux app."
+description: "MatrixScan AR is not available on the Linux SDK."
 displayed_sidebar: linuxSidebar
 ---
 
