@@ -309,6 +309,12 @@ keywords:
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 * Fixed `BarcodeBatchBasicOverlayStyle.Frame` such that it now correctly displays as a frame on iOS and MAUI iOS platforms, where previously setting the style to `Frame` would incorrectly render as a dot due to an enum value mismatch in the iOS binding layer
 
+## 8.1.6
+
+**Released**: July 28, 2026
+
+No updates for this framework in this release.
+
 ## 8.1.5
 
 **Released**: June 10, 2026

@@ -184,6 +184,12 @@ No updates for this framework in this release.
 * Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 
+## 8.1.6
+
+**Released**: July 28, 2026
+
+No updates for this framework in this release.
+
 ## 8.1.5
 
 **Released**: June 10, 2026

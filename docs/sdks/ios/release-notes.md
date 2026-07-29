@@ -371,6 +371,16 @@ keywords:
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
 
+## 8.1.6
+
+**Released**: July 28, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Fixed an edge case where XCTest calling `objc_copyClassList` when `ScanditIDC.xcframework` is not linked caused a crash.
+
 ## 8.1.5
 
 **Released**: June 10, 2026
