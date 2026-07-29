@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step-by-step how to add MatrixScan Pick to your application. Implementing MatrixScan Pick involves two primary elements:                                                                              "
+description: "Add MatrixScan Pick to your Cordova app to guide users through order picking with AR cues."
 
 sidebar_position: 2
 framework: cordova

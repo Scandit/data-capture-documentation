@@ -1,4 +1,5 @@
 ---
+description: "Scan add-on (extension) codes for EAN-8, EAN-13, UPC-A, and UPC-E in your Linux app with the Scandit Data Capture SDK."
 sidebar_position: 1
 pagination_next: null
 framework: linux

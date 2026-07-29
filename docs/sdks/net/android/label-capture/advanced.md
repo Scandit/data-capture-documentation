@@ -1,5 +1,5 @@
 ---
-description: "Guide to customizing overlays in the Scandit .NET Android Label Capture SDK."
+description: "Customize Smart Label Capture overlays on .NET Android by implementing an ILabelCaptureBasicOverlayListener."
 sidebar_position: 3
 pagination_next: null
 framework: net-android

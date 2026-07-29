@@ -1,5 +1,5 @@
 ---
-description: "ID Bolt allows comprehensive customization of its visual appearance to match your brand identity. Use the `theme` option when creating an ID Bolt session to customize colors, dimensions, and other visual elements.                                                                    "
+description: "Customize the ID Bolt visual appearance with the theme option to match your brand, including colors, dimensions, and other elements."
 
 sidebar_label: "Theming"
 title: "Theming"

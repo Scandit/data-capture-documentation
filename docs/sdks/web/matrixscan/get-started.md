@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step-by-step how to add MatrixScan to your application.                                                                                      "
+description: "Add MatrixScan to your Web app to detect, track, and highlight multiple barcodes in the same frame."
 
 sidebar_position: 2
 pagination_next: null

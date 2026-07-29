@@ -1,5 +1,5 @@
 ---
-description: 'An overview of Scandit Express’s built-in workflows.'
+description: "Scandit Express built-in workflows: configurable, ready-to-deploy modes that guide users with prompts and AR guidance."
 sidebar_label: 'Overview'
 displayed_sidebar: expressSidebar
 keywords:

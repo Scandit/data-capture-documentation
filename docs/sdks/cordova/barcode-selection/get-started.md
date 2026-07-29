@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step by step how to add barcode selection to your application. The general step are:                                                                               "
+description: "Add Barcode Selection to your Cordova app so users can tap or aim to select a single barcode among many."
 
 sidebar_position: 2
 pagination_next: null

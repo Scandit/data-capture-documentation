@@ -1,5 +1,5 @@
 ---
-description: "Guide to integrating the Scandit Data Capture SDK into your project."
+description: "Add the Scandit Data Capture SDK to your Titanium project: dependencies, license key, and camera permissions."
 
 sidebar_position: 1
 toc_max_heading_level: 4

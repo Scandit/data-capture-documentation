@@ -1,5 +1,5 @@
 ---
-description: "MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.                                                                     "
+description: "Advanced MatrixScan Find settings for React Native: customize matching, overlays, and search behavior."
 
 sidebar_position: 3
 pagination_next: null

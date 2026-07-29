@@ -1,4 +1,5 @@
 ---
+description: "Add MatrixScan to your Capacitor app to detect, track, and highlight multiple barcodes in the same frame."
 sidebar_position: 2
 framework: capacitor
 keywords:

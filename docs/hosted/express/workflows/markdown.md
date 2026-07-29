@@ -1,5 +1,5 @@
 ---
-description: 'Configuration options for the Markdown workflow in Scandit Express.'
+description: "Configure the Markdown workflow in Scandit Express to guide users through task-based work such as product recalls."
 sidebar_label: 'Markdown Configuration'
 displayed_sidebar: expressSidebar
 keywords:

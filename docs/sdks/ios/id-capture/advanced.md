@@ -1,5 +1,5 @@
 ---
-description: "There are several advanced configurations that can be used to customize the behavior of the ID Capture SDK and enable additional features.                                                                              "
+description: "Advanced ID Capture settings for iOS: configure document types, extracted fields, and verification."
 
 sidebar_position: 4
 pagination_next: null

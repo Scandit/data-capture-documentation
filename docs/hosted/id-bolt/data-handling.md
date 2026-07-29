@@ -1,5 +1,5 @@
 ---
-description: "ID Bolt provides options to control what data is returned from scanned documents and how sensitive information is handled, allowing you to balance functionality with privacy requirements.                                                                         "
+description: "Control what data ID Bolt returns from scanned documents and how sensitive information is handled to balance functionality and privacy."
 
 sidebar_label: "Data Handling"
 title: "Data Handling"

@@ -1,5 +1,5 @@
 ---
-description: "Guide to customizing overlays in the Scandit .NET iOS Label Capture SDK."
+description: "Customize Smart Label Capture overlays on .NET iOS by implementing an ILabelCaptureBasicOverlayListener."
 sidebar_position: 3
 pagination_next: null
 framework: net-ios

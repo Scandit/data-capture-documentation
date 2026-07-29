@@ -1,4 +1,5 @@
 ---
+description: "Sample programs that show how to use the Scandit Data Capture SDK for C on Linux."
 sidebar_position: 2
 toc_max_heading_level: 5
 sidebar_label: 'Samples'

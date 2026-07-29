@@ -1,5 +1,5 @@
 ---
-description: "This page describes the step-by-step instructions that helps you to add SparkScan to your application:                                                                                     "
+description: "Add SparkScan to your Android app: create a data capture context, configure the mode, add the view, and handle scanned barcodes."
 
 sidebar_position: 2
 framework: android

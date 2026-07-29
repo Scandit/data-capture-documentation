@@ -1,5 +1,5 @@
 ---
-description: "Powered by Smart Label Capture, a feature available in the Scandit Smart Data Capture SDK, this mode enables the simultaneous scanning of multiple barcodes and printed text on labels, streamlining data entry and reducing errors."
+description: "Scan Labels in Scandit Express, powered by Smart Label Capture, reads multiple barcodes and printed text on a label in one scan."
 framework: express
 keywords:
   - express

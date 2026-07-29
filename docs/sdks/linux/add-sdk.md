@@ -1,4 +1,5 @@
 ---
+description: "Add the Scandit Data Capture SDK to your Linux project: dependencies, license key, and camera permissions."
 toc_max_heading_level: 4
 pagination_next: null
 framework: linux

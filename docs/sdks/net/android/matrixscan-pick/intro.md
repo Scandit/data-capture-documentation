@@ -1,4 +1,5 @@
 ---
+description: "MatrixScan Pick guides order picking in your .NET Android app with on-screen AR cues for the items to pick."
 sidebar_position: 1
 pagination_prev: null
 framework: netAndroid

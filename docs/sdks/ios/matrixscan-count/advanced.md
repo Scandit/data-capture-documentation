@@ -1,5 +1,5 @@
 ---
-description: "MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.                                                                     "
+description: "Advanced MatrixScan Count settings for iOS to tune counting accuracy, performance, and the user experience."
 
 sidebar_position: 3
 pagination_next: null

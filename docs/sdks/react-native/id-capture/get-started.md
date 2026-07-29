@@ -1,5 +1,5 @@
 ---
-description: "This page will guide you through the process of adding ID Capture to your React Native application. ID Capture is a mode of the Scandit Data Capture SDK that allows you to capture and extract information from personal identification documents, such as driver's licenses, passports, and ID cards.                                                    "
+description: "Add ID Capture to your React Native app to scan and extract data from IDs such as driver's licenses, passports, and ID cards."
 
 sidebar_position: 2
 framework: react

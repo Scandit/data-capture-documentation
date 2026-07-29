@@ -1,5 +1,5 @@
 ---
-description: "This page describes the steps to add MatrixScan Count to your application.                                                                                        "
+description: "Add MatrixScan Count to your Android app: set up the mode, scan and count multiple barcodes, and handle the results."
 
 sidebar_position: 2
 framework: android

@@ -1,5 +1,5 @@
 ---
-description: "Learn how to use the Scandit Web SDK inside a native WebView on Android and iOS, including how to correctly handle camera permissions."
+description: "Run the Scandit Web SDK inside a native WebView on Android and iOS, with the host app delegating camera permissions."
 sidebar_position: 2
 framework: web
 keywords:

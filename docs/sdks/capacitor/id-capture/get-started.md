@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step-by-step how to add ID Capture to your application.                                                                                     "
+description: "Add ID Capture to your Capacitor app to scan and extract data from IDs such as driver's licenses, passports, and ID cards."
 
 sidebar_position: 2
 framework: capacitor

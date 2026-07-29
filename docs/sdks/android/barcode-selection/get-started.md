@@ -1,5 +1,5 @@
 ---
-description: "This page describes the steps to add Barcode Selection to your application.                                                                                        "
+description: "Add Barcode Selection to your Android app so users can tap or aim to select a single barcode among many."
 
 sidebar_position: 2
 pagination_next: null

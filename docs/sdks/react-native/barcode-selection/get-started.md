@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step-by-step how to add Barcode Selection to your application.                                                                                     "
+description: "Add Barcode Selection to your React Native app so users can tap or aim to select a single barcode among many."
 
 sidebar_position: 2
 pagination_next: null

@@ -1,5 +1,5 @@
 ---
-description: "The Parser parses data strings (as found in barcodes) into a set of key-value mappings. These data formats are supported:                                                                                "
+description: "Use the Scandit parser in your Web app to turn barcode data strings into key-value fields, including formats such as HIBC."
 
 sidebar_position: 2
 pagination_prev: null

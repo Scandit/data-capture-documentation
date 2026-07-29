@@ -1,5 +1,5 @@
 ---
-description: "Smart Label Capture provides a API, enabling you to configure and extract structured data from predefined and custom labels. This feature provides a flexible way to recognize and decode fields within a specific label layout such as price tags, VIN labels, or packaging stickers without needing to write custom code for each label type.                                              "
+description: "Define label layouts for Smart Label Capture on iOS: the barcodes and text fields to extract."
 
 framework: ios
 toc_max_heading_level: 4

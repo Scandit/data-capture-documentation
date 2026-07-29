@@ -1,4 +1,5 @@
 ---
+description: "Add MatrixScan Pick to your .NET Android app to guide users through order picking with AR cues."
 sidebar_position: 2
 framework: netAndroid
 keywords:

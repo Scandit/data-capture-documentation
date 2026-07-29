@@ -1,5 +1,5 @@
 ---
-description: "This page covers advanced features and options for ID Bolt that help optimize performance and handle specific use cases.                                                                                 "
+description: "Advanced ID Bolt options for performance tuning and less-common integration scenarios."
 
 sidebar_label: "Advanced Options"
 title: "Advanced Options"

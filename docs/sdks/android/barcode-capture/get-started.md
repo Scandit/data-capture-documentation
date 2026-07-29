@@ -1,5 +1,5 @@
 ---
-description: "This page describes the step-by-step instructions that helps you to add Barcode Capture to your application.                                                                                    "
+description: "Add Barcode Capture to your Android app: configure the mode, set up the camera and view, and handle scanned barcodes."
 
 sidebar_position: 2
 pagination_prev: null

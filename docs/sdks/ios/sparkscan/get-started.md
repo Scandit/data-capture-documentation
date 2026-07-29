@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step-by-step how to add SparkScan to your application by:                                                                                     "
+description: "Add SparkScan to your iOS app: create a data capture context, configure the mode, add the SparkScan view, and handle scanned barcodes."
 
 sidebar_position: 2
 framework: ios

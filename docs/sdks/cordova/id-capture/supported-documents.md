@@ -1,5 +1,5 @@
 ---
-description: "Scandit ID Capture provides various types, each designed for specific scanning workflows. These workflows can involve scanning either specific parts of a document or the entire document, including both the front and back sides. This section details the types of documents supported by each scanner type.                                                      "
+description: "Identity documents and regions supported by Scandit ID Capture on Cordova, and the data each returns."
 
 sidebar_label: Supported Documents
 title: Supported Documents

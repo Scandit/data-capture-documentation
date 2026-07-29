@@ -1,5 +1,5 @@
 ---
-description: "Powered by , a feature available in the Scandit Smart Data Capture SDK, this mode enables you to speed up finding and picking workflows by scanning multiple items at once and highlighting the correct item(s) in real-time using an AR overlay.                                                           "
+description: "Find Items in Scandit Express, powered by MatrixScan Find, speeds up picking by scanning many items and highlighting the right ones in AR."
 
 framework: express
 keywords:

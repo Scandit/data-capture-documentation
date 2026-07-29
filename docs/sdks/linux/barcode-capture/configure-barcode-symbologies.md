@@ -1,4 +1,5 @@
 ---
+description: "Enable and configure barcode symbologies for Barcode Capture on Linux."
 sidebar_position: 3
 pagination_next: null
 framework: linux

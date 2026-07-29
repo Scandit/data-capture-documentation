@@ -1,5 +1,5 @@
 ---
-description: "There are two ways to add advanced AR overlays to a Data Capture View:                                                                                      "
+description: "Advanced MatrixScan settings for Flutter: tune tracking, overlays, and scanning performance."
 
 sidebar_position: 3
 pagination_next: null

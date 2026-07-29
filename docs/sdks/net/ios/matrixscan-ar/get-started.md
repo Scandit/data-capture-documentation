@@ -1,4 +1,5 @@
 ---
+description: "Add MatrixScan AR to your .NET iOS app: set up the view and the overlays that guide users to the right items while scanning."
 sidebar_position: 2
 framework: netIos
 keywords:

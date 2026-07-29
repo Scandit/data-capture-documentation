@@ -1,5 +1,5 @@
 ---
-description: "Release notes and updates for ID Bolt."
+description: "Release notes for ID Bolt: new features, changes, and fixes by date."
 toc_max_heading_level: 3
 displayed_sidebar: boltSidebar
 framework: bolt

@@ -1,4 +1,5 @@
 ---
+description: "ID Capture scans and extracts data from identity documents such as passports and driver's licenses in your .NET Android app."
 sidebar_label: About ID Capture
 title: About ID Capture
 sidebar_position: 1

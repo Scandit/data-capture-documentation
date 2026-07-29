@@ -1,5 +1,5 @@
 ---
-description: "This page describes how to integrate the Scandit Data Capture SDK into your iOS project. The SDK can be added via:                                                                               "
+description: "Add the Scandit Data Capture SDK to your iOS project: dependencies, license key, and camera permissions."
 
 sidebar_position: 1
 toc_max_heading_level: 4

@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step-by-step how to add SparkScan to your application. The general steps are:                                                                                  "
+description: "Add SparkScan to your React Native app: create a data capture context, configure the mode, add the view, and handle scanned barcodes."
 
 sidebar_position: 2
 framework: react
