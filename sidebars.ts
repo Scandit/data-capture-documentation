@@ -413,6 +413,7 @@ const sidebars: SidebarsConfig = {
           label: "GitHub Samples",
           href: "https://github.com/Scandit/datacapture-android-samples",
         },
+        'sdks/android/unit-testing',
       ],
     },
     {

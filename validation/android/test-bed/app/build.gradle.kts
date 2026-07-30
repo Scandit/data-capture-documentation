@@ -120,4 +120,14 @@ dependencies {
     compileOnly("androidx.annotation:annotation:1.9.1")
     compileOnly("androidx.appcompat:appcompat:1.7.1")
     compileOnly("androidx.lifecycle:lifecycle-livedata:2.10.0")
+
+    // Test/mocking libraries referenced by the Unit Testing documentation snippets.
+    compileOnly("io.mockk:mockk:1.13.13")
+    compileOnly("org.mockito:mockito-core:5.14.2")
+    compileOnly("org.mockito.kotlin:mockito-kotlin:5.4.0")
+    // Match the kotlinc version pinned in CI (.github/workflows/validate-code-snippets.yml,
+    // setup-kotlin version: 2.4.0); a newer library than the compiler fails to resolve.
+    compileOnly("org.jetbrains.kotlin:kotlin-test:2.4.0")
+    compileOnly("junit:junit:4.13.2")
+    compileOnly("androidx.test.ext:junit:1.2.1")
 }
