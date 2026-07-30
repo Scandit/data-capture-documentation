@@ -58,3 +58,52 @@ export function parseSdksRoute(pathname: string): SdksRouteInfo {
 
   return { framework, product, lastSegment: last };
 }
+
+// Maps the ?framework= query slug used on the homepage to an agent-skills URL path.
+export const QUERY_FRAMEWORK_TO_PATH: Record<string, string> = {
+  ios: 'ios',
+  android: 'android',
+  web: 'web',
+  cordova: 'cordova',
+  capacitor: 'capacitor',
+  flutter: 'flutter',
+  'react-native': 'react-native',
+  'net-ios': 'net/ios',
+  'net-android': 'net/android',
+};
+
+// The homepage framework selector uses its own identifiers (see frameworkCardsArr)
+// that differ from the QUERY_FRAMEWORK_TO_PATH keys. Map them so
+// ?framework=react / netIos / netAndroid resolve correctly.
+const HOMEPAGE_FRAMEWORK_ALIASES: Record<string, string> = {
+  react: 'react-native',
+  netios: 'net-ios',
+  netandroid: 'net-android',
+};
+
+// Normalizes a raw ?framework= value to a QUERY_FRAMEWORK_TO_PATH key, or ''
+// when it maps to no agent-skills page.
+export function normalizeFrameworkQuery(raw: string): string {
+  const lower = (raw || '').toLowerCase();
+  const aliased = HOMEPAGE_FRAMEWORK_ALIASES[lower] || lower;
+  return QUERY_FRAMEWORK_TO_PATH[aliased] ? aliased : '';
+}
+
+// Resolves the Agent Skills URL for the framework the reader currently has
+// selected on the homepage. The homepage swaps frameworks with
+// history.pushState, which does NOT update React Router — so any href derived
+// from useLocation() (or rendered statically) goes stale. Callers on the
+// homepage should therefore resolve at click time from the live URL +
+// localStorage instead of trusting the rendered value. Falls back to iOS.
+export function resolveAgentSkillsUrl(): string {
+  if (typeof window === 'undefined') return '/sdks/ios/agent-skills';
+  const fromQuery = new URLSearchParams(window.location.search).get('framework');
+  let fromStorage: string | null = null;
+  try {
+    fromStorage = window.localStorage.getItem(FRAMEWORK_STORAGE_KEY);
+  } catch {
+    fromStorage = null;
+  }
+  const slug = normalizeFrameworkQuery(fromQuery || fromStorage || '') || 'ios';
+  return `/sdks/${QUERY_FRAMEWORK_TO_PATH[slug]}/agent-skills`;
+}

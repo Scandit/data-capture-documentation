@@ -3,7 +3,13 @@ import { useLocation } from '@docusaurus/router';
 
 import skillsData from '@site/src/data/skills.json';
 import productsData from '@site/src/data/products.json';
-import { parseSdksRoute, frameworkToSlug, FRAMEWORK_STORAGE_KEY } from '../utils/frameworks';
+import {
+  parseSdksRoute,
+  frameworkToSlug,
+  QUERY_FRAMEWORK_TO_PATH,
+  normalizeFrameworkQuery,
+  resolveAgentSkillsUrl,
+} from '../utils/frameworks';
 import { capturePostHogEvent } from './analytics';
 import InstallTabs from './InstallTabs';
 import styles from './styles.module.css';
@@ -55,36 +61,6 @@ const FRAMEWORK_SLUG: Record<string, string> = {
   '.NET Android': 'net-android',
 };
 
-// Maps the ?framework= query slug used on the homepage to an agent-skills URL path.
-const QUERY_FRAMEWORK_TO_PATH: Record<string, string> = {
-  ios: 'ios',
-  android: 'android',
-  web: 'web',
-  cordova: 'cordova',
-  capacitor: 'capacitor',
-  flutter: 'flutter',
-  'react-native': 'react-native',
-  'net-ios': 'net/ios',
-  'net-android': 'net/android',
-};
-
-// The homepage framework selector uses its own identifiers (see
-// frameworkCardsArr) that differ from the QUERY_FRAMEWORK_TO_PATH keys. Map
-// them so ?framework=react / netIos / netAndroid resolve correctly.
-const HOMEPAGE_FRAMEWORK_ALIASES: Record<string, string> = {
-  react: 'react-native',
-  netios: 'net-ios',
-  netandroid: 'net-android',
-};
-
-// Normalizes a raw ?framework= value to a QUERY_FRAMEWORK_TO_PATH key, or ''
-// when it maps to no agent-skills page.
-function normalizeFrameworkQuery(raw: string): string {
-  const lower = (raw || '').toLowerCase();
-  const aliased = HOMEPAGE_FRAMEWORK_ALIASES[lower] || lower;
-  return QUERY_FRAMEWORK_TO_PATH[aliased] ? aliased : '';
-}
-
 // Resolves the framework for the shared callout, preferring the framework in
 // the current path (so "More info" keeps the reader on the framework they are
 // already browsing), then the ?framework= query used by the homepage banner,
@@ -100,24 +76,6 @@ function getSharedFrameworkSlug(pathname: string, search: string): string {
 function getSharedMoreInfoUrl(pathname: string, search: string): string {
   const path = QUERY_FRAMEWORK_TO_PATH[getSharedFrameworkSlug(pathname, search)];
   return `/sdks/${path}/agent-skills`;
-}
-
-// The homepage swaps frameworks with history.pushState, which does NOT update
-// React Router — so useLocation() (and any href derived from it) goes stale.
-// For the banner we therefore resolve the selected framework from the live URL
-// and localStorage at click time instead of trusting the rendered value.
-function resolveLiveBannerMoreInfoUrl(): string {
-  if (typeof window === 'undefined') return '/sdks/ios/agent-skills';
-  const fromQuery = new URLSearchParams(window.location.search).get('framework');
-  const fromStorage = (() => {
-    try {
-      return window.localStorage.getItem(FRAMEWORK_STORAGE_KEY);
-    } catch {
-      return null;
-    }
-  })();
-  const slug = normalizeFrameworkQuery(fromQuery || fromStorage || '') || 'ios';
-  return `/sdks/${QUERY_FRAMEWORK_TO_PATH[slug]}/agent-skills`;
 }
 
 interface CalloutDetailsProps {
@@ -179,7 +137,7 @@ const SharedBody: React.FC<SharedBodyProps> = ({
   liveBanner = false,
 }) => {
   const refreshHref: React.ReactEventHandler<HTMLAnchorElement> = (e) => {
-    e.currentTarget.href = resolveLiveBannerMoreInfoUrl();
+    e.currentTarget.href = resolveAgentSkillsUrl();
   };
   const liveHandlers: React.HTMLAttributes<HTMLAnchorElement> = liveBanner
     ? {
@@ -188,7 +146,7 @@ const SharedBody: React.FC<SharedBodyProps> = ({
             return;
           }
           e.preventDefault();
-          window.location.assign(resolveLiveBannerMoreInfoUrl());
+          window.location.assign(resolveAgentSkillsUrl());
         },
         onMouseDown: refreshHref,
         onFocus: refreshHref,
