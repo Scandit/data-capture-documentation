@@ -593,6 +593,7 @@ image to the decoder with `BitmapFrameSource`, then assert on the result.
 
 ```kotlin
 # import android.graphics.BitmapFactory
+# import androidx.test.platform.app.InstrumentationRegistry
 # import com.scandit.datacapture.barcode.capture.BarcodeCapture
 # import com.scandit.datacapture.barcode.capture.BarcodeCaptureListener
 # import com.scandit.datacapture.barcode.capture.BarcodeCaptureSession
@@ -605,6 +606,7 @@ image to the decoder with `BitmapFrameSource`, then assert on the result.
 # import java.util.concurrent.CountDownLatch
 # import java.util.concurrent.TimeUnit
 # import kotlin.test.assertEquals
+# import kotlin.test.assertTrue
 val dataCaptureContext = DataCaptureContext.forLicenseKey("-- ENTER YOUR SCANDIT LICENSE KEY HERE --")
 val settings = BarcodeCaptureSettings().apply { enableSymbology(Symbology.QR, true) }
 val barcodeCapture = BarcodeCapture.forDataCaptureContext(dataCaptureContext, settings)
@@ -622,13 +624,15 @@ barcodeCapture.addListener(object : BarcodeCaptureListener {
     }
 })
 
-// A bitmap containing a known barcode, e.g. loaded from your test assets.
-val bitmap = BitmapFactory.decodeStream(context.assets.open("test-qr.png"))
+// A bitmap containing a known barcode, loaded from your test assets
+// (`src/androidTest/assets`), so use the *test* APK's context, not `targetContext`.
+val testContext = InstrumentationRegistry.getInstrumentation().context
+val bitmap = BitmapFactory.decodeStream(testContext.assets.open("test-qr.png"))
 val frameSource = BitmapFrameSource.of(bitmap)
 dataCaptureContext.setFrameSource(frameSource)
 frameSource.switchToDesiredState(FrameSourceState.ON)
 
-latch.await(10, TimeUnit.SECONDS)
+assertTrue(latch.await(10, TimeUnit.SECONDS), "decoding timed out")
 assertEquals("Scandit", scannedData) // "Scandit" is the text encoded in the test QR code
 ```
 
