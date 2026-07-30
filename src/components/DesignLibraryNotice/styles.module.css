@@ -1,0 +1,62 @@
+/* Box geometry and colors follow the site's warning admonition
+   (src/css/components/doc-admonition.scss) so this reads as the same kind of
+   yellow bubble; the type scale follows the Agent Skills callout
+   (src/components/SkillsCallout/styles.module.css) so titles and body text
+   match the other boxes. No left accent bar — the docs' bubbles don't use one. */
+.notice {
+  display: block;
+  margin: 0 0 1.5rem 0;
+  padding: 17px 20px;
+  border-radius: 10px;
+  background: var(--light-yellow-40);
+  border: 1px solid var(--light-yellow-80);
+  font-family: var(--font-family, inherit);
+}
+
+.title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.body {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.body + .body {
+  margin-top: 0.5rem;
+}
+
+.notice code {
+  padding: 0.1rem 0.35rem;
+  background: var(--light-yellow-60);
+  color: var(--light-yellow-120);
+  border: 1px solid var(--light-yellow-80);
+  border-radius: 4px;
+  font-family: var(
+    --third-family,
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace
+  );
+  font-size: 0.9375rem;
+  vertical-align: baseline;
+}
+
+/* The --light-yellow-* variables are themselves redefined for the dark theme
+   (see custom.scss), so only the container's text color needs an override,
+   matching what doc-admonition.scss does for warning admonitions. */
+html[data-theme="dark"] .notice {
+  background: var(--dark-brown-80);
+  border-color: var(--dark-brown-60);
+  color: var(--dark-brown-40);
+}
+
+html[data-theme="dark"] .notice code {
+  background: var(--dark-brown-100);
+  border-color: var(--dark-brown-60);
+}

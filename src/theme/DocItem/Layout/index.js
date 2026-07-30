@@ -12,11 +12,14 @@ import DocItemContent from "@theme/DocItem/Content";
 import DocBreadcrumbs from "@theme/DocBreadcrumbs";
 import Unlisted from "@theme/Unlisted";
 import FrameworkSelectorMobile from "@site/src/components/FrameworkSelectorMobile";
+import DesignLibraryNotice from "@site/src/components/DesignLibraryNotice";
 import styles from "./styles.module.css";
 
 /**
- * Swizzled (copy of the stock component) only to render the mobile
- * framework/version selector above the "On this page" mobile TOC.
+ * Swizzled (copy of the stock component) to render the mobile
+ * framework/version selector above the "On this page" mobile TOC, and the
+ * ScanditDesign advance notice under the breadcrumbs (the notice picks its own
+ * pages; see the component).
  */
 function useDocTOC() {
   const { frontMatter, toc } = useDoc();
@@ -48,6 +51,7 @@ export default function DocItemLayout({ children }) {
         <div className={styles.docItemContainer}>
           <article>
             <DocBreadcrumbs />
+            <DesignLibraryNotice />
             <DocVersionBadge />
             <FrameworkSelectorMobile />
             {docTOC.mobile}
