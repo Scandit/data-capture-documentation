@@ -657,6 +657,7 @@ const sidebars: SidebarsConfig = {
         'sdks/web/add-sdk',
         'sdks/web/webview',
         'sdks/web/agent-skills',
+        'sdks/web/testing',
         {
           type: "link",
           label: "GitHub Samples",
