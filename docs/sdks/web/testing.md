@@ -12,7 +12,7 @@ keywords:
 
 # Testing
 
-Scanning happens against live camera frames delivered through the browser's `getUserMedia` API, which is not available in most unit test environments (Node, jsdom, headless CI runners). The capture modes, sessions, and result objects the SDK hands to your listeners are also produced internally during a live scan, so they cannot be constructed with real data directly.
+Scanning happens against live camera frames delivered through the browser's `getUserMedia` API, then decoded internally using Web Workers, canvas, and WebAssembly. None of these are available in most unit test environments (Node, jsdom, happy-dom), so a unit test can never exercise the real decoding engine — only the code around it. The capture modes, sessions, and result objects the SDK hands to your listeners are also produced internally during a live scan, so they cannot be constructed with real data directly.
 
 Unlike on iOS and Android, the SDK's public types on Web are plain TypeScript classes and interfaces with no native bridge behind them, so there is no dedicated mocking framework to add — a plain object literal is enough to stand in for anything the SDK would otherwise hand your listener. There are two recommended approaches, which you can use on their own or combine:
 
@@ -36,20 +36,24 @@ With this approach the SDK is confined to a thin adapter, and your application l
 Declare an interface that exposes only the data your application needs from a scan, and put your logic in a type that depends on that interface. It never references `BarcodeCapture`, `BarcodeCaptureSession`, or `Barcode`.
 
 ```ts
+import type { Symbology } from '@scandit/web-datacapture-barcode';
+
 // The app-facing abstraction — only what your logic needs.
 export interface BarcodeScanReceiver {
-  onScan(data: string, symbology: string): void;
+  onScan(data: string, symbology: Symbology): void;
 }
 
 // Your testable application logic.
 export class CartModel implements BarcodeScanReceiver {
   readonly scannedItems: string[] = [];
 
-  onScan(data: string, symbology: string): void {
+  onScan(data: string, symbology: Symbology): void {
     this.scannedItems.push(data);
   }
 }
 ```
+
+`Symbology` is a plain string enum, so it's safe to use in your abstraction and to construct directly in tests. Only the capture mode, session, and result objects need to be kept out of your logic.
 
 ### Confine the SDK to a thin adapter
 
@@ -61,7 +65,7 @@ import type { FrameData } from '@scandit/web-datacapture-core';
 import type { BarcodeScanReceiver } from './cart-model';
 
 // The only code that depends on the live capture session.
-export function createBarcodeCaptureAdapter(receiver: BarcodeScanReceiver): BarcodeCaptureListener {
+export function createBarcodeListener(receiver: BarcodeScanReceiver): BarcodeCaptureListener {
   return {
     didScan(barcodeCapture: BarcodeCapture, session: BarcodeCaptureSession, frameData: FrameData) {
       const barcode = session.newlyRecognizedBarcode;
@@ -73,35 +77,51 @@ export function createBarcodeCaptureAdapter(receiver: BarcodeScanReceiver): Barc
 }
 ```
 
-### Set up the scanner
+### Set up the scanner with your abstraction
 
-Wire up the context, settings, capture mode, and camera as usual — this mirrors the standard integration in the [Get Started](./barcode-capture/get-started.md) guide; the only difference is that the listener comes from the adapter above.
+Wire up the context, settings, capture mode, camera, and view as usual — this follows the same sequence as [`BarcodeCaptureSimpleSample`](https://github.com/Scandit/datacapture-web-samples) — the only difference is that the listener comes from the adapter above.
 
 ```ts
-import { Camera, DataCaptureContext, FrameSourceState } from '@scandit/web-datacapture-core';
-import { BarcodeCapture, BarcodeCaptureSettings, barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
+import { BarcodeCapture, BarcodeCaptureOverlay, BarcodeCaptureSettings, Symbology, barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
+import { Camera, DataCaptureContext, DataCaptureView, FrameSourceState } from '@scandit/web-datacapture-core';
 import { CartModel } from './cart-model';
-import { createBarcodeCaptureAdapter } from './barcode-capture-adapter';
+import { createBarcodeListener } from './barcode-capture-adapter';
 
 async function setupScanner(): Promise<void> {
+  // To visualize the ongoing loading process on screen, the view must be connected before the SDK finishes loading.
+  const view = new DataCaptureView();
+
+  // Let the SDK select the best camera, and start the stream immediately so the preview appears as
+  // soon as possible, without waiting for the SDK to finish loading.
+  const camera = Camera.pickBestGuess();
+  await camera.applySettings(BarcodeCapture.recommendedCameraSettings);
+  void camera.switchToDesiredState(FrameSourceState.On);
+  view.connectToElement(document.getElementById('data-capture-view')!, { camera });
+
   const context = await DataCaptureContext.forLicenseKey('-- ENTER YOUR SCANDIT LICENSE KEY HERE --', {
     libraryLocation: new URL('self-hosted-sdc-lib/', document.baseURI).toString(),
     moduleLoaders: [barcodeCaptureLoader()],
   });
 
+  // The view must be connected to the data capture context once it's ready.
+  await view.setContext(context);
+  await context.setFrameSource(camera);
+
   const settings = new BarcodeCaptureSettings();
-  settings.enableSymbologies(['ean13Upca', 'code128']);
+  settings.enableSymbologies([Symbology.EAN13UPCA, Symbology.Code128]);
 
   const barcodeCapture = await BarcodeCapture.forContext(context, settings);
 
   // Route results into your own logic through the adapter.
   const cartModel = new CartModel();
-  barcodeCapture.addListener(createBarcodeCaptureAdapter(cartModel));
+  const listener = createBarcodeListener(cartModel);
+  barcodeCapture.addListener(listener);
 
-  const camera = Camera.pickBestGuess();
-  await camera.applySettings(BarcodeCapture.recommendedCameraSettings);
-  await context.setFrameSource(camera);
-  await camera.switchToDesiredState(FrameSourceState.On);
+  // Add a default overlay to the view to visualize the scan process.
+  await BarcodeCaptureOverlay.withBarcodeCaptureForView(barcodeCapture, view);
+
+  // Re-affirm the desired camera state now that it's wired to the context, matching the sample.
+  await context.frameSource?.switchToDesiredState(FrameSourceState.On);
 }
 ```
 
@@ -111,13 +131,14 @@ Because the logic only depends on your interface, the test calls it directly. No
 
 ```ts
 import { describe, expect, it } from 'vitest';
+import { Symbology } from '@scandit/web-datacapture-barcode';
 import { CartModel } from './cart-model';
 
 describe('CartModel', () => {
   it('adds a scanned item to the cart', () => {
     const cart = new CartModel();
 
-    cart.onScan('0123456789012', 'ean13Upca');
+    cart.onScan('0123456789012', Symbology.EAN13UPCA);
 
     expect(cart.scannedItems).toEqual(['0123456789012']);
   });
@@ -125,10 +146,8 @@ describe('CartModel', () => {
 ```
 
 :::note
-The adapter and the scanner setup are intentionally minimal and are not covered by unit tests, since they depend on a live capture session. Exercise them through [integration testing](#integration-testing-your-pipeline) instead.
+The adapter and the scanner setup are not covered by unit tests, since they depend on a live capture session. Exercise them through [integration testing](#integration-testing-your-pipeline) instead.
 :::
-
-This pattern (applied to a real sample, with the SDK-touching dependencies injected rather than closed over) is used, with a passing test, in [`BarcodeCaptureSimpleSample`](https://github.com/Scandit/datacapture-web-samples/blob/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low-level_API/BarcodeCaptureSimpleSample) — see `scanResult.ts` and `scanResult.test.ts`.
 
 ## Test With the SDK's Own Types Directly
 
@@ -153,7 +172,7 @@ If you would rather test your existing code without restructuring it, build a pl
 
 ```ts
 import { describe, expect, it, vi } from 'vitest';
-import type { BarcodeCaptureListener, BarcodeCaptureSession } from '@scandit/web-datacapture-barcode';
+import { Symbology, type BarcodeCaptureListener, type BarcodeCaptureSession } from '@scandit/web-datacapture-barcode';
 
 function createScanHandler(onScan: (data: string) => void): BarcodeCaptureListener {
   return {
@@ -172,7 +191,7 @@ describe('createScanHandler', () => {
     const listener = createScanHandler(onScan);
 
     const fakeSession = {
-      newlyRecognizedBarcode: { data: '0123456789012', symbology: 'ean13Upca' },
+      newlyRecognizedBarcode: { data: '0123456789012', symbology: Symbology.EAN13UPCA },
     } as unknown as BarcodeCaptureSession;
 
     listener.didScan(undefined, fakeSession, undefined);
@@ -286,110 +305,9 @@ describe('createSparkScanHandler', () => {
 });
 ```
 
-### FrameData
-
-`FrameData` is a plain interface (`width`, `height`, `isFrameSourceMirrored`, `getData()`, `toBlob()`), so a fake is a plain object implementing it:
-
-```ts
-const fakeFrameData = {
-  width: 1920,
-  height: 1080,
-  isFrameSourceMirrored: false,
-  getData: async () => null,
-  toBlob: async () => null,
-};
-```
-
 ## Integration Testing Your Pipeline
 
-The two approaches above are unit tests of your callback logic. To also confirm the whole pipeline works — your symbologies are enabled, your listener is registered, and the real, licensed engine actually decodes a frame — feed a real image instead of the camera. There are two ways to do this on Web, depending on what you want to exercise:
-
-### Feed a static image directly with `ImageFrameSource`
-
-[`ImageFrameSource`](https://docs.scandit.com/data-capture-sdk/web/core/api/image-frame-source.html) is a frame source built into the SDK for exactly this purpose: it bypasses the camera and `getUserMedia` entirely and feeds a static image directly into the same pipeline the camera would otherwise feed. This is the lightest-weight integration test, since it does not need a `Camera` at all:
-
-```ts
-import { DataCaptureContext, ImageFrameSource, FrameSourceState } from '@scandit/web-datacapture-core';
-import { BarcodeCapture, BarcodeCaptureSettings, barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
-
-async function scanKnownImage(licenseKey: string, imageUrl: string): Promise<string[]> {
-  const context = await DataCaptureContext.forLicenseKey(licenseKey, {
-    libraryLocation: new URL('self-hosted-sdc-lib/', document.baseURI).toString(),
-    moduleLoaders: [barcodeCaptureLoader()],
-  });
-
-  const settings = new BarcodeCaptureSettings();
-  settings.enableSymbologies(['ean13Upca']);
-  const barcodeCapture = await BarcodeCapture.forContext(context, settings);
-
-  const scanned: string[] = [];
-  barcodeCapture.addListener({
-    didScan(_mode, session) {
-      const barcode = session.newlyRecognizedBarcode;
-      if (barcode?.data) {
-        scanned.push(barcode.data);
-      }
-    },
-  });
-
-  const response = await fetch(imageUrl);
-  const file = new File([await response.blob()], 'known-barcode.png');
-  const frameSource = await ImageFrameSource.fromFile(file);
-  await context.setFrameSource(frameSource);
-  await frameSource.switchToDesiredState(FrameSourceState.On);
-
-  return scanned;
-}
-```
-
-### Mock the camera with `@eatsjobs/media-mock`
-
-When your code specifically drives `navigator.mediaDevices.getUserMedia` — for example you want to exercise your own camera-permission handling, or run the exact same `Camera` frame source your production code uses rather than swap in `ImageFrameSource` — [`@eatsjobs/media-mock`](https://github.com/eatsjobs/media-mock) fakes `getUserMedia` at the browser API level. Your application code, the `Camera` frame source, and the real engine all run unmodified; only the physical webcam is replaced with a static image, video, or canvas:
-
-```ts
-import { MediaMock, devices } from '@eatsjobs/media-mock';
-import { Camera, DataCaptureContext, FrameSourceState } from '@scandit/web-datacapture-core';
-import { BarcodeCapture, BarcodeCaptureSettings, barcodeCaptureLoader } from '@scandit/web-datacapture-barcode';
-
-MediaMock.mock(devices['Mac Desktop']);
-await MediaMock.setSource('./assets/barcode-1234567890128.png');
-
-const context = await DataCaptureContext.forLicenseKey('-- ENTER YOUR SCANDIT LICENSE KEY HERE --', {
-  libraryLocation: new URL('self-hosted-sdc-lib/', document.baseURI).toString(),
-  moduleLoaders: [barcodeCaptureLoader()],
-});
-
-const settings = new BarcodeCaptureSettings();
-settings.enableSymbologies(['ean13Upca']);
-const barcodeCapture = await BarcodeCapture.forContext(context, settings);
-
-const scanned: string[] = [];
-barcodeCapture.addListener({
-  didScan(_mode, session) {
-    const barcode = session.newlyRecognizedBarcode;
-    if (barcode?.data) {
-      scanned.push(barcode.data);
-    }
-  },
-});
-
-const camera = Camera.pickBestGuess();
-await camera.applySettings(BarcodeCapture.recommendedCameraSettings);
-await context.setFrameSource(camera);
-await camera.switchToDesiredState(FrameSourceState.On);
-```
-
-`@eatsjobs/media-mock` also has `simulateGetUserMediaError` for testing permission-denied or no-camera error paths, and runs equally well under Playwright for headless CI (its `TimerMode.SetInterval`, the default, is the most reliable choice under a virtual display).
-
-:::note
-Both techniques run against the real, licensed WebAssembly engine, so they need a valid license key and are slower than the unit tests above — keep them in a separate integration-test suite. `ImageFrameSource` skips the camera layer entirely, so it is the lighter-weight choice when you only need to verify decoding; use `@eatsjobs/media-mock` when the code path you want to test goes through `getUserMedia` and `Camera` itself.
-:::
-
-### Driving an already-built app with Playwright
-
-The example above works because every line runs in one script, in order. Testing an **already-built app** with Playwright is different: your mock setup and the app's own entry script are two separate pieces of code, injected via `page.addInitScript()`, that could in principle race each other on load.
-
-`@eatsjobs/media-mock@2.0.2` and later track the in-flight `setSource()` call internally, so `getUserMedia()` waits for it instead of racing it — use `^2.0.2` or newer and you don't need to gate anything yourself. Wrap the setup in a small facade class and expose it as a fixture so more than one spec can use it:
+Chromium has a built-in way to feed a real file into `getUserMedia` without any library: `--use-fake-device-for-media-stream` together with `--use-file-for-fake-video-capture=<path>.y4m` plays a `.y4m` video as the webcam. It only covers Chromium, though — Firefox and WebKit have no equivalent flag in Playwright — and it needs your test image pre-converted into a `.y4m` video rather than just pointing at a plain image file. [`@eatsjobs/media-mock`](https://github.com/eatsjobs/media-mock) covers the same need — a real image feeding the real decoding pipeline — consistently across all three engines, from a plain image URL:
 
 ```ts
 // e2e/fixtures.ts
@@ -430,9 +348,9 @@ export class MediaMockFacade {
     await this.page.addInitScript({ content: mediaMockUmdSource });
   }
 
-  public async mockCameraStream(imageUrl: string): Promise<void> {
+  public async mock(): Promise<void> {
     await this.page.addInitScript(
-      async ({ url, device }: { url: string; device: MediaMockDeviceName }) => {
+      async ({ device }: { device: MediaMockDeviceName }) => {
         // Playwright also runs init scripts against its internal about:blank setup navigation,
         // before the real page loads. There is no valid origin there to resolve a relative image
         // URL against, so skip it -- the script re-runs correctly on the real navigation.
@@ -441,22 +359,28 @@ export class MediaMockFacade {
         }
         const { MediaMock, devices } = window.MediaMock;
         MediaMock.mock(devices[device]);
-        try {
-          await MediaMock.setSource(url);
-        } catch (error) {
-          console.error('Failed to set media-mock source:', error);
-          throw error;
-        }
       },
-      { url: imageUrl, device: this.mediaMockDevice }
+      { device: this.mediaMockDevice }
     );
+  }
+
+  public async setSource(imageUrl: string): Promise<void> {
+    await this.page.addInitScript(async ({ url }) => {
+      const { MediaMock } = window.MediaMock;
+      try {
+        await MediaMock.setSource(url);
+      } catch (error) {
+        console.error('Failed to set media-mock source:', error);
+        throw error;
+      }
+    }, { url: imageUrl });
   }
 
   // Takes effect on the page's *next* navigation, like any addInitScript call -- call it before
   // a subsequent page.goto() within the same test, not after your assertions. Each Playwright
   // test already gets a fresh browser context by default, so most suites never need this between
   // tests; it matters only if you navigate more than once within a single test.
-  public async unmockCameraStream(): Promise<void> {
+  public async unmock(): Promise<void> {
     await this.page.addInitScript(() => {
       const { MediaMock } = window.MediaMock;
       MediaMock.unmock();
@@ -491,17 +415,22 @@ import { expect, test } from './fixtures';
 
 test.describe('scanning a barcode with a mocked camera', () => {
   test.beforeEach(async ({ mediaMockFacade }) => {
-    await mediaMockFacade.mockCameraStream('/ean13Upca_1234567890128.png');
+    await mediaMockFacade.mock();
+    await mediaMockFacade.setSource('/ean13Upca_1234567890128.png');
   });
 
   test.afterEach(async ({ mediaMockFacade }) => {
-    await mediaMockFacade.unmockCameraStream();
+    await mediaMockFacade.unmock();
   });
 
   test('scans a real barcode image through a mocked camera', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page.getByText('1234567890128')).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByText("Loading the Scandit Sdk...")).toBeVisible({ timeout: 20_000 });
+
+    await expect(page.getByText("1234567890128")).toBeVisible({ timeout: 20_000 });
+
+    await expect(page.locator("button", { hasText: "OK" })).toBeVisible({ timeout: 20_000 });
   });
 });
 ```
@@ -544,7 +473,65 @@ export default defineConfig<MockedCameraFixtures>({
 
 `scan.spec.ts` needs no changes — the same test runs once per project, each with its own emulated device.
 
-This exact fixture, config, and test have been run against the real SDK build in `BarcodeCaptureSimpleSample`, once `SCANDIT_LICENSE_KEY` is set and `npx playwright install` has run for the browsers you target.
+### Enabling WebGL Acceleration and Multithreading
+
+The SDK's engine uses WebGL for GPU-accelerated frame processing and, where the browser supports it, multithreaded WebAssembly for a further speedup. Neither is on by default under Playwright: headless browsers commonly run without real GPU access, and multithreading additionally requires the page itself to be cross-origin isolated, which most dev/preview servers don't set up out of the box. Neither gap fails a test outright — the SDK falls back to a slower path — so a suite can pass while silently exercising a code path your users' browsers never take.
+
+#### WebGL
+
+Headless browsers typically disable or emulate the GPU rather than expose the real one, so WebGL needs to be forced on explicitly, through whatever mechanism your browser engine exposes via Playwright's `launchOptions`:
+
+- **Chromium-based browsers** take command-line flags via `launchOptions.args` — for example `--enable-webgl`, `--ignore-gpu-blocklist`, and `--disable-software-rasterizer`. The exact set worth passing depends on your Chromium version and CI environment; [Chromium's command-line switches reference](https://peter.sh/experiments/chromium-command-line-switches/) documents what's available.
+- **Firefox** doesn't take Chromium flags at all; use `launchOptions.firefoxUserPrefs` instead — e.g. `webgl.force-enabled` and `webgl.disable-fail-if-major-performance-caveat` — mirroring what you'd otherwise set in `about:config`.
+- **WebKit** generally needs nothing extra in Playwright's bundled build.
+
+```ts
+// playwright.config.ts
+export default defineConfig({
+  projects: [
+    {
+      name: 'chromium',
+      use: { launchOptions: { args: ['--enable-webgl', '--ignore-gpu-blocklist', '--disable-software-rasterizer'] } },
+    },
+    {
+      name: 'firefox',
+      use: {
+        launchOptions: {
+          firefoxUserPrefs: { 'webgl.force-enabled': true, 'webgl.disable-fail-if-major-performance-caveat': true },
+        },
+      },
+    },
+  ],
+});
+```
+
+Treat this as a starting point rather than a fixed list — confirm what your specific Playwright/Chromium version needs by checking whether WebGL is actually active, the same way you'd verify cross-origin isolation below.
+
+#### Multithreading
+
+Multithreading needs the page to be [cross-origin isolated](https://developer.mozilla.org/en-US/docs/Web/API/crossOriginIsolated) (`SharedArrayBuffer` is otherwise unavailable). This is a property of the HTTP headers your web server sends, not something a Playwright launch option can turn on: configure whatever serves your app under test — your `webServer` command, or whatever it proxies to — with `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp` (or `credentialless` if the engine is loaded from a CDN). See [Improve Runtime Performance by Enabling Browser Multithreading](/sdks/web/matrixscan/get-started/#improve-runtime-performance-by-enabling-browser-multithreading) for the exact configuration across common server technologies, including Vite, which most Playwright `webServer` setups build on.
+
+Some engines gate `SharedArrayBuffer` behind an additional preference on top of the headers — for instance Firefox's `javascript.options.shared_memory`, set through `launchOptions.firefoxUserPrefs`. Check your target engine's equivalent if the check below confirms cross-origin isolation but multithreading still doesn't engage.
+
+Verify the setup actually took effect from inside the test, rather than assuming the headers or flags worked. `window.crossOriginIsolated` is the one universal, engine-agnostic signal Playwright can read without depending on your app:
+
+```ts
+test('the page is cross-origin isolated', async ({ page }) => {
+  await page.goto('/');
+
+  expect(await page.evaluate(() => window.crossOriginIsolated)).toBe(true);
+});
+```
+
+The SDK itself checks more than that one flag — `BrowserHelper.checkMultithreadingSupport()` additionally confirms `SharedArrayBuffer` and nested Web Worker support, not just cross-origin isolation:
+
+```ts
+import { BrowserHelper } from '@scandit/web-datacapture-core';
+
+const supportsMultithreading = await BrowserHelper.checkMultithreadingSupport();
+```
+
+This runs in the page, not in the Playwright test process, so call it from your own app code (the same way you would outside of testing) and surface the result somewhere your test can read it — a small on-page status element, a `data-*` attribute, or a value exposed on `window` for the test to pick up via `page.evaluate`.
 
 ## Tips and Pitfalls
 
