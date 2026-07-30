@@ -544,7 +544,7 @@ export default defineConfig<MockedCameraFixtures>({
 
 `scan.spec.ts` needs no changes — the same test runs once per project, each with its own emulated device.
 
-This exact fixture, config, and test run against the real SDK build in [`BarcodeCaptureSimpleSample`](https://github.com/Scandit/datacapture-web-samples/blob/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low-level_API/BarcodeCaptureSimpleSample/e2e) (`pnpm run e2e`, once `SCANDIT_LICENSE_KEY` is set and `npx playwright install` has run for the browsers you target).
+This exact fixture, config, and test have been run against the real SDK build in `BarcodeCaptureSimpleSample`, once `SCANDIT_LICENSE_KEY` is set and `npx playwright install` has run for the browsers you target.
 
 ## Tips and Pitfalls
 
