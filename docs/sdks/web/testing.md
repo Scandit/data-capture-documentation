@@ -128,6 +128,8 @@ describe('CartModel', () => {
 The adapter and the scanner setup are intentionally minimal and are not covered by unit tests, since they depend on a live capture session. Exercise them through [integration testing](#integration-testing-your-pipeline) instead.
 :::
 
+This pattern (applied to a real sample, with the SDK-touching dependencies injected rather than closed over) is used, with a passing test, in [`BarcodeCaptureSimpleSample`](https://github.com/Scandit/datacapture-web-samples/blob/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low-level_API/BarcodeCaptureSimpleSample) — see `scanResult.ts` and `scanResult.test.ts`.
+
 ## Test With the SDK's Own Types Directly
 
 If you would rather test your existing code without restructuring it, build a plain object that stands in for whatever the SDK would hand your listener, and call the listener directly.
@@ -382,6 +384,139 @@ await camera.switchToDesiredState(FrameSourceState.On);
 :::note
 Both techniques run against the real, licensed WebAssembly engine, so they need a valid license key and are slower than the unit tests above — keep them in a separate integration-test suite. `ImageFrameSource` skips the camera layer entirely, so it is the lighter-weight choice when you only need to verify decoding; use `@eatsjobs/media-mock` when the code path you want to test goes through `getUserMedia` and `Camera` itself.
 :::
+
+### Driving an already-built app with Playwright
+
+The example above works because every line runs in one script, in order. Testing an **already-built app** with Playwright is different: your mock setup and the app's own entry script are two separate pieces of code racing each other, and `page.addInitScript()` does not block the page's own `<script>` tag from running while an async init script is still awaiting something.
+
+Concretely: `@eatsjobs/media-mock`'s `getUserMedia` falls back to loading its default placeholder image if `setSource()` has not finished when `getUserMedia()` is first called. If your app calls `getUserMedia` early on load (most do), a plain `addInitScript` that calls `MediaMock.mock(...)` then `await MediaMock.setSource(...)` can lose the race, and the app ends up scanning the placeholder instead of your image.
+
+Gate the app's entry script on your mock setup finishing, using `page.route()` to hold the request until a readiness flag is set, and package it as a reusable fixture so more than one spec can use it:
+
+```ts
+// e2e/fixtures.ts
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import type * as MediaMockModule from '@eatsjobs/media-mock';
+import { test as base } from '@playwright/test';
+
+declare global {
+  interface Window {
+    MediaMock: typeof MediaMockModule;
+    scanditTestMediaMockReady: boolean;
+  }
+}
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
+const mediaMockUmdSource = readFileSync(
+  path.resolve(dirname, '../node_modules/@eatsjobs/media-mock/dist/main.umd.js'),
+  'utf8'
+);
+
+export type MediaMockDeviceName = keyof typeof MediaMockModule.devices;
+
+export interface MockedCameraFixtures {
+  // Which media-mock device profile to emulate. Set per-project in playwright.config.ts (via
+  // `use: { mediaMockDevice: ... }`) to match the real device the browser/engine combination is
+  // standing in for -- media-mock only ships "iPhone 12", "Samsung Galaxy M53", and "Mac Desktop".
+  mediaMockDevice: MediaMockDeviceName;
+  mockCameraStream: (imageUrl: string) => Promise<void>;
+}
+
+export const test = base.extend<MockedCameraFixtures>({
+  mediaMockDevice: ['Mac Desktop', { option: true }],
+
+  mockCameraStream: async ({ page, mediaMockDevice }, use) => {
+    async function mockCameraStream(imageUrl: string): Promise<void> {
+      await page.route('**/index.ts', async (route) => {
+        await page.waitForFunction(() => window.scanditTestMediaMockReady);
+        await route.continue();
+      });
+
+      await page.addInitScript({ content: mediaMockUmdSource });
+      await page.addInitScript(
+        async ({ url, device }: { url: string; device: MediaMockDeviceName }) => {
+          // Playwright also runs init scripts against its internal about:blank setup navigation,
+          // before the real page loads. There is no valid origin there to resolve a relative
+          // image URL against, so skip it -- the script re-runs correctly on the real navigation.
+          if (window.location.protocol !== 'https:' && window.location.protocol !== 'http:') {
+            return;
+          }
+          window.scanditTestMediaMockReady = false;
+          const { MediaMock, devices } = window.MediaMock;
+          MediaMock.mock(devices[device]);
+          try {
+            await MediaMock.setSource(url);
+          } catch (error) {
+            console.error('Failed to set media-mock source:', error);
+            throw error;
+          } finally {
+            window.scanditTestMediaMockReady = true;
+          }
+        },
+        { url: imageUrl, device: mediaMockDevice }
+      );
+    }
+
+    await use(mockCameraStream);
+  },
+});
+
+export { expect } from '@playwright/test';
+```
+
+```ts
+// e2e/scan.spec.ts
+import { expect, test } from './fixtures';
+
+test('scans a real barcode image through a mocked camera', async ({ page, mockCameraStream }) => {
+  await mockCameraStream('/ean13Upca_1234567890128.png');
+  await page.goto('/');
+
+  await expect(page.locator('.result-text')).toContainText('1234567890128', { timeout: 20_000 });
+});
+```
+
+Replace `'**/index.ts'` with whatever glob matches your app's own entry script request, and `.result-text`/`ean13Upca_1234567890128.png` with your app's own DOM and test image.
+
+### Testing across browser engines and form factors
+
+media-mock ships exactly three device profiles: `"iPhone 12"`, `"Samsung Galaxy M53"`, and `"Mac Desktop"`. Map each Playwright project to whichever is the closest real device for that browser engine and form factor, using `mediaMockDevice` as a per-project option:
+
+```ts
+// playwright.config.ts
+import { defineConfig, devices } from '@playwright/test';
+import type { MockedCameraFixtures } from './e2e/fixtures';
+
+export default defineConfig<MockedCameraFixtures>({
+  testDir: './e2e',
+  projects: [
+    // WebKit stands in for Safari: iPhone on mobile, Mac on desktop.
+    { name: 'Mobile Safari', use: { ...devices['iPhone 14'], mediaMockDevice: 'iPhone 12' } },
+    { name: 'Desktop Safari', use: { ...devices['Desktop Safari'], mediaMockDevice: 'Mac Desktop' } },
+    // Chromium and Firefox on mobile both stand in for Android -- media-mock has no separate
+    // Firefox-for-Android profile.
+    { name: 'Mobile Chrome', use: { ...devices['Pixel 7'], mediaMockDevice: 'Samsung Galaxy M53' } },
+    {
+      name: 'Mobile Firefox',
+      // Playwright has no mobile-Firefox device preset (Firefox for Android isn't a distinct
+      // rendering engine Playwright can drive) -- approximate it with desktop Firefox at a phone
+      // viewport and a Firefox-for-Android user agent.
+      use: {
+        browserName: 'firefox',
+        viewport: { width: 412, height: 915 },
+        userAgent: 'Mozilla/5.0 (Android 14; Mobile; rv:132.0) Gecko/132.0 Firefox/132.0',
+        mediaMockDevice: 'Samsung Galaxy M53',
+      },
+    },
+  ],
+});
+```
+
+`scan.spec.ts` needs no changes — the same test runs once per project, each with its own emulated device.
+
+This exact fixture, config, and test run against the real SDK build in [`BarcodeCaptureSimpleSample`](https://github.com/Scandit/datacapture-web-samples/blob/master/01_Single_Scanning_Samples/02_Barcode_Scanning_with_Low-level_API/BarcodeCaptureSimpleSample/e2e) (`pnpm run e2e`, once `SCANDIT_LICENSE_KEY` is set and `npx playwright install` has run for the browsers you target).
 
 ## Tips and Pitfalls
 
