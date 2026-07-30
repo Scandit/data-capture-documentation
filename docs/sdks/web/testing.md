@@ -387,11 +387,9 @@ Both techniques run against the real, licensed WebAssembly engine, so they need 
 
 ### Driving an already-built app with Playwright
 
-The example above works because every line runs in one script, in order. Testing an **already-built app** with Playwright is different: your mock setup and the app's own entry script are two separate pieces of code racing each other, and `page.addInitScript()` does not block the page's own `<script>` tag from running while an async init script is still awaiting something.
+The example above works because every line runs in one script, in order. Testing an **already-built app** with Playwright is different: your mock setup and the app's own entry script are two separate pieces of code, injected via `page.addInitScript()`, that could in principle race each other on load.
 
-Concretely: `@eatsjobs/media-mock`'s `getUserMedia` falls back to loading its default placeholder image if `setSource()` has not finished when `getUserMedia()` is first called. If your app calls `getUserMedia` early on load (most do), a plain `addInitScript` that calls `MediaMock.mock(...)` then `await MediaMock.setSource(...)` can lose the race, and the app ends up scanning the placeholder instead of your image.
-
-Gate the app's entry script on your mock setup finishing, using `page.route()` to hold the request until a readiness flag is set, and package it as a reusable fixture so more than one spec can use it:
+`@eatsjobs/media-mock@2.0.2` and later track the in-flight `setSource()` call internally, so `getUserMedia()` waits for it instead of racing it — use `^2.0.2` or newer and you don't need to gate anything yourself. Wrap the setup in a small facade class and expose it as a fixture so more than one spec can use it:
 
 ```ts
 // e2e/fixtures.ts
@@ -399,12 +397,12 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type * as MediaMockModule from '@eatsjobs/media-mock';
+import type { Page } from '@playwright/test';
 import { test as base } from '@playwright/test';
 
 declare global {
   interface Window {
     MediaMock: typeof MediaMockModule;
-    scanditTestMediaMockReady: boolean;
   }
 }
 
@@ -416,50 +414,71 @@ const mediaMockUmdSource = readFileSync(
 
 export type MediaMockDeviceName = keyof typeof MediaMockModule.devices;
 
+// Wraps @eatsjobs/media-mock's setup for a Playwright page: injecting the library, picking the
+// device profile to emulate, and pointing getUserMedia at a real image.
+export class MediaMockFacade {
+  private readonly page: Page;
+
+  private readonly mediaMockDevice: MediaMockDeviceName;
+
+  public constructor(page: Page, mediaMockDevice: MediaMockDeviceName) {
+    this.page = page;
+    this.mediaMockDevice = mediaMockDevice;
+  }
+
+  public async inject(): Promise<void> {
+    await this.page.addInitScript({ content: mediaMockUmdSource });
+  }
+
+  public async mockCameraStream(imageUrl: string): Promise<void> {
+    await this.page.addInitScript(
+      async ({ url, device }: { url: string; device: MediaMockDeviceName }) => {
+        // Playwright also runs init scripts against its internal about:blank setup navigation,
+        // before the real page loads. There is no valid origin there to resolve a relative image
+        // URL against, so skip it -- the script re-runs correctly on the real navigation.
+        if (window.location.protocol !== 'https:' && window.location.protocol !== 'http:') {
+          return;
+        }
+        const { MediaMock, devices } = window.MediaMock;
+        MediaMock.mock(devices[device]);
+        try {
+          await MediaMock.setSource(url);
+        } catch (error) {
+          console.error('Failed to set media-mock source:', error);
+          throw error;
+        }
+      },
+      { url: imageUrl, device: this.mediaMockDevice }
+    );
+  }
+
+  // Takes effect on the page's *next* navigation, like any addInitScript call -- call it before
+  // a subsequent page.goto() within the same test, not after your assertions. Each Playwright
+  // test already gets a fresh browser context by default, so most suites never need this between
+  // tests; it matters only if you navigate more than once within a single test.
+  public async unmockCameraStream(): Promise<void> {
+    await this.page.addInitScript(() => {
+      const { MediaMock } = window.MediaMock;
+      MediaMock.unmock();
+    });
+  }
+}
+
 export interface MockedCameraFixtures {
   // Which media-mock device profile to emulate. Set per-project in playwright.config.ts (via
   // `use: { mediaMockDevice: ... }`) to match the real device the browser/engine combination is
   // standing in for -- media-mock only ships "iPhone 12", "Samsung Galaxy M53", and "Mac Desktop".
   mediaMockDevice: MediaMockDeviceName;
-  mockCameraStream: (imageUrl: string) => Promise<void>;
+  mediaMockFacade: MediaMockFacade;
 }
 
 export const test = base.extend<MockedCameraFixtures>({
   mediaMockDevice: ['Mac Desktop', { option: true }],
 
-  mockCameraStream: async ({ page, mediaMockDevice }, use) => {
-    async function mockCameraStream(imageUrl: string): Promise<void> {
-      await page.route('**/index.ts', async (route) => {
-        await page.waitForFunction(() => window.scanditTestMediaMockReady);
-        await route.continue();
-      });
-
-      await page.addInitScript({ content: mediaMockUmdSource });
-      await page.addInitScript(
-        async ({ url, device }: { url: string; device: MediaMockDeviceName }) => {
-          // Playwright also runs init scripts against its internal about:blank setup navigation,
-          // before the real page loads. There is no valid origin there to resolve a relative
-          // image URL against, so skip it -- the script re-runs correctly on the real navigation.
-          if (window.location.protocol !== 'https:' && window.location.protocol !== 'http:') {
-            return;
-          }
-          window.scanditTestMediaMockReady = false;
-          const { MediaMock, devices } = window.MediaMock;
-          MediaMock.mock(devices[device]);
-          try {
-            await MediaMock.setSource(url);
-          } catch (error) {
-            console.error('Failed to set media-mock source:', error);
-            throw error;
-          } finally {
-            window.scanditTestMediaMockReady = true;
-          }
-        },
-        { url: imageUrl, device: mediaMockDevice }
-      );
-    }
-
-    await use(mockCameraStream);
+  mediaMockFacade: async ({ page, mediaMockDevice }, use) => {
+    const mediaMockFacade = new MediaMockFacade(page, mediaMockDevice);
+    await mediaMockFacade.inject();
+    await use(mediaMockFacade);
   },
 });
 
@@ -470,15 +489,24 @@ export { expect } from '@playwright/test';
 // e2e/scan.spec.ts
 import { expect, test } from './fixtures';
 
-test('scans a real barcode image through a mocked camera', async ({ page, mockCameraStream }) => {
-  await mockCameraStream('/ean13Upca_1234567890128.png');
-  await page.goto('/');
+test.describe('scanning a barcode with a mocked camera', () => {
+  test.beforeEach(async ({ mediaMockFacade }) => {
+    await mediaMockFacade.mockCameraStream('/ean13Upca_1234567890128.png');
+  });
 
-  await expect(page.locator('.result-text')).toContainText('1234567890128', { timeout: 20_000 });
+  test.afterEach(async ({ mediaMockFacade }) => {
+    await mediaMockFacade.unmockCameraStream();
+  });
+
+  test('scans a real barcode image through a mocked camera', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.getByText('1234567890128')).toBeVisible({ timeout: 20_000 });
+  });
 });
 ```
 
-Replace `'**/index.ts'` with whatever glob matches your app's own entry script request, and `.result-text`/`ean13Upca_1234567890128.png` with your app's own DOM and test image.
+Replace `ean13Upca_1234567890128.png` with your own test image, and the `getByText` assertion with whatever your app renders on a successful scan.
 
 ### Testing across browser engines and form factors
 
