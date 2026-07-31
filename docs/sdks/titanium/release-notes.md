@@ -10,6 +10,12 @@ keywords:
   - titanium
 ---
 
+## 8.5.2
+
+**Released**: July 31, 2026
+
+No updates for this framework in this release.
+
 ## 8.5.1
 
 **Released**: July 20, 2026
@@ -186,7 +192,7 @@ No updates for this framework in this release.
 
 ## 8.1.6
 
-**Released**: July 28, 2026
+**Released**: July 29, 2026
 
 No updates for this framework in this release.
 
