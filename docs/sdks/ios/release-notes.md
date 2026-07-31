@@ -14,11 +14,11 @@ keywords:
 
 **Released**: July 31, 2026
 
-### New Features
+### Performance Improvements
 
 #### Id
 
-* Newly supporting scanning of the Irish Garda Age Card.
+* Improved performance of Irish Garda Age Card
 
 ## 8.5.1
 
