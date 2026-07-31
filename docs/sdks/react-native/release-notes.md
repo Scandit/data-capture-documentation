@@ -10,6 +10,26 @@ keywords:
   - react
 ---
 
+## 8.5.2
+
+**Released**: July 31, 2026
+
+### New Features
+
+#### Id
+
+* Newly supporting scanning of the Irish Garda Age Card.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed BarcodeCount clusters where the not-in-list cluster color incorrectly followed the matched/deviated customization.
+
+#### Smart Label Capture
+
+* Fixed a memory leak preventing the batch and label advanced overlay from being collected until the mode they're bound to is collectable.
+
 ## 8.5.1
 
 **Released**: July 20, 2026

@@ -10,6 +10,16 @@ keywords:
   - web
 ---
 
+## 8.5.2
+
+**Released**: July 31, 2026
+
+### New Features
+
+#### Id
+
+* Newly supporting scanning of the Irish Garda Age Card.
+
 ## 8.5.1
 
 **Released**: July 20, 2026
