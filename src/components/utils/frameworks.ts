@@ -89,6 +89,55 @@ export function normalizeFrameworkQuery(raw: string): string {
   return QUERY_FRAMEWORK_TO_PATH[aliased] ? aliased : '';
 }
 
+// Event the homepage framework selectors fire when the selection changes.
+// The selectors swap frameworks with history.pushState, which fires no event,
+// so the shared Agent Skills banner can't otherwise know it changed. Both
+// selectors dispatch this; the banner listens to toggle its visibility.
+export const FRAMEWORK_CHANGE_EVENT = 'scandit:framework-change';
+
+// Reads the framework the homepage currently has selected: live ?framework=
+// query first, then localStorage. Returns the raw selector value (e.g. 'xamarin',
+// 'netIos') or '' when nothing is set.
+export function readSelectedFrameworkRaw(): string {
+  if (typeof window === 'undefined') return '';
+  const fromQuery = new URLSearchParams(window.location.search).get('framework');
+  let fromStorage: string | null = null;
+  try {
+    fromStorage = window.localStorage.getItem(FRAMEWORK_STORAGE_KEY);
+  } catch {
+    fromStorage = null;
+  }
+  return fromQuery || fromStorage || '';
+}
+
+// Homepage selector slugs the shared product-picker banner hides for, because
+// there is no Agent Skill to route to. Xamarin (and its variants), Titanium and
+// Linux have no skills at all. Bare ".NET" is also hidden: it has no general
+// skill — the reader must pick a platform — so the banner stays hidden until
+// ".NET iOS" or ".NET Android" is selected (those slugs, netios/netandroid, are
+// intentionally NOT in this set, so the banner returns for them).
+const FRAMEWORKS_WITHOUT_AGENT_SKILLS = new Set<string>([
+  'xamarin',
+  'xamarinios',
+  'xamarinandroid',
+  'xamarinforms',
+  'titanium',
+  'linux',
+  'net',
+]);
+
+// True unless the selected framework has no Agent Skills at all. Unknown/empty
+// (the default before any selection) returns true, so the banner shows by default.
+export function frameworkHasAgentSkills(raw: string): boolean {
+  return !FRAMEWORKS_WITHOUT_AGENT_SKILLS.has((raw || '').toLowerCase());
+}
+
+// Notify listeners (the shared Agent Skills banner) that the selection changed.
+export function emitFrameworkChange(framework: string): void {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(new CustomEvent(FRAMEWORK_CHANGE_EVENT, { detail: framework }));
+}
+
 // Resolves the Agent Skills URL for the framework the reader currently has
 // selected on the homepage. The homepage swaps frameworks with
 // history.pushState, which does NOT update React Router — so any href derived

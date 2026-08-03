@@ -3,7 +3,7 @@ import { frameworkCards } from "../data/frameworkCardsArr";
 import { FrameworkCard } from "./FrameworkCard";
 import CardAdditional from "./CardAdditional";
 import { FrameworkCardType } from "../../constants/types";
-import { FRAMEWORK_STORAGE_KEY } from "../../utils/frameworks";
+import { FRAMEWORK_STORAGE_KEY, emitFrameworkChange } from "../../utils/frameworks";
 import { useEffect, useState } from "react";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
@@ -18,6 +18,7 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
     if (ExecutionEnvironment.canUseDOM) {
       window.history.pushState({}, "", `?framework=${framework.framework}`);
       localStorage.setItem(FRAMEWORK_STORAGE_KEY, framework.framework);
+      emitFrameworkChange(framework.framework);
     }
     setSelectedFramework(framework.framework);
     framework.framework !== "xamarin" &&
@@ -43,6 +44,7 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
           }`
         );
         setSelectedFramework(frameworkFromURL);
+        emitFrameworkChange(frameworkFromURL);
       }
     };
     updateSelectedFramework();

@@ -1,6 +1,6 @@
 import { ArrowDropDown } from "../../IconComponents";
 import { FrameworksName } from "../../constants/frameworksName";
-import { FRAMEWORK_STORAGE_KEY } from "../../utils/frameworks";
+import { FRAMEWORK_STORAGE_KEY, emitFrameworkChange } from "../../utils/frameworks";
 import style from "./FrameworkCard.module.css";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 
@@ -17,6 +17,7 @@ export function FrameworkCard({
       "",
       `${window.location.pathname}?framework=${frameworkValue.toString()}`
     );
+    emitFrameworkChange(frameworkValue.toString());
     !hasAdditional && handleFrameworkClick();
   }
 
