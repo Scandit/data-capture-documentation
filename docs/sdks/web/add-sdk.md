@@ -269,7 +269,13 @@ In alternative to jsdeliver, unpkg can be used:
 
 ## Install via UMD build (plain `<script>` tags)
 
-Alongside the ES module (ESM) build, every Scandit package ships a [UMD](https://github.com/umdjs/umd) build. This lets you load the SDK with plain `<script>` tags, without a bundler or an [import map](#install-via-cdn). Each package exposes its exports on a browser global:
+:::caution Use UMD only as a last resort
+Prefer the ES module (ESM) build. The UMD bundles cannot be tree-shaken or optimized the way a bundler (or the browser) handles our ES modules, so the browser downloads considerably more code and your app starts up slower.
+
+[ESM is supported by every current browser](https://caniuse.com/?search=ESM). If the blocker is only [import map](#install-via-cdn) support, load [`es-module-shims`](https://github.com/guybedford/es-module-shims#usage) — as the [CDN example](#install-via-cdn) above does — instead of falling back to UMD.
+:::
+
+Alongside the ESM build, every Scandit package also ships a [UMD](https://github.com/umdjs/umd) build that exposes the package exports on a browser global, so the SDK can be loaded with plain `<script>` tags:
 
 | Package | Browser global |
 | --- | --- |
@@ -279,102 +285,35 @@ Alongside the ES module (ESM) build, every Scandit package ships a [UMD](https:/
 | `@scandit/web-datacapture-label` | `SDCLabel` |
 | `@scandit/web-datacapture-parser` | `SDCParser` |
 
-The UMD bundle for each package lives at `@scandit/web-datacapture-<module>/umd/index.js`. On a CDN you can also point to the bare `umd` subpath (for example `.../web-datacapture-core/umd`) and it resolves to `index.js` via the directory index.
-
-:::caution Load order matters
-Load `@scandit/web-datacapture-core` **first**. The feature packages (barcode, id, label, parser) resolve the `SDCCore` global when they load, so their `<script>` tags must come after core's.
-:::
-
-:::note
-A classic `<script>` (unlike `<script type="module">`) does not support top-level `await`, so wrap the setup code in an async function as shown below.
-:::
-
-### Complete UMD Example
+The bundle is exposed as the `umd` subpath of each package (`@scandit/web-datacapture-<module>/umd`), which on a CDN or a self-hosted copy of the package resolves to `build/js/umd/index.js`. Load `@scandit/web-datacapture-core` **first**: the feature packages resolve the `SDCCore` global when they load, so their `<script>` tags must come after core's.
 
 ```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Scandit UMD Simple sample</title>
-    <!-- Load core first, then the feature packages that depend on it. -->
-    <script src="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8/umd/index.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/umd/index.js"></script>
-    <style>
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-      }
-      #app {
-        height: 100%;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script>
-      const {
-        DataCaptureView,
-        Camera,
-        DataCaptureContext,
-        FrameSourceState,
-      } = SDCCore;
+<script src="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8/build/js/umd/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/build/js/umd/index.js"></script>
+```
 
-      const {
-        barcodeCaptureLoader,
-        BarcodeCaptureSettings,
-        BarcodeCapture,
-        Symbology,
-        SymbologyDescription,
-      } = SDCBarcode;
+From there the setup is the same as in the [CDN example](#install-via-cdn) above, with two differences: you take the exports off the globals instead of importing them, and you wrap the setup in an async function, because a classic `<script>` (unlike `<script type="module">`) does not support top-level `await`:
 
-      (async () => {
-        let view = new DataCaptureView();
-        view.connectToElement(document.getElementById("app"));
-        view.showProgressBar();
+```js
+const { DataCaptureContext, DataCaptureView } = SDCCore;
+const { barcodeCaptureLoader } = SDCBarcode;
 
-        const context = await DataCaptureContext.forLicenseKey("-- ENTER LICENSE KEY HERE --", {
-          libraryLocation:
-            "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/sdc-lib/",
-          moduleLoaders: [barcodeCaptureLoader()],
-        });
-        view.hideProgressBar();
+(async () => {
+  await DataCaptureContext.forLicenseKey("-- ENTER LICENSE KEY HERE --", {
+    libraryLocation:
+      "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/sdc-lib/",
+    moduleLoaders: [barcodeCaptureLoader()],
+  });
 
-        const camera = Camera.pickBestGuess();
+  const view = new DataCaptureView();
+  view.connectToElement(document.getElementById("app"));
 
-        await view.setContext(context);
+  // The context is initialized only once: use DataCaptureContext.sharedInstance
+  // to access it from anywhere in your app.
+  await view.setContext(DataCaptureContext.sharedInstance);
 
-        // Depending on the use case further camera settings adjustments can be made here.
-        const cameraSettings = BarcodeCapture.recommendedCameraSettings;
-        await camera.applySettings(cameraSettings);
-
-        await context.setFrameSource(camera);
-        await context.frameSource.switchToDesiredState(FrameSourceState.On);
-
-        const settings = new BarcodeCaptureSettings();
-        settings.enableSymbologies([Symbology.Code128, Symbology.QR]);
-
-        let barcodeCapture = await BarcodeCapture.forContext(context, settings);
-
-        barcodeCapture.addListener({
-          didScan: async (barcodeCaptureMode, session) => {
-            const barcode = session.newlyRecognizedBarcode;
-            if (!barcode) {
-              return;
-            }
-            const symbology = new SymbologyDescription(barcode.symbology);
-            alert(`Scanned: ${barcode.data ?? ""}\n(${symbology.readableName})`);
-          },
-        });
-
-        await barcodeCapture.setEnabled(true);
-      })();
-    </script>
-  </body>
-</html>
+  // Continue with the camera, mode and listener setup as in the CDN example.
+})();
 ```
 
 :::tip
