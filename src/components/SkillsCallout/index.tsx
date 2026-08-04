@@ -9,6 +9,9 @@ import {
   QUERY_FRAMEWORK_TO_PATH,
   normalizeFrameworkQuery,
   resolveAgentSkillsUrl,
+  frameworkHasAgentSkills,
+  readSelectedFrameworkRaw,
+  FRAMEWORK_CHANGE_EVENT,
 } from '../utils/frameworks';
 import { capturePostHogEvent } from './analytics';
 import InstallTabs from './InstallTabs';
@@ -169,6 +172,53 @@ const SharedBody: React.FC<SharedBodyProps> = ({
   );
 };
 
+// Shared "product picker" banner. On the homepage the framework is chosen via
+// the selector (history.pushState), and some frameworks have no Agent Skills at
+// all — Xamarin, Titanium, Linux, and bare .NET (which needs a specific
+// platform). For those the banner has nothing to offer, so it hides itself.
+// Visibility is derived from frameworkHasAgentSkills(), so it stays correct
+// automatically if a framework later gains a skills page.
+const SharedCallout: React.FC<{ banner: boolean }> = ({ banner }) => {
+  const { pathname, search } = useLocation();
+  // Start visible so SSR and the first client render agree (no hydration
+  // mismatch); correct on mount and on every subsequent framework change.
+  const [visible, setVisible] = React.useState(true);
+
+  React.useEffect(() => {
+    const update = () =>
+      setVisible(frameworkHasAgentSkills(readSelectedFrameworkRaw()));
+    update();
+    window.addEventListener(FRAMEWORK_CHANGE_EVENT, update);
+    window.addEventListener('popstate', update);
+    return () => {
+      window.removeEventListener(FRAMEWORK_CHANGE_EVENT, update);
+      window.removeEventListener('popstate', update);
+    };
+  }, []);
+
+  if (!visible) return null;
+
+  const sharedFrameworkSlug = getSharedFrameworkSlug(pathname, search);
+  const sharedMoreInfoUrl = getSharedMoreInfoUrl(pathname, search);
+  return (
+    <CalloutDetails
+      heading={PRODUCT_DISAMBIGUATION_HEADING}
+      banner={banner}
+      trackingProps={{
+        variant: 'shared',
+        pathname,
+        framework: sharedFrameworkSlug,
+      }}
+    >
+      <SharedBody
+        sharedFrameworkSlug={sharedFrameworkSlug}
+        sharedMoreInfoUrl={sharedMoreInfoUrl}
+        liveBanner={banner}
+      />
+    </CalloutDetails>
+  );
+};
+
 const SkillsCallout: React.FC<SkillsCalloutProps> = ({
   product,
   framework,
@@ -179,7 +229,7 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({
   frameworkSlug: frameworkSlugProp,
   moreInfoUrl: moreInfoUrlProp,
 }) => {
-  const { pathname, search } = useLocation();
+  const { pathname } = useLocation();
 
   if (variant === 'skill') {
     if (!skillSlug) return null;
@@ -211,25 +261,7 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({
   }
 
   if (variant === 'shared') {
-    const sharedFrameworkSlug = getSharedFrameworkSlug(pathname, search);
-    const sharedMoreInfoUrl = getSharedMoreInfoUrl(pathname, search);
-    return (
-      <CalloutDetails
-        heading={PRODUCT_DISAMBIGUATION_HEADING}
-        banner={banner}
-        trackingProps={{
-          variant: 'shared',
-          pathname,
-          framework: sharedFrameworkSlug,
-        }}
-      >
-        <SharedBody
-          sharedFrameworkSlug={sharedFrameworkSlug}
-          sharedMoreInfoUrl={sharedMoreInfoUrl}
-          liveBanner={banner}
-        />
-      </CalloutDetails>
-    );
+    return <SharedCallout banner={banner} />;
   }
 
   const route = parseSdksRoute(pathname);

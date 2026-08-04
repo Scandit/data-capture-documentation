@@ -4,6 +4,7 @@ import style from "./FrameworksMobile.module.css";
 import { frameworkCards } from "../data/frameworkCardsArr";
 import { FrameworksName } from "../../constants/frameworksName";
 import { ArrowDown } from "../../IconComponents";
+import { emitFrameworkChange } from "../../utils/frameworks";
 
 interface FrameworksMobileProps {
   handleFrameworkClick: () => void;
@@ -19,7 +20,9 @@ export default function FrameworksMobile({
 
   useEffect(() => {
     const paramsURL = Object.fromEntries(new URLSearchParams(window.location.search));
-    setSelectedFramework(paramsURL.framework || "web");
+    const initial = paramsURL.framework || "web";
+    setSelectedFramework(initial);
+    emitFrameworkChange(initial);
   }, []);
 
   useEffect(() => {
@@ -42,6 +45,7 @@ export default function FrameworksMobile({
 
   function selectFramework(framework: string) {
     window.history.pushState({}, "", `?framework=${framework}`);
+    emitFrameworkChange(framework);
     setSelectedFramework(framework);
     framework !== "net" && framework !== "xamarin" && handleFrameworkClick();
   }
