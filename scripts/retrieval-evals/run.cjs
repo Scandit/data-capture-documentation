@@ -33,6 +33,7 @@ const INDEX = arg("index", "build/assets/knowledge-retrieval-index.json");
 const GOLD = arg("gold", path.join(__dirname, "gold-set.json"));
 const K = parseInt(arg("k", "3"), 10);
 const MIN_SUCCESS = parseFloat(arg("min-success", "0.8"));
+const MIN_RECALL = parseFloat(arg("min-recall", "0.6"));
 const MIN_MRR = parseFloat(arg("min-mrr", "0.6"));
 const REPORT = arg("report", "");
 
@@ -87,24 +88,37 @@ function main() {
     process.exit(1);
   }
 
+  // Total relevant modules per query in the whole corpus (denominator for
+  // capped recall). Path-class gold sets have many relevant docs, so recall@k
+  // is capped at k: hits / min(total_relevant, k) — 1.0 means every one of the
+  // top-k slots that could be relevant is.
+  const totalRelevant = (expect) =>
+    index.reduce((c, d) => c + (relevant({ url: String(d.url || "") }, expect) ? 1 : 0), 0);
+
   let successSum = 0,
     precisionSum = 0,
+    recallSum = 0,
     rrSum = 0;
   const rows = [];
   for (const g of gold) {
     const hits = search(index, g.query, K);
     const rel = hits.map((h) => relevant(h, g.expect));
     const firstRel = rel.indexOf(true);
+    const relCount = rel.filter(Boolean).length;
     const success = firstRel !== -1 ? 1 : 0;
-    const precision = rel.filter(Boolean).length / Math.max(hits.length, 1);
+    const precision = relCount / Math.max(hits.length, 1);
+    const denom = Math.min(totalRelevant(g.expect), K) || 1;
+    const recall = relCount / denom;
     const rr = firstRel !== -1 ? 1 / (firstRel + 1) : 0;
     successSum += success;
     precisionSum += precision;
+    recallSum += recall;
     rrSum += rr;
     rows.push({
       query: g.query,
       success,
       precision: +precision.toFixed(3),
+      recall: +recall.toFixed(3),
       rr: +rr.toFixed(3),
       top: hits.map((h) => h.url.replace(/^https?:\/\/[^/]+/, "")),
     });
@@ -114,6 +128,7 @@ function main() {
   const metrics = {
     success_at_k: +(successSum / n).toFixed(4),
     precision_at_k: +(precisionSum / n).toFixed(4),
+    recall_at_k: +(recallSum / n).toFixed(4),
     mrr: +(rrSum / n).toFixed(4),
     k: K,
     query_count: n,
@@ -121,15 +136,17 @@ function main() {
   };
 
   console.log(`\nRetrieval evals (token mode, k=${K}, ${n} queries over ${index.length} modules)`);
-  console.log(`  success@${K}  = ${metrics.success_at_k}  (min ${MIN_SUCCESS})`);
-  console.log(`  precision@${K}= ${metrics.precision_at_k}`);
-  console.log(`  MRR          = ${metrics.mrr}  (min ${MIN_MRR})\n`);
+  console.log(`  success@${K}   = ${metrics.success_at_k}  (min ${MIN_SUCCESS})`);
+  console.log(`  precision@${K} = ${metrics.precision_at_k}`);
+  console.log(`  recall@${K}    = ${metrics.recall_at_k}  (min ${MIN_RECALL})`);
+  console.log(`  MRR           = ${metrics.mrr}  (min ${MIN_MRR})\n`);
   for (const r of rows) {
     if (!r.success) console.log(`  ✗ MISS  "${r.query}"  → top: ${r.top.join(" , ") || "(none)"}`);
   }
 
   const breaches = [];
   if (metrics.success_at_k < MIN_SUCCESS) breaches.push(`success@${K}=${metrics.success_at_k} < ${MIN_SUCCESS}`);
+  if (metrics.recall_at_k < MIN_RECALL) breaches.push(`recall@${K}=${metrics.recall_at_k} < ${MIN_RECALL}`);
   if (metrics.mrr < MIN_MRR) breaches.push(`MRR=${metrics.mrr} < ${MIN_MRR}`);
 
   if (REPORT) {
