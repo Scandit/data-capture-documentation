@@ -523,36 +523,33 @@ export default function knowledgeExtractor(context: any, _options: any) {
   return {
     name: "knowledge-extractor",
     async postBuild({ siteConfig, outDir }: { siteConfig: any; outDir: string }) {
+      const site = String(siteConfig?.url || "").replace(/\/+$/, "");
+      const sourceSite = site ? new URL(site).hostname.toLowerCase() : "";
+      const updatedAt = new Date().toISOString();
+      const version = "current";
+
+      // Index the CURRENT docs version only. Frozen versions (versions.json)
+      // are archived duplicates; the external API reference (data-capture-sdk)
+      // is a separate tool; *.html dirs are client-redirect stubs.
+      let frozenVersions: string[] = [];
       try {
-        const site = String(siteConfig?.url || "").replace(/\/+$/, "");
-        const sourceSite = site ? new URL(site).hostname.toLowerCase() : "";
-        const updatedAt = new Date().toISOString();
-        const version = "current";
+        const parsed = JSON.parse(fs.readFileSync(path.join(siteDir, "versions.json"), "utf8"));
+        if (Array.isArray(parsed)) frozenVersions = parsed.map(String);
+      } catch {
+        /* no versions.json */
+      }
+      const excluded = new Set<string>([...frozenVersions, "data-capture-sdk", "assets", "img", "fonts", "search"]);
+      const skipDir = (name: string) => excluded.has(name) || name.endsWith(".html");
 
-        // Index the CURRENT docs version only. Frozen versions (versions.json)
-        // are archived duplicates; the external API reference (data-capture-sdk)
-        // is a separate tool; *.html dirs are client-redirect stubs.
-        let frozenVersions: string[] = [];
+      const files = walkHtml(outDir, skipDir);
+      const modules: KModule[] = [];
+      let pagesProcessed = 0;
+      let pageErrors = 0;
+
+      for (const file of files) {
+        // Per-page failures are non-fatal — skip the one bad page, keep going.
         try {
-          const parsed = JSON.parse(fs.readFileSync(path.join(siteDir, "versions.json"), "utf8"));
-          if (Array.isArray(parsed)) frozenVersions = parsed.map(String);
-        } catch {
-          /* no versions.json */
-        }
-        const excluded = new Set<string>([...frozenVersions, "data-capture-sdk", "assets", "img", "fonts", "search"]);
-        const skipDir = (name: string) => excluded.has(name) || name.endsWith(".html");
-
-        const files = walkHtml(outDir, skipDir);
-        const modules: KModule[] = [];
-        let pagesProcessed = 0;
-
-        for (const file of files) {
-          let html: string;
-          try {
-            html = fs.readFileSync(file, "utf8");
-          } catch {
-            continue;
-          }
+          const html = fs.readFileSync(file, "utf8");
           const $ = cheerio.load(html);
           const root = $("article .markdown").first().length
             ? $("article .markdown").first()
@@ -582,31 +579,52 @@ export default function knowledgeExtractor(context: any, _options: any) {
               buildModule({ pathname, url, sourceSite, site, title, description, chunk, idx: i + 1, framework, product, contentType, version, updatedAt, notAvailable }),
             );
           });
+        } catch (err) {
+          pageErrors += 1;
+          console.warn(`[knowledge-extractor] skipped page ${path.relative(outDir, file)}: ${(err as Error)?.message || err}`);
         }
-
-        const active = modules.filter((m) => m.status === "active");
-        const index = active.map(toIndexRecord);
-        const graph = buildGraph(active, site);
-
-        const assetsDir = path.join(outDir, "assets");
-        fs.mkdirSync(assetsDir, { recursive: true });
-        fs.writeFileSync(path.join(assetsDir, "knowledge-retrieval-index.json"), JSON.stringify(index, null, 2) + "\n", "utf8");
-        fs.writeFileSync(path.join(assetsDir, "knowledge-graph.jsonld"), JSON.stringify(graph, null, 2) + "\n", "utf8");
-
-        const edgeTypes: Record<string, number> = {};
-        for (const n of graph["@graph"] as any[]) {
-          if ("source" in n && "target" in n) edgeTypes[n["@type"]] = (edgeTypes[n["@type"]] || 0) + 1;
-        }
-        const edgeSummary = Object.entries(edgeTypes)
-          .map(([k, v]) => `${k}=${v}`)
-          .join(" ");
-        console.log(
-          `[knowledge-extractor] ${index.length} modules from ${pagesProcessed} pages | ` +
-            `graph: ${graph["@graph"].length} nodes | edges: ${edgeSummary} -> /assets/`,
-        );
-      } catch (err) {
-        console.warn(`[knowledge-extractor] skipped (non-fatal): ${(err as Error)?.message || err}`);
       }
+
+      const active = modules.filter((m) => m.status === "active");
+      const index = active.map(toIndexRecord);
+      const graph = buildGraph(active, site);
+
+      // Fail LOUD on empty extraction — matches the config's onBrokenLinks:"throw"
+      // convention. "Non-fatal" covers one bad page, not "extracted nothing at
+      // all": selector drift (theme upgrade renames .markdown/.theme-doc-markdown)
+      // must not silently publish an empty index + node-less graph over a green
+      // build. Throwing here fails `docusaurus build`, so the regression is seen.
+      if (pagesProcessed === 0 || index.length === 0) {
+        throw new Error(
+          `[knowledge-extractor] extracted 0 modules from ${files.length} HTML file(s) ` +
+            `(${pageErrors} page error(s)). Page selectors likely drifted — refusing to ` +
+            `overwrite the AI-layer artifacts with empty output.`,
+        );
+      }
+
+      // Write both artifacts atomically: emit to temp files, then rename, so a
+      // failure between the two writes can never ship an index without a matching
+      // graph (or vice versa).
+      const assetsDir = path.join(outDir, "assets");
+      fs.mkdirSync(assetsDir, { recursive: true });
+      const idxPath = path.join(assetsDir, "knowledge-retrieval-index.json");
+      const graphPath = path.join(assetsDir, "knowledge-graph.jsonld");
+      fs.writeFileSync(idxPath + ".tmp", JSON.stringify(index, null, 2) + "\n", "utf8");
+      fs.writeFileSync(graphPath + ".tmp", JSON.stringify(graph, null, 2) + "\n", "utf8");
+      fs.renameSync(idxPath + ".tmp", idxPath);
+      fs.renameSync(graphPath + ".tmp", graphPath);
+
+      const edgeTypes: Record<string, number> = {};
+      for (const n of graph["@graph"] as any[]) {
+        if ("source" in n && "target" in n) edgeTypes[n["@type"]] = (edgeTypes[n["@type"]] || 0) + 1;
+      }
+      const edgeSummary = Object.entries(edgeTypes)
+        .map(([k, v]) => `${k}=${v}`)
+        .join(" ");
+      console.log(
+        `[knowledge-extractor] ${index.length} modules from ${pagesProcessed} pages ` +
+          `(${pageErrors} page error(s)) | graph: ${graph["@graph"].length} nodes | edges: ${edgeSummary} -> /assets/`,
+      );
     },
   };
 }

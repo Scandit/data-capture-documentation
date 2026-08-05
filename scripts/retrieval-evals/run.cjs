@@ -35,6 +35,13 @@ const K = parseInt(arg("k", "3"), 10);
 const MIN_SUCCESS = parseFloat(arg("min-success", "0.8"));
 const MIN_RECALL = parseFloat(arg("min-recall", "0.6"));
 const MIN_MRR = parseFloat(arg("min-mrr", "0.6"));
+// --auto: corpus-wide self-retrieval over EVERY module (not just the 20-query
+// gold set) — each module becomes a query built from its own title+summary and
+// must retrieve itself in the top k. Measures coverage across all docs we
+// create/edit. --auto-limit caps it; --min-auto-success gates it.
+const AUTO = process.argv.includes("--auto");
+const AUTO_LIMIT = parseInt(arg("auto-limit", "0"), 10);
+const MIN_AUTO_SUCCESS = parseFloat(arg("min-auto-success", "0"));
 const REPORT = arg("report", "");
 
 const TOKEN = /[a-z0-9]{2,}/gi;
@@ -83,6 +90,77 @@ function main() {
     console.error("retrieval-evals: empty or invalid index.");
     process.exit(1);
   }
+  if (AUTO) {
+    // Corpus-wide, PAGE-LEVEL self-retrieval over every doc: for each page,
+    // query with a chunk's own title+summary and check that a chunk from the
+    // SAME page (same url) lands in the top k. Page-level (not exact-chunk) is
+    // the meaningful coverage metric here, because the index holds many
+    // near-duplicate chunks per page (shared prose across frameworks, "Part N"
+    // splits) — so "did we surface the right page for this doc's content?" is
+    // what matters, not "did this exact chunk outrank its own siblings".
+    const docs = index.map((m) => ({
+      id: String(m.id || ""),
+      url: String(m.url || ""),
+      tokens: tokenize(docText(m)),
+      query: [m.title, m.summary].filter(Boolean).join(" ").trim() || String(m.id || ""),
+    }));
+    // One representative query per unique page (first chunk seen).
+    const seen = new Set();
+    let rows = docs.filter((d) => d.url && !seen.has(d.url) && seen.add(d.url));
+    if (AUTO_LIMIT > 0) rows = rows.slice(0, AUTO_LIMIT);
+    const fastScore = (qt, dt) => {
+      if (!qt.size || !dt.size) return 0;
+      let o = 0;
+      for (const t of qt) if (dt.has(t)) o++;
+      return o / Math.sqrt(qt.size * dt.size);
+    };
+    let ok = 0,
+      rrSum = 0;
+    const misses = [];
+    for (const r of rows) {
+      const qt = tokenize(r.query);
+      // best score among chunks of the SAME page
+      let bestSame = 0;
+      for (const d of docs) if (d.url === r.url) bestSame = Math.max(bestSame, fastScore(qt, d.tokens));
+      // rank of that best same-page chunk = # of OTHER-page chunks scoring higher
+      let better = 0;
+      for (const d of docs) {
+        if (d.url === r.url) continue;
+        if (fastScore(qt, d.tokens) > bestSame) {
+          better++;
+          if (better >= K) break;
+        }
+      }
+      if (better < K) {
+        ok++;
+        rrSum += 1 / (better + 1);
+      } else {
+        misses.push(r.url.replace(/^https?:\/\/[^/]+/, ""));
+      }
+    }
+    const metrics = {
+      mode: "auto-page-self-retrieval",
+      pages: rows.length,
+      modules: docs.length,
+      k: K,
+      page_success_at_k: +(ok / rows.length).toFixed(4),
+      page_mrr: +(rrSum / rows.length).toFixed(4),
+    };
+    console.log(`\nRetrieval self-eval (AUTO, page-level over all docs): ${rows.length} pages / ${docs.length} modules, k=${K}`);
+    console.log(`  page-success@${K} = ${metrics.page_success_at_k}  (min ${MIN_AUTO_SUCCESS})`);
+    console.log(`  page-MRR          = ${metrics.page_mrr}`);
+    console.log(`  ${misses.length} page(s) not surfaced in top ${K} by their own content.`);
+    misses.slice(0, 10).forEach((m) => console.log(`    ✗ ${m}`));
+    if (REPORT) {
+      fs.mkdirSync(path.dirname(REPORT), { recursive: true });
+      fs.writeFileSync(
+        REPORT,
+        JSON.stringify({ status: metrics.page_success_at_k < MIN_AUTO_SUCCESS ? "breach" : "ok", metrics, misses: misses.slice(0, 200) }, null, 2) + "\n",
+      );
+    }
+    process.exit(metrics.page_success_at_k < MIN_AUTO_SUCCESS ? 1 : 0);
+  }
+
   if (!gold.length) {
     console.error("retrieval-evals: empty gold set.");
     process.exit(1);
