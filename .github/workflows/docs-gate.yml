@@ -1,0 +1,51 @@
+name: Docs Quality Gate
+
+# Runs the docs quality gate (Vale/Google style, cspell, frontmatter schema,
+# link check) on every PR. The gate ratchets to the docs CHANGED in the PR
+# (git merge-base origin/main HEAD), so it never blocks on pre-existing legacy
+# pages — only new or modified docs must pass.
+
+on:
+  pull_request:
+    branches:
+      - main
+      - 'release/**'
+
+jobs:
+  docs-gate:
+    name: Docs Quality Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Full history so the gate's merge-base ratchet can diff the PR
+          # against its target branch.
+          fetch-depth: 0
+
+      - name: Fetch the PR base branch for the ratchet
+        run: git fetch --no-tags origin "${{ github.base_ref }}"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Install Vale (pinned)
+        run: |
+          VALE_VERSION=3.7.1
+          curl -sSfL "https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" \
+            | sudo tar -xz -C /usr/local/bin vale
+          vale -v
+
+      - name: Sync Vale styles
+        run: yarn docs:gate:setup
+
+      - name: Run docs quality gate
+        # GITHUB_BASE_REF makes the gate ratchet against the PR's target branch.
+        run: yarn docs:gate
