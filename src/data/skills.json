@@ -1,5 +1,6 @@
 {
   "repo": "https://github.com/scandit/skills",
+  "repoSlug": "scandit/skills",
   "shared": "data-capture-sdk",
   "products": {
     "sparkscan": {
@@ -157,11 +158,11 @@
       { "slug": "matrixscan-count-net-ios", "product": "matrixscan-count" },
       { "slug": "label-capture-net-ios", "product": "smart-label-capture" },
       { "slug": "id-capture-net-ios", "product": "id-capture" },
-      { "slug": "sparkscan-maui", "product": "sparkscan", "label": "SparkScan for .NET MAUI (cross-platform iOS + Android)" },
-      { "slug": "barcode-capture-maui", "product": "barcode-capture", "label": "Barcode Capture for .NET MAUI (cross-platform iOS + Android)" },
-      { "slug": "matrixscan-batch-maui", "product": "matrixscan-batch", "label": "MatrixScan Batch for .NET MAUI (cross-platform iOS + Android)" },
-      { "slug": "matrixscan-ar-maui", "product": "matrixscan-ar", "label": "MatrixScan AR for .NET MAUI (cross-platform iOS + Android)" },
-      { "slug": "matrixscan-count-maui", "product": "matrixscan-count", "label": "MatrixScan Count for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "sparkscan-net-maui", "product": "sparkscan", "label": "SparkScan for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "barcode-capture-net-maui", "product": "barcode-capture", "label": "Barcode Capture for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "matrixscan-batch-net-maui", "product": "matrixscan-batch", "label": "MatrixScan Batch for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "matrixscan-ar-net-maui", "product": "matrixscan-ar", "label": "MatrixScan AR for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "matrixscan-count-net-maui", "product": "matrixscan-count", "label": "MatrixScan Count for .NET MAUI (cross-platform iOS + Android)" },
       { "slug": "label-capture-net-maui", "product": "smart-label-capture", "label": "Smart Label Capture for .NET MAUI (cross-platform iOS + Android)" },
       { "slug": "id-capture-net-maui", "product": "id-capture", "label": "ID Capture for .NET MAUI (cross-platform iOS + Android)" }
     ],
@@ -173,11 +174,11 @@
       { "slug": "matrixscan-count-net-android", "product": "matrixscan-count" },
       { "slug": "label-capture-net-android", "product": "smart-label-capture" },
       { "slug": "id-capture-net-android", "product": "id-capture" },
-      { "slug": "sparkscan-maui", "product": "sparkscan", "label": "SparkScan for .NET MAUI (cross-platform iOS + Android)" },
-      { "slug": "barcode-capture-maui", "product": "barcode-capture", "label": "Barcode Capture for .NET MAUI (cross-platform iOS + Android)" },
-      { "slug": "matrixscan-batch-maui", "product": "matrixscan-batch", "label": "MatrixScan Batch for .NET MAUI (cross-platform iOS + Android)" },
-      { "slug": "matrixscan-ar-maui", "product": "matrixscan-ar", "label": "MatrixScan AR for .NET MAUI (cross-platform iOS + Android)" },
-      { "slug": "matrixscan-count-maui", "product": "matrixscan-count", "label": "MatrixScan Count for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "sparkscan-net-maui", "product": "sparkscan", "label": "SparkScan for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "barcode-capture-net-maui", "product": "barcode-capture", "label": "Barcode Capture for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "matrixscan-batch-net-maui", "product": "matrixscan-batch", "label": "MatrixScan Batch for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "matrixscan-ar-net-maui", "product": "matrixscan-ar", "label": "MatrixScan AR for .NET MAUI (cross-platform iOS + Android)" },
+      { "slug": "matrixscan-count-net-maui", "product": "matrixscan-count", "label": "MatrixScan Count for .NET MAUI (cross-platform iOS + Android)" },
       { "slug": "label-capture-net-maui", "product": "smart-label-capture", "label": "Smart Label Capture for .NET MAUI (cross-platform iOS + Android)" },
       { "slug": "id-capture-net-maui", "product": "id-capture", "label": "ID Capture for .NET MAUI (cross-platform iOS + Android)" }
     ]
