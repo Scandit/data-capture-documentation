@@ -21,10 +21,22 @@ import styles from './styles.module.css';
  * Renders nothing if `product`, `user_intents`, and `not_for` are all unset.
  */
 
+interface FrameworkEntry {
+  version?: string;
+  apiUrl?: string;
+}
+
 interface ProductEntry {
   key: string;
   name: string;
-  frameworks?: Record<string, unknown> | string[];
+  frameworks?: Record<string, FrameworkEntry> | string[];
+}
+
+// products.json marks a framework the product does NOT support with version "n/a"
+// (e.g. SparkScan on Titanium). Treat those as unsupported.
+function isSupported(entry: FrameworkEntry): boolean {
+  const v = String(entry?.version ?? '').trim().toLowerCase();
+  return v !== '' && v !== 'n/a';
 }
 
 interface ProductChooserProps {
@@ -45,7 +57,9 @@ export default function ProductChooser({ frontMatter = {} }: ProductChooserProps
   const frameworks = product?.frameworks
     ? Array.isArray(product.frameworks)
       ? product.frameworks
-      : Object.keys(product.frameworks)
+      : Object.entries(product.frameworks)
+          .filter(([, entry]) => isSupported(entry))
+          .map(([name]) => name)
     : [];
 
   if (!intents.length && !notFor.length && !frameworks.length) return null;
