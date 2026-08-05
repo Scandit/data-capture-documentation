@@ -496,6 +496,9 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   // Searches fire on every keystroke; debounce to one docs_search_performed
   // per finished search rather than one per keystroke.
   const searchPerformedDebounceRef = useRef(null);
+  // Debounce for the single Algolia analytics count per completed query (see
+  // transformSearchClient) - separate from the PostHog capture debounce below.
+  const analyticsCountRef = useRef(null);
   const captureSearchDebounced = useCallback((query, nbHits) => {
     if (searchPerformedDebounceRef.current) {
       clearTimeout(searchPerformedDebounceRef.current);
@@ -537,8 +540,16 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // Build a request array with an optional query-text override (routed
         // framework/version tokens stripped, or the enum-member fallback below)
         // and the version-facet swap. Reused for the primary search and retry.
-        const buildRequests = (queryOverride) =>
-          (queryOverride != null || targetTag) && Array.isArray(requests)
+        // Every keystroke calls searchClient.search, so each partial query
+        // ("l","li","lic",...) would otherwise be counted as its own search in
+        // Algolia Search Analytics - inflating the searches total and the
+        // no-result rate with prefixes that are not real queries. We run the
+        // interactive requests with analytics:false (results still show
+        // as-you-type; clickAnalytics is untouched so result-click attribution
+        // keeps working) and fire ONE analytics:true count-only request per
+        // completed query via the debounced ping below.
+        const buildRequests = (queryOverride, { analyticsPing = false } = {}) =>
+          Array.isArray(requests)
             ? requests.map((r) => {
                 const p = r.params || r;
                 const params = { ...p };
@@ -550,6 +561,16 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
                     params.facetFilters,
                     targetTag
                   );
+                }
+                if (analyticsPing) {
+                  // The single counted search per finished query: recorded in
+                  // Search Analytics, but fetch no hits and no queryID - it
+                  // exists only to log the whole query and its no-result status.
+                  params.analytics = true;
+                  params.hitsPerPage = 0;
+                  params.clickAnalytics = false;
+                } else {
+                  params.analytics = false;
                 }
                 return r.params ? { ...r, params } : params;
               })
@@ -580,6 +601,24 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
               captureSearchDebounced(query, nbHitsOf(response))
             )
             .catch(() => {});
+        }
+        // Count ONE search per completed query in Algolia Search Analytics,
+        // after the user pauses typing. Skips <3-char prefixes ("lc") so
+        // mid-typing noise is never counted, and re-checks latestQueryRef at
+        // fire time so only the final query in a burst is recorded. The query
+        // text matches the interactive primary (routed tokens stripped) so its
+        // no-result status reflects what the user actually saw.
+        if (query && query.trim().length >= 3) {
+          if (analyticsCountRef.current) {
+            clearTimeout(analyticsCountRef.current);
+          }
+          const analyticsRequests = buildRequests(strippedQuery, {
+            analyticsPing: true,
+          });
+          analyticsCountRef.current = setTimeout(() => {
+            if (latestQueryRef.current !== query) return;
+            originalSearch(analyticsRequests).catch(() => {});
+          }, 600);
         }
         return resultPromise;
       };
