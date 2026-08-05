@@ -4,6 +4,7 @@ import type * as Preset from "@docusaurus/preset-classic";
 import * as dotenv from 'dotenv';
 import { version } from "react";
 import remarkHideComments from "./src/plugins/remark-hide-comments";
+import knowledgeExtractor from "./src/plugins/knowledge-extractor";
 dotenv.config();  // Load environment variables from .env file
 
 /**
@@ -410,6 +411,9 @@ const config: Config = {
       ignoreFiles: llmsIgnoreFiles,
     },
   ],
+  // Build-generate AI layer: emits /assets/knowledge-retrieval-index.json and
+  // /assets/knowledge-graph.jsonld from the rendered HTML (see src/plugins/knowledge-extractor).
+  knowledgeExtractor,
 ],
 
   presets: [
