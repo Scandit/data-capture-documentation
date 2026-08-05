@@ -668,9 +668,11 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
             hitComponent={Hit}
             transformSearchClient={transformSearchClient}
             getMissingResultsUrl={({ query }) => {
-              // Most zero-result queries are exact API symbol names that the
-              // main index doesn't contain (data-capture-sdk tree excluded) -
-              // offer the API reference's built-in search as a fallback.
+              // The API reference (data-capture-sdk tree) IS in this index, so
+              // most API-symbol queries do resolve here. This only fires on a
+              // genuine zero-result query - offer the API reference's own
+              // built-in search as a last-resort fallback for symbols/versions
+              // the main index may not cover.
               const sdkFw = (currentFramework || '/sdks/web').replace('/sdks/', '');
               const fw = sdkFrameworkToApi(sdkFw);
               return `https://docs.scandit.com/data-capture-sdk/${fw}/search.html?q=${encodeURIComponent(query)}`;
