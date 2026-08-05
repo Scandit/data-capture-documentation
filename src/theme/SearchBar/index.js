@@ -544,10 +544,11 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // ("l","li","lic",...) would otherwise be counted as its own search in
         // Algolia Search Analytics - inflating the searches total and the
         // no-result rate with prefixes that are not real queries. We run the
-        // interactive requests with analytics:false (results still show
-        // as-you-type; clickAnalytics is untouched so result-click attribution
-        // keeps working) and fire ONE analytics:true count-only request per
-        // completed query via the debounced ping below.
+        // interactive requests with analytics ON but tagged 'as-you-type' (so
+        // click/queryID attribution keeps working and the keystroke prefixes can
+        // be segmented OUT of the whole-query metrics in the dashboard, rather
+        // than lost), and fire ONE untagged count-only request per completed
+        // query via the debounced ping below.
         const buildRequests = (queryOverride, { analyticsPing = false } = {}) =>
           Array.isArray(requests)
             ? requests.map((r) => {
@@ -563,14 +564,24 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
                   );
                 }
                 if (analyticsPing) {
-                  // The single counted search per finished query: recorded in
-                  // Search Analytics, but fetch no hits and no queryID - it
-                  // exists only to log the whole query and its no-result status.
+                  // The single counted whole-query record: analytics on, no hits,
+                  // no click attribution, and UNtagged - the clean count once the
+                  // as-you-type prefixes are filtered out in the dashboard.
                   params.analytics = true;
                   params.hitsPerPage = 0;
                   params.clickAnalytics = false;
                 } else {
-                  params.analytics = false;
+                  // Interactive as-you-type request. Keep analytics + clickAnalytics
+                  // ON so the queryID stays linkable and result-click attribution
+                  // (CTR/conversion, plus NeuralSearch / Dynamic Re-Ranking / A-B
+                  // testing, which all require the click to link back to a recorded
+                  // search) keeps working. Tag it 'as-you-type' so the keystroke
+                  // prefixes are segmentable out of the whole-query metrics.
+                  params.analytics = true;
+                  params.analyticsTags = [
+                    ...(Array.isArray(params.analyticsTags) ? params.analyticsTags : []),
+                    "as-you-type",
+                  ];
                 }
                 return r.params ? { ...r, params } : params;
               })
@@ -584,20 +595,28 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // ".member" stripped so the parent symbol's page is found. Fires only on
         // zero results and only adopts the retry when it actually finds hits, so
         // normal queries are untouched.
+        // Resolve to BOTH the response and the query that actually produced it
+        // (the primary, or the member-stripped retry when that is what found the
+        // hits), so the counted ping below logs the query the user really saw.
+        const primaryQuery = strippedQuery != null ? strippedQuery : query || "";
         const resultPromise = originalSearch(buildRequests(strippedQuery)).then(
           (response) => {
-            if (nbHitsOf(response) !== 0) return response;
+            if (nbHitsOf(response) !== 0)
+              return { response, effectiveQuery: primaryQuery };
             const base = strippedQuery || query || "";
             const memberStripped = stripTrailingMember(base);
-            if (!memberStripped || memberStripped === base) return response;
+            if (!memberStripped || memberStripped === base)
+              return { response, effectiveQuery: primaryQuery };
             return originalSearch(buildRequests(memberStripped)).then((retry) =>
-              nbHitsOf(retry) > 0 ? retry : response
+              nbHitsOf(retry) > 0
+                ? { response: retry, effectiveQuery: memberStripped }
+                : { response, effectiveQuery: primaryQuery }
             );
           }
         );
         if (query) {
           resultPromise
-            .then((response) =>
+            .then(({ response }) =>
               captureSearchDebounced(query, nbHitsOf(response))
             )
             .catch(() => {});
@@ -605,22 +624,25 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // Count ONE search per completed query in Algolia Search Analytics,
         // after the user pauses typing. Skips <3-char prefixes ("lc") so
         // mid-typing noise is never counted, and re-checks latestQueryRef at
-        // fire time so only the final query in a burst is recorded. The query
-        // text matches the interactive primary (routed tokens stripped) so its
-        // no-result status reflects what the user actually saw.
+        // fire time so only the final query in a burst is recorded. Uses the
+        // RESOLVED query (post enum-member fallback), so its no-result status
+        // reflects what the user actually saw, not the un-retried primary.
         if (query && query.trim().length >= 3) {
           if (analyticsCountRef.current) {
             clearTimeout(analyticsCountRef.current);
           }
-          const analyticsRequests = buildRequests(strippedQuery, {
-            analyticsPing: true,
-          });
           analyticsCountRef.current = setTimeout(() => {
             if (latestQueryRef.current !== query) return;
-            originalSearch(analyticsRequests).catch(() => {});
+            resultPromise
+              .then(({ effectiveQuery }) =>
+                originalSearch(
+                  buildRequests(effectiveQuery, { analyticsPing: true })
+                )
+              )
+              .catch(() => {});
           }, 600);
         }
-        return resultPromise;
+        return resultPromise.then((r) => r.response);
       };
       return searchClient;
     },
