@@ -3,7 +3,10 @@ name: Docs Retrieval Evals
 # Measures retrieval quality of the build-generated knowledge index against a
 # gold set of real queries (success@k / precision@k / MRR). Runs on PRs that
 # touch docs, the extractor, or the gold set — a regression in descriptions or
-# partials that hurts retrieval fails here.
+# partials that hurts retrieval fails here. Also runs on push to main, so the
+# deploy branch is checked too (an empty index from a cause outside the PR
+# paths — e.g. a Docusaurus upgrade renaming article selectors — is caught here
+# as well as by the plugin's own fail-loud floor check during the build).
 
 on:
   pull_request:
@@ -14,6 +17,9 @@ on:
       - 'src/plugins/knowledge-extractor/**'
       - 'scripts/retrieval-evals/**'
       - '.github/workflows/docs-retrieval-evals.yml'
+  push:
+    branches:
+      - main
 
 jobs:
   retrieval-evals:
