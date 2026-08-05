@@ -64,6 +64,16 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
         the generated code always targets current, validated APIs.
       </p>
 
+      <div className={styles.videoWrap}>
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/LGdsM5_dAT4"
+          title="Scandit Agent Skills in action"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          loading="lazy"
+        />
+      </div>
+
       <h2>How it works</h2>
       <ol className={styles.steps}>
         <li>
