@@ -12,13 +12,33 @@ const { checkLinks } = require("./links.cjs");
 const ROOT = process.cwd();
 
 function sh(cmd) {
-  return execSync(cmd, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  // Surface git's stderr (do not swallow it) so a failed ratchet lookup is
+  // visible in the logs instead of silently collapsing to an empty diff.
+  return execSync(cmd, { encoding: "utf8", stdio: ["ignore", "pipe", "inherit"] }).trim();
 }
 
 function changedDocs() {
+  // Ratchet against the PR's target branch, not a hardcoded main — so a PR into
+  // release/** diffs against that release branch, not main's fork point.
+  // GITHUB_BASE_REF is set by GitHub on pull_request events.
+  const baseBranch = process.env.GITHUB_BASE_REF ? `origin/${process.env.GITHUB_BASE_REF}` : "origin/main";
   let base;
-  try { base = sh("git merge-base origin/main HEAD"); }
-  catch { try { base = sh("git rev-parse origin/main"); } catch { base = ""; } }
+  try { base = sh(`git merge-base ${baseBranch} HEAD`); }
+  catch {
+    try { base = sh(`git rev-parse ${baseBranch}`); }
+    catch {
+      if (process.env.CI) {
+        // Fail loud: a missing base ref would otherwise make `git diff` collapse
+        // to a working-tree diff (empty in a clean checkout) → a false "pass".
+        console.error(
+          `docs-gate: cannot resolve ratchet base '${baseBranch}'. ` +
+          `Fetch it in CI (git fetch origin ${process.env.GITHUB_BASE_REF || "main"}) before running the gate.`
+        );
+        process.exit(2);
+      }
+      base = "";
+    }
+  }
   let out = "";
   try { out = sh(`git diff --name-only --diff-filter=ACMR ${base} HEAD -- docs`); } catch {}
   // include staged, unstaged, and untracked changes so a local run before push also checks
@@ -90,8 +110,20 @@ function main() {
   findings.push(...runCspell(files));
 
   const vale = findVale();
-  if (vale) findings.push(...runVale(files, vale));
-  else console.log("docs-gate: Vale not installed — skipping prose style check (run `npm run docs:gate:setup`).\n");
+  if (vale) {
+    findings.push(...runVale(files, vale));
+  } else if (process.env.CI) {
+    // In CI, a missing Vale must fail — otherwise the headline prose-style check
+    // silently no-ops while the job stays green. Locally it's still advisory.
+    findings.push({
+      file: ".vale.ini",
+      level: "error",
+      check: "vale",
+      msg: "Vale is not installed in CI — prose style checks cannot run. Install Vale in the workflow before `docs:gate`.",
+    });
+  } else {
+    console.log("docs-gate: Vale not installed — skipping prose style check (run `npm run docs:gate:setup`).\n");
+  }
 
   // report, grouped by file
   const byFile = {};

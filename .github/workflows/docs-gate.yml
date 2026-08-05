@@ -20,12 +20,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # Full history so the gate's `git merge-base origin/main HEAD`
-          # ratchet can diff the PR against main.
+          # Full history so the gate's merge-base ratchet can diff the PR
+          # against its target branch.
           fetch-depth: 0
 
-      - name: Ensure origin/main is available for the ratchet
-        run: git fetch --no-tags origin main
+      - name: Fetch the PR base branch for the ratchet
+        run: git fetch --no-tags origin "${{ github.base_ref }}"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -36,8 +36,16 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Set up Vale
+      - name: Install Vale (pinned)
+        run: |
+          VALE_VERSION=3.7.1
+          curl -sSfL "https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" \
+            | sudo tar -xz -C /usr/local/bin vale
+          vale -v
+
+      - name: Sync Vale styles
         run: yarn docs:gate:setup
 
       - name: Run docs quality gate
+        # GITHUB_BASE_REF makes the gate ratchet against the PR's target branch.
         run: yarn docs:gate
