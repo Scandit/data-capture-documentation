@@ -37,6 +37,9 @@ import Prerequisites from '../../../partials/get-started/_prerequisites.mdx';
 ## Create a data capture context
 
 import DataCaptureContextIos from '../../../partials/get-started/_create-data-capture-context-ios.mdx';
+import LicenseKeyInput from '@site/src/components/LicenseKeyInput';
+
+<LicenseKeyInput/>
 
 <DataCaptureContextIos/>
 
