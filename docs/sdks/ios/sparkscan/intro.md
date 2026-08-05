@@ -5,15 +5,27 @@ sidebar_position: 1
 displayed_sidebar: iosSidebar
 pagination_prev: null
 framework: ios
+product: sparkscan
+user_intents:
+  - "scan one barcode at a time on iOS"
+  - "add a ready-made scanning UI without building your own"
+  - "scan items one by one to build a list (inventory, receiving)"
+not_for:
+  - "scan and count many barcodes at once — use MatrixScan Count"
+  - "build a fully custom scanning UI — use Barcode Capture"
 keywords:
   - ios
 ---
+
+import ProductChooser from '@site/src/components/ProductChooser';
 
 # About SparkScan
 
 SparkScan is our pre-built smartphone scanning interface designed for high-performance barcode scanning. It fits on top of any smartphone application, providing an intuitive user interface for simple, fast and ergonomic scanning in scan-intensive workflows such as inventory management in retail, or goods receiving in logistics.
 
 SparkScan bundles multiple scanning features together and addresses many common challenges associated with scanning on smart devices. It is designed to be easily integrated into any application, and can be customized to fit your specific needs.
+
+<ProductChooser frontMatter={frontMatter}/>
 
 ## UI Overview
 
