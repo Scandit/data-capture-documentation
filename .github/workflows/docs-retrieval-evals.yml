@@ -1,0 +1,47 @@
+name: Docs Retrieval Evals
+
+# Measures retrieval quality of the build-generated knowledge index against a
+# gold set of real queries (success@k / precision@k / MRR). Runs on PRs that
+# touch docs, the extractor, or the gold set — a regression in descriptions or
+# partials that hurts retrieval fails here.
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'src/plugins/knowledge-extractor/**'
+      - 'scripts/retrieval-evals/**'
+      - '.github/workflows/docs-retrieval-evals.yml'
+
+jobs:
+  retrieval-evals:
+    name: Docs Retrieval Evals
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build docs (generates the knowledge retrieval index)
+        run: yarn build
+
+      - name: Run retrieval evals
+        run: node scripts/retrieval-evals/run.cjs --report reports/retrieval-evals.json
+
+      - name: Upload eval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: retrieval-evals-report
+          path: reports/retrieval-evals.json
+          if-no-files-found: ignore

@@ -1,0 +1,25 @@
+{
+  "_comment": "Retrieval-eval gold set. Each entry is a real user query (seeded from Algolia top-queries + the product/intent taxonomy) mapped to the URL/path substrings a correct answer should live under. A retrieved knowledge module counts as relevant if its `url` contains ANY of `expect`. Add entries as new products/pages land; keep queries in the user's words.",
+  "queries": [
+    { "query": "barcode capture get started", "expect": ["/barcode-capture/get-started"] },
+    { "query": "sparkscan", "expect": ["/sparkscan/"] },
+    { "query": "spark scan get started", "expect": ["/sparkscan/get-started", "/sparkscan/intro"] },
+    { "query": "matrixscan count", "expect": ["/matrixscan-count/"] },
+    { "query": "matrixscan find", "expect": ["/matrixscan-find/", "/matrixscan-pick/"] },
+    { "query": "label capture", "expect": ["/label-capture/"] },
+    { "query": "smart label capture", "expect": ["/label-capture/"] },
+    { "query": "id capture supported documents", "expect": ["/id-capture/supported-documents", "/id-capture/", "id-documents"] },
+    { "query": "id bolt", "expect": ["/id-bolt/"] },
+    { "query": "parser", "expect": ["/parser/"] },
+    { "query": "barcode selection", "expect": ["/barcode-selection/"] },
+    { "query": "add the sdk", "expect": ["/add-sdk"] },
+    { "query": "how to initialize data capture context", "expect": ["/add-sdk", "/get-started"] },
+    { "query": "supported symbologies", "expect": ["barcode-symbologies", "symbology-properties"] },
+    { "query": "qr code scanning", "expect": ["barcode-symbologies", "/barcode-capture/"] },
+    { "query": "data matrix", "expect": ["barcode-symbologies"] },
+    { "query": "ai powered barcode scanning", "expect": ["ai-powered-barcode-scanning"] },
+    { "query": "scandit express inventory count", "expect": ["/express/", "inventory-count"] },
+    { "query": "release notes", "expect": ["/release-notes"] },
+    { "query": "agent skills", "expect": ["/agent-skills"] }
+  ]
+}
