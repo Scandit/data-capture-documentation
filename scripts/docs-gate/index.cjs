@@ -85,7 +85,17 @@ function runVale(files, bin) {
     const raw = execFileSync(bin, ["--output=JSON", ...files], { cwd: ROOT, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
     json = JSON.parse(raw);
   } catch (e) {
-    try { json = JSON.parse(e.stdout || "{}"); } catch { return out; }
+    // Vale exits non-zero BOTH when it finds alerts (JSON on stdout) and when it
+    // fails to run (bad config, missing StylesPath, invalid rule — a diagnostic
+    // on stderr, non-JSON stdout). Only the first is "no error"; the second must
+    // fail the gate, not be swallowed as "no alerts".
+    const stdout = (e.stdout || "").toString();
+    try {
+      json = JSON.parse(stdout);
+    } catch {
+      const stderr = ((e.stderr || "").toString().trim() || (e.message || "").trim()).split(/\r?\n/).slice(0, 5).join(" ");
+      return [{ file: ".vale.ini", level: "error", check: "vale", msg: `Vale failed to run (not an alert): ${stderr}` }];
+    }
   }
   for (const [file, alerts] of Object.entries(json || {})) {
     for (const a of alerts) {
