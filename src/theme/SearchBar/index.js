@@ -496,6 +496,9 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   // Searches fire on every keystroke; debounce to one docs_search_performed
   // per finished search rather than one per keystroke.
   const searchPerformedDebounceRef = useRef(null);
+  // Debounce for the single Algolia analytics count per completed query (see
+  // transformSearchClient) - separate from the PostHog capture debounce below.
+  const analyticsCountRef = useRef(null);
   const captureSearchDebounced = useCallback((query, nbHits) => {
     if (searchPerformedDebounceRef.current) {
       clearTimeout(searchPerformedDebounceRef.current);
@@ -537,8 +540,17 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // Build a request array with an optional query-text override (routed
         // framework/version tokens stripped, or the enum-member fallback below)
         // and the version-facet swap. Reused for the primary search and retry.
-        const buildRequests = (queryOverride) =>
-          (queryOverride != null || targetTag) && Array.isArray(requests)
+        // Every keystroke calls searchClient.search, so each partial query
+        // ("l","li","lic",...) would otherwise be counted as its own search in
+        // Algolia Search Analytics - inflating the searches total and the
+        // no-result rate with prefixes that are not real queries. We run the
+        // interactive requests with analytics ON but tagged 'as-you-type' (so
+        // click/queryID attribution keeps working and the keystroke prefixes can
+        // be segmented OUT of the whole-query metrics in the dashboard, rather
+        // than lost), and fire ONE untagged count-only request per completed
+        // query via the debounced ping below.
+        const buildRequests = (queryOverride, { analyticsPing = false } = {}) =>
+          Array.isArray(requests)
             ? requests.map((r) => {
                 const p = r.params || r;
                 const params = { ...p };
@@ -550,6 +562,26 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
                     params.facetFilters,
                     targetTag
                   );
+                }
+                if (analyticsPing) {
+                  // The single counted whole-query record: analytics on, no hits,
+                  // no click attribution, and UNtagged - the clean count once the
+                  // as-you-type prefixes are filtered out in the dashboard.
+                  params.analytics = true;
+                  params.hitsPerPage = 0;
+                  params.clickAnalytics = false;
+                } else {
+                  // Interactive as-you-type request. Keep analytics + clickAnalytics
+                  // ON so the queryID stays linkable and result-click attribution
+                  // (CTR/conversion, plus NeuralSearch / Dynamic Re-Ranking / A-B
+                  // testing, which all require the click to link back to a recorded
+                  // search) keeps working. Tag it 'as-you-type' so the keystroke
+                  // prefixes are segmentable out of the whole-query metrics.
+                  params.analytics = true;
+                  params.analyticsTags = [
+                    ...(Array.isArray(params.analyticsTags) ? params.analyticsTags : []),
+                    "as-you-type",
+                  ];
                 }
                 return r.params ? { ...r, params } : params;
               })
@@ -563,25 +595,54 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // ".member" stripped so the parent symbol's page is found. Fires only on
         // zero results and only adopts the retry when it actually finds hits, so
         // normal queries are untouched.
+        // Resolve to BOTH the response and the query that actually produced it
+        // (the primary, or the member-stripped retry when that is what found the
+        // hits), so the counted ping below logs the query the user really saw.
+        const primaryQuery = strippedQuery != null ? strippedQuery : query || "";
         const resultPromise = originalSearch(buildRequests(strippedQuery)).then(
           (response) => {
-            if (nbHitsOf(response) !== 0) return response;
+            if (nbHitsOf(response) !== 0)
+              return { response, effectiveQuery: primaryQuery };
             const base = strippedQuery || query || "";
             const memberStripped = stripTrailingMember(base);
-            if (!memberStripped || memberStripped === base) return response;
+            if (!memberStripped || memberStripped === base)
+              return { response, effectiveQuery: primaryQuery };
             return originalSearch(buildRequests(memberStripped)).then((retry) =>
-              nbHitsOf(retry) > 0 ? retry : response
+              nbHitsOf(retry) > 0
+                ? { response: retry, effectiveQuery: memberStripped }
+                : { response, effectiveQuery: primaryQuery }
             );
           }
         );
         if (query) {
           resultPromise
-            .then((response) =>
+            .then(({ response }) =>
               captureSearchDebounced(query, nbHitsOf(response))
             )
             .catch(() => {});
         }
-        return resultPromise;
+        // Count ONE search per completed query in Algolia Search Analytics,
+        // after the user pauses typing. Skips <3-char prefixes ("lc") so
+        // mid-typing noise is never counted, and re-checks latestQueryRef at
+        // fire time so only the final query in a burst is recorded. Uses the
+        // RESOLVED query (post enum-member fallback), so its no-result status
+        // reflects what the user actually saw, not the un-retried primary.
+        if (query && query.trim().length >= 3) {
+          if (analyticsCountRef.current) {
+            clearTimeout(analyticsCountRef.current);
+          }
+          analyticsCountRef.current = setTimeout(() => {
+            if (latestQueryRef.current !== query) return;
+            resultPromise
+              .then(({ effectiveQuery }) =>
+                originalSearch(
+                  buildRequests(effectiveQuery, { analyticsPing: true })
+                )
+              )
+              .catch(() => {});
+          }, 600);
+        }
+        return resultPromise.then((r) => r.response);
       };
       return searchClient;
     },
@@ -629,9 +690,11 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
             hitComponent={Hit}
             transformSearchClient={transformSearchClient}
             getMissingResultsUrl={({ query }) => {
-              // Most zero-result queries are exact API symbol names that the
-              // main index doesn't contain (data-capture-sdk tree excluded) -
-              // offer the API reference's built-in search as a fallback.
+              // The API reference (data-capture-sdk tree) IS in this index, so
+              // most API-symbol queries do resolve here. This only fires on a
+              // genuine zero-result query - offer the API reference's own
+              // built-in search as a last-resort fallback for symbols/versions
+              // the main index may not cover.
               const sdkFw = (currentFramework || '/sdks/web').replace('/sdks/', '');
               const fw = sdkFrameworkToApi(sdkFw);
               return `https://docs.scandit.com/data-capture-sdk/${fw}/search.html?q=${encodeURIComponent(query)}`;
