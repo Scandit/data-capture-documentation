@@ -1,76 +1,80 @@
 ---
-description: "Add SparkScan to your iOS app: create a data capture context, configure the mode, add the SparkScan view, and handle scanned barcodes."
-
-sidebar_position: 2
-framework: ios
+title: "Get started with SparkScan on iOS"
+description: "Add SparkScan to your iOS app: create a data capture context, configure the mode, add the view, and handle scanned barcodes."
+product: sparkscan
+frameworks: [ios]
+topic_type: get-started
+version_status: current
+canonical_id: scandit.sparkscan.get-started
+related_products: [barcode-capture]
+user_intents:
+  - "add a ready-made barcode scanner to my iOS app"
+  - "scan one barcode at a time on iOS"
+  - "scan items one by one to build a list (inventory, receiving) on iOS"
+not_for:
+  - "scanning and counting many barcodes at once — use MatrixScan Count"
+  - "a fully custom scanning UI — use Barcode Capture"
+prerequisites:
+  - scandit.get-a-license
+  - scandit.add-sdk.ios
 keywords:
   - ios
+  - sparkscan
+  - barcode
+sidebar_position: 2
 ---
 
-# Get Started
+# Get started with SparkScan on iOS
 
-In this guide you will learn step-by-step how to add SparkScan to your application by:
+SparkScan adds a prebuilt, drop-in scanning interface to your iOS app. Follow this guide to create a data capture context, configure the SparkScan mode, add the scanning view, and handle the barcodes you scan. By the end you have a working SparkScan integration and your first successful scan.
 
-- Creating a new Data Capture Context instance
-- Configuring the Spark Scan Mode
-- Creating the SparkScanView with the desired settings and binding it to the application’s lifecycle
-- Registering the listener to be informed when new barcodes are scanned and updating the UI accordingly
+## Before you start
 
-## Prerequisites
+import Prerequisites from '../../../partials/get-started/_prerequisites.mdx';
 
-Before starting with adding a capture mode, make sure that you have a valid Scandit Data Capture SDK license key and that you added the necessary dependencies. If you have not done that yet, check out this [guide](/sdks/ios/add-sdk.md).
+<Prerequisites framework="ios" />
 
-:::tip
-You can retrieve your Scandit Data Capture SDK license key by signing in to your account [Dashboard](https://ssl.scandit.com/dashboard/sign-in).
-:::
-
-## Create a Data Capture Context
+## Create a data capture context
 
 import DataCaptureContextIos from '../../../partials/get-started/_create-data-capture-context-ios.mdx';
 
 <DataCaptureContextIos/>
 
-## Configure the SparkScan Mode
+## Configure the SparkScan mode
 
-The SparkScan Mode is configured through SparkScanSettings and allows you to register one or more listeners that are informed whenever a new barcode is scanned.
+Configure the mode through `SparkScanSettings`. The mode lets you register one or more listeners that are notified whenever a new barcode is scanned.
 
-For this tutorial, we will set up SparkScan for scanning EAN13 codes. Change this to the correct symbologies for your use case (for example, Code 128, Code 39…).
+This guide sets up SparkScan to scan EAN-13 codes. Set the symbologies your use case needs instead — for example, Code 128 or Code 39:
 
 ```swift
 let settings = SparkScanSettings()
 settings.set(symbology: .ean13UPCA, enabled: true)
 ```
 
-Next, create a SparkScan instance with the settings initialized in the previous step:
+Create a `SparkScan` instance with those settings:
 
 ```swift
 let sparkScan = SparkScan(settings: settings)
 ```
 
-## Create the SparkScan View
+## Add the SparkScan view
 
-The SparkScan built-in user interface includes the camera preview and scanning UI elements. These guide the user through the scanning process.
-
-The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html).
+The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html) provides the built-in interface — the camera preview and the scanning UI elements that guide the user through scanning. Customize its appearance through [`SparkScanViewSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html):
 
 ```swift
 let viewSettings = SparkScanViewSettings()
-// setup the desired settings by updating the viewSettings object
+// Configure the desired settings by updating the viewSettings object.
 ```
 
-By adding a [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html), the scanning interface (camera preview and scanning UI elements) will be added automatically to your application.
-
-Add a [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html) to your view hierarchy: 
-
-Construct a new [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html), and it is automatically added to the provided parentView:
+Construct the view with your context, mode, and settings. Passing a `parentView` adds the view — and with it the camera preview and scanning UI — to your view hierarchy automatically:
 
 ```swift
 let sparkScanView = SparkScanView(parentView: view, context: context, sparkScan: sparkScan, settings: viewSettings)
 ```
 
-See the [SparkScan Workflow Options](./advanced.md#workflow-options) section for more information.
+For the full set of view options, see [SparkScan workflow options](/sdks/ios/sparkscan/advanced/#workflow-options).
 
-Additionally, make sure to call [`SDCSparkScanView.prepareScanning`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.PrepareScanning) and [`SDCSparkScanView.stopScanning`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your UIViewController’s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) and [`viewWillDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621485-viewwilldisappear) callbacks, to make sure that start up time is optimal and scanning is stopped when the app is going in the background.
+Call [`prepareScanning`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.PrepareScanning) and [`stopScanning`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) from your `UIViewController`'s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) and [`viewWillDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621485-viewwilldisappear) callbacks. This keeps startup time optimal and stops scanning when the app moves to the background:
 
 ```swift
 override func viewWillAppear(_ animated: Bool) {
@@ -84,34 +88,48 @@ override func viewWillDisappear(_ animated: Bool) {
 }
 ```
 
-## Register the Listener
+## Handle scanned barcodes
 
-To keep track of the barcodes that have been scanned, implement the [`SDCSparkScanListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) protocol and register the listener to the SparkScan mode.
+To track the barcodes you scan, implement the [`SparkScanListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) protocol and register the listener on the mode:
 
 ```swift
-// Register self as a listener to monitor the spark scan session.
+// Register self as a listener to monitor the SparkScan session.
 sparkScan.addListener(self)
 ```
 
-[`SDCSparkScanListener.sparkScan:didScanInSession:frameData:`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list: [`SDCSparkScanSession.newlyRecognizedBarcode`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode).
+The SDK calls [`sparkScan(_:didScanIn:frameData:)`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) each time it scans a new barcode. Retrieve the result from [`session.newlyRecognizedBarcode`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode) — it holds the single barcode from this scan.
 
-Please note that this list only contains one barcode entry.
+The SDK invokes this method on an internal recognition thread, so dispatch to the main thread before you update your UI:
 
 ```swift
 extension ViewController: SparkScanListener {
     func sparkScan(_ sparkScan: SparkScan,
                       didScanIn session: SparkScanSession,
                       frameData: FrameData?) {
-        // Gather the recognized barcode
+        // Gather the recognized barcode.
         let barcode = session.newlyRecognizedBarcode
-        // This method is invoked from a recognition internal thread.
-        // Dispatch to the main thread to update the internal barcode list.
+        // This method is invoked from an internal recognition thread.
+        // Dispatch to the main thread to update your barcode list.
         DispatchQueue.main.async {
-            // Update the internal list and the UI with the barcode retrieved above
+            // Update your internal list and the UI with the barcode above.
             self.latestBarcode = barcode
 
-            // Handle the barcode
+            // Handle the barcode.
         }
     }
 }
 ```
+
+## Verify your first scan
+
+Your integration works when:
+
+- The app builds and runs.
+- The camera preview opens.
+- The SDK accepts your license key, with no license error.
+- Scanning a test EAN-13 barcode triggers `sparkScan(_:didScanIn:frameData:)`.
+
+## Next steps
+
+- [Configure SparkScan for your workflow](/sdks/ios/sparkscan/advanced/)
+- [About SparkScan](/sdks/ios/sparkscan/intro/)
