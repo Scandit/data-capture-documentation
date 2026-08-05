@@ -2,7 +2,11 @@ import React from 'react';
 
 import skillsData from '@site/src/data/skills.json';
 import productsData from '@site/src/data/products.json';
-import InstallTabs from '../SkillsCallout/InstallTabs';
+import CommandBlock from '../SkillsCallout/CommandBlock';
+import InstallCommand from '../SkillsCallout/InstallCommand';
+import ManualInstall from '../SkillsCallout/ManualInstall';
+import { singleSkillCommand } from '../SkillsCallout/agents';
+import { frameworkToSlug } from '../utils/frameworks';
 import styles from './styles.module.css';
 
 interface SkillsPageProps {
@@ -49,7 +53,14 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
   const fwSkills = frameworks[framework] || [];
   const products = productsData as ProductEntry[];
   const productsByKey = Object.fromEntries(products.map((p) => [p.key, p]));
-  const exampleSkillSlug = fwSkills[0]?.slug || 'sparkscan';
+  const frameworkSlug = frameworkToSlug(framework);
+
+  // Example prompts name real skills for the framework being read, so every
+  // snippet on the page is copy-pasteable as-is.
+  const slugFor = (product: string): string | undefined =>
+    fwSkills.find((s) => s.product === product)?.slug;
+  const primarySlug = slugFor('sparkscan') || fwSkills[0]?.slug || skillsData.shared;
+  const barcodeSlug = slugFor('barcode-capture') || primarySlug;
 
   return (
     <div className={styles.page}>
@@ -64,45 +75,56 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
         the generated code always targets current, validated APIs.
       </p>
 
-      <div className={styles.videoWrap}>
-        <iframe
-          src="https://www.youtube-nocookie.com/embed/LGdsM5_dAT4"
-          title="Scandit Agent Skills in action"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-          loading="lazy"
-        />
-      </div>
+      <h2>Install the Scandit plugin</h2>
+      <InstallCommand
+        framework={framework}
+        manualInstallUrl="#manual-installation"
+      />
 
-      <h2>How it works</h2>
-      <ol className={styles.steps}>
-        <li>
-          <strong>Describe your use case</strong> in plain language inside
-          your AI coding tool (e.g. <em>"scan barcodes in a warehouse picking
-          app on {framework}"</em>). The more detail, the better — the agent
-          will ask follow-ups if anything is missing.
-        </li>
-        <li>
-          The <code>{skillsData.shared}</code> product-picker skill recommends
-          the right Scandit product and framework combination, grounded in
-          real customer integrations.
-        </li>
-        <li>
-          The matching product-and-framework skill (e.g.{' '}
-          <code>{exampleSkillSlug}</code>) takes over and writes the
-          integration directly into your codebase. Review the result and ship.
-        </li>
-      </ol>
-
-      <h2>Install the Scandit skills bundle</h2>
+      <h2>How to use it</h2>
       <p>
-        Installing the bundle gives your agent access to every Scandit skill,
-        including the <code>{skillsData.shared}</code> product picker. Your
-        agent loads the right one automatically based on your prompt — or
-        you can invoke a specific skill explicitly with <code>/skill-name</code>{' '}
-        followed by your task.
+        The plugin bundles every Scandit skill. Describe what you want in plain
+        language and your agent loads the right one on its own, or name one
+        explicitly with <code>/skill-name</code> in your prompt.
       </p>
-      <InstallTabs framework={framework} />
+
+      <h3>Not sure which product you need?</h3>
+      <p>
+        Start with <code>{skillsData.shared}</code>. It is an advisor, not an
+        integration skill: it asks a few questions about your workflow,
+        recommends the right product, then hands off to the matching{' '}
+        {framework} skill. Describe your app, paste a screenshot of the screen
+        you want to add scanning to, or drop in a photo of the label, package
+        or ID you need to capture.
+      </p>
+      <CommandBlock
+        command={`/${skillsData.shared} I need to scan QR barcodes in a warehouse app on ${framework} - which product should I use? I need to create a mode to build a list of the packages we receive`}
+        trackingId="prompt-advisor"
+        framework={frameworkSlug}
+        prose
+      />
+
+      <h3>Already know the product?</h3>
+      <p>Go straight to its skill.</p>
+      <CommandBlock
+        command={`Integrate /${primarySlug} in my receiving mode in the app, making sure the UI respects the brand colors`}
+        trackingId="prompt-product"
+        framework={frameworkSlug}
+        prose
+      />
+
+      <h3>Migrating an existing integration?</h3>
+      <p>
+        Most skills carry version migration guidance alongside first
+        integration. The Barcode Capture, SparkScan and MatrixScan Batch skills
+        also cover replacing a third-party scanner.
+      </p>
+      <CommandBlock
+        command={`Migrate the implementation of /${barcodeSlug} from SDK v6 API to v8`}
+        trackingId="prompt-migration"
+        framework={frameworkSlug}
+        prose
+      />
 
       <h2>Available skills for {framework}</h2>
       <p>
@@ -123,9 +145,9 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
                 <code>{skillsData.shared}</code>
               </td>
               <td>
-                Shared baseline — product selection, license activation,
-                framework boilerplate, troubleshooting. Recommended alongside
-                any product skill.
+                Product-selection advisor — recommends the right Scandit
+                product for your use case from a description, screenshot or
+                photo, then hands off to the matching implementation skill.
               </td>
               <td>—</td>
             </tr>
@@ -162,13 +184,24 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
         </table>
       </div>
 
-      <h2>Install a single skill</h2>
+      <h2 id="manual-installation">Manual installation</h2>
       <p>
-        Prefer to install just one skill instead of the full bundle? Open the
-        product page linked in the <em>Docs</em> column above — each product
-        page has its own install box with the right command for that
-        specific {framework} skill.
+        The command above covers every agent. If you would rather install from
+        the plugin marketplace your agent ships with, pick it here.
       </p>
+      <ManualInstall framework={frameworkSlug} />
+
+      <h3>Install a single skill</h3>
+      <p>
+        Your agent only loads the skills your prompt needs, so the full plugin
+        is usually the right choice. To install one skill on its own, name it —
+        for example <code>{primarySlug}</code>:
+      </p>
+      <CommandBlock
+        command={singleSkillCommand(primarySlug)}
+        trackingId="cli-single-skill"
+        framework={frameworkSlug}
+      />
 
       <h2>Learn more</h2>
       <ul className={styles.learnMore}>
@@ -187,26 +220,6 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
             Agent Skills documentation
           </a>{' '}
           — the open spec for the Agent Skills format used across tools.
-        </li>
-        <li>
-          <a
-            href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Agent Skills overview (Anthropic)
-          </a>{' '}
-          — Claude's documentation on how skills work.
-        </li>
-        <li>
-          <a
-            href="https://github.com/vercel-labs/skills"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <code>skills</code> npm package
-          </a>{' '}
-          — the CLI behind <code>npx skills add</code>.
         </li>
       </ul>
 
