@@ -37,9 +37,9 @@ const InstallCommand: React.FC<InstallCommandProps> = ({
   return (
     <div className={styles.install}>
       <p className={styles.tabHint}>
-        Run this in your project directory: it detects the supported coding
-        agents you have installed and adds the Scandit plugin to each. Re-run
-        it to update.
+        Run the following command in your project directory. It detects the
+        supported coding agents you have installed and adds the Scandit plugin
+        to each. Re-run it to update.
       </p>
       <CommandBlock
         command={PLUGIN_INSTALL_COMMAND}
