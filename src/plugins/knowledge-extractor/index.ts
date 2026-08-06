@@ -387,9 +387,14 @@ function buildModule(args: {
   const tags = Array.from(
     new Set(["auto-extracted", contentType || "docs", framework, product, stemSlug].filter(Boolean)),
   ).sort();
+  // user_intents ARE folded into keywords (untruncated + conventionally searched),
+  // so the curated intent is retrievable even by a consumer that only searches
+  // keywords. not_for is deliberately EXCLUDED here — putting "…use MatrixScan
+  // Count" into searchable text would make this page falsely match that product;
+  // not_for stays a structured field for a reranker to demote against.
   const keywords = Array.from(
     new Set(
-      [stemSlug.replace(/-/g, " "), product.replace(/-/g, " "), contentType || "docs", framework.replace(/-/g, " "), ...fmKeywords].filter(Boolean),
+      [stemSlug.replace(/-/g, " "), product.replace(/-/g, " "), contentType || "docs", framework.replace(/-/g, " "), ...fmKeywords, ...userIntents].filter(Boolean),
     ),
   ).sort();
   return {
