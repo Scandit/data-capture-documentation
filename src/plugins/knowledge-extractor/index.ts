@@ -25,6 +25,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import * as cheerio from "cheerio";
+import matter from "gray-matter";
 
 const CHUNK_TARGET_CHARS = 1400;
 const OWNER = "docsops-auto";
@@ -281,6 +282,63 @@ function classifyLinks(chunkMarkdown: string, site: string): { internal: string[
   return { internal: Array.from(internal), api: Array.from(api) };
 }
 
+// ---------------------------------------------------------------------------
+// frontmatter ingestion — the CURATED signal, read straight from source .md
+// (the rendered HTML only carries description/keywords/title, so the rich
+//  extended-schema fields must be read from the source frontmatter itself)
+// ---------------------------------------------------------------------------
+const TOPIC_TYPE_TO_CONTENT: Record<string, string> = {
+  "get-started": "tutorial",
+  tutorial: "tutorial",
+  "how-to": "how-to",
+  howto: "how-to",
+  reference: "reference",
+  concept: "concept",
+  about: "concept",
+  overview: "concept",
+  troubleshooting: "troubleshooting",
+};
+
+function fmStringArray(v: unknown): string[] {
+  if (Array.isArray(v)) return v.map((x) => String(x).trim()).filter(Boolean);
+  if (typeof v === "string" && v.trim()) return [v.trim()];
+  return [];
+}
+
+function fmFirst(v: unknown): string {
+  if (Array.isArray(v)) return v.length ? String(v[0]).trim() : "";
+  return v == null ? "" : String(v).trim();
+}
+
+/**
+ * Best-effort: map a built page pathname back to its CURRENT-version source
+ * markdown and return the parsed frontmatter. Returns {} when there is no 1:1
+ * source file (custom `slug:`, generated category page, redirect stub) — callers
+ * then fall back to path/heuristic derivation, so this NEVER breaks extraction.
+ */
+function readFrontMatter(siteDir: string, pathname: string): Record<string, unknown> {
+  const rel = pathname.replace(/^\/+|\/+$/g, "");
+  const base = path.join(siteDir, "docs");
+  const candidates = rel
+    ? [
+        path.join(base, `${rel}.md`),
+        path.join(base, `${rel}.mdx`),
+        path.join(base, rel, "index.md"),
+        path.join(base, rel, "index.mdx"),
+        path.join(base, rel, "README.md"),
+      ]
+    : [path.join(base, "index.md"), path.join(base, "intro.md"), path.join(base, "index.mdx")];
+  for (const file of candidates) {
+    try {
+      if (!fs.existsSync(file)) continue;
+      return (matter(fs.readFileSync(file, "utf8")).data || {}) as Record<string, unknown>;
+    } catch {
+      /* unreadable / malformed frontmatter — try next candidate, else heuristics */
+    }
+  }
+  return {};
+}
+
 function buildModule(args: {
   pathname: string;
   url: string;
@@ -296,16 +354,28 @@ function buildModule(args: {
   version: string;
   updatedAt: string;
   notAvailable: boolean;
+  fm: Record<string, unknown>;
 }) {
-  const { pathname, url, sourceSite, site, title: rawTitle, description, chunk, idx, framework, product, contentType, version, updatedAt, notAvailable } = args;
+  const { pathname, url, sourceSite, site, title: rawTitle, description, chunk, idx, framework, product, contentType, version, updatedAt, notAvailable, fm } = args;
   const chunkClean = chunk.content.trim();
   const title = (rawTitle || pathname).trim();
   const displayTitle = idx === 1 ? title : `${title} (Part ${idx})`;
   const summary = extractSummary(description, chunkClean);
   const resolvedHeading = (chunk.heading || displayTitle).trim();
   const links = classifyLinks(chunkClean, site);
+  // Curated signal read from the page's own frontmatter (empty when absent).
+  const userIntents = fmStringArray(fm.user_intents);
+  const notFor = fmStringArray(fm.not_for);
+  const canonicalId = fmFirst(fm.canonical_id);
+  const topicType = fmFirst(fm.topic_type);
+  const fmKeywords = fmStringArray(fm.keywords);
+  const curatedApplied = Boolean(userIntents.length || fmFirst(fm.product) || topicType);
+
+  const intentLine = userIntents.length ? `User intents: ${userIntents.join("; ")}. ` : "";
+  const notForLine = notFor.length ? `Not for: ${notFor.join("; ")}. ` : "";
   const assistantContext =
     `Use this module when answering questions related to: ${displayTitle}. ` +
+    `${intentLine}${notForLine}` +
     `Source path: ${pathname}. ` +
     `Summary: ${summary}\n\n${chunkClean}`;
   const moduleId = slug(`auto-${pathname}-${idx}`);
@@ -316,7 +386,9 @@ function buildModule(args: {
     new Set(["auto-extracted", contentType || "docs", framework, product, stemSlug].filter(Boolean)),
   ).sort();
   const keywords = Array.from(
-    new Set([stemSlug.replace(/-/g, " "), product.replace(/-/g, " "), contentType || "docs", framework.replace(/-/g, " ")].filter(Boolean)),
+    new Set(
+      [stemSlug.replace(/-/g, " "), product.replace(/-/g, " "), contentType || "docs", framework.replace(/-/g, " "), ...fmKeywords].filter(Boolean),
+    ),
   ).sort();
   return {
     id: moduleId,
@@ -331,6 +403,8 @@ function buildModule(args: {
     last_verified: updatedAt.slice(0, 10),
     dependencies: [] as string[],
     tags,
+    user_intents: userIntents,
+    not_for: notFor,
     metadata: {
       url,
       title: displayTitle.slice(0, 90),
@@ -341,6 +415,8 @@ function buildModule(args: {
       updated_at: updatedAt,
       source_site: sourceSite,
       source_path: pathname,
+      canonical_id: canonicalId,
+      topic_type: topicType,
       not_available: notAvailable,
     },
     semantic: {
@@ -348,7 +424,7 @@ function buildModule(args: {
       intent: intents[0],
       audience: audiences[0],
       keywords,
-      status: "rule_based",
+      status: curatedApplied ? "frontmatter" : "rule_based",
     },
     references: links.internal.slice(0, 20),
     api_refs: links.api.slice(0, 20),
@@ -395,6 +471,10 @@ function toIndexRecord(m: KModule) {
     semantic_intent: m.semantic.intent,
     semantic_audience: m.semantic.audience,
     keywords: m.semantic.keywords,
+    user_intents: m.user_intents,
+    not_for: m.not_for,
+    canonical_id: m.metadata.canonical_id,
+    topic_type: m.metadata.topic_type,
     semantic_status: m.semantic.status,
   };
 }
@@ -418,6 +498,10 @@ function buildGraph(modules: KModule[], site: string) {
     product: m.metadata.product,
     version: m.metadata.version,
     url: m.metadata.url,
+    userIntents: m.user_intents,
+    notFor: m.not_for,
+    canonicalId: m.metadata.canonical_id,
+    topicType: m.metadata.topic_type,
     lastVerified: m.last_verified || "",
   }));
 
@@ -570,13 +654,17 @@ export default function knowledgeExtractor(context: any, _options: any) {
           if (!chunks.length) continue;
           pagesProcessed += 1;
 
+          const fm = readFrontMatter(siteDir, pathname);
           const framework = detectFramework(pathname);
-          const product = detectProduct(pathname);
-          const contentType = detectContentType(pathname, title);
+          // Frontmatter is authoritative when present; fall back to path/heuristics.
+          const fmProduct = fmFirst(fm.product);
+          const product = fmProduct ? slug(fmProduct) : detectProduct(pathname);
+          const fmTopic = fmFirst(fm.topic_type).toLowerCase();
+          const contentType = TOPIC_TYPE_TO_CONTENT[fmTopic] || detectContentType(pathname, title);
           const notAvailable = isAvailabilityStub(title, bodyMd);
           chunks.forEach((chunk, i) => {
             modules.push(
-              buildModule({ pathname, url, sourceSite, site, title, description, chunk, idx: i + 1, framework, product, contentType, version, updatedAt, notAvailable }),
+              buildModule({ pathname, url, sourceSite, site, title, description, chunk, idx: i + 1, framework, product, contentType, version, updatedAt, notAvailable, fm }),
             );
           });
         } catch (err) {
