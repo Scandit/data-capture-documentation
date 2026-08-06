@@ -371,11 +371,13 @@ function buildModule(args: {
   const fmKeywords = fmStringArray(fm.keywords);
   const curatedApplied = Boolean(userIntents.length || fmFirst(fm.product) || topicType);
 
-  const intentLine = userIntents.length ? `User intents: ${userIntents.join("; ")}. ` : "";
-  const notForLine = notFor.length ? `Not for: ${notFor.join("; ")}. ` : "";
+  // NB: user_intents / not_for are emitted as dedicated, UN-truncated fields
+  // (see the return + toIndexRecord). We deliberately do NOT inline them into
+  // assistant_context, because the index only ships a 300-char assistant_excerpt
+  // — inlining them would crowd out the summary. The curated signal lives in the
+  // structured fields; the excerpt stays a clean title+summary preview.
   const assistantContext =
     `Use this module when answering questions related to: ${displayTitle}. ` +
-    `${intentLine}${notForLine}` +
     `Source path: ${pathname}. ` +
     `Summary: ${summary}\n\n${chunkClean}`;
   const moduleId = slug(`auto-${pathname}-${idx}`);
