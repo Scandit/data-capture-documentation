@@ -11,6 +11,12 @@ const FRAMEWORKS = [
   { label: "Cordova", sidebarId: "cordovaSidebar", slug: "cordova", activeBasePath: "sdks/cordova/" },
   { label: "React Native", sidebarId: "reactnativeSidebar", slug: "react-native", activeBasePath: "sdks/react-native/" },
   { label: "Flutter", sidebarId: "flutterSidebar", slug: "flutter", activeBasePath: "sdks/flutter/" },
+  // unreleased: KMP docs only exist in the "current" doc version, which is
+  // served at the root (/sdks/kmp/...). There is no versioned_docs snapshot for
+  // it yet, so the generic `${linkVersion}/${slug}${link}` formula below (which
+  // targets whatever released version the visitor is on) would 404 for someone
+  // browsing an older version. Pin it to the root until it ships in a release.
+  { label: "Kotlin Multiplatform", sidebarId: "kmpSidebar", slug: "kmp", activeBasePath: "sdks/kmp/", unreleased: true },
   { label: "Capacitor", sidebarId: "capacitorSidebar", slug: "capacitor", activeBasePath: "sdks/capacitor/" },
   { label: "Titanium", sidebarId: "titaniumSidebar", slug: "titanium", activeBasePath: "sdks/titanium/" },
   { label: "Xamarin iOS", sidebarId: "xamarinIosSidebar", slug: "xamarin/ios", activeBasePath: "sdks/xamarin/ios/", xamarin: true },
@@ -113,6 +119,8 @@ export function useFrameworkItems() {
         sidebarId: framework.sidebarId,
         to: framework.xamarin
           ? `${xamarinVersion}/sdks/${framework.slug}${link}`
+          : framework.unreleased
+          ? `/sdks/${framework.slug}${link}`
           : `${linkVersion}/${framework.slug}${link}`,
         activeBasePath: framework.activeBasePath,
       })),

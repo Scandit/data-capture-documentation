@@ -8,6 +8,7 @@ import {
   ScanditCapacitor,
   ScanditCordova,
   ScanditFlutter,
+  ScanditKmp,
   ScanditIOS,
   ScanditReact,
   TitaniumFramework,
@@ -128,6 +129,21 @@ export const frameworkCards: FrameworkCardType[] = [
   {
     framework: "flutter",
     icon: <ScanditFlutter iconClass={style.iconStyle} />,
+    barcodeScanning: [
+      BarcodeScanning.SingleScanning,
+      BarcodeScanning.BatchScanning,
+      BarcodeScanning.ScanditExpress,
+    ],
+    IDScanning: [IDScanning.IdBolt, IDScanning.IDCaptureValidation],
+    labelScanning: [LabelScanning.LabelScanning],
+  },
+  {
+    // `link` is pinned to the root (current docs) because kmp has no
+    // versioned_docs snapshot yet (same reason as the unreleased flag in
+    // src/utils/useFrameworkItems.js).
+    framework: "kmp",
+    link: "/sdks/kmp",
+    icon: <ScanditKmp iconClass={style.iconStyle} />,
     barcodeScanning: [
       BarcodeScanning.SingleScanning,
       BarcodeScanning.BatchScanning,

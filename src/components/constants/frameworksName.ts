@@ -6,6 +6,7 @@ export enum FrameworksName {
   cordova = "Cordova",
   xamarinForms = "Xamarin Forms",
   flutter = "Flutter",
+  kmp = "Kotlin Multiplatform",
   capacitor = "Capacitor",
   titanium = "Titanium",
   linux = "Linux",
