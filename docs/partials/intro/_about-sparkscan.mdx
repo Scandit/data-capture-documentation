@@ -1,31 +1,8 @@
----
-description: "SparkScan is a prebuilt scanning UI for fast, ergonomic barcode scanning that drops on top of any iOS app."
+import Link from '@docusaurus/Link';
 
-sidebar_position: 1
-displayed_sidebar: iosSidebar
-pagination_prev: null
-framework: ios
-product: sparkscan
-user_intents:
-  - "scan one barcode at a time on iOS"
-  - "add a ready-made scanning UI without building your own"
-  - "scan items one by one to build a list (inventory, receiving)"
-not_for:
-  - "scan and count many barcodes at once — use MatrixScan Count"
-  - "build a fully custom scanning UI — use Barcode Capture"
-keywords:
-  - ios
----
-
-import ProductChooser from '@site/src/components/ProductChooser';
-
-# About SparkScan
-
-import AboutSparkScan from '../../../partials/intro/_about-sparkscan.mdx';
+SparkScan is our pre-built smartphone scanning interface designed for high-performance barcode scanning. It fits on top of any smartphone application, providing an intuitive user interface for simple, fast and ergonomic scanning in scan-intensive workflows, such as inventory management in retail, or goods receiving in logistics.
 
 SparkScan bundles multiple scanning features together and addresses many common challenges associated with scanning on smart devices. It is designed to be easily integrated into any application, and can be customized to fit your specific needs.
-
-<ProductChooser frontMatter={frontMatter}/>
 
 ## UI Overview
 
@@ -38,7 +15,7 @@ Two main elements compose the UI:
 - **Camera preview**: A small camera preview that helps with aiming and shows scan feedback. When not in use, the camera preview is hidden. It can be expanded and hosts easy to access controls (zoom level, flash etc).
 - **Trigger button**: A large-sized, semi-transparent floating button that users can drag to position it in the most ergonomic position. When not in use, the trigger button collapses to occupy less space.
 
-There are additional UI elements available for displaying additional scanning modes, errors, or providing feedback to the user. These are described in the [Advanced](./advanced.md) section.
+There are additional UI elements available for displaying additional scanning modes, errors, or providing feedback to the user. These are described in the <Link to={`/sdks/${props.framework}/sparkscan/advanced/`}>Advanced</Link> section.
 
 ## Workflow Description
 
@@ -61,13 +38,12 @@ If instead of tapping on the trigger button the user taps and holds it pressed, 
 
 The default workflow just described has been carefully designed as a result of extensive user testing and customer feedback from the field.
 
-But not all use-cases look the same, and your needs may differ for most users. That's why SparkScan comes with a set of options to configure the scanner and to best fit in the desired workflow. Check the [Workflow Options](./advanced.md#workflow-options) guide to discover more.
+But not all use-cases look the same, and your needs may differ for most users. That's why SparkScan comes with a set of options to configure the scanner and to best fit in the desired workflow. Check the <Link to={`/sdks/${props.framework}/sparkscan/advanced/#workflow-options`}>Workflow Options</Link> guide to discover more.
 
 ## Supported Symbologies
 
-SparkScan supports all of the major symbologies listed here: [Barcode Symbologies](../barcode-symbologies.mdx).
+SparkScan supports all of the major symbologies listed here: <Link to={`/sdks/${props.framework}/barcode-symbologies/`}>Barcode Symbologies</Link>.
 
 ## AI-Powered Features
 
-SparkScan includes AI-powered scanning capabilities that enhance accuracy and user experience. These features automatically handle challenging scenarios such as avoiding unintentional scans, selecting barcodes in dense environments, scanning damaged barcodes with OCR fallback, and intelligently filtering duplicate scans. Learn more about these capabilities in our [AI-Powered Barcode Scanning](../ai-powered-barcode-scanning.md) guide.
-<AboutSparkScan framework="ios"/>
+SparkScan includes AI-powered scanning capabilities that enhance accuracy and user experience. These features automatically handle challenging scenarios such as avoiding unintentional scans, selecting barcodes in dense environments, scanning damaged barcodes with OCR fallback, and intelligently filtering duplicate scans. Learn more about these capabilities in our <Link to={`/sdks/${props.framework}/ai-powered-barcode-scanning/`}>AI-Powered Barcode Scanning</Link> guide.

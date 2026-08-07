@@ -14,8 +14,11 @@ import {
   FRAMEWORK_CHANGE_EVENT,
 } from '../utils/frameworks';
 import { capturePostHogEvent } from './analytics';
-import InstallTabs from './InstallTabs';
+import InstallCommand from './InstallCommand';
 import styles from './styles.module.css';
+
+/** Anchor of the per-agent manual install section on the Agent Skills pages. */
+const MANUAL_INSTALL_ANCHOR = '#manual-installation';
 
 const PRODUCT_DISAMBIGUATION_HEADING =
   'Not sure which Scandit product fits your use case?';
@@ -139,34 +142,40 @@ const SharedBody: React.FC<SharedBodyProps> = ({
   sharedMoreInfoUrl,
   liveBanner = false,
 }) => {
-  const refreshHref: React.ReactEventHandler<HTMLAnchorElement> = (e) => {
-    e.currentTarget.href = resolveAgentSkillsUrl();
+  // `suffix` lets the manual-installation link land on its section of the page
+  // the banner's framework selector currently points at.
+  const makeLiveHandlers = (suffix = ''): React.HTMLAttributes<HTMLAnchorElement> => {
+    const refreshHref: React.ReactEventHandler<HTMLAnchorElement> = (e) => {
+      e.currentTarget.href = `${resolveAgentSkillsUrl()}${suffix}`;
+    };
+    return liveBanner
+      ? {
+          onClick: (e) => {
+            if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
+              return;
+            }
+            e.preventDefault();
+            window.location.assign(`${resolveAgentSkillsUrl()}${suffix}`);
+          },
+          onMouseDown: refreshHref,
+          onFocus: refreshHref,
+        }
+      : {};
   };
-  const liveHandlers: React.HTMLAttributes<HTMLAnchorElement> = liveBanner
-    ? {
-        onClick: (e) => {
-          if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) {
-            return;
-          }
-          e.preventDefault();
-          window.location.assign(resolveAgentSkillsUrl());
-        },
-        onMouseDown: refreshHref,
-        onFocus: refreshHref,
-      }
-    : {};
+  const liveHandlers = makeLiveHandlers();
   return (
   <>
     <p className={styles.description}>
-      Install our <code>{skillsData.shared}</code> skill so your coding
-      agent can answer questions about Scandit products and recommend
-      the right one for your use case, directly from your editor.{' '}
+      Install the Scandit plugin and use the <code>/{skillsData.shared}</code>{' '}
+      skill so that your AI coding agent can recommend the right product for
+      your use case.{' '}
       <a href={sharedMoreInfoUrl} {...liveHandlers}>More info →</a>
     </p>
-    <InstallTabs
-      skillSlug={skillsData.shared}
+    <InstallCommand
       product="shared"
       framework={sharedFrameworkSlug}
+      manualInstallUrl={`${sharedMoreInfoUrl}${MANUAL_INSTALL_ANCHOR}`}
+      manualLinkProps={makeLiveHandlers(MANUAL_INSTALL_ANCHOR)}
     />
   </>
   );
@@ -246,15 +255,17 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({
         }}
       >
         <p className={styles.description}>
-          Install the official skill to help your coding agent (Claude Code,
-          Codex, Cursor, etc.) integrate, debug, and customize{' '}
+          Install the Scandit plugin and use the <code>/{skillSlug}</code> skill
+          so that your AI coding agent can integrate, debug, and customize{' '}
           <strong>{name}</strong> following Scandit's recommended patterns.{' '}
           {moreInfoUrlProp && <a href={moreInfoUrlProp}>More info →</a>}
         </p>
-        <InstallTabs
-          skillSlug={skillSlug}
+        <InstallCommand
           product={skillSlug}
           framework={frameworkSlugProp}
+          manualInstallUrl={
+            moreInfoUrlProp ? `${moreInfoUrlProp}${MANUAL_INSTALL_ANCHOR}` : undefined
+          }
         />
       </CalloutDetails>
     );
@@ -294,8 +305,8 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({
       }}
     >
       <p className={styles.description}>
-        Install the official skill to help your coding agent (Claude Code,
-        Codex, Cursor, etc.) integrate, debug, and customize{' '}
+        Install the Scandit plugin and use the <code>/{productSkill}</code>{' '}
+        skill so that your AI coding agent can integrate, debug, and customize{' '}
         <strong>{productName}</strong> on{' '}
         <strong>{resolvedFramework}</strong> following Scandit's recommended
         patterns.{' '}
@@ -305,10 +316,12 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({
           </a>
         )}
       </p>
-      <InstallTabs
-        skillSlug={productSkill}
+      <InstallCommand
         product={resolvedProduct}
         framework={frameworkSlug}
+        manualInstallUrl={
+          moreInfoUrl ? `${moreInfoUrl}${MANUAL_INSTALL_ANCHOR}` : undefined
+        }
       />
     </CalloutDetails>
   );
