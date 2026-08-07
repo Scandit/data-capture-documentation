@@ -419,6 +419,7 @@ const config: Config = {
         docs: {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.ts"),
+          editUrl: "https://github.com/Scandit/data-capture-documentation/edit/main/",
           remarkPlugins: [remarkHideComments],
           breadcrumbs: true,
           admonitions: {
