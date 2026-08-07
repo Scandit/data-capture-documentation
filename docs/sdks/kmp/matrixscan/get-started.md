@@ -43,7 +43,7 @@ val dataCaptureContext = DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LI
 
 ## Configure the Barcode Batch Mode
 
-The main entry point for MatrixScan Batch is the `BarcodeBatch` mode, configured through `BarcodeBatchSettings`. For this tutorial, we enable a generous set of symbologies — in your own app, only enable the ones you require, since every extra symbology impacts processing time.
+The main entry point for MatrixScan Batch is the `BarcodeBatch` mode, configured through `BarcodeBatchSettings`. For this tutorial, we enable a generous set of symbologies—in your own app, only enable the ones you require, since every extra symbology impacts processing time.
 
 ```kotlin
 import com.kmp.datacapture.barcode.batch.BarcodeBatch
@@ -65,7 +65,7 @@ val settings = BarcodeBatchSettings.barcodeBatchSettings().also {
 val barcodeBatch = BarcodeBatch.forContext(dataCaptureContext, settings)
 ```
 
-`BarcodeBatch.forContext(...)` attaches the mode to `dataCaptureContext` for you — there is no separate step to add it.
+`BarcodeBatch.forContext(...)` attaches the mode to `dataCaptureContext` for you—there is no separate step to add it.
 
 ## Use the Built-in Camera
 
@@ -88,7 +88,7 @@ On Android, declare the `android.permission.CAMERA` permission in `AndroidManife
 
 ## Host a Data Capture View and Visualize the Tracked Barcodes
 
-MatrixScan Batch has no prebuilt Compose composable — host a `DataCaptureView` from the `core` module directly and add a `BarcodeBatchBasicOverlay` to it, which highlights every tracked barcode with a default dot or frame.
+MatrixScan Batch has no prebuilt Compose composable—host a `DataCaptureView` from the `core` module directly and add a `BarcodeBatchBasicOverlay` to it, which highlights every tracked barcode with a default dot or frame.
 
 On Android, embed the view in your UI (shown here hosted from Compose via `AndroidView`) and forward the lifecycle events, keeping camera-on as the last step of mounting and camera-off as the first step of teardown:
 
@@ -228,4 +228,4 @@ To stop tracking, set `BarcodeBatch.isEnabled` to `false`. The effect is immedia
 barcodeBatch.isEnabled = false
 ```
 
-Disabling the mode does not stop the camera — turn it off separately with `camera.switchToDesiredState(FrameSourceState.OFF)` if you no longer need the preview.
+Disabling the mode does not stop the camera—turn it off separately with `camera.switchToDesiredState(FrameSourceState.OFF)` if you no longer need the preview.

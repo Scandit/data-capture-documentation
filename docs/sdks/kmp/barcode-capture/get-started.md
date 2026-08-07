@@ -43,7 +43,7 @@ val dataCaptureContext = DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LI
 
 ## Configure the Barcode Capture Mode
 
-Barcode scanning is orchestrated by the `BarcodeCapture` mode, configured through `BarcodeCaptureSettings`. For this tutorial, we enable a generous set of symbologies — in your own app, only enable the ones you require, since every extra symbology impacts processing time. See [Configure Barcode Symbologies](configure-barcode-symbologies.md) for the full set of configuration options.
+Barcode scanning is orchestrated by the `BarcodeCapture` mode, configured through `BarcodeCaptureSettings`. For this tutorial, we enable a generous set of symbologies—in your own app, only enable the ones you require, since every extra symbology impacts processing time. See [Configure Barcode Symbologies](configure-barcode-symbologies.md) for the full set of configuration options.
 
 ```kotlin
 import com.kmp.datacapture.barcode.capture.BarcodeCapture
@@ -69,7 +69,7 @@ val barcodeCapture = BarcodeCapture.forContext(dataCaptureContext, settings)
 
 If you don't disable Barcode Capture immediately after scanning the first code, consider setting `BarcodeCaptureSettings.codeDuplicateFilter` (in milliseconds) so the same code isn't reported repeatedly.
 
-Barcode Capture needs a frame source to process — most applications use the device's built-in camera. `BarcodeCapture.createRecommendedCameraSettings()` returns camera settings tuned for the mode (preferred resolution, focus range, autofocus mode), which cut scan latency compared to the framework defaults, especially on iOS. The camera setup differs slightly depending on whether you host the view via Compose or imperatively — see below.
+Barcode Capture needs a frame source to process—most applications use the device's built-in camera. `BarcodeCapture.createRecommendedCameraSettings()` returns camera settings tuned for the mode (preferred resolution, focus range, autofocus mode), which cut scan latency compared to the framework defaults, especially on iOS. The camera setup differs slightly depending on whether you host the view via Compose or imperatively—see below.
 
 :::important
 On iOS, add the `NSCameraUsageDescription` key to your app's `Info.plist`. On Android, declare and request the `android.permission.CAMERA` permission at runtime.
@@ -144,7 +144,7 @@ fun ScanningScreen() {
 
 ### Imperative View API
 
-If you need full control over the view and camera lifecycle — or you are not using the `-compose` companion modules — construct the base-module `DataCaptureView` directly and drive the camera/mode lifecycle from shared `commonMain` code, so both Android and iOS hosts call the same two functions instead of duplicating `switchToDesiredState`/`isEnabled` calls per platform. The camera is switched on as the *last* step of `start()`, and switched off as the *first* step of `stop()`:
+If you need full control over the view and camera lifecycle—or you are not using the `-compose` companion modules—construct the base-module `DataCaptureView` directly and drive the camera/mode lifecycle from shared `commonMain` code, so both Android and iOS hosts call the same two functions instead of duplicating `switchToDesiredState`/`isEnabled` calls per platform. The camera is switched on as the *last* step of `start()`, and switched off as the *first* step of `stop()`:
 
 ```kotlin
 import com.kmp.datacapture.core.capture.DataCaptureContext
@@ -202,7 +202,7 @@ DisposableEffect(lifecycleOwner) {
 AndroidView(factory = { dataCaptureView.toAndroidView() })
 ```
 
-On iOS, wrap the same shared `dataCaptureView` instance in a SwiftUI `UIViewRepresentable`, calling `toUIView()` to get the native `UIView`, and call the shared `controller` from `onAppear`/`onDisappear` — the SDK objects and their lifecycle stay in Kotlin, Swift only drives `start()`/`stop()`:
+On iOS, wrap the same shared `dataCaptureView` instance in a SwiftUI `UIViewRepresentable`, calling `toUIView()` to get the native `UIView`, and call the shared `controller` from `onAppear`/`onDisappear`—the SDK objects and their lifecycle stay in Kotlin, Swift only drives `start()`/`stop()`:
 
 ```swift
 struct DataCaptureViewRepresentable: UIViewRepresentable {
@@ -265,7 +265,7 @@ To disable barcode capture, for instance as a consequence of a barcode being rec
 barcodeCapture.isEnabled = false
 ```
 
-The effect is immediate: no more frames are processed after the change. A frame that is already being processed still completes and delivers its results to registered listeners. Disabling the mode does not stop the camera — the camera keeps streaming frames until it is turned off with `switchToDesiredState(FrameSourceState.OFF)`.
+The effect is immediate: no more frames are processed after the change. A frame that is already being processed still completes and delivers its results to registered listeners. Disabling the mode does not stop the camera—the camera keeps streaming frames until it is turned off with `switchToDesiredState(FrameSourceState.OFF)`.
 
 ## Scan Some Barcodes
 

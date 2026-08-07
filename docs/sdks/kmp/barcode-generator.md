@@ -1,5 +1,5 @@
 ---
-description: "The Barcode Generator is a simple tool to generate barcodes directly from the Scandit SDK. In this guide, we will show you how to use the Barcode Generator to generate barcodes and QR codes."
+description: "Generate barcode images directly from the Scandit SDK in Kotlin Multiplatform."
 
 sidebar_position: 4
 pagination_prev: null
@@ -35,7 +35,7 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 ## Generating Barcodes
 
-To generate barcodes, you need a `DataCaptureContext`. With the context you can then use the static factory method on `BarcodeGenerator` for the symbology you are interested in — in this example, Code 128 — to get a builder instance.
+To generate barcodes, you need a `DataCaptureContext`. With the context you can then use the static factory method on `BarcodeGenerator` for the symbology you are interested in—in this example, Code 128—to get a builder instance.
 
 You can configure the colors used in the resulting image with `withBackgroundColor()`/`withForegroundColor()`, which take a packed ARGB `Long` value:
 

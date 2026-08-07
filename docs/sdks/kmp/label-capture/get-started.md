@@ -1,5 +1,5 @@
 ---
-description: "In this guide you will learn step-by-step how to add Smart Label Capture to your application.                                                                                    "
+description: "Add Smart Label Capture to a Kotlin Multiplatform application, step by step."
 
 sidebar_position: 2
 framework: kmp
@@ -35,8 +35,8 @@ The `label` module is the only one required for Smart Label Capture. It optional
 | Module | Required for Feature |
 | ----------- | ----------- |
 | `label` | Always required |
-| `label-text` | Required for capturing arbitrary text fields (e.g. `CustomText`, `ExpiryDateText`) |
-| `price-label` | Required for capturing price and weight fields (e.g. `TotalPriceText`, `UnitPriceText`) |
+| `label-text` | Required for capturing arbitrary text fields (for example, `CustomText`, `ExpiryDateText`) |
+| `price-label` | Required for capturing price and weight fields (for example, `TotalPriceText`, `UnitPriceText`) |
 
 See [Modules](/sdks/kmp/add-sdk.mdx#modules) for the exact Gradle coordinates and Swift Package products.
 
@@ -156,7 +156,7 @@ fun LabelScanningScreen() {
 }
 ```
 
-`LabelOverlayStyle` also has `Advanced`, `ValidationFlow`, and `AdaptiveRecognition` variants — see [Advanced Configurations](advanced.md) for what each one is for.
+`LabelOverlayStyle` also has `Advanced`, `ValidationFlow`, and `AdaptiveRecognition` variants—see [Advanced Configurations](advanced.md) for what each one is for.
 
 ### Imperative View API
 

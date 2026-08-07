@@ -60,7 +60,7 @@ symbologySettings.activeSymbolCounts = setOf<Short>(6, 7, 8)
 
 ## Read Bright-on-Dark Barcodes
 
-Most barcodes are printed using dark ink on a bright background. Some symbologies allow the colors to be inverted and can also be printed using bright ink on a dark background. When you enable a symbology, only dark-on-bright codes are enabled by default — set `SymbologySettings.isColorInvertedEnabled` to also read bright-on-dark codes:
+Most barcodes are printed using dark ink on a bright background. Some symbologies allow the colors to be inverted and can also be printed using bright ink on a dark background. When you enable a symbology, only dark-on-bright codes are enabled by default—set `SymbologySettings.isColorInvertedEnabled` to also read bright-on-dark codes:
 
 ```kotlin
 val symbologySettings = settings.getSymbologySettings(Symbology.CODE128)
@@ -69,7 +69,7 @@ symbologySettings.isColorInvertedEnabled = true
 
 ## Enforce Checksums
 
-Some symbologies have a mandatory checksum that is always enforced, while others only have optional checksums. Enforcing an optional checksum reduces false positives. Set `SymbologySettings.checksums` to the `Checksum` values you want to require — make sure the data of your codes actually contains the calculated checksum, otherwise the codes are discarded:
+Some symbologies have a mandatory checksum that is always enforced, while others only have optional checksums. Enforcing an optional checksum reduces false positives. Set `SymbologySettings.checksums` to the `Checksum` values you want to require—make sure the data of your codes actually contains the calculated checksum, otherwise the codes are discarded:
 
 ```kotlin
 import com.kmp.datacapture.barcode.data.Checksum
@@ -89,4 +89,4 @@ symbologySettings.setExtensionEnabled("full_ascii", true)
 
 This extension allows Code 39 to encode all 128 ASCII characters instead of only the 43 characters defined in the standard. It is disabled by default as it can lead to false reads when enabled.
 
-Once configured, apply the settings to an existing `BarcodeCapture` mode with `BarcodeCapture.applySettings()`, or pass them to `BarcodeCapture.forContext()` when creating the mode — see [Get Started](get-started.md).
+Once configured, apply the settings to an existing `BarcodeCapture` mode with `BarcodeCapture.applySettings()`, or pass them to `BarcodeCapture.forContext()` when creating the mode—see [Get Started](get-started.md).

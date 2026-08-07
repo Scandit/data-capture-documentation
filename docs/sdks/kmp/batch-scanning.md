@@ -1,5 +1,5 @@
 ---
-description: "Batch scanning enables you to capture and interact with multiple barcodes simultaneously, making it ideal for inventory management, retail, and logistics applications."
+description: "Capture and interact with multiple barcodes at once, for inventory, retail, and logistics workflows."
 toc_max_heading_level: 4
 
 

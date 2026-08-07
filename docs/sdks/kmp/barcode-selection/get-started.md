@@ -67,7 +67,7 @@ val settings = BarcodeSelectionSettings.barcodeSelectionSettings().also {
 
 `BarcodeSelectionSettings.selectionType` defines the method `BarcodeSelection` uses to select codes.
 
-If you want the user to select barcodes with a tap, use `BarcodeSelectionTapSelection`. It can automatically freeze the camera preview to make the selection easier — configure the freezing behavior with `freezeBehavior`, and whether a second tap on a barcode unselects it or selects it again with `tapBehavior`:
+If you want the user to select barcodes with a tap, use `BarcodeSelectionTapSelection`. It can automatically freeze the camera preview to make the selection easier—configure the freezing behavior with `freezeBehavior`, and whether a second tap on a barcode unselects it or selects it again with `tapBehavior`:
 
 ```kotlin
 import com.kmp.datacapture.barcode.selection.BarcodeSelectionFreezeBehavior
@@ -115,7 +115,7 @@ val barcodeSelection = BarcodeSelection.forContext(dataCaptureContext, settings)
 
 ## Use the Built-in Camera
 
-Barcode Selection needs a frame source to process — most applications use the device's built-in camera. `BarcodeSelection.createRecommendedCameraSettings()` returns camera settings tuned for the mode.
+Barcode Selection needs a frame source to process—most applications use the device's built-in camera. `BarcodeSelection.createRecommendedCameraSettings()` returns camera settings tuned for the mode.
 
 :::important
 On iOS, add the `NSCameraUsageDescription` key to your app's `Info.plist`. On Android, declare and request the `android.permission.CAMERA` permission at runtime.
@@ -189,7 +189,7 @@ fun SelectionScreen() {
 
 ### Imperative View API
 
-If you need full control over the view and camera lifecycle — or you are not using the `-compose` companion modules — construct the base-module `DataCaptureView` directly and drive the camera/mode lifecycle from shared `commonMain` code. The camera is switched on as the *last* step of `start()`, and switched off as the *first* step of `stop()`:
+If you need full control over the view and camera lifecycle—or you are not using the `-compose` companion modules—construct the base-module `DataCaptureView` directly and drive the camera/mode lifecycle from shared `commonMain` code. The camera is switched on as the *last* step of `start()`, and switched off as the *first* step of `stop()`:
 
 ```kotlin
 import com.kmp.datacapture.core.capture.DataCaptureContext
@@ -310,4 +310,4 @@ To disable Barcode Selection, for instance when selection is complete, set `Barc
 barcodeSelection.isEnabled = false
 ```
 
-The effect is immediate: no more frames are processed after the change. A frame that is already being processed still completes and delivers its results to registered listeners. Disabling the mode does not stop the camera — the camera keeps streaming frames until it is turned off with `switchToDesiredState(FrameSourceState.OFF)`.
+The effect is immediate: no more frames are processed after the change. A frame that is already being processed still completes and delivers its results to registered listeners. Disabling the mode does not stop the camera—the camera keeps streaming frames until it is turned off with `switchToDesiredState(FrameSourceState.OFF)`.

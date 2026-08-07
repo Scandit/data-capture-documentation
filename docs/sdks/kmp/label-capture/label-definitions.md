@@ -1,5 +1,5 @@
 ---
-description: "A **Label Definition** is a configuration that defines the label, and its relevant fields, that Smart Label Capture should recognize and extract during scans.                                                                            "
+description: "A Label Definition configures which label and fields Smart Label Capture recognizes and extracts during scans."
 
 framework: kmp
 keywords:
@@ -69,7 +69,7 @@ The following builder methods are available to configure custom fields:
 | Method | Required | Description |
 |--------|----------|-------------|
 | `setValueRegexes()` / `setValueRegex()` | Yes | The regex patterns that identify the target string in the scanned content. |
-| `setAnchorRegexes()` / `setAnchorRegex()` | No | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
+| `setAnchorRegexes()` / `setAnchorRegex()` | No | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (for example, when both packaging and expiry dates are present). |
 | `setSymbologies()` / `setSymbology()` | Yes (barcode fields) | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
 | `isOptional()` | No | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
 

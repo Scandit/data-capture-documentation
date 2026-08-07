@@ -57,7 +57,7 @@ val settings = BarcodePickSettings.barcodePickSettings().also {
 }
 ```
 
-Next, define the products you want MatrixScan Pick to highlight — each one identified by the barcode data and a target quantity to pick:
+Next, define the products you want MatrixScan Pick to highlight—each one identified by the barcode data and a target quantity to pick:
 
 ```kotlin
 import com.kmp.datacapture.barcode.pick.BarcodePickProduct
@@ -68,7 +68,7 @@ val productsToPick = setOf(
 )
 ```
 
-`BarcodePick` resolves scanned barcodes to products asynchronously through a `BarcodePickAsyncMapperProductProvider`. Implement `BarcodePickAsyncMapperProductProviderCallback.mapItems` to map the scanned barcode data to a product identifier — here the barcode data doubles as the product identifier, but in your app this is typically a backend/catalog lookup:
+`BarcodePick` resolves scanned barcodes to products asynchronously through a `BarcodePickAsyncMapperProductProvider`. Implement `BarcodePickAsyncMapperProductProviderCallback.mapItems` to map the scanned barcode data to a product identifier—here the barcode data doubles as the product identifier, but in your app this is typically a backend/catalog lookup:
 
 ```kotlin
 import com.kmp.datacapture.barcode.pick.BarcodePickAsyncMapperProductProvider
@@ -94,7 +94,7 @@ MatrixScan Pick's built-in user interface includes the camera preview, augmented
 
 ### Compose (recommended)
 
-The `barcode-compose` module provides a declarative `BarcodePickView` composable that manages the picking lifecycle automatically — it builds the `BarcodePick` mode from `settings` and `productProvider`, starts picking when it enters the composition, and stops when it leaves, via `DisposableEffect`.
+The `barcode-compose` module provides a declarative `BarcodePickView` composable that manages the picking lifecycle automatically—it builds the `BarcodePick` mode from `settings` and `productProvider`, starts picking when it enters the composition, and stops when it leaves, via `DisposableEffect`.
 
 ```kotlin
 import com.kmp.datacapture.barcode.compose.BarcodePickView
@@ -113,7 +113,7 @@ fun PickingScreen() {
 
 ### Imperative View API
 
-If you need full control over the view and its lifecycle — or you are not using the `-compose` companion modules — construct the `BarcodePick` mode and a `BarcodePickView` from the base `barcode` module directly, and drive the start/pause/stop lifecycle yourself.
+If you need full control over the view and its lifecycle—or you are not using the `-compose` companion modules—construct the `BarcodePick` mode and a `BarcodePickView` from the base `barcode` module directly, and drive the start/pause/stop lifecycle yourself.
 
 ```kotlin
 import com.kmp.datacapture.barcode.pick.BarcodePick
@@ -124,7 +124,7 @@ val barcodePick = BarcodePick.forContext(dataCaptureContext, settings, productPr
 val barcodePickViewSettings = BarcodePickViewSettings.barcodePickViewSettings()
 ```
 
-On Android, embed the view in your UI (shown here hosted from Compose via `AndroidView`, as in a typical Compose Multiplatform app) and forward the lifecycle events. `stop()` is a terminal teardown — call it only when the view is removed from the screen for good; use `pause()`/`start()` for backgrounding/foregrounding.
+On Android, embed the view in your UI (shown here hosted from Compose via `AndroidView`, as in a typical Compose Multiplatform app) and forward the lifecycle events. `stop()` is a terminal teardown—call it only when the view is removed from the screen for good; use `pause()`/`start()` for backgrounding/foregrounding.
 
 ```kotlin
 import androidx.compose.ui.viewinterop.AndroidView
@@ -200,4 +200,4 @@ If you are using the Compose `BarcodePickView`'s `onFinishTap` callback instead,
 
 ## Start Searching
 
-With everything configured, the view starts the scan-and-pick session as soon as it's mounted — this is the last step of `start()` in the imperative flow above, or automatic in the Compose flow. This is the equivalent of pressing the Play button: it turns on the camera and begins highlighting items to pick.
+With everything configured, the view starts the scan-and-pick session as soon as it's mounted—this is the last step of `start()` in the imperative flow above, or automatic in the Compose flow. This is the equivalent of pressing the Play button: it turns on the camera and begins highlighting items to pick.

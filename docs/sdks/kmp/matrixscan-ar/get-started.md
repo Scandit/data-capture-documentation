@@ -43,7 +43,7 @@ val dataCaptureContext = DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LI
 
 ## Configure the Barcode AR Mode
 
-The main entry point for MatrixScan AR is the `BarcodeAr` mode, configured through `BarcodeArSettings`. For this tutorial, we track EAN-13 codes — change this to the symbologies your use case requires.
+The main entry point for MatrixScan AR is the `BarcodeAr` mode, configured through `BarcodeArSettings`. For this tutorial, we track EAN-13 codes—change this to the symbologies your use case requires.
 
 ```kotlin
 import com.kmp.datacapture.barcode.ar.BarcodeAr
@@ -65,7 +65,7 @@ The `BarcodeArView` built-in user interface includes the camera preview, highlig
 
 ### Compose (recommended)
 
-The `barcode-compose` module provides a declarative `BarcodeArView` composable. Combine it with `core-compose`'s `rememberCamera` to wire up the camera; both manage their piece of the lifecycle automatically — camera-on and AR-scanning-start happen as composition mounts, camera-off and AR-scanning-stop happen when it leaves. See [Customize Highlights and Annotations](#customize-highlights-and-annotations) below for how to pass `annotationProvider`/`highlightProvider` to this same composable.
+The `barcode-compose` module provides a declarative `BarcodeArView` composable. Combine it with `core-compose`'s `rememberCamera` to wire up the camera; both manage their piece of the lifecycle automatically—camera-on and AR-scanning-start happen as composition mounts, camera-off and AR-scanning-stop happen when it leaves. See [Customize Highlights and Annotations](#customize-highlights-and-annotations) below for how to pass `annotationProvider`/`highlightProvider` to this same composable.
 
 ```kotlin
 import androidx.compose.runtime.Composable
@@ -90,7 +90,7 @@ fun ScanAndCheckScreen(licenseKey: String) {
 
 ### Imperative View API
 
-If you need full control over the view and its lifecycle — or you are not using the `-compose` companion modules — construct a `BarcodeArView` from the base `barcode` module directly. In this case you also create and drive the camera yourself, and control the resume/pause/stop lifecycle:
+If you need full control over the view and its lifecycle—or you are not using the `-compose` companion modules—construct a `BarcodeArView` from the base `barcode` module directly. In this case you also create and drive the camera yourself, and control the resume/pause/stop lifecycle:
 
 ```kotlin
 import com.kmp.datacapture.barcode.ar.BarcodeArViewSettings
@@ -215,7 +215,7 @@ barcodeArView.highlightProvider = myHighlightProvider
 barcodeArView.annotationProvider = myAnnotationProvider
 ```
 
-When hosting the Compose composable, pass them as parameters instead — remember them so they aren't recreated (and re-subscribed) on every recomposition:
+When hosting the Compose composable, pass them as parameters instead—remember them so they aren't recreated (and re-subscribed) on every recomposition:
 
 ```kotlin
 import androidx.compose.runtime.remember

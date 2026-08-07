@@ -1,5 +1,5 @@
 ---
-description: "MatrixScan Count is our pre-built scan and count solution for counting and receiving multiple items at once, built on the Kotlin Multiplatform BarcodeCount mode and view."
+description: "Pre-built scan-and-count UI for receiving many items at once, built on the Kotlin Multiplatform BarcodeCount mode."
 
 sidebar_position: 1
 pagination_prev: null
@@ -28,7 +28,7 @@ The UI workflow is designed to be as simple and ergonomic as possible, and inclu
     - The counter badge counts the number of codes scanned.
     - The progress bar replaces the counter badge when scanning against a list of expected codes.
 
-Upon completing the scanning process, if all items have been successfully scanned, you can advance the user to the next step automatically — for example finalizing an order receipt, or reviewing the scan list to identify unexpected items.
+Upon completing the scanning process, if all items have been successfully scanned, you can advance the user to the next step automatically—for example finalizing an order receipt, or reviewing the scan list to identify unexpected items.
 
 ## Supported Symbologies
 

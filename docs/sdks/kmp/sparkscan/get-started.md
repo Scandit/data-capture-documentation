@@ -41,7 +41,7 @@ val dataCaptureContext = DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LI
 
 ## Configure the SparkScan Mode
 
-The SparkScan Mode is configured through `SparkScanSettings`, which lets you enable the symbologies you need. For this tutorial, we enable a generous set of symbologies — in your own app, only enable the ones you require, since every extra symbology impacts processing time.
+The SparkScan Mode is configured through `SparkScanSettings`, which lets you enable the symbologies you need. For this tutorial, we enable a generous set of symbologies—in your own app, only enable the ones you require, since every extra symbology impacts processing time.
 
 ```kotlin
 import com.kmp.datacapture.barcode.data.Symbology
@@ -69,7 +69,7 @@ The SparkScan built-in user interface includes the camera preview and scanning U
 
 ### Compose (recommended)
 
-The `barcode-compose` module provides a declarative `SparkScanView` composable that manages the scanning lifecycle automatically — it starts scanning when it enters the composition and stops when it leaves, via `DisposableEffect`.
+The `barcode-compose` module provides a declarative `SparkScanView` composable that manages the scanning lifecycle automatically—it starts scanning when it enters the composition and stops when it leaves, via `DisposableEffect`.
 
 ```kotlin
 import com.kmp.datacapture.barcode.compose.SparkScanView
@@ -89,7 +89,7 @@ fun ScanningScreen() {
 
 ### Imperative View API
 
-If you need full control over the view and its lifecycle — or you are not using the `-compose` companion modules — construct a `SparkScanView` from the base `barcode` module directly and host it with the platform view APIs. In this case you create the view settings and drive the resume/pause lifecycle yourself:
+If you need full control over the view and its lifecycle—or you are not using the `-compose` companion modules—construct a `SparkScanView` from the base `barcode` module directly and host it with the platform view APIs. In this case you create the view settings and drive the resume/pause lifecycle yourself:
 
 ```kotlin
 import com.kmp.datacapture.barcode.spark.SparkScanViewSettings

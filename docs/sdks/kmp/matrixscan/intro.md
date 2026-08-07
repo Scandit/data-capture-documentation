@@ -23,8 +23,8 @@ Typical use cases include:
 `BarcodeBatch` tracks barcodes across frames, assigning each one a stable tracking identifier via [`TrackedBarcode`](./get-started.md#track-the-results). You can either:
 
 - Use [`BarcodeBatchBasicOverlay`](./get-started.md#host-a-data-capture-view-and-visualize-the-tracked-barcodes) to highlight tracked barcodes on top of the camera preview with minimal setup, or
-- Use [`BarcodeBatchAdvancedOverlay`](./advanced.md) to render your own native view (e.g. a badge or button) anchored to each tracked barcode.
+- Use [`BarcodeBatchAdvancedOverlay`](./advanced.md) to render your own native view (for example, a badge or button) anchored to each tracked barcode.
 
-If your use case needs a prebuilt augmented-reality UI with highlights, annotations, and a guided scan-and-check flow, see [MatrixScan AR](../matrixscan-ar/intro.md) instead — it is a superset of MatrixScan Batch's tracking capabilities.
+If your use case needs a prebuilt augmented-reality UI with highlights, annotations, and a guided scan-and-check flow, see [MatrixScan AR](../matrixscan-ar/intro.md) instead—it is a superset of MatrixScan Batch's tracking capabilities.
 
 Continue to [Get Started](./get-started.md) to add MatrixScan Batch to your application.

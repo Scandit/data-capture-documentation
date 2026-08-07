@@ -1,5 +1,5 @@
 ---
-description: "MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs."
+description: "Advanced settings for customizing MatrixScan Count behavior and its pre-built UI."
 
 sidebar_position: 3
 pagination_next: null
@@ -10,7 +10,7 @@ keywords:
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and ease of use. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Group (Cluster) Scanning
 
@@ -116,7 +116,7 @@ barcodeCountView.shouldShowStatusModeButton = true
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned. If this is the case, you can enable the "Clear screen" button:
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR overlays) but keep the list of barcodes scanned. If this is the case, you can enable the "Clear screen" button:
 
 ```kotlin
 barcodeCountView.shouldShowClearHighlightsButton = true
@@ -207,7 +207,7 @@ barcodeCount.feedback = feedback
 
 ## Additional Barcodes
 
-You can inject barcodes into a session that were not scanned by the camera — for example, items added manually by the user:
+You can inject barcodes into a session that were not scanned by the camera—for example, items added manually by the user:
 
 ```kotlin
 // barcode is a previously obtained com.kmp.datacapture.barcode.data.Barcode instance.

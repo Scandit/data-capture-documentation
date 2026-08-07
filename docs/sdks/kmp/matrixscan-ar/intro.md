@@ -14,8 +14,8 @@ MatrixScan AR is Scandit's most advanced and flexible API for building custom au
 
 MatrixScan AR is implemented through two elements, both in the `com.kmp.datacapture.barcode.ar` package of the `barcode` module:
 
-- `BarcodeAr` — the data capture mode driving scan-and-track recognition. Unlike most other modes, `BarcodeAr` is not a `DataCaptureMode`: it attaches itself to a `DataCaptureContext` when constructed via `BarcodeAr.forContext(...)`, so you never call `addMode()`/`removeMode()` for it.
-- `BarcodeArView` — the prebuilt AR UI that renders highlights and annotations over tracked barcodes and hosts the camera preview.
+- `BarcodeAr`—the data capture mode driving scan-and-track recognition. Unlike most other modes, `BarcodeAr` is not a `DataCaptureMode`: it attaches itself to a `DataCaptureContext` when constructed via `BarcodeAr.forContext(...)`, so you never call `addMode()`/`removeMode()` for it.
+- `BarcodeArView`—the prebuilt AR UI that renders highlights and annotations over tracked barcodes and hosts the camera preview.
 
 Use MatrixScan AR as the go-to API for new projects that need custom, advanced AR capabilities. If you only need lightweight multi-barcode tracking without an AR overlay, use [MatrixScan Batch](../matrixscan/intro.md) instead.
 

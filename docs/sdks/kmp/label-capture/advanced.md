@@ -1,5 +1,5 @@
 ---
-description: "Guide to customizing overlays in the Scandit Kotlin Multiplatform Label Capture SDK."
+description: "Customize Smart Label Capture overlays in Kotlin Multiplatform."
 sidebar_position: 3
 pagination_next: null
 framework: kmp
@@ -20,7 +20,7 @@ import ValidationFlowCustomField from '../../../partials/advanced/_validation-fl
 
 ### Basic Overlay
 
-To customize the appearance of an overlay you can implement a `LabelCaptureBasicOverlayListener` and/or `LabelCaptureAdvancedOverlayListener` interface, depending on the overlay(s) you are using.
+To customize the appearance of an overlay you can implement a `LabelCaptureBasicOverlayListener` and/or `LabelCaptureAdvancedOverlayListener` interface, depending on the overlays you are using.
 
 `brushForLabel()` is called every time a label is captured, and `brushForField()` is called for each of its fields to determine the brush for the label or field.
 
@@ -214,7 +214,7 @@ validationFlowOverlay.applySettings(validationFlowOverlaySettings)
 The Adaptive Recognition API is still in beta and may change in future versions of Scandit Data Capture SDK. To enable it on your subscription, please contact [support@scandit.com](mailto:support@scandit.com).
 :::
 
-The Adaptive Recognition Engine helps making Smart Label Capture more robust and scalable thanks to its larger, more capable model hosted in the cloud. Whenever Smart Label Capture's on-device model fails to capture data, the SDK will automatically trigger the Adaptive Recognition Engine to capture complex, unforeseen data and process it with high accuracy and reliability — avoiding the need for the user to type data manually.
+The Adaptive Recognition Engine helps making Smart Label Capture more robust and scalable thanks to its larger, more capable model hosted in the cloud. Whenever Smart Label Capture's on-device model fails to capture data, the SDK will automatically trigger the Adaptive Recognition Engine to capture complex, unforeseen data and process it with high accuracy and reliability—avoiding the need for the user to type data manually.
 
 Enable Adaptive Recognition by setting `adaptiveRecognitionMode` to `AUTO` on the label definition. This is a single extra line added to your existing label definition configuration, using the DSL's `adaptiveRecognition()` member:
 

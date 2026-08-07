@@ -17,7 +17,7 @@ SparkScan bundles multiple scanning features together and addresses many common 
 
 ## UI Overview
 
-The UI elements in SparkScan are intentionally minimalistic, meant to be overlayed on any application without the need to adapt the existing app while offering the best user experience.
+The UI elements in SparkScan are intentionally minimalistic, meant to be overlaid on any application without the need to adapt the existing app while offering the best user experience.
 
 Two main elements compose the UI:
 
@@ -28,10 +28,10 @@ Two main elements compose the UI:
 
 ## Workflow Description
 
-When SparkScan is started, the UI presents just the trigger button, collapsed. The user can move the trigger button by simply dragging it around: the position of the trigger button is remembered across sessions, so the user can place the button where it's the most comfortable to use.
-To start scanning, the user can simply tap on it.
+When SparkScan is started, the UI presents just the trigger button, collapsed. The user can move the trigger button by dragging it around: the position of the trigger button is remembered across sessions, so the user can place the button where it's the most comfortable to use.
+To start scanning, the user can tap on it.
 
-When the scanner is active, the mini preview is shown. The mini preview too can be placed anywhere in the view by simply pressing on it for a little while and then dragging it around. Also the position of the mini preview is remembered across sessions, so the user can place it where it prefers (e.g. not to cover an important information at the top of the app).
+When the scanner is active, the mini preview is shown. The mini preview too can be placed anywhere in the view by pressing and holding it, then dragging it around. Also the position of the mini preview is remembered across sessions, so the user can place it where it prefers (for example, not to cover an important information at the top of the app).
 
 In the default configuration:
 - Upon scan the user will receive audio/haptic feedback confirming the scan, and the mini preview will display the scanned barcode for a small amount of time before fading away.

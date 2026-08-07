@@ -1,5 +1,5 @@
 ---
-description: "MatrixScan Find is our pre-built UI that uses augmented reality overlays to highlight items that match predefined criteria, built on the Kotlin Multiplatform BarcodeFind mode and view."
+description: "Pre-built AR UI that highlights items matching predefined criteria, built on the BarcodeFind mode."
 
 sidebar_position: 1
 pagination_prev: null
@@ -26,7 +26,7 @@ The UI workflow is designed to be as simple and ergonomic as possible, and inclu
 - **Feedback** is overlaid as colorful visual dots highlighting items on screen.
 - When paused, MatrixScan Find shows a **carousel** listing all the items currently being searched for, with a check mark for those already found.
 
-Upon completing the search, if all items have been found, you can advance the user to the next step automatically — for example finalizing an order, or moving on to the next search.
+Upon completing the search, if all items have been found, you can advance the user to the next step automatically—for example finalizing an order, or moving on to the next search.
 
 ## Supported Symbologies
 

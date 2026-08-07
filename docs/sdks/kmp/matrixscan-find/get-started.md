@@ -47,7 +47,7 @@ val dataCaptureContext = DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LI
 
 ## Configure the Barcode Find Mode
 
-The Barcode Find mode is configured through `BarcodeFindSettings`, which lets you enable the symbologies you need. For this tutorial, we enable a generous set of symbologies — in your own app, only enable the ones you require, since every extra symbology impacts processing time.
+The Barcode Find mode is configured through `BarcodeFindSettings`, which lets you enable the symbologies you need. For this tutorial, we enable a generous set of symbologies—in your own app, only enable the ones you require, since every extra symbology impacts processing time.
 
 ```kotlin
 import com.kmp.datacapture.barcode.data.Symbology
@@ -118,7 +118,7 @@ fun FindingScreen() {
 
 ### Imperative View API
 
-If you need full control over the view and its lifecycle — or you are not using the `-compose` companion modules — construct a `BarcodeFindView` from the base `barcode` module directly, configure `BarcodeFindViewSettings`, and drive the resume/pause and searching lifecycle yourself.
+If you need full control over the view and its lifecycle—or you are not using the `-compose` companion modules—construct a `BarcodeFindView` from the base `barcode` module directly, configure `BarcodeFindViewSettings`, and drive the resume/pause and searching lifecycle yourself.
 
 ```kotlin
 import com.kmp.datacapture.barcode.find.BarcodeFindViewSettings
@@ -214,7 +214,7 @@ If you are using the Compose `BarcodeFindView`'s `onFinishTap` callback instead,
 
 ## Start Searching
 
-If you constructed the view imperatively without going through the lifecycle wiring above, you can control searching directly. This is the equivalent of pressing the "Play" button programmatically — it starts the camera and hides the item carousel:
+If you constructed the view imperatively without going through the lifecycle wiring above, you can control searching directly. This is the equivalent of pressing the "Play" button programmatically—it starts the camera and hides the item carousel:
 
 ```kotlin
 barcodeFindView.startSearching()

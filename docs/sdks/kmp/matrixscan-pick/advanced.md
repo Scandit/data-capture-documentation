@@ -1,5 +1,5 @@
 ---
-description: "MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs."
+description: "Advanced settings for customizing MatrixScan Pick behavior and its pre-built UI."
 
 sidebar_position: 3
 pagination_next: null
@@ -10,7 +10,7 @@ keywords:
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and ease of use. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Mode Listener
 
@@ -83,7 +83,7 @@ barcodePickView.addListener(MyViewListener())
 
 ## Handling Pick and Unpick Actions
 
-By default, MatrixScan Pick resolves pick/unpick actions on its own. To intercept them — for example, to confirm an action against a backend before it's applied — implement `BarcodePickActionListener` and register it on the view. Each callback must eventually be completed by invoking `onFinish` on the supplied `BarcodePickActionCallback`.
+By default, MatrixScan Pick resolves pick/unpick actions on its own. To intercept them—for example, to confirm an action against a backend before it's applied—implement `BarcodePickActionListener` and register it on the view. Each callback must eventually be completed by invoking `onFinish` on the supplied `BarcodePickActionCallback`.
 
 ```kotlin
 import com.kmp.datacapture.barcode.pick.BarcodePickActionCallback
@@ -131,7 +131,7 @@ barcodePick.cancelActionForItemWithData("9783598215438")
 
 ## Updating the Product List at Runtime
 
-If the set of products to pick changes during a session (e.g. a new pick list is loaded), call `updateProductList` on the `BarcodePickAsyncMapperProductProvider` instead of recreating the mode:
+If the set of products to pick changes during a session (for example, a new pick list is loaded), call `updateProductList` on the `BarcodePickAsyncMapperProductProvider` instead of recreating the mode:
 
 ```kotlin
 productProvider.updateProductList(
@@ -169,7 +169,7 @@ barcodePickViewSettings.highlightStyle = highlightStyle
 
 ### Icons and Async Highlight Styles
 
-`BarcodePickViewHighlightStyleDotWithIcons` and `BarcodePickViewHighlightStyleRectangularWithIcons` add per-state icons (`setIconForState`/`setSelectedIconForState`) on top of the brush customization above. Both also expose `asyncStyleProvider`, letting you resolve the style per item asynchronously — for example, to look up a status icon from a backend:
+`BarcodePickViewHighlightStyleDotWithIcons` and `BarcodePickViewHighlightStyleRectangularWithIcons` add per-state icons (`setIconForState`/`setSelectedIconForState`) on top of the brush customization above. Both also expose `asyncStyleProvider`, letting you resolve the style per item asynchronously—for example, to look up a status icon from a backend:
 
 ```kotlin
 import com.kmp.datacapture.barcode.pick.BarcodePickStatusIconStyle

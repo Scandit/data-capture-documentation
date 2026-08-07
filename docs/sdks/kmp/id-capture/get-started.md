@@ -145,7 +145,7 @@ idCapture.addListener(object : IdCaptureListener {
 
 Capture results are delivered as a `CapturedId`. This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. `CapturedId.barcode`, `CapturedId.mrz`, `CapturedId.viz`).
+For more specific information, use its non-null result properties (for example, `CapturedId.barcode`, `CapturedId.mrz`, `CapturedId.viz`).
 
 ```kotlin
 override fun onIdCaptured(mode: IdCapture, id: CapturedId) {

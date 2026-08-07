@@ -1,5 +1,5 @@
 ---
-description: "MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs."
+description: "Advanced settings for customizing MatrixScan Find behavior and its pre-built UI."
 
 sidebar_position: 3
 pagination_next: null
@@ -10,7 +10,7 @@ keywords:
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and ease of use. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## Set Up a Listener on the BarcodeFind Mode
 
@@ -119,7 +119,7 @@ if (BarcodeFindView.hardwareTriggerSupported) {
 
 ## Pausing the Search
 
-In addition to `startSearching()` and `stopSearching()`, you can pause an in-progress search — for example when the user wants to inspect the found-items carousel without losing progress:
+In addition to `startSearching()` and `stopSearching()`, you can pause an in-progress search—for example when the user wants to inspect the found-items carousel without losing progress:
 
 ```kotlin
 barcodeFindView.pauseSearching()

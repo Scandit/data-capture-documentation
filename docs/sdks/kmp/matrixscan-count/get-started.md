@@ -42,7 +42,7 @@ val dataCaptureContext = DataCaptureContext.initialize("-- ENTER YOUR SCANDIT LI
 
 ## Configure the Barcode Count Mode
 
-The Barcode Count mode is configured through `BarcodeCountSettings`, which lets you enable the symbologies you need and tune how counting behaves. For this tutorial, we enable a generous set of symbologies — in your own app, only enable the ones you require, since every extra symbology impacts processing time.
+The Barcode Count mode is configured through `BarcodeCountSettings`, which lets you enable the symbologies you need and tune how counting behaves. For this tutorial, we enable a generous set of symbologies—in your own app, only enable the ones you require, since every extra symbology impacts processing time.
 
 ```kotlin
 import com.kmp.datacapture.barcode.count.BarcodeCount
@@ -64,7 +64,7 @@ val settings = BarcodeCountSettings.barcodeCountSettings().also {
 val barcodeCount = BarcodeCount.forContext(dataCaptureContext, settings)
 ```
 
-If you are sure that your environment will only have unique barcodes (i.e. no duplicated values), you can also set `BarcodeCountSettings.expectsOnlyUniqueBarcodes = true`. This improves scanning performance as long as no duplicates are present.
+If you are sure that your environment will only have unique barcodes (that is, no duplicated values), you can also set `BarcodeCountSettings.expectsOnlyUniqueBarcodes = true`. This improves scanning performance as long as no duplicates are present.
 
 ## Host the View
 
@@ -96,7 +96,7 @@ fun CountingScreen() {
 
 ### Imperative View API
 
-If you need full control over the view and its lifecycle — or you are not using the `-compose` companion modules — construct a `BarcodeCountView` from the base `barcode` module directly and drive the resume/pause lifecycle yourself.
+If you need full control over the view and its lifecycle—or you are not using the `-compose` companion modules—construct a `BarcodeCountView` from the base `barcode` module directly and drive the resume/pause lifecycle yourself.
 
 On Android, embed the view in your UI (shown here hosted from Compose via `AndroidView`) and forward the lifecycle events:
 

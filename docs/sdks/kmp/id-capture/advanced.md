@@ -1,5 +1,5 @@
 ---
-description: "There are several advanced configurations that can be used to customize the behavior of the ID Capture SDK and enable additional features.                                                                              "
+description: "Configure ID Capture behavior and turn on additional features such as barcode verification and voided-document detection."
 
 sidebar_position: 4
 pagination_next: null
@@ -121,7 +121,7 @@ For a rejected document, a `RejectionReason` is provided in `onIdRejected` to he
 * `INVALID_FORMAT`: The document is in the list of accepted documents, but the format is invalid. In this scenario, you could direct the user to scan the document again.
 * `DOCUMENT_VOIDED`: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * `TIMEOUT`: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
-* `SINGLE_IMAGE_NOT_RECOGNIZED`: A single-frame capture (e.g. mobile ID) could not be recognized.
+* `SINGLE_IMAGE_NOT_RECOGNIZED`: A single-frame capture (for example, mobile ID) could not be recognized.
 * `DOCUMENT_EXPIRED`: The document has expired.
 * `DOCUMENT_EXPIRES_SOON`: The document expires within the window configured by `rejectIdsExpiringIn`.
 * `NOT_REAL_ID_COMPLIANT`: The document is not REAL ID compliant, when `rejectNotRealIdCompliant` is enabled.
@@ -143,7 +143,7 @@ idCapture.capturedIds
     .launchIn(coroutineScope)
 ```
 
-Collecting the flow registers a listener under the hood; cancelling the collection removes it. Rejections are not surfaced on this Flow — use `IdCaptureListener.onIdRejected` for those.
+Collecting the flow registers a listener under the hood; cancelling the collection removes it. Rejections are not surfaced on this Flow—use `IdCaptureListener.onIdRejected` for those.
 
 ## Detect Fake IDs
 

@@ -135,3 +135,9 @@ Gradle
 Kotlin
 Objective-C
 
+Multiplatform
+datacapture
+BCBP
+UPCA
+ARGB
+tappable

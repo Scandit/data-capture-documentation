@@ -1,5 +1,5 @@
 ---
-description: "There are two ways to add advanced AR overlays to a Data Capture View with MatrixScan Batch."
+description: "Add advanced AR overlays to a Data Capture View with MatrixScan Batch."
 
 sidebar_position: 3
 pagination_next: null
@@ -45,7 +45,7 @@ The setter methods take priority: if a view for a tracked barcode has been set w
 
 ### Using BarcodeBatchAdvancedOverlayListener
 
-`viewForTrackedBarcode()` asks for a `NativeView` (`android.view.View` on Android, `UIView` on iOS) to display above the barcode. Returning `null` shows no view. `anchorForTrackedBarcode()` asks how to anchor the view via `Anchor` — note that it anchors the view's *center* to the anchor point, so to pin the top or bottom of the view instead, apply an offset. `offsetForTrackedBarcode()` supplies that offset, expressed as a `PointWithUnit`.
+`viewForTrackedBarcode()` asks for a `NativeView` (`android.view.View` on Android, `UIView` on iOS) to display above the barcode. Returning `null` shows no view. `anchorForTrackedBarcode()` asks how to anchor the view via `Anchor`—note that it anchors the view's *center* to the anchor point, so to pin the top or bottom of the view instead, apply an offset. `offsetForTrackedBarcode()` supplies that offset, expressed as a `PointWithUnit`.
 
 ```kotlin
 import com.kmp.datacapture.barcode.batch.BarcodeBatchAdvancedOverlay
@@ -129,7 +129,7 @@ If you do not want to use the advanced overlay, you can build augmented-reality 
 - Set a `BarcodeBatchListener` on `BarcodeBatch`.
 - In `onSessionUpdated()`, read `session.addedTrackedBarcodes` and `session.removedTrackedBarcodes`.
 - Create and show your own views for the added barcodes; remove the views for the barcodes that were lost.
-- On every update, reposition the views for the barcodes still on screen using `TrackedBarcode.location`. There's no need to animate the change yourself — updates happen frequently enough that the movement already looks smooth.
+- On every update, reposition the views for the barcodes still on screen using `TrackedBarcode.location`. There's no need to animate the change yourself—updates happen frequently enough that the movement already looks smooth.
 
 :::note
 `TrackedBarcode.location` is expressed in frame coordinates and must be mapped to view coordinates with `DataCaptureView.mapFrameQuadrilateralToView()`.
