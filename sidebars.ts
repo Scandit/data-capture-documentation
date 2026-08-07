@@ -1610,6 +1610,7 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/kmp/add-sdk',
+        'sdks/kmp/agent-skills',
       ],
     },
     {

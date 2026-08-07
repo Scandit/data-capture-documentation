@@ -10,6 +10,7 @@
       "Cordova": "sparkscan-cordova",
       "Capacitor": "sparkscan-capacitor",
       "Flutter": "sparkscan-flutter",
+      "Kotlin Multiplatform": "sparkscan-kmp",
       "React Native": "sparkscan-rn",
       ".NET iOS": "sparkscan-net-ios",
       ".NET Android": "sparkscan-net-android"
@@ -21,6 +22,7 @@
       "Cordova": "barcode-capture-cordova",
       "Capacitor": "barcode-capture-capacitor",
       "Flutter": "barcode-capture-flutter",
+      "Kotlin Multiplatform": "barcode-capture-kmp",
       "React Native": "barcode-capture-rn",
       ".NET iOS": "barcode-capture-net-ios",
       ".NET Android": "barcode-capture-net-android"
@@ -32,6 +34,7 @@
       "Cordova": "label-capture-cordova",
       "Capacitor": "label-capture-capacitor",
       "Flutter": "label-capture-flutter",
+      "Kotlin Multiplatform": "label-capture-kmp",
       "React Native": "label-capture-rn",
       ".NET iOS": "label-capture-net-ios",
       ".NET Android": "label-capture-net-android"
@@ -43,6 +46,7 @@
       "Cordova": "matrixscan-ar-cordova",
       "Capacitor": "matrixscan-ar-capacitor",
       "Flutter": "matrixscan-ar-flutter",
+      "Kotlin Multiplatform": "matrixscan-ar-kmp",
       "React Native": "matrixscan-ar-rn",
       ".NET iOS": "matrixscan-ar-net-ios",
       ".NET Android": "matrixscan-ar-net-android"
@@ -54,6 +58,7 @@
       "Cordova": "matrixscan-batch-cordova",
       "Capacitor": "matrixscan-batch-capacitor",
       "Flutter": "matrixscan-batch-flutter",
+      "Kotlin Multiplatform": "matrixscan-batch-kmp",
       "React Native": "matrixscan-batch-rn",
       ".NET iOS": "matrixscan-batch-net-ios",
       ".NET Android": "matrixscan-batch-net-android"
@@ -64,12 +69,14 @@
       "Cordova": "matrixscan-count-cordova",
       "Capacitor": "matrixscan-count-capacitor",
       "Flutter": "matrixscan-count-flutter",
+      "Kotlin Multiplatform": "matrixscan-count-kmp",
       "React Native": "matrixscan-count-rn",
       ".NET iOS": "matrixscan-count-net-ios",
       ".NET Android": "matrixscan-count-net-android"
     },
     "matrixscan-pick": {
-      "iOS": "matrixscan-pick-ios"
+      "iOS": "matrixscan-pick-ios",
+      "Kotlin Multiplatform": "matrixscan-pick-kmp"
     },
     "id-capture": {
       "iOS": "id-capture-ios",
@@ -78,6 +85,7 @@
       "Cordova": "id-capture-cordova",
       "Capacitor": "id-capture-capacitor",
       "Flutter": "id-capture-flutter",
+      "Kotlin Multiplatform": "id-capture-kmp",
       "React Native": "id-capture-rn",
       ".NET iOS": "id-capture-net-ios",
       ".NET Android": "id-capture-net-android"
@@ -140,6 +148,16 @@
       { "slug": "matrixscan-count-flutter", "product": "matrixscan-count" },
       { "slug": "label-capture-flutter", "product": "smart-label-capture" },
       { "slug": "id-capture-flutter", "product": "id-capture" }
+    ],
+    "Kotlin Multiplatform": [
+      { "slug": "sparkscan-kmp", "product": "sparkscan" },
+      { "slug": "barcode-capture-kmp", "product": "barcode-capture" },
+      { "slug": "matrixscan-batch-kmp", "product": "matrixscan-batch" },
+      { "slug": "matrixscan-ar-kmp", "product": "matrixscan-ar" },
+      { "slug": "matrixscan-count-kmp", "product": "matrixscan-count" },
+      { "slug": "matrixscan-pick-kmp", "product": "matrixscan-pick" },
+      { "slug": "label-capture-kmp", "product": "smart-label-capture" },
+      { "slug": "id-capture-kmp", "product": "id-capture" }
     ],
     "React Native": [
       { "slug": "sparkscan-rn", "product": "sparkscan" },
