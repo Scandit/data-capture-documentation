@@ -195,7 +195,7 @@ barcodePickView.uiListener = object : BarcodePickViewUiListener {
 ```
 
 :::note
-If you are using the Compose `BarcodePickView`'s `onFinishTap` callback instead, you don't need to set `uiListener` separately — the composable wires it up for you.
+If you are using the Compose `BarcodePickView`'s `onFinishTap` callback instead, you don't need to set `uiListener` separately—the composable wires it up for you.
 :::
 
 ## Start Searching

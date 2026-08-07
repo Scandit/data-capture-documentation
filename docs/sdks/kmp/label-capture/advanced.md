@@ -138,7 +138,7 @@ validationFlowOverlay.listener = myValidationFlowListener
 ```
 
 :::note
-On Android, call `validationFlowOverlay.onResume()` / `onPause()` from your screen's resume/pause lifecycle — the overlay does not observe lifecycle events on its own. Both calls are no-ops on iOS, which manages its own lifecycle.
+On Android, call `validationFlowOverlay.onResume()` / `onPause()` from your screen's resume/pause lifecycle—the overlay does not observe lifecycle events on its own. Both calls are no-ops on iOS, which manages its own lifecycle.
 :::
 
 ### Define a Listener

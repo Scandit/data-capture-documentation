@@ -81,7 +81,7 @@ To display the camera preview together with the scanning UI, host a `DataCapture
 
 ### Compose (recommended)
 
-The `core-compose` module's `DataCaptureView` composable and `rememberCamera` helper manage the camera and view lifecycle declaratively — `rememberCamera` sets the frame source and turns the camera on as the final step of entering composition, and off as the first step on leaving it. Attach the `BarcodeCaptureOverlay` through the composable's `overlays` parameter so scanned codes get visual feedback.
+The `core-compose` module's `DataCaptureView` composable and `rememberCamera` helper manage the camera and view lifecycle declaratively—`rememberCamera` sets the frame source and turns the camera on as the final step of entering composition, and off as the first step on leaving it. Attach the `BarcodeCaptureOverlay` through the composable's `overlays` parameter so scanned codes get visual feedback.
 
 ```kotlin
 import androidx.compose.foundation.layout.fillMaxSize

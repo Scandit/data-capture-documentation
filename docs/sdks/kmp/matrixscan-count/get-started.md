@@ -176,7 +176,7 @@ barcodeCount.addListener(MyCountListener())
 ```
 
 :::note
-If you are using the Compose `BarcodeCountView`'s `onScan` callback instead, you don't need a separate `BarcodeCountListener` — both are notified from the same underlying scan event.
+If you are using the Compose `BarcodeCountView`'s `onScan` callback instead, you don't need a separate `BarcodeCountListener`—both are notified from the same underlying scan event.
 :::
 
 ## Reset the Mode

@@ -99,7 +99,7 @@ MatrixScan Find's built-in AR user interface includes the camera preview and sea
 
 ### Compose (recommended)
 
-The `barcode-compose` module provides a declarative `BarcodeFindView` composable that owns the `BarcodeFind` mode, applies `itemsToFind` reactively, and manages the searching lifecycle automatically — `startSearching()` is the final mount step and `stopSearching()` runs first on dispose:
+The `barcode-compose` module provides a declarative `BarcodeFindView` composable that owns the `BarcodeFind` mode, applies `itemsToFind` reactively, and manages the searching lifecycle automatically—`startSearching()` is the final mount step and `stopSearching()` runs first on dispose:
 
 ```kotlin
 import com.kmp.datacapture.barcode.compose.BarcodeFindView
@@ -209,7 +209,7 @@ barcodeFindView.uiListener = object : BarcodeFindViewUiListener {
 ```
 
 :::note
-If you are using the Compose `BarcodeFindView`'s `onFinishTap` callback instead, you don't need a separate `BarcodeFindViewUiListener` — both are notified from the same underlying finish event.
+If you are using the Compose `BarcodeFindView`'s `onFinishTap` callback instead, you don't need a separate `BarcodeFindViewUiListener`—both are notified from the same underlying finish event.
 :::
 
 ## Start Searching

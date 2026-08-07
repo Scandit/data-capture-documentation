@@ -96,7 +96,7 @@ To add the package:
 3. Select the single `ScanditKmp*` product that covers every Scandit KMP module your app uses.
 
 :::warning
-Add **exactly one** `ScanditKmp*` product to your app. Two Kotlin/Native frameworks linked into the same app cannot share types with each other, even when both come from the Scandit SDK — so you cannot combine several `ScanditKmp*` products the way you add individual modules on Android/Maven. Instead, pick the single umbrella variant that covers every module your app uses: `ScanditKmpBarcode` if you only scan barcodes, or `ScanditKmpAll` if you also need id, label, or parser.
+Add **exactly one** `ScanditKmp*` product to your app. Two Kotlin/Native frameworks linked into the same app cannot share types with each other, even when both come from the Scandit SDK—so you cannot combine several `ScanditKmp*` products the way you add individual modules on Android/Maven. Instead, pick the single umbrella variant that covers every module your app uses: `ScanditKmpBarcode` if you only scan barcodes, or `ScanditKmpAll` if you also need id, label, or parser.
 :::
 
 The native Scandit frameworks (for example, `ScanditCaptureCore`, `ScanditBarcodeCapture`) resolve transitively—the package manifest pins an exact dependency on the native `datacapture-spm` package, so there is no manual wiring required.

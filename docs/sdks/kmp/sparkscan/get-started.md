@@ -184,7 +184,7 @@ sparkScan.addListener(MyScanListener())
 ```
 
 :::note
-If you are using the Compose `SparkScanView`'s `onScan` callback instead, you don't need a separate `SparkScanListener` — both are notified from the same underlying scan event.
+If you are using the Compose `SparkScanView`'s `onScan` callback instead, you don't need a separate `SparkScanListener`—both are notified from the same underlying scan event.
 :::
 
 ## Scan Some Barcodes
