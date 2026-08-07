@@ -350,13 +350,14 @@ function buildModule(args: {
   idx: number;
   framework: string;
   product: string;
+  products: string[];
   contentType: string;
   version: string;
   updatedAt: string;
   notAvailable: boolean;
   fm: Record<string, unknown>;
 }) {
-  const { pathname, url, sourceSite, site, title: rawTitle, description, chunk, idx, framework, product, contentType, version, updatedAt, notAvailable, fm } = args;
+  const { pathname, url, sourceSite, site, title: rawTitle, description, chunk, idx, framework, product, products, contentType, version, updatedAt, notAvailable, fm } = args;
   const chunkClean = chunk.content.trim();
   const title = (rawTitle || pathname).trim();
   const displayTitle = idx === 1 ? title : `${title} (Part ${idx})`;
@@ -418,6 +419,7 @@ function buildModule(args: {
       heading: resolvedHeading.slice(0, 180),
       framework,
       product,
+      products,
       version,
       updated_at: updatedAt,
       source_site: sourceSite,
@@ -431,7 +433,7 @@ function buildModule(args: {
       intent: intents[0],
       audience: audiences[0],
       keywords,
-      status: curatedApplied ? "frontmatter" : "rule_based",
+      status: curatedApplied ? "frontmatter_augmented" : "rule_based",
     },
     references: links.internal.slice(0, 20),
     api_refs: links.api.slice(0, 20),
@@ -468,6 +470,7 @@ function toIndexRecord(m: KModule) {
     heading: m.metadata.heading,
     framework: m.metadata.framework,
     product: m.metadata.product,
+    products: m.metadata.products,
     version: m.metadata.version,
     updated_at: m.metadata.updated_at,
     source_site: m.metadata.source_site,
@@ -503,6 +506,7 @@ function buildGraph(modules: KModule[], site: string) {
     channels: m.channels,
     framework: m.metadata.framework,
     product: m.metadata.product,
+    products: m.metadata.products,
     version: m.metadata.version,
     url: m.metadata.url,
     userIntents: m.user_intents,
@@ -516,7 +520,7 @@ function buildGraph(modules: KModule[], site: string) {
   const audiences = uniq(modules.flatMap((m) => m.audiences));
   const channels = uniq(modules.flatMap((m) => m.channels));
   const frameworks = uniq(modules.map((m) => m.metadata.framework));
-  const products = uniq(modules.map((m) => m.metadata.product));
+  const products = uniq(modules.flatMap((m) => (m.metadata.products && m.metadata.products.length ? m.metadata.products : [m.metadata.product])));
   const apiRefs = uniq(modules.flatMap((m) => m.api_refs));
   const docPaths = uniq(modules.map((m) => m.metadata.source_path));
 
@@ -548,7 +552,7 @@ function buildGraph(modules: KModule[], site: string) {
     for (const v of m.audiences) addEdge(`${src}#audience:${v}`, "HasAudience", src, `urn:audience:${v}`);
     for (const v of m.channels) addEdge(`${src}#channel:${v}`, "HasChannel", src, `urn:channel:${v}`);
     if (m.metadata.framework) addEdge(`${src}#framework:${m.metadata.framework}`, "HasFramework", src, `urn:framework:${m.metadata.framework}`);
-    if (m.metadata.product) addEdge(`${src}#product:${m.metadata.product}`, "BelongsToProduct", src, `urn:product:${m.metadata.product}`);
+    for (const p of (m.metadata.products && m.metadata.products.length ? m.metadata.products : [m.metadata.product]).filter(Boolean)) addEdge(`${src}#product:${p}`, "BelongsToProduct", src, `urn:product:${p}`);
     for (const a of m.api_refs) addEdge(`${src}#api:${a}`, "CitesApi", src, `urn:api:${a}`);
     for (const ref of m.references) {
       if (indexedPaths.has(ref)) addEdge(`${src}#see:${ref}`, "SeeAlso", src, `urn:doc:${ref}`);
@@ -664,14 +668,15 @@ export default function knowledgeExtractor(context: any, _options: any) {
           const fm = readFrontMatter(siteDir, pathname);
           const framework = detectFramework(pathname);
           // Frontmatter is authoritative when present; fall back to path/heuristics.
-          const fmProduct = fmFirst(fm.product);
-          const product = fmProduct ? slug(fmProduct) : detectProduct(pathname);
+          const fmProducts = fmStringArray(fm.product).map(slug).filter(Boolean);
+          const products = fmProducts.length ? Array.from(new Set(fmProducts)) : [detectProduct(pathname)];
+          const product = products[0];
           const fmTopic = fmFirst(fm.topic_type).toLowerCase();
           const contentType = TOPIC_TYPE_TO_CONTENT[fmTopic] || detectContentType(pathname, title);
           const notAvailable = isAvailabilityStub(title, bodyMd);
           chunks.forEach((chunk, i) => {
             modules.push(
-              buildModule({ pathname, url, sourceSite, site, title, description, chunk, idx: i + 1, framework, product, contentType, version, updatedAt, notAvailable, fm }),
+              buildModule({ pathname, url, sourceSite, site, title, description, chunk, idx: i + 1, framework, product, products, contentType, version, updatedAt, notAvailable, fm }),
             );
           });
         } catch (err) {
