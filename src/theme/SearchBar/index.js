@@ -184,6 +184,15 @@ function stripTrailingMember(query) {
   const base = m[1];
   return base.length >= 3 && base !== q ? base : null;
 }
+// Trial/sign-up conversion attribution: remember the last search-result click so
+// a subsequent trial/sign-up CTA click can be attributed to that search via
+// Algolia convertedObjectIDsAfterSearch. Cross-domain conversions (license
+// creation, first-scan) fire on the dashboard/SDK and are NOT reachable here.
+let lastSearchClick_ = null; // { queryID, objectID, ts }
+function recordSearchClick_(queryID, objectID) {
+  if (queryID) lastSearchClick_ = { queryID, objectID, ts: Date.now() };
+}
+
 function Hit({ hit, children }) {
   // Mouse clicks navigate through this Link directly and never reach the
   // modal's navigator (which only handles keyboard selection), so capture
@@ -196,6 +205,7 @@ function Hit({ hit, children }) {
       position: hit.__autocomplete_absolutePosition ?? hit.__position,
       interaction: "mouse",
     });
+    recordSearchClick_(hit.__autocomplete_queryID, hit.objectID);
   };
   return (
     <Link to={hit.url} onClick={handleClick}>
@@ -292,6 +302,60 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
     };
   }, []);
 
+  // --- Search -> trial/sign-up conversion attribution ------------------------
+  // When a user clicks a search result and then, in the same session, clicks a
+  // trial / sign-up CTA, report that to Algolia as a conversion tied to the
+  // original search (queryID). This closes the "did search help the user
+  // convert?" loop for the docs-side conversion. License creation and first-
+  // scan are cross-domain (dashboard / SDK) and are intentionally NOT handled
+  // here - they need a server/dashboard-side pipeline.
+  //
+  // UNVERIFIED: the search-insights event shape and the CTA href patterns below
+  // must be confirmed against real runtime data (Algolia Insights debugger +
+  // console.log of a real result item) after this ships - the live library
+  // cannot be exercised at build time.
+  useEffect(() => {
+    try {
+      aa("init", { appId: props.appId, apiKey: props.apiKey });
+    } catch (e) {
+      /* insights unavailable - skip conversion reporting */
+    }
+    // Trial / sign-up CTAs in the docs (dashboard sign-up, free-trial pages).
+    const TRIAL_HREF = /(dashboard\/sign-(?:up|in)|\/free-trial|[?&]utm_campaign=trial|\bsign-?up\b)/i;
+    const ATTRIBUTION_WINDOW_MS = 30 * 60 * 1000; // only attribute a recent search
+    const onDocClick = (e) => {
+      const a = e.target && e.target.closest && e.target.closest("a[href]");
+      if (!a) return;
+      const href = a.getAttribute("href") || "";
+      if (!TRIAL_HREF.test(href)) return;
+      if (
+        !lastSearchClick_ ||
+        !lastSearchClick_.queryID ||
+        Date.now() - lastSearchClick_.ts > ATTRIBUTION_WINDOW_MS
+      ) {
+        return;
+      }
+      try {
+        aa("convertedObjectIDsAfterSearch", {
+          index: props.indexName,
+          eventName: "Docs trial/sign-up after search",
+          queryID: lastSearchClick_.queryID,
+          objectIDs: [lastSearchClick_.objectID].filter(Boolean),
+        });
+      } catch (err) {
+        /* non-fatal - PostHog event below still records the conversion */
+      }
+      capturePostHogEvent("docs_search_conversion", {
+        query_id: lastSearchClick_.queryID,
+        object_id: lastSearchClick_.objectID,
+        href,
+      });
+    };
+    document.addEventListener("click", onDocClick, true);
+    return () => document.removeEventListener("click", onDocClick, true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const currentFramework = useMemo(() => {
     // .NET uses two path segments (net/ios, net/android); every other framework
     // uses one. Match the two-segment case first so it isn't cut to "net".
@@ -370,6 +434,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         position: item?.__autocomplete_absolutePosition ?? item?.__position,
         interaction: "keyboard",
       });
+      recordSearchClick_(item?.__autocomplete_queryID, item?.objectID);
       // Algolia results could contain URL's from other domains which cannot
       // be served through history and should navigate with window.location.
       // The API reference (/data-capture-sdk/) is a separate Sphinx tree on the
