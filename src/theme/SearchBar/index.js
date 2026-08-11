@@ -545,10 +545,10 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // Algolia Search Analytics - inflating the searches total and the
         // no-result rate with prefixes that are not real queries. We run the
         // interactive requests with analytics ON but tagged 'as-you-type' (so
-        // click/queryID attribution keeps working and the keystroke prefixes can
-        // be segmented OUT of the whole-query metrics in the dashboard, rather
-        // than lost), and fire ONE untagged count-only request per completed
-        // query via the debounced ping below.
+        // click/queryID attribution keeps working), and fire ONE count-only
+        // request per completed query, tagged 'whole-query', via the debounced
+        // ping below. The dashboard reads two segments: counts + no-result rate
+        // from 'whole-query'; CTR + conversion from 'as-you-type'.
         const buildRequests = (queryOverride, { analyticsPing = false } = {}) =>
           Array.isArray(requests)
             ? requests.map((r) => {
@@ -564,12 +564,17 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
                   );
                 }
                 if (analyticsPing) {
-                  // The single counted whole-query record: analytics on, no hits,
-                  // no click attribution, and UNtagged - the clean count once the
-                  // as-you-type prefixes are filtered out in the dashboard.
+                  // The single counted whole-query record: analytics ON, no hits,
+                  // no click attribution, tagged 'whole-query' so the dashboard can
+                  // select it as its own segment. CTR/conversion on this segment are
+                  // 0 by design (no click can attach); those live on 'as-you-type'.
                   params.analytics = true;
                   params.hitsPerPage = 0;
                   params.clickAnalytics = false;
+                  params.analyticsTags = [
+                    ...(Array.isArray(params.analyticsTags) ? params.analyticsTags : []),
+                    "whole-query",
+                  ];
                 } else {
                   // Interactive as-you-type request. Keep analytics + clickAnalytics
                   // ON so the queryID stays linkable and result-click attribution
