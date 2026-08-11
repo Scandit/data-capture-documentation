@@ -104,7 +104,11 @@ const docsVersions: Record<
   { label?: string; banner: "none"; badge: boolean }
 > = {
   current: {
-    label: "8.5.2",
+    label: "8.6.0",
+    banner: "unreleased",
+    badge: false,
+  },
+  "8.5.2": {
     banner: "none",
     badge: false,
   },
@@ -433,7 +437,7 @@ const config: Config = {
           },
           showLastUpdateTime: false,
           includeCurrentVersion: true,
-          lastVersion: "current",
+          lastVersion: "8.5.2",
           versions: docsVersions,
         },
         blog: false,
