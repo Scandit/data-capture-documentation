@@ -9,6 +9,7 @@ import Ios from "./Ios";
 import Javascript from "./Javascript";
 import Cordova from "./Cordova";
 import Flutter from "./Flutter";
+import Kmp from "./Kmp";
 import ReactIcon from "./React";
 import Capacitor from "./Capacitor";
 import Xamarin from "./Xamarin";
@@ -26,6 +27,7 @@ import ScanditAndroid from "./ScanditAndroid";
 import ScanditCapacitor from "./ScanditCapacitor";
 import ScanditCordova from "./ScanditCordova";
 import ScanditFlutter from "./ScanditFlutter";
+import ScanditKmp from "./ScanditKmp";
 import ScanditIOS from "./ScanditIOS";
 import ScanditReact from "./ScanditReact";
 import Logo from "./Logo";
@@ -59,6 +61,7 @@ export {
   Cordova,
   ReactIcon,
   Flutter,
+  Kmp,
   Capacitor,
   Xamarin,
   Bolt,
@@ -75,6 +78,7 @@ export {
   ScanditCapacitor,
   ScanditCordova,
   ScanditFlutter,
+  ScanditKmp,
   ScanditIOS,
   ScanditReact,
   Logo,
