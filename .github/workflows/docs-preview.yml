@@ -1,0 +1,72 @@
+name: Deploy PR Preview
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+    branches:
+      - main
+      - 'release/**'
+
+concurrency:
+  group: docs-preview-${{ github.event.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build preview site
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build documentation
+        run: yarn build
+        env:
+          base_url: /data-capture-documentation/pr-preview/pr-${{ github.event.number }}/
+          preview_build: 'true'
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-site
+          path: build/
+          retention-days: 1
+
+  deploy:
+    name: Deploy or remove PR preview
+    needs: build
+    # Runs whenever build succeeded (normal deploy) OR was skipped (closed
+    # event has nothing to build but still needs to run removal) - but not
+    # when build actually failed.
+    if: always() && (needs.build.result == 'success' || needs.build.result == 'skipped')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download build artifact
+        if: github.event.action != 'closed'
+        uses: actions/download-artifact@v4
+        with:
+          name: preview-site
+          path: build/
+
+      - name: Deploy or remove PR preview
+        uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1
+        with:
+          source-dir: ./build/
+          qr-code: false
