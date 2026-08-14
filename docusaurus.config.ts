@@ -4,7 +4,15 @@ import type * as Preset from "@docusaurus/preset-classic";
 import * as dotenv from 'dotenv';
 import { version } from "react";
 import remarkHideComments from "./src/plugins/remark-hide-comments";
+import remarkOffloadPreviewMedia from "./src/plugins/remark-offload-preview-media";
+import stripPreviewMediaPlugin from "./src/plugins/plugin-strip-preview-media";
 dotenv.config();  // Load environment variables from .env file
+
+const productionUrl = "https://docs.scandit.com";
+// GitHub Pages PR previews (.github/workflows/docs-preview.yml) set this to skip
+// frozen doc versions and offload gif/mp4 to production — GitHub Pages caps a
+// published site at 1 GB, and a full build is ~300 MB per preview.
+const isPreviewBuild = process.env.preview_build === "true";
 
 /**
  * docusaurus-plugin-llms reads only docs/ and emits one entry per markdown file (v0.1.5 strips HTML only).
@@ -170,12 +178,16 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: "https://docs.scandit.com",
+  url: productionUrl,
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: process.env.base_url ?? '',
 
-  onBrokenLinks: "throw",
+  // Preview builds drop frozen versions (onlyIncludeVersions above), but several
+  // current-version release-notes pages hardlink to those versions' release notes
+  // (e.g. docs/sdks/android/release-notes.md -> /7.6.14/sdks/android/release-notes) -
+  // expected in a preview, not a real broken link, so don't fail the build over it.
+  onBrokenLinks: isPreviewBuild ? "warn" : "throw",
   onBrokenAnchors: "throw",
   onBrokenMarkdownLinks: "throw",
   onDuplicateRoutes: "throw",
@@ -410,6 +422,7 @@ const config: Config = {
       ignoreFiles: llmsIgnoreFiles,
     },
   ],
+  ...(isPreviewBuild ? [stripPreviewMediaPlugin] : []),
 ],
 
   presets: [
@@ -419,7 +432,13 @@ const config: Config = {
         docs: {
           routeBasePath: "/",
           sidebarPath: require.resolve("./sidebars.ts"),
-          remarkPlugins: [remarkHideComments],
+          remarkPlugins: [
+            remarkHideComments,
+            ...(isPreviewBuild
+              ? [[remarkOffloadPreviewMedia, { mediaBaseUrl: productionUrl }]]
+              : []),
+          ],
+          ...(isPreviewBuild ? { onlyIncludeVersions: ["current"] } : {}),
           breadcrumbs: true,
           admonitions: {
             keywords: [
