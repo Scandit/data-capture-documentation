@@ -10,6 +10,115 @@ keywords:
   - flutter
 ---
 
+## 8.6.0-beta.1
+
+**Released**: August 14, 2026
+
+### New Features
+
+#### Barcode
+
+* Added per-barcode highlight icon support to BarcodeCount through the BarcodeCountViewListener icon callbacks (recognized, not-in-list, accepted, and rejected).
+* BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
+* Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
+* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
+* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+
+#### Id
+
+* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
+* Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
+* Added an ID Capture image upload sample that demonstrates scanning ID documents from still images or PDF files on the device instead of using the live camera.
+* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
+* Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
+
+#### Smart Label Capture
+
+* Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
+
+#### Core
+
+* Added support in the GS1 parser for the telecom Application Identifiers 8040 (IMEI), 8041 (IMEI2), 8042 (eSIM/EID), and 8043 (pSIM), so GS1 codes carrying them parse instead of being rejected as unrecognized.
+* Added support for parsing the 2D-DOC (French 2D-Doc / ANTS) data format.
+* Added more detailed error reporting when required resources are missing.
+* Added support for multiple DataCaptureView instances to render the camera preview simultaneously, so navigating between screens that each show a DataCaptureView no longer causes black or frozen previews, including during interactive edge-swipe transitions. DataCaptureView also now renders a preview when the frame source is an ImageFrameSource or SequenceFrameSource.
+* Added LicenseInfo.allowedModes, exposing the set of capture modes a license key permits via the new CaptureMode enum.
+* Added MacroModeControl, letting you add a camera macro-mode toggle button to the DataCaptureView.
+* Added support for reading camera frames directly into a SharedArrayBuffer in supported environments (currently Chrome or Firefox, when pthread is enabled), avoiding an extra copy.
+
+### Performance Improvements
+
+#### Barcode
+
+* Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
+* Improved ITF decoding robustness, reducing the number of unscanned codes.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+
+#### Id
+
+* Improved PDF417 scanning on Quebec, Alaska, and Oklahoma driver’s licenses.
+
+### Behavioral Changes
+
+#### Barcode
+
+* Changed the default highlight brush in SparkScan and Barcode Capture.
+* Updated recommended camera settings for MatrixScan Batch, Find, Pick, Sequence, and AR, now using UHD4K resolution with a 16:9 aspect ratio.
+* MatrixScan Count uses a new default colour for scanned (counted) barcodes, chosen to meet accessibility contrast requirements. It applies to single scanned barcodes, to the barcodes inside a cluster, and to the cluster highlight itself. To keep your previous appearance, set the colour through the existing icon customization.
+* Enabled detection and decoding of mirrored MaxiCodes by default. Previously this required enabling the symbology extension `mirrored`, which has been removed.
+* Limited the GS1 format flag for DotCode to genuine GS1 openings (a leading digit pair without FNC1) per AIM DotCode v3.0, instead of defaulting all symbols to GS1.
+* Disabled enhanced low-resolution scanning of QR codes (introduced in 8.5.0) for MatrixScan modes. Customers who need this feature should contact Scandit support.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed Swift Package Manager resolution that failed to locate the core plugin, so the id, barcode, label, and parser plugins now resolve for SPM consumers.
+* Fixed a bug with the highlight colors of BarcodeCount clusters.
+* Fixed predefined Smart Label Capture barcode fields (IMEI1, IMEI2, serial number) not scanning correctly without an explicit symbology list.
+* Fixed Barcode AR highlight icons not displaying on Android when no icon color was set (previously they were invisible).
+* Fixed BarcodePick filter settings (excluded codes regex, excluded symbologies, EAN-13/UPC-A exclusions) not being applied.
+* Fixed the MatrixScan Count not-in-list accept/reject popover not reflecting a custom accepted/rejected ScanditIcon when configured.
+* Fixed BarcodeArPopoverAnnotation.isEntirePopoverTappable not applying changes, and popover tap callbacks being lost after annotation updates on iOS.
+* Fixed a visual artifact that could appear around the scan preview indicators in MatrixScan Count when using Scan Preview.
+* Fixed MatrixScan AR to adapt to the device UI scale.
+* Fixed rare cases where DotCode Code Set C symbols using the date/lot macro decoded to incorrect data due to a dropped leading zero in a digit pair.
+* Fixed a regression where short ITF codes with low wide/narrow ratio were not decoded.
+
+#### Id
+
+* Fixed a crash that could occur when navigating away from a screen while a hint was displayed.
+* Improved the DLID parser, fixing previously unparsable codes found in analytics.
+* Hardened dependency resolution for Android native samples.
+* Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
+* Fixed an issue where the VLM scanning screen remained permanently displayed if IdCaptureSettings were applied mid-scan.
+
+#### Smart Label Capture
+
+* Fixed a bug where the receipt scanning overlay and validation flow overlay could not be used on the same mode instance.
+* Fixed a crash on iOS when finalizing receipt scanning (LabelCapture adaptive recognition).
+* Fixed an issue on iOS where LabelCapture sound and vibration feedback could not be disabled, because a disabled sound or vibration was deserialized as the default (enabled) instead of as off. The same defect affected Feedback.emit() for all modes on iOS.
+* Fixed prebuilt date fields to recognize Spanish month abbreviations. The abbreviations `ene`, `abr`, `ago`, and `dic` are newly supported; the remaining Spanish abbreviations already resolved because they match their English form. The expiry-date anchor additionally recognizes common Spanish expiry terms such as `caducidad`, `vencimiento`, `consumir antes`, and `consumo preferente`.
+
+#### Core
+
+* Fixed a SequenceFrameSource occasionally delivering the same frame to its listeners twice.
+* Fixed Nokia G11 and Nokia 8.3 5G devices not correctly getting the Camera2 path when API2-only features were requested.
+* Fixed the Galaxy Note10 camera profile selection so the international Note10 family (SM-N970x/SM-N971x) gets its intended fixed-focus and Camera2 behaviors.
+* Fixed the Galaxy S9+ (SM-G965x) camera profile selection so Camera2-based capture is enabled on those devices as intended.
+* Fixed the camera preview appearing darker in single-scan modes after using a mode that applies its own exposure adjustment, such as SparkScan or MatrixScan Count.
+* Fixed a race condition in SimplePropertyBehaviorSubject where mutating the subscriber list during a callback could cause crashes or missed notifications.
+* Fixed an IllegalStateException in analytics HTTPS requests when the app is instrumented by APM tools such as Dynatrace.
+* Fixed EventsResponse::getRetryTimeoutInSeconds to return a fallback instead of aborting on out-of-range header values.
+
+### Deprecations
+
+#### Barcode
+
+* Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
 ## 8.5.2
 
 **Released**: July 31, 2026
