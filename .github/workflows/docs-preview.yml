@@ -16,7 +16,8 @@ jobs:
     name: Build preview site
     if: github.event.action != 'closed'
     runs-on: ubuntu-latest
-    permissions: {}
+    permissions:
+      contents: read
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
