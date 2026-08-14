@@ -21,6 +21,10 @@ validation/cache/
 .env.production.local
 .vscode
 
+# Claude Code planning artifacts (local working docs, not meant to ship in PRs)
+.claude/specs/
+.claude/plans/
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
