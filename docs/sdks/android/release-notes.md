@@ -18,7 +18,7 @@ keywords:
 
 #### Barcode
 
-* The MatrixScan Sequence simple sample is now publicly available (LINK), showing the minimum setup needed to run MatrixScan Sequence.
+* The [MatrixScan Sequence simple sample](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/06_Sequence/MatrixScanSequenceSimpleSample) is now publicly available, showing the minimum setup needed to run MatrixScan Sequence.
 * Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
 * BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
 * [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set barcodeCountSettings.AutomaticClusteringMethod to AutomaticClusteringMethod.Label to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
@@ -35,7 +35,7 @@ keywords:
 
 * ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
 * Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
-* Added an ID Capture image upload sample that demonstrates scanning ID documents from still images or PDF files on the device instead of using the live camera.
+* Added an [ID Capture image upload sample](https://github.com/Scandit/datacapture-android-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample) that demonstrates scanning ID documents from still images or PDF files on the device instead of using the live camera.
 * Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 

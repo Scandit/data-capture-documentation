@@ -18,7 +18,7 @@ keywords:
 
 #### Barcode
 
-* The MatrixScan Sequence simple sample is now publicly available (LINK), showing the minimum setup needed to run MatrixScan Sequence.
+* The [MatrixScan Sequence simple sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/06_Sequence/MatrixScanSequenceSimpleSample) is now publicly available, showing the minimum setup needed to run MatrixScan Sequence.
 * Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
 * BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
 * Added support for configuring the accepted device orientation via the new `BarcodeSequenceSettings.shelfSequencingOrientation` property. Defaults to `.landscapeOnly`; set to `.portraitOnly` or `.any` to enable portrait (or any) orientation. The rotate-device prompt's default text now reflects the configured orientation.
@@ -40,7 +40,7 @@ keywords:
 * ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
 * Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
 * Added `setRepeatAsync` on `SDCImageFrameSource`. It determines whether the frame source keeps re-emitting its frames after all of them have been processed. Setting this to true makes a still image behave like a continuous camera feed, giving the recognizer the multiple passes over the image it generally needs.
-* Added an ID Capture image upload sample that demonstrates scanning ID documents from still images or PDF files on the device instead of using the live camera.
+* Added an [ID Capture image upload sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample) that demonstrates scanning ID documents from still images or PDF files on the device instead of using the live camera.
 * Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
