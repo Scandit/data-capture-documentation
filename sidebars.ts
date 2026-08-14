@@ -1780,6 +1780,42 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
+      type: "category",
+      label: "API Reference",
+      items: [
+        {
+          type: "link",
+          label: "ScanditCaptureCore",
+          href: "https://docs.scandit.com/data-capture-sdk/kmp/core/api.html",
+        },
+        {
+          type: "link",
+          label: "ScanditBarcodeCapture",
+          href: "https://docs.scandit.com/data-capture-sdk/kmp/barcode-capture/api.html",
+        },
+        {
+          type: "link",
+          label: "ScanditIdCapture",
+          href: "https://docs.scandit.com/data-capture-sdk/kmp/id-capture/api.html",
+        },
+        {
+          type: "link",
+          label: "ScanditLabelCapture",
+          href: "https://docs.scandit.com/data-capture-sdk/kmp/label-capture/api.html",
+        },
+        {
+          type: "link",
+          label: "ScanditParser",
+          href: "https://docs.scandit.com/data-capture-sdk/kmp/parser/api.html",
+        },
+        {
+          type: "link",
+          label: "Index",
+          href: "https://docs.scandit.com/data-capture-sdk/kmp/genindex.html",
+        },
+      ],
+    },
+    {
       type: 'doc',
       label: 'Release Notes',
       id: 'sdks/kmp/release-notes',
