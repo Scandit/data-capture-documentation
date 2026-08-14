@@ -1,3 +1,5 @@
+import { withCurrentDocsPath } from '@site/src/constants/docsPaths';
+
 // localStorage key the homepage framework selector writes and the shared
 // Agent Skills banner reads back. Both sides must use this constant so the
 // contract can't drift (a rename would otherwise silently fall back to iOS).
@@ -46,7 +48,12 @@ export interface SdksRouteInfo {
 }
 
 export function parseSdksRoute(pathname: string): SdksRouteInfo {
-  const match = pathname.match(/^\/sdks\/((?:net\/)?[^\/]+)\/([^\/]+)(?:\/([^\/]+))?/);
+  // Tolerate a leading docs-version segment (/next/, /7.6.14/, ...): only the
+  // version served at the site root has none, so matching on /sdks/ alone would
+  // silently fail on every other version.
+  const match = pathname.match(
+    /^(?:\/(?:next|\d+\.\d+\.\d+))?\/sdks\/((?:net\/)?[^\/]+)\/([^\/]+)(?:\/([^\/]+))?/,
+  );
   if (!match) return {};
 
   const rawFramework = match[1];
@@ -156,5 +163,5 @@ export function resolveAgentSkillsUrl(): string {
     fromStorage = null;
   }
   const slug = normalizeFrameworkQuery(fromQuery || fromStorage || '') || 'ios';
-  return `/sdks/${QUERY_FRAMEWORK_TO_PATH[slug]}/agent-skills`;
+  return withCurrentDocsPath(`/sdks/${QUERY_FRAMEWORK_TO_PATH[slug]}/agent-skills`);
 }

@@ -1,3 +1,8 @@
+import {
+  CURRENT_DOCS_PATH,
+  withCurrentDocsPath,
+} from '@site/src/constants/docsPaths';
+
 const FRAMEWORK_PREFIXES = [
   '/sdks/net/ios/',
   '/sdks/net/android/',
@@ -7,15 +12,29 @@ const FRAMEWORK_PREFIXES = [
   '/sdks/cordova/',
   '/sdks/react-native/',
   '/sdks/flutter/',
+  '/sdks/kmp/',
   '/sdks/capacitor/',
 ];
+
+// Leading docs-version segment (/next/, /7.6.14/, ...). Only the version served
+// at the site root has none, so it has to be stripped before matching.
+const VERSION_PREFIX = /^\/(?:next|\d+\.\d+\.\d+)(?=\/)/;
 
 const DEFAULT_HREF = '/sdks/ios/agent-skills';
 
 function pickHref(pathname: string): string {
+  const versionPrefix = pathname.match(VERSION_PREFIX)?.[0] ?? '';
+  const versionlessPath = pathname.slice(versionPrefix.length);
   for (const prefix of FRAMEWORK_PREFIXES) {
-    if (pathname.startsWith(prefix)) {
-      return `${prefix}agent-skills`;
+    if (versionlessPath.startsWith(prefix)) {
+      const href = `${prefix}agent-skills`;
+      // Frameworks that only exist in the unreleased docs always need the
+      // current-version prefix. Otherwise stay on the current docs when the
+      // reader is already there; legacy versions have no Agent Skills pages,
+      // so those fall back to the root (last released) version.
+      const unreleasedHref = withCurrentDocsPath(href);
+      if (unreleasedHref !== href) return unreleasedHref;
+      return versionPrefix === CURRENT_DOCS_PATH ? `${versionPrefix}${href}` : href;
     }
   }
   return DEFAULT_HREF;

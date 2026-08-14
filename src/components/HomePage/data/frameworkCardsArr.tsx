@@ -19,6 +19,7 @@ import {
 import style from "../Frameworks/FrameworkCard.module.css";
 import { BarcodeScanning, IDScanning, LabelScanning } from "../../constants/scanningEnums";
 import type { FrameworkCardType } from "../../constants/types";
+import { CURRENT_DOCS_PATH } from "@site/src/constants/docsPaths";
 
 //the framework name in this array is used exactly as it appears in the FrameworksName enum
 //The framework key of the object in the frameworkCards array is also used to form the link.
@@ -138,11 +139,12 @@ export const frameworkCards: FrameworkCardType[] = [
     labelScanning: [LabelScanning.LabelScanning],
   },
   {
-    // `link` is pinned to the root (current docs) because kmp has no
-    // versioned_docs snapshot yet (same reason as the unreleased flag in
-    // src/utils/useFrameworkItems.js).
+    // `link` is pinned to the current docs version because kmp has no
+    // versioned_docs snapshot yet, so it does not exist at the site root (which
+    // serves the last released version). Mirror image of the Xamarin entries
+    // above, which are pinned down to /7.6.14. See src/constants/docsPaths.ts.
     framework: "kmp",
-    link: "/sdks/kmp",
+    link: `${CURRENT_DOCS_PATH}/sdks/kmp`,
     icon: <ScanditKmp iconClass={style.iconStyle} />,
     barcodeScanning: [
       BarcodeScanning.SingleScanning,

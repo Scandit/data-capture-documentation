@@ -4,6 +4,7 @@ import type * as Preset from "@docusaurus/preset-classic";
 import * as dotenv from 'dotenv';
 import { version } from "react";
 import remarkHideComments from "./src/plugins/remark-hide-comments";
+import { UNRELEASED_FRAMEWORK_SLUGS } from "./src/constants/unreleasedFrameworks";
 dotenv.config();  // Load environment variables from .env file
 
 /**
@@ -201,6 +202,23 @@ const config: Config = {
       {
         fromExtensions: ['html'],
         createRedirects(existingPath) {
+          // Mirror image of the Xamarin rule below: frameworks that exist only
+          // in the current (unreleased) docs are not present at the site root,
+          // which serves the last released version. Also serve every such page
+          // at its root-level /sdks/<slug>/* URL, so old links and search
+          // results move up to the current version instead of 404ing.
+          // The version prefix is taken from the built path, so this no-ops by
+          // itself once the current docs are served at the root again.
+          const versionedUnreleased = existingPath.match(
+            /^(\/(?:next|\d+\.\d+\.\d+))(\/sdks\/([^/]+)\/.*)$/,
+          );
+          if (
+            versionedUnreleased &&
+            UNRELEASED_FRAMEWORK_SLUGS.includes(versionedUnreleased[3])
+          ) {
+            return [versionedUnreleased[2]];
+          }
+
           // Redirect all /sdks/xamarin/* paths to the migration guide
           // Only create redirects when processing the root migrate-7-to-8 page to avoid duplicates
           if (existingPath === '/migrate-7-to-8' || existingPath === '/migrate-7-to-8/') {
@@ -531,14 +549,15 @@ const config: Config = {
               to: "sdks/flutter/add-sdk",
             },
             {
-              // This entry's `to`/`sidebarId` are inert at runtime — the
+              // This entry's `to`/`sidebarId` are inert once hydrated — the
               // custom DropdownNavbarItem (src/theme/NavbarItem/DropdownNavbarItem)
               // replaces the whole "SDKs" menu with useFrameworkItems() output
               // whenever any item here has type "docsVersion"; this array only
               // supplies the label set + triggers that swap. The real
-              // (page-preserving) href — including the root-pinning needed
-              // because KMP docs aren't in a released version snapshot yet —
-              // lives in src/utils/useFrameworkItems.js.
+              // (page-preserving) href lives in src/utils/useFrameworkItems.js.
+              // kmpSidebar exists only in the current docs version, so
+              // Docusaurus resolves this item to the right version on its own —
+              // no hand-written version prefix needed.
               type: "docsVersion",
               label: "Kotlin Multiplatform",
               sidebarId: "kmpSidebar",

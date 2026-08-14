@@ -7,6 +7,11 @@ import {
 } from "@docusaurus/plugin-content-docs/client";
 import { useDocsPreferredVersion } from "@docusaurus/theme-common";
 import { useFrameworkItems } from "@site/src/utils/useFrameworkItems";
+import {
+  filterVersionsForPath,
+  getVersionCategory,
+  VERSION_TAG_LABEL,
+} from "@site/src/utils/versionFilters";
 import { frameworkCards } from "@site/src/components/HomePage/data/frameworkCardsArr";
 import { FrameworksName } from "@site/src/components/constants/frameworksName";
 import { ArrowDown } from "@site/src/components/IconComponents";
@@ -23,16 +28,6 @@ frameworkCards.forEach((card) => {
     ] = additionalCard.icon;
   });
 });
-
-// Same categorization as the navbar version dropdown
-const VERSION_CATEGORY: Record<string, string> = {
-  current: "stable",
-};
-const TAG_LABEL: Record<string, string> = {
-  stable: "Stable",
-  beta: "Beta",
-  legacy: "Legacy",
-};
 
 const getVersionMainDoc = (version) =>
   version.docs.find((doc) => doc.id === version.mainDocId);
@@ -89,10 +84,10 @@ export default function FrameworkSelectorMobile() {
     return null;
   }
 
-  // Xamarin only exists in the legacy versions
-  const filteredVersions = pathname.includes("/xamarin/")
-    ? versions.filter((v) => v.name === "7.6.14" || v.name === "6.28.11")
-    : versions;
+  // Only offer versions that document the framework being viewed (Xamarin is
+  // legacy-only, Kotlin Multiplatform is current-only). Shared with the desktop
+  // navbar dropdown so the two can't drift.
+  const filteredVersions = filterVersionsForPath(versions, pathname);
   const activeVersion = activeDocContext?.activeVersion;
 
   const versionLinks = filteredVersions.map((v) => {
@@ -103,7 +98,7 @@ export default function FrameworkSelectorMobile() {
     return {
       name: v.name,
       label: v.label,
-      category: VERSION_CATEGORY[v.name] || "legacy",
+      category: getVersionCategory(v),
       to: `${versionDoc?.path ?? "/"}${search}${hash}`,
       // v (from useVersions) and activeVersion (from useActiveDocContext) come
       // from different hooks, so compare by name rather than reference.
@@ -113,7 +108,7 @@ export default function FrameworkSelectorMobile() {
 
   const versionTag = (category: string) => (
     <span className={`version-tag version-tag-${category}`}>
-      {TAG_LABEL[category]}
+      {VERSION_TAG_LABEL[category]}
     </span>
   );
 
