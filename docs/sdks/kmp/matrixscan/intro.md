@@ -12,6 +12,8 @@ keywords:
 
 MatrixScan Batch is Scandit's low-level API for scanning and tracking multiple barcodes at once, without augmented-reality overlays. It is implemented through the `BarcodeBatch` data capture mode, in the `com.kmp.datacapture.barcode.batch` package of the `barcode` module.
 
+<ReactPlayer playing controls width='800' url="/img/batch-scanning/MatrixScanBatch.mp4" />
+
 Typical use cases include:
 
 - Inventory counts and stocktaking
@@ -26,5 +28,9 @@ Typical use cases include:
 - Use [`BarcodeBatchAdvancedOverlay`](./advanced.md) to render your own native view (for example, a badge or button) anchored to each tracked barcode.
 
 If your use case needs a prebuilt augmented-reality UI with highlights, annotations, and a guided scan-and-check flow, see [MatrixScan AR](../matrixscan-ar/intro.md) instead—it is a superset of MatrixScan Batch's tracking capabilities.
+
+## Supported Symbologies
+
+MatrixScan Batch supports all [symbologies](../barcode-symbologies.mdx) except DotCode, MaxiCode and postal codes (KIX, RM4SCC).
 
 Continue to [Get Started](./get-started.md) to add MatrixScan Batch to your application.

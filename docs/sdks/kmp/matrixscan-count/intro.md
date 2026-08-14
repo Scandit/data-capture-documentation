@@ -20,6 +20,8 @@ On Kotlin Multiplatform, MatrixScan Count is exposed through the `BarcodeCount` 
 
 MatrixScan Count includes pre-built and pre-tested user interface (UI) elements and interactions. These UI elements are intentionally minimalistic, meant to be overlaid on any application without the need to adapt the existing app while offering the best user experience.
 
+<ReactPlayer playing controls width='800' url="/img/batch-scanning/MatrixScanCount.mp4" />
+
 The UI workflow is designed to be as simple and ergonomic as possible, and includes the following elements:
 
 - A **shutter button** the user operates in order to initiate scanning. The user is guided to tap the shutter to scan items.

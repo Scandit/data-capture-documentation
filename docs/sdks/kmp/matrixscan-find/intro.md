@@ -12,6 +12,8 @@ keywords:
 
 MatrixScan Find is our pre-built UI that uses augmented reality overlays to highlight items that match predefined criteria. It enables you to add a search-and-find experience with augmented reality to an existing Kotlin Multiplatform app with just a few lines of code.
 
+<ReactPlayer playing controls width='800' url="/img/batch-scanning/MatrixScanFind.mp4" />
+
 MatrixScan Find bundles multiple scanning features together and addresses many common challenges associated with scanning on smart devices. It is designed to be easily integrated into any application, and can be customized to fit your specific needs.
 
 On Kotlin Multiplatform, MatrixScan Find is exposed through the `BarcodeFind` data capture mode and the `BarcodeFindView` built-in UI, both of which are shared between Android and iOS.
@@ -21,6 +23,8 @@ On Kotlin Multiplatform, MatrixScan Find is exposed through the `BarcodeFind` da
 MatrixScan Find includes pre-built and pre-tested user interface (UI) elements and interactions. These UI elements are intentionally minimalistic, meant to be overlaid on any application without the need to adapt the existing app while offering the best user experience.
 
 The UI workflow is designed to be as simple and ergonomic as possible, and includes the following elements:
+
+![MatrixScan Find UI](/img/matrixscan-find/ui-overview.png)
 
 - A **shutter button** the user operates in order to initiate scanning and searching for items.
 - **Feedback** is overlaid as colorful visual dots highlighting items on screen.

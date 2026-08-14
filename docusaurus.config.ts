@@ -103,7 +103,13 @@ const llmsIgnoreFiles: string[] = [
 // major comes from `label`. Frozen versions are keyed by their version string.
 const docsVersions: Record<
   string,
-  { label?: string; banner: "none"; badge: boolean }
+  {
+    label?: string;
+    // The values the docs plugin accepts; `current` carries "unreleased" while
+    // it is in beta and flips back to "none" when it becomes lastVersion.
+    banner: "none" | "unreleased" | "unmaintained";
+    badge: boolean;
+  }
 > = {
   current: {
     label: "8.6.0",

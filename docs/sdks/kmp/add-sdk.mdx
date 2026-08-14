@@ -122,7 +122,7 @@ let context = DataCaptureContextCompanion.shared.initialize(
 )
 ```
 
-In Kotlin (shared code) the same call is `DataCaptureContext.initialize(licenseKey)`—initializing the context from shared Kotlin code (as the sample apps do) keeps the Swift side free of these bridging details and is the recommended setup.
+In Kotlin (shared code) the same call is `DataCaptureContext.initialize(licenseKey)`. Initializing the context from shared Kotlin code keeps the Swift side free of these bridging details and is the recommended setup.
 
 ### Apps with their own shared module
 
