@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-423/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-423/assets/css/styles.69384737.css">
-<script src="/data-capture-documentation/pr-preview/pr-423/assets/js/runtime~main.56ef1554.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-423/assets/js/runtime~main.1bc3250d.js" defer="defer"></script>
 <script src="/data-capture-documentation/pr-preview/pr-423/assets/js/main.c502dbc1.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -36,7 +36,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="smart-label-capture">Smart Label Capture<a class="hash-link" aria-label="Direct link to Smart Label Capture" title="Direct link to Smart Label Capture" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#smart-label-capture">​</a></h4>
 <ul>
 <li>Restored SIMD support in WebAssembly for iOS 26, recovering performance across all capture modes, most noticeably Label Capture.</li>
-<li>Added shipping-label support (AdaptiveRecognitionResultType.ShippingLabel, Carrier, ShippingLabelScanningResult) to adaptive recognition, matching iOS and Android.</li>
+<li>Added shipping-label support (<code>AdaptiveRecognitionResultType.ShippingLabel</code>, Carrier, ShippingLabelScanningResult) to adaptive recognition, matching iOS and Android.</li>
 <li>Added a new sample to quickly test and integrate Smart Label Capture to read and validate price shelf labels against a database - showing live AR overlays based on the match and mismatch of the content.</li>
 <li>Added support for label definitions that use the &quot;semantics&quot; feature on fields of both type &quot;barcode&quot; and &quot;text&quot; simultaneously; previously only one of the two types could use it at once.</li>
 </ul>
@@ -170,8 +170,8 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-8">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#barcode-8">​</a></h4>
 <ul>
 <li>Reduced Code 128 minimum symbol count from 6 to 4; short codes (4 &amp; 5 symbols) use stricter matching rules than longer codes. To explicitly exclude short codes, disable symbol counts 4 &amp; 5 via <code>sc_symbology_settings_set_active_symbol_counts()</code> for Code 128. Note that if you previously enabled short code scanning, more strict settings are now in effect to reduce the chance of false positives, which are more likely for very short codes.</li>
-<li>Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the <code>relaxed</code> extension on Code 39 via <code>sc_symbology_settings_set_extension_enabled()</code>. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.</li>
-<li>Updated <code>SymbologyDescription.forIdentifier</code> to return <code>null</code> for unrecognized identifiers (e.g. <code>&quot;EAN-8&quot;</code> instead of <code>&quot;ean8&quot;</code>); previously such input was silently mapped to <code>Codabar</code>.</li>
+<li>Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the <code>relaxed</code> extension on Code 39 via <code>sc_symbology_settings_set_extension_enabled()</code>. This is only advised when external validation measures are available, for example, scanning against a known list of valid codes or when codes contain structured data.</li>
+<li>Updated <code>SymbologyDescription.forIdentifier</code> to return <code>null</code> for unrecognized identifiers (for example, <code>&quot;EAN-8&quot;</code> instead of <code>&quot;ean8&quot;</code>); previously such input was silently mapped to <code>Codabar</code>.</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-2">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#bug-fixes-2">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-9">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#barcode-9">​</a></h4>
@@ -187,7 +187,7 @@
 <ul>
 <li>Fixed an issue where cropped document images were rotated when Frame Image was also enabled.</li>
 <li>Corrected the orientation of cropped Visa document images that were being rotated incorrectly when scanned using a single-frame image source.</li>
-<li>Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning &quot;Invalid Format&quot;.</li>
+<li>Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning &quot;Invalid Format.&quot;</li>
 <li>Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="smart-label-capture-4">Smart Label Capture<a class="hash-link" aria-label="Direct link to Smart Label Capture" title="Direct link to Smart Label Capture" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#smart-label-capture-4">​</a></h4>
@@ -233,7 +233,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-8">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#id-8">​</a></h4>
 <ul>
 <li>Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.</li>
-<li>Added support for new versions of USA, California – Driver&#x27;s License; USA, North Carolina – Driver&#x27;s License; USA, Texas – Driver&#x27;s License; and USA, Oklahoma – Driver&#x27;s License.</li>
+<li>Added support for new versions of USA, California–Driver&#x27;s License; USA, North Carolina–Driver&#x27;s License; USA, Texas–Driver&#x27;s License; and USA, Oklahoma–Driver&#x27;s License.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="smart-label-capture-5">Smart Label Capture<a class="hash-link" aria-label="Direct link to Smart Label Capture" title="Direct link to Smart Label Capture" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#smart-label-capture-5">​</a></h4>
 <ul>
@@ -415,7 +415,7 @@
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core-13">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#core-13">​</a></h4>
 <ul>
-<li>Removed Howler.hs and JavaScript Cookie 3rd party dependencies</li>
+<li>Removed Howler.hs and JavaScript Cookie third-party dependencies</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="performance-improvements-6">Performance Improvements<a class="hash-link" aria-label="Direct link to Performance Improvements" title="Direct link to Performance Improvements" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#performance-improvements-6">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core-14">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#core-14">​</a></h4>
@@ -514,18 +514,18 @@
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="new-features-5">New Features<a class="hash-link" aria-label="Direct link to New Features" title="Direct link to New Features" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#new-features-5">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-25">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#barcode-25">​</a></h4>
 <ul>
-<li>Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a &quot;dense barcode&quot; environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.</li>
+<li>Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a &quot;dense barcode&quot; environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a more intuitive scanning experience that requires no manual configuration.</li>
 <li>Added SymbologySettings.ocrFallbackRegex, allowing you to filter or constrain results returned from OCR fallback.</li>
 <li>Extended Aztec codes reader to support scanning mirrored codes.</li>
 <li>Added support for square DataMatrix codes with one-sided damage or occlusion. This feature is only enabled in Barcode Capture and SparkScan.</li>
-<li><a href="/data-capture-documentation/pr-preview/pr-423/sdks/web/sparkscan/intro/">SparkScan</a> now supports Smart Scan Selection. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Users might have to manually switch to a special, more precise scanning mode (Target Mode), which is inefficient. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a &quot;dense barcode&quot; environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.</li>
+<li><a href="/data-capture-documentation/pr-preview/pr-423/sdks/web/sparkscan/intro/">SparkScan</a> now supports Smart Scan Selection. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Users might have to manually switch to a special, more precise scanning mode (Target Mode), which is inefficient. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a &quot;dense barcode&quot; environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a more intuitive scanning experience that requires no manual configuration.</li>
 <li>Added <code>ScanditIconType.Delete</code> and <code>ScanditIconType.Slash</code> which can be used in <code>BarcodeArStatusIconAnnotationAnchor</code>.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-18">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#id-18">​</a></h4>
 <ul>
 <li>Added NationalityISO property that maps results from Nationality field to country ISO code</li>
 <li>Added RejectionDiagnosticJSON property to CapturedId to report debug info during Timeout rejections</li>
-<li>Added rejectionTimeoutSeconds to IdCaptureSettings allowing customers to use timeout other than default (6s). Minimum timeout is 1s.</li>
+<li>Added rejectionTimeoutSeconds to IdCaptureSettings allowing customers to use timeout other than default (6 s). Minimum timeout is 1 s.</li>
 <li>Added support for new California DL, new South Carolina DL, Arizona Medical Marijuana Card, Kuwait Civil card, and new Texas DL</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core-19">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#core-19">​</a></h4>
@@ -590,7 +590,7 @@
 <p>With SDK 8.0 businesses can transform data capture from a basic function to a strategic advantage. It enables intelligent scanning that:</p>
 <ul>
 <li>Understands not just what is being scanned, but also what you want to scan and why you’re scanning it</li>
-<li>Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.</li>
+<li>Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users through sophisticated tasks to ensure the highest level of productivity.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core-22">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-423/sdks/web/release-notes/#core-22">​</a></h4>
 <ul>

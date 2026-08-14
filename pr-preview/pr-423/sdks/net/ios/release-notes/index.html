@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-423/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-423/assets/css/styles.69384737.css">
-<script src="/data-capture-documentation/pr-preview/pr-423/assets/js/runtime~main.56ef1554.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-423/assets/js/runtime~main.1bc3250d.js" defer="defer"></script>
 <script src="/data-capture-documentation/pr-preview/pr-423/assets/js/main.c502dbc1.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -23,17 +23,17 @@
 <li>Added <code>initialOrderOnShelf</code> and <code>initialOrderOnTray</code> properties to <code>BarcodeSequenceSettings</code>, allowing scanning to resume from a previous session.</li>
 <li>BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.</li>
 <li>BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.</li>
-<li>Added missing BarcodeAr .NET APIs: BarcodeArView.LogoAnchor and BarcodeArView.LogoOffset to position the Scandit logo (iOS + Android); BarcodeArView.LogoStyle for minimal/extended logo style (iOS); BarcodeArView.ZoomControlOrientation for the zoom control&#x27;s orientation (iOS); BarcodeArStatusIconAnnotation.Anchor plus the new BarcodeArStatusIconAnnotationAnchor enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and BarcodeArResponsiveAnnotation.CloseUpAnnotation and BarcodeArResponsiveAnnotation.FarAwayAnnotation to read the close-up/far-away annotation variations (iOS + Android).</li>
-<li>Added BarcodePickViewSettings.ZoomButtonPosition, ShowTorchButton, TorchButtonPosition, LogoAnchor, and LogoStyle (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; RectangularWithIcons.StatusIconSettings; and BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string).</li>
-<li>Unified the .NET BarcodeCount API with native Android/iOS: added BarcodeCountStatus.ExpiringSoon, BarcodeCountView.ShouldShowStatusIconsOnScan/LogoStyle/LogoAnchor, and a public BarcodeCountNotInListActionSettings() constructor.</li>
-<li>Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus IBarcodeFindListener.OnSessionUpdated, the BarcodeFind.SessionUpdated event, BarcodeFindView.LogoAnchor/LogoStyle, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.</li>
-<li>Added missing BarcodeSelection .NET APIs: BarcodeSelectionSession.SelectUnselectedBarcodes(), BarcodeSelectionSettings.TapGestureForSelectionEnabled and SwipeGesturesEnabled, and the BarcodeSelectionSettings.Create(CapturePreset) factory.</li>
-<li>Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously-missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.</li>
+<li>Added missing BarcodeAr .NET APIs: <code>BarcodeArView.LogoAnchor</code> and <code>BarcodeArView.LogoOffset</code> to position the Scandit logo (iOS + Android); <code>BarcodeArView.LogoStyle</code> for minimal/extended logo style (iOS); <code>BarcodeArView.ZoomControlOrientation</code> for the zoom control&#x27;s orientation (iOS); <code>BarcodeArStatusIconAnnotation.Anchor</code> plus the new <code>BarcodeArStatusIconAnnotationAnchor</code> enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and <code>BarcodeArResponsiveAnnotation.CloseUpAnnotation</code> and <code>BarcodeArResponsiveAnnotation.FarAwayAnnotation</code> to read the close-up/far-away annotation variations (iOS + Android).</li>
+<li>Added <code>BarcodePickViewSettings.ZoomButtonPosition</code>, <code>ShowTorchButton</code>, <code>TorchButtonPosition</code>, <code>LogoAnchor</code>, and <code>LogoStyle</code> (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; <code>RectangularWithIcons.StatusIconSettings</code>; and <code>BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string)</code>.</li>
+<li>Unified the .NET BarcodeCount API with native Android/iOS: added <code>BarcodeCountStatus.ExpiringSoon</code>, <code>BarcodeCountView.ShouldShowStatusIconsOnScan</code>/<code>LogoStyle</code>/<code>LogoAnchor</code>, and a public BarcodeCountNotInListActionSettings() constructor.</li>
+<li>Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus <code>IBarcodeFindListener.OnSessionUpdated</code>, the <code>BarcodeFind.SessionUpdated</code> event, <code>BarcodeFindView.LogoAnchor</code>/<code>LogoStyle</code>, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.</li>
+<li>Added missing BarcodeSelection .NET APIs: <code>BarcodeSelectionSession.SelectUnselectedBarcodes()</code>, <code>BarcodeSelectionSettings.TapGestureForSelectionEnabled</code> and <code>SwipeGesturesEnabled</code>, and the <code>BarcodeSelectionSettings.Create(CapturePreset)</code> factory.</li>
+<li>Added missing .NET BarcodeBatch and BarcodePick APIs: <code>BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes</code>, <code>BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary)</code>, <code>BarcodeBatchBasicOverlay.DotRadius</code>, the previously missing <code>TrackedObject</code> class (Location, Identifier, Data), and <code>BarcodePickSession.TrackedObjects</code>/<code>AddedObjects</code> exposing the new <code>TrackedObject</code>.</li>
 <li>Added BarcodeSequence support to .NET, with MAUI consumption.</li>
 <li>Added BarcodeGenerator for .NET to generate barcode/2D-code images from text or byte[] at a configurable width, with foreground/background color customization. Supports Code 39, Code 128, EAN-13, UPC-A, Interleaved 2 of 5, QR Code, Data Matrix, Aztec, and PDF417.</li>
-<li>Added BarcodeArPopoverAnnotation.Anchor and the BarcodeArPopoverAnnotationAnchor enum (Left/Right/Bottom/Top, default Bottom).</li>
-<li>Added BarcodeArCircleHighlight.Pulsing to enable/disable the pulsing highlight animation.</li>
-<li>Added BarcodeArAnnotationTrigger.BarcodeScan, showing AR annotations immediately on scan with no tap-to-toggle.</li>
+<li>Added <code>BarcodeArPopoverAnnotation.Anchor</code> and the <code>BarcodeArPopoverAnnotationAnchor</code> enum (Left/Right/Bottom/Top, default Bottom).</li>
+<li>Added <code>BarcodeArCircleHighlight.Pulsing</code> to enable/disable the pulsing highlight animation.</li>
+<li>Added <code>BarcodeArAnnotationTrigger.BarcodeScan</code>, showing AR annotations immediately on scan with no tap-to-toggle.</li>
 <li>Added IBarcodeArFilter functionality.</li>
 <li>Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.</li>
 <li>Added decoding of the DotCode Code Set B first-position &quot;Macro&quot; codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.</li>
@@ -171,8 +171,8 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-8">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#barcode-8">​</a></h4>
 <ul>
 <li>Reduced Code 128 minimum symbol count from 6 to 4; short codes (4 &amp; 5 symbols) use stricter matching rules than longer codes. To explicitly exclude short codes, disable symbol counts 4 &amp; 5 via <code>sc_symbology_settings_set_active_symbol_counts()</code> for Code 128. Note that if you previously enabled short code scanning, more strict settings are now in effect to reduce the chance of false positives, which are more likely for very short codes.</li>
-<li>Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the <code>relaxed</code> extension on Code 39 via <code>sc_symbology_settings_set_extension_enabled()</code>. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.</li>
-<li>Updated <code>SymbologyDescription.forIdentifier</code> to return <code>null</code> for unrecognized identifiers (e.g. <code>&quot;EAN-8&quot;</code> instead of <code>&quot;ean8&quot;</code>); previously such input was silently mapped to <code>Codabar</code>.</li>
+<li>Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the <code>relaxed</code> extension on Code 39 via <code>sc_symbology_settings_set_extension_enabled()</code>. This is only advised when external validation measures are available, for example, scanning against a known list of valid codes or when codes contain structured data.</li>
+<li>Updated <code>SymbologyDescription.forIdentifier</code> to return <code>null</code> for unrecognized identifiers (for example, <code>&quot;EAN-8&quot;</code> instead of <code>&quot;ean8&quot;</code>); previously such input was silently mapped to <code>Codabar</code>.</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-2">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#bug-fixes-2">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-9">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#barcode-9">​</a></h4>
@@ -187,7 +187,7 @@
 <ul>
 <li>Fixed an issue where cropped document images were rotated when Frame Image was also enabled.</li>
 <li>Corrected the orientation of cropped Visa document images that were being rotated incorrectly when scanned using a single-frame image source.</li>
-<li>Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning &quot;Invalid Format&quot;.</li>
+<li>Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning &quot;Invalid Format.&quot;</li>
 <li>Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="smart-label-capture-4">Smart Label Capture<a class="hash-link" aria-label="Direct link to Smart Label Capture" title="Direct link to Smart Label Capture" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#smart-label-capture-4">​</a></h4>
@@ -226,7 +226,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-8">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#id-8">​</a></h4>
 <ul>
 <li>Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.</li>
-<li>Added support for new versions of USA, California – Driver&#x27;s License; USA, North Carolina – Driver&#x27;s License; USA, Texas – Driver&#x27;s License; and USA, Oklahoma – Driver&#x27;s License.</li>
+<li>Added support for new versions of USA, California–Driver&#x27;s License; USA, North Carolina–Driver&#x27;s License; USA, Texas–Driver&#x27;s License; and USA, Oklahoma–Driver&#x27;s License.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core-3">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#core-3">​</a></h4>
 <ul>
@@ -360,7 +360,7 @@
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="820">8.2.0<a class="hash-link" aria-label="Direct link to 8.2.0" title="Direct link to 8.2.0" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#820">​</a></h2>
 <p><strong>Released</strong>: February 13, 2026</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="new-features-4">New Features<a class="hash-link" aria-label="Direct link to New Features" title="Direct link to New Features" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#new-features-4">​</a></h3>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="smart-label-capture-9">Smart Label Capture<a class="hash-link" aria-label="Direct link to Smart Label Capture" title="Direct link to Smart Label Capture" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#smart-label-capture-9">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="smart-label-capture-9">Smart Label Capture<a class="hash-link" aria-label="Direct link to Smart Label Capture" title="Direct link to Smart Label Capture" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#smart-label-capture-9"> ​</a></h4>
 <ul>
 <li><a href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/label-capture/intro/">Smart Label Capture</a> is now available on .NET for Android. It enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.</li>
 </ul>
@@ -459,7 +459,7 @@
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="new-features-6">New Features<a class="hash-link" aria-label="Direct link to New Features" title="Direct link to New Features" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#new-features-6">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-24">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#barcode-24">​</a></h4>
 <ul>
-<li>Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a &quot;dense barcode&quot; environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.</li>
+<li>Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a &quot;dense barcode&quot; environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a more intuitive scanning experience that requires no manual configuration.</li>
 <li>Extended Aztec codes reader to support scanning mirrored codes.</li>
 <li>Added support for square DataMatrix codes with one-sided damage or occlusion. This feature is only enabled in Barcode Capture and SparkScan.</li>
 <li>Added, in <code>BarcodeAr</code>, a new annotation type (<code>BarcodeArResponsiveAnnotation</code>), which automatically switches between close-up and far-away info annotations based on the barcode&#x27;s size on screen</li>
@@ -532,11 +532,11 @@
 <p>With SDK 8.0 businesses can transform data capture from a basic function to a strategic advantage. It enables intelligent scanning that:</p>
 <ul>
 <li>Understands not just what is being scanned, but also what you want to scan and why you’re scanning it</li>
-<li>Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.</li>
+<li>Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users through sophisticated tasks to ensure the highest level of productivity.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core-18">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-423/sdks/net/ios/release-notes/#core-18">​</a></h4>
 <ul>
-<li>We&#x27;ve fundamentally redesigned our .NET SDK&#x27;s architecture to better align with the modern .NET ecosystem!<!-- -->
+<li>We&#x27;ve fundamentally redesigned our .NET SDK&#x27;s architecture to better align with the modern .NET ecosystem.<!-- -->
 <ul>
 <li><strong>Platform-Agnostic .net8.0 and net9.0 Targets</strong>: The SDK now includes generic net8.0 and .net9.0 targets. This allows you to reference <code>Scandit.DataCapture.Core</code> and related packages directly from non-UI projects, such as class libraries or unit test projects. This makes it significantly easier to build modular, testable applications following principles like Clean Architecture.</li>
 </ul>

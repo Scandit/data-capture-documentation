@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-423/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-423/assets/css/styles.69384737.css">
-<script src="/data-capture-documentation/pr-preview/pr-423/assets/js/runtime~main.56ef1554.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-423/assets/js/runtime~main.1bc3250d.js" defer="defer"></script>
 <script src="/data-capture-documentation/pr-preview/pr-423/assets/js/main.c502dbc1.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -37,7 +37,7 @@
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="smart-label-capture">Smart Label Capture<a class="hash-link" aria-label="Direct link to Smart Label Capture" title="Direct link to Smart Label Capture" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#smart-label-capture">​</a></h4>
 <ul>
-<li>Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.</li>
+<li>Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.</li>
 <li>Added support for label definitions that use the &quot;semantics&quot; feature on fields of both type &quot;barcode&quot; and &quot;text&quot; simultaneously; previously only one of the two types could use it at once.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#core">​</a></h4>
@@ -111,7 +111,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-4">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#barcode-4">​</a></h4>
 <ul>
 <li>Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.</li>
-<li>Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.</li>
+<li>Deprecated the SparkScan target-mode APIs and <code>ScanIntention.SmartSelection</code> in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.</li>
 </ul>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="852">8.5.2<a class="hash-link" aria-label="Direct link to 8.5.2" title="Direct link to 8.5.2" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#852">​</a></h2>
 <p><strong>Released</strong>: July 31, 2026</p>
@@ -176,8 +176,8 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-9">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#barcode-9">​</a></h4>
 <ul>
 <li>Reduced Code 128 minimum symbol count from 6 to 4; short codes (4 &amp; 5 symbols) use stricter matching rules than longer codes. To explicitly exclude short codes, disable symbol counts 4 &amp; 5 via <code>sc_symbology_settings_set_active_symbol_counts()</code> for Code 128. Note that if you previously enabled short code scanning, more strict settings are now in effect to reduce the chance of false positives, which are more likely for very short codes.</li>
-<li>Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the <code>relaxed</code> extension on Code 39 via <code>sc_symbology_settings_set_extension_enabled()</code>. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.</li>
-<li>Updated <code>SymbologyDescription.forIdentifier</code> to return <code>null</code> for unrecognized identifiers (e.g. <code>&quot;EAN-8&quot;</code> instead of <code>&quot;ean8&quot;</code>); previously such input was silently mapped to <code>Codabar</code>.</li>
+<li>Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the <code>relaxed</code> extension on Code 39 via <code>sc_symbology_settings_set_extension_enabled()</code>. This is only advised when external validation measures are available, for example, scanning against a known list of valid codes or when codes contain structured data.</li>
+<li>Updated <code>SymbologyDescription.forIdentifier</code> to return <code>null</code> for unrecognized identifiers (for example, <code>&quot;EAN-8&quot;</code> instead of <code>&quot;ean8&quot;</code>); previously such input was silently mapped to <code>Codabar</code>.</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-3">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#bug-fixes-3">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-10">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#barcode-10">​</a></h4>
@@ -192,7 +192,7 @@
 <ul>
 <li>Fixed an issue where cropped document images were rotated when Frame Image was also enabled.</li>
 <li>Corrected the orientation of cropped Visa document images that were being rotated incorrectly when scanned using a single-frame image source.</li>
-<li>Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning &quot;Invalid Format&quot;.</li>
+<li>Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning &quot;Invalid Format.&quot;</li>
 <li>Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="smart-label-capture-5">Smart Label Capture<a class="hash-link" aria-label="Direct link to Smart Label Capture" title="Direct link to Smart Label Capture" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#smart-label-capture-5">​</a></h4>
@@ -237,7 +237,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-8">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#id-8">​</a></h4>
 <ul>
 <li>Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.</li>
-<li>Added support for new versions of USA, California – Driver&#x27;s License; USA, North Carolina – Driver&#x27;s License; USA, Texas – Driver&#x27;s License; and USA, Oklahoma – Driver&#x27;s License.</li>
+<li>Added support for new versions of USA, California–Driver&#x27;s License; USA, North Carolina–Driver&#x27;s License; USA, Texas–Driver&#x27;s License; and USA, Oklahoma–Driver&#x27;s License.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core-3">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#core-3">​</a></h4>
 <ul>
@@ -296,7 +296,7 @@
 <ul>
 <li>Fixed a crash that occurred when the <code>DataCaptureContext</code> singleton was initialized more than once.</li>
 <li>Fixed a rare crash when opening the camera.</li>
-<li>Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from <code>Camera.Parameters.getSupportedFocusModes()</code> (e.g. industrial barcode scanners like the Newland NLS-MT93).</li>
+<li>Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from <code>Camera.Parameters.getSupportedFocusModes()</code> (for example, industrial barcode scanners like the Newland NLS-MT93).</li>
 <li>Fixed custom sound not working in Barcode Find on Android.</li>
 <li>Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.</li>
 <li>Fixed a rare crash when starting camera capture while under memory pressure.</li>
@@ -470,7 +470,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core-12">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#core-12">​</a></h4>
 <ul>
 <li>Fixed a rare issue that was causing a crash when the app moved to the background.</li>
-<li>Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from <code>Camera.Parameters.getSupportedFocusModes()</code> (e.g. industrial barcode scanners like the Newland NLS-MT93).</li>
+<li>Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from <code>Camera.Parameters.getSupportedFocusModes()</code> (for example, industrial barcode scanners like the Newland NLS-MT93).</li>
 <li>Fixed crashes caused by RuntimeExceptions thrown by OEM camera code that are not part of the standard Android Camera API contract; these exceptions are now caught and logged instead of crashing.</li>
 </ul>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="813">8.1.3<a class="hash-link" aria-label="Direct link to 8.1.3" title="Direct link to 8.1.3" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#813">​</a></h2>
@@ -517,7 +517,7 @@
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="new-features-5">New Features<a class="hash-link" aria-label="Direct link to New Features" title="Direct link to New Features" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#new-features-5">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-25">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#barcode-25">​</a></h4>
 <ul>
-<li>Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a &quot;dense barcode&quot; environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.</li>
+<li>Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a &quot;dense barcode&quot; environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a more intuitive scanning experience that requires no manual configuration.</li>
 <li><a href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/sparkscan/intro/">SparkScan</a> is not limited to only barcodes anymore, but can also scan items - in other words any combinations of barcodes and text present on a target to be scanned. The feature is available in beta at the moment, please contact <a href="mailto:support@scandit.com" target="_blank" rel="noopener noreferrer">Scandit Support</a> if you are interested in trying it out.</li>
 <li>Extended Aztec codes reader to support scanning mirrored codes.</li>
 <li>Added support for square DataMatrix codes with one-sided damage or occlusion. This feature is only enabled in Barcode Capture and SparkScan.</li>
@@ -612,7 +612,7 @@
 <p>With SDK 8.0 businesses can transform data capture from a basic function to a strategic advantage. It enables intelligent scanning that:</p>
 <ul>
 <li>Understands not just what is being scanned, but also what you want to scan and why you’re scanning it</li>
-<li>Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.</li>
+<li>Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users through sophisticated tasks to ensure the highest level of productivity.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core-19">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-423/sdks/capacitor/release-notes/#core-19">​</a></h4>
 <ul>
