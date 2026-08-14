@@ -8,6 +8,10 @@
 .docusaurus
 .cache-loader
 
+# Vale style package, fetched by `docs:gate:setup` (`vale sync`) — vendored,
+# not source; styles/Scandit/ (our own rules) IS tracked and must stay.
+/styles/Google/
+
 # Python
 __pycache__/
 *.pyc
