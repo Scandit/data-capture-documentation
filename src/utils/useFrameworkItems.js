@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "@docusaurus/router";
 import { FrameworksName } from "@site/src/components/constants/frameworksName";
+import {
+  CURRENT_DOCS_PATH,
+  isUnreleasedFramework,
+} from "@site/src/constants/docsPaths";
 
 const POSSIBLE_VERSIONS = ["/next", "/6.28.11", "/7.6.14"];
 
@@ -11,6 +15,13 @@ const FRAMEWORKS = [
   { label: "Cordova", sidebarId: "cordovaSidebar", slug: "cordova", activeBasePath: "sdks/cordova/" },
   { label: "React Native", sidebarId: "reactnativeSidebar", slug: "react-native", activeBasePath: "sdks/react-native/" },
   { label: "Flutter", sidebarId: "flutterSidebar", slug: "flutter", activeBasePath: "sdks/flutter/" },
+  // KMP docs exist only in the "current" doc version (see
+  // UNRELEASED_FRAMEWORK_SLUGS): there is no versioned_docs snapshot for it
+  // yet, so the generic `${linkVersion}/${slug}${link}` formula below (which
+  // targets whatever version the visitor is on) would 404 for anyone browsing
+  // a released version. Pin it to CURRENT_DOCS_PATH until it ships, so
+  // switching to it from an older version moves the reader up to 8.6.
+  { label: "Kotlin Multiplatform", sidebarId: "kmpSidebar", slug: "kmp", activeBasePath: "sdks/kmp/" },
   { label: "Capacitor", sidebarId: "capacitorSidebar", slug: "capacitor", activeBasePath: "sdks/capacitor/" },
   { label: "Titanium", sidebarId: "titaniumSidebar", slug: "titanium", activeBasePath: "sdks/titanium/" },
   { label: "Xamarin iOS", sidebarId: "xamarinIosSidebar", slug: "xamarin/ios", activeBasePath: "sdks/xamarin/ios/", xamarin: true },
@@ -113,6 +124,8 @@ export function useFrameworkItems() {
         sidebarId: framework.sidebarId,
         to: framework.xamarin
           ? `${xamarinVersion}/sdks/${framework.slug}${link}`
+          : isUnreleasedFramework(framework.slug)
+          ? `${CURRENT_DOCS_PATH}/sdks/${framework.slug}${link}`
           : `${linkVersion}/${framework.slug}${link}`,
         activeBasePath: framework.activeBasePath,
       })),

@@ -10,6 +10,54 @@ keywords:
   - linux
 ---
 
+## 8.6.0-beta.1
+
+**Released**: August 14, 2026
+
+### New Features
+
+#### Barcode
+
+* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
+* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+
+### Performance Improvements
+
+#### Barcode
+
+* Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
+* Improved ITF decoding robustness, reducing the number of unscanned codes.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+
+#### Id
+
+* Improved PDF417 scanning on Quebec, Alaska, and Oklahoma driver’s licenses.
+
+### Behavioral Changes
+
+#### Barcode
+
+* Enabled detection and decoding of mirrored MaxiCodes by default. Previously this required enabling the symbology extension `mirrored`, which has been removed.
+* Limited the GS1 format flag for DotCode to genuine GS1 openings (a leading digit pair without FNC1) per AIM DotCode v3.0, instead of defaulting all symbols to GS1.
+* Disabled enhanced low-resolution scanning of QR codes (introduced in 8.5.0) for MatrixScan modes. Customers who need this feature should contact Scandit support.
+
+#### Core
+
+* Exposed the structured append segment fields on `Barcode` (`segment_index`, `segment_count`, `file_id`) via the Python API, matching the C API's `sc_barcode_get_segment_index`, `sc_barcode_get_segment_count`, and `sc_barcode_get_file_id`.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed rare cases where DotCode Code Set C symbols using the date/lot macro decoded to incorrect data due to a dropped leading zero in a digit pair.
+* Fixed a regression where short ITF codes with low wide/narrow ratio were not decoded.
+
+#### Core
+
+* Fixed `sc_camera_get_frame` hanging indefinitely when the camera is disconnected while streaming. It now returns promptly instead of blocking.
+* Fixed the Python camera sample (`CommandLineBarcodeScannerCameraSample.py`) crashing at startup.
+
 ## 8.5.2
 
 **Released**: July 31, 2026
@@ -47,7 +95,7 @@ No updates for this framework in this release.
 #### Barcode
 
 * Reduced Code 128 minimum symbol count from 6 to 4; short codes (4 & 5 symbols) use stricter matching rules than longer codes. To explicitly exclude short codes, disable symbol counts 4 & 5 via `sc_symbology_settings_set_active_symbol_counts()` for Code 128. Note that if you previously enabled short code scanning, more strict settings are now in effect to reduce the chance of false positives, which are more likely for very short codes.
-* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.
+* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, for example, scanning against a known list of valid codes or when codes contain structured data.
 
 ### Bug Fixes
 
@@ -243,14 +291,14 @@ Scandit's SDK 8.0 marks the evolution of data capture from a high-performing sca
 
 With SDK 8.0 businesses can transform data capture from a basic function to a strategic advantage. It enables intelligent scanning that:
   * Understands not just what is being scanned, but also what you want to scan and why you’re scanning it
-  * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.
+  * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users through sophisticated tasks to ensure the highest level of productivity.
 
 * Updated `ScProcessFrameResult` struct definition with additional detailed error information.
 * Modified `sc_barcode_scanner_apply_settings` to return `ScContextStatus` with detailed error information.
 * Added `sc_context_status_free` to public API to free `ScContextStatus` structures holding detailed error information.
 * Added `sc_process_frame_result_free` to public API to free `ScProcessFrameResult` structures holding detailed error information.
 * Modified `sc_parser_new_with_context` to take `ScContextStatus *` as the last param instead of just the `ScContextStatusFlag *`.
-* Improved and accelerated scanning for 1d symbologies at low resolution, in particular Code 128. 
+* Improved and accelerated scanning for 1D symbologies at low resolution, in particular Code 128. 
 
 ### Bug Fixes
 

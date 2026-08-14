@@ -13,6 +13,7 @@ import {
   readSelectedFrameworkRaw,
   FRAMEWORK_CHANGE_EVENT,
 } from '../utils/frameworks';
+import { withCurrentDocsPath } from '@site/src/constants/docsPaths';
 import { capturePostHogEvent } from './analytics';
 import InstallCommand from './InstallCommand';
 import styles from './styles.module.css';
@@ -49,6 +50,7 @@ const FRAMEWORK_URL_PATH: Record<string, string> = {
   Cordova: 'cordova',
   Capacitor: 'capacitor',
   Flutter: 'flutter',
+  'Kotlin Multiplatform': 'kmp',
   'React Native': 'react-native',
   '.NET iOS': 'net/ios',
   '.NET Android': 'net/android',
@@ -62,6 +64,7 @@ const FRAMEWORK_SLUG: Record<string, string> = {
   Cordova: 'cordova',
   Capacitor: 'capacitor',
   Flutter: 'flutter',
+  'Kotlin Multiplatform': 'kmp',
   'React Native': 'react-native',
   '.NET iOS': 'net-ios',
   '.NET Android': 'net-android',
@@ -81,7 +84,7 @@ function getSharedFrameworkSlug(pathname: string, search: string): string {
 
 function getSharedMoreInfoUrl(pathname: string, search: string): string {
   const path = QUERY_FRAMEWORK_TO_PATH[getSharedFrameworkSlug(pathname, search)];
-  return `/sdks/${path}/agent-skills`;
+  return withCurrentDocsPath(`/sdks/${path}/agent-skills`);
 }
 
 interface CalloutDetailsProps {
@@ -292,7 +295,9 @@ const SkillsCallout: React.FC<SkillsCalloutProps> = ({
 
   const frameworkPath = FRAMEWORK_URL_PATH[resolvedFramework];
   const frameworkSlug = FRAMEWORK_SLUG[resolvedFramework];
-  const moreInfoUrl = frameworkPath ? `/sdks/${frameworkPath}/agent-skills` : null;
+  const moreInfoUrl = frameworkPath
+    ? withCurrentDocsPath(`/sdks/${frameworkPath}/agent-skills`)
+    : null;
 
   return (
     <CalloutDetails

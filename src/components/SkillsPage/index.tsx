@@ -7,6 +7,7 @@ import InstallCommand from '../SkillsCallout/InstallCommand';
 import ManualInstall from '../SkillsCallout/ManualInstall';
 import { singleSkillCommand } from '../SkillsCallout/agents';
 import { frameworkToSlug } from '../utils/frameworks';
+import { withCurrentDocsPath } from '@site/src/constants/docsPaths';
 import styles from './styles.module.css';
 
 interface SkillsPageProps {
@@ -153,7 +154,10 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
             </tr>
             {fwSkills.map((s) => {
               const product = productsByKey[s.product];
-              const apiUrl = s.url || product?.frameworks?.[framework]?.apiUrl;
+              const rawApiUrl = s.url || product?.frameworks?.[framework]?.apiUrl;
+              // products.json paths are version-agnostic; frameworks that only
+              // exist in the unreleased docs need the current version prefix.
+              const apiUrl = rawApiUrl ? withCurrentDocsPath(rawApiUrl) : rawApiUrl;
               const label = s.label || product?.name || s.product;
               let description: string;
               if (s.description) {

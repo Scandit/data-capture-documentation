@@ -241,8 +241,16 @@ Before considering work complete, **always perform these checks:**
    - Must complete successfully
    - Pay attention to warnings (they often indicate real issues)
    - Redirect warnings are expected but review new ones
+   - **A passing build does not mean the content passes the docs quality gate below** — they check different things and one can be green while the other is red.
 
-2. **Test locally:**
+2. **Run the docs quality gate on any `docs/` changes:**
+   ```bash
+   npm run docs:gate:setup   # once per machine — installs Vale styles if `vale` is on PATH
+   npm run docs:gate
+   ```
+   - See "Docs Quality Gate" below — read it before assuming a clean run means the content is clean.
+
+3. **Test locally:**
    ```bash
    npm start
    ```
@@ -250,16 +258,39 @@ Before considering work complete, **always perform these checks:**
    - Test navigation and links
    - Check both light and dark themes
 
-3. **Check multiple versions:**
+4. **Check multiple versions:**
    - Switch between version dropdown options
    - Verify changes appear correctly in intended version(s)
    - Ensure versioned docs weren't accidentally modified
 
-4. **Validate links and references:**
+5. **Validate links and references:**
    - Internal links work correctly
    - Cross-references between pages are valid
    - Images and assets load properly
    - External links are correct
+
+### Docs Quality Gate
+
+`npm run docs:gate` (`scripts/docs-gate/index.cjs`) is a separate check from the build. It runs frontmatter schema validation, a conservative relative-link check, cspell, and Vale (Google style guide + Scandit's own rules) — but **only against docs changed relative to the PR's target branch** (`git merge-base origin/<base> HEAD`), not the whole repo. It also runs as a local `pre-push` git hook (`.husky/pre-push`), and in CI as the "Docs Quality Gate" workflow on every PR into `main` or `release/**`.
+
+**Only Vale errors (`✗`) block the push/PR — cspell findings are warnings (`⚠`) by design** (too many legitimate proper nouns and code identifiers for a hard block today) and don't need to be zero. Don't spend effort silencing cspell unless asked to; do treat every Vale `✗` as build-blocking.
+
+**Vale/cspell must actually be installed to mean anything.** If they're missing, the script does *not* fail — it prints `Vale not installed — skipping prose style check` / `cspell not found — skipped` and returns a clean result. A "0 errors" from `docs:gate` on a machine without Vale installed only means "0 checked," not "0 issues." Install before trusting a green run:
+```bash
+brew install vale        # macOS; see https://vale.sh/docs/vale-cli/installation/ for others
+npm run docs:gate:setup  # syncs the Google style package into styles/Google/ (gitignored, don't commit it)
+```
+(CI installs Vale itself and hard-fails the gate if it's somehow missing there — the local skip-with-warning behavior is a local-only convenience, not how it behaves in CI.)
+
+**The ratchet means old content can suddenly fail.** The base for the diff is the PR's true fork point, not "since your last commit" — so a long-lived branch (like a release branch that hasn't merged `main` in a while) can surface Vale violations from *anyone's* earlier commit the first time the gate actually runs against it, not just from what you just touched. If a gate failure lists files you didn't edit, check `git log <merge-base>..HEAD -- <file>` before assuming your change caused it.
+
+**Style rules that come up constantly in release notes and prose:**
+- Bare dotted API/property references in prose (`someObject.SomeMethod`) get misread by Vale as a run-on sentence (`Google.Spacing`, "should have one space"). Wrap them in backticks — `` `someObject.SomeMethod` `` — matching how every other API reference in these docs is formatted. This is the correct fix, not a lint workaround: Vale's markdown parser treats backtick spans as code and exempts them from prose rules.
+- No `e.g.` — write `for example,` (`Google.Latin`).
+- No spaces around an em or en dash used as a connector or aside — `California–Driver's License`, `brushes—green, red, grey—and` (`Google.EmDash`).
+- Commas and periods go inside closing quotation marks (`Google.Quotes`).
+- A number and its unit need a nonbreaking space — `6 s`, not `6s` (`Google.Units`). Watch for false positives on non-duration tokens that happen to end in a unit letter (`1d` meaning "1-dimensional" gets misread as "1 day"); disambiguate instead of adding a duration that isn't there (for example, capitalize to `1D`, matching this repo's own usage elsewhere).
+- Avoid `simply`, `seamless(ly)`, `effortlessly`, `obviously`, `blazing(ly) fast` (`Scandit.Banned`, prose body) — state the mechanism instead of the vibe. Frontmatter `description:` fields have their own, stricter anti-fluff check banning `efficiently`, `seamless(ly)`, `easily`, `simply`, `robust`, `powerful`, plus fluffy openers like "Learn how to..." (`scripts/docs-gate/frontmatter.cjs`) — different word list, same spirit.
 
 ### Build Performance
 

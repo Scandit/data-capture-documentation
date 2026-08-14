@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 import { useHistory, useLocation } from "@docusaurus/router";
 import OriginalNotFoundContent from "@theme-original/NotFound/Content";
+import {
+  CURRENT_DOCS_PATH,
+  isUnreleasedFramework,
+} from "@site/src/constants/docsPaths";
 
 const FRAMEWORK_FALLBACK_PATH = {
   linux: "overview/",
@@ -20,6 +24,16 @@ function getFallbackUrl(pathname) {
   const versionPrefix = match[1];
   const framework = match[2];
   const version = versionPrefix.replace(/^\//, "");
+
+  // A framework documented only in the current version (e.g. Kotlin
+  // Multiplatform) 404s under every released version. Move the reader up to the
+  // current docs keeping the same page, rather than dumping them on a framework
+  // overview that doesn't exist there either. This also catches client-side
+  // navigation, which never fetches the build-time redirect pages.
+  if (isUnreleasedFramework(framework) && versionPrefix !== CURRENT_DOCS_PATH) {
+    return `${CURRENT_DOCS_PATH}${pathname.slice(versionPrefix.length)}`;
+  }
+
   const fallbackPath = OLD_VERSION_PATTERN.test(version)
     ? OLD_VERSION_FALLBACK_PATH
     : (FRAMEWORK_FALLBACK_PATH[framework] ?? DEFAULT_FALLBACK_PATH);

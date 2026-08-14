@@ -10,6 +10,120 @@ keywords:
   - android
 ---
 
+## 8.6.0-beta.1
+
+**Released**: August 14, 2026
+
+### New Features
+
+#### Barcode
+
+* The [MatrixScan Sequence simple sample](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/06_Sequence/MatrixScanSequenceSimpleSample) is now publicly available, showing the minimum setup needed to run MatrixScan Sequence.
+* Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
+* BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
+* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set `barcodeCountSettings.AutomaticClusteringMethod` to `AutomaticClusteringMethod.Label` to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
+* When highlights inside a MatrixScan Count cluster would overlap, the cluster now collapses into a single badge showing how many barcodes it contains, instead of drawing every highlight on top of the others. This also applies in Scan Preview mode.
+* Added an API to customize the text of the hint shown when a new scan group starts (BarcodeCountView.setTextForNewGroupHint).
+* BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
+* Added BarcodeSequenceDeserializer for creating and updating MatrixScan Sequence modes and settings from JSON.
+* Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
+* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
+* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+
+#### Id
+
+* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
+* Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
+* Added an [ID Capture image upload sample](https://github.com/Scandit/datacapture-android-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample) that demonstrates scanning ID documents from still images or PDF files on the device instead of using the live camera.
+* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
+* Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
+
+#### Smart Label Capture
+
+* Added a new sample to quickly test and integrate Smart Label Capture to read and validate price shelf labels against a database - showing live AR overlays based on the match and mismatch of the content.
+* Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
+
+#### Core
+
+* Added support in the GS1 parser for the telecom Application Identifiers 8040 (IMEI), 8041 (IMEI2), 8042 (eSIM/EID), and 8043 (pSIM), so GS1 codes carrying them parse instead of being rejected as unrecognized.
+* Added support for parsing the 2D-DOC (French 2D-Doc / ANTS) data format.
+* Added more detailed error reporting when required resources are missing.
+* Added LicenseInfo.allowedModes, exposing the set of capture modes a license key permits via the new CaptureMode enum.
+* Introduced a new dedicated Android design library and moved UI elements into it.
+* Added support for reading camera frames directly into a SharedArrayBuffer in supported environments (currently Chrome or Firefox, when pthread is enabled), avoiding an extra copy.
+
+### Performance Improvements
+
+#### Barcode
+
+* Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
+* Improved ITF decoding robustness, reducing the number of unscanned codes.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+
+#### Id
+
+* Improved performance for the Irish Garda Age Card.
+* Improved PDF417 scanning on Quebec, Alaska, and Oklahoma driver’s licenses.
+
+#### Smart Label Capture
+
+* Improved LabelCaptureValidationFlowOverlay lifecycle handling in unexpected scenarios.
+
+### Behavioral Changes
+
+#### Barcode
+
+* Changed the default highlight brush in SparkScan and Barcode Capture.
+* Updated recommended camera settings for MatrixScan Batch, Find, Pick, Sequence, and AR, now using UHD4K resolution with a 16:9 aspect ratio.
+* MatrixScan Count uses a new default colour for scanned (counted) barcodes, chosen to meet accessibility contrast requirements. It applies to single scanned barcodes, to the barcodes inside a cluster, and to the cluster highlight itself. To keep your previous appearance, set the colour through the existing icon customization.
+* MatrixScan Count now highlights each barcode inside a cluster individually and follows its live position.
+* Enabled detection and decoding of mirrored MaxiCodes by default. Previously this required enabling the symbology extension `mirrored`, which has been removed.
+* Limited the GS1 format flag for DotCode to genuine GS1 openings (a leading digit pair without FNC1) per AIM DotCode v3.0, instead of defaulting all symbols to GS1.
+* Disabled enhanced low-resolution scanning of QR codes (introduced in 8.5.0) for MatrixScan modes. Customers who need this feature should contact Scandit support.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed a bug with the highlight colors of BarcodeCount clusters.
+* Fixed the MatrixScan Count not-in-list accept/reject popover not reflecting a custom accepted/rejected ScanditIcon when configured.
+* Fixed the "Remove" button in the sequence popover sometimes not working.
+* Fixed MatrixScan AR to adapt to the device UI scale.
+* Fixed rare cases where DotCode Code Set C symbols using the date/lot macro decoded to incorrect data due to a dropped leading zero in a digit pair.
+* Fixed a regression where short ITF codes with low wide/narrow ratio were not decoded.
+
+#### Id
+
+* Improved the DLID parser, fixing previously unparsable codes found in analytics.
+* Hardened dependency resolution for Android native samples.
+* Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
+
+#### Smart Label Capture
+
+* Fixed a bug where the receipt scanning overlay and validation flow overlay could not be used on the same mode instance.
+* Fixed prebuilt date fields to recognize Spanish month abbreviations. The abbreviations `ene`, `abr`, `ago`, and `dic` are newly supported; the remaining Spanish abbreviations already resolved because they match their English form. The expiry-date anchor additionally recognizes common Spanish expiry terms such as `caducidad`, `vencimiento`, `consumir antes`, and `consumo preferente`.
+
+#### Core
+
+* Fixed a SequenceFrameSource occasionally delivering the same frame to its listeners twice.
+* Fixed Nokia G11 and Nokia 8.3 5G devices not correctly getting the Camera2 path when API2-only features were requested.
+* Fixed the Galaxy Note10 camera profile selection so the international Note10 family (SM-N970x/SM-N971x) gets its intended fixed-focus and Camera2 behaviors.
+* Fixed the Galaxy S9+ (SM-G965x) camera profile selection so Camera2-based capture is enabled on those devices as intended.
+* Fixed a race condition in SimplePropertyBehaviorSubject where mutating the subscriber list during a callback could cause crashes or missed notifications.
+* Fixed an IllegalStateException in analytics HTTPS requests when the app is instrumented by APM tools such as Dynatrace.
+* Fixed EventsResponse::getRetryTimeoutInSeconds to return a fallback instead of aborting on out-of-range header values.
+* Fixed a crash when initializing a USB (external) camera.
+
+### Deprecations
+
+#### Barcode
+
+* Removed the deprecated Barcode Sequence view settings API; configure the view's settings directly on the view.
+* Deprecated the alternative (accessible) color scheme for Barcode Count; it will be removed in a future release. The default color scheme now provides an accessible appearance, so you can remove the explicit setting.
+* Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
 ## 8.5.2
 
 **Released**: July 31, 2026
@@ -65,9 +179,9 @@ keywords:
 #### Barcode
 
 * MatrixScan Sequence: Introduced several new configurations to adapt the sequencing flow:
-  - Configure the duration of the idle timeout via BarcodeSequenceSettings.IdleTimeout.
+  - Configure the duration of the idle timeout via `BarcodeSequenceSettings.IdleTimeout`.
   - Set the accepted device orientation via `BarcodeSequenceSettings.shelfSequencingOrientation`. Defaults to `LANDSCAPE_ONLY`, with `PORTRAIT_ONLY` and `ANY` also available. The rotate-device prompt's default text now reflects the configured orientation.
-  - Toggle the per-row tray indicator label (e.g. "Row 1") through `shouldShowTrayIndicatorText` on the `BarcodeSequenceView`.
+  - Toggle the per-row tray indicator label (for example, "Row 1") through `shouldShowTrayIndicatorText` on the `BarcodeSequenceView`.
 * Added group scanning to MatrixScan Count, enabled via `BarcodeCountSettings`. Group scanning lets users count items in distinct groups, for example one pallet or delivery at a time, within a single session. Three controls manage the flow: Next group saves the current group's scans and clears its AR highlights so the next group starts on a clean screen; Redo clears the scans for the current group only, leaving already-completed groups untouched; Finish ends the session.
 * Added `BarcodeCountSettings.ExpectedNumberOfBarcodesPerCluster` to MatrixScan Count to declare how many barcodes each cluster should contain (for example, 2 for labels carrying two barcodes). Any cluster that deviates from the expected count is flagged and highlighted with a default yellow brush (overridable).
 * Added support for `ScanditIcon` in MatrixScan Count highlights.
@@ -105,8 +219,8 @@ keywords:
 #### Barcode
 
 * Reduced Code 128 minimum symbol count from 6 to 4; short codes (4 & 5 symbols) use stricter matching rules than longer codes. To explicitly exclude short codes, disable symbol counts 4 & 5 via `sc_symbology_settings_set_active_symbol_counts()` for Code 128. Note that if you previously enabled short code scanning, more strict settings are now in effect to reduce the chance of false positives, which are more likely for very short codes.
-* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.
-* Updated `SymbologyDescription.forIdentifier` to return `null` for unrecognized identifiers (e.g. `"EAN-8"` instead of `"ean8"`); previously such input was silently mapped to `Codabar`.
+* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, for example, scanning against a known list of valid codes or when codes contain structured data.
+* Updated `SymbologyDescription.forIdentifier` to return `null` for unrecognized identifiers (for example, `"EAN-8"` instead of `"ean8"`); previously such input was silently mapped to `Codabar`.
 
 ### Bug Fixes
 
@@ -122,7 +236,7 @@ keywords:
 
 * Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
 * Corrected the orientation of cropped Visa document images that were being rotated incorrectly when scanned using a single-frame image source.
-* Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning "Invalid Format".
+* Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning "Invalid Format."
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 
 #### Smart Label Capture
@@ -173,7 +287,7 @@ keywords:
 #### Id
 
 * Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.
-* Added support for new versions of USA, California – Driver's License; USA, North Carolina – Driver's License; USA, Texas – Driver's License; and USA, Oklahoma – Driver's License.
+* Added support for new versions of USA, California–Driver's License; USA, North Carolina–Driver's License; USA, Texas–Driver's License; and USA, Oklahoma–Driver's License.
 
 #### Core
 
@@ -233,7 +347,7 @@ keywords:
 
 * Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
 * Fixed a rare crash when opening the camera.
-* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
+* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (for example, industrial barcode scanners like the Newland NLS-MT93).
 * Fixed custom sound not working in Barcode Find on Android.
 * Fixed a rare crash when starting camera capture while under memory pressure.
 
@@ -418,7 +532,7 @@ keywords:
 
 #### Barcode
 
-* Added `shouldShowTrayIndicatorText` to `BarcodeSequenceView` to toggle the per-row tray indicator label (e.g. "Row 1").
+* Added `shouldShowTrayIndicatorText` to `BarcodeSequenceView` to toggle the per-row tray indicator label (for example, "Row 1").
 * Added an option to configure the duration of BarcodeSequence's idle timeout.
 
 ### Bug Fixes
@@ -451,7 +565,7 @@ keywords:
 
 #### Core
 
-* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
+* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (for example, industrial barcode scanners like the Newland NLS-MT93).
 * Fixed crashes caused by RuntimeExceptions thrown by OEM camera code that are not part of the standard Android Camera API contract; these exceptions are now caught and logged instead of crashing.
 
 ## 8.1.3
@@ -509,7 +623,7 @@ keywords:
 
 #### Barcode
 
-* Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.
+* Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a more intuitive scanning experience that requires no manual configuration.
 * Extended Aztec codes reader to support scanning mirrored codes.
 * Added support for square DataMatrix codes with one-sided damage or occlusion. This feature is only enabled in Barcode Capture and SparkScan.
 * Added, in `BarcodeAr`, a `BarcodeArFilter` interface to selectively control which barcodes are displayed in the AR overlay based on custom filtering logic. You can set a filter via `BarcodeAr.SetBarcodeFilter`.
@@ -520,7 +634,7 @@ keywords:
 
 * Added NationalityISO property that maps results from Nationality field to country ISO code
 * Added RejectionDiagnosticJSON property to CapturedId to report debug info during Timeout rejections
-* Added rejectionTimeoutSeconds to IdCaptureSettings allowing customers to use timeout other than default (6s). Minimum timeout is 1s.
+* Added rejectionTimeoutSeconds to IdCaptureSettings allowing customers to use timeout other than default (6 s). Minimum timeout is 1 s.
 * Added support for new California DL, new South Carolina DL, Arizona Medical Marijuana Card, Kuwait Civil card, and new Texas DL
 * Our SDK can now scan the following documents both in single-side and double-side mode:
   - All Mexican DLs
@@ -609,7 +723,7 @@ Scandit's SDK 8.0 marks the evolution of data capture from a high-performing sca
 
 With SDK 8.0 businesses can transform data capture from a basic function to a strategic advantage. It enables intelligent scanning that:
   * Understands not just what is being scanned, but also what you want to scan and why you’re scanning it
-  * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.
+  * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users through sophisticated tasks to ensure the highest level of productivity.
 
 #### Core
 
@@ -687,9 +801,9 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * The following previously deprecated APIs have been removed:
   * BarcodeCaptureOverlay Related APIs
   * BarcodeCaptureOverlayStyle enum
-  * BarcodeCaptureOverlay.NewInstance(BarcodeCapture, DataCaptureView?, BarcodeCaptureOverlayStyle)factory method
-  * BarcodeCaptureOverlay.DefaultBrushForStyle(BarcodeCaptureOverlayStyle) method
-  * BarcodeCaptureOverlay.Style property
+  * `BarcodeCaptureOverlay.NewInstance(BarcodeCapture, DataCaptureView?, BarcodeCaptureOverlayStyle)`factory method
+  * `BarcodeCaptureOverlay.DefaultBrushForStyle(BarcodeCaptureOverlayStyle)` method
+  * `BarcodeCaptureOverlay.Style` property
   * SparkScanViewHandMode enum
   * SparkScanView.torchButtonVisible property
   * SparkScanView.handModeButtonVisible property
@@ -702,15 +816,15 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
   * SparkScanView.captureButtonTintColor property
   * SparkScanViewSettings.defaultHandMode property
   * SparkScan View Defaults APIs
-  * SparkScanViewDefaults.DefaultHandModeButtonVisible property
-  * SparkScanViewDefaults.DefaultTorchButtonVisible property
-  * SparkScanViewDefaults.DefaultStopCapturingText property
-  * SparkScanViewDefaults.DefaultStartCapturingText property
-  * SparkScanViewDefaults.DefaultResumeCapturingText property
-  * SparkScanViewDefaults.DefaultScanningCapturingText property
-  * SparkScanViewDefaults.DefaultCaptureButtonActiveBackgroundColor property
-  * SparkScanViewDefaults.DefaultCaptureButtonBackgroundColor property
-  * SparkScanViewDefaults.DefaultCaptureButtonTintColorProperty 
+  * `SparkScanViewDefaults.DefaultHandModeButtonVisible` property
+  * `SparkScanViewDefaults.DefaultTorchButtonVisible` property
+  * `SparkScanViewDefaults.DefaultStopCapturingText` property
+  * `SparkScanViewDefaults.DefaultStartCapturingText` property
+  * `SparkScanViewDefaults.DefaultResumeCapturingText` property
+  * `SparkScanViewDefaults.DefaultScanningCapturingText` property
+  * `SparkScanViewDefaults.DefaultCaptureButtonActiveBackgroundColor` property
+  * `SparkScanViewDefaults.DefaultCaptureButtonBackgroundColor` property
+  * `SparkScanViewDefaults.DefaultCaptureButtonTintColorProperty` 
 
 
 ## 7.6.7

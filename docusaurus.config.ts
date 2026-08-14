@@ -6,6 +6,7 @@ import { version } from "react";
 import remarkHideComments from "./src/plugins/remark-hide-comments";
 import remarkOffloadPreviewMedia from "./src/plugins/remark-offload-preview-media";
 import stripPreviewMediaPlugin from "./src/plugins/plugin-strip-preview-media";
+import { UNRELEASED_FRAMEWORK_SLUGS } from "./src/constants/unreleasedFrameworks";
 dotenv.config();  // Load environment variables from .env file
 
 const productionUrl = "https://docs.scandit.com";
@@ -45,6 +46,7 @@ const llmsNonWebSdkRoots = [
   "sdks/ios",
   "sdks/react-native",
   "sdks/flutter",
+  "sdks/kmp",
   "sdks/cordova",
   "sdks/capacitor",
   "sdks/linux",
@@ -109,10 +111,20 @@ const llmsIgnoreFiles: string[] = [
 // major comes from `label`. Frozen versions are keyed by their version string.
 const docsVersions: Record<
   string,
-  { label?: string; banner: "none"; badge: boolean }
+  {
+    label?: string;
+    // The values the docs plugin accepts; `current` carries "unreleased" while
+    // it is in beta and flips back to "none" when it becomes lastVersion.
+    banner: "none" | "unreleased" | "unmaintained";
+    badge: boolean;
+  }
 > = {
   current: {
-    label: "8.5.2",
+    label: "8.6.0",
+    banner: "unreleased",
+    badge: false,
+  },
+  "8.5.2": {
     banner: "none",
     badge: false,
   },
@@ -208,6 +220,23 @@ const config: Config = {
       {
         fromExtensions: ['html'],
         createRedirects(existingPath) {
+          // Mirror image of the Xamarin rule below: frameworks that exist only
+          // in the current (unreleased) docs are not present at the site root,
+          // which serves the last released version. Also serve every such page
+          // at its root-level /sdks/<slug>/* URL, so old links and search
+          // results move up to the current version instead of 404ing.
+          // The version prefix is taken from the built path, so this no-ops by
+          // itself once the current docs are served at the root again.
+          const versionedUnreleased = existingPath.match(
+            /^(\/(?:next|\d+\.\d+\.\d+))(\/sdks\/([^/]+)\/.*)$/,
+          );
+          if (
+            versionedUnreleased &&
+            UNRELEASED_FRAMEWORK_SLUGS.includes(versionedUnreleased[3])
+          ) {
+            return [versionedUnreleased[2]];
+          }
+
           // Redirect all /sdks/xamarin/* paths to the migration guide
           // Only create redirects when processing the root migrate-7-to-8 page to avoid duplicates
           if (existingPath === '/migrate-7-to-8' || existingPath === '/migrate-7-to-8/') {
@@ -452,7 +481,11 @@ const config: Config = {
           },
           showLastUpdateTime: false,
           includeCurrentVersion: true,
-          lastVersion: "current",
+          // Preview builds restrict onlyIncludeVersions to just "current" above,
+          // and Docusaurus requires lastVersion to be one of the included
+          // versions — so it must follow onlyIncludeVersions here rather than
+          // staying pinned to the real released version.
+          lastVersion: isPreviewBuild ? "current" : "8.5.2",
           versions: docsVersions,
         },
         blog: false,
@@ -543,6 +576,21 @@ const config: Config = {
               label: "Flutter",
               sidebarId: "flutterSidebar",
               to: "sdks/flutter/add-sdk",
+            },
+            {
+              // This entry's `to`/`sidebarId` are inert once hydrated — the
+              // custom DropdownNavbarItem (src/theme/NavbarItem/DropdownNavbarItem)
+              // replaces the whole "SDKs" menu with useFrameworkItems() output
+              // whenever any item here has type "docsVersion"; this array only
+              // supplies the label set + triggers that swap. The real
+              // (page-preserving) href lives in src/utils/useFrameworkItems.js.
+              // kmpSidebar exists only in the current docs version, so
+              // Docusaurus resolves this item to the right version on its own —
+              // no hand-written version prefix needed.
+              type: "docsVersion",
+              label: "Kotlin Multiplatform",
+              sidebarId: "kmpSidebar",
+              to: "sdks/kmp/add-sdk",
             },
             {
               type: "docsVersion",
