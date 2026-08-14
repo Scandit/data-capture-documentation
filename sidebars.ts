@@ -1779,6 +1779,11 @@ const sidebars: SidebarsConfig = {
         },
       ],
     },
+    {
+      type: 'doc',
+      label: 'Release Notes',
+      id: 'sdks/kmp/release-notes',
+    },
   ],
 
   capacitorSidebar: [
