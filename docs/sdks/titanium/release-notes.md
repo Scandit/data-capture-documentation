@@ -98,8 +98,8 @@ No updates for this framework in this release.
 #### Barcode
 
 * Reduced Code 128 minimum symbol count from 6 to 4; short codes (4 & 5 symbols) use stricter matching rules than longer codes. To explicitly exclude short codes, disable symbol counts 4 & 5 via `sc_symbology_settings_set_active_symbol_counts()` for Code 128. Note that if you previously enabled short code scanning, more strict settings are now in effect to reduce the chance of false positives, which are more likely for very short codes.
-* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.
-* Updated `SymbologyDescription.forIdentifier` to return `null` for unrecognized identifiers (e.g. `"EAN-8"` instead of `"ean8"`); previously such input was silently mapped to `Codabar`.
+* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, for example, scanning against a known list of valid codes or when codes contain structured data.
+* Updated `SymbologyDescription.forIdentifier` to return `null` for unrecognized identifiers (for example, `"EAN-8"` instead of `"ean8"`); previously such input was silently mapped to `Codabar`.
 
 ### Bug Fixes
 
@@ -140,7 +140,7 @@ No updates for this framework in this release.
 #### Id
 
 * Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.
-* Added support for new versions of USA, California – Driver's License; USA, North Carolina – Driver's License; USA, Texas – Driver's License; and USA, Oklahoma – Driver's License.
+* Added support for new versions of USA, California–Driver's License; USA, North Carolina–Driver's License; USA, Texas–Driver's License; and USA, Oklahoma–Driver's License.
 
 #### Core
 
@@ -191,7 +191,7 @@ No updates for this framework in this release.
 
 * Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
 * Fixed a rare crash when opening the camera.
-* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
+* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (for example, industrial barcode scanners like the Newland NLS-MT93).
 * Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
 * Fixed a rare crash when starting camera capture while under memory pressure.
 
@@ -289,7 +289,7 @@ No updates for this framework in this release.
 #### Core
 
 * Fixed a rare issue that was causing a crash when the app moved to the background.
-* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
+* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (for example, industrial barcode scanners like the Newland NLS-MT93).
 * Fixed crashes caused by RuntimeExceptions thrown by OEM camera code that are not part of the standard Android Camera API contract; these exceptions are now caught and logged instead of crashing.
 
 ## 8.1.3
@@ -409,7 +409,7 @@ Scandit's SDK 8.0 marks the evolution of data capture from a high-performing sca
 
 With SDK 8.0 businesses can transform data capture from a basic function to a strategic advantage. It enables intelligent scanning that:
   * Understands not just what is being scanned, but also what you want to scan and why you’re scanning it
-  * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.
+  * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users through sophisticated tasks to ensure the highest level of productivity.
 
 #### Core
 

@@ -22,7 +22,7 @@ keywords:
 * Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
 * BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
 * Added support for configuring the accepted device orientation via the new `BarcodeSequenceSettings.shelfSequencingOrientation` property. Defaults to `.landscapeOnly`; set to `.portraitOnly` or `.any` to enable portrait (or any) orientation. The rotate-device prompt's default text now reflects the configured orientation.
-* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set barcodeCountSettings.AutomaticClusteringMethod to AutomaticClusteringMethod.Label to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
+* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set `barcodeCountSettings.AutomaticClusteringMethod` to `AutomaticClusteringMethod.Label` to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
 * When highlights inside a MatrixScan Count cluster would overlap, the cluster now collapses into a single badge showing how many barcodes it contains, instead of drawing every highlight on top of the others. This also applies in Scan Preview mode.
 * BarcodeCountView.shouldShowTorchControl now applies in Scan Preview, so the torch button can be shown in that mode.
 * The accept/reject popover for barcodes not in the list, enabled via BarcodeCountNotInListActionSettings.enabled, is now available in Scan Preview.
@@ -171,8 +171,8 @@ keywords:
 
 * MatrixScan Sequence: Introduced several new configurations to adapt the sequencing flow:
   - Configure  the duration of the idle timeout.
-  - Toggle the per-row tray indicator label (e.g. "Row 1") through `shouldShowTrayIndicatorText` on the `BarcodeSequenceView`.
-* Added a new standalone iOS Price Capture sample (`PriceCaptureSample`) demonstrating a (barcode, price) pair captured from a shelf price label in one shot using Smart Label Capture's pre-built Price Capture definition, validated against a bundled CSV reference database, with fields highlighted by color brushes — green (correct), red (incorrect), grey (unknown) — and the whole-label outline hidden.
+  - Toggle the per-row tray indicator label (for example, "Row 1") through `shouldShowTrayIndicatorText` on the `BarcodeSequenceView`.
+* Added a new standalone iOS Price Capture sample (`PriceCaptureSample`) demonstrating a (barcode, price) pair captured from a shelf price label in one shot using Smart Label Capture's pre-built Price Capture definition, validated against a bundled CSV reference database, with fields highlighted by color brushes—green (correct), red (incorrect), grey (unknown)—and the whole-label outline hidden.
 * Added group scanning to MatrixScan Count, enabled via `BarcodeCountSettings`. Group scanning lets users count items in distinct groups, for example one pallet or delivery at a time, within a single session. Three controls manage the flow: Next group saves the current group's scans and clears its AR highlights so the next group starts on a clean screen; Redo clears the scans for the current group only, leaving already-completed groups untouched; Finish ends the session.
 * Added `BarcodeCountSettings.ExpectedNumberOfBarcodesPerCluster` to MatrixScan Count to declare how many barcodes each cluster should contain (for example, 2 for labels carrying two barcodes). Any cluster that deviates from the expected count is flagged and highlighted with a default yellow brush (overridable).
 * Added support for `ScanditIcon` in MatrixScan Count highlights.
@@ -211,8 +211,8 @@ keywords:
 #### Barcode
 
 * Reduced Code 128 minimum symbol count from 6 to 4; short codes (4 & 5 symbols) use stricter matching rules than longer codes. To explicitly exclude short codes, disable symbol counts 4 & 5 via `sc_symbology_settings_set_active_symbol_counts()` for Code 128. Note that if you previously enabled short code scanning, more strict settings are now in effect to reduce the chance of false positives, which are more likely for very short codes.
-* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.
-* Updated `SymbologyDescription.forIdentifier` to return `null` for unrecognized identifiers (e.g. `"EAN-8"` instead of `"ean8"`); previously such input was silently mapped to `Codabar`.
+* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, for example, scanning against a known list of valid codes or when codes contain structured data.
+* Updated `SymbologyDescription.forIdentifier` to return `null` for unrecognized identifiers (for example, `"EAN-8"` instead of `"ean8"`); previously such input was silently mapped to `Codabar`.
 
 #### Id
 
@@ -231,7 +231,7 @@ keywords:
 
 * Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
 * Corrected the orientation of cropped Visa document images that were being rotated incorrectly when scanned using a single-frame image source.
-* Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning "Invalid Format".
+* Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning "Invalid Format."
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 
 #### Smart Label Capture
@@ -282,7 +282,7 @@ keywords:
 #### Id
 
 * Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.
-* Added support for new versions of USA, California – Driver's License; USA, North Carolina – Driver's License; USA, Texas – Driver's License; and USA, Oklahoma – Driver's License.
+* Added support for new versions of USA, California–Driver's License; USA, North Carolina–Driver's License; USA, Texas–Driver's License; and USA, Oklahoma–Driver's License.
 
 #### Smart Label Capture
 
@@ -514,7 +514,7 @@ keywords:
 
 #### Barcode
 
-* Added `shouldShowTrayIndicatorText` to `BarcodeSequenceView` to toggle the per-row tray indicator label (e.g. "Row 1").
+* Added `shouldShowTrayIndicatorText` to `BarcodeSequenceView` to toggle the per-row tray indicator label (for example, "Row 1").
 * Added an option to configure the duration of BarcodeSequence's idle timeout.
 
 ### Bug Fixes
@@ -599,7 +599,7 @@ keywords:
 
 #### Barcode
 
-* Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.
+* Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a more intuitive scanning experience that requires no manual configuration.
 * Extended Aztec codes reader to support scanning mirrored codes.
 * Added support for square DataMatrix codes with one-sided damage or occlusion. This feature is only enabled in Barcode Capture and SparkScan.
 * Added, in `BarcodeAr`, a `BarcodeArFilter` interface to selectively control which barcodes are displayed in the AR overlay based on custom filtering logic. You can set a filter via `BarcodeAr.SetBarcodeFilter`.
@@ -609,7 +609,7 @@ keywords:
 
 * Added NationalityISO property that maps results from Nationality field to country ISO code
 * Added RejectionDiagnosticJSON property to CapturedId to report debug info during Timeout rejections
-* Added rejectionTimeoutSeconds to IdCaptureSettings allowing customers to use timeout other than default (6s). Minimum timeout is 1s.
+* Added rejectionTimeoutSeconds to IdCaptureSettings allowing customers to use timeout other than default (6 s). Minimum timeout is 1 s.
 * Added IdCaptureLite to CocoaPods. It is identical to IdCapture but without the dependency on ScanditIDC. This reduces the app size for customers that do not require VIZ scanning capabilities
 * Added support for new California DL, new South Carolina DL, Arizona Medical Marijuana Card, Kuwait Civil card, and new Texas DL
 * Our SDK can now scan the following documents both in single-side and double-side mode:
@@ -706,7 +706,7 @@ Scandit's SDK 8.0 marks the evolution of data capture from a high-performing sca
 
 With SDK 8.0 businesses can transform data capture from a basic function to a strategic advantage. It enables intelligent scanning that:
   * Understands not just what is being scanned, but also what you want to scan and why you’re scanning it
-  * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.
+  * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users through sophisticated tasks to ensure the highest level of productivity.
 
 #### Core
 

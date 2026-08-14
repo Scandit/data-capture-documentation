@@ -95,7 +95,7 @@ No updates for this framework in this release.
 #### Barcode
 
 * Reduced Code 128 minimum symbol count from 6 to 4; short codes (4 & 5 symbols) use stricter matching rules than longer codes. To explicitly exclude short codes, disable symbol counts 4 & 5 via `sc_symbology_settings_set_active_symbol_counts()` for Code 128. Note that if you previously enabled short code scanning, more strict settings are now in effect to reduce the chance of false positives, which are more likely for very short codes.
-* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.
+* Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, for example, scanning against a known list of valid codes or when codes contain structured data.
 
 ### Bug Fixes
 
@@ -291,14 +291,14 @@ Scandit's SDK 8.0 marks the evolution of data capture from a high-performing sca
 
 With SDK 8.0 businesses can transform data capture from a basic function to a strategic advantage. It enables intelligent scanning that:
   * Understands not just what is being scanned, but also what you want to scan and why you’re scanning it
-  * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.
+  * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users through sophisticated tasks to ensure the highest level of productivity.
 
 * Updated `ScProcessFrameResult` struct definition with additional detailed error information.
 * Modified `sc_barcode_scanner_apply_settings` to return `ScContextStatus` with detailed error information.
 * Added `sc_context_status_free` to public API to free `ScContextStatus` structures holding detailed error information.
 * Added `sc_process_frame_result_free` to public API to free `ScProcessFrameResult` structures holding detailed error information.
 * Modified `sc_parser_new_with_context` to take `ScContextStatus *` as the last param instead of just the `ScContextStatusFlag *`.
-* Improved and accelerated scanning for 1d symbologies at low resolution, in particular Code 128. 
+* Improved and accelerated scanning for 1D symbologies at low resolution, in particular Code 128. 
 
 ### Bug Fixes
 
