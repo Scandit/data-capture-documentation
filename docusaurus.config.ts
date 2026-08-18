@@ -485,7 +485,7 @@ const config: Config = {
           // and Docusaurus requires lastVersion to be one of the included
           // versions — so it must follow onlyIncludeVersions here rather than
           // staying pinned to the real released version.
-          lastVersion: isPreviewBuild ? "current" : "8.5.2",
+          lastVersion: isPreviewBuild ? "current" : "8.5.3",
           versions: docsVersions,
         },
         blog: false,
