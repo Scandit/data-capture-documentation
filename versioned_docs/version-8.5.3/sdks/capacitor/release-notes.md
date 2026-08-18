@@ -1,14 +1,38 @@
 ---
-description: "Release notes and updates for the Scandit Cordova SDK."
+description: "Release notes for the Scandit Data Capture SDK on Capacitor: new features, changes, and fixes by version."
 toc_max_heading_level: 3
-displayed_sidebar: cordovaSidebar
+displayed_sidebar: capacitorSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
-framework: cordova
+framework: capacitor
 keywords:
-  - cordova
+  - capacitor
 ---
+
+## 8.5.3
+
+**Released**: August 18, 2026
+
+### Behavioral Changes
+
+#### Barcode
+
+* Disabled enhanced low-resolution scanning of QR codes (introduced in 8.5.0) for MatrixScan modes. Customers who need this feature should contact Scandit support.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+
+#### Id
+
+* Fixed a crash that could occur when navigating away from a screen while a hint was displayed.
+
+#### Core
+
+* Fixed an IllegalStateException in analytics HTTPS requests when the app is instrumented by APM tools such as Dynatrace.
 
 ## 8.5.2
 
@@ -109,8 +133,7 @@ keywords:
 
 #### Core
 
-* Fixed a TypeError: `frameSource.setNativeFrameSourceIsBeingCreated is not a function` thrown when calling `DataCaptureContext.setFrameSource()` with an `ImageFrameSource` on Cordova, Capacitor, and React Native SDKs.
-* Fixed a Cordova Android issue with cordova-android 15.x where HTML overlays in the WebView could appear hidden behind the camera preview.
+* Fixed SPM resolution failure in Capacitor 8 / Xcode 26 projects (CapApp-SPM) caused by an invalid Package.swift header and an outdated capacitor-swift-pm version pin.
 * Fixed a rare crash when starting camera capture while under memory pressure.
 * Fixed a rare crash when opening the camera.
 * Fixed a crash when the `DataCaptureContext` singleton was initialized more than once.
@@ -137,10 +160,6 @@ keywords:
 * Fixed an issue where cropped document images were rotated when they are recovered using the getFrame API.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 
-#### Core
-
-* Fixed a TypeError: `frameSource.setNativeFrameSourceIsBeingCreated is not a function` thrown when calling `DataCaptureContext.setFrameSource()` with an `ImageFrameSource` on Cordova, Capacitor, and React Native SDKs.
-
 ## 8.4.0
 
 **Released**: May 18, 2026
@@ -158,15 +177,10 @@ keywords:
 * Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.
 * Added support for new versions of USA, California – Driver's License; USA, North Carolina – Driver's License; USA, Texas – Driver's License; and USA, Oklahoma – Driver's License.
 
-#### Smart Label Capture
-
-* Added the LabelCapture simple sample for Cordova.
-
 #### Core
 
 * Redesigned `ZoomSwitchControl` to support multiple configurable zoom levels; the control now displays as a compact button that expands to show all available zoom levels, automatically filtered to those supported by the device hardware.
 * Added a new `PinchToZoom` gesture.
-* Added Swift Package Manager support to Cordova plugins for iOS.
 
 ### Performance Improvements
 
@@ -226,8 +240,6 @@ keywords:
 * Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
 * Fixed custom sound not working in Barcode Find on Android.
 * Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
-* Fixed a Cordova Android issue with cordova-android 15.x where HTML overlays in the WebView could appear hidden behind the camera preview.
-* Fixed an issue on Cordova Android where AR overlay views (such as bubbles in MatrixScan-based samples) could become unresponsive to taps after the app was minimized and reopened while the camera preview was frozen.
 * Fixed a rare crash when starting camera capture while under memory pressure.
 
 ## 8.3.1
@@ -250,7 +262,6 @@ keywords:
 #### Barcode
 
 * Added support for composite codes in SparkScan
-* Added a SparkScan ListBuilding sample for Cordova
 
 #### Id
 
@@ -300,7 +311,6 @@ keywords:
 
 #### Core
 
-* Fixed Cordova iOS compilation error due to missing header files
 * Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled.
 * Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
 
@@ -330,17 +340,19 @@ keywords:
 
 * Added new getFeedbackForScannedItem method to SparkScanFeedbackDelegate
 * Added BarcodeArResponsiveAnnotation API
-* Added MatrixScanArSimpleSample on Cordova
-* Added MatrixScan AR mode to Cordova framework
+* Added BarcodeAr API to Capacitor
 * Added some missing BarcodePick APIs to React-Native, Capacitor and Cordova
 
 #### Smart Label Capture
 
-* [Smart Label Capture](/sdks/cordova/label-capture/intro.md) is now available on .NET for Android. It enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.
+* The Validation Flow, our ready‑to‑use workflow in Smart Label Capture for capturing and validating label data with minimal code, now features a completely redesigned user interface. The update improves ergonomics through a simplified API and highly requested customization options, making Smart Label Capture more intuitive and significantly reducing integration and customization effort across a wider range of use cases
+* Smart Label Capture now supports Receipt Scanning Capture. The feature is available in beta (contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out).
+* Added `getFrameData` to `didUpdateSession` of the LabelCaptureListener
 
 #### Core
 
 * Added Electronic Product Code (EPC) data format
+* Added support for Capacitor 8
 
 ### Performance Improvements
 
@@ -369,13 +381,17 @@ keywords:
 
 #### Core
 
-* Fixed MatrixScanBubble Tap not being triggered in Cordova
 * Fixed an issue where the camera would not restart when opened from another app
 * Fixed an issue where the interface and video feed could have different visual orientations
 * Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 * Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates.
-* Fixed a Cordova iOS compilation error due to missing header files
+
+### Deprecations
+
+#### Smart Label Capture
+
+* Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
 
 ## 8.1.6
 
@@ -403,7 +419,6 @@ keywords:
 
 #### Core
 
-* Fixed a TypeError: `frameSource.setNativeFrameSourceIsBeingCreated is not a function` thrown when calling `DataCaptureContext.setFrameSource()` with an `ImageFrameSource` on Cordova, Capacitor, and React Native SDKs.
 * Fixed a rare crash when starting camera capture while under memory pressure.
 * Fixed a rare crash when opening the camera.
 * Fixed a rare native crash (SIGABRT in BitTube::recvObjects) that could occur on Android during camera preview rendering.
@@ -483,7 +498,7 @@ keywords:
 #### Barcode
 
 * Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.
-* [SparkScan](/sdks/cordova/sparkscan/intro.md) is not limited to only barcodes anymore, but can also scan items - in other words any combinations of barcodes and text present on a target to be scanned. The feature is available in beta at the moment, please contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out.
+* [SparkScan](/sdks/capacitor/sparkscan/intro.md) is not limited to only barcodes anymore, but can also scan items - in other words any combinations of barcodes and text present on a target to be scanned. The feature is available in beta at the moment, please contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out.
 * Extended Aztec codes reader to support scanning mirrored codes.
 * Added support for square DataMatrix codes with one-sided damage or occlusion. This feature is only enabled in Barcode Capture and SparkScan.
 
@@ -496,6 +511,10 @@ keywords:
   - All Mexican DLs
   - Mexican Voter Cards
 
+#### Core
+
+* Added webViewContentOnTop to DataCaptureView so hybrid apps can place HTML overlays above the camera preview without sacrificing native gestures. Default behaviour stays unchanged; when you enable the property, the bridge now mirrors Android and iOS touch routing—JS UI elements receive taps first, and any unhandled touch paths through to the native DataCaptureView. Improved resilience: both platforms fall back automatically if the WebView can't evaluate the hit-test logic, preventing stalled gestures even under heavy load.
+
 ### Performance Improvements
 
 #### Barcode
@@ -503,11 +522,19 @@ keywords:
 * Improved MicroQR detector tolerance to quiet zone violations
 * Improved suppression of incorrect Codabar recognitions when using the [“strict" symbology extension](../symbology-properties#symbology-extension-descriptions)
 
+#### Smart Label Capture
+
+* Incremental improvements in accuracy across all use-cases for the OCR model powering Smart Label Capture.
+
 ### Behavioral Changes
 
 #### Barcode
 
 * Enabling the [“ocr_fallback" symbology extension](../symbology-properties#symbology-extension-descriptions) with missing OCR model resources now triggers the context error 28 (“Missing Resource”)
+
+#### Smart Label Capture
+
+* Validation Flow: Manually input values for barcodes will go through a stricter validation. Some values may no longer be accepted if they do not match the symbology specs for the symbology’s definition
 
 ### Bug Fixes
 
@@ -527,6 +554,10 @@ keywords:
 * Fixed an issue where front expiry date anonymization rectangle is erroneously drawn on front and back
 * Fixed a bug that prevented VizResult anonymization of the following fields: additionalAddressInformation, bloodType, employer, fathersName, issuingAuthority, maritalStatus, mothersName, placeOfBirth, profession, race, residentialStatus
 * Fixed a bug concerning return complete instead of cropped images on the back of EU driving licenses
+
+#### Smart Label Capture
+
+* Fixed an issue where LabelCapture fields would return default data in some frameworks
 
 #### Core
 
@@ -567,10 +598,19 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
   * Understands not just what is being scanned, but also what you want to scan and why you’re scanning it
   * Adapts accordingly by adjusting scanning settings and/or UI, understanding what comes next and how to guide users seamlessly through sophisticated tasks to ensure the highest level of productivity.
 
+#### Core
+
+* The Capacitor Kotlin plugin version used is now `1.9.25`, enabling support for projects using Capacitor 7.
+
 #### Barcode
 
 * Updated the Gradle version for all sample applications to 8.14.3.
 * `BarcodeBatchBasicOverlay` and `BarcodeBatchBasicOverlayListener` now allow for nullable brushes.
+
+#### Smart Label Capture
+
+* [Smart Label Capture](/sdks/capacitor/label-capture/intro.md) is now available for Capacitor. It enables the capture of any label, regardless of its layout or format, and extracts the relevant information automatically. This is achieved through a combination of AI-based text recognition and barcode scanning, allowing users to capture all necessary data in a single scan. Smart Label Capture is ideal for applications such as inventory management, asset tracking, and logistics, where labels can vary widely in design and content.
+* We’re introducing an enhancement that makes Smart Label Capture more robust and scalable by complementing its on-device model with a larger, more capable model. When the on-device model can’t capture certain labels, the SDK automatically escalates to this enhancement to handle complex or unforeseen cases with high accuracy and reliability. This capability is currently available in `beta`. If you’re interested in trying it, please contact Scandit Support. For configuration details, see `labelDefinition.adaptiveRecognitionEngine`.
 
 #### ID
 
@@ -596,7 +636,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
   * Australian mobile driver licenses (mDL) are now treated as normal documents, with no separate mode.
   * US Green Cards are now treated as residence permits.
 * Removed the deprecated API `DateResult::toDate`. Use `DateResult::toLocalDate` or `DateResult::toUtcDate` instead.
-* `fullName` now an optional field on all `IdCapture` result types and `capturedMrz` now an optional field on `MrzeeeeeResult`.
+* `fullName` now an optional field on all `IdCapture` result types and `capturedMrz` now an optional field on `MrzResult`.
 
 ### Bug Fixes
 
@@ -613,4 +653,4 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/cordova/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/capacitor/release-notes)

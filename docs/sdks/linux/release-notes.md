@@ -58,6 +58,16 @@ keywords:
 * Fixed `sc_camera_get_frame` hanging indefinitely when the camera is disconnected while streaming. It now returns promptly instead of blocking.
 * Fixed the Python camera sample (`CommandLineBarcodeScannerCameraSample.py`) crashing at startup.
 
+## 8.5.3
+
+**Released**: August 18, 2026
+
+### Behavioral Changes
+
+#### Barcode
+
+* Disabled enhanced low-resolution scanning of QR codes (introduced in 8.5.0) for MatrixScan modes. Customers who need this feature should contact Scandit support.
+
 ## 8.5.2
 
 **Released**: July 31, 2026

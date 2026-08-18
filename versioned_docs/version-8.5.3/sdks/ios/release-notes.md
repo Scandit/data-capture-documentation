@@ -1,14 +1,35 @@
 ---
-description: "Release notes and updates for the Scandit React Native SDK."
+description: "Release notes and updates for the Scandit iOS SDK."
 toc_max_heading_level: 3
-displayed_sidebar: reactnativeSidebar
+displayed_sidebar: iosSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
-framework: react
+framework: ios
 keywords:
-  - react
+  - ios
 ---
+
+## 8.5.3
+
+**Released**: August 18, 2026
+
+### Behavioral Changes
+
+#### Barcode
+
+* Disabled enhanced low-resolution scanning of QR codes (introduced in 8.5.0) for MatrixScan modes. Customers who need this feature should contact Scandit support.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+
+#### Id
+
+* Fixed a crash that could occur when navigating away from a screen while a hint was displayed.
+* Fixed a crash caused by an edge case where XCTest called objc_copyClassList() while the ScanditIDC.xcframework was not linked.
 
 ## 8.5.2
 
@@ -20,19 +41,15 @@ keywords:
 
 * Improved performance of Irish Garda Age Card
 
-### Bug Fixes
-
-#### Barcode
-
-* Fixed BarcodeCount clusters where the not-in-list cluster color incorrectly followed the matched/deviated customization.
-
-#### Smart Label Capture
-
-* Fixed a memory leak preventing the batch and label advanced overlay from being collected until the mode they're bound to is collectable.
-
 ## 8.5.1
 
 **Released**: July 20, 2026
+
+### New Features
+
+#### Barcode
+
+* Added two new properties to `BarcodeSequenceSettings`: `initialOrderOnShelf` and `initialOrderOnTray`, allowing scanning to resume from a previous session.
 
 ### Bug Fixes
 
@@ -44,10 +61,11 @@ keywords:
 
 * Fixed an incorrect license key check that prevented scanning of documents with a PDF417 barcode or MRZ on one side, and of mDLs read via OCR.
 
-#### Core
+### Deprecations
 
-* Fixed an iOS build failure when using React Native versions below 0.78.
-* Fixed DataCaptureView and other scanning views not rendering on Android release builds with React Native 0.78 New Architecture.
+#### Barcode
+
+* Deprecated `BarcodeSequenceViewSettings` and the settings-taking initializers in favor of initializers without settings; `BarcodeSequenceView` settings (sound, haptics, initial guidance, tray indicator appearance, and highlight appearance) can now be changed at runtime through properties on the view.
 
 ## 8.5.0
 
@@ -57,13 +75,25 @@ keywords:
 
 #### Barcode
 
+* MatrixScan Sequence: Introduced several new configurations to adapt the sequencing flow:
+  - Configure  the duration of the idle timeout.
+  - Toggle the per-row tray indicator label (e.g. "Row 1") through `shouldShowTrayIndicatorText` on the `BarcodeSequenceView`.
+* Added a new standalone iOS Price Capture sample (`PriceCaptureSample`) demonstrating a (barcode, price) pair captured from a shelf price label in one shot using Smart Label Capture's pre-built Price Capture definition, validated against a bundled CSV reference database, with fields highlighted by color brushes — green (correct), red (incorrect), grey (unknown) — and the whole-label outline hidden.
+* Added group scanning to MatrixScan Count, enabled via `BarcodeCountSettings`. Group scanning lets users count items in distinct groups, for example one pallet or delivery at a time, within a single session. Three controls manage the flow: Next group saves the current group's scans and clears its AR highlights so the next group starts on a clean screen; Redo clears the scans for the current group only, leaving already-completed groups untouched; Finish ends the session.
+* Added `BarcodeCountSettings.ExpectedNumberOfBarcodesPerCluster` to MatrixScan Count to declare how many barcodes each cluster should contain (for example, 2 for labels carrying two barcodes). Any cluster that deviates from the expected count is flagged and highlighted with a default yellow brush (overridable).
+* Added support for `ScanditIcon` in MatrixScan Count highlights.
+* MatrixScan Count now offers Scan Preview, a new option that previews which barcodes will be scanned and tracks reliably across large, complex setups. Highlights appear in real time before capture, so users can position themselves for the best result. They stay anchored to their barcodes across wide areas, deep stacks, and items at varied angles and depths. Scan Preview is best suited to large surfaces or irregularly arranged groups. For standard counting on a single flat surface, the default mode remains the recommended choice. Enable via BarcodeCountSettings(scanPreviewEnabled: true)
+* Added support for `ScanditIcon` in MatrixScan Count Scan Preview highlights.
 * Added the SelectionMode API to replace the SparkScan target-mode APIs and `ScanIntention.smartSelection`: Set `selectionMode` (off/on/auto) in the `BarcodeCaptureSettings` and `SparkScanSettings` to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+* Added `logoStyle` and `logoAnchor` customization properties to `BarcodeArView`, `BarcodeCountView`, `BarcodeFindView`, `BarcodePickView`, and `BarcodeSequenceView`.
 
 #### Id
 
 * Added Irish Garda Age Card as `RegionSpecificSubtype.IrelandAgeCard`.
+* Added a new `PassportType` property to `MrzResult`.
 * Added double-sided support for the Oman residence card.
 * Added single-sided support for extraction of issue date and birth date from the 2025 NYC Municipal ID.
+* Added `ReadID_UI` and `ScanditIdCaptureNfc.xcframework` to support NFC document capture.
 
 #### Smart Label Capture
 
@@ -90,44 +120,42 @@ keywords:
 * Tightened Code 39 false positive filter thresholds by default; to restore the previous behavior, enable the `relaxed` extension on Code 39 via `sc_symbology_settings_set_extension_enabled()`. This is only advised when external validation measures are available, e.g. scanning against a known list of valid codes or when codes contain structured data.
 * Updated `SymbologyDescription.forIdentifier` to return `null` for unrecognized identifiers (e.g. `"EAN-8"` instead of `"ean8"`); previously such input was silently mapped to `Codabar`.
 
+#### Id
+
+* Updated iOS to Read ID 4.126.0.
+
 ### Bug Fixes
 
 #### Barcode
 
 * Fixed BarcodeAR not displaying an overlay for every scanned barcode when duplicate barcode values are present.
 * Fixed a memory leak in item-based scanning.
-* Fixed an issue in BarcodeCount where the strap mode setting would not be saved in all cases.
 * Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
 * Fixed rare cases of incorrect (tiny) PDF417 location outlines.
 
 #### Id
 
 * Fixed an issue where cropped document images were rotated when Frame Image was also enabled.
-* Added support for Business Travel Permit to Hong Kong/Macau SAR (AKCHN prefix).
 * Corrected the orientation of cropped Visa document images that were being rotated incorrectly when scanned using a single-frame image source.
 * Fixed parser handling of non-standard Surrey BC AAMVA barcodes that were incorrectly returning "Invalid Format".
-* Fixed an issue in ID Capture where `didCaptureId` and `didRejectId` listener callbacks were never invoked if the listener was added after the mode was set on the data capture context (e.g. awaiting `setMode` before `addListener`). Listener registration order no longer matters.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 
 #### Smart Label Capture
 
 * Fixed a memory leak in LabelCapture.
-* Fixed a bug where setting `valueRegexes` or `anchorRegexes` to null in frameworks was incorrectly treated the same as setting them to an empty list; they now correctly fall back to the definition type's defaults.
 
 #### Core
 
-* Fixed React Native projects using the New Architecture (NewArch) on iOS that required a custom `post_install` snippet in the Podfile to build; the Swift-to-Objective-C bridging header search paths are now set correctly in the SDK podspecs.
-* Fixed a rare crash when starting camera capture while under memory pressure.
-* Fixed a rare crash when opening the camera.
+* Fixed a thread-safety race in `SDCDataCaptureContext` that could cause an `NSGenericException` when scanning modes were added or removed from multiple threads concurrently; `_modes`/`activeMode` access is now serialized through a mutex.
+* Fixed an iOS camera issue where CVPixelBuffer read locks could leak on every frame for planar (YUV) buffers, eventually starving the buffer pool and stalling frame delivery.
 * Fixed a crash when the `DataCaptureContext` singleton was initialized more than once.
-* Fixed an issue where the camera preview (DataCaptureView and other view components) could remain blank while scanning still worked. Native view creation no longer depends on React Native's interaction queue, which a long-running JS animation could block indefinitely.
-* Fixed an Android build error ("Unknown CMake command target_compile_reactnative_options") that affected projects on RN < 0.81 with the New Architecture enabled; the generated CMake now falls back to equivalent compile flags on older React Native versions.
 
 ### Deprecations
 
 #### Barcode
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
+* Added `ScanditIcon` support for `BarcodeCount` status mode highlights, and deprecated the `SDCBarcodeCountStatus`-based highlight API.
 
 ## 8.4.1
 
@@ -145,10 +173,6 @@ keywords:
 * Fixed an issue where cropped document images were rotated when they are recovered using the getFrame API.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 
-#### Core
-
-* Fixed an issue where the camera preview (`DataCaptureView` and other view components) could remain blank in React Native apps while scanning still worked. Native view creation no longer depends on React Native's interaction queue, which a long-running JS animation could block indefinitely.
-
 ## 8.4.0
 
 **Released**: May 18, 2026
@@ -157,19 +181,24 @@ keywords:
 
 #### Barcode
 
+* Added an Error entry to `BarcodeSequenceState`, triggered when the sequencing process encounters an error.
 * Added `dotRadius` property to `BarcodeBatchBasicOverlay` to allow customizing the size of dots when using the Dot overlay style.
-* Added custom view support for barcode pick highlighting in JavaScript frameworks.
-* Added support for PDF417 in the Barcode Generator.
+* Added `shouldShowShutterButton` flag in `BarcodeSequenceView` to hide the main shutter button and blinking indicator; added `BarcodeSequenceView::startSequencing()` and `BarcodeSequenceView::pauseSequencing()` (iOS) / `BarcodeSequenceView::stopSequencing()` (Android) to programmatically replicate the shutter button behavior; exposed `BarcodeSequenceState` enum and `BarcodeSequenceViewUIListener::onStateChanged` to be notified when a state change occurs; exposed `BarcodeSequenceView::state` to retrieve the current state; exposed `BarcodeSequenceView::sequencedShelfModule` to retrieve the scanned shelf module.
 
 #### Id
 
 * Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.
 * Added support for new versions of USA, California – Driver's License; USA, North Carolina – Driver's License; USA, Texas – Driver's License; and USA, Oklahoma – Driver's License.
 
+#### Smart Label Capture
+
+* Added a Swift extension for  `LabelDateResult` to improve ergonomics when using Swift..
+
 #### Core
 
 * Redesigned `ZoomSwitchControl` to support multiple configurable zoom levels; the control now displays as a compact button that expands to show all available zoom levels, automatically filtered to those supported by the device hardware.
 * Added a new `PinchToZoom` gesture.
+* Introduced a new `ZoomListener` on the Camera object.
 
 ### Performance Improvements
 
@@ -196,15 +225,12 @@ keywords:
 
 #### Barcode
 
-* Fixed an issue in `BarcodeCount` where the floating shutter button was not visible after setting `shouldShowFloatingShutterButton` to `true`.
-* Fixed an issue preventing `BarcodeFind` from finding binary barcodes.
 * Fixed a stability issue that could cause a crash when tracked barcodes were removed or expired during a scanning session.
 * Fixed an issue where `BarcodeCountView` would display incorrectly after rotating the device when a sibling view was present in the same parent view.
 * Fixed an unnecessary second scan callback that occurs after freezing barcode recognition.
 * Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
 * Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
 * Fixed an issue where the Smart Scan Selection aimer would become too small when scan-area margins restricted the visible scan area; the aimer is now sized relative to the view, keeping a consistent on-screen size regardless of margins.
-* Fixed an issue in BarcodeCount where the strap mode setting would not be saved in all cases.
 
 #### Id
 
@@ -225,18 +251,31 @@ keywords:
 #### Core
 
 * Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
-* Fixed a rare crash when opening the camera.
-* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
-* Fixed custom sound not working in Barcode Find on Android.
 * Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
-* Fixed React Native projects using the New Architecture (NewArch) on iOS that required a custom post_install snippet in the Podfile to build; the Swift-to-Objective-C bridging header search paths are now set correctly in the SDK podspecs.
-* Fixed a rare crash when starting camera capture while under memory pressure.
+
+### Deprecations
+
+#### Core
+
+* Added `zoomLevels` property to `CameraSettings` and deprecated `zoomGestureZoomFactor`.
+* Deprecated `ZoomSwitchControlListener` and the `addListener`/`removeListener` methods on `ZoomSwitchControl`; use `ZoomListener` on Camera instead.
+* Deprecated the image-based APIs for `ZoomSwitchControl`.
 
 ## 8.3.1
 
 **Released**: April 14, 2026
 
+### New Features
+
+#### Barcode
+
+* Added `shouldShowShutterButton` flag in `BarcodeSequenceView` to hide the main shutter button and blinking indicator; added `BarcodeSequenceView::startSequencing()` and `BarcodeSequenceView::pauseSequencing()` to programmatically replicate the shutter button behavior; exposed `BarcodeSequenceState` enum as well as `BarcodeSequenceViewUIListener::onStateChanged` to be notified when a state change occurs; exposed `BarcodeSequenceView::state` to retrieve the current state; exposed `BarcodeSequenceView::sequencedShelfModule` to retrieve the scanned shelf module.
+
 ### Bug Fixes
+
+#### Barcode
+
+* Removed the ARKit framework import to prevent App Store submission rejections
 
 #### Smart Label Capture
 
@@ -252,28 +291,17 @@ keywords:
 #### Barcode
 
 * Added support for composite codes in SparkScan
+* Added PDF417 barcode generation support with configurable options like error correction level, compaction mode, and dimensions through the new `Pdf417BarcodeGeneratorBuilder`.
 
 #### Id
 
 * Added support for OCR scanning of the 2026 version of Victoria mobile driver licenses
 * Added IdCaptureSettings.anonymizeDefaultFields setting that controls whether the SDK applies default anonymization rules for specific document types and regions
+* US, EU/ Schengen + UK passports no longer fallback to MRZ only. Now, US, EU/ Schengen + UK passports must capture VIZ instead of returning MRZ values after the configurable timeout has elapsed. This applies to FullDocumentScanner or SingleSideScanner when both VIZ and MRZ zones are enabled.
 
 #### Smart Label Capture
 
 * Fixed a rare race condition
-
-#### Core
-
-* Added support for the New Architecture of React Native
-* Added support for React Native Turbo Module Event Emitters with event handling performance improvements
-* Added support for React Native Fabric Components
-* Added Camera-related APIs for macro mode, torch, accessibility hints, as well as ImageBuffer and Timestamp for FrameData.
-* Added shouldShowZoomNotification and setProperty to DataCaptureView
-* Added new SparkScan APIs related to feedback, scanning mode change, and periscope mode.
-* Added BarcodeFilterSettings public constructor and exposed excludedSymbolCounts property for JavaScript frameworks
-* Added BarcodeCount-related APIs for BarcodeCountNotInListActionSettings, BarcodeCountToolbarSettings, BarcodeCountMappingFlowSettings, status mode and accessibility properties on BarcodeCountView, BarcodeCountStatusProvider with status items and callbacks, cluster support, capture list completion listener, and session update listener
-* Added moduleCountX and moduleCountY to Barcode API
-* Added an Expo-based React Native sample for Barcode Capture Simple Sample
 
 ### Performance Improvements
 
@@ -286,8 +314,6 @@ keywords:
 
 #### Barcode
 
-* Fixed an issue in BarcodeCount where the floating shutter button was not visible after setting shouldShowFloatingShutterButton to true.
-* Fixed a bug that was causing BarcodeFind to render barcodes filtered out by the Transformer as if they were valid targets.
 * Fixed a stability issue that could cause a crash when tracked barcodes were removed or expired during a scanning session.
 
 #### Id
@@ -298,16 +324,8 @@ keywords:
 * Added support for scanning MRZ from the back of Argentinian DN when using `FullDocumentScanner`
 * Fixed misplaced MRZ anonymization on FullFrame images.
 
-#### Smart Label Capture
-
-* Fixed an issue in the `LabelCaptureValidationFlowOverlay` when using it with Jetpack Compose that caused focus loss when opening the keyboard
-* Added `LabelCaptureValidationFlowOverlay.ShouldHandleKeyboardInsetsInternally` for cases when customers don't want to follow official Android edge-to-edge and inset guidelines
-
 #### Core
 
-* Fixed crashes on Android 8.x when native libraries fail to load
-* Fixed app freeze/deadlock when navigating to DataCaptureView with React Native New Architecture (Fabric)
-* Fixed default camera settings for LabelCapture and Other Capture Modes.
 * Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled.
 * Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
 
@@ -323,14 +341,7 @@ keywords:
 
 #### Smart Label Capture
 
-* Fixed LabelCaptureValidationFlowOverlay possible issue with Jetpack Compose that caused focus loss when opening the keyboard
-* Added LabelCaptureValidationFlowOverlay::ShouldHandleKeyboardInsetsInternally in case customers don't want to follow official Android guidelines for edge-to-edge and insets
 * Fixed a rare race condition
-
-#### Core
-
-* Fixed app freeze/deadlock when navigating to DataCaptureView with React Native New Architecture (Fabric)
-* Fixed a syntax error in ScanditReactPackageBase.kt which prevented compilation with some React Native versions
 
 ## 8.2.0
 
@@ -340,20 +351,22 @@ keywords:
 
 #### Barcode
 
-* Added new getFeedbackForScannedItem method to SparkScanFeedbackDelegate
-* Added BarcodeArResponsiveAnnotation API
-* Added some missing BarcodePick APIs to React-Native, Capacitor and Cordova
+* Added access to closeUp and farAway annotations in MatrixScan AR
+
+#### Id
+
+* Enabled scanning of MRZ on the backside of several EU residence permits
+* Added extraction of a cropped document image from Passports and VISAs that do not support VIZ extraction
+* Added extraction of the date of birth from Romanian IDs
 
 #### Smart Label Capture
 
 * The Validation Flow, our ready‑to‑use workflow in Smart Label Capture for capturing and validating label data with minimal code, now features a completely redesigned user interface. The update improves ergonomics through a simplified API and highly requested customization options, making Smart Label Capture more intuitive and significantly reducing integration and customization effort across a wider range of use cases
-* Smart Label Capture now supports Receipt Scanning Capture. The feature is available in beta (contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out).
-* Added `getFrameData` to `didUpdateSession` of the LabelCaptureListener
+* Added LabelCapture Validation Flow Manual input delegate, that allows the developer to receive a callback when the users trigger the manual input.
 
 #### Core
 
-* Added Electronic Product Code (EPC) data format
-* Added Flow Types to the React-Native plugins
+* Added a third standby stage to the iOS camera that turns everything off for improved power management
 
 ### Performance Improvements
 
@@ -371,25 +384,17 @@ keywords:
 * Fixed BarcodeCount Scan Preview issues including: fixed an issue where preview barcodes were used to populate the scanning list, the correct feedback is played when a barcode not in list is scanned, fixed an issue where scanning was not possible after the app was put in background, and corrected highlight orientation in landscape
 * Fixed an issue where MatrixScan AR circle highlights stopped pulsing when the app was restored from the background
 * Added cameraStateOnStop property to BarcodeFindView to optimize camera transitions when switching between modes
-* Fixed an issue where the successful hint in BarcodeFind is not displayed
 * Fixed the missing found item icon in the MatrixScan Find carousel
 
 #### Id
 
-* Fixed an issue affecting MRZ scanning performance when using the user facing camera in portrait mode on Android
-* Fixed a memory issue leading to a persistent black screen during ID Capture startup
 * Treated Puerto Rico driver licenses as AAMVA to enforce barcode capture with FullScanner
 * Fixed a bug that would cause Canada Northwest Territories driver license scans to be incomplete
 
 #### Core
 
-* Fixed an issue where the camera would not restart when opened from another app
 * Fixed an issue where the interface and video feed could have different visual orientations
-* Improved loading of platform defaults in React-Native
-* Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
-* Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates.
-* Fixed compatibility of the React Native plugins with apps using React Native versions below 0.78
 
 ### Deprecations
 
@@ -403,13 +408,20 @@ keywords:
 
 ### Bug Fixes
 
-#### Smart Label Capture
+#### Id
 
-* Fixed a memory leak preventing the batch and label advanced overlay from being collected until the mode they're bound to is collectable.
+* Fixed an edge case where XCTest calling `objc_copyClassList` when `ScanditIDC.xcframework` is not linked caused a crash.
 
 ## 8.1.5
 
 **Released**: June 10, 2026
+
+### New Features
+
+#### Barcode
+
+* Added `shouldShowTrayIndicatorText` to `BarcodeSequenceView` to toggle the per-row tray indicator label (e.g. "Row 1").
+* Added an option to configure the duration of BarcodeSequence's idle timeout.
 
 ### Bug Fixes
 
@@ -421,12 +433,6 @@ keywords:
 #### Smart Label Capture
 
 * Fixed a memory leak in LabelCapture.
-
-#### Core
-
-* Fixed a rare crash when starting camera capture while under memory pressure.
-* Fixed a rare crash when opening the camera.
-* Fixed a rare native crash (SIGABRT in BitTube::recvObjects) that could occur on Android during camera preview rendering.
 
 ## 8.1.4
 
@@ -442,12 +448,16 @@ keywords:
 #### Core
 
 * Fixed a rare issue that was causing a crash when the app moved to the background.
-* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (e.g. industrial barcode scanners like the Newland NLS-MT93).
-* Fixed crashes caused by RuntimeExceptions thrown by OEM camera code that are not part of the standard Android Camera API contract; these exceptions are now caught and logged instead of crashing.
 
 ## 8.1.3
 
 **Released**: March 25, 2026
+
+### New Features
+
+#### Barcode
+
+* Added `shouldShowShutterButton` flag in `BarcodeSequenceView` to hide the main shutter button and blinking indicator; added `BarcodeSequenceView::startSequencing()` and `BarcodeSequenceView::pauseSequencing()` to programmatically replicate the shutter button behavior; exposed `BarcodeSequenceState` enum as well as `BarcodeSequenceViewUIListener::onStateChanged` to be notified when a state change occurs; exposed `BarcodeSequenceView::state` to retrieve the current state; exposed `BarcodeSequenceView::sequencedShelfModule` to retrieve the scanned shelf module.
 
 ### Bug Fixes
 
@@ -482,17 +492,10 @@ keywords:
 
 ### Bug Fixes
 
-#### Id
-
-* Fixed a memory issue leading to a persistent black screen during ID Capture startup
-
 #### Core
 
-* Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates
 * Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
-* Fixed an issue where the camera would not restart when opened from another app
 * Fixed an issue where the interface and video feed could have different visual orientations
-* Fixed a bug that could in rare cases produce a black screen when starting the camera
 
 ## 8.1.0
 
@@ -503,19 +506,30 @@ keywords:
 #### Barcode
 
 * Smart Scan Selection is now available in Barcode Capture. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a "dense barcode" environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a seamless and more intuitive scanning experience.
-* [SparkScan](/sdks/react-native/sparkscan/intro.md) is not limited to only barcodes anymore, but can also scan items - in other words any combinations of barcodes and text present on a target to be scanned. The feature is available in beta at the moment, please contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out.
 * Extended Aztec codes reader to support scanning mirrored codes.
 * Added support for square DataMatrix codes with one-sided damage or occlusion. This feature is only enabled in Barcode Capture and SparkScan.
-* Added, in `BarcodeAr`, new classes to create custom highlights (via `BarcodeArCustomHighlight`) and custom annotations (via `BarcodeArCustomAnnotation`).
+* Added, in `BarcodeAr`, a `BarcodeArFilter` interface to selectively control which barcodes are displayed in the AR overlay based on custom filtering logic. You can set a filter via `BarcodeAr.SetBarcodeFilter`.
+* Added `ScanditIconType.Slash` which can be used in `BarcodeArStatusIconAnnotationAnchor`.
 
 #### Id
 
 * Added NationalityISO property that maps results from Nationality field to country ISO code
 * Added RejectionDiagnosticJSON property to CapturedId to report debug info during Timeout rejections
+* Added rejectionTimeoutSeconds to IdCaptureSettings allowing customers to use timeout other than default (6s). Minimum timeout is 1s.
+* Added IdCaptureLite to CocoaPods. It is identical to IdCapture but without the dependency on ScanditIDC. This reduces the app size for customers that do not require VIZ scanning capabilities
 * Added support for new California DL, new South Carolina DL, Arizona Medical Marijuana Card, Kuwait Civil card, and new Texas DL
 * Our SDK can now scan the following documents both in single-side and double-side mode:
   - All Mexican DLs
   - Mexican Voter Cards
+
+#### Smart Label Capture
+
+* It's now possible to use Swift's result builder pattern to build a `LabelDefinition`
+
+#### Core
+
+* Added support for QuadHD resolution to provide improved performance and extended range for MatrixScan modes on slower devices
+* Added Electronic Product Code (EPC) parser
 
 ### Performance Improvements
 
@@ -527,6 +541,9 @@ keywords:
 #### Smart Label Capture
 
 * Incremental improvements in accuracy across all use-cases for the OCR model powering Smart Label Capture.
+* Some Label Capture API have been refined for Swift. For example:
+  - `CustomBarcode(name: "barcode", symbologies: [NSNumber(value: Symbology.ean13UPCA.rawValue)])`
+  - now becomes `CustomBarcode(name: "barcode", symbologies: [.ean13UPCA])`
 
 ### Behavioral Changes
 
@@ -543,13 +560,7 @@ keywords:
 #### Barcode
 
 * Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
-* Fixed a bug in the default color of BarcodeCapture highlights
-* Fixed an issue where popover annotations with HIGHLIGHT_TAP_AND_BARCODE_SCAN trigger could not be opened again
-* Fixed an issue in BarcodeSequence where camera would not be ON in portrait
-* Fixed an issue where SparkScan mini preview would sometimes stay in regular when entering target mode
-* Fixed the app becoming unresponsive after being in the background for extended periods
 * Added the `cameraStateOnStop` property to BarcodeFindView to optimize camera transitions when switching between modes
-* Fixed an issue where the successful notification in BarcodeFind was not displayed
 
 #### Id
 
@@ -557,33 +568,35 @@ keywords:
 * Fixed a bug that prevented VizResult anonymization of the following fields: additionalAddressInformation, bloodType, employer, fathersName, issuingAuthority, maritalStatus, mothersName, placeOfBirth, profession, race, residentialStatus
 * Fixed a bug concerning return complete instead of cropped images on the back of EU driving licenses
 
-#### Smart Label Capture
-
-* Fixed an issue where LabelCapture fields would return default data in some frameworks
-
 #### Core
 
-* Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed a small memory leak that affected fresh install runs only
 * Fixed an issue where barcode scanning would permanently stop after the app returned from background, particularly when camera permission dialogs were shown during initialization
-* Fixed a bug where getIsTorchAvailable() would return null on Android
 
 ## 8.0.1
 
 **Released**: January 14, 2026
 
+### New Features
+
+#### Barcode
+
+* Added, in `BarcodeAr`, a `BarcodeArFilter` interface to selectively control which barcodes are displayed in the AR overlay based on custom filtering logic. You can set a filter via `BarcodeAr.SetBarcodeFilter`.
+* Fixed an issue where the optional and location fields of BarcodeDefinition and TextDefinition could not be set with builder methods
+
+#### Id
+
+* Added IdCaptureLite to CocoaPods. It is identical to IdCapture but without the dependency on ScanditIDC. This reduces the app size for customers that do not require VIZ scanning capabilities
+
 ### Bug Fixes
 
 #### Barcode
 
-* Fixed an issue where the successful hint in BarcodeFind was not displayed
 * Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
 
 #### Core
 
-* Fixed an issue where the camera would not restart when opened from another app
 * Fixed an issue where the interface and video feed could have different visual orientations
-* Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed a small memory leak that affected fresh install runs only
 
 ## 8.0.0
@@ -603,14 +616,11 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 #### Core
 
-* Upgraded all sample applications to React Native 0.81.4 and enabled the new architecture.
+* The minimum iOS version is now 14.
 
 #### Barcode
 
-* All sample applications have been updated to more closely align with React Native best practices.
-* `BarcodeBatchBasicOverlay` and `BarcodeBatchBasicOverlayListener` now allow for nullable brushes.
-* MatrixScan AR now allows for the use of custom highlights and annotations.
-* Updated the Gradle version for all sample applications to 8.14.3. 
+* SparkScan is not limited to only barcodes anymore, but can also scan items - in other words any combinations of barcodes and text present on a target to be scanned. The feature is available in beta at the moment, please contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out.
 
 #### Smart Label Capture
 
@@ -639,7 +649,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 * The `LabelFieldDefinition` API has been updated with the following changes:
   * Renamed property: `pattern` → `valueRegex`, `patterns` → `valueRegexes`
   * Renamed property: `dataTypePattern` → `anchorRegex`, `dataTypePatterns` → `anchorRegexes`
-* Receipt Scanning API has been updated with the following changes:
+* Our Receipt Scanning Capture feature, available in beta (contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out), has been updated to improve performance and the API:
   * `ReceiptScanningResult`:
     * Removed properties: `storeNumber`, `storeStreet`, `storeZip`, `storeState`, `storePhone`, `paymentMethod`, and `paymentCurrency`.
     * Added property: `storeAddress` - Full address of the store (Street Number, Street, City, State, NPA).
@@ -660,7 +670,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 #### Core
 
-* Fixed handling of `ImageFrameSource` turn on and off calls.
+* Fixed an issue where macro mode would not be maintained when resuming the app from background, causing the camera to switch unexpectedly.
 
 #### ID
 
@@ -679,4 +689,4 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/react-native/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/ios/release-notes)

@@ -93,10 +93,15 @@ def extract_current_banner(config_path: Path) -> str:
 
 def extract_last_version(config_path: Path) -> str:
     content = config_path.read_text()
-    match = re.search(r'lastVersion:\s*"([^"]+)"', content)
-    if not match:
+    line_match = re.search(r'lastVersion:[^\n]*', content)
+    if not line_match:
         raise ValueError("Could not extract lastVersion from docusaurus.config.ts")
-    version = match.group(1)
+    # lastVersion may be a plain string or `isPreviewBuild ? "current" : "X"` —
+    # in both cases the real (non-preview) value is the last quoted string.
+    values = re.findall(r'"([^"]+)"', line_match.group(0))
+    if not values:
+        raise ValueError("Could not extract lastVersion from docusaurus.config.ts")
+    version = values[-1]
     if version == "current":
         raise ValueError("Already in production state (lastVersion is 'current')")
     return version
@@ -226,7 +231,7 @@ def update_config_version_entry(config_path: Path, old_version: str, new_version
     content = config_path.read_text()
     content = re.sub(rf'"{re.escape(old_version)}":', f'"{new_version}":', content)
     content = re.sub(
-        rf'(lastVersion:\s*)["\']({re.escape(old_version)})["\']',
+        rf'(lastVersion:\s*(?:isPreviewBuild\s*\?\s*["\']current["\']\s*:\s*)?)["\']{re.escape(old_version)}["\']',
         rf'\g<1>"{new_version}"',
         content,
     )
@@ -316,7 +321,11 @@ def update_versioned_docs(old_version: str, new_version: str) -> None:
 def update_config_for_minor_beta(config_path: Path, current_version: str, new_version: str) -> None:
     content = config_path.read_text()
 
-    content = re.sub(r'lastVersion:\s*["\']current["\']', f'lastVersion: "{current_version}"', content)
+    content = re.sub(
+        r'(lastVersion:\s*(?:isPreviewBuild\s*\?\s*["\']current["\']\s*:\s*)?)["\']current["\']',
+        rf'\g<1>"{current_version}"',
+        content,
+    )
 
     version_label = re.sub(r'-beta\.\d+$', '', new_version)
     content = re.sub(
@@ -368,7 +377,11 @@ def delete_versioned_files(version: str) -> None:
 def update_config_for_minor_production(config_path: Path, version: str) -> None:
     content = config_path.read_text()
 
-    content = re.sub(r'lastVersion:\s*"[^"]+"', 'lastVersion: "current"', content)
+    content = re.sub(
+        r'(lastVersion:\s*(?:isPreviewBuild\s*\?\s*["\']current["\']\s*:\s*)?)["\'][^"\']+["\']',
+        r'\g<1>"current"',
+        content,
+    )
 
     content = re.sub(
         r'(current:\s*\{[^}]*banner:\s*)"[^"]*"',

@@ -10,6 +10,16 @@ keywords:
   - linux
 ---
 
+## 8.5.3
+
+**Released**: August 18, 2026
+
+### Behavioral Changes
+
+#### Barcode
+
+* Disabled enhanced low-resolution scanning of QR codes (introduced in 8.5.0) for MatrixScan modes. Customers who need this feature should contact Scandit support.
+
 ## 8.5.2
 
 **Released**: July 31, 2026
