@@ -105,6 +105,16 @@ keywords:
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
 
+## 8.5.3
+
+**Released**: August 18, 2026
+
+### Behavioral Changes
+
+#### Barcode
+
+* Disabled enhanced low-resolution scanning of QR codes (introduced in 8.5.0) for MatrixScan modes. Customers who need this feature should contact Scandit support.
+
 ## 8.5.2
 
 **Released**: July 31, 2026
