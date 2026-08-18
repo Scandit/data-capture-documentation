@@ -124,7 +124,7 @@ const docsVersions: Record<
     banner: "unreleased",
     badge: false,
   },
-  "8.5.2": {
+  "8.5.3": {
     banner: "none",
     badge: false,
   },
