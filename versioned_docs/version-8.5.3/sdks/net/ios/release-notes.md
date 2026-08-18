@@ -10,6 +10,26 @@ keywords:
   - netIos
 ---
 
+## 8.5.3
+
+**Released**: August 18, 2026
+
+### Behavioral Changes
+
+#### Barcode
+
+* Disabled enhanced low-resolution scanning of QR codes (introduced in 8.5.0) for MatrixScan modes. Customers who need this feature should contact Scandit support.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+
+#### Id
+
+* Fixed a crash that could occur when navigating away from a screen while a hint was displayed.
+
 ## 8.5.2
 
 **Released**: July 31, 2026
