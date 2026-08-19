@@ -27,5 +27,12 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      # Whole-corpus check: the docs gate is a ratchet on changed files, so it
+      # cannot see a pre-existing violation nobody touched. This is what makes a
+      # framework value outside the enum - in docs OR in the code maps that read
+      # it - break the build instead of silently mis-resolving.
+      - name: Verify framework identifiers
+        run: yarn verify:frameworks
+
       - name: Build documentation
         run: yarn build

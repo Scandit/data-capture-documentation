@@ -5,7 +5,8 @@ sidebar_label: "Workflow Options"
 title: "Workflow & Scanner Options"
 displayed_sidebar: boltSidebar
 toc_max_heading_level: 4
-framework: bolt
+framework: hosted
+product: id-bolt
 keywords:
   - bolt
   - workflow

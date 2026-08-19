@@ -1,7 +1,7 @@
 ---
 description: "Add ID Capture to your .NET Android app to scan and extract data from IDs such as driver's licenses, passports, and ID cards."
 sidebar_position: 2
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 ---

@@ -2,7 +2,7 @@
 description: "Add ID Capture to your React Native app to scan and extract data from IDs such as driver's licenses, passports, and ID cards."
 
 sidebar_position: 2
-framework: react
+framework: react-native
 keywords:
   - react
 ---

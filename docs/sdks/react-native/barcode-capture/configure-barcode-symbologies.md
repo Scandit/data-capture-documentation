@@ -3,7 +3,7 @@ description: "Learn about the available symbologies and the corresponding config
 
 sidebar_position: 3
 pagination_next: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---

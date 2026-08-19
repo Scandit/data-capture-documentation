@@ -3,7 +3,7 @@ description: "Add Barcode Selection to your React Native app so users can tap or
 
 sidebar_position: 2
 pagination_next: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---

@@ -2,7 +2,7 @@
 description: "Advanced MatrixScan Find settings for .NET iOS: customize matching, overlays, and search behavior."
 sidebar_position: 3
 pagination_next: null
-framework: netIos
+framework: net-ios
 keywords:
   - netIos
 ---

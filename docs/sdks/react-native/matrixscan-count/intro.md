@@ -3,7 +3,7 @@ description: "MatrixScan Count scans and counts many barcodes at once in your Re
 
 sidebar_position: 1
 pagination_prev: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---

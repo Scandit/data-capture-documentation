@@ -2,7 +2,7 @@
 description: "Scan a single barcode at a time in your .NET Android app with the Scandit Data Capture SDK."
 toc_max_heading_level: 4
 pagination_prev: null
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 ---

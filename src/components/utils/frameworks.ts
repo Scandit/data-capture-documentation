@@ -17,6 +17,9 @@ export const FRAMEWORK_MAPPING: { [urlSlug: string]: string } = {
   'web': 'Web',
   'net-ios': '.NET iOS',
   'net-android': '.NET Android',
+  // Without this, parseSdksRoute() resolved no framework at all for every
+  // /sdks/linux/ page. Found by `yarn verify:frameworks`.
+  'linux': 'Linux',
 };
 
 export const URL_PRODUCT_MAPPING: { [urlSlug: string]: string } = {

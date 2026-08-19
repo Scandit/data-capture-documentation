@@ -5,7 +5,8 @@ sidebar_label: "Validators"
 title: "Validators"
 displayed_sidebar: boltSidebar
 toc_max_heading_level: 4
-framework: bolt
+framework: hosted
+product: id-bolt
 keywords:
   - bolt
   - validators

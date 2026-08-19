@@ -5,7 +5,8 @@ sidebar_position: 1
 sidebar_label: 'Overview'
 title: 'Scandit Express'
 displayed_sidebar: expressSidebar
-framework: express
+framework: hosted
+product: express
 keywords:
   - express
 ---

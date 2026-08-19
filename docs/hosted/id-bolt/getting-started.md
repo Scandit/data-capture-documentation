@@ -5,7 +5,8 @@ sidebar_label: "Getting Started"
 title: "Getting Started"
 hide_title: false
 displayed_sidebar: boltSidebar
-framework: bolt
+framework: hosted
+product: id-bolt
 keywords:
   - bolt
 ---

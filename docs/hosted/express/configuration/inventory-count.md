@@ -1,6 +1,7 @@
 ---
 description: "Use the Inventory Count mode in Scandit Express for fast, accurate stock counting."
-framework: express
+framework: hosted
+product: express
 keywords:
   - express
 ---
