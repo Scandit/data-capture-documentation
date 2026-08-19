@@ -127,10 +127,31 @@ function frameworksInQuery(query) {
   }
   return found;
 }
-// Major version typed in the query -> the newest docusaurus_tag on that line.
-// The map is derived from docsVersions in docusaurus.config.ts and passed in via
-// customFields (versionTagByMajor), so it can never drift from the real versions.
+// Major version typed in the query -> the docusaurus_tag of the version a reader
+// on that line is actually served. Derived from docsVersions + lastVersion in
+// docusaurus.config.ts and passed in via customFields. Being derived is not the
+// same as being right: this map was derived correctly from the wrong assumption
+// (that `current` is always the newest release) and pointed "v8" at an
+// unreleased beta for four days. `yarn verify:search-tags` is what checks it.
 const EMPTY_VERSION_MAP = {};
+const EMPTY_TAG_LIST = [];
+// `useAlgoliaContextualFacetFilters` returns [languageFilter, [tagFilter, ...]]:
+// a top-level AND whose one nested array is the OR group of docusaurus_tags.
+// Indexed content that Docusaurus never tags for this build (the API reference,
+// see alwaysOnSearchTags in docusaurus.config.ts) has to join that OR group -
+// appending it at the top level would AND it against the page's own tag and
+// match nothing at all.
+function withAlwaysOnTags(contextualFilters, tagFilters) {
+  if (!tagFilters.length) return contextualFilters;
+  let injected = false;
+  const out = contextualFilters.map((entry) => {
+    if (injected || !Array.isArray(entry)) return entry;
+    injected = true;
+    return [...entry, ...tagFilters.filter((t) => !entry.includes(t))];
+  });
+  // No OR group to join (contextual search returned only flat entries): add one.
+  return injected ? out : [...out, tagFilters];
+}
 function versionTagInQuery(query, versionTagByMajor) {
   const q = (query || "").toLowerCase();
   // Only an explicit version marker ("version 6", "ver 6", "v6", "sdk 6").
@@ -139,14 +160,17 @@ function versionTagInQuery(query, versionTagByMajor) {
   const m = q.match(/\b(?:version|ver|v|sdk)\s*\.?\s*(\d+)\b/);
   return m ? versionTagByMajor[m[1]] || null : null;
 }
-function rewriteVersionTag(facetFilters, targetTag) {
+function rewriteVersionTag(facetFilters, targetTag, keepTags = EMPTY_TAG_LIST) {
+  const keep = new Set(keepTags);
   const swap = (f) => {
     if (typeof f === "string") {
-      // Swap only the versioned docs tag (docusaurus_tag:docs-*). Leave
-      // docusaurus_tag:default (framework-agnostic / non-doc pages) and any
-      // other entry untouched, so the contextual OR isn't collapsed and those
-      // pages still match when a version is typed.
-      return f.startsWith("docusaurus_tag:docs-")
+      // Swap only the tag of the version the page is served from. Leave
+      // docusaurus_tag:default (framework-agnostic / non-doc pages), the
+      // always-on tags (API reference - see alwaysOnSearchTags in
+      // docusaurus.config.ts) and any other entry untouched, so the contextual
+      // OR isn't collapsed and that content still matches when a version is
+      // typed.
+      return f.startsWith("docusaurus_tag:docs-") && !keep.has(f)
         ? `docusaurus_tag:${targetTag}`
         : f;
     }
@@ -265,6 +289,15 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   // Version-routing map derived at build time from docsVersions (see config).
   const versionTagByMajor =
     siteConfig.customFields?.versionTagByMajor || EMPTY_VERSION_MAP;
+  // Indexed content Docusaurus does not tag for this build (API reference).
+  // Stable reference from siteConfig, so it is safe in memo dependencies.
+  const alwaysOnTagFilters = useMemo(
+    () =>
+      (siteConfig.customFields?.alwaysOnSearchTags || EMPTY_TAG_LIST).map(
+        (tag) => `docusaurus_tag:${tag}`,
+      ),
+    [siteConfig.customFields],
+  );
   const processSearchResultUrl = useSearchResultUrlProcessor();
   const contextualSearchFacetFilters = useAlgoliaContextualFacetFilters();
   const configFacetFilters = props.searchParameters?.facetFilters ?? [];
@@ -304,8 +337,12 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   }, [currentUrl]);
 
   const facetFilters = contextualSearch
-    ? // Merge contextual search filters with config filters
-      mergeFacetFilters(contextualSearchFacetFilters, configFacetFilters)
+    ? // Merge contextual search filters with config filters, after widening the
+      // contextual tag OR group with the tags Docusaurus cannot know about.
+      mergeFacetFilters(
+        withAlwaysOnTags(contextualSearchFacetFilters, alwaysOnTagFilters),
+        configFacetFilters,
+      )
     : // ... or use config facetFilters
       configFacetFilters;
 
@@ -560,7 +597,8 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
                 if (targetTag && params.facetFilters) {
                   params.facetFilters = rewriteVersionTag(
                     params.facetFilters,
-                    targetTag
+                    targetTag,
+                    alwaysOnTagFilters
                   );
                 }
                 if (analyticsPing) {
@@ -651,7 +689,12 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
       };
       return searchClient;
     },
-    [siteMetadata.docusaurusVersion, captureSearchDebounced, versionTagByMajor]
+    [
+      siteMetadata.docusaurusVersion,
+      captureSearchDebounced,
+      versionTagByMajor,
+      alwaysOnTagFilters,
+    ]
   );
   useDocSearchKeyboardEvents({
     isOpen,

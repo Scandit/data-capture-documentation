@@ -29,3 +29,11 @@ jobs:
 
       - name: Build documentation
         run: yarn build
+
+      # Compares build/search-tags.json (what this build's widget will filter on)
+      # against the live Algolia index. Catches a docs-version rename quietly
+      # dropping content out of search - see scripts/verify-search-tags.cjs.
+      # Not --strict on PRs: a crawl still catching up after a deploy warns
+      # rather than blocking unrelated work.
+      - name: Verify search tags
+        run: yarn verify:search-tags

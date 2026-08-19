@@ -106,9 +106,29 @@ const llmsIgnoreFiles: string[] = [
   ),
 ];
 
-// Single source of truth for docs versions (consumed by the preset below and by
-// the search widget's version-routing map). `current` is the live version; its
-// major comes from `label`. Frozen versions are keyed by their version string.
+// ---------------------------------------------------------------------------
+// SINGLE SOURCE OF TRUTH: docs versions and every `docusaurus_tag` derived
+// from them.
+//
+// Docusaurus stamps each page with `docusaurus_tag: docs-<pluginId>-<versionName>`
+// built from the version NAME - the key in `docsVersions` below - and never
+// from `label` (see docVersionSearchTag in @docusaurus/theme-common). The search
+// widget filters every query on the tag of the version it is served from, so
+// each of those strings is a load-bearing identity, and a release that renames a
+// version silently changes what search can reach.
+//
+// Therefore: nothing outside this block may write a `docs-default-*` literal, and
+// nothing may restate `lastVersion`. Everything below is derived, exported through
+// `customFields`, and consumed by src/theme/SearchBar. `yarn verify:search-tags`
+// checks the derived values against the live Algolia index, because a value
+// derived correctly from the wrong assumption is still wrong.
+// ---------------------------------------------------------------------------
+
+// The version served at the site root. Must be a key of `docsVersions`.
+// Preview builds restrict `onlyIncludeVersions` to ["current"], and Docusaurus
+// requires lastVersion to be one of the included versions, so previews follow it.
+const DOCS_LAST_VERSION = "8.5.3";
+
 const docsVersions: Record<
   string,
   {
@@ -138,13 +158,42 @@ const docsVersions: Record<
   },
 };
 
-// Derive the search widget's "major version typed in a query -> docusaurus_tag"
-// map from docsVersions so it can never drift from the actual versions. The
-// crawler stamps docusaurus_tag as `docs-default-<versionName>` (current ->
-// docs-default-current). Newest patch wins per major, and `current` always
-// wins its own major. Exposed via customFields and read in SearchBar.
+/** The only place a `docusaurus_tag` for a docs version is constructed. */
+const docVersionTag = (versionName: string): string =>
+  `docs-default-${versionName}`;
+
+/**
+ * Content that lives in the same Algolia index but is NOT a Docusaurus docs
+ * version, so Docusaurus never emits its tag and the contextual filter never
+ * includes it. Today that is the generated API reference under
+ * /data-capture-sdk/, which the Algolia crawler stamps `docs-default-current`.
+ *
+ * This value is owned by the Algolia crawler configuration, not by this repo, so
+ * it cannot be derived here - `yarn verify:search-tags` asserts it still matches
+ * the index and fails the build if the crawler is retagged.
+ *
+ * Why this exists: while `lastVersion` was "current" the API reference happened
+ * to share the guides' tag and rode along for free. Releasing 8.5.3 renamed the
+ * guides' version, the shared tag stopped being shared, and ~3,200 API reference
+ * pages silently dropped out of every search. Nothing failed - results just got
+ * quietly worse. Listing the tag explicitly is what makes it survive the next
+ * rename.
+ */
+const ALWAYS_ON_SEARCH_TAGS: string[] = [docVersionTag("current")];
+
+/**
+ * Map a major version typed in a query ("v7", "sdk 6") to the tag of the version
+ * a reader on that line is actually served.
+ *
+ * Priority per major: the site's `lastVersion` first, then the newest RELEASED
+ * version, and an `unreleased` version only when nothing else covers the major.
+ * The previous rule let `current` win its major unconditionally, which was
+ * correct only while `lastVersion` was "current"; once 8.6.0-beta became current
+ * and 8.5.3 became lastVersion, "v8" routed readers at the unreleased beta's tag.
+ */
 function buildVersionTagByMajor(
-  versions: Record<string, { label?: string }>,
+  versions: Record<string, { label?: string; banner: string }>,
+  lastVersion: string,
 ): Record<string, string> {
   const comparePatch = (a: string, b: string): number => {
     const pa = a.split(".").map(Number);
@@ -154,27 +203,81 @@ function buildVersionTagByMajor(
     }
     return 0;
   };
-  const best: Record<string, { label: string; isCurrent: boolean }> = {};
-  const out: Record<string, string> = {};
+
+  type Candidate = {
+    name: string;
+    label: string;
+    isLast: boolean;
+    unreleased: boolean;
+  };
+  const byMajor: Record<string, Candidate[]> = {};
+
   for (const [name, cfg] of Object.entries(versions)) {
-    const isCurrent = name === "current";
-    const label = isCurrent ? cfg.label || "" : name;
+    // The tag comes from the name; the number a user would type comes from the
+    // label for `current` and from the name itself for frozen versions.
+    const label = name === "current" ? cfg.label || "" : name;
     const major = label.split(".")[0];
     if (!major) continue;
-    const cur = best[major];
-    if (
-      !cur ||
-      isCurrent ||
-      (!cur.isCurrent && comparePatch(label, cur.label) > 0)
-    ) {
-      best[major] = { label, isCurrent };
-      out[major] = `docs-default-${name}`;
-    }
+    (byMajor[major] = byMajor[major] || []).push({
+      name,
+      label,
+      isLast: name === lastVersion,
+      unreleased: cfg.banner === "unreleased",
+    });
+  }
+
+  const out: Record<string, string> = {};
+  for (const [major, candidates] of Object.entries(byMajor)) {
+    const winner = candidates.slice().sort(
+      (a, b) =>
+        Number(b.isLast) - Number(a.isLast) ||
+        Number(a.unreleased) - Number(b.unreleased) ||
+        comparePatch(b.label, a.label),
+    )[0];
+    out[major] = docVersionTag(winner.name);
   }
   return out;
 }
 
-const versionTagByMajor = buildVersionTagByMajor(docsVersions);
+const versionTagByMajor = buildVersionTagByMajor(
+  docsVersions,
+  // Previews only build `current`, so route every major there rather than at
+  // frozen tags whose pages that build does not contain.
+  isPreviewBuild ? "current" : DOCS_LAST_VERSION,
+);
+
+/**
+ * Writes build/search-tags.json: the docusaurus_tag values this build actually
+ * makes reachable through search. `yarn verify:search-tags` diffs it against the
+ * live Algolia index; see scripts/verify-search-tags.cjs.
+ */
+function searchTagsManifestPlugin() {
+  return {
+    name: "search-tags-manifest",
+    async postBuild({ outDir }: { outDir: string }) {
+      const { writeFile } = await import("fs/promises");
+      const { join } = await import("path");
+      const lastVersion = isPreviewBuild ? "current" : DOCS_LAST_VERSION;
+      await writeFile(
+        join(outDir, "search-tags.json"),
+        JSON.stringify(
+          {
+            lastVersion,
+            // Always in Docusaurus's contextual filter.
+            defaultTag: "default",
+            // The tag every page at the site root emits.
+            lastVersionTag: docVersionTag(lastVersion),
+            alwaysOnTags: ALWAYS_ON_SEARCH_TAGS,
+            versionTagByMajor,
+          },
+          null,
+          2,
+        ) + "\n",
+        "utf8",
+      );
+    },
+  };
+}
 
 const config: Config = {
   title: "Scandit Developer Documentation",
@@ -183,10 +286,13 @@ const config: Config = {
   favicon: "img/sdk_icon.png",
   trailingSlash: true,
 
-  // Derived from docsVersions; read by the search widget (SearchBar) to route a
-  // version typed in a query to the right docusaurus_tag without a hardcoded map.
+  // The search widget's whole view of docusaurus_tag, derived above and passed
+  // through so SearchBar never constructs one of these strings itself.
   customFields: {
+    // Major typed in a query -> tag of the version a reader is actually served.
     versionTagByMajor,
+    // Indexed content Docusaurus does not tag for us (the API reference).
+    alwaysOnSearchTags: ALWAYS_ON_SEARCH_TAGS,
   },
 
   // Set the production url of your site here
@@ -452,6 +558,10 @@ const config: Config = {
     },
   ],
   ...(isPreviewBuild ? [stripPreviewMediaPlugin] : []),
+  // Publish the exact tag set the built widget filters on, so the search-tag
+  // gate can check a real build artifact instead of re-deriving the same
+  // assumption from this file and agreeing with itself.
+  searchTagsManifestPlugin,
 ],
 
   presets: [
@@ -481,11 +591,9 @@ const config: Config = {
           },
           showLastUpdateTime: false,
           includeCurrentVersion: true,
-          // Preview builds restrict onlyIncludeVersions to just "current" above,
-          // and Docusaurus requires lastVersion to be one of the included
-          // versions — so it must follow onlyIncludeVersions here rather than
-          // staying pinned to the real released version.
-          lastVersion: isPreviewBuild ? "current" : "8.5.3",
+          // See DOCS_LAST_VERSION above - declared once, next to docsVersions,
+          // so the search tag derivation and the docs plugin cannot disagree.
+          lastVersion: isPreviewBuild ? "current" : DOCS_LAST_VERSION,
           versions: docsVersions,
         },
         blog: false,
