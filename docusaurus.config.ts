@@ -193,15 +193,22 @@ const apiReferenceTag = (versionNumber: string): string =>
 /**
  * The API-reference tag that belongs with each docs version's own tag.
  *
- * The Algolia crawler is expected to derive its tag from the URL
- * (`/8.5/data-capture-sdk/...` -> `api-reference-8.5`), so a docs release never
- * requires a crawler change, and a new API-reference line never requires an edit
- * here: both sides read the version out of what they already have.
+ * This mirrors how the site actually links, which is the only thing the crawler
+ * can discover (the sitemap carries no /data-capture-sdk/ URLs at all):
  *
- * That decoupling is the point. Tagging the API reference with a docs version
- * NAME is what broke search in August 2026 - releasing 8.5.3 renamed the docs
- * from `docs-default-current` to `docs-default-8.5.3`, the API reference kept
- * the old name, and ~3,200 pages silently left every result.
+ *   - the version served at the root, and the in-development one, link to the
+ *     UNVERSIONED tree, /data-capture-sdk/... -> `api-reference-latest`
+ *   - every frozen version links to its own line,
+ *     /7.6/data-capture-sdk/... -> `api-reference-7.6`
+ *
+ * Nothing links to /8.5/data-capture-sdk/, so mapping the served version at
+ * `api-reference-8.5` would point at a tree the crawler never reaches - and the
+ * current API reference would drop out of search exactly as it did in August.
+ *
+ * Both sides read the version out of what they already have: this file out of
+ * docsVersions, the crawler out of the URL. Neither hard-codes one, which is the
+ * point - tagging the API reference with a docs version NAME is what broke
+ * search when releasing 8.5.3 renamed it.
  */
 function buildApiReferenceTags(
   versions: Record<string, { label?: string }>,
@@ -212,11 +219,14 @@ function buildApiReferenceTags(
   for (const [name, cfg] of Object.entries(versions)) {
     const number = name === "current" ? cfg.label || "" : name;
     if (!number) continue;
-    const tags = [apiReferenceTag(number)];
-    // Migration: the crawler currently stamps the whole (unversioned) API
-    // reference with one legacy tag. Keep it on the served version so search
-    // works whichever change lands first; `yarn verify:search-tags` says when
-    // the new tags are populated and this can go.
+    const servedAtRoot = name === lastVersion || name === "current";
+    const tags = [
+      servedAtRoot ? "api-reference-latest" : apiReferenceTag(number),
+    ];
+    // Migration: until the crawler is retagged, the whole API reference still
+    // carries one legacy tag. Keep it on the served version so search works
+    // whichever change lands first; `yarn verify:search-tags` says when the new
+    // tags are populated and this line can go.
     if (name === lastVersion) tags.push(legacyTag);
     out[docVersionTag(name)] = tags;
   }
