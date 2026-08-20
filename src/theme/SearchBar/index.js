@@ -137,31 +137,32 @@ const EMPTY_VERSION_MAP = {};
 const EMPTY_TAG_LIST = [];
 // `useAlgoliaContextualFacetFilters` returns [languageFilter, [tagFilter, ...]]:
 // a top-level AND whose one nested array is the OR group of docusaurus_tags.
-// Indexed content that Docusaurus never tags for this build (the API reference,
-// see alwaysOnSearchTags in docusaurus.config.ts) has to join that OR group -
-// appending it at the top level would AND it against the page's own tag and
-// match nothing at all.
-// `scopeFilters` limits WHERE the extra tags apply: the API reference documents
-// the current SDK, so a reader on a frozen legacy version must not get it (on a
-// 7.6.14 page it took one query from 53 hits to 73, all 20 extras inapplicable).
-// Injecting only when the page's own tag is in scope keeps legacy search clean.
-function withAlwaysOnTags(contextualFilters, tagFilters, scopeFilters) {
-  if (!tagFilters.length) return contextualFilters;
-  const inScope =
-    !scopeFilters.length ||
-    contextualFilters.some(
-      (entry) =>
-        Array.isArray(entry) && entry.some((t) => scopeFilters.includes(t)),
-    );
-  if (!inScope) return contextualFilters;
+// The API reference lives in the same index but Docusaurus never tags it, so it
+// has to join that OR group - appending at the top level would AND it against
+// the page's own tag and match nothing at all.
+//
+// It is joined per version: the API reference is published per major.minor line,
+// so a reader on 6.28.11 gets the 6.28 API reference and never the 8.x one.
+// `map` comes from customFields (built in docusaurus.config.ts) and is keyed by
+// the docs tag the page itself carries.
+const API_TAG_PREFIX = "docusaurus_tag:api-reference-";
+function apiTagsFor(tagGroup, map) {
+  for (const entry of tagGroup) {
+    const tags = map[String(entry).replace("docusaurus_tag:", "")];
+    if (tags) return tags.map((t) => `docusaurus_tag:${t}`);
+  }
+  return EMPTY_TAG_LIST;
+}
+function withApiReferenceTags(contextualFilters, map) {
+  if (!map || !Object.keys(map).length) return contextualFilters;
   let injected = false;
   const out = contextualFilters.map((entry) => {
     if (injected || !Array.isArray(entry)) return entry;
+    const extra = apiTagsFor(entry, map).filter((t) => !entry.includes(t));
     injected = true;
-    return [...entry, ...tagFilters.filter((t) => !entry.includes(t))];
+    return extra.length ? [...entry, ...extra] : entry;
   });
-  // No OR group to join (contextual search returned only flat entries): add one.
-  return injected ? out : [...out, tagFilters];
+  return out;
 }
 function versionTagInQuery(query, versionTagByMajor) {
   const q = (query || "").toLowerCase();
@@ -171,21 +172,28 @@ function versionTagInQuery(query, versionTagByMajor) {
   const m = q.match(/\b(?:version|ver|v|sdk)\s*\.?\s*(\d+)\b/);
   return m ? versionTagByMajor[m[1]] || null : null;
 }
-function rewriteVersionTag(facetFilters, targetTag, keepTags = EMPTY_TAG_LIST) {
-  const keep = new Set(keepTags);
+function rewriteVersionTag(facetFilters, targetTag, apiMap) {
+  // Typing "v7" must move the API reference to 7.x as well, or the reader gets
+  // 7.6 guides beside 8.5 API pages.
+  const targetApi = ((apiMap && apiMap[targetTag]) || []).map(
+    (t) => `docusaurus_tag:${t}`,
+  );
   const swap = (f) => {
     if (typeof f === "string") {
       // Swap only the tag of the version the page is served from. Leave
-      // docusaurus_tag:default (framework-agnostic / non-doc pages), the
-      // always-on tags (API reference - see alwaysOnSearchTags in
-      // docusaurus.config.ts) and any other entry untouched, so the contextual
-      // OR isn't collapsed and that content still matches when a version is
-      // typed.
-      return f.startsWith("docusaurus_tag:docs-") && !keep.has(f)
+      // docusaurus_tag:default (framework-agnostic / non-doc pages) and any
+      // other entry untouched, so the contextual OR isn't collapsed and those
+      // pages still match when a version is typed. API-reference tags are
+      // handled separately below, because they must follow the version too.
+      return f.startsWith("docusaurus_tag:docs-")
         ? `docusaurus_tag:${targetTag}`
         : f;
     }
-    return Array.isArray(f) ? f.map(swap) : f;
+    if (!Array.isArray(f)) return f;
+    // Swap the whole API-reference set for the target version's, keeping
+    // docusaurus_tag:default and anything else in the OR group untouched.
+    const rest = f.filter((t) => !String(t).startsWith(API_TAG_PREFIX));
+    return [...rest.map(swap), ...targetApi];
   };
   return swap(facetFilters);
 }
@@ -302,21 +310,9 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
     siteConfig.customFields?.versionTagByMajor || EMPTY_VERSION_MAP;
   // Indexed content Docusaurus does not tag for this build (API reference).
   // Stable reference from siteConfig, so it is safe in memo dependencies.
-  const alwaysOnTagFilters = useMemo(
-    () =>
-      (siteConfig.customFields?.alwaysOnSearchTags || EMPTY_TAG_LIST).map(
-        (tag) => `docusaurus_tag:${tag}`,
-      ),
-    [siteConfig.customFields],
-  );
-  // Versions those tags are in scope for; empty means "everywhere".
-  const alwaysOnScopeFilters = useMemo(
-    () =>
-      (siteConfig.customFields?.alwaysOnScopeTags || EMPTY_TAG_LIST).map(
-        (tag) => `docusaurus_tag:${tag}`,
-      ),
-    [siteConfig.customFields],
-  );
+  // Docs version tag -> the API-reference tag(s) documenting that version.
+  const apiReferenceTags =
+    siteConfig.customFields?.apiReferenceTagsByVersionTag || EMPTY_VERSION_MAP;
   const processSearchResultUrl = useSearchResultUrlProcessor();
   const contextualSearchFacetFilters = useAlgoliaContextualFacetFilters();
   const configFacetFilters = props.searchParameters?.facetFilters ?? [];
@@ -359,11 +355,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
     ? // Merge contextual search filters with config filters, after widening the
       // contextual tag OR group with the tags Docusaurus cannot know about.
       mergeFacetFilters(
-        withAlwaysOnTags(
-          contextualSearchFacetFilters,
-          alwaysOnTagFilters,
-          alwaysOnScopeFilters,
-        ),
+        withApiReferenceTags(contextualSearchFacetFilters, apiReferenceTags),
         configFacetFilters,
       )
     : // ... or use config facetFilters
@@ -621,7 +613,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
                   params.facetFilters = rewriteVersionTag(
                     params.facetFilters,
                     targetTag,
-                    alwaysOnTagFilters
+                    apiReferenceTags
                   );
                 }
                 if (analyticsPing) {
@@ -716,7 +708,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
       siteMetadata.docusaurusVersion,
       captureSearchDebounced,
       versionTagByMajor,
-      alwaysOnTagFilters,
+      apiReferenceTags,
     ]
   );
   useDocSearchKeyboardEvents({

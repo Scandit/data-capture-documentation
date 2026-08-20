@@ -185,11 +185,16 @@ async function main() {
   const reachable = new Set([
     manifest.defaultTag,
     manifest.lastVersionTag,
-    ...(manifest.alwaysOnTags || []),
+    // The API reference for the served version. The other versions' API tags
+    // are reachable from those versions' pages, so they count as routable.
+    ...((manifest.apiReferenceTagsByVersionTag || {})[manifest.lastVersionTag] || []),
   ]);
   // Reached only when a reader types a version. Checked for existence, but a tag
   // being routable does NOT make its content reachable by ordinary search.
-  const routable = new Set(Object.values(manifest.versionTagByMajor || {}));
+  const routable = new Set([
+    ...Object.values(manifest.versionTagByMajor || {}),
+    ...Object.values(manifest.apiReferenceTagsByVersionTag || {}).flat(),
+  ]);
 
   // Checked before any network call: typing the major the site is serving must
   // route to the version the site is serving. When 8.6.0-beta became `current`
@@ -258,16 +263,21 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   );
   // `default` legitimately holds only a handful of non-doc pages, so thinness is
   // only meaningful for the tags that carry the docs themselves.
-  const thin = [manifest.lastVersionTag, ...(manifest.alwaysOnTags || [])]
+  const thin = [manifest.lastVersionTag]
     .filter((tag) => counts[tag] !== undefined && counts[tag] < THIN_PAGE_THRESHOLD)
     .map((tag) => [tag, counts[tag]]);
   // An always-on tag that holds nothing is a migration in flight, not a broken
   // build: the repo can name the crawler's target tag before the crawler emits
   // it, or the other way round. Either order must keep CI green as long as one
   // always-on tag still carries the content.
-  const alwaysOn = manifest.alwaysOnTags || [];
+  // Flatten the per-version API-reference map: every tag it names must exist.
+  const apiMap = manifest.apiReferenceTagsByVersionTag || {};
+  const alwaysOn = [...new Set(Object.values(apiMap).flat())];
+  // API-reference tags are reported by the migration check above, so they are
+  // excluded here rather than counted twice.
+  const apiTags = new Set(alwaysOn);
   const missing = [manifest.defaultTag, manifest.lastVersionTag, ...routable]
-    .filter((tag) => tag && counts[tag] === undefined);
+    .filter((tag) => tag && !apiTags.has(tag) && counts[tag] === undefined);
   const pendingAlwaysOn = alwaysOn.filter((tag) => counts[tag] === undefined);
   const alwaysOnEmpty = alwaysOn.length > 0 && pendingAlwaysOn.length === alwaysOn.length;
 

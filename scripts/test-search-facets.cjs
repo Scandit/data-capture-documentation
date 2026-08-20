@@ -36,15 +36,26 @@ function extract(name) {
 }
 
 const EMPTY_TAG_LIST = [];
-const withAlwaysOnTags = eval(`(${extract("withAlwaysOnTags")})`);
+const API_TAG_PREFIX = "docusaurus_tag:api-reference-";
+const apiTagsFor = eval(`(${extract("apiTagsFor")})`);
+const withApiReferenceTags = eval(`(${extract("withApiReferenceTags")})`);
 const rewriteVersionTag = eval(`(${extract("rewriteVersionTag")})`);
 
-const API = "docusaurus_tag:docs-default-current";
 const SERVED = "docusaurus_tag:docs-default-8.5.3";
 const LEGACY = "docusaurus_tag:docs-default-7.6.14";
+const OLDEST = "docusaurus_tag:docs-default-6.28.11";
 const DEFAULT = "docusaurus_tag:default";
-const alwaysOn = [API];
-const scope = [SERVED, "docusaurus_tag:docs-default-current"];
+const API85 = "docusaurus_tag:api-reference-8.5";
+const API76 = "docusaurus_tag:api-reference-7.6";
+const API628 = "docusaurus_tag:api-reference-6.28";
+
+// Exactly what docusaurus.config.ts derives from docsVersions.
+const MAP = {
+  "docs-default-8.5.3": ["api-reference-8.5", "docs-default-current"],
+  "docs-default-7.6.14": ["api-reference-7.6"],
+  "docs-default-6.28.11": ["api-reference-6.28"],
+  "docs-default-current": ["api-reference-8.6"],
+};
 
 const tagsOf = (filters) => filters.find(Array.isArray) || [];
 let passed = 0;
@@ -56,39 +67,47 @@ function check(label, fn) {
 
 console.log("\nsearch facet filters\n");
 
-check("served version pulls the API reference in", () => {
-  const out = withAlwaysOnTags(["language:en", [DEFAULT, SERVED]], alwaysOn, scope);
-  assert.ok(tagsOf(out).includes(API));
+check("served version gets its own API reference", () => {
+  const out = withApiReferenceTags(["language:en", [DEFAULT, SERVED]], MAP);
+  assert.ok(tagsOf(out).includes(API85));
 });
 
-check("frozen legacy version does NOT pull it in", () => {
-  const out = withAlwaysOnTags(["language:en", [DEFAULT, LEGACY]], alwaysOn, scope);
-  assert.ok(!tagsOf(out).includes(API), "legacy readers must not get current-SDK API pages");
+check("a legacy version gets ITS API reference, not the current one", () => {
+  const out = withApiReferenceTags(["language:en", [DEFAULT, LEGACY]], MAP);
+  const tags = tagsOf(out);
+  assert.ok(tags.includes(API76), "7.6 reader must get the 7.6 API reference");
+  assert.ok(!tags.includes(API85), "and must not get the 8.5 one");
+});
+
+check("the oldest version too", () => {
+  const tags = tagsOf(withApiReferenceTags(["language:en", [DEFAULT, OLDEST]], MAP));
+  assert.ok(tags.includes(API628) && !tags.includes(API85));
 });
 
 check("extra tags join the OR group, never the top-level AND", () => {
-  const out = withAlwaysOnTags(["language:en", [DEFAULT, SERVED]], alwaysOn, scope);
+  const out = withApiReferenceTags(["language:en", [DEFAULT, SERVED]], MAP);
   assert.strictEqual(out.length, 2, "a top-level entry would AND and match nothing");
   assert.ok(tagsOf(out).includes(DEFAULT) && tagsOf(out).includes(SERVED));
 });
 
-check("no duplicate tag when always-on equals the page's own tag", () => {
-  const out = withAlwaysOnTags(["language:en", [DEFAULT, API]], alwaysOn, scope);
-  assert.strictEqual(tagsOf(out).filter((t) => t === API).length, 1);
+check("an unknown version tag adds nothing rather than guessing", () => {
+  const out = withApiReferenceTags(["language:en", [DEFAULT, "docusaurus_tag:docs-default-9.9.9"]], MAP);
+  assert.ok(!tagsOf(out).some((t) => t.startsWith(API_TAG_PREFIX)));
 });
 
-check("empty scope means everywhere (back-compatible default)", () => {
-  const out = withAlwaysOnTags(["language:en", [DEFAULT, LEGACY]], alwaysOn, []);
-  assert.ok(tagsOf(out).includes(API));
-});
-
-check("typing a version swaps the page tag but keeps the API reference", () => {
-  const filters = ["language:en", [DEFAULT, SERVED, API]];
-  const out = rewriteVersionTag(filters, "docs-default-7.6.14", alwaysOn);
+check("typing a version moves the guides AND the API reference together", () => {
+  const filters = ["language:en", [DEFAULT, SERVED, API85]];
+  const out = rewriteVersionTag(filters, "docs-default-7.6.14", MAP);
   const tags = tagsOf(out);
-  assert.ok(tags.includes("docusaurus_tag:docs-default-7.6.14"), "page tag must be swapped");
-  assert.ok(tags.includes(API), "always-on tag must survive the swap");
+  assert.ok(tags.includes(LEGACY), "page tag must be swapped");
+  assert.ok(tags.includes(API76), "API reference must follow to 7.6");
+  assert.ok(!tags.includes(API85), "the 8.5 API reference must be dropped");
   assert.ok(tags.includes(DEFAULT), "the OR group must not collapse");
+});
+
+check("no duplicate tag when the page already carries it", () => {
+  const out = withApiReferenceTags(["language:en", [DEFAULT, SERVED, API85]], MAP);
+  assert.strictEqual(tagsOf(out).filter((t) => t === API85).length, 1);
 });
 
 console.log(`\n${passed} passed\n`);
