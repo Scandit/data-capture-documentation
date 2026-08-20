@@ -8,7 +8,7 @@ keywords:
 
 # Custom Data Transfer
 
-The **Custom Data Transfer** feature in Scandit Express lets you import and export data using a configurable CSV file or Google Sheet. By aligning data formats between Scandit Express and your system, this feature ensures seamless integration into your workflow without the need for coding or reformatting.
+The **Custom Data Transfer** feature in Scandit Express lets you import and export data using a configurable CSV file or Google Sheet. By aligning data formats between Scandit Express and your system, this feature fits into your workflow without the need for coding or reformatting.
 
 ## Key Benefits
 

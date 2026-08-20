@@ -8,7 +8,7 @@ keywords:
 
 # Find Items
 
-Powered by [MatrixScan Find](https://www.scandit.com/products/matrixscan-find/), a feature available in the Scandit Smart Data Capture SDK, this mode enables you to speed up finding and picking workflows by scanning multiple items at once and highlighting the correct item(s) in real-time using an AR overlay.
+Powered by [MatrixScan Find](https://www.scandit.com/products/matrixscan-find/), a feature available in the Scandit Smart Data Capture SDK, this mode enables you to speed up finding and picking workflows by scanning multiple items at once and highlighting the correct items in real-time using an AR overlay.
 
 ## Create the Find List
 
@@ -61,7 +61,7 @@ Remember to use URL encoding for the list name and the list of barcodes:
 
 ### Integrate into Your App
 
-You can also integrate the links for your Find List(s) (with the barcodes to find embedded in them) in your own application. Follow the instructions above to create your list, and then display the link in your app or your website. If a user clicks on the link it will start Scandit Express and show the list of codes that need to be found.
+You can also integrate the links for your Find lists (with the barcodes to find embedded in them) in your own application. Follow the instructions above to create your list, and then display the link in your app or your website. If a user clicks on the link it will start Scandit Express and show the list of codes that need to be found.
 
  To integrate specific barcodes to find, you need to:
 
@@ -85,7 +85,7 @@ You can also integrate the links for your Find List(s) (with the barcodes to fin
     }
     ```
 
-    The space in QR codes is limited, so if you have more codes that can fit into a single QR code you can create multiple codes. A good rule of thumb is to limit to 2000 barcode characters for a single QR code. Simply adjust the “partsTotal” field (`"partsTotal": 2`) and number each code using the `"part"` field accordingly (`"part": 1` and `"part": 2`).
+    The space in QR codes is limited, so if you have more codes that can fit into a single QR code you can create multiple codes. A good rule of thumb is to limit to 2000 barcode characters for a single QR code. Adjust the “partsTotal” field (`"partsTotal": 2`) and number each code using the `"part"` field accordingly (`"part": 1` and `"part": 2`).
 
 2. Generate a QR code from the JSON string and display it to the user.
 

@@ -1,0 +1,24 @@
+extends: existence
+message: "'%s' should have one space."
+link: 'https://developers.google.com/style/sentence-spacing'
+level: error
+nonword: true
+action:
+  name: remove
+# Replaces Google.Spacing, which is disabled in .vale.ini.
+#
+# Google's version matches `[a-z][.?!][A-Z]` anywhere. In API documentation that
+# is overwhelmingly a code identifier, not a sentence: SymbologySettings.Checksums,
+# context.SetFrameSourceAsync(), Scandit.DataCapture.Core.Maui. Measured across
+# the docs it produced 233 findings, of which 154 were identifiers and exactly
+# one was a real missing space - so it reported 154 corrections that would each
+# have corrupted a symbol name.
+#
+# RE2 has no lookaround, so the sentence boundary is expressed positionally:
+# a whole lowercase word, then the punctuation, then a single Capitalised word,
+# with whitespace on both outer edges. An identifier fails at least one part -
+# either it starts with a capital, or the right-hand side carries internal
+# capitals (SetFrameSourceAsync) or a trailing "()".
+tokens:
+  - '(?:^|\s)[a-z]+[.?!] {2,}[A-Z][a-z]+(?:\s|$)'
+  - '(?:^|\s)[a-z]+[.?!][A-Z][a-z]+(?:\s|$)'

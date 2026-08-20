@@ -69,7 +69,7 @@ The following properties are available to configure custom fields:
 | Property | Required | Description |
 |----------|----------|-------------|
 | `valueRegexes` | Yes | The regex patterns that identify the target string in the scanned content. |
-| `anchorRegexes` | No | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
+| `anchorRegexes` | No | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (for example, when both packaging and expiry dates are present). |
 | `symbologies` | Yes (barcode fields) | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
 | `optional` | No | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
 

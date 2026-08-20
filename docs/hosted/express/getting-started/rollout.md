@@ -43,7 +43,7 @@ To automatically synchronize your Scandit Express configuration with Scandit, yo
 If your MDM system requires an AppConfig configuration, you can generate one [here](https://appconfig.jamfresearch.com/generator) by selecting Scandit Express as: `com.scandit.KeyboardWedge2/current`.
 :::
 
-### 3rd-Party Instructions
+### Third-Party Instructions
 
 This section provides links to the relevant sections of the documentation for popular MDM/EMM solutions:
 
@@ -95,7 +95,7 @@ To automatically synchronize your Scandit Express configuration with Scandit, yo
 
 ![Add Project Code](/img/express/rollout_android_2.png)
 
-### 3rd-Party Instructions
+### Third-Party Instructions
 
 This section provides links to the relevant sections of the documentation for popular MDM/EMM solutions:
 
@@ -108,7 +108,7 @@ This section provides links to the relevant sections of the documentation for po
 
 ## Updating Configuration
 
-To update the configuration of Scandit Express on all devices, simply change the configuration in the Scandit Dashboard. The new configuration will be automatically distributed to all devices.
+To update the configuration of Scandit Express on all devices, change the configuration in the Scandit Dashboard. The new configuration will be automatically distributed to all devices.
 
 Scandit Express automatically updates the license and configuration when restarted, but if you need to force a reload:
 

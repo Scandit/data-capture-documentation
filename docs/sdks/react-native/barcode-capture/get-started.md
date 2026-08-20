@@ -19,7 +19,7 @@ The general steps are:
 - Create a new [DataCaptureContext](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) instance, initialized with your license key.
 - Create a [BarcodeCaptureSettings](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-settings.html#class-scandit.datacapture.barcode.BarcodeCaptureSettings) and enable the [BarcodeSymbologies](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology) you want to read in your application.
 - Create a new [BarcodeCaptureMode](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance and initialize it with the settings created above.
-- Register a [BarcodeCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) to receive scan events. Process the successful scans according to your application’s needs, e.g. by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
+- Register a [BarcodeCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) to receive scan events. Process the successful scans according to your application’s needs, for example, by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
 - Obtain a [Camera](https://docs.scandit.com/data-capture-sdk/react-native/core/api/camera.html#class-scandit.datacapture.core.Camera) instance and set it as the frame source on the data capture context.
 - Display the camera preview by creating a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 - If displaying a preview, optionally create a new [BarcodeCaptureOverlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) and add it to [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) for a better visual feedback.
@@ -88,7 +88,7 @@ Each additional Symbology may reduce recognition speed, therefore only enable th
 	<TabItem value="ts">
 	```ts
 	const settings = new BarcodeCaptureSettings();
-	settings.codeDuplicateFilter = 300; // optionally add a 300ms timeout between scanning identical barcodes
+	settings.codeDuplicateFilter = 300; // optionally add a timeout of 300 milliseconds between scanning identical barcodes
 	settings.enableSymbologies([
 		Symbology.Code128,
 		Symbology.Code39,
@@ -106,7 +106,7 @@ Each additional Symbology may reduce recognition speed, therefore only enable th
 	<TabItem value="js">
 	```js
 	const settings = new BarcodeCaptureSettings();
-	settings.codeDuplicateFilter = 300; // optionally add a 300ms timeout between scanning identical barcodes
+	settings.codeDuplicateFilter = 300; // optionally add a timeout of 300 milliseconds between scanning identical barcodes
 	settings.enableSymbologies([
 		Symbology.Code128,
 		Symbology.Code39,
@@ -187,7 +187,7 @@ if (!barcode.data?.startsWith('09:')) {
 
 ## Use the Built-in Camera
 
-The `DataCaptureContext` supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
+The `DataCaptureContext` supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, for example, the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
 :::important
 In iOS, the user must explicitly grant permission for each app to access cameras. Your app needs to provide static messages to display to the user when the system asks for camera permission. To do that include the [NSCameraUsageDescription](https://developer.apple.com/documentation/bundleresources/information%5Fproperty%5Flist/nscamerausagedescription)
