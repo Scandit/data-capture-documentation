@@ -34,5 +34,10 @@ jobs:
       - name: Verify framework identifiers
         run: yarn verify:frameworks
 
+      # Pins the membership of every derived framework map. The refactor risk
+      # here is not a crash, it is a map quietly gaining or losing an entry.
+      - name: Test framework registry
+        run: yarn test:frameworks
+
       - name: Build documentation
         run: yarn build

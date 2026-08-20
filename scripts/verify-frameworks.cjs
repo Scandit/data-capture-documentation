@@ -27,26 +27,11 @@ const yaml = require("js-yaml");
 const ROOT = path.join(__dirname, "..");
 const DOCS = path.join(ROOT, "docs");
 
-// Code maps keyed by framework slug. Display-name-keyed maps (SkillsCallout's
-// FRAMEWORK_URL_PATH / FRAMEWORK_SLUG) are not listed: they key off display
-// names, so they are checked transitively through FRAMEWORK_MAPPING's values.
-const SLUG_KEYED_MAPS = [
-  { file: "src/components/utils/frameworks.ts", name: "FRAMEWORK_MAPPING" },
-  { file: "src/components/utils/frameworks.ts", name: "QUERY_FRAMEWORK_TO_PATH" },
-];
-
-// Slugs a given map deliberately does not carry, with the reason. Anything not
-// listed here shows up as a coverage gap.
-const KNOWN_GAPS = {
-  FRAMEWORK_MAPPING: {
-    hosted: "not an /sdks/ route - the hosted tree lives at /hosted/",
-  },
-  QUERY_FRAMEWORK_TO_PATH: {
-    hosted: "not an /sdks/ route",
-    titanium: "no Agent Skills page to route to",
-    linux: "no Agent Skills page to route to",
-  },
-};
+// The registry is now the only hand-written list of framework slugs in the
+// code; every map derives from it (src/constants/frameworks.ts). So this gate
+// checks the registry against the schema enum rather than each map: if those
+// two agree, every derived map agrees by construction.
+const REGISTRY_FILE = "src/constants/frameworks.ts";
 
 function enumSlugs() {
   const schema = yaml.load(
@@ -102,49 +87,38 @@ function declaredFrameworks(file) {
   return found;
 }
 
-/** Top-level keys of an exported object literal, or null if the shape changed. */
-function mapKeys(file, name) {
-  const src = fs.readFileSync(path.join(ROOT, file), "utf8");
-  const start = src.indexOf(`${name}`);
+/** The `slug:` values in the FRAMEWORKS registry, or null if its shape changed. */
+function registryFrameworkSlugs() {
+  const src = fs.readFileSync(path.join(ROOT, REGISTRY_FILE), "utf8");
+  const start = src.indexOf("export const FRAMEWORKS");
   if (start === -1) return null;
-  // Anchor on the assignment, not the first brace: a typed declaration puts an
-  // annotation object first (`FRAMEWORK_MAPPING: { [k: string]: string } = {`),
-  // and reading that instead yields zero keys - a gate that checks nothing while
-  // reporting success.
+  // Anchor on the assignment: the type annotation `FrameworkDef[]` puts an
+  // empty pair of brackets first, and reading those yields zero entries - a
+  // gate that checks nothing while reporting success.
   const eq = src.indexOf("=", start);
   if (eq === -1) return null;
-  const open = src.indexOf("{", eq);
+  const open = src.indexOf("[", eq);
   if (open === -1) return null;
   let depth = 0;
   let end = -1;
   for (let i = open; i < src.length; i += 1) {
-    if (src[i] === "{") depth += 1;
-    else if (src[i] === "}") {
+    if (src[i] === "[") depth += 1;
+    else if (src[i] === "]") {
       depth -= 1;
-      if (depth === 0) {
-        end = i;
-        break;
-      }
+      if (depth === 0) { end = i; break; }
     }
   }
   if (end === -1) return null;
-  // Strip comments first: a key preceded by an explanatory comment would
-  // otherwise not match, and silently read as a missing entry.
-  const body = src
-    .slice(open + 1, end)
-    .replace(new RegExp("/\\*[\\s\\S]*?\\*/", "g"), "")
-    .replace(new RegExp("//[^\\n]*", "g"), "");
-  const keys = [];
-  const re = /(?:^|[,{])\s*(?:'([^']+)'|"([^"]+)"|([A-Za-z_][\w-]*))\s*:/g;
+  const slugs = [];
+  const re = /slug:\s*"([^"]+)"/g;
   let m;
-  while ((m = re.exec(body))) keys.push(m[1] || m[2] || m[3]);
-  return keys;
+  while ((m = re.exec(src.slice(open + 1, end)))) slugs.push(m[1]);
+  return slugs;
 }
 
 function main() {
   const allowed = enumSlugs();
   const errors = [];
-  const notes = [];
 
   // 1. CONTENT
   const files = walk(DOCS);
@@ -161,28 +135,27 @@ function main() {
     }
   }
 
-  // 2. DRIFT + 3. COVERAGE
-  for (const { file, name } of SLUG_KEYED_MAPS) {
-    const keys = mapKeys(file, name);
-    if (keys && keys.length === 0) {
-      errors.push(`${file}: ${name} parsed to zero keys - this gate is not checking it`);
-      continue;
-    }
-    if (!keys) {
-      errors.push(
-        `${file}: could not read ${name} - its shape changed, so this gate is no longer checking it`,
-      );
-      continue;
-    }
-    for (const key of keys) {
-      if (!allowed.has(key)) {
-        errors.push(`${file}: ${name} keys off "${key}", which the enum does not define`);
+  // 2. DRIFT + 3. COVERAGE, checked against the registry the maps derive from.
+  const registrySlugs = registryFrameworkSlugs();
+  if (!registrySlugs) {
+    errors.push(
+      `${REGISTRY_FILE}: could not read the FRAMEWORKS registry - its shape changed, ` +
+        `so this gate is no longer checking it`,
+    );
+  } else if (registrySlugs.length === 0) {
+    errors.push(`${REGISTRY_FILE}: FRAMEWORKS parsed to zero entries`);
+  } else {
+    for (const slug of registrySlugs) {
+      if (!allowed.has(slug)) {
+        errors.push(`${REGISTRY_FILE}: registry defines "${slug}", docs-schema.yml does not`);
       }
     }
-    const gaps = KNOWN_GAPS[name] || {};
     for (const slug of allowed) {
-      if (!keys.includes(slug) && !(slug in gaps)) {
-        notes.push(`${name} has no entry for "${slug}"`);
+      if (!registrySlugs.includes(slug)) {
+        errors.push(
+          `docs-schema.yml allows "${slug}", the registry does not define it - a page ` +
+            `may use it and every component will silently resolve nothing`,
+        );
       }
     }
   }
@@ -191,12 +164,6 @@ function main() {
     `\nframework gate: ${files.length} docs scanned, ${pagesWithField} declare a framework`,
   );
   console.log(`enum (${allowed.size}): ${[...allowed].join(", ")}\n`);
-
-  if (notes.length) {
-    console.log("Coverage gaps (not failures - a component will resolve nothing here):");
-    for (const n of notes) console.log(`  - ${n}`);
-    console.log("");
-  }
 
   if (errors.length) {
     console.error(`FAIL: ${errors.length} framework identifier problem(s).\n`);

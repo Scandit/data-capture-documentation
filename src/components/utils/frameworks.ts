@@ -1,26 +1,20 @@
 import { withCurrentDocsPath } from '@site/src/constants/docsPaths';
+import {
+  FRAMEWORKS,
+  ROUTED_FRAMEWORKS,
+  AGENT_SKILL_FRAMEWORKS,
+} from '@site/src/constants/frameworks';
 
 // localStorage key the homepage framework selector writes and the shared
 // Agent Skills banner reads back. Both sides must use this constant so the
 // contract can't drift (a rename would otherwise silently fall back to iOS).
 export const FRAMEWORK_STORAGE_KEY = 'framework';
 
-export const FRAMEWORK_MAPPING: { [urlSlug: string]: string } = {
-  'ios': 'iOS',
-  'android': 'Android',
-  'cordova': 'Cordova',
-  'react-native': 'React Native',
-  'flutter': 'Flutter',
-  'kmp': 'Kotlin Multiplatform',
-  'capacitor': 'Capacitor',
-  'titanium': 'Titanium',
-  'web': 'Web',
-  'net-ios': '.NET iOS',
-  'net-android': '.NET Android',
-  // Without this, parseSdksRoute() resolved no framework at all for every
-  // /sdks/linux/ page. Found by `yarn verify:frameworks`.
-  'linux': 'Linux',
-};
+// Derived from the framework registry - see src/constants/frameworks.ts.
+// `hosted` is absent because it is not an /sdks/ route.
+export const FRAMEWORK_MAPPING: { [urlSlug: string]: string } = Object.fromEntries(
+  ROUTED_FRAMEWORKS.map((f) => [f.slug, f.display]),
+);
 
 export const URL_PRODUCT_MAPPING: { [urlSlug: string]: string } = {
   'label-capture': 'smart-label-capture',
@@ -71,27 +65,21 @@ export function parseSdksRoute(pathname: string): SdksRouteInfo {
 }
 
 // Maps the ?framework= query slug used on the homepage to an agent-skills URL path.
-export const QUERY_FRAMEWORK_TO_PATH: Record<string, string> = {
-  ios: 'ios',
-  android: 'android',
-  web: 'web',
-  cordova: 'cordova',
-  capacitor: 'capacitor',
-  flutter: 'flutter',
-  kmp: 'kmp',
-  'react-native': 'react-native',
-  'net-ios': 'net/ios',
-  'net-android': 'net/android',
-};
+// Maps a framework slug to its agent-skills URL path. Only frameworks that
+// actually have an Agent Skills page appear here - derived from the registry.
+export const QUERY_FRAMEWORK_TO_PATH: Record<string, string> = Object.fromEntries(
+  AGENT_SKILL_FRAMEWORKS.map((f) => [f.slug, f.routeSegment as string]),
+);
 
 // The homepage framework selector uses its own identifiers (see frameworkCardsArr)
 // that differ from the QUERY_FRAMEWORK_TO_PATH keys. Map them so
 // ?framework=react / netIos / netAndroid resolve correctly.
-const HOMEPAGE_FRAMEWORK_ALIASES: Record<string, string> = {
-  react: 'react-native',
-  netios: 'net-ios',
-  netandroid: 'net-android',
-};
+// The homepage framework selector uses its own identifiers (see
+// frameworkCardsArr) that differ from the canonical slugs. Declared as
+// `aliases` on each registry entry so a new spelling is added in one place.
+const HOMEPAGE_FRAMEWORK_ALIASES: Record<string, string> = Object.fromEntries(
+  FRAMEWORKS.flatMap((f) => (f.aliases || []).map((a) => [a, f.slug])),
+);
 
 // Normalizes a raw ?framework= value to a QUERY_FRAMEWORK_TO_PATH key, or ''
 // when it maps to no agent-skills page.
@@ -123,19 +111,25 @@ export function readSelectedFrameworkRaw(): string {
 }
 
 // Homepage selector slugs the shared product-picker banner hides for, because
-// there is no Agent Skill to route to. Xamarin (and its variants), Titanium and
-// Linux have no skills at all. Bare ".NET" is also hidden: it has no general
-// skill — the reader must pick a platform — so the banner stays hidden until
-// ".NET iOS" or ".NET Android" is selected (those slugs, netios/netandroid, are
-// intentionally NOT in this set, so the banner returns for them).
-const FRAMEWORKS_WITHOUT_AGENT_SKILLS = new Set<string>([
+// there is no Agent Skill to route to.
+//
+// Two sources, deliberately: the frameworks we document but have no skill for
+// come from the registry (so adding a skill flips one flag, not two lists), and
+// the selector-only identifiers below are spellings that are not canonical
+// frameworks at all - Xamarin is removed from 8.x and has no docs tree, and bare
+// ".NET" has no general skill because the reader must pick a platform first
+// (netios/netandroid are intentionally absent, so the banner returns for them).
+const SELECTOR_ONLY_WITHOUT_AGENT_SKILLS = [
   'xamarin',
   'xamarinios',
   'xamarinandroid',
   'xamarinforms',
-  'titanium',
-  'linux',
   'net',
+];
+
+const FRAMEWORKS_WITHOUT_AGENT_SKILLS = new Set<string>([
+  ...FRAMEWORKS.filter((f) => !f.agentSkills).map((f) => f.slug),
+  ...SELECTOR_ONLY_WITHOUT_AGENT_SKILLS,
 ]);
 
 // True unless the selected framework has no Agent Skills at all. Unknown/empty

@@ -14,7 +14,11 @@
  * Kept free of imports so docusaurus.config.ts can read it too: the config is
  * loaded by Node, where webpack's `@generated` alias does not resolve.
  */
-export const UNRELEASED_FRAMEWORK_SLUGS = ["kmp"];
+import { FRAMEWORKS } from "./frameworks";
+
+export const UNRELEASED_FRAMEWORK_SLUGS = FRAMEWORKS.filter(
+  (f) => f.unreleased,
+).map((f) => f.slug);
 
 /** True when `slug` is documented only in the current docs version. */
 export function isUnreleasedFramework(
