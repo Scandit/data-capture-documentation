@@ -2,7 +2,7 @@
 description: "Add MatrixScan Count to your React Native app: set up the mode, scan and count multiple barcodes, and handle the results."
 
 sidebar_position: 2
-framework: react
+framework: react-native
 keywords:
   - react
 ---

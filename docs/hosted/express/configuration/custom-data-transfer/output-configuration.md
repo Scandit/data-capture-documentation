@@ -1,6 +1,7 @@
 ---
 description: "Configure how Custom Data Transfer structures, transforms, and exports scanned data to external systems in Scandit Express."
-framework: express
+framework: hosted
+product: express
 sidebar_label: Output Configuration
 keywords:
   - express

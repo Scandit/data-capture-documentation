@@ -1,6 +1,7 @@
 ---
 description: "Set up online device pairing in Scandit Express to send scanned data to a web application."
-framework: express
+framework: hosted
+product: express
 keywords:
   - express
 ---

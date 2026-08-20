@@ -1,6 +1,7 @@
 ---
 description: "Use Device Pairing in Scandit Express to transfer scanned barcode data in real time from a sender device to the receiver running your app."
-framework: express
+framework: hosted
+product: express
 sidebar_label: Overview
 keywords:
   - express

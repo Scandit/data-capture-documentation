@@ -10,6 +10,8 @@ const { loadSchema, validateFile } = require("./frontmatter.cjs");
 const { checkLinks } = require("./links.cjs");
 
 const ROOT = process.cwd();
+// The ratchet base changedDocs() resolved, reused by frontmatterOnly().
+let lastRatchetBase = "";
 
 function sh(cmd) {
   // Surface git's stderr (do not swallow it) so a failed ratchet lookup is
@@ -45,10 +47,53 @@ function changedDocs() {
   try { out += "\n" + sh("git diff --name-only --diff-filter=ACMR -- docs"); } catch {}
   try { out += "\n" + sh("git diff --cached --name-only --diff-filter=ACMR -- docs"); } catch {}
   try { out += "\n" + sh("git ls-files --others --exclude-standard -- docs"); } catch {}
+  lastRatchetBase = base; // reused by frontmatterOnly()
   const files = [...new Set(out.split(/\r?\n/).filter(Boolean))];
   return files.filter(
     (f) => /\.(md|mdx)$/i.test(f) && !path.basename(f).startsWith("_") && fs.existsSync(path.join(ROOT, f))
   );
+}
+
+/** Everything after the frontmatter block, or the whole file if there is none. */
+function bodyOf(text) {
+  // git show hands back the repo blob with LF while the Windows working copy
+  // has CRLF; without this every file compares as changed and the skip never fires.
+  text = text.replace(/\r\n/g, "\n");
+  if (!text.startsWith("---")) return text;
+  const end = text.indexOf("\n---", 3);
+  return end === -1 ? text : text.slice(end + 4);
+}
+
+/**
+ * Files whose diff against the ratchet base touches frontmatter only.
+ *
+ * The ratchet checks a whole file as soon as a PR touches one line of it, which
+ * is right for prose someone is actually editing and wrong for a mechanical
+ * metadata pass: normalizing a `framework:` value across 117 pages dragged in
+ * 233 pre-existing Vale findings that the change neither caused nor altered.
+ * Nobody writes prose in frontmatter, so when the body is byte-identical to the
+ * base there is no prose to review, and the prose checks are skipped for that
+ * file. Schema and link checks still run on every changed file.
+ */
+function frontmatterOnly(files, base) {
+  const out = new Set();
+  if (!base) return out;
+  for (const f of files) {
+    let before;
+    try {
+      before = sh(`git show ${base}:${f}`);
+    } catch {
+      continue; // new file - it is all new, check everything
+    }
+    let after;
+    try {
+      after = fs.readFileSync(path.join(ROOT, f), "utf8");
+    } catch {
+      continue;
+    }
+    if (bodyOf(before).trim() === bodyOf(after).trim()) out.add(f);
+  }
+  return out;
 }
 
 function findVale() {
@@ -111,17 +156,27 @@ function main() {
   if (files.length === 0) { console.log("docs-gate: no changed docs — nothing to check."); process.exit(0); }
   console.log(`docs-gate: checking ${files.length} changed doc(s)…\n`);
 
+  // Prose checks only look at files whose body actually changed.
+  const metaOnly = frontmatterOnly(files, lastRatchetBase);
+  const proseFiles = files.filter((f) => !metaOnly.has(f));
+  if (metaOnly.size) {
+    console.log(
+      `docs-gate: ${metaOnly.size} file(s) changed frontmatter only - ` +
+        `skipping prose checks for them (body identical to base).\n`,
+    );
+  }
+
   const schema = loadSchema(path.join(ROOT, "docs-schema.yml"));
   let findings = [];
   for (const f of files) {
     findings.push(...validateFile(path.join(ROOT, f), schema).map((x) => ({ ...x, file: f })));
     findings.push(...checkLinks(path.join(ROOT, f)).map((x) => ({ ...x, file: f })));
   }
-  findings.push(...runCspell(files));
+  if (proseFiles.length) findings.push(...runCspell(proseFiles));
 
   const vale = findVale();
   if (vale) {
-    findings.push(...runVale(files, vale));
+    if (proseFiles.length) findings.push(...runVale(proseFiles, vale));
   } else if (process.env.CI) {
     // In CI, a missing Vale must fail — otherwise the headline prose-style check
     // silently no-ops while the job stays green. Locally it's still advisory.

@@ -2,7 +2,7 @@
 description: "Add MatrixScan AR to your React Native app: set up the view and the overlays that guide users to the right items."
 
 sidebar_position: 2
-framework: react
+framework: react-native
 keywords:
   - react
 ---

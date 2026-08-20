@@ -1,7 +1,8 @@
 ---
 description: "Find Items in Scandit Express, powered by MatrixScan Find, speeds up picking by scanning many items and highlighting the right ones in AR."
 
-framework: express
+framework: hosted
+product: express
 keywords:
   - express
 ---

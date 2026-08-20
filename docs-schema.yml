@@ -35,14 +35,30 @@ properties:
            matrixscan-ar, matrixscan-pick, barcode-selection, barcode-generator,
            id-capture, id-bolt, label-capture, parser, express, core, platform]
 
+  # Canonical framework slugs. These are the SSOT for every framework identifier
+  # in the repo: they are exactly the `/sdks/<slug>/` URL segments (with `hosted`
+  # for the /hosted/ tree), and src/components/utils/frameworks.ts must cover
+  # this same set - `yarn verify:frameworks` fails the build if the two drift.
+  #
+  # `kmp` (Kotlin Multiplatform) is documented only in the in-development docs
+  # version; that is tracked by UNRELEASED_FRAMEWORK_SLUGS in
+  # src/constants/unreleasedFrameworks.ts, not by leaving it out of this enum.
+  #
+  # Singular `framework` and plural `frameworks` share the set deliberately: a
+  # page states one platform or several, never two different vocabularies.
+  framework:
+    type: string
+    enum: [ios, android, web, react-native, flutter, cordova, capacitor, kmp,
+           titanium, linux, net-ios, net-android, hosted]
+
   frameworks:
     type: array
     minItems: 1
     uniqueItems: true
     items:
       type: string
-      enum: [ios, android, web, react-native, flutter, cordova, capacitor, titanium,
-             linux, net-ios, net-android, hosted]
+      enum: [ios, android, web, react-native, flutter, cordova, capacitor, kmp,
+             titanium, linux, net-ios, net-android, hosted]
 
   version_status:
     type: string
