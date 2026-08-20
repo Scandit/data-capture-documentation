@@ -16,7 +16,8 @@
     "typecheck": "tsc",
     "prepare": "husky",
     "docs:gate": "node scripts/docs-gate/index.cjs",
-    "docs:gate:setup": "node scripts/setup-vale.cjs"
+    "docs:gate:setup": "node scripts/setup-vale.cjs",
+    "verify:api-reference-seo": "node scripts/verify-api-reference-seo.cjs"
   },
   "dependencies": {
     "@docusaurus/core": "^3.4.0",
