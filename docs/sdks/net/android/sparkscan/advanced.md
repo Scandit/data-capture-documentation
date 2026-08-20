@@ -9,7 +9,7 @@ keywords:
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -22,7 +22,7 @@ SparkScan offers a built-in API to let you do this via [scandit.datacapture.barc
 <!--
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
 
 You can customize:
 
@@ -30,7 +30,7 @@ You can customize:
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\<2s) could allow the user to scan again without having to interact with the app, just momentarily pausing the workflow to acknowledge that a “special” barcode has been scanned.
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\<2s) could allow the user to scan again without having to interact with the app, just momentarily pausing the workflow to acknowledge that a “special” barcode has been scanned.
     :::
  
 * The color of the flashing screen upon scan. You can enable or disable the visual feedback via `scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.VisualFeedbackEnabled` and control the color via `scandit.datacapture.barcode.spark.ui.SparkScanViewFeedback`.

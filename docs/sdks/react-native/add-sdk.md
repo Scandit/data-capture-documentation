@@ -98,7 +98,7 @@ To add Scandit plugins from the package registry, run the corresponding commands
 	</TabItem>
 </Tabs>
 
-**Then add the plugin(s) for your desired functionality:**
+**Then add the plugins for your desired functionality:**
 
 <Tabs defaultValue="yarn" values={[
 	{label: 'Yarn', value: 'yarn'},
@@ -148,7 +148,7 @@ You can add only the plugins you need as described in the [Internal Dependencies
 
 #### Step 2: Extract and locate the plugins
 
-1. Extract the downloaded `.zip` file to a location of your choice (e.g., `~/Downloads/scandit-react-native-sdk/`)
+1. Extract the downloaded `.zip` file to a location of your choice (for example, `~/Downloads/scandit-react-native-sdk/`)
 2. The extracted archive contains multiple React Native plugin folders, each representing a different SDK module.
 
 #### Step 3: Install the plugins to your project
@@ -173,7 +173,7 @@ Navigate to your React Native project root directory and install the plugins usi
 	</TabItem>
 </Tabs>
 
-**Then add the plugin(s) for your desired functionality:**
+**Then add the plugins for your desired functionality:**
 
 <Tabs defaultValue="yarn" values={[
 	{label: 'Yarn', value: 'yarn'},

@@ -53,7 +53,7 @@ You will always need to add the `Scandit.DataCapture.Core` package, which contai
 
 In addition, depending on the data capture task, you will need a reference to:
 
-| Functionality | Description | Required Module(s) |
+| Functionality | Description | Required modules |
 | --- | --- | --- |
 | Barcode Capture | [ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api.html) if you want to use barcode-related functionality, such as barcode capture or MatrixScan. | _com.scandit.datacapture:barcode_ |
 | Parser | [ScanditParser API](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api.html) if you want to parse data strings, for instance, as found in barcodes, into a set of key-value mappings. | _com.scandit.datacapture:parser_ |
