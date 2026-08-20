@@ -50,6 +50,8 @@ const ORPHAN_PAGE_THRESHOLD = 50;
 // A tag the widget targets is expected to carry at least this many pages.
 const THIN_PAGE_THRESHOLD = 100;
 
+const NL = "\n";
+
 const DEFAULT_MANIFEST = path.join(__dirname, "..", "build", "search-tags.json");
 
 const argv = process.argv.slice(2);
@@ -259,9 +261,15 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   const thin = [manifest.lastVersionTag, ...(manifest.alwaysOnTags || [])]
     .filter((tag) => counts[tag] !== undefined && counts[tag] < THIN_PAGE_THRESHOLD)
     .map((tag) => [tag, counts[tag]]);
-  const missing = [...reachable, ...routable].filter(
-    (tag) => counts[tag] === undefined,
-  );
+  // An always-on tag that holds nothing is a migration in flight, not a broken
+  // build: the repo can name the crawler's target tag before the crawler emits
+  // it, or the other way round. Either order must keep CI green as long as one
+  // always-on tag still carries the content.
+  const alwaysOn = manifest.alwaysOnTags || [];
+  const missing = [manifest.defaultTag, manifest.lastVersionTag, ...routable]
+    .filter((tag) => tag && counts[tag] === undefined);
+  const pendingAlwaysOn = alwaysOn.filter((tag) => counts[tag] === undefined);
+  const alwaysOnEmpty = alwaysOn.length > 0 && pendingAlwaysOn.length === alwaysOn.length;
 
   let failed = process.exitCode === 1;
 
@@ -275,6 +283,16 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
       `\n  Either the widget must include the tag (alwaysOnSearchTags in\n` +
         `  docusaurus.config.ts) or the crawler must stop emitting it.`,
     );
+  }
+
+  if (pendingAlwaysOn.length) {
+    console.error(
+      `\n${alwaysOnEmpty ? "FAIL" : "NOTE"}: always-on tag(s) hold nothing yet: ` +
+        `${pendingAlwaysOn.join(", ")}.` + NL +
+        `  Expected while the Algolia crawler is being retagged. ` +
+        `${alwaysOnEmpty ? "No always-on tag has content - the API reference is unreachable." : "Another always-on tag still carries the content."}` + NL,
+    );
+    if (alwaysOnEmpty) failed = true;
   }
 
   if (missing.length) {

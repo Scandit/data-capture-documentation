@@ -35,5 +35,11 @@ jobs:
       # dropping content out of search - see scripts/verify-search-tags.cjs.
       # Not --strict on PRs: a crawl still catching up after a deploy warns
       # rather than blocking unrelated work.
+      # Asserts what the widget actually sends to Algolia: the API reference is
+      # reachable on the served version and absent on frozen legacy versions.
+      # Both failure modes are silent in production.
+      - name: Test search facet filters
+        run: yarn test:search-facets
+
       - name: Verify search tags
         run: yarn verify:search-tags

@@ -141,8 +141,19 @@ const EMPTY_TAG_LIST = [];
 // see alwaysOnSearchTags in docusaurus.config.ts) has to join that OR group -
 // appending it at the top level would AND it against the page's own tag and
 // match nothing at all.
-function withAlwaysOnTags(contextualFilters, tagFilters) {
+// `scopeFilters` limits WHERE the extra tags apply: the API reference documents
+// the current SDK, so a reader on a frozen legacy version must not get it (on a
+// 7.6.14 page it took one query from 53 hits to 73, all 20 extras inapplicable).
+// Injecting only when the page's own tag is in scope keeps legacy search clean.
+function withAlwaysOnTags(contextualFilters, tagFilters, scopeFilters) {
   if (!tagFilters.length) return contextualFilters;
+  const inScope =
+    !scopeFilters.length ||
+    contextualFilters.some(
+      (entry) =>
+        Array.isArray(entry) && entry.some((t) => scopeFilters.includes(t)),
+    );
+  if (!inScope) return contextualFilters;
   let injected = false;
   const out = contextualFilters.map((entry) => {
     if (injected || !Array.isArray(entry)) return entry;
@@ -298,6 +309,14 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
       ),
     [siteConfig.customFields],
   );
+  // Versions those tags are in scope for; empty means "everywhere".
+  const alwaysOnScopeFilters = useMemo(
+    () =>
+      (siteConfig.customFields?.alwaysOnScopeTags || EMPTY_TAG_LIST).map(
+        (tag) => `docusaurus_tag:${tag}`,
+      ),
+    [siteConfig.customFields],
+  );
   const processSearchResultUrl = useSearchResultUrlProcessor();
   const contextualSearchFacetFilters = useAlgoliaContextualFacetFilters();
   const configFacetFilters = props.searchParameters?.facetFilters ?? [];
@@ -340,7 +359,11 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
     ? // Merge contextual search filters with config filters, after widening the
       // contextual tag OR group with the tags Docusaurus cannot know about.
       mergeFacetFilters(
-        withAlwaysOnTags(contextualSearchFacetFilters, alwaysOnTagFilters),
+        withAlwaysOnTags(
+          contextualSearchFacetFilters,
+          alwaysOnTagFilters,
+          alwaysOnScopeFilters,
+        ),
         configFacetFilters,
       )
     : // ... or use config facetFilters

@@ -179,7 +179,34 @@ const docVersionTag = (versionName: string): string =>
  * quietly worse. Listing the tag explicitly is what makes it survive the next
  * rename.
  */
-const ALWAYS_ON_SEARCH_TAGS: string[] = [docVersionTag("current")];
+const ALWAYS_ON_SEARCH_TAGS: string[] = [
+  // Target state: a stable tag that is not a version name, so no release can
+  // ever rename it out from under the widget. Set this in the Algolia crawler's
+  // /data-capture-sdk/** action (the `docusaurus_tag` field of the record it
+  // returns). Until that crawl lands the tag holds nothing, which the gate
+  // reports as a pending migration rather than a failure.
+  "api-reference",
+  // Current state, kept so search keeps working whichever change lands first.
+  // Drop this entry once `yarn verify:search-tags` shows api-reference
+  // populated - it is also the 8.6.0 beta's own tag, which is why it is a bad
+  // long-term home for the API reference.
+  docVersionTag("current"),
+];
+
+/**
+ * The versions on which always-on content is in scope.
+ *
+ * The API reference documents the current SDK, so a reader on 7.6.14 or 6.28.11
+ * must not get it: measured on a legacy page, pulling it in took one query from
+ * 53 hits to 73, and the 20 extra were 8.x API pages that do not apply there.
+ * Before the 8.5.3 rename this was handled by accident - the API reference
+ * shared the served version's tag, so it appeared there and nowhere else. This
+ * makes that scoping explicit instead of incidental.
+ */
+const ALWAYS_ON_SCOPE_VERSIONS = (lastVersion: string): string[] => [
+  docVersionTag(lastVersion),
+  docVersionTag("current"),
+];
 
 /**
  * Map a major version typed in a query ("v7", "sdk 6") to the tag of the version
@@ -268,6 +295,7 @@ function searchTagsManifestPlugin() {
             // The tag every page at the site root emits.
             lastVersionTag: docVersionTag(lastVersion),
             alwaysOnTags: ALWAYS_ON_SEARCH_TAGS,
+            alwaysOnScopeTags: ALWAYS_ON_SCOPE_VERSIONS(lastVersion),
             versionTagByMajor,
           },
           null,
@@ -291,8 +319,12 @@ const config: Config = {
   customFields: {
     // Major typed in a query -> tag of the version a reader is actually served.
     versionTagByMajor,
-    // Indexed content Docusaurus does not tag for us (the API reference).
+    // Indexed content Docusaurus does not tag for us (the API reference)...
     alwaysOnSearchTags: ALWAYS_ON_SEARCH_TAGS,
+    // ...and the versions it is in scope for. Off on frozen legacy versions.
+    alwaysOnScopeTags: ALWAYS_ON_SCOPE_VERSIONS(
+      isPreviewBuild ? "current" : DOCS_LAST_VERSION,
+    ),
   },
 
   // Set the production url of your site here
