@@ -29,3 +29,11 @@ jobs:
 
       - name: Build documentation
         run: yarn build
+
+      # The versioned API reference publishes the same page under several URLs
+      # and declares no canonical form, so Google picks one - often the oldest.
+      # Warns for now: the API-reference HTML is generated outside this repo, so
+      # this cannot pass until that generator emits canonical/noindex. Add
+      # --strict to make it blocking once it does.
+      - name: Verify API-reference canonical tags
+        run: yarn verify:api-reference-seo
