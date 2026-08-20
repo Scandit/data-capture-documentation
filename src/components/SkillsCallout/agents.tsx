@@ -27,6 +27,16 @@ export interface AgentInstall {
   key: string;
   /** Label in the agent picker. */
   label: string;
+  /**
+   * Optgroup in the picker. Ungrouped entries are the coding agents; grouped
+   * ones are listed after them under this label.
+   */
+  group?: string;
+  /**
+   * Framework slugs this entry applies to. Omit for "every framework". AI app
+   * builders generate web apps, so they only make sense on the Web page.
+   */
+  frameworks?: string[];
   /** One-click marketplace install, offered before the commands. */
   oneClick?: { url: string; label: string; trackingId: string };
   /** Where the commands are typed, e.g. "in Claude Code" or "in a terminal". */
@@ -34,12 +44,17 @@ export interface AgentInstall {
   commands?: AgentCommand[];
   /** Anything else worth knowing, e.g. how to find the plugin by hand. */
   note?: React.ReactNode;
+  /** The platform's own instructions, linked after the steps. */
+  docs?: { url: string; label: string };
   /**
    * How to keep the plugin current once installed. Secondary to the install
    * steps, so any command here is inline rather than its own copy block.
    */
   update: React.ReactNode;
 }
+
+/** Picker group for platforms that install skills through their own UI. */
+export const APP_BUILDER_GROUP = 'AI app builders';
 
 export const AGENT_INSTALLS: AgentInstall[] = [
   {
@@ -153,4 +168,38 @@ export const AGENT_INSTALLS: AgentInstall[] = [
       </>
     ),
   },
+  {
+    key: 'bolt',
+    label: 'Bolt',
+    group: APP_BUILDER_GROUP,
+    frameworks: ['web'],
+    where:
+      'In Bolt, open the plus menu next to the prompt → Skills → Manage skills (inside a project: gear icon → Skills). Then Add skill → From GitHub, paste the repository URL (copy the block below), pick the skill under Skill folder name and click Create.',
+    commands: [{ command: skillsData.repo, trackingId: 'bolt-github' }],
+    note: (
+      <>
+        The dropdown lists every folder in the repository, so pick the skill by
+        the name it has in the table above; repeat the import for each skill you
+        want. Importing from a project's Skills page keeps the skill to that
+        project, while importing from <strong>Settings → Skills library</strong>{' '}
+        makes it available to every project in the workspace, switched on per
+        project.
+      </>
+    ),
+    docs: {
+      url: 'https://support.bolt.new/building/skills#import-skills-from-github',
+      label: "Bolt's Skills documentation",
+    },
+    update: 'Remove the skill and import it again.',
+  },
 ];
+
+/**
+ * Entries to offer for a framework: the coding agents always, plus the app
+ * builders only where their generated code matches the framework.
+ */
+export function agentInstallsFor(framework?: string): AgentInstall[] {
+  return AGENT_INSTALLS.filter(
+    (a) => !a.frameworks || !framework || a.frameworks.includes(framework),
+  );
+}
