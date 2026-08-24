@@ -176,12 +176,30 @@ check(".NET keeps its two-segment route", () => {
   assert.strictEqual(utils.QUERY_FRAMEWORK_TO_PATH["net-ios"], "net/ios");
 });
 
-check("skill-less framework prefixes derive to titanium and linux", () => {
-  const derived = registry.FRAMEWORKS.filter(
+check("skill-less frameworks are titanium and linux, on every docs version", () => {
+  const { frameworkFromPath } = registry;
+  const skillLess = registry.FRAMEWORKS.filter(
     (f) => !f.agentSkills && f.routeSegment !== null,
-  ).map((f) => `/sdks/${f.routeSegment}/`);
-  // The literal list DocItem carried before it was derived.
-  assert.deepStrictEqual(derived.sort(), ["/sdks/linux/", "/sdks/titanium/"]);
+  ).map((f) => f.slug);
+  // The literal list DocItem carried before it resolved through the registry.
+  assert.deepStrictEqual(skillLess.slice().sort(), ["linux", "titanium"]);
+
+  // The banner must stay hidden on versioned paths too. A startsWith() over
+  // '/sdks/titanium/' returned false for these, so the callout appeared on
+  // frameworks that have no Agent Skills page.
+  for (const p of [
+    "/sdks/titanium/core-concepts",
+    "/next/sdks/titanium/core-concepts",
+    "/7.6.14/sdks/titanium/core-concepts",
+    "/sdks/linux/overview",
+    "/next/sdks/linux/overview",
+  ]) {
+    assert.strictEqual(frameworkFromPath(p).agentSkills, false, p);
+  }
+  // And still shown where Agent Skills do exist.
+  for (const p of ["/sdks/ios/add-sdk", "/next/sdks/net/ios/add-sdk"]) {
+    assert.strictEqual(frameworkFromPath(p).agentSkills, true, p);
+  }
 });
 
 check("frameworks without Agent Skills are still hidden", () => {
