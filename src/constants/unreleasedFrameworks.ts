@@ -16,7 +16,10 @@
  */
 import { FRAMEWORKS } from "./frameworks";
 
-export const UNRELEASED_FRAMEWORK_SLUGS = FRAMEWORKS.filter(
+// Annotated `string[]`, not `FrameworkSlug[]`: this is a membership-test array
+// queried with arbitrary route segments, and narrowing it would make
+// `.includes(someString)` a type error at every call site.
+export const UNRELEASED_FRAMEWORK_SLUGS: string[] = FRAMEWORKS.filter(
   (f) => f.unreleased,
 ).map((f) => f.slug);
 

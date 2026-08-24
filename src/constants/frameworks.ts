@@ -17,9 +17,41 @@
  * Kept free of imports so docusaurus.config.ts can read it: the config is loaded
  * by Node, where webpack's `@generated` alias does not resolve.
  */
+/**
+ * Every canonical framework slug, as a type.
+ *
+ * Deliberately spelled out rather than derived from FRAMEWORKS: deriving it
+ * needs `as const`, which turns the registry into 13 exact tuple members and
+ * drops the optional `aliases` / `unreleased` keys from the ones that omit
+ * them, breaking every consumer that reads those fields. So this is a second
+ * copy of the vocabulary - guarded the same way the schema enum is, by
+ * `yarn verify:frameworks`, which compares union members, registry slugs and
+ * the docs-schema.yml enum three ways and fails if any pair diverges.
+ *
+ * Use this, not `string`, anywhere code names a framework. `string` is what let
+ * `netIos` and `react` drift into the frontmatter in the first place, and it is
+ * why a typo in a component - `['Web']` for `['web']` - still compiles and then
+ * silently matches nothing. The gate cannot see inside a component's props;
+ * the type can.
+ */
+export type FrameworkSlug =
+  | "ios"
+  | "android"
+  | "web"
+  | "react-native"
+  | "flutter"
+  | "cordova"
+  | "capacitor"
+  | "kmp"
+  | "net-ios"
+  | "net-android"
+  | "titanium"
+  | "linux"
+  | "hosted";
+
 export interface FrameworkDef {
   /** Canonical slug: the docs-schema.yml enum value, and the /sdks/<slug>/ segment. */
-  slug: string;
+  slug: FrameworkSlug;
   /** Human-readable name. Used as a map key by SkillsCallout, so it is load-bearing. */
   display: string;
   /**

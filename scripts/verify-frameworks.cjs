@@ -16,6 +16,15 @@
  *                This is the error that lets two maps disagree silently.
  *   3. COVERAGE  enum slugs absent from a code map are reported, so a gap is a
  *                known gap rather than a surprise at runtime.
+ *   3b. UNION    the FrameworkSlug union in the registry must list exactly the
+ *                same slugs as the registry entries. The union is a hand-written
+ *                second copy (deriving it with `as const` breaks the optional
+ *                fields), so it is guarded rather than trusted.
+ *   4. DATA      products.json and features.json state per-framework
+ *                availability keyed by DISPLAY name, not by slug - a second
+ *                vocabulary the enum cannot see. Every name they use must be a
+ *                registry display. Found `.Net iOS` / `.Net Android` against the
+ *                registry's `.NET iOS` / `.NET Android` on its first run.
  *
  * Usage: node scripts/verify-frameworks.cjs
  */
@@ -32,6 +41,11 @@ const DOCS = path.join(ROOT, "docs");
 // checks the registry against the schema enum rather than each map: if those
 // two agree, every derived map agrees by construction.
 const REGISTRY_FILE = "src/constants/frameworks.ts";
+
+// Per-framework availability data. Keyed by display name because that is what
+// the tables render, so these files cannot be checked against the slug enum -
+// they are checked against the registry's `display` values instead.
+const DATA_FILES = ["src/data/products.json", "src/data/features.json"];
 
 function enumSlugs() {
   const schema = yaml.load(
@@ -87,14 +101,18 @@ function declaredFrameworks(file) {
   return found;
 }
 
-/** The `slug:` values in the FRAMEWORKS registry, or null if its shape changed. */
-function registryFrameworkSlugs() {
+/**
+ * Values of `<field>:` inside the FRAMEWORKS registry literal, or null if its
+ * shape changed. Used for both `slug` and `display`.
+ */
+function registryValues(field) {
   const src = fs.readFileSync(path.join(ROOT, REGISTRY_FILE), "utf8");
   const start = src.indexOf("export const FRAMEWORKS");
   if (start === -1) return null;
-  // Anchor on the assignment: the type annotation `FrameworkDef[]` puts an
-  // empty pair of brackets first, and reading those yields zero entries - a
-  // gate that checks nothing while reporting success.
+  // Anchor on the assignment, not on the first `[`: a type annotation or a
+  // trailing `satisfies readonly FrameworkDef[]` both put a stray pair of
+  // brackets nearby, and reading those yields zero entries - a gate that checks
+  // nothing while reporting success.
   const eq = src.indexOf("=", start);
   if (eq === -1) return null;
   const open = src.indexOf("[", eq);
@@ -109,11 +127,44 @@ function registryFrameworkSlugs() {
     }
   }
   if (end === -1) return null;
-  const slugs = [];
-  const re = /slug:\s*"([^"]+)"/g;
+  const values = [];
+  const re = new RegExp(field + ':\\s*"([^"]+)"', "g");
+  const body = src.slice(open + 1, end);
   let m;
-  while ((m = re.exec(src.slice(open + 1, end)))) slugs.push(m[1]);
-  return slugs;
+  while ((m = re.exec(body))) values.push(m[1]);
+  return values;
+}
+
+/**
+ * Slugs listed in the `FrameworkSlug` union, or null if it is absent. Read from
+ * source text for the same reason the registry is: this gate must not import
+ * TypeScript.
+ */
+function unionSlugs() {
+  const src = fs.readFileSync(path.join(ROOT, REGISTRY_FILE), "utf8");
+  const start = src.indexOf("export type FrameworkSlug");
+  if (start === -1) return null;
+  const end = src.indexOf(";", start);
+  if (end === -1) return null;
+  return (src.slice(start, end).match(/"([^"]+)"/g) || []).map((q) => q.slice(1, -1));
+}
+
+/** Framework display names each data file keys its availability map by. */
+function dataFileFrameworkNames(rel) {
+  const full = path.join(ROOT, rel);
+  if (!fs.existsSync(full)) return null;
+  const items = JSON.parse(fs.readFileSync(full, "utf8"));
+  if (!Array.isArray(items)) return null;
+  const names = new Set();
+  for (const item of items) {
+    const fw = item && item.frameworks;
+    if (!fw) continue;
+    // products.json maps name -> {version, apiUrl}; features.json has both
+    // shapes across its history, so accept a plain list too.
+    if (Array.isArray(fw)) for (const n of fw) names.add(n);
+    else if (typeof fw === "object") for (const n of Object.keys(fw)) names.add(n);
+  }
+  return names;
 }
 
 function main() {
@@ -136,7 +187,7 @@ function main() {
   }
 
   // 2. DRIFT + 3. COVERAGE, checked against the registry the maps derive from.
-  const registrySlugs = registryFrameworkSlugs();
+  const registrySlugs = registryValues("slug");
   if (!registrySlugs) {
     errors.push(
       `${REGISTRY_FILE}: could not read the FRAMEWORKS registry - its shape changed, ` +
@@ -158,10 +209,67 @@ function main() {
         );
       }
     }
+
+    // 3b. UNION
+    const union = unionSlugs();
+    if (!union || union.length === 0) {
+      errors.push(
+        `${REGISTRY_FILE}: the FrameworkSlug union is missing or unreadable, so code ` +
+          `naming a framework is back to unchecked \`string\``,
+      );
+    } else {
+      for (const slug of union) {
+        if (!registrySlugs.includes(slug)) {
+          errors.push(
+            `${REGISTRY_FILE}: FrameworkSlug lists "${slug}", the registry has no such entry`,
+          );
+        }
+      }
+      for (const slug of registrySlugs) {
+        if (!union.includes(slug)) {
+          errors.push(
+            `${REGISTRY_FILE}: registry defines "${slug}", FrameworkSlug omits it - code ` +
+              `cannot name that framework without a cast`,
+          );
+        }
+      }
+    }
   }
+
+  // 4. DATA
+  const registryDisplays = registryValues("display");
+  let dataNamesChecked = 0;
+  if (!registryDisplays || registryDisplays.length === 0) {
+    errors.push(
+      `${REGISTRY_FILE}: could not read \`display\` values, so the data files are unchecked`,
+    );
+  } else {
+    for (const rel of DATA_FILES) {
+      const names = dataFileFrameworkNames(rel);
+      if (!names) {
+        errors.push(`${rel}: missing or not an array - per-framework data is unchecked`);
+        continue;
+      }
+      dataNamesChecked += names.size;
+      for (const name of names) {
+        if (!registryDisplays.includes(name)) {
+          errors.push(
+            `${rel}: framework "${name}" is not a display name in the registry - the ` +
+              `row renders but no component can match it`,
+          );
+        }
+      }
+    }
+  }
+  // Deliberately one-directional: a product or feature need not support every
+  // framework, so a registry display missing from a data file is not an error.
+  // Only a name the registry does not know is.
 
   console.log(
     `\nframework gate: ${files.length} docs scanned, ${pagesWithField} declare a framework`,
+  );
+  console.log(
+    `data files: ${DATA_FILES.length} checked, ${dataNamesChecked} framework name(s) resolved`,
   );
   console.log(`enum (${allowed.size}): ${[...allowed].join(", ")}\n`);
 
@@ -173,7 +281,7 @@ function main() {
     process.exit(1);
   }
 
-  console.log("OK: every framework identifier in docs and code is in the enum.\n");
+  console.log("OK: every framework identifier in docs, code and data resolves.\n");
 }
 
 main();
