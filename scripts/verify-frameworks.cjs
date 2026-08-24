@@ -20,6 +20,16 @@
  *                same slugs as the registry entries. The union is a hand-written
  *                second copy (deriving it with `as const` breaks the optional
  *                fields), so it is guarded rather than trusted.
+ *   5. UI COPIES  three more places still spell the vocabulary out by hand -
+ *                the FrameworksName enum, SearchBar's display map, and
+ *                useFrameworkItems' switcher list. They are NOT moved into the
+ *                registry: FrameworksName carries umbrella members (`net`,
+ *                `xamarin`) that are card groupings rather than frameworks,
+ *                SearchBar's tokens are dictated by the API reference's own
+ *                naming (`dotnet.ios`), and useFrameworkItems must keep Xamarin
+ *                for the 6.28 / 7.6 versioned docs that still exist. Moving
+ *                them would change behaviour; checking them cannot. So they are
+ *                guarded here the same way the schema enum is.
  *   4. DATA      products.json and features.json state per-framework
  *                availability keyed by DISPLAY name, not by slug - a second
  *                vocabulary the enum cannot see. Every name they use must be a
@@ -46,6 +56,30 @@ const REGISTRY_FILE = "src/constants/frameworks.ts";
 // the tables render, so these files cannot be checked against the slug enum -
 // they are checked against the registry's `display` values instead.
 const DATA_FILES = ["src/data/products.json", "src/data/features.json"];
+
+// Hand-written copies of the vocabulary that stay where they are, checked from
+// here. See check 5 in the header for why each one cannot simply be derived.
+const ENUM_FILE = "src/components/constants/frameworksName.ts";
+const SEARCHBAR_FILE = "src/theme/SearchBar/index.js";
+const SWITCHER_FILE = "src/utils/useFrameworkItems.js";
+
+// Members of FrameworksName that are deliberately not frameworks: they label
+// grouping cards on the homepage. Anything else in that enum must be a registry
+// display name.
+// Values these deliberately-not-a-framework members carry: the two umbrella
+// cards, plus the three Xamarin entries that only exist in versioned_docs.
+const ENUM_ALLOWED_EXTRA_DISPLAYS = [
+  ".NET",
+  "Xamarin",
+  "Xamarin iOS",
+  "Xamarin Android",
+  "Xamarin Forms",
+];
+
+// Xamarin is documented only in versioned_docs (6.28.11 / 7.6.14) and is absent
+// from the registry on purpose. The switcher still has to offer it there, so its
+// route forms are exempt rather than errors.
+const LEGACY_ROUTE_SEGMENTS = ["xamarin/ios", "xamarin/android", "xamarin/forms"];
 
 function enumSlugs() {
   const schema = yaml.load(
@@ -236,6 +270,60 @@ function main() {
     }
   }
 
+  // 5. UI COPIES - read the three hand-written lists out of source text.
+  const uiErrors = (label, file, found, allowed, extra) => {
+    if (found === null) {
+      errors.push(`${file}: could not read its framework list, so it is unchecked`);
+      return;
+    }
+    if (found.length === 0) {
+      errors.push(`${file}: parsed zero framework entries - its shape changed`);
+      return;
+    }
+    for (const value of found) {
+      if (!allowed.includes(value) && !(extra || []).includes(value)) {
+        errors.push(`${file}: ${label} "${value}" is not in the registry`);
+      }
+    }
+  };
+
+  const readList = (file, re, group) => {
+    const full = path.join(ROOT, file);
+    if (!fs.existsSync(full)) return null;
+    const src = fs.readFileSync(full, "utf8");
+    const out = [];
+    let m;
+    const rx = new RegExp(re.source, "gm");
+    while ((m = rx.exec(src))) out.push(m[group]);
+    return out;
+  };
+
+  // Values of one named object literal. Scoped by brace matching rather than by
+  // a line regex: SearchBar carries other `key: "value"` shapes (analytics
+  // payloads, query tokens) that a file-wide scan picks up as framework names.
+  const readObjectValues = (file, constName) => {
+    const full = path.join(ROOT, file);
+    if (!fs.existsSync(full)) return null;
+    const src = fs.readFileSync(full, "utf8");
+    const start = src.indexOf(`const ${constName}`);
+    if (start === -1) return null;
+    const open = src.indexOf("{", start);
+    if (open === -1) return null;
+    let depth = 0;
+    let end = -1;
+    for (let i = open; i < src.length; i += 1) {
+      if (src[i] === "{") depth += 1;
+      else if (src[i] === "}") {
+        depth -= 1;
+        if (depth === 0) { end = i; break; }
+      }
+    }
+    if (end === -1) return null;
+    return (src.slice(open + 1, end).match(/:\s*"([^"]+)"/g) || []).map((x) =>
+      x.slice(x.indexOf('"') + 1, -1),
+    );
+  };
+
   // 4. DATA
   const registryDisplays = registryValues("display");
   let dataNamesChecked = 0;
@@ -264,6 +352,46 @@ function main() {
   // Deliberately one-directional: a product or feature need not support every
   // framework, so a registry display missing from a data file is not an error.
   // Only a name the registry does not know is.
+
+  if (registryDisplays && registryDisplays.length) {
+    // FrameworksName: `ios = "iOS"` - the VALUE must be a registry display.
+    uiErrors(
+      "display name",
+      ENUM_FILE,
+      readList(ENUM_FILE, /^\s*(\w+)\s*=\s*"([^"]+)",/m, 2),
+      registryDisplays,
+      ENUM_ALLOWED_EXTRA_DISPLAYS,
+    );
+    // SearchBar's display map: `"react-native": "React Native",` - same rule on
+    // the value. Its KEYS are API-side tokens (`dotnet.ios`) and are not checked.
+    uiErrors(
+      "display name",
+      SEARCHBAR_FILE,
+      readObjectValues(SEARCHBAR_FILE, "API_FRAMEWORK_LABELS"),
+      registryDisplays,
+      [],
+    );
+    // useFrameworkItems: `label: "iOS"` on each switcher entry.
+    uiErrors(
+      "label",
+      SWITCHER_FILE,
+      readList(SWITCHER_FILE, /label:\s*"([^"]+)"/m, 1),
+      registryDisplays,
+      ["Xamarin iOS", "Xamarin Android", "Xamarin Forms"],
+    );
+  }
+
+  // And the switcher's route forms, against `routeSegment`.
+  const registrySegments = registryValues("routeSegment");
+  if (registrySegments) {
+    uiErrors(
+      "route",
+      SWITCHER_FILE,
+      readList(SWITCHER_FILE, /slug:\s*"([^"]+)"/m, 1),
+      registrySegments,
+      LEGACY_ROUTE_SEGMENTS,
+    );
+  }
 
   console.log(
     `\nframework gate: ${files.length} docs scanned, ${pagesWithField} declare a framework`,
