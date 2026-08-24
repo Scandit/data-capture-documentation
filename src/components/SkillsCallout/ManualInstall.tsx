@@ -18,6 +18,11 @@ export interface ManualInstallProps {
 const ManualInstall: React.FC<ManualInstallProps> = ({ framework }) => {
   const installs = agentInstallsFor(framework);
   const [agentKey, setAgentKey] = useState(AGENT_INSTALLS[0].key);
+  // Clamped to an entry the current framework actually offers: the initial key
+  // comes from the unfiltered list and the selection is not reset when the
+  // framework changes, so agentKey can name a filtered-out entry. Everything
+  // below renders from `agent`, including the select's value, so the picker
+  // can't point at an option that isn't there.
   const agent = installs.find((a) => a.key === agentKey) || installs[0];
   // Grouped entries (the app builders) only exist on some frameworks, so the
   // picker stays a flat list everywhere else.
@@ -52,7 +57,7 @@ const ManualInstall: React.FC<ManualInstallProps> = ({ framework }) => {
         <select
           id="skills-agent-picker"
           className={styles.manualSelect}
-          value={agentKey}
+          value={agent.key}
           onChange={handleChange}
         >
           {groupNames.length ? (
