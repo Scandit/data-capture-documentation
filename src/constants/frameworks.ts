@@ -132,3 +132,33 @@ export const ROUTED_FRAMEWORKS: FrameworkDef[] = FRAMEWORKS.filter(
 export const AGENT_SKILL_FRAMEWORKS: FrameworkDef[] = FRAMEWORKS.filter(
   (f) => f.agentSkills,
 );
+
+/**
+ * Routed frameworks, longest `routeSegment` first, so `net/ios` is tested
+ * before `net`. A one-segment framework must never shadow a two-segment one.
+ */
+const BY_ROUTE_DEPTH: FrameworkDef[] = ROUTED_FRAMEWORKS.slice().sort(
+  (a, b) => (b.routeSegment as string).length - (a.routeSegment as string).length,
+);
+
+/**
+ * The framework an `/sdks/` path belongs to, or undefined.
+ *
+ * Derived from `routeSegment`, which is the point: the regexes this replaces
+ * captured a single path segment, so `/sdks/net/ios/...` resolved to `net` -
+ * not a framework - and FeatureList rendered an empty table on both .NET
+ * platforms for the life of those pages. Anything matching one segment has the
+ * same bug waiting; anything reading this map cannot.
+ *
+ * A future multi-segment framework needs no change here. Tolerates a leading
+ * docs-version segment (`/next/`, `/7.6.14/`) because it anchors on `sdks/`
+ * rather than on the start of the path.
+ */
+export function frameworkFromPath(pathname: string): FrameworkDef | undefined {
+  const m = /(?:^|\/)sdks\/(.+)$/.exec(pathname);
+  if (!m) return undefined;
+  const rest = m[1];
+  return BY_ROUTE_DEPTH.find(
+    (f) => rest === f.routeSegment || rest.startsWith(`${f.routeSegment}/`),
+  );
+}

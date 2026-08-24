@@ -99,6 +99,35 @@ check("hosted is not an /sdks/ route", () => {
   assert.ok(!("hosted" in utils.QUERY_FRAMEWORK_TO_PATH));
 });
 
+check("frameworkFromPath resolves the two-segment .NET routes", () => {
+  const { frameworkFromPath } = registry;
+  assert.strictEqual(frameworkFromPath("/sdks/net/ios/add-sdk").slug, "net-ios");
+  assert.strictEqual(frameworkFromPath("/sdks/net/android/add-sdk").slug, "net-android");
+  // The bug: a single-segment match yielded `net`, which is not a framework.
+  assert.strictEqual(frameworkFromPath("/sdks/net/ios/add-sdk").display, ".NET iOS");
+});
+
+check("frameworkFromPath keeps single-segment routes working", () => {
+  const { frameworkFromPath } = registry;
+  assert.strictEqual(frameworkFromPath("/sdks/ios/barcode-capture/get-started").slug, "ios");
+  assert.strictEqual(frameworkFromPath("/sdks/react-native/add-sdk").slug, "react-native");
+  assert.strictEqual(frameworkFromPath("/sdks/linux/overview").slug, "linux");
+});
+
+check("frameworkFromPath tolerates a docs-version prefix", () => {
+  const { frameworkFromPath } = registry;
+  assert.strictEqual(frameworkFromPath("/next/sdks/net/ios/add-sdk").slug, "net-ios");
+  assert.strictEqual(frameworkFromPath("/7.6.14/sdks/ios/add-sdk").slug, "ios");
+});
+
+check("frameworkFromPath resolves nothing outside /sdks/", () => {
+  const { frameworkFromPath } = registry;
+  assert.strictEqual(frameworkFromPath("/hosted/id-bolt/overview"), undefined);
+  assert.strictEqual(frameworkFromPath("/"), undefined);
+  // `net` alone is a path prefix, not a framework.
+  assert.strictEqual(frameworkFromPath("/sdks/net/"), undefined);
+});
+
 check("linux resolves a framework (the bug the gate found)", () => {
   assert.strictEqual(utils.parseSdksRoute("/sdks/linux/barcode-capture/intro").framework, "Linux");
 });
