@@ -3,6 +3,7 @@ import {
   FRAMEWORKS,
   ROUTED_FRAMEWORKS,
   AGENT_SKILL_FRAMEWORKS,
+  frameworkFromRouteTail,
 } from '@site/src/constants/frameworks';
 
 // localStorage key the homepage framework selector writes and the shared
@@ -45,23 +46,30 @@ export interface SdksRouteInfo {
 }
 
 export function parseSdksRoute(pathname: string): SdksRouteInfo {
-  // Tolerate a leading docs-version segment (/next/, /7.6.14/, ...): only the
-  // version served at the site root has none, so matching on /sdks/ alone would
-  // silently fail on every other version.
-  const match = pathname.match(
-    /^(?:\/(?:next|\d+\.\d+\.\d+))?\/sdks\/((?:net\/)?[^\/]+)\/([^\/]+)(?:\/([^\/]+))?/,
-  );
+  // Anchored, with an optional docs-version segment (/next/, /7.6.14/, ...):
+  // only the version served at the site root has none. Left unanchored,
+  // /foo/sdks/ios/... would parse as a real product route.
+  const match = /^(?:\/(?:next|\d+\.\d+\.\d+))?\/sdks\/(.+)$/.exec(pathname);
   if (!match) return {};
 
-  const rawFramework = match[1];
-  const rawProduct = match[2];
-  const last = match[3];
+  // Which framework the tail belongs to is the registry's business - it owns
+  // `routeSegment`, including the two-segment .NET routes this function used to
+  // hardcode as `(?:net\/)?` and then undo with `.replace('/', '-')`. That copy
+  // is why FeatureList's own regex could disagree with this one.
+  const def = frameworkFromRouteTail(match[1]);
+  if (!def || def.routeSegment === null) return {};
 
-  const frameworkSlug = rawFramework.replace('/', '-');
-  const framework = FRAMEWORK_MAPPING[frameworkSlug];
+  const rest = match[1].slice(def.routeSegment.length).replace(/^\//, '');
+  const [rawProduct, last] = rest.split('/');
+  // A product segment is required: /sdks/ios/ on its own is not a product page.
+  if (!rawProduct) return {};
+
   const product = URL_PRODUCT_MAPPING[rawProduct] || rawProduct;
-
-  return { framework, product, lastSegment: last };
+  // `lastSegment` is omitted rather than set to undefined, so the returned shape
+  // matches what the previous regex produced for a two-segment route.
+  return last
+    ? { framework: def.display, product, lastSegment: last }
+    : { framework: def.display, product };
 }
 
 // Maps the ?framework= query slug used on the homepage to an agent-skills URL path.

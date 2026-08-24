@@ -128,6 +128,45 @@ check("frameworkFromPath resolves nothing outside /sdks/", () => {
   assert.strictEqual(frameworkFromPath("/sdks/net/"), undefined);
 });
 
+// Captured from parseSdksRoute BEFORE it moved onto the shared registry
+// matcher. Collapsing two parsers into one is only safe if the survivor answers
+// identically, so this pins every branch: two-segment routes, version prefixes,
+// URL_PRODUCT_MAPPING rewrites, the mandatory product segment, the anchor that
+// rejects /foo/sdks/..., and `lastSegment` being absent rather than undefined
+// when there is no third segment.
+const PARSE_SDKS_ROUTE_BASELINE = [
+  ["/sdks/ios/barcode-capture/get-started", { framework: "iOS", product: "barcode-capture", lastSegment: "get-started" }],
+  ["/sdks/net/ios/sparkscan/intro", { framework: ".NET iOS", product: "sparkscan", lastSegment: "intro" }],
+  ["/sdks/net/android/matrixscan/intro", { framework: ".NET Android", product: "matrixscan-batch", lastSegment: "intro" }],
+  ["/sdks/linux/barcode-capture/intro", { framework: "Linux", product: "barcode-capture", lastSegment: "intro" }],
+  ["/next/sdks/ios/label-capture/intro", { framework: "iOS", product: "smart-label-capture", lastSegment: "intro" }],
+  ["/7.6.14/sdks/net/ios/add-sdk", { framework: ".NET iOS", product: "add-sdk" }],
+  ["/sdks/ios/matrixscan/intro", { framework: "iOS", product: "matrixscan-batch", lastSegment: "intro" }],
+  ["/sdks/web/label-capture/label-definitions", { framework: "Web", product: "smart-label-capture", lastSegment: "label-definitions" }],
+  ["/sdks/titanium/core-concepts/x", { framework: "Titanium", product: "core-concepts", lastSegment: "x" }],
+  ["/sdks/ios/", {}],
+  ["/sdks/ios", {}],
+  ["/sdks/net/", {}],
+  ["/hosted/id-bolt/overview", {}],
+  ["/", {}],
+  ["/foo/sdks/ios/x/y", {}],
+];
+
+check("parseSdksRoute is unchanged by sharing the registry matcher", () => {
+  for (const [input, expected] of PARSE_SDKS_ROUTE_BASELINE) {
+    assert.deepStrictEqual(utils.parseSdksRoute(input), expected, input);
+  }
+});
+
+check("both path parsers agree on every routed framework", () => {
+  const { frameworkFromPath } = registry;
+  for (const f of registry.ROUTED_FRAMEWORKS) {
+    const p = `/sdks/${f.routeSegment}/some-product/some-page`;
+    assert.strictEqual(frameworkFromPath(p).slug, f.slug, `frameworkFromPath ${p}`);
+    assert.strictEqual(utils.parseSdksRoute(p).framework, f.display, `parseSdksRoute ${p}`);
+  }
+});
+
 check("linux resolves a framework (the bug the gate found)", () => {
   assert.strictEqual(utils.parseSdksRoute("/sdks/linux/barcode-capture/intro").framework, "Linux");
 });
@@ -135,6 +174,14 @@ check("linux resolves a framework (the bug the gate found)", () => {
 check(".NET keeps its two-segment route", () => {
   assert.strictEqual(utils.parseSdksRoute("/sdks/net/ios/sparkscan/intro").framework, ".NET iOS");
   assert.strictEqual(utils.QUERY_FRAMEWORK_TO_PATH["net-ios"], "net/ios");
+});
+
+check("skill-less framework prefixes derive to titanium and linux", () => {
+  const derived = registry.FRAMEWORKS.filter(
+    (f) => !f.agentSkills && f.routeSegment !== null,
+  ).map((f) => `/sdks/${f.routeSegment}/`);
+  // The literal list DocItem carried before it was derived.
+  assert.deepStrictEqual(derived.sort(), ["/sdks/linux/", "/sdks/titanium/"]);
 });
 
 check("frameworks without Agent Skills are still hidden", () => {

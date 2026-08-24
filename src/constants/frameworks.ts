@@ -142,23 +142,33 @@ const BY_ROUTE_DEPTH: FrameworkDef[] = ROUTED_FRAMEWORKS.slice().sort(
 );
 
 /**
+ * The framework a path tail after `/sdks/` belongs to, or undefined.
+ *
+ * THE one place that knows how a route segment maps to a framework. Both path
+ * parsers call it: FeatureList via `frameworkFromPath`, and `parseSdksRoute` on
+ * the tail its own anchored regex captured. They used to answer this question
+ * separately, with different regexes - one of which captured a single segment,
+ * so `/sdks/net/ios/...` resolved to `net`, which is not a framework, and
+ * FeatureList rendered an empty table on both .NET platforms for the life of
+ * those pages.
+ *
+ * Derived from `routeSegment`, longest first, so a future multi-segment
+ * framework needs no change in either caller.
+ */
+export function frameworkFromRouteTail(tail: string): FrameworkDef | undefined {
+  return BY_ROUTE_DEPTH.find(
+    (f) => tail === f.routeSegment || tail.startsWith(`${f.routeSegment}/`),
+  );
+}
+
+/**
  * The framework an `/sdks/` path belongs to, or undefined.
  *
- * Derived from `routeSegment`, which is the point: the regexes this replaces
- * captured a single path segment, so `/sdks/net/ios/...` resolved to `net` -
- * not a framework - and FeatureList rendered an empty table on both .NET
- * platforms for the life of those pages. Anything matching one segment has the
- * same bug waiting; anything reading this map cannot.
- *
- * A future multi-segment framework needs no change here. Tolerates a leading
- * docs-version segment (`/next/`, `/7.6.14/`) because it anchors on `sdks/`
- * rather than on the start of the path.
+ * Anchors on `sdks/` rather than the start of the path, so docs-version
+ * prefixes (`/next/`, `/7.6.14/`) work. Use `parseSdksRoute` instead when the
+ * product segment is needed too, or when a path outside `/sdks/` must not match.
  */
 export function frameworkFromPath(pathname: string): FrameworkDef | undefined {
   const m = /(?:^|\/)sdks\/(.+)$/.exec(pathname);
-  if (!m) return undefined;
-  const rest = m[1];
-  return BY_ROUTE_DEPTH.find(
-    (f) => rest === f.routeSegment || rest.startsWith(`${f.routeSegment}/`),
-  );
+  return m ? frameworkFromRouteTail(m[1]) : undefined;
 }

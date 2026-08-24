@@ -7,6 +7,7 @@ import type { WrapperProps } from '@docusaurus/types';
 import SkillsCallout from '@site/src/components/SkillsCallout';
 import skillsData from '@site/src/data/skills.json';
 import { parseSdksRoute } from '@site/src/components/utils/frameworks';
+import { FRAMEWORKS } from '@site/src/constants/frameworks';
 import { isOnFallbackDenylist } from '@site/src/components/SkillsCallout/routes';
 
 type Props = WrapperProps<typeof ContentType>;
@@ -14,7 +15,12 @@ type Props = WrapperProps<typeof ContentType>;
 const KNOWN_PRODUCTS = new Set(Object.keys(skillsData.products));
 
 // Frameworks with no Agent Skills at all — never show the callout there.
-const SKILL_LESS_FRAMEWORK_PREFIXES = ['/sdks/titanium/', '/sdks/linux/'];
+// Derived from the registry's `agentSkills` flag rather than listed here: the
+// two prefixes were a hand-written copy, and a framework gaining or losing an
+// Agent Skills page would not have updated it.
+const SKILL_LESS_FRAMEWORK_PREFIXES = FRAMEWORKS.filter(
+  (f) => !f.agentSkills && f.routeSegment !== null,
+).map((f) => `/sdks/${f.routeSegment}/`);
 
 export default function ContentWrapper(props: Props): JSX.Element {
   const { pathname } = useLocation();
