@@ -14,8 +14,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/serial-number-barcode.html#serial-number-barcode" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/serial-number-barcode.html#serial-number-barcode" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/serial-number-barcode.html#serial-number-barcode" }
     }
   },
   {
@@ -33,8 +33,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/part-number-barcode.html#part-number-barcode" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/part-number-barcode.html#part-number-barcode" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/part-number-barcode.html#part-number-barcode" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/part-number-barcode.html#part-number-barcode" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/part-number-barcode.html#part-number-barcode" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/part-number-barcode.html#part-number-barcode" }
     }
   },
   {
@@ -52,8 +52,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/imei-one-barcode.html#imei-one-barcode" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/imei-one-barcode.html#imei-one-barcode" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/imei-one-barcode.html#imei-one-barcode" }
     }
   },
   {
@@ -71,8 +71,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/imei-two-barcode.html#imei-two-barcode" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/imei-two-barcode.html#imei-two-barcode" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/imei-two-barcode.html#imei-two-barcode" }
     }
   },
   {
@@ -90,8 +90,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/unit-price-text.html#unit-price-text" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/unit-price-text.html#unit-price-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/unit-price-text.html#unit-price-text" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/unit-price-text.html#unit-price-text" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/unit-price-text.html#unit-price-text" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/unit-price-text.html#unit-price-text" }
     }
   },
   {
@@ -109,8 +109,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/total-price-text.html#total-price-text" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/total-price-text.html#total-price-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/total-price-text.html#total-price-text" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/total-price-text.html#total-price-text" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/total-price-text.html#total-price-text" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/total-price-text.html#total-price-text" }
     }
   },
   {
@@ -128,8 +128,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/weight-text.html#weight-text" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/weight-text.html#weight-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/weight-text.html#weight-text" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/weight-text.html#weight-text" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/weight-text.html#weight-text" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/weight-text.html#weight-text" }
     }
   },
   {
@@ -147,8 +147,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/packing-date-text.html#packing-date-text" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/packing-date-text.html#packing-date-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/packing-date-text.html#packing-date-text" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/packing-date-text.html#packing-date-text" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/packing-date-text.html#packing-date-text" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/packing-date-text.html#packing-date-text" }
     }
   },
   {
@@ -166,8 +166,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/expiry-date-text.html#expiry-date-text" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/expiry-date-text.html#expiry-date-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/expiry-date-text.html#expiry-date-text" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/expiry-date-text.html#expiry-date-text" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/expiry-date-text.html#expiry-date-text" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/expiry-date-text.html#expiry-date-text" }
     }
   },
   {
@@ -185,8 +185,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.3", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/date-text.html#date-text" },
       "Cordova": { "version": "8.3", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/date-text.html#date-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/date-text.html#date-text" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/date-text.html#date-text" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/date-text.html#date-text" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/date-text.html#date-text" }
     }
   },
   {
@@ -204,8 +204,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.PriceCaptureDefinitionWithName" }
     }
   },
   {
@@ -223,8 +223,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.VinLabelDefinitionWithName" }
     }
   },
   {
@@ -242,8 +242,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/label-definition.html#method-scandit.datacapture.label.LabelDefinition.SevenSegmentDisplayLabelDefinitionWithName" }
     }
   },
   {
@@ -261,8 +261,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/receipt-scanning-result.html#receipt-scanning-result" }
     }
   },
   {
@@ -280,8 +280,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/custom-barcode.html#custom-barcode" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/custom-barcode.html#custom-barcode" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/custom-barcode.html#custom-barcode" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/custom-barcode.html#custom-barcode" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/custom-barcode.html#custom-barcode" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/custom-barcode.html#custom-barcode" }
     }
   },
   {
@@ -299,8 +299,8 @@
       "Kotlin Multiplatform": { "version": "8.6" },
       "Capacitor": { "version": "8.0", "apiUrl": "https://docs.scandit.com/data-capture-sdk/capacitor/label-capture/api/custom-text.html#custom-text" },
       "Cordova": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/cordova/label-capture/api/custom-text.html#custom-text" },
-      ".Net Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/custom-text.html#custom-text" },
-      ".Net iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/custom-text.html#custom-text" }
+      ".NET Android": { "version": "8.1", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/custom-text.html#custom-text" },
+      ".NET iOS": { "version": "8.2", "apiUrl": "https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/custom-text.html#custom-text" }
     }
   }
 ]

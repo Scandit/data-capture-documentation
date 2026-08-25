@@ -5,7 +5,8 @@ sidebar_position: 1
 sidebar_label: "Overview"
 title: "ID Bolt"
 displayed_sidebar: boltSidebar
-framework: bolt
+framework: hosted
+product: id-bolt
 keywords:
   - bolt
 ---

@@ -2,7 +2,7 @@
 description: "Barcode Selection lets users tap or aim to pick one barcode among many in your .NET Android app."
 sidebar_position: 1
 pagination_prev: null
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 ---

@@ -2,7 +2,8 @@
 description: "Overview of the configuration options available in Scandit Express and how to set them up."
 
 toc_max_heading_level: 4
-framework: express
+framework: hosted
+product: express
 keywords:
   - express
 ---

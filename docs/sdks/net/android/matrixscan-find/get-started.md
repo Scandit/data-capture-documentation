@@ -1,7 +1,7 @@
 ---
 description: "Add MatrixScan Find to your .NET Android app to search for and highlight specific items with the camera."
 sidebar_position: 2
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 ---

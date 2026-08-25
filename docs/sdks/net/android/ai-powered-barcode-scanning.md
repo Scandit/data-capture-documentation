@@ -1,7 +1,7 @@
 ---
 description: "import AIPoweredBarcodeScanning from '../../../partials/_ai-powered-barcode-scanning.mdx';"
 toc_max_heading_level: 4
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 ---
