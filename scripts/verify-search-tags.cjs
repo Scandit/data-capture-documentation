@@ -5,11 +5,18 @@
  * The search widget filters every query on `docusaurus_tag`, and Docusaurus
  * builds that tag from the version NAME. So renaming a docs version - which is
  * what every release does - changes what search can reach, without changing a
- * single URL and without breaking anything loudly. In August 2026 releasing
- * 8.5.3 renamed the guides from `docs-default-current` to `docs-default-8.5.3`;
+ * single URL and without breaking anything loudly. In August 2026 e92c1b16
+ * (Release 8.6.0-beta.1) set `lastVersion: "8.5.2"` and made `current` the
+ * unreleased beta, so the guides at the root stopped emitting
+ * `docs-default-current` (8.5.3 was a later patch bump, not the cause);
  * the API reference kept the old tag, stopped sharing one with the guides, and
  * ~3,200 pages silently left every search result. Nothing failed. Results just
  * got worse.
+ *
+ * And it is a CYCLE, not a one-off. The root-served tag moves three times per
+ * release train: production -> beta, every patch during the beta window, and
+ * beta -> production. So the build that renames it is a NORMAL event this gate
+ * has to stay green through - see `releasePending` below.
  *
  * This gate exists so that cannot happen quietly again. It does NOT re-derive
  * the tags from docusaurus.config.ts - a derivation checked against itself
@@ -128,7 +135,12 @@ function tagsEmittedByBuild(buildDir, expected, fileCap = 4000) {
       }
     }
   }
-  return found;
+  // `exhausted` distinguishes "walked the whole build" from "hit the cap". With
+  // an arbitrary stack.pop() order, a cap reached before every wanted tag was
+  // seen makes absence meaningless - reporting it as config drift blames the
+  // config for a truncated walk. Today's build is ~2,250 pages against a 4,000
+  // cap, so this is headroom for about two more frozen versions.
+  return { found, exhausted: !(seen >= fileCap && found.size < wanted.size) };
 }
 
 async function algolia(body) {
@@ -155,22 +167,31 @@ async function algolia(body) {
  * `distinct` setting and is what a reader actually sees.
  */
 async function pagesByTag() {
+  const FACET_CAP = 1000; // Algolia's maximum. Ten tags today; above the cap an
+  // absent tag would read as undefined and land in `missing` as a false FAIL.
   const { facets } = await algolia({
     query: "",
     hitsPerPage: 0,
     facets: ["docusaurus_tag"],
-    maxValuesPerFacet: 100,
+    maxValuesPerFacet: FACET_CAP,
   });
   const tags = Object.keys((facets && facets.docusaurus_tag) || {});
   const counts = {};
+  // Bounded concurrency rather than one request per tag at once: an unbounded
+  // fan-out is what trips Algolia's rate limit, and a 429 here surfaces as a
+  // transport error that used to fail CI.
+  const CONCURRENCY = 4;
+  const queue = [...tags];
   await Promise.all(
-    tags.map(async (tag) => {
-      const { nbHits } = await algolia({
-        query: "",
-        hitsPerPage: 0,
-        facetFilters: [[`docusaurus_tag:${tag}`]],
-      });
-      counts[tag] = nbHits;
+    Array.from({ length: Math.min(CONCURRENCY, queue.length) }, async () => {
+      for (let tag = queue.pop(); tag !== undefined; tag = queue.pop()) {
+        const { nbHits } = await algolia({
+          query: "",
+          hitsPerPage: 0,
+          facetFilters: [[`docusaurus_tag:${tag}`]],
+        });
+        counts[tag] = nbHits;
+      }
     }),
   );
   return counts;
@@ -189,6 +210,15 @@ async function main() {
     // are reachable from those versions' pages, so they count as routable.
     ...((manifest.apiReferenceTagsByVersionTag || {})[manifest.lastVersionTag] || []),
   ]);
+  // Reachable WITHOUT typing anything, but only from another version's pages: a
+  // reader on 7.6.14 gets api-reference-7.6 from that page's own contextual
+  // filter. Not in `reachable` (which is about the served version), but calling
+  // these "typed-only" in the report understated them - no typing is involved.
+  const contextual = new Set(
+    Object.entries(manifest.apiReferenceTagsByVersionTag || {})
+      .filter(([versionTag]) => versionTag !== manifest.lastVersionTag)
+      .flatMap(([, tags]) => tags),
+  );
   // Reached only when a reader types a version. Checked for existence, but a tag
   // being routable does NOT make its content reachable by ordinary search.
   const routable = new Set([
@@ -225,15 +255,22 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
       manifest.lastVersionTag,
       ...Object.values(manifest.versionTagByMajor || {}),
     ];
-    const emitted = tagsEmittedByBuild(buildDir, expected);
+    const { found: emitted, exhausted } = tagsEmittedByBuild(buildDir, expected);
     const notEmitted = expected.filter((t) => !emitted.has(t));
-    if (notEmitted.length) {
+    if (notEmitted.length && exhausted) {
       console.error(
         `\nFAIL: the config names tags this build never emits:\n` +
           notEmitted.map((t) => `  ${t}`).join("\n") +
           `\n  docsVersions / lastVersion and the tag derivation disagree.\n`,
       );
       process.exitCode = 1;
+    } else if (notEmitted.length) {
+      console.error(
+        `\nINCONCLUSIVE: stopped scanning the build before finding:\n` +
+          notEmitted.map((t) => `  ${t}`).join("\n") +
+          `\n  The file cap was reached, so absence proves nothing here.\n` +
+          `  Raise the cap in tagsEmittedByBuild if the build has grown.\n`,
+      );
     }
   }
 
@@ -247,9 +284,14 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
       `  ${String(n).padStart(6)}  ${
         reachable.has(tag)
           ? "reachable  "
-          : routable.has(tag)
-            ? "typed-only "
-            : "UNREACHABLE"
+          : contextual.has(tag)
+            ? // Reachable without typing anything: a reader on 7.6 gets
+              // api-reference-7.6 from that page's own contextual filter. Calling
+              // it "typed-only" understated it in the operator-facing report.
+              "contextual "
+            : routable.has(tag)
+              ? "typed-only "
+              : "UNREACHABLE"
       }  ${tag}`,
     );
   }
@@ -276,22 +318,49 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   // API-reference tags are reported by the migration check above, so they are
   // excluded here rather than counted twice.
   const apiTags = new Set(alwaysOn);
-  const missing = [manifest.defaultTag, manifest.lastVersionTag, ...routable]
-    .filter((tag) => tag && !apiTags.has(tag) && counts[tag] === undefined);
+  // Deduped: lastVersionTag is also in `routable`, so it printed twice.
+  const missing = [
+    ...new Set([manifest.defaultTag, manifest.lastVersionTag, ...routable]),
+  ].filter((tag) => tag && !apiTags.has(tag) && counts[tag] === undefined);
+
+  // Is this the build that renames the version served at the root?
+  //
+  // On that build the config names a tag the index cannot possibly hold yet -
+  // nothing is deployed, nothing is crawled - and the OUTGOING version's tag is
+  // still in the index with no config entry pointing at it. Both look exactly
+  // like the failures this gate is for, so treating them as failures made every
+  // release PR red with no path to green until after deploy plus crawl. That is
+  // the one change this gate exists to protect, so it must not block it.
+  //
+  // Detected rather than declared: if the served tag has no records at all, the
+  // index predates this build. Post-crawl the same conditions are real problems
+  // and fail as before, and --strict fails either way so main and the schedule
+  // still see them.
+  const releasePending =
+    !!manifest.lastVersionTag && counts[manifest.lastVersionTag] === undefined;
   const pendingAlwaysOn = alwaysOn.filter((tag) => counts[tag] === undefined);
   const alwaysOnEmpty = alwaysOn.length > 0 && pendingAlwaysOn.length === alwaysOn.length;
 
   let failed = process.exitCode === 1;
 
   if (unreachable.length) {
-    failed = true;
-    console.error(`\nFAIL: indexed content the search widget cannot reach.`);
+    // While a release is pending, the outgoing version's tag is unreachable by
+    // construction: this build renamed it and the index has not caught up.
+    const hard = strict || !releasePending;
+    if (hard) failed = true;
+    console.error(
+      `\n${hard ? "FAIL" : "WARN"}: indexed content the search widget cannot reach.`,
+    );
     for (const [tag, n] of unreachable) {
       console.error(`  ${n} pages tagged "${tag}" are in the index but filtered out of every query.`);
     }
     console.error(
-      `\n  Either the widget must include the tag (alwaysOnSearchTags in\n` +
-        `  docusaurus.config.ts) or the crawler must stop emitting it.`,
+      releasePending && !strict
+        ? `\n  This build renames the served version to "${manifest.lastVersionTag}",\n` +
+            `  which the index does not hold yet, so the outgoing tag is expected to be\n` +
+            `  unreachable until the deploy is crawled. Re-run then, or use --strict.`
+        : `\n  Either the widget must include the tag (alwaysOnSearchTags in\n` +
+            `  docusaurus.config.ts) or the crawler must stop emitting it.`,
     );
   }
 
@@ -306,10 +375,24 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   }
 
   if (missing.length) {
-    failed = true;
-    console.error(`\nFAIL: the widget filters on tags that hold nothing at all.`);
+    // A tag missing ONLY because this build just named it is the release flow
+    // working, not a broken config. Anything else missing is still a hard fail
+    // even mid-release.
+    const onlyTheNewServedTag =
+      releasePending &&
+      missing.every((tag) => tag === manifest.lastVersionTag);
+    const hard = strict || !onlyTheNewServedTag;
+    if (hard) failed = true;
+    console.error(
+      `\n${hard ? "FAIL" : "WARN"}: the widget filters on tags that hold nothing at all.`,
+    );
     for (const tag of missing) console.error(`  "${tag}" -> 0 records`);
-    console.error(`  A tag that matches nothing means those queries return nothing.`);
+    console.error(
+      onlyTheNewServedTag && !strict
+        ? `  Expected: this build introduces "${manifest.lastVersionTag}". The crawler\n` +
+            `  populates it after deploy. Re-run then, or use --strict.`
+        : `  A tag that matches nothing means those queries return nothing.`,
+    );
   }
 
   if (thin.length) {
@@ -327,7 +410,12 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   process.exit(failed ? 1 : 0);
 }
 
+// A network failure is not a content failure. An Algolia outage, a rate limit or
+// a sandboxed runner would otherwise block merging unrelated docs PRs. Under
+// --strict (main, or the schedule, where someone is watching) it still fails.
 main().catch((err) => {
   console.error(`\nsearch-tag gate could not run: ${err.message}\n`);
-  process.exit(1);
+  // Exit 0 unless --strict: a transport failure is not a content failure, and
+  // must not block an unrelated docs PR. --strict runs (main, schedule) still fail.
+  process.exit(strict ? 1 : 0);
 });

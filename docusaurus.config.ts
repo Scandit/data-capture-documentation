@@ -129,6 +129,11 @@ const llmsIgnoreFiles: string[] = [
 // requires lastVersion to be one of the included versions, so previews follow it.
 const DOCS_LAST_VERSION = "8.5.3";
 
+// The version actually served at the root of THIS build. Preview builds only
+// build `current`, so routing a major at a frozen tag would point at pages the
+// build does not contain. Declared once: it was restated at four call sites.
+const effectiveLastVersion = isPreviewBuild ? "current" : DOCS_LAST_VERSION;
+
 const docsVersions: Record<
   string,
   {
@@ -173,11 +178,17 @@ const docVersionTag = (versionName: string): string =>
  * the index and fails the build if the crawler is retagged.
  *
  * Why this exists: while `lastVersion` was "current" the API reference happened
- * to share the guides' tag and rode along for free. Releasing 8.5.3 renamed the
- * guides' version, the shared tag stopped being shared, and ~3,200 API reference
- * pages silently dropped out of every search. Nothing failed - results just got
- * quietly worse. Listing the tag explicitly is what makes it survive the next
- * rename.
+ * to share the guides' tag and rode along for free. That stopped at e92c1b16
+ * (Release 8.6.0-beta.1), which set `lastVersion: "8.5.2"` and made `current`
+ * the unreleased beta - the guides at the root stopped emitting
+ * `docs-default-current`, the shared tag stopped being shared, and ~3,200 API
+ * reference pages silently dropped out of every search. Nothing failed; results
+ * just got quietly worse. 8.5.3 was a later patch bump, not the cause.
+ *
+ * And it is a CYCLE, not a one-off: the root-served tag moves on the
+ * production -> beta transition, on every patch during the beta window, and
+ * again on beta -> production. Listing the tag explicitly is what makes it
+ * survive each turn of that cycle.
  */
 /**
  * The API reference is published per major.minor line, at
@@ -208,11 +219,10 @@ const apiReferenceTag = (versionNumber: string): string =>
  * Both sides read the version out of what they already have: this file out of
  * docsVersions, the crawler out of the URL. Neither hard-codes one, which is the
  * point - tagging the API reference with a docs version NAME is what broke
- * search when releasing 8.5.3 renamed it.
+ * search when the 8.6.0-beta.1 release moved the root-served tag (e92c1b16).
  */
 function buildApiReferenceTags(
   versions: Record<string, { label?: string }>,
-  legacyTag: string,
   lastVersion: string,
 ): Record<string, string[]> {
   const out: Record<string, string[]> = {};
@@ -223,11 +233,6 @@ function buildApiReferenceTags(
     const tags = [
       servedAtRoot ? "api-reference-latest" : apiReferenceTag(number),
     ];
-    // Migration: until the crawler is retagged, the whole API reference still
-    // carries one legacy tag. Keep it on the served version so search works
-    // whichever change lands first; `yarn verify:search-tags` says when the new
-    // tags are populated and this line can go.
-    if (name === lastVersion) tags.push(legacyTag);
     out[docVersionTag(name)] = tags;
   }
   return out;
@@ -295,7 +300,7 @@ const versionTagByMajor = buildVersionTagByMajor(
   docsVersions,
   // Previews only build `current`, so route every major there rather than at
   // frozen tags whose pages that build does not contain.
-  isPreviewBuild ? "current" : DOCS_LAST_VERSION,
+  effectiveLastVersion,
 );
 
 /**
@@ -309,7 +314,7 @@ function searchTagsManifestPlugin() {
     async postBuild({ outDir }: { outDir: string }) {
       const { writeFile } = await import("fs/promises");
       const { join } = await import("path");
-      const lastVersion = isPreviewBuild ? "current" : DOCS_LAST_VERSION;
+      const lastVersion = effectiveLastVersion;
       await writeFile(
         join(outDir, "search-tags.json"),
         JSON.stringify(
@@ -321,7 +326,6 @@ function searchTagsManifestPlugin() {
             lastVersionTag: docVersionTag(lastVersion),
             apiReferenceTagsByVersionTag: buildApiReferenceTags(
               docsVersions,
-              docVersionTag("current"),
               lastVersion,
             ),
             versionTagByMajor,
@@ -351,8 +355,7 @@ const config: Config = {
     // reader on 6.28.11 finds the 6.28 API and never the 8.x one.
     apiReferenceTagsByVersionTag: buildApiReferenceTags(
       docsVersions,
-      docVersionTag("current"),
-      isPreviewBuild ? "current" : DOCS_LAST_VERSION,
+      effectiveLastVersion,
     ),
   },
 
@@ -654,7 +657,7 @@ const config: Config = {
           includeCurrentVersion: true,
           // See DOCS_LAST_VERSION above - declared once, next to docsVersions,
           // so the search tag derivation and the docs plugin cannot disagree.
-          lastVersion: isPreviewBuild ? "current" : DOCS_LAST_VERSION,
+          lastVersion: effectiveLastVersion,
           versions: docsVersions,
         },
         blog: false,

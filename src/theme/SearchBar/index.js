@@ -178,7 +178,7 @@ function rewriteVersionTag(facetFilters, targetTag, apiMap) {
   const targetApi = ((apiMap && apiMap[targetTag]) || []).map(
     (t) => `docusaurus_tag:${t}`,
   );
-  const swap = (f) => {
+  const swap = (f, depth) => {
     if (typeof f === "string") {
       // Swap only the tag of the version the page is served from. Leave
       // docusaurus_tag:default (framework-agnostic / non-doc pages) and any
@@ -193,9 +193,27 @@ function rewriteVersionTag(facetFilters, targetTag, apiMap) {
     // Swap the whole API-reference set for the target version's, keeping
     // docusaurus_tag:default and anything else in the OR group untouched.
     const rest = f.filter((t) => !String(t).startsWith(API_TAG_PREFIX));
-    return [...rest.map(swap), ...targetApi];
+    const mapped = rest.map((t) => swap(t, depth + 1));
+    // WHERE the API tags are appended is the whole correctness of this function,
+    // and getting it wrong is silent both ways:
+    //
+    //   - at depth 0, facetFilters entries are ANDed, so appending there makes
+    //     every hit have to carry the API tag and filters out every guide page.
+    //     Typing "v7" then returns nothing but 7.6 API pages.
+    //   - in a nested group that is NOT the docusaurus_tag group - the
+    //     `["language:en"]` group, say - appending ORs the API tag against the
+    //     language filter and quietly widens it.
+    //
+    // So: nested only, and only the group that already carries the page's own
+    // docusaurus_tag.
+    const isTagOrGroup =
+      depth > 0 && f.some((t) => String(t).startsWith("docusaurus_tag:"));
+    if (!isTagOrGroup) return mapped;
+    // Dedupe: a version tag can appear more than once in the incoming group, and
+    // both copies swap to the same target.
+    return [...new Set([...mapped, ...targetApi])];
   };
-  return swap(facetFilters);
+  return swap(facetFilters, 0);
 }
 // Remove the framework tokens (and, when it actually routes, the version marker)
 // from the query TEXT sent to Algolia. Routing is unaffected - it's driven by the

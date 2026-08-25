@@ -35,8 +35,21 @@ function extract(name) {
   throw new Error(`could not read ${name}`);
 }
 
-const EMPTY_TAG_LIST = [];
-const API_TAG_PREFIX = "docusaurus_tag:api-reference-";
+/**
+ * Read a module-level const out of the source too.
+ *
+ * Declaring these locally made the eval'd functions close over the TEST's copy,
+ * which defeats the whole point stated above: API_TAG_PREFIX is exactly the
+ * constant whose change would otherwise go unnoticed here.
+ */
+function extractConst(name) {
+  const m = new RegExp(`const ${name}\\s*=\\s*([^;]+);`).exec(src);
+  assert.ok(m, `${name} not found in SearchBar - test is stale`);
+  return eval(`(${m[1]})`);
+}
+
+const EMPTY_TAG_LIST = extractConst("EMPTY_TAG_LIST");
+const API_TAG_PREFIX = extractConst("API_TAG_PREFIX");
 const apiTagsFor = eval(`(${extract("apiTagsFor")})`);
 const withApiReferenceTags = eval(`(${extract("withApiReferenceTags")})`);
 const rewriteVersionTag = eval(`(${extract("rewriteVersionTag")})`);
@@ -51,7 +64,12 @@ const API628 = "docusaurus_tag:api-reference-6.28";
 
 // Exactly what docusaurus.config.ts derives from docsVersions.
 const MAP = {
-  "docs-default-8.5.3": ["api-reference-latest", "docs-default-current"],
+  // No docs-default-current here: the migration shim that pushed the legacy tag
+  // onto the served version is gone. The crawler retag is done - the live index
+  // holds api-reference-latest with 3,407 pages and docs-default-current with a
+  // single stale record, which the gate should flag for purging rather than
+  // treat as reachable content.
+  "docs-default-8.5.3": ["api-reference-latest"],
   "docs-default-7.6.14": ["api-reference-7.6"],
   "docs-default-6.28.11": ["api-reference-6.28"],
   "docs-default-current": ["api-reference-latest"],
@@ -103,6 +121,19 @@ check("typing a version moves the guides AND the API reference together", () => 
   assert.ok(tags.includes(API76), "API reference must follow to 7.6");
   assert.ok(!tags.includes(APILATEST), "the current API reference must be dropped");
   assert.ok(tags.includes(DEFAULT), "the OR group must not collapse");
+  // The assertion the original test was missing. tagsOf() only inspects the
+  // nested OR group, so a stray top-level entry was invisible to every check
+  // above - and a top-level entry ANDs the API tag against the whole query,
+  // which returns zero guides. Same guard as the test at line 89.
+  assert.strictEqual(
+    out.length,
+    2,
+    "a top-level entry would AND the API tag and match nothing",
+  );
+  assert.ok(
+    out.every((f) => !String(f).startsWith(API_TAG_PREFIX)),
+    "no API tag may sit at the top level",
+  );
 });
 
 check("no duplicate tag when the page already carries it", () => {

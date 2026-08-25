@@ -30,16 +30,17 @@ jobs:
       - name: Build documentation
         run: yarn build
 
-      # Compares build/search-tags.json (what this build's widget will filter on)
-      # against the live Algolia index. Catches a docs-version rename quietly
-      # dropping content out of search - see scripts/verify-search-tags.cjs.
-      # Not --strict on PRs: a crawl still catching up after a deploy warns
-      # rather than blocking unrelated work.
       # Asserts what the widget actually sends to Algolia: the API reference is
       # reachable on the served version and absent on frozen legacy versions.
       # Both failure modes are silent in production.
       - name: Test search facet filters
         run: yarn test:search-facets
 
+      # Compares build/search-tags.json (what this build's widget will filter on)
+      # against the live Algolia index. Catches a docs-version rename quietly
+      # dropping content out of search - see scripts/verify-search-tags.cjs.
+      # Not --strict on PRs: a crawl still catching up after a deploy, a release
+      # build that renames the served version, or an Algolia outage all warn
+      # rather than blocking unrelated work.
       - name: Verify search tags
         run: yarn verify:search-tags
