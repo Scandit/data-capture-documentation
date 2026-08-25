@@ -8,7 +8,7 @@
       "api-reference-latest"
     ],
     "docs-default-8.5.3": [
-      "api-reference-8.5"
+      "api-reference-latest"
     ],
     "docs-default-7.6.14": [
       "api-reference-7.6"
@@ -17,6 +17,7 @@
       "api-reference-6.28"
     ]
   },
+  "isPreviewBuild": true,
   "versionTagByMajor": {
     "6": "docs-default-6.28.11",
     "7": "docs-default-7.6.14",
