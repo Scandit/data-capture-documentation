@@ -4,8 +4,7 @@
   "lastVersionTag": "docs-default-current",
   "apiReferenceTagsByVersionTag": {
     "docs-default-current": [
-      "api-reference-latest",
-      "docs-default-current"
+      "api-reference-latest"
     ],
     "docs-default-8.5.3": [
       "api-reference-8.5"
