@@ -18,6 +18,15 @@ const assert = require("assert");
 const SRC = path.join(__dirname, "..", "src", "theme", "SearchBar", "index.js");
 const src = fs.readFileSync(SRC, "utf8");
 
+/**
+ * Pull a function's source out of the module by counting braces.
+ *
+ * Deliberately naive: no string, template-literal, comment or regex awareness.
+ * It works because every brace in the extracted functions is balanced, and the
+ * assertion below turns the failure mode from a confusing SyntaxError inside
+ * eval() into a named one. If an unbalanced brace ever appears inside a string
+ * or comment in one of these functions, this is what to fix.
+ */
 function extract(name) {
   const start = src.indexOf(`function ${name}(`);
   assert.notStrictEqual(start, -1, `${name} not found in SearchBar - test is stale`);
@@ -53,6 +62,15 @@ const API_TAG_PREFIX = extractConst("API_TAG_PREFIX");
 const apiTagsFor = eval(`(${extract("apiTagsFor")})`);
 const withApiReferenceTags = eval(`(${extract("withApiReferenceTags")})`);
 const rewriteVersionTag = eval(`(${extract("rewriteVersionTag")})`);
+// Named guard for the brace-counting limitation in extract(): if any of the
+// three came back truncated, eval would have thrown something unrelated-looking.
+for (const [name, fn] of Object.entries({
+  apiTagsFor,
+  withApiReferenceTags,
+  rewriteVersionTag,
+})) {
+  assert.strictEqual(typeof fn, "function", `${name} did not extract cleanly`);
+}
 
 const SERVED = "docusaurus_tag:docs-default-8.5.3";
 const LEGACY = "docusaurus_tag:docs-default-7.6.14";
@@ -64,11 +82,10 @@ const API628 = "docusaurus_tag:api-reference-6.28";
 
 // Exactly what docusaurus.config.ts derives from docsVersions.
 const MAP = {
-  // No docs-default-current here: the migration shim that pushed the legacy tag
-  // onto the served version is gone. The crawler retag is done - the live index
-  // holds api-reference-latest with 3,407 pages and docs-default-current with a
-  // single stale record, which the gate should flag for purging rather than
-  // treat as reachable content.
+  // The served version maps to the unversioned tree alone. The migration shim
+  // that also pushed the legacy docs-default-current tag onto it is gone, so
+  // that tag appears here only as a KEY (the /next/ tree's own entry, below) and
+  // never as a value.
   "docs-default-8.5.3": ["api-reference-latest"],
   "docs-default-7.6.14": ["api-reference-7.6"],
   "docs-default-6.28.11": ["api-reference-6.28"],

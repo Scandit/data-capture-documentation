@@ -63,8 +63,18 @@ const DEFAULT_MANIFEST = path.join(__dirname, "..", "build", "search-tags.json")
 
 const argv = process.argv.slice(2);
 const strict = argv.includes("--strict");
-const manifestArg =
-  argv.includes("--manifest") ? argv[argv.indexOf("--manifest") + 1] : null;
+// A missing value used to leave manifestArg undefined, which silently fell back
+// to the local build AND re-enabled the build-emission scan - so a CI invocation
+// whose path variable expanded empty checked a different source and printed OK.
+let manifestArg = null;
+if (argv.includes("--manifest")) {
+  const value = argv[argv.indexOf("--manifest") + 1];
+  if (!value || value.startsWith("--")) {
+    console.error("\n--manifest needs a path or URL.\n");
+    process.exit(1);
+  }
+  manifestArg = value;
+}
 
 async function readManifest(source) {
   if (source && /^https?:\/\//.test(source)) {
@@ -86,7 +96,19 @@ async function readManifest(source) {
 /** The public Algolia keys live in two files; prove they still agree. */
 function assertConfigInSync() {
   const configPath = path.join(__dirname, "..", "docusaurus.config.ts");
-  const src = fs.readFileSync(configPath, "utf8");
+  const full = fs.readFileSync(configPath, "utf8");
+  // Scoped to the `algolia:` block. A file-wide match takes the FIRST appId /
+  // apiKey / indexName anywhere - including one in a comment or an unrelated
+  // block - and this check is in FATAL_PATTERNS, so a false positive fails CI
+  // unconditionally.
+  const start = full.indexOf("algolia:");
+  const src = start === -1 ? full : full.slice(start);
+  if (start === -1) {
+    throw new Error(
+      "no `algolia:` block found in docusaurus.config.ts - this script cannot " +
+        "verify the credentials it hard-codes. Update both.",
+    );
+  }
   for (const [key, expected] of Object.entries(ALGOLIA)) {
     const found = new RegExp(`${key}:\\s*"([^"]+)"`).exec(src);
     if (!found || found[1] !== expected) {
@@ -273,10 +295,16 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   // Against a local build: does the site really emit the tags the config claims?
   const buildDir = path.dirname(DEFAULT_MANIFEST);
   if (!manifestArg && fs.existsSync(buildDir)) {
-    const expected = [
-      manifest.lastVersionTag,
-      ...Object.values(manifest.versionTagByMajor || {}),
-    ];
+    // A preview build sets onlyIncludeVersions: ["current"], so it contains no
+    // frozen pages and the frozen majors' tags are legitimately absent. Expecting
+    // them produced "the config names tags this build never emits" against a
+    // correct config.
+    const expected = manifest.isPreviewBuild
+      ? [manifest.lastVersionTag]
+      : [
+          manifest.lastVersionTag,
+          ...Object.values(manifest.versionTagByMajor || {}),
+        ];
     const { found: emitted, exhausted } = tagsEmittedByBuild(buildDir, expected);
     const notEmitted = expected.filter((t) => !emitted.has(t));
     if (notEmitted.length && exhausted) {
@@ -323,28 +351,20 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   // through no path at all is orphaned.
   const unreachable = rows.filter(
     ([tag, n]) =>
-      !reachable.has(tag) && !routable.has(tag) && n >= ORPHAN_PAGE_THRESHOLD,
+      !reachable.has(tag) &&
+      !routable.has(tag) &&
+      // `contextual` was built for exactly this and then not consulted here, so
+      // a tag could print as `contextual` in the table and be listed under
+      // "cannot reach" in the same run. It bites for real at the next
+      // minor-production release: docs-default-8.5.x loses major 8 to
+      // docs-default-current in versionTagByMajor, drops out of `routable`,
+      // stays in `contextual`, and hard-fails every PR once the crawler has
+      // populated the new served tag and releasePending stops masking it.
+      !contextual.has(tag) &&
+      n >= ORPHAN_PAGE_THRESHOLD,
   );
   // `default` legitimately holds only a handful of non-doc pages, so thinness is
   // only meaningful for the tags that carry the docs themselves.
-  const thin = [manifest.lastVersionTag]
-    .filter((tag) => counts[tag] !== undefined && counts[tag] < THIN_PAGE_THRESHOLD)
-    .map((tag) => [tag, counts[tag]]);
-  // An always-on tag that holds nothing is a migration in flight, not a broken
-  // build: the repo can name the crawler's target tag before the crawler emits
-  // it, or the other way round. Either order must keep CI green as long as one
-  // always-on tag still carries the content.
-  // Flatten the per-version API-reference map: every tag it names must exist.
-  const apiMap = manifest.apiReferenceTagsByVersionTag || {};
-  const alwaysOn = [...new Set(Object.values(apiMap).flat())];
-  // API-reference tags are reported by the migration check above, so they are
-  // excluded here rather than counted twice.
-  const apiTags = new Set(alwaysOn);
-  // Deduped: lastVersionTag is also in `routable`, so it printed twice.
-  const missing = [
-    ...new Set([manifest.defaultTag, manifest.lastVersionTag, ...routable]),
-  ].filter((tag) => tag && !apiTags.has(tag) && counts[tag] === undefined);
-
   // Is this the build that renames the version served at the root?
   //
   // On that build the config names a tag the index cannot possibly hold yet -
@@ -376,6 +396,34 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   const releasePending =
     !!manifest.lastVersionTag &&
     (servedCount === undefined || servedCount < THIN_PAGE_THRESHOLD);
+
+  // Skipped while a release is pending: the served tag being thin is the
+  // definition of that state, not a separate problem. Without this, --strict on
+  // main turned every post-release build red until the crawl finished - the one
+  // change this gate is documented as not blocking.
+  const thin = releasePending
+    ? []
+    : [manifest.lastVersionTag]
+        .filter(
+          (tag) => counts[tag] !== undefined && counts[tag] < THIN_PAGE_THRESHOLD,
+        )
+        .map((tag) => [tag, counts[tag]]);
+  // An always-on tag that holds nothing is a migration in flight, not a broken
+  // build: the repo can name the crawler's target tag before the crawler emits
+  // it, or the other way round. Either order must keep CI green as long as one
+  // always-on tag still carries the content.
+  // Flatten the per-version API-reference map: every tag it names must exist.
+  const apiMap = manifest.apiReferenceTagsByVersionTag || {};
+  const alwaysOn = [...new Set(Object.values(apiMap).flat())];
+  // API-reference tags are reported by the migration check above, so they are
+  // excluded here rather than counted twice.
+  const apiTags = new Set(alwaysOn);
+  // Deduped: lastVersionTag is also in `routable`, so it printed twice.
+  const missing = [
+    ...new Set([manifest.defaultTag, manifest.lastVersionTag, ...routable]),
+  ].filter((tag) => tag && !apiTags.has(tag) && counts[tag] === undefined);
+
+
   const pendingAlwaysOn = alwaysOn.filter((tag) => counts[tag] === undefined);
   const alwaysOnEmpty = alwaysOn.length > 0 && pendingAlwaysOn.length === alwaysOn.length;
 
@@ -384,7 +432,10 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   if (unreachable.length) {
     // While a release is pending, the outgoing version's tag is unreachable by
     // construction: this build renamed it and the index has not caught up.
-    const hard = strict || !releasePending;
+    // releasePending is a fact about the index, not a severity preference, so
+    // --strict does NOT override it: on main, right after a release, the index
+    // genuinely cannot have caught up yet.
+    const hard = !releasePending;
     if (hard) failed = true;
     console.error(
       `\n${hard ? "FAIL" : "WARN"}: indexed content the search widget cannot reach.`,
@@ -438,7 +489,7 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
     const onlyTheNewServedTag =
       releasePending &&
       missing.every((tag) => tag === manifest.lastVersionTag);
-    const hard = strict || !onlyTheNewServedTag;
+    const hard = !onlyTheNewServedTag;
     if (hard) failed = true;
     console.error(
       `\n${hard ? "FAIL" : "WARN"}: the widget filters on tags that hold nothing at all.`,
@@ -480,7 +531,15 @@ const FATAL_PATTERNS = [
 
 main().catch((err) => {
   const message = err && err.message ? err.message : String(err);
-  const deterministic = FATAL_PATTERNS.some((re) => re.test(message));
+  // A ReferenceError / TypeError / SyntaxError is a defect in this script, not a
+  // flaky network. One of them (a temporal-dead-zone read of releasePending) was
+  // swallowed as a transport failure and exited 0, so the gate crashed and CI
+  // stayed green.
+  const isBug =
+    err instanceof ReferenceError ||
+    err instanceof TypeError ||
+    err instanceof SyntaxError;
+  const deterministic = isBug || FATAL_PATTERNS.some((re) => re.test(message));
   console.error(`\nsearch-tag gate could not run: ${message}\n`);
   // A transport failure exits 0 unless --strict, so an Algolia outage cannot
   // block an unrelated docs PR. A deterministic config fault always fails.

@@ -134,6 +134,12 @@ const DOCS_LAST_VERSION = "8.5.3";
 // build does not contain. Declared once: it was restated at four call sites.
 const effectiveLastVersion = isPreviewBuild ? "current" : DOCS_LAST_VERSION;
 
+// `current.label` is load-bearing, not decoration: it is the only source of the
+// served major once lastVersion becomes "current", and buildApiReferenceTags
+// skips any version whose number it cannot resolve. An empty label would drop
+// /next/ readers' API reference and silently no-op the gate's served-major
+// assertion - the exact hole lastVersionMajor was added to close. Asserted at
+// config load so it fails the build rather than degrading search.
 const docsVersions: Record<
   string,
   {
@@ -162,6 +168,43 @@ const docsVersions: Record<
     badge: false,
   },
 };
+
+if (!docsVersions.current?.label) {
+  throw new Error(
+    "docsVersions.current.label is empty. It is the only source of the served " +
+      "major once lastVersion becomes \"current\", and buildApiReferenceTags " +
+      "skips a version whose number it cannot resolve - so an empty label " +
+      "silently drops /next/ readers' API reference and no-ops the gate's " +
+      "served-major check. Set it to the release the beta is heading for.",
+  );
+}
+
+/**
+ * Versions whose pages link to the UNVERSIONED API-reference tree.
+ *
+ * Kept out of `docsVersions` on purpose: that object goes straight to the docs
+ * plugin, which rejects unknown keys ("versions.current.apiTree is not
+ * allowed").
+ *
+ * This is a property of the CONTENT, not of which version is served. Counted in
+ * the sources on 2026-08-25:
+ *
+ *   docs/ (current)   2258 links to /data-capture-sdk,     0 versioned
+ *   version-8.5.3     2258 links to /data-capture-sdk,     0 versioned
+ *   version-7.6.14       0 unversioned, 2883 to /7.6/data-capture-sdk
+ *   version-6.28.11      0 unversioned, 3430 to /6.28/data-capture-sdk
+ *
+ * A snapshot keeps linking to the unversioned tree until the freeze process
+ * rewrites it to its own line. Deriving this from `lastVersion` was right only
+ * by coincidence: the moment 8.5.x stops being served, that rule emits
+ * `api-reference-8.5` - a tag nothing links to and the index does not contain -
+ * and 8.5 readers get an OR-branch matching zero records, which is the
+ * regression this file exists to prevent.
+ *
+ * When the 8.5.3 links are rewritten to /8.5/, remove it from this set;
+ * `yarn verify:search-tags` then confirms api-reference-8.5 is populated.
+ */
+const UNVERSIONED_API_TREE_VERSIONS = new Set(["current", "8.5.3"]);
 
 /** The only place a `docusaurus_tag` for a docs version is constructed. */
 const docVersionTag = (versionName: string): string =>
@@ -208,15 +251,17 @@ const apiReferenceTag = (versionNumber: string): string =>
  */
 function buildApiReferenceTags(
   versions: Record<string, { label?: string }>,
-  lastVersion: string,
 ): Record<string, string[]> {
   const out: Record<string, string[]> = {};
   for (const [name, cfg] of Object.entries(versions)) {
     const number = name === "current" ? cfg.label || "" : name;
     if (!number) continue;
-    const servedAtRoot = name === lastVersion || name === "current";
+    // Keyed off the tree this version's own pages LINK to - see
+    // UNVERSIONED_API_TREE_VERSIONS - not off which version happens to be served.
     const tags = [
-      servedAtRoot ? "api-reference-latest" : apiReferenceTag(number),
+      UNVERSIONED_API_TREE_VERSIONS.has(name)
+        ? "api-reference-latest"
+        : apiReferenceTag(number),
     ];
     out[docVersionTag(name)] = tags;
   }
@@ -321,10 +366,10 @@ function searchTagsManifestPlugin() {
                 ? docsVersions.current?.label || ""
                 : lastVersion,
             ).split(".")[0],
-            apiReferenceTagsByVersionTag: buildApiReferenceTags(
-              docsVersions,
-              lastVersion,
-            ),
+            apiReferenceTagsByVersionTag: buildApiReferenceTags(docsVersions),
+            // A preview build contains only `current`, so the gate must not
+            // expect the frozen majors' tags from it.
+            isPreviewBuild,
             versionTagByMajor,
           },
           null,
@@ -350,10 +395,7 @@ const config: Config = {
     versionTagByMajor,
     // A docs version's tag -> the API-reference tag(s) that document it, so a
     // reader on 6.28.11 finds the 6.28 API and never the 8.x one.
-    apiReferenceTagsByVersionTag: buildApiReferenceTags(
-      docsVersions,
-      effectiveLastVersion,
-    ),
+    apiReferenceTagsByVersionTag: buildApiReferenceTags(docsVersions),
   },
 
   // Set the production url of your site here
