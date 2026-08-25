@@ -214,11 +214,22 @@ async function main() {
   // reader on 7.6.14 gets api-reference-7.6 from that page's own contextual
   // filter. Not in `reachable` (which is about the served version), but calling
   // these "typed-only" in the report understated them - no typing is involved.
-  const contextual = new Set(
-    Object.entries(manifest.apiReferenceTagsByVersionTag || {})
+  const contextual = new Set([
+    // A frozen version's own API tags.
+    ...Object.entries(manifest.apiReferenceTagsByVersionTag || {})
       .filter(([versionTag]) => versionTag !== manifest.lastVersionTag)
       .flatMap(([, tags]) => tags),
-  );
+    // And the docs-version tags themselves. A reader on /next/ or on a frozen
+    // version reaches that version's pages through their own contextual filter,
+    // exactly like the API tags above. Without this, docs-default-current (the
+    // /next/ tree) reads UNREACHABLE - tolerable today only because the index
+    // holds one stale record, but every PR would hard-fail the moment the
+    // crawler indexes 50 of them, blaming a config that is correct. Same for a
+    // second frozen version sharing a major with the routed winner.
+    ...Object.keys(manifest.apiReferenceTagsByVersionTag || {}).filter(
+      (tag) => tag !== manifest.lastVersionTag,
+    ),
+  ]);
   // Reached only when a reader types a version. Checked for existence, but a tag
   // being routable does NOT make its content reachable by ordinary search.
   const routable = new Set([
@@ -231,10 +242,21 @@ async function main() {
   // and 8.5.3 became lastVersion, "v8" pointed at the beta's tag instead - and
   // because that tag also held the API reference, it still returned results, so
   // nothing looked broken. This is the check that catches it deterministically.
-  const servedMajor = String(manifest.lastVersionTag).replace(
-    /^docs-default-/,
-    "",
-  ).split(".")[0];
+  // Stated by the build, not parsed out of the tag. `docs-default-current`
+  // carries no number, so the old derivation produced "current", looked up
+  // versionTagByMajor["current"], found undefined and silently checked nothing -
+  // for the entire production half of every release cycle. The fallback keeps a
+  // manifest written before this field existed working.
+  const servedMajor = String(
+    manifest.lastVersionMajor ||
+      String(manifest.lastVersionTag).replace(/^docs-default-/, "").split(".")[0],
+  );
+  if (!manifest.lastVersionMajor) {
+    console.error(
+      `\nNOTE: manifest has no lastVersionMajor, so the served-major check is` +
+        ` derived from the tag and cannot verify a "current" lastVersion.\n`,
+    );
+  }
   const routedForServedMajor = (manifest.versionTagByMajor || {})[servedMajor];
   if (routedForServedMajor && routedForServedMajor !== manifest.lastVersionTag) {
     console.error(
@@ -336,8 +358,24 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   // index predates this build. Post-crawl the same conditions are real problems
   // and fail as before, and --strict fails either way so main and the schedule
   // still see them.
+  //
+  // The test is "holds no meaningful content", NOT "is absent from the index".
+  // `=== undefined` was wrong on the beta -> production build: that one sets
+  // DOCS_LAST_VERSION = "current", so lastVersionTag becomes
+  // docs-default-current - which the index already holds with ONE stale record
+  // (a leftover /sdks/linux/barcode-capture/get-started/ from when current was
+  // served). releasePending came out false, the outgoing docs-default-8.5.3 with
+  // its 559 pages tripped `unreachable`, and the build failed with no path to
+  // green. That is one of the three cycle events named above.
+  //
+  // Nothing is masked by the wider test: a served tag genuinely below the
+  // threshold is what the THIN check reports, and it reports it either way.
+  const servedCount = manifest.lastVersionTag
+    ? counts[manifest.lastVersionTag]
+    : undefined;
   const releasePending =
-    !!manifest.lastVersionTag && counts[manifest.lastVersionTag] === undefined;
+    !!manifest.lastVersionTag &&
+    (servedCount === undefined || servedCount < THIN_PAGE_THRESHOLD);
   const pendingAlwaysOn = alwaysOn.filter((tag) => counts[tag] === undefined);
   const alwaysOnEmpty = alwaysOn.length > 0 && pendingAlwaysOn.length === alwaysOn.length;
 
@@ -359,8 +397,9 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
         ? `\n  This build renames the served version to "${manifest.lastVersionTag}",\n` +
             `  which the index does not hold yet, so the outgoing tag is expected to be\n` +
             `  unreachable until the deploy is crawled. Re-run then, or use --strict.`
-        : `\n  Either the widget must include the tag (alwaysOnSearchTags in\n` +
-            `  docusaurus.config.ts) or the crawler must stop emitting it.`,
+        : `\n  Either give the tag a home in buildApiReferenceTags / docsVersions\n` +
+            `  (docusaurus.config.ts) so the widget filters on it, or stop the\n` +
+            `  Algolia crawler emitting it. There is no alwaysOnSearchTags option.`,
     );
   }
 
@@ -372,6 +411,24 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
         `${alwaysOnEmpty ? "No always-on tag has content - the API reference is unreachable." : "Another always-on tag still carries the content."}` + NL,
     );
     if (alwaysOnEmpty) failed = true;
+  }
+
+  // A SINGLE empty API-reference tag is already a hole, not a migration in
+  // flight. If the crawler stops emitting api-reference-7.6, every 7.6 reader's
+  // OR-branch filters on a zero-record tag and 2,501 pages leave 7.6 search -
+  // the exact August regression class. This used to print only a NOTE and exit 0,
+  // because `alwaysOnEmpty` required EVERY api tag to be empty at once and
+  // `missing` explicitly excluded them. Skipped while a release is pending: a
+  // brand-new version's API tag has not been crawled yet either.
+  const emptyApiTags = releasePending || alwaysOnEmpty ? [] : pendingAlwaysOn;
+  if (emptyApiTags.length) {
+    failed = true;
+    console.error(
+      `\nFAIL: API-reference tag(s) the widget filters on hold nothing:` + NL +
+        emptyApiTags.map((t) => `  "${t}" -> 0 records`).join(NL) + NL +
+        `  Readers on those versions get an OR-branch matching nothing, so that` + NL +
+        `  version's API reference is absent from search.` + NL,
+    );
   }
 
   if (missing.length) {
@@ -413,9 +470,19 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
 // A network failure is not a content failure. An Algolia outage, a rate limit or
 // a sandboxed runner would otherwise block merging unrelated docs PRs. Under
 // --strict (main, or the schedule, where someone is watching) it still fails.
+// Faults the gate must never swallow. These are deterministic config errors, not
+// a flaky network, and treating them as transport meant the gate could degrade to
+// a complete no-op while printing a line nobody reads and passing CI.
+const FATAL_PATTERNS = [
+  /does not match this script/i, // assertConfigInSync: Algolia key drift
+  /No search-tag manifest/i, // the manifest plugin stopped running
+];
+
 main().catch((err) => {
-  console.error(`\nsearch-tag gate could not run: ${err.message}\n`);
-  // Exit 0 unless --strict: a transport failure is not a content failure, and
-  // must not block an unrelated docs PR. --strict runs (main, schedule) still fail.
-  process.exit(strict ? 1 : 0);
+  const message = err && err.message ? err.message : String(err);
+  const deterministic = FATAL_PATTERNS.some((re) => re.test(message));
+  console.error(`\nsearch-tag gate could not run: ${message}\n`);
+  // A transport failure exits 0 unless --strict, so an Algolia outage cannot
+  // block an unrelated docs PR. A deterministic config fault always fails.
+  process.exit(deterministic || strict ? 1 : 0);
 });

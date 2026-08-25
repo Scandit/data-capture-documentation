@@ -168,29 +168,6 @@ const docVersionTag = (versionName: string): string =>
   `docs-default-${versionName}`;
 
 /**
- * Content that lives in the same Algolia index but is NOT a Docusaurus docs
- * version, so Docusaurus never emits its tag and the contextual filter never
- * includes it. Today that is the generated API reference under
- * /data-capture-sdk/, which the Algolia crawler stamps `docs-default-current`.
- *
- * This value is owned by the Algolia crawler configuration, not by this repo, so
- * it cannot be derived here - `yarn verify:search-tags` asserts it still matches
- * the index and fails the build if the crawler is retagged.
- *
- * Why this exists: while `lastVersion` was "current" the API reference happened
- * to share the guides' tag and rode along for free. That stopped at e92c1b16
- * (Release 8.6.0-beta.1), which set `lastVersion: "8.5.2"` and made `current`
- * the unreleased beta - the guides at the root stopped emitting
- * `docs-default-current`, the shared tag stopped being shared, and ~3,200 API
- * reference pages silently dropped out of every search. Nothing failed; results
- * just got quietly worse. 8.5.3 was a later patch bump, not the cause.
- *
- * And it is a CYCLE, not a one-off: the root-served tag moves on the
- * production -> beta transition, on every patch during the beta window, and
- * again on beta -> production. Listing the tag explicitly is what makes it
- * survive each turn of that cycle.
- */
-/**
  * The API reference is published per major.minor line, at
  * /<major.minor>/data-capture-sdk/<framework>/ - /6.28/, /7.6/, /8.5/, /8.6/.
  * So it IS versioned, and each docs version has its own.
@@ -219,7 +196,15 @@ const apiReferenceTag = (versionNumber: string): string =>
  * Both sides read the version out of what they already have: this file out of
  * docsVersions, the crawler out of the URL. Neither hard-codes one, which is the
  * point - tagging the API reference with a docs version NAME is what broke
- * search when the 8.6.0-beta.1 release moved the root-served tag (e92c1b16).
+ * search when the 8.6.0-beta.1 release moved the root-served tag (e92c1b16):
+ * that release set `lastVersion: "8.5.2"` and made `current` the unreleased
+ * beta, so the guides at the root stopped emitting `docs-default-current`, the
+ * tag the API reference had been sharing for free. ~3,200 pages left search and
+ * nothing failed. 8.5.3 was a later patch bump, not the cause.
+ *
+ * And it is a CYCLE: the root-served tag moves on production -> beta, on every
+ * patch during the beta window, and again on beta -> production. Deriving the
+ * mapping is what makes it survive each turn.
  */
 function buildApiReferenceTags(
   versions: Record<string, { label?: string }>,
@@ -298,8 +283,10 @@ function buildVersionTagByMajor(
 
 const versionTagByMajor = buildVersionTagByMajor(
   docsVersions,
-  // Previews only build `current`, so route every major there rather than at
-  // frozen tags whose pages that build does not contain.
+  // Previews only build `current`, so the major CONTAINING current is routed
+  // there. Majors that exist only as frozen versions (6, 7) still resolve to
+  // their own tags, which a preview has no pages for - typing "v7" in a preview
+  // returns nothing. Accepted: previews are for reviewing the current tree.
   effectiveLastVersion,
 );
 
@@ -324,6 +311,16 @@ function searchTagsManifestPlugin() {
             defaultTag: "default",
             // The tag every page at the site root emits.
             lastVersionTag: docVersionTag(lastVersion),
+            // The major the site serves, stated rather than parsed out of the
+            // tag. When lastVersion is "current" the tag is
+            // `docs-default-current`, which carries no number, so the gate's
+            // served-major assertion silently no-opped for the entire
+            // production half of every release cycle.
+            lastVersionMajor: String(
+              lastVersion === "current"
+                ? docsVersions.current?.label || ""
+                : lastVersion,
+            ).split(".")[0],
             apiReferenceTagsByVersionTag: buildApiReferenceTags(
               docsVersions,
               lastVersion,

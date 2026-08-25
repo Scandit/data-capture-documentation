@@ -42,5 +42,11 @@ jobs:
       # Not --strict on PRs: a crawl still catching up after a deploy, a release
       # build that renames the served version, or an Algolia outage all warn
       # rather than blocking unrelated work.
+      # --strict on main only. On a PR a crawl still catching up, a release build
+      # that renames the served version, or an Algolia outage must not block
+      # unrelated work; on main those same conditions are real and someone is
+      # watching. Without this the script's repeated "--strict still fails"
+      # promise was empty - THIN, transport errors and Algolia-key drift could
+      # not fail any job.
       - name: Verify search tags
-        run: yarn verify:search-tags
+        run: yarn verify:search-tags${{ github.ref == 'refs/heads/main' && ' --strict' || '' }}

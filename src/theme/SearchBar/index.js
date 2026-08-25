@@ -158,6 +158,14 @@ function withApiReferenceTags(contextualFilters, map) {
   let injected = false;
   const out = contextualFilters.map((entry) => {
     if (injected || !Array.isArray(entry)) return entry;
+    // Gate on CONTENT, not position. This used to latch on the first array it
+    // saw, which works only because useAlgoliaContextualFacetFilters happens to
+    // return the language filter as a bare string. If Docusaurus ever wraps it
+    // (`["language:en"]`), or a config filter gets prepended, the API tags would
+    // land in that group instead - silently dropped from the tag OR, which is
+    // the whole regression coming back. Every test here passes a string first,
+    // so nothing would have caught it.
+    if (!entry.some((t) => String(t).startsWith("docusaurus_tag:"))) return entry;
     const extra = apiTagsFor(entry, map).filter((t) => !entry.includes(t));
     injected = true;
     return extra.length ? [...entry, ...extra] : entry;
@@ -192,7 +200,15 @@ function rewriteVersionTag(facetFilters, targetTag, apiMap) {
     if (!Array.isArray(f)) return f;
     // Swap the whole API-reference set for the target version's, keeping
     // docusaurus_tag:default and anything else in the OR group untouched.
-    const rest = f.filter((t) => !String(t).startsWith(API_TAG_PREFIX));
+    // Only STRINGS are tested against the prefix. String() on a nested array
+    // joins its elements, so an OR group whose first element is an
+    // `api-reference-*` tag stringified to "docusaurus_tag:api-reference-…,…"
+    // and the entire group was dropped from the top-level AND - removing the
+    // docusaurus_tag filter altogether and returning every version's results.
+    // Safe today only because the tags are appended last and `default` is first.
+    const rest = f.filter(
+      (t) => Array.isArray(t) || !String(t).startsWith(API_TAG_PREFIX),
+    );
     const mapped = rest.map((t) => swap(t, depth + 1));
     // WHERE the API tags are appended is the whole correctness of this function,
     // and getting it wrong is silent both ways:
