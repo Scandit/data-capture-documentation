@@ -196,6 +196,14 @@ if (!docsVersions.current?.label) {
  *
  * The two forms are mutually exclusive per version, so the scan is unambiguous.
  *
+ * One thing this does NOT buy: the tag vocabulary is derived here, but the
+ * records come from the Algolia crawler. When 8.5.3's links are rewritten to
+ * /8.5/, this file correctly derives `api-reference-8.5` and the index will not
+ * hold it until the crawler has an action for that path. `yarn
+ * verify:search-tags` reports exactly that - WARN on PRs, FAIL on main - rather
+ * than letting 8.5 readers silently lose their API reference, but the crawler
+ * change is a real separate step, not a free consequence of the rewrite.
+ *
  * Why derived and not listed: every earlier attempt at this value was a second
  * copy of the served version, and a copy the release script does not know about
  * is a regression with a release date on it. Deriving it from `lastVersion` was
@@ -207,7 +215,7 @@ if (!docsVersions.current?.label) {
  * would still have said 8.5.3 and ~3,900 API-reference pages would have left
  * search again. Reading the links means a release changes nothing here, and the
  * freeze process rewriting 8.5.3's links to /8.5/ is picked up on the next build
- * with no edit at all.
+ * with no edit in this file.
  *
  * Cost: one walk per version, ~185 ms total (early-exit on the first hit, so
  * only a version that links unversioned reads its whole tree), memoised because

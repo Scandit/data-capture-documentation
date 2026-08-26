@@ -99,8 +99,12 @@ assert.ok(MAP && Object.keys(MAP).length, "manifest has no version-tag map");
 const servedTag = manifest.lastVersionTag;
 assert.ok(MAP[servedTag], `manifest maps no API tree for the served ${servedTag}`);
 
-// Frozen versions, newest first. Asserted rather than assumed: with fewer than
-// two, the legacy-isolation checks below would silently assert on undefined.
+// Frozen versions, newest first. One is required, because the whole point of
+// these tests is that a frozen version does not get the current API reference.
+// Two are NOT required: end-of-lifing 6.28 is routine housekeeping, and failing
+// `yarn test:search-facets` with "expected at least two frozen versions" would
+// block it for a reason that has nothing to do with search correctness. The
+// second check is skipped instead.
 const frozen = Object.keys(MAP)
   .filter((t) => t !== servedTag && t !== "docs-default-current")
   .sort((a, b) => {
@@ -110,8 +114,8 @@ const frozen = Object.keys(MAP)
     return 0;
   });
 assert.ok(
-  frozen.length >= 2,
-  `expected at least two frozen versions in the manifest, got ${frozen.length}`,
+  frozen.length >= 1,
+  "expected at least one frozen version in the manifest, got none",
 );
 
 const tag = (t) => `docusaurus_tag:${t}`;
@@ -125,6 +129,16 @@ const API628 = tag(MAP[frozen[frozen.length - 1]][0]);
 
 const tagsOf = (filters) => filters.find(Array.isArray) || [];
 let passed = 0;
+let skipped = 0;
+/** Run a check only when the site's version set makes it meaningful. */
+function maybeCheck(condition, label, fn) {
+  if (!condition) {
+    skipped += 1;
+    console.log(`  --  ${label} (skipped: only one frozen version)`);
+    return;
+  }
+  check(label, fn);
+}
 function check(label, fn) {
   fn();
   passed += 1;
@@ -145,7 +159,7 @@ check("a legacy version gets ITS API reference, not the current one", () => {
   assert.ok(!tags.includes(APILATEST), "and must not get the current one");
 });
 
-check("the oldest version too", () => {
+maybeCheck(frozen.length >= 2, "the oldest version too", () => {
   const tags = tagsOf(withApiReferenceTags(["language:en", [DEFAULT, OLDEST]], MAP));
   assert.ok(tags.includes(API628) && !tags.includes(APILATEST));
 });
@@ -264,4 +278,4 @@ for (const versionTag of Object.keys(MAP)) {
   });
 }
 
-console.log(`\n${passed} passed\n`);
+console.log(`\n${passed} passed${skipped ? `, ${skipped} skipped` : ""}\n`);

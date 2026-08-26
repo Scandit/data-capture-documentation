@@ -94,9 +94,34 @@ async function readManifest(source) {
 }
 
 /** The public Algolia keys live in two files; prove they still agree. */
+/**
+ * Mark an error as "the gate verified nothing", so the transport tolerance can
+ * never swallow it.
+ *
+ * Matching on message text was not enough: "no `algolia:` block found" is a
+ * plain Error and matched no pattern, so moving the algolia block into its own
+ * themeConfig module - a routine refactor - would have made every PR print
+ * "search-tag gate could not run" and pass green, with the credential check, the
+ * served-major check, the build-emission scan and every Algolia comparison
+ * skipped. A flag on the error is structural; a regex over prose is not.
+ */
+function fatal(message) {
+  const err = new Error(message);
+  err.fatal = true;
+  return err;
+}
+
 function assertConfigInSync() {
   const configPath = path.join(__dirname, "..", "docusaurus.config.ts");
-  const full = fs.readFileSync(configPath, "utf8");
+  let full;
+  try {
+    full = fs.readFileSync(configPath, "utf8");
+  } catch (err) {
+    throw fatal(
+      `cannot read docusaurus.config.ts (${err.message}) - the credentials this ` +
+        `script hard-codes cannot be checked against it.`,
+    );
+  }
   // Scoped to the `algolia:` block. A file-wide match takes the FIRST appId /
   // apiKey / indexName anywhere - including one in a comment or an unrelated
   // block - and this check is in FATAL_PATTERNS, so a false positive fails CI
@@ -104,7 +129,7 @@ function assertConfigInSync() {
   const start = full.indexOf("algolia:");
   const src = start === -1 ? full : full.slice(start);
   if (start === -1) {
-    throw new Error(
+    throw fatal(
       "no `algolia:` block found in docusaurus.config.ts - this script cannot " +
         "verify the credentials it hard-codes. Update both.",
     );
@@ -112,7 +137,7 @@ function assertConfigInSync() {
   for (const [key, expected] of Object.entries(ALGOLIA)) {
     const found = new RegExp(`${key}:\\s*"([^"]+)"`).exec(src);
     if (!found || found[1] !== expected) {
-      throw new Error(
+      throw fatal(
         `Algolia ${key} in docusaurus.config.ts (${found ? found[1] : "missing"}) ` +
           `does not match this script (${expected}). Update both.`,
       );
@@ -128,12 +153,29 @@ function assertConfigInSync() {
  * is the only way a derived value gets checked - the drift that caused this gate
  * to exist was a config that was internally consistent and still wrong.
  */
-function tagsEmittedByBuild(buildDir, expected, fileCap = 4000) {
+// The <meta name="docusaurus_tag"> sits in <head>; measured across the whole
+// build the deepest one is at byte 1165. Reading a 4 KB head instead of the
+// whole file is what makes an exhaustive walk affordable - 123 MB of full reads
+// was the reason a cap existed at all.
+const HEAD_BYTES = 4096;
+
+function headOf(file) {
+  const fd = fs.openSync(file, "r");
+  try {
+    const buf = Buffer.alloc(HEAD_BYTES);
+    const n = fs.readSync(fd, buf, 0, HEAD_BYTES, 0);
+    return buf.slice(0, n).toString("utf8");
+  } finally {
+    fs.closeSync(fd);
+  }
+}
+
+function tagsEmittedByBuild(buildDir, expected) {
   const found = new Set();
   const wanted = new Set(expected);
   const stack = [buildDir];
   let seen = 0;
-  while (stack.length && seen < fileCap && found.size < wanted.size) {
+  while (stack.length && found.size < wanted.size) {
     const dir = stack.pop();
     let entries;
     try {
@@ -147,9 +189,7 @@ function tagsEmittedByBuild(buildDir, expected, fileCap = 4000) {
         stack.push(full);
       } else if (e.name === "index.html") {
         seen += 1;
-        const m = /name="docusaurus_tag" content="([^"]+)"/.exec(
-          fs.readFileSync(full, "utf8"),
-        );
+        const m = /name="docusaurus_tag" content="([^"]+)"/.exec(headOf(full));
         // Only tags we are looking for count toward the early exit; the build
         // also emits tags for versions the manifest does not route to.
         if (m && wanted.has(m[1])) found.add(m[1]);
@@ -157,12 +197,13 @@ function tagsEmittedByBuild(buildDir, expected, fileCap = 4000) {
       }
     }
   }
-  // `exhausted` distinguishes "walked the whole build" from "hit the cap". With
-  // an arbitrary stack.pop() order, a cap reached before every wanted tag was
-  // seen makes absence meaningless - reporting it as config drift blames the
-  // config for a truncated walk. Today's build is ~2,250 pages against a 4,000
-  // cap, so this is headroom for about two more frozen versions.
-  return { found, exhausted: !(seen >= fileCap && found.size < wanted.size) };
+  // No cap, so absence is now proof. The previous 4,000-file cap was BELOW the
+  // build's real size (4,397 index.html files today), and the early exit means
+  // only the failure case walks the whole tree - so a tag the build never emits
+  // always hit the cap, always came back "inconclusive", and the FAIL branch
+  // this function exists to feed could not fire at all. It reported a state it
+  // was written to catch as a state it could not judge.
+  return { found, seen };
 }
 
 async function algolia(body) {
@@ -305,22 +346,16 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
           manifest.lastVersionTag,
           ...Object.values(manifest.versionTagByMajor || {}),
         ];
-    const { found: emitted, exhausted } = tagsEmittedByBuild(buildDir, expected);
+    const { found: emitted, seen } = tagsEmittedByBuild(buildDir, expected);
     const notEmitted = expected.filter((t) => !emitted.has(t));
-    if (notEmitted.length && exhausted) {
+    if (notEmitted.length) {
       console.error(
         `\nFAIL: the config names tags this build never emits:\n` +
           notEmitted.map((t) => `  ${t}`).join("\n") +
-          `\n  docsVersions / lastVersion and the tag derivation disagree.\n`,
+          `\n  Scanned all ${seen} pages in the build; these tags are on none of\n` +
+          `  them. docsVersions / lastVersion and the tag derivation disagree.\n`,
       );
       process.exitCode = 1;
-    } else if (notEmitted.length) {
-      console.error(
-        `\nINCONCLUSIVE: stopped scanning the build before finding:\n` +
-          notEmitted.map((t) => `  ${t}`).join("\n") +
-          `\n  The file cap was reached, so absence proves nothing here.\n` +
-          `  Raise the cap in tagsEmittedByBuild if the build has grown.\n`,
-      );
     }
   }
 
@@ -376,7 +411,7 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   //
   // Detected rather than declared: if the served tag has no records at all, the
   // index predates this build. Post-crawl the same conditions are real problems
-  // and fail as before, and --strict fails either way so main and the schedule
+  // and fail as before, and --strict fails either way so main
   // still see them.
   //
   // The test is "holds no meaningful content", NOT "is absent from the index".
@@ -412,6 +447,24 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   const releasePending =
     !!manifest.lastVersionTag && servedThin && otherDocsTagsHealthy;
 
+  // Honest about what this cannot decide. releasePending has no time bound, and
+  // a crawler that STALLS on the served version while the frozen ones stay
+  // healthy looks identical to a release whose crawl has not run yet. The
+  // suppression is therefore kept as narrow as possible - it excuses the served
+  // docs tag and nothing else, so the API trees and the frozen versions are
+  // still checked - but distinguishing a stall from a release needs the previous
+  // crawl state, which a single CI run does not have. Repetition is the tell: a
+  // pending release clears on the next crawl, a stall does not.
+  if (releasePending) {
+    console.error(
+      `\nNOTE: treating "${manifest.lastVersionTag}" as a release whose crawl has` + NL +
+        `  not run yet, so its own page count is not being judged. If this same` + NL +
+        `  line appears on consecutive runs days apart, it is not a release - the` + NL +
+        `  crawl for the served version has stalled, and that is what the standing` + NL +
+        `  Algolia monitor exists to catch.` + NL,
+    );
+  }
+
   if (servedThin && !otherDocsTagsHealthy) {
     console.error(
       `\nNOTE: the served tag "${manifest.lastVersionTag}" is thin AND no other` + NL +
@@ -424,13 +477,31 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   // definition of that state, not a separate problem. Without this, --strict on
   // main turned every post-release build red until the crawl finished - the one
   // change this gate is documented as not blocking.
-  const thin = releasePending
-    ? []
-    : [manifest.lastVersionTag]
-        .filter(
-          (tag) => counts[tag] !== undefined && counts[tag] < THIN_PAGE_THRESHOLD,
-        )
-        .map((tag) => [tag, counts[tag]]);
+  // Every docs version a reader can actually be ROUTED to, not just the served
+  // one. If docs-default-7.6.14 drops from 342 pages to 4, it stays in
+  // `routable` so `unreachable` skips it, `missing` only fires at zero, and
+  // `thinApiTags` covers API trees only - so 7.6 readers lost nearly every guide
+  // result and this printed "every tag with content is reachable". Same argument
+  // the file already makes for API tags; docs tags were simply left out of it.
+  // versionTagByMajor is the right set: those are the tags a version query and
+  // the contextual filter can send someone to. docs-default-current is not in it
+  // and must not be - the /next/ tree is deliberately not crawled, so its single
+  // stale record is not a collapse.
+  const routableDocsTags = [
+    ...new Set(
+      [
+        manifest.lastVersionTag,
+        ...Object.values(manifest.versionTagByMajor || {}),
+      ].filter(Boolean),
+    ),
+  ];
+  const thin = routableDocsTags
+    // The served tag being thin IS the pending-release state, not a finding.
+    .filter((tag) => !(releasePending && tag === manifest.lastVersionTag))
+    .filter(
+      (tag) => counts[tag] !== undefined && counts[tag] < THIN_PAGE_THRESHOLD,
+    )
+    .map((tag) => [tag, counts[tag]]);
   // An always-on tag that holds nothing is a migration in flight, not a broken
   // build: the repo can name the crawler's target tag before the crawler emits
   // it, or the other way round. Either order must keep CI green as long as one
@@ -493,9 +564,19 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   // OR-branch filters on a zero-record tag and 2,501 pages leave 7.6 search -
   // the exact August regression class. This used to print only a NOTE and exit 0,
   // because `alwaysOnEmpty` required EVERY api tag to be empty at once and
-  // `missing` explicitly excluded them. Skipped while a release is pending: a
-  // brand-new version's API tag has not been crawled yet either.
-  const emptyApiTags = releasePending || alwaysOnEmpty ? [] : pendingAlwaysOn;
+  // `missing` explicitly excluded them.
+  //
+  // NOT suppressed by releasePending any more. That suppression assumed a
+  // release introduces an uncrawled API tag, which stopped being true once the
+  // mapping was derived from the links: a patch release maps to
+  // api-reference-latest, which already exists. Meanwhile releasePending has no
+  // time bound - a crawler that STALLS on the root version rather than dying
+  // keeps the served tag thin while 7.6 and 6.28 stay healthy, so it stayed true
+  // indefinitely and took thin, thinApiTags and emptyApiTags down with it. The
+  // one case it did cover - a frozen version's links rewritten to its own line
+  // before the crawler knows that line - is handled by the strict gate below
+  // instead, which reports it everywhere and blocks only where it can be acted on.
+  const emptyApiTags = alwaysOnEmpty ? [] : pendingAlwaysOn;
 
   // ...and a tag that still exists but has collapsed. emptyApiTags only tests
   // `=== undefined`, `missing` excludes API tags by construction, `unreachable`
@@ -504,18 +585,18 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   // "OK: every tag with content is reachable." A partial collapse is the same
   // regression class as a total one; 7.6 readers just lose most of the API
   // reference instead of all of it.
-  const thinApiTags = releasePending
-    ? []
-    : alwaysOn
-        .filter(
-          (tag) =>
-            counts[tag] !== undefined && counts[tag] < THIN_PAGE_THRESHOLD,
-        )
-        .map((tag) => [tag, counts[tag]]);
+  const thinApiTags = alwaysOn
+    .filter(
+      (tag) => counts[tag] !== undefined && counts[tag] < THIN_PAGE_THRESHOLD,
+    )
+    .map((tag) => [tag, counts[tag]]);
   if (thinApiTags.length) {
-    failed = true;
+    // Strict-gated like `thin`, for the same reason: no PR author can fix a
+    // partial crawl, and failing unrelated work adds no detection. main and any
+    // manual re-run still go red, which is where someone can act.
+    if (strict) failed = true;
     console.error(
-      `\nFAIL: API-reference tag(s) hold far too little to be a whole tree:` + NL +
+      `\n${strict ? "FAIL" : "WARN"}: API-reference tag(s) hold far too little to be a whole tree:` + NL +
         thinApiTags
           .map(([t, n]) => `  "${t}" -> ${n} pages (floor ${THIN_PAGE_THRESHOLD})`)
           .join(NL) + NL +
@@ -525,12 +606,21 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
     );
   }
   if (emptyApiTags.length) {
-    failed = true;
+    // Strict-gated, because the fix is usually OUTSIDE this repo. The tag
+    // vocabulary is derived here from the links, but the records are produced by
+    // the Algolia crawler: the moment a frozen version's links are rewritten to
+    // its own line, this repo correctly derives api-reference-<line> and the
+    // crawler has never heard of it. Hard-failing every PR until someone edits
+    // an external crawler config blocks work that cannot fix it, so PRs warn and
+    // main goes red - the same split `thin` and `thinApiTags` use.
+    if (strict) failed = true;
     console.error(
-      `\nFAIL: API-reference tag(s) the widget filters on hold nothing:` + NL +
+      `\n${strict ? "FAIL" : "WARN"}: API-reference tag(s) the widget filters on hold nothing:` + NL +
         emptyApiTags.map((t) => `  "${t}" -> 0 records`).join(NL) + NL +
         `  Readers on those versions get an OR-branch matching nothing, so that` + NL +
-        `  version's API reference is absent from search.` + NL,
+        `  version's API reference is absent from search.` + NL +
+        `  If the version's links were just rewritten to its own line, the Algolia` + NL +
+        `  crawler needs an action for that path before this can go green.` + NL,
     );
   }
 
@@ -562,7 +652,11 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
     );
     for (const [tag, n] of thin) console.error(`  "${tag}" -> ${n} pages`);
     console.error(
-      `  Usually the crawler catching up after a deploy; re-run once it has.`,
+      thin.every(([tag]) => tag === manifest.lastVersionTag)
+        ? `  Usually the crawler catching up after a deploy; re-run once it has.`
+        : `  A version other than the served one is thin, so "the crawl is still\n` +
+            `  catching up" does not explain it: a frozen version's pages have not\n` +
+            `  changed. Check the crawler's path rules for that version.`,
     );
     if (strict) failed = true;
   }
@@ -573,7 +667,10 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
 
 // A network failure is not a content failure. An Algolia outage, a rate limit or
 // a sandboxed runner would otherwise block merging unrelated docs PRs. Under
-// --strict (main, or the schedule, where someone is watching) it still fails.
+// --strict (main, where someone is watching) it still fails. There is no
+// scheduled run in this repo; the standing Algolia check that catches a crawl
+// finishing later lives outside CI, so "re-run after the crawl" means a manual
+// re-run or the next push to main.
 // Faults the gate must never swallow. These are deterministic config errors, not
 // a flaky network, and treating them as transport meant the gate could degrade to
 // a complete no-op while printing a line nobody reads and passing CI.
@@ -600,7 +697,10 @@ main().catch((err) => {
     err instanceof ReferenceError ||
     (err instanceof TypeError && !isTransportTypeError) ||
     err instanceof SyntaxError;
-  const deterministic = isBug || FATAL_PATTERNS.some((re) => re.test(message));
+  const deterministic =
+    !!(err && err.fatal) ||
+    isBug ||
+    FATAL_PATTERNS.some((re) => re.test(message));
   console.error(`\nsearch-tag gate could not run: ${message}\n`);
   // A transport failure exits 0 unless --strict, so an Algolia outage cannot
   // block an unrelated docs PR. A deterministic config fault always fails.
