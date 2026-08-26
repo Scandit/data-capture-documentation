@@ -92,75 +92,12 @@ new value, which makes the view re-apply its settings more often than it needs t
 
 ## Navigate Between Scanning Screens
 
-This is the part most applications get wrong, so it is worth understanding before you
-build the second screen.
+Two scanning screens cannot both drive the camera. The newest view to claim it takes
+ownership, and passing each view the screen's `navigation` object suspends scanning while
+that screen is blurred.
 
-The camera has exactly one owner. The newest view to claim it takes ownership, calls from
-a superseded owner are ignored, and the camera drops to standby when nothing holds it.
-Most AIO views share the camera the provider owns. `SparkScanAioView` is the exception:
-it claims the camera exclusively and drives its own.
-
-Pass each view the screen's `navigation` object. Scanning is then suspended while the
-screen is blurred or the app is backgrounded, and resumed when it comes back:
-
-```js
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { ScanditProvider } from 'scandit-react-native-datacapture-core';
-import {
-  BarcodeCaptureAioView,
-  SparkScanAioView,
-  Symbology,
-} from 'scandit-react-native-datacapture-barcode';
-
-const SYMBOLOGIES = [Symbology.EAN13UPCA, Symbology.Code128];
-const Stack = createStackNavigator();
-
-function SparkScanScreen({ navigation }) {
-  return (
-    <SparkScanAioView
-      style={{ flex: 1 }}
-      navigation={navigation}
-      symbologies={SYMBOLOGIES}
-      didScan={(barcodes) => console.log('spark', barcodes[0]?.data)}
-    />
-  );
-}
-
-function CaptureScreen({ navigation }) {
-  return (
-    <BarcodeCaptureAioView
-      style={{ flex: 1 }}
-      navigation={navigation}
-      symbologies={SYMBOLOGIES}
-      didScan={(barcodes) => console.log('capture', barcodes[0]?.data)}
-    />
-  );
-}
-
-export default function App() {
-  return (
-    <ScanditProvider licenseKey={LICENSE_KEY}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name="Spark" component={SparkScanScreen} />
-          <Stack.Screen name="Capture" component={CaptureScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </ScanditProvider>
-  );
-}
-```
-
-Moving between these two screens crosses between an exclusive claim and a shared one.
-Handing the camera over is what the ownership model exists to do, so no extra code is
-needed, but do test this path on a device, because it is where mistakes show up.
-
-:::note
-`navigation` only needs an object with an `addListener` method for `focus` and `blur`
-events. React Navigation's `navigation` prop satisfies this, and so can your own
-implementation.
-:::
+See [Navigating Between Screens](./navigating-between-screens.md) for the ownership model
+and the lifecycle props that control when each view scans.
 
 ## Camera Position and Torch
 
@@ -250,4 +187,5 @@ from your desk? Here's a [handy pdf of barcodes](https://github.com/Scandit/.git
 
 ## Where to Go Next
 
+- [Navigating Between Screens](./navigating-between-screens.md): the camera ownership model and the lifecycle props that control when each view scans.
 - [React Native samples](https://github.com/Scandit/datacapture-react-native-samples): complete applications you can build and run.

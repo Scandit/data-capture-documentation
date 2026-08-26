@@ -1118,7 +1118,10 @@ const sidebars: SidebarsConfig = {
           type: 'category',
           label: 'AIO Components',
           collapsed: true,
-          items: ['sdks/react-native/aio/get-started'],
+          items: [
+            'sdks/react-native/aio/get-started',
+            'sdks/react-native/aio/navigating-between-screens',
+          ],
         },
         'sdks/react-native/system-requirements',
         {
