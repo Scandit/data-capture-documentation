@@ -2,6 +2,8 @@ import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 import * as dotenv from 'dotenv';
+import * as fs from "fs";
+import * as path from "path";
 import { version } from "react";
 import remarkHideComments from "./src/plugins/remark-hide-comments";
 import remarkOffloadPreviewMedia from "./src/plugins/remark-offload-preview-media";
@@ -180,31 +182,73 @@ if (!docsVersions.current?.label) {
 }
 
 /**
- * Versions whose pages link to the UNVERSIONED API-reference tree.
- *
- * Kept out of `docsVersions` on purpose: that object goes straight to the docs
- * plugin, which rejects unknown keys ("versions.current.apiTree is not
- * allowed").
- *
- * This is a property of the CONTENT, not of which version is served. Counted in
- * the sources on 2026-08-25:
- *
- *   docs/ (current)   2258 links to /data-capture-sdk,     0 versioned
- *   version-8.5.3     2258 links to /data-capture-sdk,     0 versioned
- *   version-7.6.14       0 unversioned, 2883 to /7.6/data-capture-sdk
- *   version-6.28.11      0 unversioned, 3430 to /6.28/data-capture-sdk
+ * Which API-reference tree a docs version's pages link to - READ OUT OF THAT
+ * VERSION'S SOURCES, not declared here.
  *
  * A snapshot keeps linking to the unversioned tree until the freeze process
- * rewrites it to its own line. Deriving this from `lastVersion` was right only
- * by coincidence: the moment 8.5.x stops being served, that rule emits
- * `api-reference-8.5` - a tag nothing links to and the index does not contain -
- * and 8.5 readers get an OR-branch matching zero records, which is the
- * regression this file exists to prevent.
+ * rewrites its links to its own line, so this is a property of the CONTENT and
+ * nothing else. Counted on 2026-08-26:
  *
- * When the 8.5.3 links are rewritten to /8.5/, remove it from this set;
- * `yarn verify:search-tags` then confirms api-reference-8.5 is populated.
+ *   docs/ (current)   210 files link docs.scandit.com/data-capture-sdk, 0 versioned
+ *   version-8.5.3     210 files link docs.scandit.com/data-capture-sdk, 0 versioned
+ *   version-7.6.14      0 unversioned, links docs.scandit.com/7.6/data-capture-sdk
+ *   version-6.28.11     0 unversioned, links docs.scandit.com/6.28/data-capture-sdk
+ *
+ * The two forms are mutually exclusive per version, so the scan is unambiguous.
+ *
+ * Why derived and not listed: every earlier attempt at this value was a second
+ * copy of the served version, and a copy the release script does not know about
+ * is a regression with a release date on it. Deriving it from `lastVersion` was
+ * right only by coincidence - the moment 8.5.x stops being served, that rule
+ * emits `api-reference-8.5`, a tag nothing links to and the index does not hold,
+ * and 8.5 readers get an OR-branch matching zero records. Listing the versions
+ * instead just moved the same bug: scripts/update-version.py rewrites
+ * DOCS_LAST_VERSION and the `"8.5.3":` key, so after the next release the list
+ * would still have said 8.5.3 and ~3,900 API-reference pages would have left
+ * search again. Reading the links means a release changes nothing here, and the
+ * freeze process rewriting 8.5.3's links to /8.5/ is picked up on the next build
+ * with no edit at all.
+ *
+ * Cost: one walk per version, ~185 ms total (early-exit on the first hit, so
+ * only a version that links unversioned reads its whole tree), memoised because
+ * buildApiReferenceTags runs twice per build.
  */
-const UNVERSIONED_API_TREE_VERSIONS = new Set(["current", "8.5.3"]);
+const apiLineCache = new Map<string, boolean>();
+function linksToOwnApiLine(versionName: string, number: string): boolean {
+  const cached = apiLineCache.get(versionName);
+  if (cached !== undefined) return cached;
+  // Docusaurus is always invoked from the site root.
+  const dir =
+    versionName === "current"
+      ? path.join(process.cwd(), "docs")
+      : path.join(process.cwd(), "versioned_docs", `version-${versionName}`);
+  const line = number.split(".").slice(0, 2).join(".");
+  const needle = `docs.scandit.com/${line}/data-capture-sdk`;
+  let found = false;
+  const stack = [dir];
+  while (stack.length && !found) {
+    const current = stack.pop() as string;
+    let entries: fs.Dirent[];
+    try {
+      entries = fs.readdirSync(current, { withFileTypes: true });
+    } catch {
+      continue; // a version with no snapshot on disk links nothing
+    }
+    for (const entry of entries) {
+      const full = path.join(current, entry.name);
+      if (entry.isDirectory()) stack.push(full);
+      else if (
+        /.mdx?$/i.test(entry.name) &&
+        fs.readFileSync(full, "utf8").includes(needle)
+      ) {
+        found = true;
+        break;
+      }
+    }
+  }
+  apiLineCache.set(versionName, found);
+  return found;
+}
 
 /** The only place a `docusaurus_tag` for a docs version is constructed. */
 const docVersionTag = (versionName: string): string =>
@@ -249,6 +293,25 @@ const apiReferenceTag = (versionNumber: string): string =>
  * patch during the beta window, and again on beta -> production. Deriving the
  * mapping is what makes it survive each turn.
  */
+/**
+ * The version NUMBER behind each docs-version tag.
+ *
+ * Exported so scripts/test-search-facets.cjs can check the API-tree mapping
+ * against the sources without guessing: `docs-default-current` carries no number
+ * in its name, and deriving one from `lastVersionMajor` gave "8" where the label
+ * says "8.6.0", so the test could not check /next/ at all.
+ */
+function buildVersionNumberByTag(
+  versions: Record<string, { label?: string }>,
+): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [name, cfg] of Object.entries(versions)) {
+    const number = name === "current" ? cfg.label || "" : name;
+    if (number) out[docVersionTag(name)] = number;
+  }
+  return out;
+}
+
 function buildApiReferenceTags(
   versions: Record<string, { label?: string }>,
 ): Record<string, string[]> {
@@ -257,11 +320,11 @@ function buildApiReferenceTags(
     const number = name === "current" ? cfg.label || "" : name;
     if (!number) continue;
     // Keyed off the tree this version's own pages LINK to - see
-    // UNVERSIONED_API_TREE_VERSIONS - not off which version happens to be served.
+    // linksToOwnApiLine - not off which version happens to be served.
     const tags = [
-      UNVERSIONED_API_TREE_VERSIONS.has(name)
-        ? "api-reference-latest"
-        : apiReferenceTag(number),
+      linksToOwnApiLine(name, number)
+        ? apiReferenceTag(number)
+        : "api-reference-latest",
     ];
     out[docVersionTag(name)] = tags;
   }
@@ -367,6 +430,7 @@ function searchTagsManifestPlugin() {
                 : lastVersion,
             ).split(".")[0],
             apiReferenceTagsByVersionTag: buildApiReferenceTags(docsVersions),
+            versionNumberByTag: buildVersionNumberByTag(docsVersions),
             // A preview build contains only `current`, so the gate must not
             // expect the frozen majors' tags from it.
             isPreviewBuild,
@@ -396,6 +460,7 @@ const config: Config = {
     // A docs version's tag -> the API-reference tag(s) that document it, so a
     // reader on 6.28.11 finds the 6.28 API and never the 8.x one.
     apiReferenceTagsByVersionTag: buildApiReferenceTags(docsVersions),
+    versionNumberByTag: buildVersionNumberByTag(docsVersions),
   },
 
   // Set the production url of your site here

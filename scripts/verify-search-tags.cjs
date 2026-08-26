@@ -393,9 +393,32 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   const servedCount = manifest.lastVersionTag
     ? counts[manifest.lastVersionTag]
     : undefined;
+  const servedThin =
+    servedCount === undefined || servedCount < THIN_PAGE_THRESHOLD;
+
+  // Corroboration, because "the served tag is thin" is equally true when the
+  // crawler is broken - and releasePending suppresses unreachable, thin and
+  // emptyApiTags, so believing it during an outage silences the gate at exactly
+  // the moment search is most broken. A release in flight moves ONE tag; an
+  // outage collapses all of them. If no OTHER docs-version tag still holds
+  // content, this is not a release.
+  const otherDocsTagsHealthy = Object.keys(
+    manifest.apiReferenceTagsByVersionTag || {},
+  ).some(
+    (tag) =>
+      tag !== manifest.lastVersionTag &&
+      (counts[tag] || 0) >= THIN_PAGE_THRESHOLD,
+  );
   const releasePending =
-    !!manifest.lastVersionTag &&
-    (servedCount === undefined || servedCount < THIN_PAGE_THRESHOLD);
+    !!manifest.lastVersionTag && servedThin && otherDocsTagsHealthy;
+
+  if (servedThin && !otherDocsTagsHealthy) {
+    console.error(
+      `\nNOTE: the served tag "${manifest.lastVersionTag}" is thin AND no other` + NL +
+        `  docs version holds content either. That is an index-wide failure, not a` + NL +
+        `  release in flight, so nothing below is being excused as "crawl pending".` + NL,
+    );
+  }
 
   // Skipped while a release is pending: the served tag being thin is the
   // definition of that state, not a separate problem. Without this, --strict on
@@ -444,10 +467,11 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
       console.error(`  ${n} pages tagged "${tag}" are in the index but filtered out of every query.`);
     }
     console.error(
-      releasePending && !strict
+      releasePending
         ? `\n  This build renames the served version to "${manifest.lastVersionTag}",\n` +
             `  which the index does not hold yet, so the outgoing tag is expected to be\n` +
-            `  unreachable until the deploy is crawled. Re-run then, or use --strict.`
+            `  unreachable until the deploy is crawled. Re-run after the crawl.\n` +
+            `  --strict does NOT turn this into a failure: the state is real.`
         : `\n  Either give the tag a home in buildApiReferenceTags / docsVersions\n` +
             `  (docusaurus.config.ts) so the widget filters on it, or stop the\n` +
             `  Algolia crawler emitting it. There is no alwaysOnSearchTags option.`,
@@ -472,6 +496,34 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   // `missing` explicitly excluded them. Skipped while a release is pending: a
   // brand-new version's API tag has not been crawled yet either.
   const emptyApiTags = releasePending || alwaysOnEmpty ? [] : pendingAlwaysOn;
+
+  // ...and a tag that still exists but has collapsed. emptyApiTags only tests
+  // `=== undefined`, `missing` excludes API tags by construction, `unreachable`
+  // skips them as contextual, and `thin` only ever looked at the served version -
+  // so api-reference-7.6 dropping from 2,501 pages to 4 printed
+  // "OK: every tag with content is reachable." A partial collapse is the same
+  // regression class as a total one; 7.6 readers just lose most of the API
+  // reference instead of all of it.
+  const thinApiTags = releasePending
+    ? []
+    : alwaysOn
+        .filter(
+          (tag) =>
+            counts[tag] !== undefined && counts[tag] < THIN_PAGE_THRESHOLD,
+        )
+        .map((tag) => [tag, counts[tag]]);
+  if (thinApiTags.length) {
+    failed = true;
+    console.error(
+      `\nFAIL: API-reference tag(s) hold far too little to be a whole tree:` + NL +
+        thinApiTags
+          .map(([t, n]) => `  "${t}" -> ${n} pages (floor ${THIN_PAGE_THRESHOLD})`)
+          .join(NL) + NL +
+        `  Each of these trees is thousands of pages. This few means the crawl is` + NL +
+        `  partial or its extractor is dropping records - readers on that version` + NL +
+        `  can no longer find most of their API reference.` + NL,
+    );
+  }
   if (emptyApiTags.length) {
     failed = true;
     console.error(
@@ -496,9 +548,10 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
     );
     for (const tag of missing) console.error(`  "${tag}" -> 0 records`);
     console.error(
-      onlyTheNewServedTag && !strict
+      onlyTheNewServedTag
         ? `  Expected: this build introduces "${manifest.lastVersionTag}". The crawler\n` +
-            `  populates it after deploy. Re-run then, or use --strict.`
+            `  populates it after deploy. Re-run after the crawl; --strict does NOT\n` +
+            `  turn this into a failure, because the state is real.`
         : `  A tag that matches nothing means those queries return nothing.`,
     );
   }
@@ -535,9 +588,17 @@ main().catch((err) => {
   // flaky network. One of them (a temporal-dead-zone read of releasePending) was
   // swallowed as a transport failure and exited 0, so the gate crashed and CI
   // stayed green.
+  // Node's fetch (undici) rejects with a TypeError for DNS, connection and TLS
+  // failures - "TypeError: fetch failed", with the real cause attached - so
+  // treating every TypeError as a defect made the documented transport tolerance
+  // unreachable for the most common transport failure: one DNS blip on a runner
+  // would block an unrelated docs PR. Those carry a `cause`; a real defect in
+  // this script (reading a property of undefined) does not.
+  const isTransportTypeError =
+    err instanceof TypeError && (err.message === "fetch failed" || !!err.cause);
   const isBug =
     err instanceof ReferenceError ||
-    err instanceof TypeError ||
+    (err instanceof TypeError && !isTransportTypeError) ||
     err instanceof SyntaxError;
   const deterministic = isBug || FATAL_PATTERNS.some((re) => re.test(message));
   console.error(`\nsearch-tag gate could not run: ${message}\n`);
