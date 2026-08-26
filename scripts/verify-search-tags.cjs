@@ -411,7 +411,8 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
   //
   // Detected rather than declared: if the served tag has no records at all, the
   // index predates this build. Post-crawl the same conditions are real problems
-  // and fail as before, and --strict fails either way so main
+  // and fail as before, and --strict fails either way so main and the daily
+  // scheduled run
   // still see them.
   //
   // The test is "holds no meaningful content", NOT "is absent from the index".
@@ -459,9 +460,9 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
     console.error(
       `\nNOTE: treating "${manifest.lastVersionTag}" as a release whose crawl has` + NL +
         `  not run yet, so its own page count is not being judged. If this same` + NL +
-        `  line appears on consecutive runs days apart, it is not a release - the` + NL +
-        `  crawl for the served version has stalled, and that is what the standing` + NL +
-        `  Algolia monitor exists to catch.` + NL,
+        `  line appears on consecutive daily runs, it is not a release - the crawl` + NL +
+        `  for the served version has stalled. The scheduled --strict run is where` + NL +
+        `  that shows up, because it is the only one that fires post-crawl.` + NL,
     );
   }
 
@@ -667,10 +668,9 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
 
 // A network failure is not a content failure. An Algolia outage, a rate limit or
 // a sandboxed runner would otherwise block merging unrelated docs PRs. Under
-// --strict (main, where someone is watching) it still fails. There is no
-// scheduled run in this repo; the standing Algolia check that catches a crawl
-// finishing later lives outside CI, so "re-run after the crawl" means a manual
-// re-run or the next push to main.
+// --strict (main, and the daily scheduled run where someone is watching) it
+// still fails. "Re-run after the crawl" is served by that scheduled run, or by
+// triggering the workflow by hand - see .github/workflows/build-docs.yml.
 // Faults the gate must never swallow. These are deterministic config errors, not
 // a flaky network, and treating them as transport meant the gate could degrade to
 // a complete no-op while printing a line nobody reads and passing CI.
