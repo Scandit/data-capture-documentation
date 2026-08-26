@@ -14,6 +14,8 @@ The AIO ("all-in-one") components are React scanning views that own their own ca
 mode, overlay, camera claim and lifecycle. You render one component instead of
 assembling a context, a mode, a view and an overlay by hand.
 
+They are available from version 8.7.
+
 In this guide you will learn step-by-step how to build a scanner with them. The
 general steps are:
 
