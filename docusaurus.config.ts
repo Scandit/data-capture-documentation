@@ -2,6 +2,8 @@ import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 import * as dotenv from 'dotenv';
+import * as fs from "fs";
+import * as path from "path";
 import { version } from "react";
 import remarkHideComments from "./src/plugins/remark-hide-comments";
 import remarkOffloadPreviewMedia from "./src/plugins/remark-offload-preview-media";
@@ -106,9 +108,40 @@ const llmsIgnoreFiles: string[] = [
   ),
 ];
 
-// Single source of truth for docs versions (consumed by the preset below and by
-// the search widget's version-routing map). `current` is the live version; its
-// major comes from `label`. Frozen versions are keyed by their version string.
+// ---------------------------------------------------------------------------
+// SINGLE SOURCE OF TRUTH: docs versions and every `docusaurus_tag` derived
+// from them.
+//
+// Docusaurus stamps each page with `docusaurus_tag: docs-<pluginId>-<versionName>`
+// built from the version NAME - the key in `docsVersions` below - and never
+// from `label` (see docVersionSearchTag in @docusaurus/theme-common). The search
+// widget filters every query on the tag of the version it is served from, so
+// each of those strings is a load-bearing identity, and a release that renames a
+// version silently changes what search can reach.
+//
+// Therefore: nothing outside this block may write a `docs-default-*` literal, and
+// nothing may restate `lastVersion`. Everything below is derived, exported through
+// `customFields`, and consumed by src/theme/SearchBar. `yarn verify:search-tags`
+// checks the derived values against the live Algolia index, because a value
+// derived correctly from the wrong assumption is still wrong.
+// ---------------------------------------------------------------------------
+
+// The version served at the site root. Must be a key of `docsVersions`.
+// Preview builds restrict `onlyIncludeVersions` to ["current"], and Docusaurus
+// requires lastVersion to be one of the included versions, so previews follow it.
+const DOCS_LAST_VERSION = "8.5.3";
+
+// The version actually served at the root of THIS build. Preview builds only
+// build `current`, so routing a major at a frozen tag would point at pages the
+// build does not contain. Declared once: it was restated at four call sites.
+const effectiveLastVersion = isPreviewBuild ? "current" : DOCS_LAST_VERSION;
+
+// `current.label` is load-bearing, not decoration: it is the only source of the
+// served major once lastVersion becomes "current", and buildApiReferenceTags
+// skips any version whose number it cannot resolve. An empty label would drop
+// /next/ readers' API reference and silently no-op the gate's served-major
+// assertion - the exact hole lastVersionMajor was added to close. Asserted at
+// config load so it fails the build rather than degrading search.
 const docsVersions: Record<
   string,
   {
@@ -138,13 +171,187 @@ const docsVersions: Record<
   },
 };
 
-// Derive the search widget's "major version typed in a query -> docusaurus_tag"
-// map from docsVersions so it can never drift from the actual versions. The
-// crawler stamps docusaurus_tag as `docs-default-<versionName>` (current ->
-// docs-default-current). Newest patch wins per major, and `current` always
-// wins its own major. Exposed via customFields and read in SearchBar.
-function buildVersionTagByMajor(
+if (!docsVersions.current?.label) {
+  throw new Error(
+    "docsVersions.current.label is empty. It is the only source of the served " +
+      "major once lastVersion becomes \"current\", and buildApiReferenceTags " +
+      "skips a version whose number it cannot resolve - so an empty label " +
+      "silently drops /next/ readers' API reference and no-ops the gate's " +
+      "served-major check. Set it to the release the beta is heading for.",
+  );
+}
+
+/**
+ * Which API-reference tree a docs version's pages link to - READ OUT OF THAT
+ * VERSION'S SOURCES, not declared here.
+ *
+ * A snapshot keeps linking to the unversioned tree until the freeze process
+ * rewrites its links to its own line, so this is a property of the CONTENT and
+ * nothing else. Counted on 2026-08-26:
+ *
+ *   docs/ (current)   210 files link docs.scandit.com/data-capture-sdk, 0 versioned
+ *   version-8.5.3     210 files link docs.scandit.com/data-capture-sdk, 0 versioned
+ *   version-7.6.14      0 unversioned, links docs.scandit.com/7.6/data-capture-sdk
+ *   version-6.28.11     0 unversioned, links docs.scandit.com/6.28/data-capture-sdk
+ *
+ * The two forms are mutually exclusive per version, so the scan is unambiguous.
+ *
+ * One thing this does NOT buy: the tag vocabulary is derived here, but the
+ * records come from the Algolia crawler. When 8.5.3's links are rewritten to
+ * /8.5/, this file correctly derives `api-reference-8.5` and the index will not
+ * hold it until the crawler has an action for that path. `yarn
+ * verify:search-tags` reports exactly that - WARN on PRs, FAIL on main - rather
+ * than letting 8.5 readers silently lose their API reference, but the crawler
+ * change is a real separate step, not a free consequence of the rewrite.
+ *
+ * Why derived and not listed: every earlier attempt at this value was a second
+ * copy of the served version, and a copy the release script does not know about
+ * is a regression with a release date on it. Deriving it from `lastVersion` was
+ * right only by coincidence - the moment 8.5.x stops being served, that rule
+ * emits `api-reference-8.5`, a tag nothing links to and the index does not hold,
+ * and 8.5 readers get an OR-branch matching zero records. Listing the versions
+ * instead just moved the same bug: scripts/update-version.py rewrites
+ * DOCS_LAST_VERSION and the `"8.5.3":` key, so after the next release the list
+ * would still have said 8.5.3 and ~3,900 API-reference pages would have left
+ * search again. Reading the links means a release changes nothing here, and the
+ * freeze process rewriting 8.5.3's links to /8.5/ is picked up on the next build
+ * with no edit in this file.
+ *
+ * Cost: one walk per version, ~185 ms total (early-exit on the first hit, so
+ * only a version that links unversioned reads its whole tree), memoised because
+ * buildApiReferenceTags runs twice per build.
+ */
+const apiLineCache = new Map<string, boolean>();
+function linksToOwnApiLine(versionName: string, number: string): boolean {
+  const cached = apiLineCache.get(versionName);
+  if (cached !== undefined) return cached;
+  // Docusaurus is always invoked from the site root.
+  const dir =
+    versionName === "current"
+      ? path.join(process.cwd(), "docs")
+      : path.join(process.cwd(), "versioned_docs", `version-${versionName}`);
+  const line = number.split(".").slice(0, 2).join(".");
+  const needle = `docs.scandit.com/${line}/data-capture-sdk`;
+  let found = false;
+  const stack = [dir];
+  while (stack.length && !found) {
+    const current = stack.pop() as string;
+    let entries: fs.Dirent[];
+    try {
+      entries = fs.readdirSync(current, { withFileTypes: true });
+    } catch {
+      continue; // a version with no snapshot on disk links nothing
+    }
+    for (const entry of entries) {
+      const full = path.join(current, entry.name);
+      if (entry.isDirectory()) stack.push(full);
+      else if (
+        /.mdx?$/i.test(entry.name) &&
+        fs.readFileSync(full, "utf8").includes(needle)
+      ) {
+        found = true;
+        break;
+      }
+    }
+  }
+  apiLineCache.set(versionName, found);
+  return found;
+}
+
+/** The only place a `docusaurus_tag` for a docs version is constructed. */
+const docVersionTag = (versionName: string): string =>
+  `docs-default-${versionName}`;
+
+/**
+ * The API reference is published per major.minor line, at
+ * /<major.minor>/data-capture-sdk/<framework>/ - /6.28/, /7.6/, /8.5/, /8.6/.
+ * So it IS versioned, and each docs version has its own.
+ */
+const apiReferenceLine = (versionNumber: string): string =>
+  versionNumber.split(".").slice(0, 2).join(".");
+
+const apiReferenceTag = (versionNumber: string): string =>
+  `api-reference-${apiReferenceLine(versionNumber)}`;
+
+/**
+ * The API-reference tag that belongs with each docs version's own tag.
+ *
+ * This mirrors how the site actually links, which is the only thing the crawler
+ * can discover (the sitemap carries no /data-capture-sdk/ URLs at all):
+ *
+ *   - the version served at the root, and the in-development one, link to the
+ *     UNVERSIONED tree, /data-capture-sdk/... -> `api-reference-latest`
+ *   - every frozen version links to its own line,
+ *     /7.6/data-capture-sdk/... -> `api-reference-7.6`
+ *
+ * Nothing links to /8.5/data-capture-sdk/, so mapping the served version at
+ * `api-reference-8.5` would point at a tree the crawler never reaches - and the
+ * current API reference would drop out of search exactly as it did in August.
+ *
+ * Both sides read the version out of what they already have: this file out of
+ * docsVersions, the crawler out of the URL. Neither hard-codes one, which is the
+ * point - tagging the API reference with a docs version NAME is what broke
+ * search when the 8.6.0-beta.1 release moved the root-served tag (e92c1b16):
+ * that release set `lastVersion: "8.5.2"` and made `current` the unreleased
+ * beta, so the guides at the root stopped emitting `docs-default-current`, the
+ * tag the API reference had been sharing for free. ~3,200 pages left search and
+ * nothing failed. 8.5.3 was a later patch bump, not the cause.
+ *
+ * And it is a CYCLE: the root-served tag moves on production -> beta, on every
+ * patch during the beta window, and again on beta -> production. Deriving the
+ * mapping is what makes it survive each turn.
+ */
+/**
+ * The version NUMBER behind each docs-version tag.
+ *
+ * Exported so scripts/test-search-facets.cjs can check the API-tree mapping
+ * against the sources without guessing: `docs-default-current` carries no number
+ * in its name, and deriving one from `lastVersionMajor` gave "8" where the label
+ * says "8.6.0", so the test could not check /next/ at all.
+ */
+function buildVersionNumberByTag(
   versions: Record<string, { label?: string }>,
+): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [name, cfg] of Object.entries(versions)) {
+    const number = name === "current" ? cfg.label || "" : name;
+    if (number) out[docVersionTag(name)] = number;
+  }
+  return out;
+}
+
+function buildApiReferenceTags(
+  versions: Record<string, { label?: string }>,
+): Record<string, string[]> {
+  const out: Record<string, string[]> = {};
+  for (const [name, cfg] of Object.entries(versions)) {
+    const number = name === "current" ? cfg.label || "" : name;
+    if (!number) continue;
+    // Keyed off the tree this version's own pages LINK to - see
+    // linksToOwnApiLine - not off which version happens to be served.
+    const tags = [
+      linksToOwnApiLine(name, number)
+        ? apiReferenceTag(number)
+        : "api-reference-latest",
+    ];
+    out[docVersionTag(name)] = tags;
+  }
+  return out;
+}
+
+/**
+ * Map a major version typed in a query ("v7", "sdk 6") to the tag of the version
+ * a reader on that line is actually served.
+ *
+ * Priority per major: the site's `lastVersion` first, then the newest RELEASED
+ * version, and an `unreleased` version only when nothing else covers the major.
+ * The previous rule let `current` win its major unconditionally, which was
+ * correct only while `lastVersion` was "current"; once 8.6.0-beta became current
+ * and 8.5.3 became lastVersion, "v8" routed readers at the unreleased beta's tag.
+ */
+function buildVersionTagByMajor(
+  versions: Record<string, { label?: string; banner: string }>,
+  lastVersion: string,
 ): Record<string, string> {
   const comparePatch = (a: string, b: string): number => {
     const pa = a.split(".").map(Number);
@@ -154,27 +361,97 @@ function buildVersionTagByMajor(
     }
     return 0;
   };
-  const best: Record<string, { label: string; isCurrent: boolean }> = {};
-  const out: Record<string, string> = {};
+
+  type Candidate = {
+    name: string;
+    label: string;
+    isLast: boolean;
+    unreleased: boolean;
+  };
+  const byMajor: Record<string, Candidate[]> = {};
+
   for (const [name, cfg] of Object.entries(versions)) {
-    const isCurrent = name === "current";
-    const label = isCurrent ? cfg.label || "" : name;
+    // The tag comes from the name; the number a user would type comes from the
+    // label for `current` and from the name itself for frozen versions.
+    const label = name === "current" ? cfg.label || "" : name;
     const major = label.split(".")[0];
     if (!major) continue;
-    const cur = best[major];
-    if (
-      !cur ||
-      isCurrent ||
-      (!cur.isCurrent && comparePatch(label, cur.label) > 0)
-    ) {
-      best[major] = { label, isCurrent };
-      out[major] = `docs-default-${name}`;
-    }
+    (byMajor[major] = byMajor[major] || []).push({
+      name,
+      label,
+      isLast: name === lastVersion,
+      unreleased: cfg.banner === "unreleased",
+    });
+  }
+
+  const out: Record<string, string> = {};
+  for (const [major, candidates] of Object.entries(byMajor)) {
+    const winner = candidates.slice().sort(
+      (a, b) =>
+        Number(b.isLast) - Number(a.isLast) ||
+        Number(a.unreleased) - Number(b.unreleased) ||
+        comparePatch(b.label, a.label),
+    )[0];
+    out[major] = docVersionTag(winner.name);
   }
   return out;
 }
 
-const versionTagByMajor = buildVersionTagByMajor(docsVersions);
+const versionTagByMajor = buildVersionTagByMajor(
+  docsVersions,
+  // Previews only build `current`, so the major CONTAINING current is routed
+  // there. Majors that exist only as frozen versions (6, 7) still resolve to
+  // their own tags, which a preview has no pages for - typing "v7" in a preview
+  // returns nothing. Accepted: previews are for reviewing the current tree.
+  effectiveLastVersion,
+);
+
+/**
+ * Writes build/search-tags.json: the docusaurus_tag values this build actually
+ * makes reachable through search. `yarn verify:search-tags` diffs it against the
+ * live Algolia index; see scripts/verify-search-tags.cjs.
+ */
+function searchTagsManifestPlugin() {
+  return {
+    name: "search-tags-manifest",
+    async postBuild({ outDir }: { outDir: string }) {
+      const { writeFile } = await import("fs/promises");
+      const { join } = await import("path");
+      const lastVersion = effectiveLastVersion;
+      await writeFile(
+        join(outDir, "search-tags.json"),
+        JSON.stringify(
+          {
+            lastVersion,
+            // Always in Docusaurus's contextual filter.
+            defaultTag: "default",
+            // The tag every page at the site root emits.
+            lastVersionTag: docVersionTag(lastVersion),
+            // The major the site serves, stated rather than parsed out of the
+            // tag. When lastVersion is "current" the tag is
+            // `docs-default-current`, which carries no number, so the gate's
+            // served-major assertion silently no-opped for the entire
+            // production half of every release cycle.
+            lastVersionMajor: String(
+              lastVersion === "current"
+                ? docsVersions.current?.label || ""
+                : lastVersion,
+            ).split(".")[0],
+            apiReferenceTagsByVersionTag: buildApiReferenceTags(docsVersions),
+            versionNumberByTag: buildVersionNumberByTag(docsVersions),
+            // A preview build contains only `current`, so the gate must not
+            // expect the frozen majors' tags from it.
+            isPreviewBuild,
+            versionTagByMajor,
+          },
+          null,
+          2,
+        ) + "\n",
+        "utf8",
+      );
+    },
+  };
+}
 
 const config: Config = {
   title: "Scandit Developer Documentation",
@@ -183,10 +460,15 @@ const config: Config = {
   favicon: "img/sdk_icon.png",
   trailingSlash: true,
 
-  // Derived from docsVersions; read by the search widget (SearchBar) to route a
-  // version typed in a query to the right docusaurus_tag without a hardcoded map.
+  // The search widget's whole view of docusaurus_tag, derived above and passed
+  // through so SearchBar never constructs one of these strings itself.
   customFields: {
+    // Major typed in a query -> tag of the version a reader is actually served.
     versionTagByMajor,
+    // A docs version's tag -> the API-reference tag(s) that document it, so a
+    // reader on 6.28.11 finds the 6.28 API and never the 8.x one.
+    apiReferenceTagsByVersionTag: buildApiReferenceTags(docsVersions),
+    versionNumberByTag: buildVersionNumberByTag(docsVersions),
   },
 
   // Set the production url of your site here
@@ -452,6 +734,10 @@ const config: Config = {
     },
   ],
   ...(isPreviewBuild ? [stripPreviewMediaPlugin] : []),
+  // Publish the exact tag set the built widget filters on, so the search-tag
+  // gate can check a real build artifact instead of re-deriving the same
+  // assumption from this file and agreeing with itself.
+  searchTagsManifestPlugin,
 ],
 
   presets: [
@@ -481,11 +767,9 @@ const config: Config = {
           },
           showLastUpdateTime: false,
           includeCurrentVersion: true,
-          // Preview builds restrict onlyIncludeVersions to just "current" above,
-          // and Docusaurus requires lastVersion to be one of the included
-          // versions — so it must follow onlyIncludeVersions here rather than
-          // staying pinned to the real released version.
-          lastVersion: isPreviewBuild ? "current" : "8.5.3",
+          // See DOCS_LAST_VERSION above - declared once, next to docsVersions,
+          // so the search tag derivation and the docs plugin cannot disagree.
+          lastVersion: effectiveLastVersion,
           versions: docsVersions,
         },
         blog: false,
