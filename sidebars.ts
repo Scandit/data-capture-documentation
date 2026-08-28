@@ -1121,6 +1121,7 @@ const sidebars: SidebarsConfig = {
           items: [
             'sdks/react-native/aio/get-started',
             'sdks/react-native/aio/navigating-between-screens',
+            'sdks/react-native/aio/vs-classic',
           ],
         },
         'sdks/react-native/system-requirements',
