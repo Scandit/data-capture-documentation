@@ -15,7 +15,7 @@ Version 8.7 adds a new, simplified way to build a scanning screen in React Nativ
 
 The AIO components internalize much of the complex logic in the classic components, leaving you to focus on your scanning workflow rather than on the component lifecycle.
 
-Nothing was taken away. Every classic API still works exactly as it did, and existing screens keep running untouched. This page explains what the AIO components do for you, which API to reach for, and how to migrate a screen.
+Every classic API still works exactly as it did, and existing screens keep running untouched. This page explains what the AIO components do for you, which API to reach for, and how to migrate a screen.
 
 <!-- TODO(SDC-33129): link the getting-started guide once it is published. The page is
      docs/sdks/react-native/aio/get-started.md, so the link becomes:
@@ -61,7 +61,15 @@ await camera.switchToDesiredState(FrameSourceState.On);
 const overlay = new BarcodeCaptureOverlay(barcodeCapture);
 ```
 
-This is where the AIO components change the most, because all of that scaffolding moves into the component.
+This is where the AIO components change the most, because all of that scaffolding moves into the component. The block above becomes this:
+
+```jsx
+<BarcodeCaptureAioView
+  style={{ flex: 1 }}
+  symbologies={[Symbology.EAN13UPCA, Symbology.QR]}
+  didScan={barcodes => onScan(barcodes[0])}
+/>
+```
 
 :::note[These four are the modes with an AIO component]
 Other modes also need a `DataCaptureView`—Barcode Selection is one. The four named above are the `DataCaptureView` modes that have an AIO equivalent in 8.7. Barcode Pick, Barcode Find and Barcode Selection have none, and stay on the classic API.
@@ -71,9 +79,11 @@ Other modes also need a `DataCaptureView`—Barcode Selection is one. The four n
 
 `SparkScanView`, `BarcodeCountView`, `BarcodeArView`, `BarcodePickView` and `BarcodeFindView` already render their own native view, so there is no `DataCaptureView` and no overlay to assemble. You still initialize the context, construct the mode, pass both to the view, and manage the context's lifetime.
 
-To see what you were expected to own with these, look at one of the [public samples](https://github.com/Scandit/datacapture-react-native-samples): List Building for SparkScan, MatrixScan Count for Barcode Count, MatrixScan Simple for Barcode Batch.
+To see what you were expected to own with these, look at one of the public samples: [List Building](https://github.com/Scandit/datacapture-react-native-samples/tree/master/01_Single_Scanning_Samples/01_Barcode_Scanning_with_Pre_Built_UI/ListBuildingSample) for SparkScan, [MatrixScan Count](https://github.com/Scandit/datacapture-react-native-samples/tree/master/03_Advanced_Batch_Scanning_Samples/02_Counting_and_Receiving/MatrixScanCountSimpleSample) for Barcode Count, and [MatrixScan Simple](https://github.com/Scandit/datacapture-react-native-samples/tree/master/03_Advanced_Batch_Scanning_Samples/01_Batch_Scanning_and_AR_Info_Lookup/MatrixScanSimpleSample) for Barcode Batch.
 
 ## What the AIO components change
+
+### Wrapping your app with `ScanditProvider`
 
 A single `ScanditProvider` near the root of your app initializes the context and owns the camera. Each `*AioView` below it owns its own mode, overlay and camera claim, takes its configuration as props, and reports results through callback props.
 
@@ -90,8 +100,8 @@ A single `ScanditProvider` near the root of your app initializes the context and
 | The `DataCaptureContext`—initialize, attach modes, dispose | Owned by `ScanditProvider` |
 | The capture mode—construct, attach, remove on unmount | Built from props |
 | The camera—acquire, configure, turn off when hidden | Owned by `ScanditProvider` |
-| The overlay—build it, add it to the view | A prop object |
-| Listeners—register and unregister | Callback props |
+| The overlay—build it, add it to the view | A prop object, managed internally |
+| Listeners—register and unregister | Callback props, managed internally |
 | Screen focus and app background | Handled from your navigation object |
 
 The context is a shared instance either way: `DataCaptureContext.initialize()` returns `DataCaptureContext.sharedInstance`, and so does the provider.
@@ -114,13 +124,17 @@ Seven capture modes have an AIO component in 8.7:
 | [Barcode Count](/sdks/react-native/matrixscan-count/intro) | `BarcodeCountView` | `BarcodeCountAioView` |
 | [Barcode AR](/sdks/react-native/matrixscan-ar/intro) | `BarcodeArView` | `BarcodeArAioView` |
 
+<!-- TODO(SDC-33130): link each AIO component in the third column to its RST API
+     reference once those pages are published. They do not exist yet, and
+     onBrokenLinks is "throw", so linking them now fails the build. -->
+
 :::note[Each view exposes what its mode has]
 An AIO view's props mirror its mode's own API. Barcode Capture, Barcode Batch, ID Capture and Label Capture have overlay objects in the SDK, so their views take `*Overlay` props. SparkScan, Barcode Count and Barcode AR have no overlay, so their visual properties—brushes, providers, view settings—sit directly on the view, exactly as on the classic components.
 :::
 
 ### How you configure the mode
 
-You never construct the mode. Each AIO view takes a `symbologies` array for the common case and a full settings object when you need more control. If you pass both, the settings object wins and the component warns that the shorthand was ignored.
+Each AIO view constructs the mode internally. It takes a `symbologies` array for the common case and a full settings object when you need more control. If you pass both, the settings object wins and the component warns that the shorthand was ignored.
 
 ```jsx
 {/* shorthand */}
@@ -132,7 +146,7 @@ You never construct the mode. Each AIO view takes a `symbologies` array for the 
 
 ### How overlays are configured
 
-This applies to the four modes that needed manual assembly. The overlay was a separate object you built and added to the `DataCaptureView`. On the AIO view it is a prop object instead: `basicOverlay`, plus `advancedOverlay` where the mode has one. SparkScan, Barcode Count and Barcode AR have no overlay, so this does not apply to them.
+This applies to the modes that require rendering a `DataCaptureView`. The overlay was a separate object you built, added to the `DataCaptureView` and managed the lifecycle of. On the AIO view it is a prop object instead: `basicOverlay`, plus `advancedOverlay` where the mode has one.
 
 ```jsx
 <BarcodeBatchAioView
@@ -148,9 +162,13 @@ This applies to the four modes that needed manual assembly. The overlay was a se
 
 Pass `{ enabled: false }` to skip an overlay, or omit the prop to take the defaults.
 
+:::note[Three modes have no overlay]
+SparkScan, Barcode Count and Barcode AR have no overlay object at any layer, so this section does not apply to them. Their visual properties sit directly on the view.
+:::
+
 ### How you receive results
 
-Instead of registering a listener on the mode, you pass callback props. Every AIO view exposes `didScan`, called with the newly recognized barcodes, the session, and a function that resolves the frame data. `didUpdateSession` fires on every session update, before `didScan` for the same update.
+Instead of registering a listener on the mode, you pass callback props. `didScan` is called with the newly recognized barcodes, the session, and a function that resolves the frame data; `didUpdateSession` fires on every session update, before `didScan` for the same update. Every AIO view exposes that pair except `IdCaptureAioView`, which reports differently.
 
 ```jsx
 <BarcodeCaptureAioView
@@ -165,7 +183,7 @@ Instead of registering a listener on the mode, you pass callback props. Every AI
 
 ### Camera configuration
 
-The provider owns the camera, so `frameSourceState`, `cameraPosition`, `torchState` and `cameraSettings` are props on `ScanditProvider` rather than on the view. A nested `ScanditProvider` around a single screen sets them for that screen only; values it applies are not reverted when it unmounts.
+[The provider](#wrapping-your-app-with-scanditprovider) owns the camera, so `frameSourceState`, `cameraPosition`, `torchState` and `cameraSettings` are props on `ScanditProvider` rather than on the view. A nested `ScanditProvider` around a single screen is a convenient place to set them, but it applies them to the same shared camera: the last writer wins, and the values stay applied after the nested provider unmounts. Set them again on the way out if a later screen needs different ones.
 
 ```jsx
 <ScanditProvider
@@ -186,7 +204,7 @@ The provider owns the camera, so `frameSourceState`, `cameraPosition`, `torchSta
 
 ### Starting and stopping as screens change
 
-The AIO views suspend scanning while a screen is blurred or the app is backgrounded, and resume when it returns. Pass your navigation object:
+The AIO views suspend scanning while a screen is blurred or the app is backgrounded, and resume when it returns. Pass your navigation object to enable this behaviour:
 
 ```jsx
 <SparkScanAioView
@@ -201,15 +219,16 @@ React Navigation works out of the box. The prop is typed structurally as `Scandi
 You do not have to use a navigation library at all. The `disabled` prop keeps scanning off regardless of focus, and every AIO view's handle exposes `enable()` and `disable()` for direct control. `SparkScanAioViewHandle` and `BarcodeCountAioViewHandle` additionally expose `reset()`, which clears the current scanning session; both warn and do nothing if the view is not attached, so they are safe to call during a screen transition.
 
 ```jsx
-const ref = useRef(null);
+function ScanScreen({ isPaused }) {
+  const ref = useRef(null);
 
-<BarcodeCaptureAioView ref={ref} disabled={isPaused} />;
-
-// or imperatively
-await ref.current.disable();
+  // Declaratively: scanning stays off while `isPaused` is true.
+  // Imperatively: await ref.current.disable() / ref.current.enable().
+  return <BarcodeCaptureAioView ref={ref} disabled={isPaused} />;
+}
 ```
 
-Set `appStateHandlingDisabled` if you want to handle app-state changes yourself.
+Both work regardless of focus. Set `appStateHandlingDisabled` if you also want to handle app backgrounding yourself.
 
 ## Which one to use
 
@@ -221,12 +240,28 @@ An existing screen that works does not need rewriting.
 
 ## Migrating a screen
 
-The shape of every migration is the same:
+The migration process is the same for every mode:
 
 1. Wrap your app in a `ScanditProvider` with your license key, once.
 2. Delete the context initialization, the mode construction, the listener registration, the overlay construction and the camera setup from the screen.
 3. Replace the classic component with its AIO equivalent, moving settings to props and the listener to `didScan`.
 4. Move any per-screen camera or torch state to a nested `ScanditProvider`.
+
+```jsx
+// 1. Once, at the root of your app.
+<ScanditProvider licenseKey={LICENSE_KEY}>
+  <NavigationContainer>{/* your screens */}</NavigationContainer>
+</ScanditProvider>;
+
+// 3 and 4. Per screen, in place of the classic assembly.
+<ScanditProvider frameSourceState={isFocused ? FrameSourceState.On : FrameSourceState.Off}>
+  <BarcodeCaptureAioView
+    style={{ flex: 1 }}
+    symbologies={[Symbology.QR]}
+    didScan={barcodes => onScan(barcodes[0])}
+  />
+</ScanditProvider>;
+```
 
 ### `BarcodeCapture`
 
