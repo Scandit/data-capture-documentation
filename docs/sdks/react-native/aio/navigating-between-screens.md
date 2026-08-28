@@ -14,6 +14,10 @@ A single scanning screen is straightforward. A second one is where applications 
 wrong, because two screens cannot both drive the camera. This page covers what happens
 when you navigate between AIO views.
 
+It follows on from [Get Started](./get-started.md), which covers installing the packages
+and mounting the provider. The examples below also use
+[React Navigation](https://reactnavigation.org/), which is not part of the Scandit SDK.
+
 ## The Camera Has One Owner
 
 The camera has exactly one owner at a time. The newest view to claim it takes ownership,
@@ -50,6 +54,7 @@ import {
   Symbology,
 } from 'scandit-react-native-datacapture-barcode';
 
+const LICENSE_KEY = 'YOUR_LICENSE_KEY_HERE';
 const SYMBOLOGIES = [Symbology.EAN13UPCA, Symbology.Code128];
 const Stack = createStackNavigator();
 
@@ -106,9 +111,27 @@ not the whole story:
   moves between the background and the foreground. Set it only if you manage that
   yourself.
 
-Every AIO view also exposes `enable()` and `disable()` on its handle for a single
-imperative change. Prefer `disabled` for state your render already knows about: the prop
-and the handle can otherwise disagree about whether scanning is on.
+`disabled` is a prop like any other, so drive it from state:
+
+```js
+<BarcodeCaptureAioView
+  style={{ flex: 1 }}
+  navigation={navigation}
+  disabled={isSheetOpen}
+  symbologies={SYMBOLOGIES}
+  didScan={handleScan}
+/>
+```
+
+Every AIO view also exposes `enable()` and `disable()` on its
+[handle](./get-started.md#calling-the-view-directly), for a single imperative change.
+
+:::warning
+Prefer the `disabled` prop for anything your render already knows about. The focus and
+foreground handlers read the current value of `disabled`, and an imperative `disable()`
+does not change it. So a view you disabled by hand starts scanning again at the next
+focus or foreground event, because the prop still says it is enabled.
+:::
 
 ## Where to Go Next
 
