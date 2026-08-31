@@ -129,7 +129,7 @@ const llmsIgnoreFiles: string[] = [
 // The version served at the site root. Must be a key of `docsVersions`.
 // Preview builds restrict `onlyIncludeVersions` to ["current"], and Docusaurus
 // requires lastVersion to be one of the included versions, so previews follow it.
-const DOCS_LAST_VERSION = "8.5.3";
+const DOCS_LAST_VERSION = "current";
 
 // The version actually served at the root of THIS build. Preview builds only
 // build `current`, so routing a major at a frozen tag would point at pages the
@@ -154,10 +154,6 @@ const docsVersions: Record<
 > = {
   current: {
     label: "8.6.0",
-    banner: "unreleased",
-    badge: false,
-  },
-  "8.5.3": {
     banner: "none",
     badge: false,
   },

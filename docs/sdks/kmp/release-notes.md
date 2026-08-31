@@ -10,9 +10,9 @@ keywords:
   - kmp
 ---
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 

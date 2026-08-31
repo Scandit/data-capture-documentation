@@ -10,33 +10,36 @@ keywords:
   - netIos
 ---
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
 #### Barcode
 
-* Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
-* BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
+* MatrixScan Sequence: introduced several new configurations to adapt the sequencing flow.
+  - `initialOrderOnShelf` and `initialOrderOnTray` resume scanning from a previous session.
+  - `idleTimeout` sets the inactivity period in seconds before sequencing pauses automatically, defaulting to 10 seconds; 0 or less disables the automatic pause
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
-* Added missing BarcodeAr .NET APIs: `BarcodeArView.LogoAnchor` and `BarcodeArView.LogoOffset` to position the Scandit logo (iOS + Android); `BarcodeArView.LogoStyle` for minimal/extended logo style (iOS); `BarcodeArView.ZoomControlOrientation` for the zoom control's orientation (iOS); `BarcodeArStatusIconAnnotation.Anchor` plus the new `BarcodeArStatusIconAnnotationAnchor` enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and `BarcodeArResponsiveAnnotation.CloseUpAnnotation` and `BarcodeArResponsiveAnnotation.FarAwayAnnotation` to read the close-up/far-away annotation variations (iOS + Android).
-* Added `BarcodePickViewSettings.ZoomButtonPosition`, `ShowTorchButton`, `TorchButtonPosition`, `LogoAnchor`, and `LogoStyle` (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; `RectangularWithIcons.StatusIconSettings`; and `BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string)`.
-* Unified the .NET BarcodeCount API with native Android/iOS: added `BarcodeCountStatus.ExpiringSoon`, `BarcodeCountView.ShouldShowStatusIconsOnScan`/`LogoStyle`/`LogoAnchor`, and a public BarcodeCountNotInListActionSettings() constructor.
-* Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus `IBarcodeFindListener.OnSessionUpdated`, the `BarcodeFind.SessionUpdated` event, `BarcodeFindView.LogoAnchor`/`LogoStyle`, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
-* Added missing BarcodeSelection .NET APIs: `BarcodeSelectionSession.SelectUnselectedBarcodes()`, `BarcodeSelectionSettings.TapGestureForSelectionEnabled` and `SwipeGesturesEnabled`, and the `BarcodeSelectionSettings.Create(CapturePreset)` factory.
-* Added missing .NET BarcodeBatch and BarcodePick APIs: `BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes`, `BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary)`, `BarcodeBatchBasicOverlay.DotRadius`, the previously missing `TrackedObject` class (Location, Identifier, Data), and `BarcodePickSession.TrackedObjects`/`AddedObjects` exposing the new `TrackedObject`.
+* Added missing BarcodeAr .NET APIs: BarcodeArView.LogoAnchor and BarcodeArView.LogoOffset to position the Scandit logo (iOS + Android); BarcodeArView.LogoStyle for minimal/extended logo style (iOS); BarcodeArView.ZoomControlOrientation for the zoom control's orientation (iOS); BarcodeArStatusIconAnnotation.Anchor plus the new BarcodeArStatusIconAnnotationAnchor enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and BarcodeArResponsiveAnnotation.CloseUpAnnotation and BarcodeArResponsiveAnnotation.FarAwayAnnotation to read the close-up/far-away annotation variations (iOS + Android).
+* Added BarcodePickViewSettings.ZoomButtonPosition, ShowTorchButton, TorchButtonPosition, LogoAnchor, and LogoStyle (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; RectangularWithIcons.StatusIconSettings; and BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string).
+* Unified the .NET BarcodeCount API with native Android/iOS: added BarcodeCountStatus.ExpiringSoon, BarcodeCountView.ShouldShowStatusIconsOnScan/LogoStyle/LogoAnchor, and a public BarcodeCountNotInListActionSettings() constructor.
+* Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus IBarcodeFindListener.OnSessionUpdated, the BarcodeFind.SessionUpdated event, BarcodeFindView.LogoAnchor/LogoStyle, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
+* Added missing BarcodeSelection .NET APIs: BarcodeSelectionSession.SelectUnselectedBarcodes(), BarcodeSelectionSettings.TapGestureForSelectionEnabled and SwipeGesturesEnabled, and the BarcodeSelectionSettings.Create(CapturePreset) factory.
+* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously-missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
 * Added BarcodeSequence support to .NET, with MAUI consumption.
 * Added BarcodeGenerator for .NET to generate barcode/2D-code images from text or byte[] at a configurable width, with foreground/background color customization. Supports Code 39, Code 128, EAN-13, UPC-A, Interleaved 2 of 5, QR Code, Data Matrix, Aztec, and PDF417.
-* Added `BarcodeArPopoverAnnotation.Anchor` and the `BarcodeArPopoverAnnotationAnchor` enum (Left/Right/Bottom/Top, default Bottom).
-* Added `BarcodeArCircleHighlight.Pulsing` to enable/disable the pulsing highlight animation.
-* Added `BarcodeArAnnotationTrigger.BarcodeScan`, showing AR annotations immediately on scan with no tap-to-toggle.
-* Added IBarcodeArFilter functionality.
+* Added various Barcode AR APIs:
+  - `BarcodeArPopoverAnnotation.Anchor` and the `BarcodeArPopoverAnnotationAnchor` enum (`Left`/`Right`/`Bottom`/`Top`, defaults to `Bottom`).
+  - `BarcodeArCircleHighlight.Pulsing` to enable/disable the pulsing highlight animation.
+  - `BarcodeArAnnotationTrigger.BarcodeScan`, showing AR annotations immediately on scan with no tap-to-toggle.
+  - `IBarcodeArFilter` functionality.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -63,8 +66,8 @@ keywords:
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
