@@ -132,11 +132,6 @@
     }
   }
 
-  /* Hidden, not unmounted - see the note in index.tsx. */
-  .expertHidden {
-    display: none;
-  }
-
   .expert {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -146,6 +141,14 @@
     background: var(--in-panel);
     border: 1px solid var(--in-line);
     border-radius: var(--in-radius);
+  }
+
+  /* Closed by default. Hidden rather than unmounted (see the note in index.tsx),
+     so TWO classes and declared after `.expert` - a single-class rule placed
+     earlier loses to `.expert { display: grid }` on source order, which is
+     exactly what left the panel open on the first build. */
+  .expert.expertHidden {
+    display: none;
   }
 
   .xitem {
