@@ -1,0 +1,74 @@
+{
+  "_comment": "Intent taxonomy for the docs 'Start here' navigator (Phase E MVP). Mirrors the Unified-Signup PRD product quiz (scan type -> task -> delivery -> product) so the docs entry point and the signup quiz recommend the same product for the same intent. `href` is the verified web landing for each product; the IntentNavigator upgrades it to the reader's selected framework when that framework has the product. Keep this in sync with the PRD decision matrix.",
+  "scanTypes": [
+    {
+      "id": "barcodes",
+      "label": "Barcodes",
+      "hint": "QR, EAN-13, Code 128, Data Matrix, and more",
+      "goals": [
+        {
+          "task": "Scan one item at a time",
+          "context": "point of sale, lookup, list-building",
+          "options": [
+            { "product": "sparkscan", "name": "SparkScan", "delivery": "Ready-made scanning UI", "href": "/sdks/web/sparkscan/intro" },
+            { "product": "barcode-capture", "name": "Barcode Capture", "delivery": "Full control (SDK)", "href": "/sdks/web/barcode-capture/get-started" },
+            { "product": "express", "name": "Scandit Express", "delivery": "No code", "href": "/hosted/express/overview" }
+          ]
+        },
+        {
+          "task": "Scan and tally many quickly",
+          "context": "stocktake, bulk scanning",
+          "options": [
+            { "product": "matrixscan-batch", "name": "MatrixScan Batch", "delivery": "Full control (SDK)", "href": "/sdks/web/matrixscan/intro" },
+            { "product": "express", "name": "Scandit Express", "delivery": "No code", "href": "/hosted/express/overview" }
+          ]
+        },
+        {
+          "task": "Count and check against an expected list",
+          "context": "proof of delivery, receiving",
+          "options": [
+            { "product": "matrixscan-count", "name": "MatrixScan Count", "delivery": "Full control (SDK)", "href": "/sdks/web/matrixscan-count/intro" },
+            { "product": "express", "name": "Scandit Express", "delivery": "No code", "href": "/hosted/express/overview" }
+          ]
+        },
+        {
+          "task": "Find a specific item among many",
+          "context": "order picking",
+          "options": [
+            { "product": "matrixscan-find", "name": "MatrixScan Find", "delivery": "Guided AR search (SDK)", "href": "/sdks/web/matrixscan-find/intro" },
+            { "product": "matrixscan-pick", "name": "MatrixScan Pick", "delivery": "Pick workflow (SDK)", "href": "/sdks/web/matrixscan-pick/intro" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "labels",
+      "label": "Text and barcodes on labels",
+      "hint": "expiry dates, prices, lot numbers, addresses",
+      "goals": [
+        {
+          "task": "Capture fields from a label",
+          "context": "expiry, price, lot number, address",
+          "options": [
+            { "product": "smart-label-capture", "name": "Smart Label Capture", "delivery": "Full control (SDK)", "href": "/sdks/web/label-capture/intro" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "id",
+      "label": "Identity documents",
+      "hint": "passports, driver's licenses, ID cards",
+      "goals": [
+        {
+          "task": "Scan and extract ID data",
+          "context": "onboarding, identity and age checks",
+          "options": [
+            { "product": "id-capture", "name": "ID Capture", "delivery": "Full control (SDK)", "href": "/sdks/web/id-capture/intro" },
+            { "product": "id-bolt", "name": "ID Bolt", "delivery": "No code (web)", "href": "/hosted/id-bolt/getting-started" }
+          ]
+        }
+      ]
+    }
+  ]
+}
