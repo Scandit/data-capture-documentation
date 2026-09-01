@@ -1,33 +1,29 @@
 import React from "react";
 import Head from "@docusaurus/Head";
 import Layout from "@theme/Layout";
+import Link from "@docusaurus/Link";
 import ProductChooser from "@site/src/components/ProductChooser";
-import IntentNavigator from "@site/src/components/IntentNavigator";
-import ErrorCodeFinder from "@site/src/components/ErrorCodeFinder";
 
 /**
- * /component-preview - a single page rendering the three IA change proposals so a
- * designer can review them in real site chrome (real tokens, fonts, spacing, and a
- * working light/dark toggle) from ONE link.
+ * /component-preview - a launcher for the design review.
  *
- * Deliberately a src/pages route, NOT a docs page: it therefore appears in no
- * sidebar, in no framework tree, and in no docs version. It is a review surface,
- * not documentation. `noindex` keeps it out of search engines, and the PR preview
- * that hosts it is deleted automatically when the PR closes.
+ * IMPORTANT: this page does NOT re-render the three components itself, because
+ * doing that changed how they looked. Two of them are built to sit on a DOCS page,
+ * where they inherit the docs markdown wrapper (markdown.scss, doc-content.scss,
+ * doc-admonition.scss) plus the docs column width and typography. Rendering them on
+ * a src/pages route dropped all of that, so the earlier version of this page showed
+ * something subtly different from what was actually built.
  *
- * The components are unmodified - copied from their own branches so the designer
- * sees exactly what was built:
- *   ProductChooser   docs/product-chooser            (PR #417)
- *   IntentNavigator  docs/phase-e-intent-navigator
- *   ErrorCodeFinder  0fd2e0a4 on docs/sparkscan-ios-rewrite
+ * So the canonical review surfaces are the ORIGINAL pages, copied verbatim from
+ * their own branches, and this page just links to them. The only thing rendered
+ * inline is the ProductChooser framework variant that the real page cannot show
+ * (the same product as seen by a Web reader), clearly labelled as an extra.
+ *
+ * Not documentation: no sidebar entry, noindex, and removed when the PR closes.
  */
 
-// ProductChooser reads the page's own frontmatter when it sits on a docs page.
-// Here we pass the same shape by hand, copied verbatim from the frontmatter of
-// docs/sdks/ios/sparkscan/intro.md on the docs/product-chooser branch, so the
-// rendering matches the real page rather than an invented example.
-const SPARKSCAN_IOS = {
-  framework: "ios",
+const SPARKSCAN_WEB = {
+  framework: "web",
   product: "sparkscan",
   user_intents: [
     "scan one barcode at a time on iOS",
@@ -40,67 +36,41 @@ const SPARKSCAN_IOS = {
   ],
 };
 
-// The same product on Web, to show that the "Available on" chips and the
-// framework-aware anti-use-case links change with the reader's framework.
-const SPARKSCAN_WEB = { ...SPARKSCAN_IOS, framework: "web" };
-
-// A second product, so the designer sees the block at a different length and with
-// an anti-use-case pointing at a different product.
-const MATRIXSCAN_PICK_IOS = {
-  framework: "ios",
-  product: "matrixscan-pick",
-  user_intents: [
-    "guide a picker to the right items for an order",
-    "show what to pick and confirm each item on screen",
-  ],
-  not_for: [
-    "just count items against a list — use MatrixScan Count",
-    "find one specific item — use MatrixScan Find",
-  ],
+const CARD: React.CSSProperties = {
+  border: "1px solid var(--ifm-toc-border-color)",
+  borderRadius: 8,
+  padding: "1.1rem 1.3rem",
+  marginBottom: "1.1rem",
 };
 
-function Section({
+function Card({
   n,
   title,
-  branch,
+  to,
   intent,
+  source,
   children,
-  note,
 }: {
   n: string;
   title: string;
-  branch: string;
+  to: string;
   intent: string;
-  children: React.ReactNode;
-  note?: React.ReactNode;
+  source: string;
+  children?: React.ReactNode;
 }) {
   return (
-    <section style={{ marginBottom: "4.5rem" }}>
-      <h2 style={{ marginBottom: ".25rem" }}>
-        {n}. {title}
-      </h2>
-      <p style={{ margin: 0, fontSize: ".9rem", opacity: 0.7 }}>
+    <div style={CARD}>
+      <h3 style={{ margin: "0 0 .35rem" }}>
+        {n}. <Link to={to}>{title}</Link>
+      </h3>
+      <p style={{ margin: "0 0 .5rem", fontSize: ".92rem" }}>
         <strong>Serves:</strong> {intent}
       </p>
-      <p style={{ marginTop: ".2rem", fontSize: ".8rem", opacity: 0.55 }}>
-        <code>{branch}</code>
+      <p style={{ margin: "0 0 .5rem", fontSize: ".8rem", opacity: 0.6 }}>
+        <code>{to}</code> — from <code>{source}</code>
       </p>
-      {note && (
-        <div
-          style={{
-            border: "1px solid var(--ifm-color-warning-dark)",
-            background: "var(--ifm-color-warning-contrast-background)",
-            borderRadius: 6,
-            padding: ".6rem .8rem",
-            fontSize: ".85rem",
-            margin: "0 0 1.2rem",
-          }}
-        >
-          {note}
-        </div>
-      )}
-      <div style={{ marginTop: "1.2rem" }}>{children}</div>
-    </section>
+      {children}
+    </div>
   );
 }
 
@@ -114,68 +84,77 @@ export default function ComponentPreview(): JSX.Element {
         <meta name="robots" content="noindex, nofollow" />
       </Head>
 
-      <main className="container margin-vert--lg" style={{ maxWidth: 900 }}>
+      <main className="container margin-vert--lg" style={{ maxWidth: 860 }}>
         <h1>Component preview</h1>
         <p style={{ fontSize: "1.05rem" }}>
-          Three proposed documentation components, on one page, in the real site so
-          colours, fonts and spacing are exactly what a reader would get.{" "}
-          <strong>Try the light/dark toggle in the header</strong> — all three have to
+          Three proposed documentation components, each on its own real page so it
+          renders exactly as built.{" "}
+          <strong>Use the light/dark toggle in the header</strong> — all three have to
           work in both.
         </p>
         <p style={{ fontSize: ".9rem", opacity: 0.7 }}>
-          This page is not part of the documentation: it is in no sidebar, no framework
-          tree and no docs version, and it is <code>noindex</code>. It disappears when
-          the pull request that hosts this preview is closed.
+          The pages below are copied verbatim from the branches they were built on.
+          Nothing here is part of the documentation: none of it is in a sidebar, this
+          launcher is <code>noindex</code>, and the whole preview disappears when the
+          pull request hosting it is closed.
         </p>
 
         <hr />
 
-        <Section
+        <Card
           n="1"
-          title="Intent navigator — the orientation layer"
-          branch="docs/phase-e-intent-navigator · src/components/IntentNavigator"
+          title="Start here — the intent navigator"
+          to="/start"
           intent="“I know what I want to scan, but not which Scandit product does it.”"
+          source="docs/phase-e-intent-navigator · docs/start.mdx"
         >
-          <IntentNavigator />
-        </Section>
+          <p style={{ margin: 0, fontSize: ".9rem" }}>
+            The page carries the framing copy and — at the bottom — the shortcut for
+            readers who already know their product. Both belong to the page, not the
+            component, which is why they were missing when this preview rendered the
+            component on its own.
+          </p>
+        </Card>
 
-        <Section
+        <Card
           n="2"
-          title="Product chooser — on a product page"
-          branch="docs/product-chooser (PR #417) · src/components/ProductChooser"
-          intent="“I have landed on a product page — is this the right one for me?” It answers in both directions: each ‘consider another product’ line links to the product that does serve that job."
+          title="SparkScan overview — the product chooser"
+          to="/sdks/ios/sparkscan/intro"
+          intent="“I have landed on a product page — is this the right one?” It answers in both directions: each ‘consider another product’ line links to the product that does serve that job."
+          source="docs/product-chooser (PR #417) · docs/sdks/ios/sparkscan/intro.md"
         >
-          <h3 style={{ fontSize: "1rem", opacity: 0.75 }}>SparkScan, reader on iOS</h3>
-          <ProductChooser frontMatter={SPARKSCAN_IOS} />
+          <p style={{ margin: 0, fontSize: ".9rem" }}>
+            This is the only page in the docs where the chooser is currently live, and
+            it reads the page’s own frontmatter for the two lists.
+          </p>
+        </Card>
 
-          <h3 style={{ fontSize: "1rem", opacity: 0.75, marginTop: "2rem" }}>
-            The same product, reader on Web — the availability chips and the outgoing
-            links follow the reader’s framework
-          </h3>
-          <ProductChooser frontMatter={SPARKSCAN_WEB} />
-
-          <h3 style={{ fontSize: "1rem", opacity: 0.75, marginTop: "2rem" }}>
-            A different product, so the block is a different length
-          </h3>
-          <ProductChooser frontMatter={MATRIXSCAN_PICK_IOS} />
-        </Section>
-
-        <Section
+        <Card
           n="3"
-          title="Error message finder — troubleshooting"
-          branch="0fd2e0a4 on docs/sparkscan-ios-rewrite · src/components/ErrorCodeFinder"
+          title="Troubleshooting — the error message finder"
+          to="/troubleshooting"
           intent="“I have this exact error in my console and I want the fix now.” Paste a whole console line — matching ignores your own key or app id inside it."
-          note={
-            <>
-              <strong>The entries below are placeholder data</strong> (each tagged{" "}
-              <code>SAMPLE</code>). They demonstrate the interaction only and are not real
-              Scandit error messages. The verified catalogue exists and will replace them.
-              Please review the <em>layout and interaction</em>, not the wording.
-            </>
-          }
+          source="0fd2e0a4 on docs/sparkscan-ios-rewrite · docs/troubleshooting.md"
         >
-          <ErrorCodeFinder />
-        </Section>
+          <p style={{ margin: 0, fontSize: ".9rem" }}>
+            <strong>The entries are placeholder data</strong>, each tagged{" "}
+            <code>SAMPLE</code>, and the page says so. Please review the layout and the
+            interaction, not the wording — the verified catalogue exists and will
+            replace them.
+          </p>
+        </Card>
+
+        <hr />
+
+        <h2>One variant the real pages cannot show</h2>
+        <p>
+          The chooser is live on an iOS page only. Below is the same product as a{" "}
+          <strong>Web</strong> reader would see it, so you can compare how the
+          “Available on” row and the outgoing links follow the reader’s framework. This
+          is the one thing rendered outside its normal page, so treat its spacing as
+          indicative rather than final.
+        </p>
+        <ProductChooser frontMatter={SPARKSCAN_WEB} />
 
         <hr />
 
@@ -199,8 +178,12 @@ export default function ComponentPreview(): JSX.Element {
             than a normal site search?
           </li>
           <li>
-            Mobile widths: the availability chips and the three-step navigator are the
-            most likely to wrap awkwardly.
+            Mobile widths: the “Available on” chips and the navigator’s option rows are
+            the most likely to wrap awkwardly.
+          </li>
+          <li>
+            On <Link to="/start">/start</Link>: the whole taxonomy is shown at once. Is
+            that the right call, or should it reveal one step at a time?
           </li>
         </ul>
       </main>
