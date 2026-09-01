@@ -1,0 +1,520 @@
+/** Component: IntentNavigator */
+
+@import '../../css/_mixins.scss';
+
+/**
+ * Ported from the Phase E demo, restyled in the site's own idiom.
+ *
+ * The demo carried a private hex palette. Everything here is expressed in the
+ * tokens custom.scss already defines, and those tokens ALREADY FLIP between
+ * themes (html[data-theme="dark"] redefines --light-black, --light-blue-100,
+ * --light-gray-100, --light-blue-60, --nav-border, --frameworksBgLight), so light
+ * and dark come for free rather than from a second, parallel theme.
+ *
+ * Only the four delivery badges need explicit dark values, because the green and
+ * blue *soft* tokens are not among the ones custom.scss re-declares for dark.
+ * Those use the `dark` mixin from _mixins.scss.
+ *
+ * Deliberately NOT following card.module.scss in one respect: that file consumes
+ * --spacing-2, --spacing-6 and --neutral-0, none of which are defined anywhere in
+ * this repo. Spacing here is explicit so nothing silently resolves to nothing.
+ */
+
+:root {
+  /* Surfaces and lines - all four of these flip for dark in custom.scss. */
+  --in-panel: var(--frameworksBgLight);
+  --in-raised: var(--light-blue-60);
+  --in-line: var(--nav-border);
+  --in-page: var(--ifm-background-color);
+
+  /* Text. --light-black is the ink token; it flips to #f0f0f0 for dark. */
+  --in-ink: var(--light-black);
+  --in-muted: var(--light-gray-100);
+  --in-faint: var(--toc-title);
+
+  /* Accent. #0a3390 light, #2385ec dark. */
+  --in-accent: var(--light-blue-100);
+  --in-accent-soft: var(--light-blue-60);
+
+  --in-radius: 12px;
+  --in-radius-sm: 9px;
+  --in-mono: var(--ifm-font-family-monospace);
+
+  /* Delivery badges - the one place the site has no dark equivalent. */
+  --in-badge-ui-ink: var(--light-green-100);
+  --in-badge-ui-bg: var(--light-green-60);
+  --in-badge-sdk-ink: var(--light-blue-100);
+  --in-badge-sdk-bg: var(--light-blue-60);
+  --in-badge-nocode-ink: var(--light-yellow-120);
+  --in-badge-nocode-bg: var(--light-yellow-60);
+  --in-badge-hosted-ink: var(--light-gray-100);
+  --in-badge-hosted-bg: var(--light-gray-40);
+}
+
+@include dark {
+  --in-badge-ui-ink: #37c08b;
+  --in-badge-ui-bg: #0f2a21;
+  --in-badge-sdk-ink: #9cbeff;
+  --in-badge-sdk-bg: #13203f;
+  --in-badge-nocode-ink: #e0a44a;
+  --in-badge-nocode-bg: #2b2113;
+  --in-badge-hosted-ink: #a996ff;
+  --in-badge-hosted-bg: #1e1840;
+}
+
+.nav {
+  margin: 24px 0 0;
+  font-family: var(--font-family);
+
+  /* --------------------------------------------------- 1. platform bar */
+  .fwbar {
+    padding: 14px 16px;
+    background: var(--in-panel);
+    border: 1px solid var(--in-line);
+    border-radius: var(--in-radius);
+  }
+
+  .fwLabel {
+    margin-bottom: 9px;
+    font-family: var(--in-mono);
+    font-size: 10.5px;
+    line-height: 1.5;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--in-faint);
+  }
+
+  .pills {
+    @include flex-row(7px, center, null);
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    @include transition;
+    padding: 5px 11px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--in-muted);
+    background: var(--in-page);
+    border: 1px solid var(--in-line);
+    border-radius: var(--btn-radius);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--in-ink);
+      border-color: var(--in-accent);
+    }
+
+    &[aria-pressed='true'] {
+      color: #fff;
+      background: var(--in-accent);
+      border-color: var(--in-accent);
+    }
+  }
+
+  /* ----------------------------------------------- 2. expert shortcut */
+  .expertbar {
+    margin-top: 8px;
+  }
+
+  .expertLink {
+    padding: 6px 2px;
+    font-family: var(--in-mono);
+    font-size: 11.5px;
+    color: var(--in-accent);
+    background: none;
+    border: 0;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  /* Hidden, not unmounted - see the note in index.tsx. */
+  .expertHidden {
+    display: none;
+  }
+
+  .expert {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+    padding: 12px 14px;
+    background: var(--in-panel);
+    border: 1px solid var(--in-line);
+    border-radius: var(--in-radius);
+  }
+
+  .xitem {
+    @include transition;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 9px 11px;
+    background: var(--in-page);
+    border: 1px solid var(--in-line);
+    border-radius: var(--in-radius-sm);
+    text-decoration: none;
+
+    &:hover {
+      border-color: var(--in-accent);
+      text-decoration: none;
+    }
+  }
+
+  .xname {
+    font-size: 13px;
+    font-weight: 650;
+    color: var(--in-ink);
+  }
+
+  .xhref {
+    font-family: var(--in-mono);
+    font-size: 10.5px;
+    color: var(--in-faint);
+    word-break: break-all;
+  }
+
+  /* ------------------------------------------------------ 3. the steps */
+  .steps {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    margin-top: 26px;
+  }
+
+  .stepHead {
+    @include flex-row(10px, center, null);
+    margin-bottom: 12px;
+  }
+
+  .stepNum {
+    display: grid;
+    place-items: center;
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+    font-family: var(--in-mono);
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--in-accent);
+    background: var(--in-accent-soft);
+    border-radius: 50%;
+  }
+
+  .stepTitle {
+    margin: 0;
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--in-ink);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px;
+  }
+
+  .card {
+    @include transition;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    font-family: inherit;
+    text-align: left;
+    background: var(--in-panel);
+    border: 1px solid var(--in-line);
+    border-radius: var(--in-radius);
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--in-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px -12px var(--in-accent);
+    }
+
+    &[aria-pressed='true'] {
+      border-color: var(--in-accent);
+      box-shadow: inset 0 0 0 1px var(--in-accent);
+    }
+  }
+
+  .cardIcon {
+    font-size: 22px;
+    line-height: 1;
+  }
+
+  .cardTitle {
+    margin: 8px 0 3px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--in-ink);
+  }
+
+  .cardHint {
+    font-size: 12.5px;
+    color: var(--in-muted);
+  }
+
+  .goalList {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .goal {
+    @include transition;
+    display: block;
+    width: 100%;
+    padding: 14px 16px;
+    font-family: inherit;
+    text-align: left;
+    background: var(--in-panel);
+    border: 1px solid var(--in-line);
+    border-radius: var(--in-radius);
+    cursor: pointer;
+
+    &:hover {
+      border-color: var(--in-accent);
+    }
+
+    &[aria-pressed='true'] {
+      border-color: var(--in-accent);
+      box-shadow: inset 0 0 0 1px var(--in-accent);
+    }
+  }
+
+  .goalTask {
+    display: block;
+    font-size: 14px;
+    font-weight: 650;
+    color: var(--in-ink);
+  }
+
+  .goalContext {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--in-faint);
+  }
+
+  .recos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 12px;
+  }
+
+  .reco {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 16px;
+    background: var(--in-panel);
+    border: 1px solid var(--in-line);
+    border-radius: var(--in-radius);
+  }
+
+  .recoName {
+    font-size: 16px;
+    font-weight: 750;
+    color: var(--in-ink);
+  }
+
+  .badge {
+    padding: 3px 9px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-radius: var(--btn-radius);
+  }
+
+  .badge_ui {
+    color: var(--in-badge-ui-ink);
+    background: var(--in-badge-ui-bg);
+  }
+
+  .badge_sdk {
+    color: var(--in-badge-sdk-ink);
+    background: var(--in-badge-sdk-bg);
+  }
+
+  .badge_nocode {
+    color: var(--in-badge-nocode-ink);
+    background: var(--in-badge-nocode-bg);
+  }
+
+  .badge_hosted {
+    color: var(--in-badge-hosted-ink);
+    background: var(--in-badge-hosted-bg);
+  }
+
+  .recoCta {
+    font-size: 13.5px;
+    font-weight: 650;
+  }
+
+  .recoPath {
+    align-self: stretch;
+    padding: 6px 8px;
+    font-family: var(--in-mono);
+    font-size: 11px;
+    color: var(--in-faint);
+    word-break: break-all;
+    background: var(--in-raised);
+    border-radius: 6px;
+  }
+
+  .reset {
+    margin-top: 14px;
+    padding: 0;
+    font-family: var(--in-mono);
+    font-size: 11.5px;
+    color: var(--in-accent);
+    background: none;
+    border: 0;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  /* ---------------------------------------------- 4. why this matters */
+  .parity {
+    margin-top: 30px;
+    padding: 18px 20px;
+    background: var(--in-raised);
+    border: 1px solid var(--in-line);
+    border-left: 3px solid var(--in-accent);
+    border-radius: var(--in-radius);
+  }
+
+  .parityTitle {
+    margin: 0 0 6px;
+    font-size: 14.5px;
+    color: var(--in-ink);
+  }
+
+  .parityBody {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--in-muted);
+  }
+
+  /* ------------------------------- 5. Linux caveat and provenance */
+  .lnote {
+    margin-top: 12px;
+    padding: 8px 11px;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--in-badge-nocode-ink);
+    background: var(--in-badge-nocode-bg);
+    border: 1px solid var(--in-badge-nocode-ink);
+    border-radius: var(--in-radius-sm);
+  }
+
+  .provenance {
+    margin-top: 18px;
+    padding-top: 14px;
+    font-family: var(--in-mono);
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--in-faint);
+    border-top: 1px solid var(--in-line);
+  }
+
+  /* ------------------------ the flat, pre-hydration / no-JS fallback */
+  .flatType {
+    margin-bottom: 28px;
+  }
+
+  .flatIcon {
+    margin-right: 8px;
+  }
+
+  .stTitle {
+    margin: 0 0 2px;
+    font-size: 17px;
+    color: var(--in-ink);
+  }
+
+  .stHint {
+    margin: 0 0 12px;
+    font-size: 13.5px;
+    color: var(--in-muted);
+  }
+
+  .flatGoal {
+    padding: 10px 0 12px;
+    border-top: 1px solid var(--in-line);
+  }
+
+  .flatOptions {
+    @include flex-row(8px, stretch, null);
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .flatOption {
+    @include transition;
+    display: inline-flex;
+    flex-direction: column;
+    padding: 7px 11px;
+    font-size: 13px;
+    font-weight: 650;
+    background: var(--in-panel);
+    border: 1px solid var(--in-line);
+    border-radius: var(--in-radius-sm);
+    text-decoration: none;
+
+    &:hover {
+      border-color: var(--in-accent);
+      text-decoration: none;
+    }
+  }
+
+  .flatDelivery {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--in-faint);
+  }
+
+  /* The demo's rise-in, honoured only where motion is welcome. */
+  @media (prefers-reduced-motion: no-preference) {
+    .step {
+      animation: intentRise 0.35s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+    }
+  }
+
+  /* Single column on phones: the pills wrap on their own, but the card,
+     recommendation and expert grids need it. */
+  @media (max-width: 480px) {
+    .cards,
+    .recos,
+    .expert {
+      grid-template-columns: 1fr;
+    }
+
+    .fwLabel {
+      letter-spacing: 0.06em;
+    }
+  }
+}
+
+@keyframes intentRise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
