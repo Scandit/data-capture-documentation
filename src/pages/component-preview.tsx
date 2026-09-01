@@ -3,6 +3,8 @@ import Head from "@docusaurus/Head";
 import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 import ProductChooser from "@site/src/components/ProductChooser";
+import ErrorCodeFinder from "@site/src/components/ErrorCodeFinder";
+import PageFeedback from "@site/src/components/PageFeedback";
 
 /**
  * /component-preview - a launcher for the design review.
@@ -150,42 +152,61 @@ export default function ComponentPreview(): JSX.Element {
         <p>
           The chooser is live on an iOS page only. Below is the same product as a{" "}
           <strong>Web</strong> reader would see it, so you can compare how the
-          “Available on” row and the outgoing links follow the reader’s framework. This
-          is the one thing rendered outside its normal page, so treat its spacing as
-          indicative rather than final.
+          “Available on” row and the outgoing links follow the reader’s framework.
         </p>
-        <ProductChooser frontMatter={SPARKSCAN_WEB} />
+        {/*
+          Wrapped in the docs markdown container on purpose. markdown.scss scopes its
+          rules to `#__docusaurus .theme-doc-markdown.markdown` — BOTH classes on one
+          element — so without this wrapper the chooser renders with page typography
+          instead of docs typography and looks subtly unlike its real home. This is
+          why it appeared different here in the first place.
+        */}
+        <div className="theme-doc-markdown markdown">
+          <ProductChooser frontMatter={SPARKSCAN_WEB} />
+        </div>
 
         <hr />
 
-        <h2>What we would value your view on</h2>
-        <ul>
-          <li>
-            Does each block read as one clear decision, or does it compete with the page
-            around it?
-          </li>
-          <li>
-            The “choose this / consider another” pair — is the contrast strong enough
-            without looking like a warning?
-          </li>
-          <li>
-            Dark mode: all three use existing tokens from{" "}
-            <code>src/css/custom.scss</code>. Anything that breaks or reads as low
-            contrast?
-          </li>
-          <li>
-            The finder’s search field — is it obviously a <em>paste target</em> rather
-            than a normal site search?
-          </li>
-          <li>
-            Mobile widths: the “Available on” chips and the navigator’s option rows are
-            the most likely to wrap awkwardly.
-          </li>
-          <li>
-            On <Link to="/start">/start</Link>: the whole taxonomy is shown at once. Is
-            that the right call, or should it reveal one step at a time?
-          </li>
-        </ul>
+        <h2>The error message finder, in full</h2>
+        <p>
+          Paste a console line into the box — matching ignores your own licence key or
+          app id inside it, so a whole pasted line still finds its entry.
+        </p>
+        <div
+          style={{
+            border: "1px solid var(--ifm-color-warning-dark)",
+            background: "var(--ifm-color-warning-contrast-background)",
+            borderRadius: 6,
+            padding: ".6rem .8rem",
+            fontSize: ".85rem",
+            margin: "0 0 1.2rem",
+          }}
+        >
+          <strong>The entries are placeholder data</strong>, each tagged{" "}
+          <code>SAMPLE</code>. They demonstrate the interaction only and are not real
+          Scandit error messages. Please review the layout and interaction, not the
+          wording.
+        </div>
+
+        {/* Same docs wrapper as the chooser above, for the same reason. */}
+        <div className="theme-doc-markdown markdown">
+          <ErrorCodeFinder />
+
+          <h2>Still stuck?</h2>
+          <p>
+            If your error isn&apos;t listed, or a fix doesn&apos;t resolve it, contact{" "}
+            <a href="https://www.scandit.com/support/">Scandit support</a> with the full
+            console output, your SDK version, and the framework you&apos;re using.
+          </p>
+        </div>
+
+        {/*
+          The per-page evaluator. On real docs pages it arrives automatically via the
+          DocItem/Footer swizzle; this is a src/pages route, so it has to be placed by
+          hand. It is BrowserOnly, so it appears in the browser rather than in the
+          static HTML.
+        */}
+        <PageFeedback />
       </main>
     </Layout>
   );
