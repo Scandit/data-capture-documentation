@@ -77,7 +77,7 @@ The `dimensions` object allows you to customize sizes and spacing:
 | `radiusButton` | `string` | Border radius for buttons   | 1.1   |
 | `radiusCard`   | `string` | Border radius for cards     | 1.1   |
 
-All values are string and must be valid CSS dimension expressions. E.g. "12px".
+All values are string and must be valid CSS dimension expressions. For example, "12px."
 
 ## Image Customization
 
@@ -175,7 +175,7 @@ const theme = {
 
 - Format: WOFF2, WOFF, TTF, or OTF (must be provided as data URLs)
 - Maximum size: 100KB per font file (size of the base64 data url)
-- Data URL format: Must start with appropriate mime type prefixes (e.g., `data:font/woff2`, `data:font/woff`)
+- Data URL format: Must start with appropriate mime type prefixes (for example, `data:font/woff2`, `data:font/woff`)
 
 ## Style Overrides
 

@@ -30,9 +30,9 @@ DataCaptureContext dataCaptureContext = DataCaptureContext.ForLicenseKey("-- ENT
 
 ## Configure the Barcode Find Mode
 
-The main entry point for the Barcode Find Mode is the [BarcodeFind](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [BarcodeFindSettings](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight (e.g. a list of products).
+The main entry point for the Barcode Find Mode is the [BarcodeFind](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [BarcodeFindSettings](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight (for example, a list of products).
 
-For this tutorial, we will set up Barcode Find for tracking EAN13 codes. Change this to the correct symbologies for your use case (e.g. Code 128, Code 39…).
+For this tutorial, we will set up Barcode Find for tracking EAN13 codes. Change this to the correct symbologies for your use case (for example, Code 128, Code 39…).
 
 First create the settings:
 
