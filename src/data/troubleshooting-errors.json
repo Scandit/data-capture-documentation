@@ -1,0 +1,109 @@
+{
+  "_comment": "DEMO SHELL DATA. Every entry below is an ILLUSTRATIVE SAMPLE with a SAMPLE-* code, not a real Scandit error. Real content (literal console messages + verified fixes) will be supplied from the support/licensing ticket data and replace these. The `match` array holds the invariant substrings used for paste-to-filter matching.",
+  "entries": [
+    {
+      "id": "sample-license-placeholder",
+      "code": "SAMPLE-LICENSE-01",
+      "area": "Licensing & activation",
+      "sample": true,
+      "title": "License key placeholder was never replaced",
+      "message": "A valid license key is required. The provided key looks like the documentation placeholder.",
+      "match": [
+        "enter your scandit license key here",
+        "a valid license key is required",
+        "no license key"
+      ],
+      "cause": "The code still contains the docs placeholder `-- ENTER YOUR SCANDIT LICENSE KEY HERE --` instead of a real key.",
+      "fix": "Paste your real key into the license field at the top of the get-started page (or set it directly in the DataCaptureContext call). Get a free key from the trial dashboard if you don't have one.",
+      "link": "/sdks/ios/sparkscan/get-started/",
+      "linkLabel": "Go to the license step"
+    },
+    {
+      "id": "sample-license-invalid",
+      "code": "SAMPLE-LICENSE-02",
+      "area": "Licensing & activation",
+      "sample": true,
+      "title": "License key is invalid or malformed",
+      "message": "License validation failed: the provided key could not be parsed.",
+      "match": [
+        "license validation failed",
+        "could not be parsed",
+        "invalid license key",
+        "key is invalid"
+      ],
+      "cause": "The key string is truncated, has extra whitespace/line breaks, or was copied only partially.",
+      "fix": "Re-copy the entire key from the dashboard as a single line with no wrapping, and make sure no characters were dropped when pasting.",
+      "link": "/sdks/ios/sparkscan/get-started/",
+      "linkLabel": "Go to the license step"
+    },
+    {
+      "id": "sample-license-expired",
+      "code": "SAMPLE-LICENSE-03",
+      "area": "Licensing & activation",
+      "sample": true,
+      "title": "License has expired",
+      "message": "This license key has expired.",
+      "match": [
+        "license key has expired",
+        "license expired",
+        "expired"
+      ],
+      "cause": "The trial or subscription tied to this key has ended.",
+      "fix": "Generate a new key or extend your trial in the dashboard, then replace the key in your app.",
+      "link": "/sdks/ios/sparkscan/get-started/",
+      "linkLabel": "Go to the license step"
+    },
+    {
+      "id": "sample-license-bundle-mismatch",
+      "code": "SAMPLE-LICENSE-04",
+      "area": "Licensing & activation",
+      "sample": true,
+      "title": "License is not valid for this application",
+      "message": "The license key is not valid for this application's bundle identifier.",
+      "match": [
+        "not valid for this application",
+        "bundle identifier",
+        "app id mismatch",
+        "package name"
+      ],
+      "cause": "The key was issued for a different bundle ID / package name than the app it is running in.",
+      "fix": "Create a key for the current bundle identifier (or add this bundle ID to the existing key's allowed apps in the dashboard).",
+      "link": "/sdks/ios/sparkscan/get-started/",
+      "linkLabel": "Go to the license step"
+    },
+    {
+      "id": "sample-license-feature",
+      "code": "SAMPLE-LICENSE-05",
+      "area": "Licensing & activation",
+      "sample": true,
+      "title": "Enabled feature is not included in the license",
+      "message": "The license does not include the enabled functionality.",
+      "match": [
+        "does not include the enabled",
+        "feature not licensed",
+        "functionality is not licensed"
+      ],
+      "cause": "The code enables a mode (for example a specific scanning capability) that this key is not entitled to.",
+      "fix": "Either disable the unlicensed mode, or request a key that includes the feature you need.",
+      "link": "/sdks/ios/sparkscan/get-started/",
+      "linkLabel": "Go to the license step"
+    },
+    {
+      "id": "sample-camera-permission",
+      "code": "SAMPLE-RUNTIME-01",
+      "area": "Camera & runtime",
+      "sample": true,
+      "title": "Camera permission was denied",
+      "message": "Camera access denied. The scanner cannot start without camera permission.",
+      "match": [
+        "camera access denied",
+        "camera permission",
+        "cannot start without camera"
+      ],
+      "cause": "The app did not request, or the user declined, camera permission — so the preview never opens.",
+      "fix": "Add the camera usage description to your app configuration and request permission before starting the scanner. On device, re-enable camera access for the app in system settings.",
+      "link": "/sdks/ios/sparkscan/get-started/",
+      "linkLabel": "Back to get-started"
+    }
+  ]
+}
