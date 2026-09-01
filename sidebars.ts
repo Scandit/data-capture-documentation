@@ -1114,6 +1114,12 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/react-native/core-concepts',
+        {
+          type: 'category',
+          label: 'AIO Components',
+          collapsed: true,
+          items: ['sdks/react-native/aio/vs-classic'],
+        },
         'sdks/react-native/system-requirements',
         {
           type: "link",
