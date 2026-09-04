@@ -73,7 +73,13 @@ function dropTrailingIntroducers(lines: string[]): string[] {
 }
 
 function clipMarkdown(text: string, limit: number): string {
-  if (text.length <= limit) return text;
+  // The early return used to hand back the raw text, so for any chunk shorter
+  // than the limit the drop never ran at all - the "no excerpt ends on an
+  // introducer" property then held only by luck of the content.
+  if (text.length <= limit) {
+    const whole = dropTrailingIntroducers(text.split("\n")).join("\n").trimEnd();
+    return whole || text;
+  }
   const cut = text.slice(0, limit);
   const lines = cut.split("\n");
   let open = false;
@@ -98,7 +104,13 @@ function clipMarkdown(text: string, limit: number): string {
   const kept = dropTrailingIntroducers(lines.slice(0, lastFenceStart));
   const trimmed = kept.join("\n").trimEnd();
   if (trimmed.length >= Math.floor(limit / 3)) return trimmed;
-  return `${cut.trimEnd()}\n\u0060\u0060\u0060`;
+  // Match the opener's quote prefix. A bare closer after "> ```" is not
+  // balanced: CommonMark ends the blockquote at the unquoted line, implicitly
+  // closing the quoted fence, and then opens a new top-level one that never
+  // closes - the exact dangling fence this function exists to prevent.
+  const openerPrefix = (lines[lastFenceStart] || "").match(/^\s*(?:>\s*)*/);
+  const closer = `${openerPrefix ? openerPrefix[0] : ""}\u0060\u0060\u0060`;
+  return `${cut.trimEnd()}\n${closer}`;
 }
 
 /**
@@ -228,7 +240,14 @@ function splitParagraphs(body: string): string[] {
  */
 function enforceChunkInvariant(chunks: Chunk[]): Chunk[] {
   const out = chunks.map((c) => ({ ...c }));
-  for (let i = out.length - 2; i >= 0; i--) {
+
+  // FORWARD, not backwards. Iterating from the end writes into a slot that has
+  // already been finalised: if out[i+1] was introducer-only it is emptied into
+  // out[i+2] first, and out[i]'s trailing run then lands in that now-empty slot,
+  // re-creating an introducer-only chunk no later step inspects. Going forward
+  // means every slot is re-examined after it is written, which is what makes this
+  // a fixpoint - re-running it changes nothing.
+  for (let i = 0; i <= out.length - 2; i++) {
     const lines = out[i].content.split("\n");
     const drop = trailingIntroducers(lines);
     if (!drop) continue;
@@ -237,9 +256,39 @@ function enforceChunkInvariant(chunks: Chunk[]): Chunk[] {
     if (moved) out[i + 1].content = `${moved}\n${out[i + 1].content}`.trim();
     out[i].content = keep;
   }
+
+  // The LAST chunk was exempt, because there is nowhere forward to move to. But a
+  // trailing introducer run at the end of the body introduces nothing anywhere -
+  // the section it names is empty in the source too - so keeping it would publish
+  // a promise the whole document cannot honour. Dropped, which costs only the
+  // heading of an empty trailing section.
+  if (out.length) {
+    const last = out[out.length - 1];
+    last.content = dropTrailingIntroducers(last.content.split("\n")).join("\n").trim();
+  }
+
   return out
     .filter((c) => c.content.trim())
-    .map((c) => ({ content: c.content, heading: firstHeading(c.content) || c.heading }));
+    .map((c) => ({ content: c.content, heading: leadingHeading(c.content) || c.heading }));
+}
+
+/**
+ * The chunk's OWN leading heading, or "" when it does not open with one.
+ *
+ * Distinct from firstHeading(), which returns the first heading ANYWHERE in the
+ * text - so a chunk that begins mid-section and happens to contain a later
+ * heading was titled by that later section. 241 chunks were titled that way, 139
+ * of them by a heading more than 400 characters in. Falling back to the
+ * chunkBody-derived heading is more accurate: that is the section the chunk
+ * STARTS in, which is what a reader of the chunk is actually inside.
+ */
+function leadingHeading(text: string): string {
+  for (const line of text.split(/\r?\n/)) {
+    if (!line.trim()) continue;
+    const m = line.match(/^\s*#{2,6}\s+(.+?)\s*$/);
+    return m ? m[1].trim() : "";
+  }
+  return "";
 }
 
 function chunkBody(body: string, target: number): Chunk[] {
@@ -375,7 +424,10 @@ function tableToMd($: cheerio.CheerioAPI, el: any): string {
     const cells: string[] = [];
     $(tr)
       .children("th,td")
-      .each((_j, c) => cells.push(escapeCell(inlineText($, c))));
+      .each((_j, c) => {
+        // Braced for the same TS2322 reason as tabsToMd above.
+        cells.push(escapeCell(inlineText($, c)));
+      });
     if (cells.length) rows.push(cells);
   });
   if (!rows.length) return "";
@@ -509,7 +561,11 @@ function tabsToMd($: cheerio.CheerioAPI, el: any): string {
   $(el)
     .children('[role="tablist"]')
     .children('[role="tab"]')
-    .each((_i, t) => labels.push(inlineText($, t)));
+    .each((_i, t) => {
+      // Braced: cheerio types the callback boolean|void, and an expression body
+      // returns push()'s number - which `yarn typecheck` rejects (TS2322).
+      labels.push(inlineText($, t));
+    });
 
   // NOT children(): Docusaurus wraps the panels in a div (the container's own
   // children are the tablist and a `margin-top--md` wrapper), so children()
@@ -1284,11 +1340,14 @@ function buildGraph(modules: KModule[], site: string) {
   }
 
   // product <-> framework availability edges (directly answers "what's available where")
-  for (const [prod, fws] of available) {
-    for (const fw of fws) addEdge(`urn:product:${prod}#avail:${fw}`, "AvailableOn", `urn:product:${prod}`, `urn:framework:${fw}`);
+  // Array.from, because @docusaurus/tsconfig's target does not allow iterating a
+  // Map directly (TS2802). This failed `yarn typecheck` in the PR as submitted -
+  // the Docusaurus build transpiles separately, so it never surfaced there.
+  for (const [prod, fws] of Array.from(available)) {
+    for (const fw of Array.from(fws)) addEdge(`urn:product:${prod}#avail:${fw}`, "AvailableOn", `urn:product:${prod}`, `urn:framework:${fw}`);
   }
-  for (const [prod, fws] of unavailable) {
-    for (const fw of fws) addEdge(`urn:product:${prod}#navail:${fw}`, "NotAvailableOn", `urn:product:${prod}`, `urn:framework:${fw}`);
+  for (const [prod, fws] of Array.from(unavailable)) {
+    for (const fw of Array.from(fws)) addEdge(`urn:product:${prod}#navail:${fw}`, "NotAvailableOn", `urn:product:${prod}`, `urn:framework:${fw}`);
   }
 
   return {
