@@ -262,42 +262,70 @@ function blockToMd($: cheerio.CheerioAPI, el: any): string {
     $(el)
       .children("li")
       .each((i, li) => {
-        // `own` is inline prose and gets its whitespace collapsed. `blocks` is
-        // anything whose LINE STRUCTURE matters - nested lists, and code samples.
-        // Routing a <pre> through `own` was why the fix for flattened code
-        // samples did not reach the 9 blocks that live inside a list item: the
-        // newlines were restored and then collapsed straight back out, so a `//`
-        // comment still swallowed the rest of the sample.
-        const own: string[] = [];
-        const blocks: string[] = [];
+        // Segments in DOCUMENT ORDER. Consecutive inline children are gathered
+        // into a run and serialized together, which matters for two reasons:
+        //
+        //  - serializeInline iterates the CONTENTS of the node it is given, so
+        //    handing it an <a> skips the branch that emits [label](href) and
+        //    keeps only the label. Same for <code> (backticks) and <br>. Passing
+        //    inline elements one at a time stripped 1489 anchors and 3124 code
+        //    spans that sit directly inside an <li>.
+        //  - joining separately-serialized pieces with " " inserted a space at
+        //    every boundary, producing "List-based workflows : Validate…".
+        //
+        // Order is preserved so a sentence that follows a code block in the
+        // source is not hoisted above it.
+        const segs: string[] = [];
+        let pending: any[] = [];
         const hasPre = (node: any) => $(node).find("pre").length > 0;
+        const flushInline = () => {
+          if (!pending.length) return;
+          const wrap = $("<span></span>");
+          for (const nd of pending) wrap.append($(nd).clone());
+          const t = inlineText($, wrap[0]);
+          if (t) segs.push(t);
+          pending = [];
+        };
         $(li)
           .contents()
           .each((_j, c: any) => {
             if (c.type === "text") {
-              const t = String(c.data || "").replace(/\s+/g, " ").trim();
-              if (t) own.push(t);
+              pending.push(c);
               return;
             }
             if (c.type !== "tag") return;
             const ctag = String(c.name || "").toLowerCase();
-            if (ctag === "ul" || ctag === "ol" || ctag === "pre" || hasPre(c)) {
-              const sub = blockToMd($, c);
-              if (sub.trim()) blocks.push(sub.trim());
-            } else if (ctag === "p" || ctag === "div") {
-              const t = blockToMd($, c);
-              if (t.trim()) own.push(t.trim());
-            } else {
-              const t = inlineText($, c);
-              if (t) own.push(t);
+            const isBlock =
+              ctag === "ul" ||
+              ctag === "ol" ||
+              ctag === "pre" ||
+              ctag === "p" ||
+              ctag === "div" ||
+              hasPre(c);
+            if (!isBlock) {
+              pending.push(c);
+              return;
             }
+            flushInline();
+            const sub = blockToMd($, c);
+            if (sub.trim()) segs.push(sub.trim());
           });
+        flushInline();
+        if (!segs.length) return;
+
         const marker = ordered ? `${start + i}.` : "-";
-        const head = own.join(" ").replace(/\s+/g, " ").trim();
-        if (!head && !blocks.length) return;
-        const lines = [`${marker} ${head}`.trim()];
-        for (const sub of blocks) {
-          for (const ln of sub.split("\n")) lines.push(`  ${ln}`);
+        const lines: string[] = [];
+        const [first, ...rest] = segs;
+        if (first.includes("\n")) {
+          // A block leads the item: keep the marker on its own line rather than
+          // gluing a fence onto it.
+          lines.push(marker);
+          for (const ln of first.split("\n")) lines.push(`  ${ln}`);
+        } else {
+          lines.push(`${marker} ${first}`);
+        }
+        for (const seg of rest) {
+          for (const ln of seg.split("\n")) lines.push(`  ${ln}`);
         }
         items.push(lines.join("\n"));
       });
@@ -572,27 +600,114 @@ function gitDates(siteDir: string): Map<string, string> {
 }
 
 /**
- * Real last-modified date of the source behind a built pathname, or "" when it is
- * genuinely unknown. Same path-guessing as readFrontMatter.
+ * Every shape a built pathname's source file might take, repo-relative and in
+ * priority order. ONE list, shared by frontmatter reading and date resolution -
+ * they had drifted apart, which is why /hosted/express/configuration/
+ * device-pairing/ shipped an empty date even from a full-history clone: its
+ * source is device-pairing/device-pairing.md, a shape neither list covered.
  */
-function sourceDate(siteDir: string, pathname: string): string {
-  const dates = gitDates(siteDir);
-  if (!dates.size) return "";
+function sourceCandidates(pathname: string): string[] {
   const rel = pathname.replace(/^\/+|\/+$/g, "");
-  if (!rel) return "";
-  for (const cand of [
-    `docs/${rel}.mdx`,
+  if (!rel) return ["docs/index.md", "docs/index.mdx", "docs/intro.md", "docs/intro.mdx"];
+  const leaf = rel.split("/").pop() || "";
+  return [
     `docs/${rel}.md`,
-    `docs/${rel}/index.mdx`,
+    `docs/${rel}.mdx`,
     `docs/${rel}/index.md`,
-  ]) {
-    const hit = dates.get(cand);
-    if (hit) return hit;
+    `docs/${rel}/index.mdx`,
+    // Docusaurus' folder/folder.md convention.
+    `docs/${rel}/${leaf}.md`,
+    `docs/${rel}/${leaf}.mdx`,
+    `docs/${rel}/README.md`,
+  ];
+}
+
+/** Repo-relative path of the source file behind a pathname, or "". */
+function resolveSource(siteDir: string, pathname: string): string {
+  for (const cand of sourceCandidates(pathname)) {
+    try {
+      if (fs.statSync(path.join(siteDir, cand)).isFile()) return cand;
+    } catch {
+      /* next shape */
+    }
   }
   return "";
 }
 
+/**
+ * Every file whose content ends up on the page: its own source, plus the partials
+ * it imports, transitively.
+ *
+ * This is what makes the date honest under single-sourcing. 110 pages in this
+ * repo are 2-line shells around a partial, so the shell's own commit date
+ * describes when the shell was written, not when the content changed - measured:
+ * _features-by-framework.mdx last changed 2026-08-14 while every shell around it
+ * still reads 2026-01-19.
+ */
+function contributingFiles(siteDir: string, pathname: string): string[] {
+  const root = resolveSource(siteDir, pathname);
+  if (!root) return [];
+  const seen = new Set<string>([root]);
+  const queue = [root];
+  // Depth is bounded by the queue: a partial importing a partial is followed,
+  // and `seen` makes a cycle terminate.
+  while (queue.length) {
+    const rel = queue.shift() as string;
+    let body = "";
+    try {
+      body = fs.readFileSync(path.join(siteDir, rel), "utf8");
+    } catch {
+      continue;
+    }
+    const dir = path.posix.dirname(rel.split(path.sep).join("/"));
+    const re = /from\s+['"]([^'"]*partials\/[^'"]+)['"]/g;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(body))) {
+      const spec = m[1].replace(/^@site\//, "");
+      const resolved = spec.startsWith("docs/")
+        ? spec
+        : path.posix.normalize(path.posix.join(dir, spec));
+      if (!resolved.startsWith("docs/")) continue;
+      const withExt = /\.mdx?$/.test(resolved) ? [resolved] : [`${resolved}.mdx`, `${resolved}.md`];
+      for (const cand of withExt) {
+        if (seen.has(cand)) continue;
+        try {
+          if (!fs.statSync(path.join(siteDir, cand)).isFile()) continue;
+        } catch {
+          continue;
+        }
+        seen.add(cand);
+        queue.push(cand);
+        break;
+      }
+    }
+  }
+  return Array.from(seen);
+}
+
+/**
+ * When the page was last edited: the most recent commit date across the page's
+ * own source and every partial it pulls in. "" when genuinely unknown (shallow
+ * clone, or no git) rather than a constant that would look like data.
+ *
+ * Caveat worth knowing: a commit date answers "when did this change", not "when
+ * was this checked" - a formatting sweep moves it. Real verification needs a
+ * human-set frontmatter field, which is a separate thing from this.
+ */
+function sourceDate(siteDir: string, pathname: string): string {
+  const dates = gitDates(siteDir);
+  if (!dates.size) return "";
+  let newest = "";
+  for (const rel of contributingFiles(siteDir, pathname)) {
+    const d = dates.get(rel);
+    // ISO-8601 with a fixed offset sorts lexicographically.
+    if (d && d > newest) newest = d;
+  }
+  return newest;
+}
+
 function readFrontMatter(siteDir: string, pathname: string): Record<string, unknown> {
+  // Kept in step with sourceCandidates() - see the note there.
   const rel = pathname.replace(/^\/+|\/+$/g, "");
   const base = path.join(siteDir, "docs");
   const candidates = rel
@@ -715,7 +830,10 @@ function buildModule(args: {
       keywords,
       status: curatedApplied ? "frontmatter_augmented" : "rule_based",
     },
-    references: links.internal.slice(0, 20),
+    // Self-references were filtered when building the graph but not here, so 25
+    // index records pointed a consumer back at the page it was already on - and
+    // burned one of the 20 slots doing it. Both artifacts now agree.
+    references: links.internal.filter((r) => r !== pathname).slice(0, 20),
     api_refs: links.api.slice(0, 20),
     content: {
       docs_markdown: chunkClean,
@@ -807,7 +925,9 @@ function buildGraph(modules: KModule[], site: string) {
   const conceptNodes: any[] = [
     ...intents.map((v) => ({ "@id": `urn:intent:${v}`, "@type": "Intent", name: v })),
     ...audiences.map((v) => ({ "@id": `urn:audience:${v}`, "@type": "Audience", name: v })),
-    ...channels.map((v) => ({ "@id": `urn:channel:${v}`, "@type": "Channel", name: v })),
+    // No Channel nodes: the HasChannel edges are gone (they were a constant on
+    // every module), and a typed node no traversal can reach is dead data in a
+    // graph whose whole point is traversal. `channels` stays on the modules.
     ...frameworks.map((v) => ({ "@id": `urn:framework:${v}`, "@type": "Framework", name: v })),
     ...products.map((v) => ({ "@id": `urn:product:${v}`, "@type": "Product", name: v })),
     ...apiRefs.map((v) => ({ "@id": `urn:api:${v}`, "@type": "ApiReference", url: v })),
@@ -844,18 +964,23 @@ function buildGraph(modules: KModule[], site: string) {
       if (ref === m.metadata.source_path) continue;
       if (indexedPaths.has(ref)) addEdge(`${src}#see:${ref}`, "SeeAlso", src, `urn:doc:${ref}`);
     }
-    // Record availability. Synthetic buckets are excluded: they group unrelated
-    // pages, so both an "available" and a "not available" page land in the same
-    // bucket and the two edges contradict each other.
-    const prod = m.metadata.product;
+    // Record availability for EVERY declared product, not just the first:
+    // BelongsToProduct already uses all of them, so using products[0] here made
+    // two edge families derived from the same field disagree on multi-product
+    // pages. Synthetic buckets stay excluded - they group unrelated pages, so an
+    // "available" and a "not available" page land in the same bucket and the two
+    // edges contradict each other.
     const fw = m.metadata.framework;
-    if (prod && fw && !SYNTHETIC_PRODUCTS.has(prod)) {
-      if (m.metadata.not_available) {
-        if (!unavailable.has(prod)) unavailable.set(prod, new Set());
-        unavailable.get(prod)!.add(fw);
-      } else {
-        if (!available.has(prod)) available.set(prod, new Set());
-        available.get(prod)!.add(fw);
+    const prods = (
+      m.metadata.products && m.metadata.products.length
+        ? m.metadata.products
+        : [m.metadata.product]
+    ).filter((p) => p && !SYNTHETIC_PRODUCTS.has(p));
+    if (fw) {
+      for (const prod of prods) {
+        const bucket = m.metadata.not_available ? unavailable : available;
+        if (!bucket.has(prod)) bucket.set(prod, new Set());
+        bucket.get(prod)!.add(fw);
       }
     }
   }
@@ -965,11 +1090,24 @@ export default function knowledgeExtractor(context: any, _options: any) {
           const framework = detectFramework(pathname);
           // Frontmatter is authoritative when present; fall back to path/heuristics.
           const fmProducts = fmStringArray(fm.product).map(slug).filter(Boolean);
-          const products = fmProducts.length ? Array.from(new Set(fmProducts)) : [detectProduct(pathname, siteDir)];
+          const notAvailable = isAvailabilityStub(title, bodyMd);
+          let products = fmProducts.length
+            ? Array.from(new Set(fmProducts))
+            : [detectProduct(pathname, siteDir)];
+          // A page whose whole job is to say "X is not available here" is about a
+          // real feature, even when that feature is not a products.json entry
+          // (ai-powered-barcode-scanning, batch-scanning). Filing it under the
+          // synthetic bucket threw the fact away - the same class of loss the
+          // bucket was introduced to stop. Name it after the page instead.
+          if (notAvailable && products.every((p) => SYNTHETIC_PRODUCTS.has(p))) {
+            const seg = pathSegments(pathname);
+            const i = seg[1] === "net" ? 3 : 2;
+            const own = slug(seg.slice(i)[0] || "");
+            if (own && !SYNTHETIC_PRODUCTS.has(own)) products = [own];
+          }
           const product = products[0];
           const fmTopic = fmFirst(fm.topic_type).toLowerCase();
           const contentType = TOPIC_TYPE_TO_CONTENT[fmTopic] || detectContentType(pathname, title);
-          const notAvailable = isAvailabilityStub(title, bodyMd);
           chunks.forEach((chunk, i) => {
             modules.push(
               buildModule({ pathname, url, sourceSite, site, title, description, chunk, idx: i + 1, framework, product, products, contentType, version, updatedAt: buildStamp, sourceUpdatedAt, notAvailable, fm }),
@@ -1012,18 +1150,26 @@ export default function knowledgeExtractor(context: any, _options: any) {
       const idxMb = mb(Buffer.byteLength(idxJson));
       const graphMb = mb(Buffer.byteLength(graphJson));
       if (idxMb > MAX_INDEX_MB || graphMb > MAX_GRAPH_MB) {
-        throw new Error(
-          `[knowledge-extractor] artifacts exceed their budget: index ${idxMb.toFixed(1)} MB ` +
-            `(max ${MAX_INDEX_MB}), graph ${graphMb.toFixed(1)} MB (max ${MAX_GRAPH_MB}). ` +
-            `Either the corpus grew legitimately - then raise the budget deliberately - or ` +
-            `an edge type is multiplying. Refusing to publish silently.`,
+        // WARN, do not throw. Everything else in this plugin is careful never to
+        // be able to break a deploy, and growth is not a reason to make an
+        // exception: the whole docs build would start failing on main because the
+        // corpus got bigger, for artifacts nothing consumes yet. An empty-output
+        // guard is worth throwing for - that means the selectors drifted and the
+        // data is wrong. This just means there is more of it.
+        console.warn(
+          `[knowledge-extractor] artifacts over budget: index ${idxMb.toFixed(1)} MB ` +
+            `(soft max ${MAX_INDEX_MB}), graph ${graphMb.toFixed(1)} MB (soft max ` +
+            `${MAX_GRAPH_MB}). Either the corpus grew - then raise the budget ` +
+            `deliberately - or an edge type is multiplying. Publishing anyway.`,
         );
       }
 
-      // Two renameSync calls are NOT atomic as a pair - the previous comment here
-      // claimed they were, and a crash between them would ship a new index with
-      // the old graph, which is exactly what it said it prevented. Keep a copy of
-      // the previous index so the first rename can be rolled back.
+      // BEST-EFFORT, not atomic. Two renames cannot be one operation, so a
+      // process kill or a cancelled job between them still leaves a new index
+      // beside the old graph; the catch below only covers a rename that THROWS.
+      // Made explicit rather than repeating the "atomically" claim this replaced.
+      // A genuinely atomic pair needs a directory swap, or a version stamp
+      // carried by both files so a consumer can detect the mismatch itself.
       fs.writeFileSync(idxPath + ".tmp", idxJson, "utf8");
       fs.writeFileSync(graphPath + ".tmp", graphJson, "utf8");
       const prevIdx = fs.existsSync(idxPath) ? fs.readFileSync(idxPath) : null;
