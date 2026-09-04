@@ -40,6 +40,33 @@ type Chunk = { heading: string; content: string };
 // ---------------------------------------------------------------------------
 // small helpers (ported)
 // ---------------------------------------------------------------------------
+/**
+ * Truncate markdown without leaving an unterminated code fence.
+ *
+ * Prefers cutting just before the fence that would be left open; if the text
+ * opens a fence too early for that to leave anything useful, closes the fence
+ * instead. Consumers read this field directly, so a dangling ``` is not cosmetic.
+ */
+function clipMarkdown(text: string, limit: number): string {
+  if (text.length <= limit) return text;
+  const cut = text.slice(0, limit);
+  const lines = cut.split("\n");
+  let open = false;
+  let lastFenceStart = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (/^\s*```/.test(lines[i])) {
+      if (!open) lastFenceStart = i;
+      open = !open;
+    }
+  }
+  if (!open) return cut;
+  // Dropping the half-included block is better than shipping it broken, unless
+  // that would throw away almost everything.
+  const trimmed = lines.slice(0, lastFenceStart).join("\n").trimEnd();
+  if (trimmed.length >= Math.floor(limit / 3)) return trimmed;
+  return `${cut.trimEnd()}\n\u0060\u0060\u0060`;
+}
+
 function slug(value: string): string {
   const clean = String(value)
     .toLowerCase()
@@ -241,6 +268,71 @@ function tableToMd($: cheerio.CheerioAPI, el: any): string {
   return rows.join("\n");
 }
 
+/**
+ * Split an element's children into ordered segments, gathering CONSECUTIVE
+ * INLINE children into runs and serializing each run as one unit.
+ *
+ * Both properties are load-bearing, and every round of review found the same two
+ * bugs in whichever walk site had not yet been fixed:
+ *
+ *  - serializeInline() iterates the CONTENTS of the node it is handed, so passing
+ *    it an <a> skips the branch that emits [label](href) and keeps only the
+ *    label. Same for <code> (backticks) and <br>. Inline children therefore have
+ *    to be serialized as a group, inside a wrapper, never one at a time.
+ *  - joining separately-serialized pieces with " " inserts a space at every
+ *    boundary, which produced "List-based workflows : Validate…".
+ *
+ * Runs also preserve document order, so a sentence that follows a code block is
+ * not hoisted above it, and a text node that CONTINUES a sentence across an
+ * inline element stays in the same segment instead of becoming its own paragraph.
+ */
+function orderedSegments($: cheerio.CheerioAPI, el: any): string[] {
+  const segs: string[] = [];
+  let pending: any[] = [];
+  const flush = () => {
+    if (!pending.length) return;
+    const wrap = $("<span></span>");
+    for (const nd of pending) wrap.append($(nd).clone());
+    const t = inlineText($, wrap[0]);
+    if (t) segs.push(t);
+    pending = [];
+  };
+  const isBlockTag = (tag: string, node: any) =>
+    tag === "ul" ||
+    tag === "ol" ||
+    tag === "pre" ||
+    tag === "p" ||
+    tag === "div" ||
+    tag === "section" ||
+    tag === "details" ||
+    tag === "article" ||
+    tag === "aside" ||
+    tag === "table" ||
+    tag === "blockquote" ||
+    Boolean(HEADING_LEVEL[tag]) ||
+    $(node).find("pre").length > 0;
+
+  $(el)
+    .contents()
+    .each((_i, c: any) => {
+      if (c.type === "text") {
+        pending.push(c);
+        return;
+      }
+      if (c.type !== "tag") return;
+      const tag = String(c.name || "").toLowerCase();
+      if (!isBlockTag(tag, c)) {
+        pending.push(c);
+        return;
+      }
+      flush();
+      const sub = blockToMd($, c);
+      if (sub.trim()) segs.push(sub.trim());
+    });
+  flush();
+  return segs;
+}
+
 function blockToMd($: cheerio.CheerioAPI, el: any): string {
   const tag = String(el.tagName || el.name || "").toLowerCase();
   if (HEADING_LEVEL[tag]) {
@@ -262,55 +354,7 @@ function blockToMd($: cheerio.CheerioAPI, el: any): string {
     $(el)
       .children("li")
       .each((i, li) => {
-        // Segments in DOCUMENT ORDER. Consecutive inline children are gathered
-        // into a run and serialized together, which matters for two reasons:
-        //
-        //  - serializeInline iterates the CONTENTS of the node it is given, so
-        //    handing it an <a> skips the branch that emits [label](href) and
-        //    keeps only the label. Same for <code> (backticks) and <br>. Passing
-        //    inline elements one at a time stripped 1489 anchors and 3124 code
-        //    spans that sit directly inside an <li>.
-        //  - joining separately-serialized pieces with " " inserted a space at
-        //    every boundary, producing "List-based workflows : Validate…".
-        //
-        // Order is preserved so a sentence that follows a code block in the
-        // source is not hoisted above it.
-        const segs: string[] = [];
-        let pending: any[] = [];
-        const hasPre = (node: any) => $(node).find("pre").length > 0;
-        const flushInline = () => {
-          if (!pending.length) return;
-          const wrap = $("<span></span>");
-          for (const nd of pending) wrap.append($(nd).clone());
-          const t = inlineText($, wrap[0]);
-          if (t) segs.push(t);
-          pending = [];
-        };
-        $(li)
-          .contents()
-          .each((_j, c: any) => {
-            if (c.type === "text") {
-              pending.push(c);
-              return;
-            }
-            if (c.type !== "tag") return;
-            const ctag = String(c.name || "").toLowerCase();
-            const isBlock =
-              ctag === "ul" ||
-              ctag === "ol" ||
-              ctag === "pre" ||
-              ctag === "p" ||
-              ctag === "div" ||
-              hasPre(c);
-            if (!isBlock) {
-              pending.push(c);
-              return;
-            }
-            flushInline();
-            const sub = blockToMd($, c);
-            if (sub.trim()) segs.push(sub.trim());
-          });
-        flushInline();
+        const segs = orderedSegments($, li);
         if (!segs.length) return;
 
         const marker = ordered ? `${start + i}.` : "-";
@@ -352,24 +396,11 @@ function blockToMd($: cheerio.CheerioAPI, el: any): string {
   if (tag === "table") return tableToMd($, el);
   if (tag === "blockquote") return inlineText($, el);
   if (tag === "div" || tag === "section" || tag === "details" || tag === "article" || tag === "aside") {
-    // Walk contents(), not children(): a text node that is a DIRECT child of a
-    // wrapper was silently dropped. Real case - an admonition heading is
+    // Shared walker: keeps direct text children (an admonition heading is
     // <div class="admonitionHeading"><span>icon</span>danger</div>, so the
-    // severity word vanished and a :::danger block read as ordinary prose.
-    const parts: string[] = [];
-    $(el)
-      .contents()
-      .each((_i, c: any) => {
-        if (c.type === "text") {
-          const t = String(c.data || "").replace(/\s+/g, " ").trim();
-          if (t) parts.push(t);
-          return;
-        }
-        if (c.type !== "tag") return;
-        const t = blockToMd($, c);
-        if (t && t.trim()) parts.push(t.trim());
-      });
-    return parts.join("\n\n");
+    // severity word used to vanish) AND keeps link URLs, which a per-child walk
+    // would strip for the same reason it did inside list items.
+    return orderedSegments($, el).join("\n\n");
   }
   return inlineText($, el);
 }
@@ -380,20 +411,11 @@ function extractMarkdownish($: cheerio.CheerioAPI, root: any): string {
   // trailing sentence, because it sits as a direct text child of .markdown after
   // an inline element - e.g. "…Sample</a></p><div/> for an example of how to use
   // this feature."
-  const parts: string[] = [];
-  $(root)
-    .contents()
-    .each((_i, el: any) => {
-      if (el.type === "text") {
-        const t = String(el.data || "").replace(/\s+/g, " ").trim();
-        if (t) parts.push(t);
-        return;
-      }
-      if (el.type !== "tag") return;
-      const t = blockToMd($, el);
-      if (t && t.trim()) parts.push(t.trim());
-    });
-  return parts.join("\n\n").replace(/\n{3,}/g, "\n\n").trim();
+  // Shared walker, so a trailing text node that continues the preceding
+  // sentence stays attached to it instead of becoming a standalone paragraph -
+  // which mattered because \n\n is a chunk boundary, so the fragment could land
+  // in a different chunk with nothing to attach it to.
+  return orderedSegments($, root).join("\n\n").replace(/\n{3,}/g, "\n\n").trim();
 }
 
 // ---------------------------------------------------------------------------
@@ -577,20 +599,24 @@ function gitDates(siteDir: string): Map<string, string> {
       );
       return GIT_DATES;
     }
+    // %ct (unix seconds) rather than %cI: the ISO form carries each committer's
+    // own UTC offset - this repo has +02:00, +01:00, +03:00 and Z - so comparing
+    // the strings lexicographically can order two commits backwards and pick the
+    // older one. Seconds compare correctly regardless of zone.
     const out = execFileSync(
       "git",
-      ["log", "--no-merges", "--name-only", "--format=%x00%cI", "--", "docs"],
+      ["log", "--no-merges", "--name-only", "--format=%x00%ct", "--", "docs", "src"],
       { cwd: siteDir, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 },
     );
-    let commitDate = "";
+    let commitStamp = "";
     for (const raw of out.split("\n")) {
       if (raw.startsWith("\u0000")) {
-        commitDate = raw.slice(1).trim();
+        commitStamp = raw.slice(1).trim();
         continue;
       }
       const file = raw.trim();
       // git log is newest-first, so the first sighting of a file is its latest.
-      if (file && commitDate && !GIT_DATES.has(file)) GIT_DATES.set(file, commitDate);
+      if (file && commitStamp && !GIT_DATES.has(file)) GIT_DATES.set(file, commitStamp);
     }
   } catch {
     // Never fatal: this plugin must not be able to break a deploy.
@@ -660,15 +686,29 @@ function contributingFiles(siteDir: string, pathname: string): string[] {
       continue;
     }
     const dir = path.posix.dirname(rel.split(path.sep).join("/"));
-    const re = /from\s+['"]([^'"]*partials\/[^'"]+)['"]/g;
+    // Follow partials AND local components: the nine agent-skills pages are
+    // shells around @site/src/components/SkillsPage, whose prose lives in the
+    // component - so editing it changes what those pages say. Same staleness the
+    // partial-following fixes, one directory over. gitDates covers src/ for this.
+    const re = /from\s+['"]([^'"]*(?:partials\/|@site\/src\/components\/)[^'"]+)['"]/g;
     let m: RegExpExecArray | null;
     while ((m = re.exec(body))) {
       const spec = m[1].replace(/^@site\//, "");
-      const resolved = spec.startsWith("docs/")
-        ? spec
-        : path.posix.normalize(path.posix.join(dir, spec));
-      if (!resolved.startsWith("docs/")) continue;
-      const withExt = /\.mdx?$/.test(resolved) ? [resolved] : [`${resolved}.mdx`, `${resolved}.md`];
+      const resolved =
+        spec.startsWith("docs/") || spec.startsWith("src/")
+          ? spec
+          : path.posix.normalize(path.posix.join(dir, spec));
+      if (!resolved.startsWith("docs/") && !resolved.startsWith("src/")) continue;
+      const withExt = /\.(mdx?|tsx?|jsx?)$/.test(resolved)
+        ? [resolved]
+        : [
+            `${resolved}.mdx`,
+            `${resolved}.md`,
+            `${resolved}.tsx`,
+            `${resolved}.ts`,
+            `${resolved}/index.tsx`,
+            `${resolved}/index.ts`,
+          ];
       for (const cand of withExt) {
         if (seen.has(cand)) continue;
         try {
@@ -697,29 +737,22 @@ function contributingFiles(siteDir: string, pathname: string): string[] {
 function sourceDate(siteDir: string, pathname: string): string {
   const dates = gitDates(siteDir);
   if (!dates.size) return "";
-  let newest = "";
+  let newest = 0;
   for (const rel of contributingFiles(siteDir, pathname)) {
-    const d = dates.get(rel);
-    // ISO-8601 with a fixed offset sorts lexicographically.
-    if (d && d > newest) newest = d;
+    const secs = Number(dates.get(rel) || 0);
+    if (Number.isFinite(secs) && secs > newest) newest = secs;
   }
-  return newest;
+  return newest ? new Date(newest * 1000).toISOString() : "";
 }
 
 function readFrontMatter(siteDir: string, pathname: string): Record<string, unknown> {
-  // Kept in step with sourceCandidates() - see the note there.
-  const rel = pathname.replace(/^\/+|\/+$/g, "");
-  const base = path.join(siteDir, "docs");
-  const candidates = rel
-    ? [
-        path.join(base, `${rel}.md`),
-        path.join(base, `${rel}.mdx`),
-        path.join(base, rel, "index.md"),
-        path.join(base, rel, "index.mdx"),
-        path.join(base, rel, "README.md"),
-      ]
-    : [path.join(base, "index.md"), path.join(base, "intro.md"), path.join(base, "index.mdx")];
-  for (const file of candidates) {
+  // Actually shares sourceCandidates() now. It previously kept its own list with
+  // a comment claiming otherwise, and the lists had drifted: a folder/folder.md
+  // page resolved for dating but not for frontmatter, so its curated fields
+  // (keywords, and any topic_type / product / user_intents / canonical_id) were
+  // silently dropped and semantic_status stayed "rule_based".
+  for (const rel of sourceCandidates(pathname)) {
+    const file = path.join(siteDir, rel);
     try {
       if (!fs.existsSync(file)) continue;
       return (matter(fs.readFileSync(file, "utf8")).data || {}) as Record<string, unknown>;
@@ -862,7 +895,11 @@ function toIndexRecord(m: KModule) {
     channels: m.channels,
     dependencies: m.dependencies,
     tags: m.tags,
-    docs_excerpt: m.content.docs_markdown.slice(0, 400),
+    // Truncating mid-fence leaves the consumer with raw code and a dangling
+    // ``` - the very defect this plugin treats as a bug elsewhere. Restoring
+    // real newlines in code samples made it more likely, not less (measured 693
+    // -> 783 records). Cut at the last safe point instead.
+    docs_excerpt: clipMarkdown(m.content.docs_markdown, 400),
     assistant_excerpt: m.content.assistant_context.slice(0, 300),
     url: m.metadata.url,
     heading: m.metadata.heading,
@@ -1101,9 +1138,16 @@ export default function knowledgeExtractor(context: any, _options: any) {
           // bucket was introduced to stop. Name it after the page instead.
           if (notAvailable && products.every((p) => SYNTHETIC_PRODUCTS.has(p))) {
             const seg = pathSegments(pathname);
-            const i = seg[1] === "net" ? 3 : 2;
-            const own = slug(seg.slice(i)[0] || "");
-            if (own && !SYNTHETIC_PRODUCTS.has(own)) products = [own];
+            // Guard the shape before trusting the offset, and check the RAW
+            // segment: slug("") returns "module", which would have emitted a
+            // phantom urn:product:module for a framework-root stub. Same trap
+            // productKeys() documents - it caught me here too.
+            if (seg[0] === "sdks") {
+              const i = seg[1] === "net" ? 3 : 2;
+              const raw = (seg[i] || "").trim();
+              const own = raw ? slug(raw) : "";
+              if (own && !SYNTHETIC_PRODUCTS.has(own)) products = [own];
+            }
           }
           const product = products[0];
           const fmTopic = fmFirst(fm.topic_type).toLowerCase();
