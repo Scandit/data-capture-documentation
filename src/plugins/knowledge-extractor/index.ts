@@ -58,26 +58,53 @@ function firstHeading(text: string): string {
 
 /** Split body into ~chunkTarget-sized chunks at H2/H3 boundaries (ported). */
 /**
- * Split on headings, but never inside a fenced code block: a sample line that
- * begins with "## " or "### " (a shell or Python comment, or a Markdown example)
- * would otherwise start a new chunk, leaving an unterminated fence behind and
- * making the code comment the chunk's heading. No such line exists in docs/
- * today, so this is a guard against a future sample rather than a live bug.
+ * Split `body` at every line the caller calls a boundary, but NEVER inside a
+ * fenced code block.
+ *
+ * Both chunk boundaries have to go through this. Splitting on headings alone was
+ * not enough: the paragraph-level fallback in chunkBody used a plain
+ * split("\n\n"), which was harmless only for as long as code samples were
+ * (wrongly) collapsed onto a single line and so contained no blank lines.
+ * Restoring real newlines in code samples turned that latent bug into a live one
+ * - measured at 386 of 4452 chunks carrying an unbalanced number of fence lines,
+ * i.e. a dangling ``` and raw code presented to a consumer as prose.
  */
-function splitOnHeadings(body: string): string[] {
+function splitFenceAware(
+  body: string,
+  isBoundary: (line: string) => boolean,
+  dropBoundary = false,
+): string[] {
   const out: string[] = [];
   let buf: string[] = [];
   let inFence = false;
+  const flush = () => {
+    const joined = buf.join("\n");
+    if (joined.trim()) out.push(joined);
+    buf = [];
+  };
   for (const line of body.split("\n")) {
     if (/^\s*```/.test(line)) inFence = !inFence;
-    if (!inFence && /^(##\s|###\s)/.test(line) && buf.length) {
-      out.push(buf.join("\n"));
-      buf = [];
+    if (!inFence && isBoundary(line)) {
+      if (dropBoundary) {
+        flush();
+        continue; // the boundary itself is a separator, not content
+      }
+      if (buf.length) flush();
     }
     buf.push(line);
   }
-  if (buf.length) out.push(buf.join("\n"));
+  flush();
   return out;
+}
+
+/** Heading boundaries: "## " / "### " at the start of a line, outside a fence. */
+function splitOnHeadings(body: string): string[] {
+  return splitFenceAware(body, (l) => /^(##\s|###\s)/.test(l));
+}
+
+/** Paragraph boundaries: a blank line outside a fence. */
+function splitParagraphs(body: string): string[] {
+  return splitFenceAware(body, (l) => l.trim() === "", true);
 }
 
 function chunkBody(body: string, target: number): Chunk[] {
@@ -103,7 +130,9 @@ function chunkBody(body: string, target: number): Chunk[] {
     }
     let para = "";
     let paraHeading = partHeading;
-    for (let p of part.split("\n\n")) {
+    // A single fenced block longer than the target stays intact and simply
+    // overshoots: an oversized chunk is recoverable, a bisected code sample is not.
+    for (let p of splitParagraphs(part)) {
       p = p.trim();
       if (!p) continue;
       const cand = para ? `${para}\n\n${p}`.trim() : p;
@@ -233,8 +262,15 @@ function blockToMd($: cheerio.CheerioAPI, el: any): string {
     $(el)
       .children("li")
       .each((i, li) => {
+        // `own` is inline prose and gets its whitespace collapsed. `blocks` is
+        // anything whose LINE STRUCTURE matters - nested lists, and code samples.
+        // Routing a <pre> through `own` was why the fix for flattened code
+        // samples did not reach the 9 blocks that live inside a list item: the
+        // newlines were restored and then collapsed straight back out, so a `//`
+        // comment still swallowed the rest of the sample.
         const own: string[] = [];
-        const nested: string[] = [];
+        const blocks: string[] = [];
+        const hasPre = (node: any) => $(node).find("pre").length > 0;
         $(li)
           .contents()
           .each((_j, c: any) => {
@@ -245,9 +281,9 @@ function blockToMd($: cheerio.CheerioAPI, el: any): string {
             }
             if (c.type !== "tag") return;
             const ctag = String(c.name || "").toLowerCase();
-            if (ctag === "ul" || ctag === "ol") {
+            if (ctag === "ul" || ctag === "ol" || ctag === "pre" || hasPre(c)) {
               const sub = blockToMd($, c);
-              if (sub.trim()) nested.push(sub.trim());
+              if (sub.trim()) blocks.push(sub.trim());
             } else if (ctag === "p" || ctag === "div") {
               const t = blockToMd($, c);
               if (t.trim()) own.push(t.trim());
@@ -258,9 +294,9 @@ function blockToMd($: cheerio.CheerioAPI, el: any): string {
           });
         const marker = ordered ? `${start + i}.` : "-";
         const head = own.join(" ").replace(/\s+/g, " ").trim();
-        if (!head && !nested.length) return;
+        if (!head && !blocks.length) return;
         const lines = [`${marker} ${head}`.trim()];
-        for (const sub of nested) {
+        for (const sub of blocks) {
           for (const ln of sub.split("\n")) lines.push(`  ${ln}`);
         }
         items.push(lines.join("\n"));
@@ -311,10 +347,21 @@ function blockToMd($: cheerio.CheerioAPI, el: any): string {
 }
 
 function extractMarkdownish($: cheerio.CheerioAPI, root: any): string {
+  // contents(), not children(): the same dropped-text-node bug that was fixed
+  // for wrapper elements survived one level up here. Two real pages lost a whole
+  // trailing sentence, because it sits as a direct text child of .markdown after
+  // an inline element - e.g. "…Sample</a></p><div/> for an example of how to use
+  // this feature."
   const parts: string[] = [];
   $(root)
-    .children()
-    .each((_i, el) => {
+    .contents()
+    .each((_i, el: any) => {
+      if (el.type === "text") {
+        const t = String(el.data || "").replace(/\s+/g, " ").trim();
+        if (t) parts.push(t);
+        return;
+      }
+      if (el.type !== "tag") return;
       const t = blockToMd($, el);
       if (t && t.trim()) parts.push(t.trim());
     });
@@ -361,8 +408,16 @@ function productKeys(siteDir: string): Set<string> {
   try {
     const raw = fs.readFileSync(path.join(siteDir, "src", "data", "products.json"), "utf8");
     const parsed = JSON.parse(raw) as Array<{ key?: unknown }>;
+    // Filter on the RAW key: slug("") returns "module", so filtering after
+    // slugging can never drop anything, and an entry with a missing key would
+    // register "module" as a real product - after which a page at
+    // /sdks/<framework>/module/ would start emitting availability edges for a
+    // product that does not exist.
     PRODUCT_KEYS = new Set(
-      parsed.map((p) => slug(String(p?.key ?? ""))).filter(Boolean),
+      parsed
+        .map((p) => String(p?.key ?? "").trim())
+        .filter(Boolean)
+        .map(slug),
     );
   } catch {
     // No registry (or unreadable): fall back to path shape only. Never fatal -
@@ -478,8 +533,22 @@ function gitDates(siteDir: string): Map<string, string> {
   GIT_DATES = new Map();
   try {
     // A shallow clone cannot answer this question; say so by staying empty.
-    const shallow = path.join(siteDir, ".git", "shallow");
-    if (fs.existsSync(shallow)) return GIT_DATES;
+    // Ask git rather than probing for .git/shallow: in a linked worktree (or with
+    // --separate-git-dir, or in a submodule) .git is a FILE, so the probe is
+    // always false and would fail OPEN - running git log against a shallow store
+    // and resolving every file to the single available commit, which is exactly
+    // the "constant that looks like data" this is meant to prevent.
+    const isShallow = execFileSync("git", ["rev-parse", "--is-shallow-repository"], {
+      cwd: siteDir,
+      encoding: "utf8",
+    }).trim();
+    if (isShallow !== "false") {
+      console.warn(
+        "[knowledge-extractor] shallow clone: last_verified will be empty. " +
+          "Set `fetch-depth: 0` on the checkout step for a real per-page date.",
+      );
+      return GIT_DATES;
+    }
     const out = execFileSync(
       "git",
       ["log", "--no-merges", "--name-only", "--format=%x00%cI", "--", "docs"],
@@ -840,9 +909,10 @@ export default function knowledgeExtractor(context: any, _options: any) {
     async postBuild({ siteConfig, outDir }: { siteConfig: any; outDir: string }) {
       const site = String(siteConfig?.url || "").replace(/\/+$/, "");
       const sourceSite = site ? new URL(site).hostname.toLowerCase() : "";
-      // Build-time "now" made every module claim it was verified today, so any
-      // consumer ranking on freshness saw a constant. Per-page mtime is set
-      // below; this stays only as the fallback for pages with no source file.
+      // When the artifact was produced. Honest and unconditional: it populates
+      // `updated_at`. It is deliberately NOT used for `last_verified`, which is
+      // the per-page git commit date resolved below - using build time there made
+      // every module claim it had been verified today.
       const buildStamp = new Date().toISOString();
       const version = "current";
 
