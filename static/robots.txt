@@ -1,0 +1,83 @@
+# robots.txt for docs.scandit.com
+#
+# Written because /robots.txt returned 404, and a missing robots.txt is not
+# neutral: crawlers read it as "everything permitted". The policy below was
+# already in force by omission; this states it.
+#
+# GUIDES: every major stays open to every crawler, search engines included.
+# People still run 6.x and 7.x and must find their documentation — in search,
+# and through an assistant they ask. The guides ship exactly one tree per major
+# (/ for 8.x, /7.6.14/, /6.28.11/), so nothing there is restricted.
+#
+# API REFERENCE: a SEPARATE SITE on the same host — Sphinx, not Docusaurus,
+# built and deployed by a different pipeline. robots.txt is per-host, so this
+# one file governs both. Unlike the guides it ships a tree per MINOR version;
+# all seven are live and full, verified by fetching a real page from each:
+#
+#   /data-capture-sdk/  38,575 bytes   current
+#   /8.6/               38,575 bytes   BYTE-IDENTICAL to the unversioned tree
+#   /8.5/ /8.4/ /8.3/   ~38 KB each    frozen 8.x minors
+#   /7.6/ /6.28/        ~35 / ~32 KB   the 7.x and 6.x majors
+#
+# The current version always lives at the UNVERSIONED path, so /8.6/ is a pure
+# duplicate and the older 8.x trees are superseded near-duplicates.
+#
+# THE RULE BELOW IS DEFAULT-DENY AND SELF-MAINTAINING. Bulk crawlers get the
+# unversioned tree, plus one explicitly named tree per OLDER major. Any other
+# versioned tree is excluded without an edit:
+#
+#   8.7 ships     -> /8.7/ appears, is excluded automatically, and its content
+#                    is already covered by the unversioned tree
+#   9.0 ships     -> /9.x/ excluded automatically. Add one Allow line naming
+#                    the 8.x tree you want to keep representing major 8.
+#
+# So minor releases need no change at all, and a major release needs one line —
+# a deliberate decision made once, at a release, rather than a list that silently
+# goes stale.
+#
+# NOT APPLIED TO SEARCH ENGINES, deliberately — but not for the usual reason.
+# Blocking crawl on an already-indexed URL can strand it: the crawler can no
+# longer read a canonical or noindex tag that would resolve the duplicate. The
+# normal advice is therefore "use canonical/noindex instead". That advice does
+# not apply cleanly here, because the API reference is NOT this site: it is a
+# separate Sphinx (Read the Docs theme) build, deployed to this host by another
+# pipeline, and its pages carry no <meta name="robots"> and no canonical link at
+# all. Adding those means changing the Sphinx build, not this repository.
+#
+# So robots.txt is the only lever reachable from here, and it is applied to bulk
+# crawlers only — where stranding does not matter, because nothing is trying to
+# rank them. Search-engine de-duplication still belongs in canonical/noindex on
+# the Sphinx side, and is left alone here rather than half-done.
+
+Sitemap: https://docs.scandit.com/sitemap.xml
+# Covers ~1,513 URLs. Roughly 3,200 API-reference pages are in no sitemap and
+# are reachable only by following links, so a link-following crawler sees closer
+# to 4,700 pages than 1,500.
+
+# --- Bulk and training crawlers ------------------------------------------
+# Crawl-delay is a request: CCBot, Amazonbot and ClaudeBot document support,
+# GPTBot and meta-externalagent do not, and Bytespider is the known ignorer.
+#
+# Precedence note: the longer Allow wins over the shorter Disallow, which is how
+# the named majors survive the default-deny. Keep the Allow paths exact.
+
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: CCBot
+User-agent: Bytespider
+User-agent: Amazonbot
+User-agent: meta-externalagent
+Crawl-delay: 2
+Disallow: /*/data-capture-sdk/
+Allow: /7.6/data-capture-sdk/
+Allow: /6.28/data-capture-sdk/
+
+# --- Everyone else --------------------------------------------------------
+# Search engines and assistants alike: the whole site, every version.
+#
+# NOTE FOR FUTURE EDITS: the six agents above have their own group and do NOT
+# inherit anything added here. robots.txt group selection is winner-take-all,
+# so a rule meant for them must be repeated in their group.
+
+User-agent: *
+Disallow:
