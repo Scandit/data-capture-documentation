@@ -67,6 +67,19 @@ function clipMarkdown(text: string, limit: number): string {
   return `${cut.trimEnd()}\n\u0060\u0060\u0060`;
 }
 
+/**
+ * `assistant_context` with its chunk clipped fence-safely, and its boilerplate
+ * prefix left alone. Splitting on the chunk rather than on a character count is
+ * what stops the clip from eating all the content.
+ */
+const ASSISTANT_CHUNK_CHARS = 300;
+function assistantExcerpt(assistantContext: string, chunk: string): string {
+  const at = chunk ? assistantContext.lastIndexOf(chunk) : -1;
+  if (at < 0) return clipMarkdown(assistantContext, ASSISTANT_CHUNK_CHARS);
+  const prefix = assistantContext.slice(0, at);
+  return `${prefix}${clipMarkdown(chunk, ASSISTANT_CHUNK_CHARS)}`;
+}
+
 function slug(value: string): string {
   const clean = String(value)
     .toLowerCase()
@@ -256,14 +269,24 @@ function inlineText($: cheerio.CheerioAPI, el: any): string {
 
 function tableToMd($: cheerio.CheerioAPI, el: any): string {
   const rows: string[] = [];
+  let width = 0;
   $(el)
     .find("tr")
     .each((_i, tr) => {
       const cells: string[] = [];
       $(tr)
         .children("th,td")
-        .each((_j, c) => cells.push(inlineText($, c)));
-      if (cells.length) rows.push(`| ${cells.join(" | ")} |`);
+        // A literal | inside a cell ends the cell for any markdown parser.
+        .each((_j, c) => cells.push(inlineText($, c).replace(/\|/g, "\\|")));
+      if (!cells.length) return;
+      rows.push(`| ${cells.join(" | ")} |`);
+      // Without the delimiter row after the header, none of this is a table to a
+      // markdown parser - it is a run of literal pipe lines, and the header is
+      // indistinguishable from data. 595 chunks shipped tables; none had one.
+      if (rows.length === 1) {
+        width = cells.length;
+        rows.push(`|${" --- |".repeat(width)}`);
+      }
     });
   return rows.join("\n");
 }
@@ -286,6 +309,17 @@ function tableToMd($: cheerio.CheerioAPI, el: any): string {
  * not hoisted above it, and a text node that CONTINUES a sentence across an
  * inline element stays in the same segment instead of becoming its own paragraph.
  */
+/**
+ * SSR loading placeholders are not documentation. FeatureList renders
+ * "Loading features..." before it hydrates, and a walk that returns bare text
+ * children publishes it. Matched narrowly - the word plus a trailing ellipsis -
+ * so prose that merely begins with "Loading" survives ("Loading Dialog",
+ * `setProgressBarMessage("Loading ...")` and the like all stay).
+ */
+function isLoadingPlaceholder(text: string): boolean {
+  return /^loading\b.{0,40}(\.{2,}|\u2026)$/i.test(text.trim());
+}
+
 function orderedSegments($: cheerio.CheerioAPI, el: any): string[] {
   const segs: string[] = [];
   let pending: any[] = [];
@@ -294,12 +328,7 @@ function orderedSegments($: cheerio.CheerioAPI, el: any): string[] {
     const wrap = $("<span></span>");
     for (const nd of pending) wrap.append($(nd).clone());
     const t = inlineText($, wrap[0]);
-    // Returning a wrapper's bare text children surfaced SSR loading placeholders
-    // - "Loading features..." is what FeatureList renders before it hydrates, so
-    // nine label-definitions pages started asserting that where their feature
-    // tables should be. Matched narrowly: "Loading" plus a trailing ellipsis, so
-    // real prose that merely starts with the word survives.
-    if (t && !/^loading\b.{0,40}(\.{2,}|\u2026)$/i.test(t)) segs.push(t);
+    if (t && !isLoadingPlaceholder(t)) segs.push(t);
     pending = [];
   };
   const isBlockTag = (tag: string, node: any) =>
@@ -332,7 +361,10 @@ function orderedSegments($: cheerio.CheerioAPI, el: any): string[] {
       }
       flush();
       const sub = blockToMd($, c);
-      if (sub.trim()) segs.push(sub.trim());
+      // Guarded here as well: it worked only because FeatureList happens to use a
+      // <div>, which recurses back through the inline path. A <p>, or anything
+      // beside the text, and the placeholder was published again.
+      if (sub.trim() && !isLoadingPlaceholder(sub)) segs.push(sub.trim());
     });
   flush();
   return segs;
@@ -710,16 +742,24 @@ function contributingFiles(siteDir: string, pathname: string): string[] {
           ? spec
           : path.posix.normalize(path.posix.join(dir, spec));
       if (!resolved.startsWith("docs/") && !resolved.startsWith("src/")) continue;
-      const withExt = /\.(mdx?|tsx?|jsx?|json)$/.test(resolved)
+      // The has-extension test accepts jsx? but the candidate list did not offer
+      // it, so an extension-less import of a .js/.jsx component - there are ~40
+      // in src/ - was silently not followed, which would quietly reintroduce the
+      // shell-staleness this function exists to prevent.
+      const withExt = /\.(mdx?|[tj]sx?|json)$/.test(resolved)
         ? [resolved]
         : [
             `${resolved}.mdx`,
             `${resolved}.md`,
             `${resolved}.tsx`,
             `${resolved}.ts`,
+            `${resolved}.jsx`,
+            `${resolved}.js`,
             `${resolved}.json`,
             `${resolved}/index.tsx`,
             `${resolved}/index.ts`,
+            `${resolved}/index.jsx`,
+            `${resolved}/index.js`,
           ];
       for (const cand of withExt) {
         if (seen.has(cand)) continue;
@@ -912,11 +952,15 @@ function toIndexRecord(m: KModule) {
     // real newlines in code samples made it more likely, not less (measured 693
     // -> 783 records). Cut at the last safe point instead.
     docs_excerpt: clipMarkdown(m.content.docs_markdown, 400),
-    // Same treatment as docs_excerpt directly above. Applying clipMarkdown to one
-    // and leaving its sibling on a hard slice left 466 records handing an
-    // assistant raw code with a dangling ``` - the identical defect, on the other
-    // published text field of the same record.
-    assistant_excerpt: clipMarkdown(m.content.assistant_context, 300),
+    // assistant_context is "<boilerplate about the module> + \n\n + <chunk>", and
+    // the boilerplate alone is typically 200-270 of a 300-char budget. Clipping
+    // the WHOLE string at a fence boundary therefore threw the chunk away and
+    // left the template - 448 records lost their entire content preview, and the
+    // limit/3 "don't discard everything" guard never fired because the
+    // boilerplate satisfied it by itself. So clip the CHUNK to its own budget and
+    // keep the prefix intact: the field is a bit longer than before, and actually
+    // carries page content, which is the only reason it exists.
+    assistant_excerpt: assistantExcerpt(m.content.assistant_context, m.content.docs_markdown),
     url: m.metadata.url,
     heading: m.metadata.heading,
     framework: m.metadata.framework,
@@ -1193,6 +1237,26 @@ export default function knowledgeExtractor(context: any, _options: any) {
           `[knowledge-extractor] extracted 0 modules from ${files.length} HTML file(s) ` +
             `(${pageErrors} page error(s)). Page selectors likely drifted — refusing to ` +
             `overwrite the AI-layer artifacts with empty output.`,
+        );
+      }
+
+      // The guard above only catches TOTAL failure. Realistic selector drift is
+      // partial: a theme upgrade breaks most page types, `!root.length` and
+      // `!bodyMd.trim()` skip them without counting as errors, and a tenth of the
+      // corpus is published over a green build. So require most eligible pages to
+      // have produced something. Threshold is deliberately loose - this must fire
+      // on drift, never on a normal day.
+      // Measured against files.length, NOT against a count taken after the
+      // selector check: drift makes that counter fall with the result, so the
+      // ratio would stay at 1 and prove nothing. Roughly 13% of candidate files
+      // are legitimately skipped (redirect stubs and the homepage), so today's
+      // ratio is ~0.87 and 0.5 leaves wide headroom - this has to fire on drift
+      // and never on a normal day.
+      if (files.length > 0 && pagesProcessed / files.length < 0.5) {
+        throw new Error(
+          `[knowledge-extractor] only ${pagesProcessed} of ${files.length} HTML file(s) ` +
+            `produced content (${pageErrors} page error(s)). Page selectors likely drifted — ` +
+            `refusing to overwrite the AI-layer artifacts with a partial corpus.`,
         );
       }
 

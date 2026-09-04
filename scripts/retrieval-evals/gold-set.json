@@ -16,7 +16,7 @@
     { "query": "how to initialize data capture context", "expect": ["/add-sdk", "/get-started"] },
     { "query": "supported symbologies", "expect": ["barcode-symbologies", "symbology-properties"] },
     { "query": "qr code scanning", "expect": ["barcode-symbologies", "/barcode-capture/"] },
-    { "query": "data matrix", "expect": ["barcode-symbologies"] },
+    { "query": "data matrix", "expect": ["barcode-symbologies", "symbology-properties"] },
     { "query": "ai powered barcode scanning", "expect": ["ai-powered-barcode-scanning"] },
     { "query": "scandit express inventory count", "expect": ["/express/", "inventory-count"] },
     { "query": "release notes", "expect": ["/release-notes"] },
