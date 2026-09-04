@@ -77,7 +77,32 @@ function assistantExcerpt(assistantContext: string, chunk: string): string {
   const at = chunk ? assistantContext.lastIndexOf(chunk) : -1;
   if (at < 0) return clipMarkdown(assistantContext, ASSISTANT_CHUNK_CHARS);
   const prefix = assistantContext.slice(0, at);
-  return `${prefix}${clipMarkdown(chunk, ASSISTANT_CHUNK_CHARS)}`;
+  // The tail is empty today because assistant_context ENDS with the chunk, but
+  // nothing asserts that. Re-appending it costs nothing and means a future
+  // suffix - the curated user_intents/not_for that a comment below contemplates
+  // inlining - cannot silently vanish from the published field.
+  const tail = assistantContext.slice(at + chunk.length);
+  return `${prefix}${clipMarkdown(chunk, ASSISTANT_CHUNK_CHARS)}${tail}`;
+}
+
+/**
+ * Escape `|` in a table cell, which would otherwise end the cell - but never
+ * inside a markdown link target, where a backslash breaks the URL instead.
+ * inlineText() has already produced `[label](href)` by this point, so the target
+ * has to be stepped over rather than escaped.
+ */
+function escapeCell(text: string): string {
+  const out: string[] = [];
+  let i = 0;
+  const re = /\]\(([^)]*)\)/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    out.push(text.slice(i, m.index).replace(/\|/g, "\\|"));
+    out.push(m[0]); // ](href) verbatim
+    i = m.index + m[0].length;
+  }
+  out.push(text.slice(i).replace(/\|/g, "\\|"));
+  return out.join("");
 }
 
 function slug(value: string): string {
@@ -268,27 +293,30 @@ function inlineText($: cheerio.CheerioAPI, el: any): string {
 }
 
 function tableToMd($: cheerio.CheerioAPI, el: any): string {
-  const rows: string[] = [];
-  let width = 0;
-  $(el)
-    .find("tr")
-    .each((_i, tr) => {
-      const cells: string[] = [];
-      $(tr)
-        .children("th,td")
-        // A literal | inside a cell ends the cell for any markdown parser.
-        .each((_j, c) => cells.push(inlineText($, c).replace(/\|/g, "\\|")));
-      if (!cells.length) return;
-      rows.push(`| ${cells.join(" | ")} |`);
-      // Without the delimiter row after the header, none of this is a table to a
-      // markdown parser - it is a run of literal pipe lines, and the header is
-      // indistinguishable from data. 595 chunks shipped tables; none had one.
-      if (rows.length === 1) {
-        width = cells.length;
-        rows.push(`|${" --- |".repeat(width)}`);
-      }
-    });
-  return rows.join("\n");
+  // Scoped to THIS table's own row groups: find("tr") also collects a nested
+  // table's rows and appends them as extra rows of the outer one.
+  const trs = $(el).children("thead,tbody,tfoot").children("tr");
+  const rows: string[][] = [];
+  (trs.length ? trs : $(el).children("tr")).each((_i, tr) => {
+    const cells: string[] = [];
+    $(tr)
+      .children("th,td")
+      .each((_j, c) => cells.push(escapeCell(inlineText($, c))));
+    if (cells.length) rows.push(cells);
+  });
+  if (!rows.length) return "";
+  // Widest row, not the header's width: a parser honours the delimiter, so a
+  // header narrower than a body row would silently DISCARD the extra cells.
+  const width = rows.reduce((w, r) => Math.max(w, r.length), 0);
+  const line = (cells: string[]) =>
+    `| ${cells.concat(Array(width - cells.length).fill("")).join(" | ")} |`;
+  const out = [line(rows[0])];
+  // Without a delimiter row after the header none of this is a table to a
+  // markdown parser - it is a run of literal pipe lines, with the header
+  // indistinguishable from the data. 595 chunks shipped tables; none had one.
+  out.push(`|${" --- |".repeat(width)}`);
+  for (const r of rows.slice(1)) out.push(line(r));
+  return out.join("\n");
 }
 
 /**
@@ -317,7 +345,12 @@ function tableToMd($: cheerio.CheerioAPI, el: any): string {
  * `setProgressBarMessage("Loading ...")` and the like all stay).
  */
 function isLoadingPlaceholder(text: string): boolean {
-  return /^loading\b.{0,40}(\.{2,}|\u2026)$/i.test(text.trim());
+  // Deliberately narrow. The previous shape allowed 40 arbitrary characters, and
+  // once the test was also applied to whole blocks that meant a paragraph like
+  // "Loading the SDK asynchronously..." would be deleted silently, with no
+  // warning and no trace in the output. A placeholder is one or two bare words
+  // and an ellipsis; anything with more shape than that is prose.
+  return /^loading(\s+[a-z]+){1,2}\s*(\.{3}|\u2026)$/i.test(text.trim());
 }
 
 function orderedSegments($: cheerio.CheerioAPI, el: any): string[] {
@@ -370,8 +403,45 @@ function orderedSegments($: cheerio.CheerioAPI, el: any): string[] {
   return segs;
 }
 
+/**
+ * A Docusaurus <Tabs> block, rendered as its labelled variants.
+ *
+ * Docusaurus emits every panel into the HTML - the inactive ones only carry
+ * `hidden` - as a <ul role="tablist"> of labels followed by one
+ * <div role="tabpanel"> per tab, in the same order. With no handling for that,
+ * the tablist came out as a detached bullet list ("- Gradle - Maven") and the
+ * panels ran together as consecutive prose, so /sdks/android/add-sdk/ published
+ * the Gradle build.gradle block immediately followed by "Add the mavenCentral
+ * repository in pom.xml file:" with nothing tying either body to its label. An
+ * assistant answering "how do I add the SDK on Android" could hand a Gradle user
+ * the Maven steps, or splice the two.
+ *
+ * Dropping the hidden panels would fix the splice by throwing away half the
+ * documentation, so instead each panel is emitted under its own label. Panels are
+ * paired with labels positionally, which is the only association in the markup.
+ */
+function tabsToMd($: cheerio.CheerioAPI, el: any): string {
+  const labels: string[] = [];
+  $(el)
+    .find('[role="tab"]')
+    .each((_i, t) => labels.push(inlineText($, t)));
+  const out: string[] = [];
+  $(el)
+    .find('[role="tabpanel"]')
+    .each((i, panel) => {
+      const body = orderedSegments($, panel).join("\n\n").trim();
+      if (!body) return;
+      const label = labels[i] || "";
+      out.push(label ? `**${label}**\n\n${body}` : body);
+    });
+  return out.join("\n\n");
+}
+
 function blockToMd($: cheerio.CheerioAPI, el: any): string {
   const tag = String(el.tagName || el.name || "").toLowerCase();
+  // Checked before the generic wrapper handling, and before `ul`, so the tablist
+  // is never emitted as a bullet list of bare tab names.
+  if ($(el).children('[role="tablist"]').length) return tabsToMd($, el);
   if (HEADING_LEVEL[tag]) {
     const t = inlineText($, el).replace(/^#+\s*/, "");
     return t ? `${"#".repeat(HEADING_LEVEL[tag])} ${t}` : "";
@@ -561,7 +631,15 @@ function classifyLinks(chunkMarkdown: string, site: string): { internal: string[
     if (href.startsWith("/")) {
       const p = href.split(/[?#]/)[0];
       if (p.startsWith("/img") || p.startsWith("/assets") || /\.(png|jpe?g|gif|svg|mp4|pdf|zip)$/i.test(p)) continue;
-      internal.add(p.endsWith("/") ? p : `${p}/`);
+      // Docusaurus routes end in "/", but a link to a FILE must not: the asset
+      // filter above only covers images and archives, so /llms.txt and the
+      // generated /stable/c_api/*.html pages were being published as
+      // "/llms.txt/" and "…struct_sc_symbology_settings.html/" - URLs that 404
+      // for anyone who follows them. Anything with a file extension in its last
+      // segment is left exactly as written.
+      const last = p.split("/").pop() || "";
+      const isFile = /\.[a-z0-9]{1,8}$/i.test(last);
+      internal.add(isFile || p.endsWith("/") ? p : `${p}/`);
     }
   }
   return { internal: Array.from(internal), api: Array.from(api) };
@@ -851,7 +929,10 @@ function buildModule(args: {
 
   // NB: user_intents / not_for are emitted as dedicated, UN-truncated fields
   // (see the return + toIndexRecord). We deliberately do NOT inline them into
-  // assistant_context, because the index only ships a 300-char assistant_excerpt
+  // assistant_context. NOTE: the "only 300 chars" reason this once gave no longer
+  // holds - assistant_excerpt is now the boilerplate prefix plus 300 chars of
+  // chunk (avg 515), so if this decision is revisited, re-derive it rather than
+  // reading a stale constraint out of this comment
   // — inlining them would crowd out the summary. The curated signal lives in the
   // structured fields; the excerpt stays a clean title+summary preview.
   const assistantContext =
