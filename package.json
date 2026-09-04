@@ -19,7 +19,8 @@
     "docs:gate:setup": "node scripts/setup-vale.cjs",
     "verify:search-tags": "node scripts/verify-search-tags.cjs",
     "test:search-facets": "node scripts/test-search-facets.cjs",
-    "verify:api-reference-seo": "node scripts/verify-api-reference-seo.cjs"
+    "verify:api-reference-seo": "node scripts/verify-api-reference-seo.cjs",
+    "discover:api-reference-lines": "node scripts/discover-api-reference-lines.cjs"
   },
   "dependencies": {
     "@docusaurus/core": "^3.4.0",

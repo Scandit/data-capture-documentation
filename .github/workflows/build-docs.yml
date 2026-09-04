@@ -76,5 +76,21 @@ jobs:
       # Warns for now: the API-reference HTML is generated outside this repo, so
       # this cannot pass until that generator emits canonical/noindex. Add
       # --strict to make it blocking once it does.
+      # Which lines to check is discovered, not hard-coded. A line keeps being
+      # published after its doc snapshot is deleted at a release - /8.5/ went that
+      # way at 8.6 - and then nothing links it, so the gate alone would never see
+      # the newest frozen line, the one whose content is closest to current and so
+      # the likeliest to outrank it. Discovery probes for those and prints them.
+      #
+      # `|| true` on purpose: if discovery cannot reach the site, LINES is empty
+      # and the gate runs on the linked lines instead of the step going red. The
+      # gate says in its own output when it ran without --lines.
       - name: Verify API-reference canonical tags
-        run: yarn verify:api-reference-seo
+        run: |
+          LINES=$(node scripts/discover-api-reference-lines.cjs --quiet || true)
+          if [ -n "$LINES" ]; then
+            echo "Discovered unlinked API-reference lines: $LINES"
+            yarn verify:api-reference-seo --lines "$LINES"
+          else
+            yarn verify:api-reference-seo
+          fi
