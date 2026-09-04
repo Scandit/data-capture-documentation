@@ -6992,26 +6992,25 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
 #### Barcode
 
 * The [MatrixScan Sequence simple sample](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/06_Sequence/MatrixScanSequenceSimpleSample) is now publicly available, showing the minimum setup needed to run MatrixScan Sequence.
-* Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
-* BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
-* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set `barcodeCountSettings.AutomaticClusteringMethod` to `AutomaticClusteringMethod.Label` to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
+* MatrixScan Sequence: `initialOrderOnShelf` and `initialOrderOnTray` resume scanning from a previous session (already available since 8.5.1).
+* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set barcodeCountSettings.AutomaticClusteringMethod to AutomaticClusteringMethod.Label to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
 * When highlights inside a MatrixScan Count cluster would overlap, the cluster now collapses into a single badge showing how many barcodes it contains, instead of drawing every highlight on top of the others. This also applies in Scan Preview mode.
-* Added an API to customize the text of the hint shown when a new scan group starts (BarcodeCountView.setTextForNewGroupHint).
+* Added an API to customize the text of the hint shown when a new scan group starts (`BarcodeCountView.setTextForNewGroupHint`).
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
-* Added BarcodeSequenceDeserializer for creating and updating MatrixScan Sequence modes and settings from JSON.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -7040,8 +7039,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -11367,9 +11366,9 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -11379,9 +11378,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Added the zoomControlOrientation property to BarcodeArView.
 * Added the BarcodeArCircleHighlight.isPulsing property to toggle the highlight's pulsing animation.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -11392,7 +11392,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -11409,8 +11409,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -11447,6 +11447,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Hardened dependency resolution for Android native samples.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 * Fixed an issue where the VLM scanning screen remained permanently displayed if IdCaptureSettings were applied mid-scan.
+* Fixed BarcodeResult.barcodeDataElements always being empty. The field is now correctly populated with the parsed AAMVA barcode data elements.
 
 #### Smart Label Capture
 
@@ -11470,7 +11471,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
-* Deprecated the SparkScan target-mode APIs and `ScanIntention.SmartSelection` in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+* Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
 
 ## 8.5.3
 
@@ -14966,9 +14967,9 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -14978,9 +14979,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Added the zoomControlOrientation property to BarcodeArView.
 * Added the BarcodeArCircleHighlight.isPulsing property to toggle the highlight's pulsing animation.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -14991,7 +14993,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -15008,8 +15010,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -15046,6 +15048,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Hardened dependency resolution for Android native samples.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 * Fixed an issue where the VLM scanning screen remained permanently displayed if IdCaptureSettings were applied mid-scan.
+* Fixed BarcodeResult.barcodeDataElements always being empty. The field is now correctly populated with the parsed AAMVA barcode data elements.
 
 #### Smart Label Capture
 
@@ -15069,7 +15072,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
-* Deprecated the SparkScan target-mode APIs and `ScanIntention.SmartSelection` in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+* Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
 
 ## 8.5.3
 
@@ -18580,9 +18583,9 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -18591,9 +18594,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Added per-barcode highlight icon support to BarcodeCount through the BarcodeCountViewListener icon callbacks (recognized, not-in-list, accepted, and rejected).
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -18621,8 +18625,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -18663,6 +18667,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Hardened dependency resolution for Android native samples.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 * Fixed an issue where the VLM scanning screen remained permanently displayed if IdCaptureSettings were applied mid-scan.
+* Fixed BarcodeResult.barcodeDataElements always being empty. The field is now correctly populated with the parsed AAMVA barcode data elements.
 
 #### Smart Label Capture
 
@@ -24397,30 +24402,28 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
 #### Barcode
 
 * The [MatrixScan Sequence simple sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/06_Sequence/MatrixScanSequenceSimpleSample) is now publicly available, showing the minimum setup needed to run MatrixScan Sequence.
-* Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
-* BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
-* Added support for configuring the accepted device orientation via the new `BarcodeSequenceSettings.shelfSequencingOrientation` property. Defaults to `.landscapeOnly`; set to `.portraitOnly` or `.any` to enable portrait (or any) orientation. The rotate-device prompt's default text now reflects the configured orientation.
-* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set `barcodeCountSettings.AutomaticClusteringMethod` to `AutomaticClusteringMethod.Label` to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
+* MatrixScan Sequence: introduced several new configurations to adapt the sequencing flow.
+  - `initialOrderOnShelf` and `initialOrderOnTray` resume scanning from a previous session (already available since 8.5.1).
+  - `shelfSequencingOrientation` sets the accepted device orientation, defaulting to `.landscapeOnly`; set `.portraitOnly` or `.any` to enable portrait or any orientation, and the rotate-device prompt's default text follows the setting.
+* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set barcodeCountSettings.AutomaticClusteringMethod to AutomaticClusteringMethod.Label to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
 * When highlights inside a MatrixScan Count cluster would overlap, the cluster now collapses into a single badge showing how many barcodes it contains, instead of drawing every highlight on top of the others. This also applies in Scan Preview mode.
-* BarcodeCountView.shouldShowTorchControl now applies in Scan Preview, so the torch button can be shown in that mode.
-* The accept/reject popover for barcodes not in the list, enabled via BarcodeCountNotInListActionSettings.enabled, is now available in Scan Preview.
-* Added an API to customize the text of the hint shown when a new scan group starts (BarcodeCountView.setTextForNewGroupHint).
-* Extended the SparkScan SwiftUI Get Started guide.
+* Scan Preview now supports two controls that were previously available only in the standard mode: the torch button, shown via `BarcodeCountView.shouldShowTorchControl`, and the accept/reject popover for barcodes not in the list, enabled via `BarcodeCountNotInListActionSettings.enabled`.
+* Added an API to customize the text of the hint shown when a new scan group starts (`BarcodeCountView.setTextForNewGroupHint`).
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
-* Added BarcodeSequenceDeserializer for creating and updating MatrixScan Sequence modes and settings from JSON.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -24449,8 +24452,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -30417,9 +30420,9 @@ Each `ParsedField` carries its `name`, its decoded `parsed` value, the `rawStrin
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -31529,25 +31532,26 @@ Dynamic threading is used internally to accelerate the execution if available. T
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
 #### Barcode
 
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 ### Performance Improvements
 
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -34755,33 +34759,36 @@ More data formats will be added in future releases. Please contact us if the dat
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
 #### Barcode
 
-* Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
-* BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
+* MatrixScan Sequence: introduced several new configurations to adapt the sequencing flow.
+  - `initialOrderOnShelf` and `initialOrderOnTray` resume scanning from a previous session.
+  - `idleTimeout` sets the inactivity period in seconds before sequencing pauses automatically, defaulting to 10 seconds; 0 or less disables the automatic pause
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
-* Added missing BarcodeAr .NET APIs: `BarcodeArView.LogoAnchor` and `BarcodeArView.LogoOffset` to position the Scandit logo (iOS + Android); `BarcodeArView.LogoStyle` for minimal/extended logo style (iOS); `BarcodeArView.ZoomControlOrientation` for the zoom control's orientation (iOS); `BarcodeArStatusIconAnnotation.Anchor` plus the new `BarcodeArStatusIconAnnotationAnchor` enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and `BarcodeArResponsiveAnnotation.CloseUpAnnotation` and `BarcodeArResponsiveAnnotation.FarAwayAnnotation` to read the close-up/far-away annotation variations (iOS + Android).
-* Added `BarcodePickViewSettings.ZoomButtonPosition`, `ShowTorchButton`, `TorchButtonPosition`, `LogoAnchor`, and `LogoStyle` (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; `RectangularWithIcons.StatusIconSettings`; and `BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string)`.
-* Unified the .NET BarcodeCount API with native Android/iOS: added `BarcodeCountStatus.ExpiringSoon`, `BarcodeCountView.ShouldShowStatusIconsOnScan`/`LogoStyle`/`LogoAnchor`, and a public BarcodeCountNotInListActionSettings() constructor.
-* Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus `IBarcodeFindListener.OnSessionUpdated`, the `BarcodeFind.SessionUpdated` event, `BarcodeFindView.LogoAnchor`/`LogoStyle`, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
-* Added missing BarcodeSelection .NET APIs: `BarcodeSelectionSession.SelectUnselectedBarcodes()`, `BarcodeSelectionSettings.TapGestureForSelectionEnabled` and `SwipeGesturesEnabled`, and the `BarcodeSelectionSettings.Create(CapturePreset)` factory.
-* Added missing .NET BarcodeBatch and BarcodePick APIs: `BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes`, `BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary)`, `BarcodeBatchBasicOverlay.DotRadius`, the previously missing `TrackedObject` class (Location, Identifier, Data), and `BarcodePickSession.TrackedObjects`/`AddedObjects` exposing the new `TrackedObject`.
+* Added missing BarcodeAr .NET APIs: BarcodeArView.LogoAnchor and BarcodeArView.LogoOffset to position the Scandit logo (iOS + Android); BarcodeArView.LogoStyle for minimal/extended logo style (iOS); BarcodeArView.ZoomControlOrientation for the zoom control's orientation (iOS); BarcodeArStatusIconAnnotation.Anchor plus the new BarcodeArStatusIconAnnotationAnchor enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and BarcodeArResponsiveAnnotation.CloseUpAnnotation and BarcodeArResponsiveAnnotation.FarAwayAnnotation to read the close-up/far-away annotation variations (iOS + Android).
+* Added BarcodePickViewSettings.ZoomButtonPosition, ShowTorchButton, TorchButtonPosition, LogoAnchor, and LogoStyle (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; RectangularWithIcons.StatusIconSettings; and BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string).
+* Unified the .NET BarcodeCount API with native Android/iOS: added BarcodeCountStatus.ExpiringSoon, BarcodeCountView.ShouldShowStatusIconsOnScan/LogoStyle/LogoAnchor, and a public BarcodeCountNotInListActionSettings() constructor.
+* Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus IBarcodeFindListener.OnSessionUpdated, the BarcodeFind.SessionUpdated event, BarcodeFindView.LogoAnchor/LogoStyle, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
+* Added missing BarcodeSelection .NET APIs: BarcodeSelectionSession.SelectUnselectedBarcodes(), BarcodeSelectionSettings.TapGestureForSelectionEnabled and SwipeGesturesEnabled, and the BarcodeSelectionSettings.Create(CapturePreset) factory.
+* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously-missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
 * Added BarcodeSequence support to .NET, with MAUI consumption.
 * Added BarcodeGenerator for .NET to generate barcode/2D-code images from text or byte[] at a configurable width, with foreground/background color customization. Supports Code 39, Code 128, EAN-13, UPC-A, Interleaved 2 of 5, QR Code, Data Matrix, Aztec, and PDF417.
-* Added `BarcodeArPopoverAnnotation.Anchor` and the `BarcodeArPopoverAnnotationAnchor` enum (Left/Right/Bottom/Top, default Bottom).
-* Added `BarcodeArCircleHighlight.Pulsing` to enable/disable the pulsing highlight animation.
-* Added `BarcodeArAnnotationTrigger.BarcodeScan`, showing AR annotations immediately on scan with no tap-to-toggle.
-* Added IBarcodeArFilter functionality.
+* Added various Barcode AR APIs:
+  - `BarcodeArPopoverAnnotation.Anchor` and the `BarcodeArPopoverAnnotationAnchor` enum (`Left`/`Right`/`Bottom`/`Top`, defaults to `Bottom`).
+  - `BarcodeArCircleHighlight.Pulsing` to enable/disable the pulsing highlight animation.
+  - `BarcodeArAnnotationTrigger.BarcodeScan`, showing AR annotations immediately on scan with no tap-to-toggle.
+  - `IBarcodeArFilter` functionality.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -34807,8 +34814,8 @@ More data formats will be added in future releases. Please contact us if the dat
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -38537,33 +38544,36 @@ More data formats will be added in future releases. Please contact us if the dat
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
 #### Barcode
 
-* Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
-* BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
+* MatrixScan Sequence: introduced several new configurations to adapt the sequencing flow.
+  - `initialOrderOnShelf` and `initialOrderOnTray` resume scanning from a previous session.
+  - `idleTimeout` sets the inactivity period in seconds before sequencing pauses automatically, defaulting to 10 seconds; 0 or less disables the automatic pause
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
-* Added missing BarcodeAr .NET APIs: `BarcodeArView.LogoAnchor` and `BarcodeArView.LogoOffset` to position the Scandit logo (iOS + Android); `BarcodeArView.LogoStyle` for minimal/extended logo style (iOS); `BarcodeArView.ZoomControlOrientation` for the zoom control's orientation (iOS); `BarcodeArStatusIconAnnotation.Anchor` plus the new `BarcodeArStatusIconAnnotationAnchor` enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and `BarcodeArResponsiveAnnotation.CloseUpAnnotation` and `BarcodeArResponsiveAnnotation.FarAwayAnnotation` to read the close-up/far-away annotation variations (iOS + Android).
-* Added `BarcodePickViewSettings.ZoomButtonPosition`, `ShowTorchButton`, `TorchButtonPosition`, `LogoAnchor`, and `LogoStyle` (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; `RectangularWithIcons.StatusIconSettings`; and `BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string)`.
-* Unified the .NET BarcodeCount API with native Android/iOS: added `BarcodeCountStatus.ExpiringSoon`, `BarcodeCountView.ShouldShowStatusIconsOnScan`/`LogoStyle`/`LogoAnchor`, and a public BarcodeCountNotInListActionSettings() constructor.
-* Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus `IBarcodeFindListener.OnSessionUpdated`, the `BarcodeFind.SessionUpdated` event, `BarcodeFindView.LogoAnchor`/`LogoStyle`, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
-* Added missing BarcodeSelection .NET APIs: `BarcodeSelectionSession.SelectUnselectedBarcodes()`, `BarcodeSelectionSettings.TapGestureForSelectionEnabled` and `SwipeGesturesEnabled`, and the `BarcodeSelectionSettings.Create(CapturePreset)` factory.
-* Added missing .NET BarcodeBatch and BarcodePick APIs: `BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes`, `BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary)`, `BarcodeBatchBasicOverlay.DotRadius`, the previously missing `TrackedObject` class (Location, Identifier, Data), and `BarcodePickSession.TrackedObjects`/`AddedObjects` exposing the new `TrackedObject`.
+* Added missing BarcodeAr .NET APIs: BarcodeArView.LogoAnchor and BarcodeArView.LogoOffset to position the Scandit logo (iOS + Android); BarcodeArView.LogoStyle for minimal/extended logo style (iOS); BarcodeArView.ZoomControlOrientation for the zoom control's orientation (iOS); BarcodeArStatusIconAnnotation.Anchor plus the new BarcodeArStatusIconAnnotationAnchor enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and BarcodeArResponsiveAnnotation.CloseUpAnnotation and BarcodeArResponsiveAnnotation.FarAwayAnnotation to read the close-up/far-away annotation variations (iOS + Android).
+* Added BarcodePickViewSettings.ZoomButtonPosition, ShowTorchButton, TorchButtonPosition, LogoAnchor, and LogoStyle (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; RectangularWithIcons.StatusIconSettings; and BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string).
+* Unified the .NET BarcodeCount API with native Android/iOS: added BarcodeCountStatus.ExpiringSoon, BarcodeCountView.ShouldShowStatusIconsOnScan/LogoStyle/LogoAnchor, and a public BarcodeCountNotInListActionSettings() constructor.
+* Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus IBarcodeFindListener.OnSessionUpdated, the BarcodeFind.SessionUpdated event, BarcodeFindView.LogoAnchor/LogoStyle, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
+* Added missing BarcodeSelection .NET APIs: BarcodeSelectionSession.SelectUnselectedBarcodes(), BarcodeSelectionSettings.TapGestureForSelectionEnabled and SwipeGesturesEnabled, and the BarcodeSelectionSettings.Create(CapturePreset) factory.
+* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously-missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
 * Added BarcodeSequence support to .NET, with MAUI consumption.
 * Added BarcodeGenerator for .NET to generate barcode/2D-code images from text or byte[] at a configurable width, with foreground/background color customization. Supports Code 39, Code 128, EAN-13, UPC-A, Interleaved 2 of 5, QR Code, Data Matrix, Aztec, and PDF417.
-* Added `BarcodeArPopoverAnnotation.Anchor` and the `BarcodeArPopoverAnnotationAnchor` enum (Left/Right/Bottom/Top, default Bottom).
-* Added `BarcodeArCircleHighlight.Pulsing` to enable/disable the pulsing highlight animation.
-* Added `BarcodeArAnnotationTrigger.BarcodeScan`, showing AR annotations immediately on scan with no tap-to-toggle.
-* Added IBarcodeArFilter functionality.
+* Added various Barcode AR APIs:
+  - `BarcodeArPopoverAnnotation.Anchor` and the `BarcodeArPopoverAnnotationAnchor` enum (`Left`/`Right`/`Bottom`/`Top`, defaults to `Bottom`).
+  - `BarcodeArCircleHighlight.Pulsing` to enable/disable the pulsing highlight animation.
+  - `BarcodeArAnnotationTrigger.BarcodeScan`, showing AR annotations immediately on scan with no tap-to-toggle.
+  - `IBarcodeArFilter` functionality.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -38590,8 +38600,8 @@ More data formats will be added in future releases. Please contact us if the dat
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -42377,9 +42387,9 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -42389,9 +42399,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Added the zoomControlOrientation property to BarcodeArView.
 * Added the BarcodeArCircleHighlight.isPulsing property to toggle the highlight's pulsing animation.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -42402,7 +42413,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -42419,8 +42430,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -42456,6 +42467,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Hardened dependency resolution for Android native samples.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 * Fixed an issue where the VLM scanning screen remained permanently displayed if IdCaptureSettings were applied mid-scan.
+* Fixed BarcodeResult.barcodeDataElements always being empty. The field is now correctly populated with the parsed AAMVA barcode data elements.
 
 #### Smart Label Capture
 
@@ -42481,7 +42493,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
-* Deprecated the SparkScan target-mode APIs and `ScanIntention.SmartSelection` in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+* Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
 
 ## 8.5.3
 
@@ -46901,9 +46913,9 @@ For important information about CDN risks and recommendations for production env
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -46911,9 +46923,10 @@ For important information about CDN risks and recommendations for production env
 
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -46925,7 +46938,7 @@ For important information about CDN risks and recommendations for production env
 #### Smart Label Capture
 
 * Restored SIMD support in WebAssembly for iOS 26, recovering performance across all capture modes, most noticeably Label Capture.
-* Added shipping-label support (`AdaptiveRecognitionResultType.ShippingLabel`, Carrier, ShippingLabelScanningResult) to adaptive recognition, matching iOS and Android.
+* Added shipping-label support (AdaptiveRecognitionResultType.ShippingLabel, Carrier, ShippingLabelScanningResult) to adaptive recognition, matching iOS and Android.
 * Added a new sample to quickly test and integrate Smart Label Capture to read and validate price shelf labels against a database - showing live AR overlays based on the match and mismatch of the content.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
@@ -46948,8 +46961,8 @@ For important information about CDN risks and recommendations for production env
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -46989,6 +47002,7 @@ For important information about CDN risks and recommendations for production env
 * Fixed a race condition in SimplePropertyBehaviorSubject where mutating the subscriber list during a callback could cause crashes or missed notifications.
 * Fixed EventsResponse::getRetryTimeoutInSeconds to return a fallback instead of aborting on out-of-range header values.
 * Fixed pinch-to-zoom and swipe-to-zoom becoming unresponsive after the browser interrupted a touch gesture, and duplicated tap and zoom handling after a data capture view was re-attached.
+* Fixed a memory leak that could make the browser tab run out of memory and crash when the data capture context was disposed and created again repeatedly.
 
 ### Deprecations
 
