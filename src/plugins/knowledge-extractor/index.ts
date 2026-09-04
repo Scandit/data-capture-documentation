@@ -24,10 +24,15 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import * as cheerio from "cheerio";
 import matter from "gray-matter";
 
 const CHUNK_TARGET_CHARS = 1400;
+// Budgets for the published artifacts. Deliberately close to today's real sizes
+// so growth has to be an explicit decision rather than a silent one.
+const MAX_INDEX_MB = 14;
+const MAX_GRAPH_MB = 16;
 const OWNER = "docsops-auto";
 
 type Chunk = { heading: string; content: string };
@@ -52,8 +57,31 @@ function firstHeading(text: string): string {
 }
 
 /** Split body into ~chunkTarget-sized chunks at H2/H3 boundaries (ported). */
+/**
+ * Split on headings, but never inside a fenced code block: a sample line that
+ * begins with "## " or "### " (a shell or Python comment, or a Markdown example)
+ * would otherwise start a new chunk, leaving an unterminated fence behind and
+ * making the code comment the chunk's heading. No such line exists in docs/
+ * today, so this is a guard against a future sample rather than a live bug.
+ */
+function splitOnHeadings(body: string): string[] {
+  const out: string[] = [];
+  let buf: string[] = [];
+  let inFence = false;
+  for (const line of body.split("\n")) {
+    if (/^\s*```/.test(line)) inFence = !inFence;
+    if (!inFence && /^(##\s|###\s)/.test(line) && buf.length) {
+      out.push(buf.join("\n"));
+      buf = [];
+    }
+    buf.push(line);
+  }
+  if (buf.length) out.push(buf.join("\n"));
+  return out;
+}
+
 function chunkBody(body: string, target: number): Chunk[] {
-  const parts = body.split(/\n(?=##\s|###\s)/);
+  const parts = splitOnHeadings(body);
   const chunks: Chunk[] = [];
   let current = "";
   let currentHeading = "";
@@ -137,8 +165,21 @@ function serializeInline($: cheerio.CheerioAPI, node: any): string {
       } else if (n.type === "tag") {
         const tag = String(n.name || "").toLowerCase();
         if (tag === "a") {
+          // Docusaurus heading anchors are <a class="hash-link"> whose label is a
+          // single U+200B and whose href is the FULL page path plus a fragment -
+          // not a bare "#anchor". So neither the empty-label check nor the
+          // startsWith("#") guard caught them: they leaked into the heading, the
+          // topic and the excerpt, and classifyLinks then read the stripped href
+          // as a real reference, which is what made most SeeAlso edges point a
+          // module at its own page.
+          const cls = String($(n).attr("class") || "");
+          if (/\bhash-link\b/.test(cls)) return;
           const href = String($(n).attr("href") || "");
-          const label = serializeInline($, n).replace(/\s+/g, " ").trim();
+          // U+200B is not matched by \s, so trim() leaves it and !label is false.
+          const label = serializeInline($, n)
+            .replace(/[\u200b\u200c\u200d\ufeff]/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
           if (!label) return;
           out += href && !href.startsWith("#") ? `[${label}](${href})` : label;
         } else if (tag === "code") {
@@ -179,26 +220,88 @@ function blockToMd($: cheerio.CheerioAPI, el: any): string {
   }
   if (tag === "p") return inlineText($, el);
   if (tag === "ul" || tag === "ol") {
+    // Previously every list emitted "- " and inlineText() flattened each <li>
+    // including any nested <ul>/<ol> and extra <p> into the parent bullet, with
+    // no separator - so ordered steps lost their numbers, sub-steps merged into
+    // their parent, and where the HTML had no whitespace between </li><li> the
+    // words glued together. Serialize each item's own inline text, then recurse
+    // into nested lists and indent them.
+    const ordered = tag === "ol";
+    const startAttr = parseInt(String($(el).attr("start") || "1"), 10);
+    const start = Number.isFinite(startAttr) ? startAttr : 1;
     const items: string[] = [];
     $(el)
       .children("li")
-      .each((_i, li) => {
-        const t = inlineText($, li);
-        if (t) items.push(`- ${t}`);
+      .each((i, li) => {
+        const own: string[] = [];
+        const nested: string[] = [];
+        $(li)
+          .contents()
+          .each((_j, c: any) => {
+            if (c.type === "text") {
+              const t = String(c.data || "").replace(/\s+/g, " ").trim();
+              if (t) own.push(t);
+              return;
+            }
+            if (c.type !== "tag") return;
+            const ctag = String(c.name || "").toLowerCase();
+            if (ctag === "ul" || ctag === "ol") {
+              const sub = blockToMd($, c);
+              if (sub.trim()) nested.push(sub.trim());
+            } else if (ctag === "p" || ctag === "div") {
+              const t = blockToMd($, c);
+              if (t.trim()) own.push(t.trim());
+            } else {
+              const t = inlineText($, c);
+              if (t) own.push(t);
+            }
+          });
+        const marker = ordered ? `${start + i}.` : "-";
+        const head = own.join(" ").replace(/\s+/g, " ").trim();
+        if (!head && !nested.length) return;
+        const lines = [`${marker} ${head}`.trim()];
+        for (const sub of nested) {
+          for (const ln of sub.split("\n")) lines.push(`  ${ln}`);
+        }
+        items.push(lines.join("\n"));
       });
     return items.join("\n");
   }
   if (tag === "pre") {
-    const code = $(el).text().replace(/\s+$/g, "");
+    // Prism renders ONE <span class="token-line"> per source line and emits no
+    // newline characters at all, so $(el).text() returns the whole sample on a
+    // single line. That is not cosmetic: a `//` or `#` comment then comments out
+    // everything after it, so every multi-line sample we shipped was broken.
+    // Join the lines back; fall back to .text() for code blocks that are not
+    // Prism-highlighted (e.g. the SkillsCallout command blocks).
+    const lines = $(el).find(".token-line");
+    const code = (
+      lines.length
+        ? lines
+            .map((_i, ln) => $(ln).text())
+            .get()
+            .join("\n")
+        : $(el).text()
+    ).replace(/\s+$/g, "");
     return code ? "```\n" + code + "\n```" : "";
   }
   if (tag === "table") return tableToMd($, el);
   if (tag === "blockquote") return inlineText($, el);
   if (tag === "div" || tag === "section" || tag === "details" || tag === "article" || tag === "aside") {
+    // Walk contents(), not children(): a text node that is a DIRECT child of a
+    // wrapper was silently dropped. Real case - an admonition heading is
+    // <div class="admonitionHeading"><span>icon</span>danger</div>, so the
+    // severity word vanished and a :::danger block read as ordinary prose.
     const parts: string[] = [];
     $(el)
-      .children()
-      .each((_i, c) => {
+      .contents()
+      .each((_i, c: any) => {
+        if (c.type === "text") {
+          const t = String(c.data || "").replace(/\s+/g, " ").trim();
+          if (t) parts.push(t);
+          return;
+        }
+        if (c.type !== "tag") return;
         const t = blockToMd($, c);
         if (t && t.trim()) parts.push(t.trim());
       });
@@ -233,13 +336,53 @@ function detectFramework(pathname: string): string {
   return p[1] || "";
 }
 
+/**
+ * Products that are not products: buckets we invent for framework-level and
+ * non-SDK pages. They must never take part in availability edges, because they
+ * aggregate unrelated pages - which is how the graph came to assert both
+ * AvailableOn(core, web) and NotAvailableOn(core, web).
+ */
+const SYNTHETIC_PRODUCTS = new Set(["core", "general"]);
+
+/**
+ * The product keys, read from src/data/products.json - the product source of
+ * truth the rest of the site already uses. Read once and cached.
+ *
+ * This matters beyond tidiness: a single-FILE product such as
+ * /sdks/web/barcode-generator/ has only one path segment after the framework, so
+ * the old `rest.length >= 2 ? rest[0] : "core"` test filed it under "core". Every
+ * other web page also contributed AvailableOn(core, web), so the graph
+ * contradicted itself, and the real facts - Barcode Generator being unavailable
+ * on web, .NET and Titanium - never reached it at all.
+ */
+let PRODUCT_KEYS: Set<string> | null = null;
+function productKeys(siteDir: string): Set<string> {
+  if (PRODUCT_KEYS) return PRODUCT_KEYS;
+  try {
+    const raw = fs.readFileSync(path.join(siteDir, "src", "data", "products.json"), "utf8");
+    const parsed = JSON.parse(raw) as Array<{ key?: unknown }>;
+    PRODUCT_KEYS = new Set(
+      parsed.map((p) => slug(String(p?.key ?? ""))).filter(Boolean),
+    );
+  } catch {
+    // No registry (or unreadable): fall back to path shape only. Never fatal -
+    // this plugin must not be able to break a deploy.
+    PRODUCT_KEYS = new Set();
+  }
+  return PRODUCT_KEYS;
+}
+
 /** Product a page belongs to (sparkscan, matrixscan, id-capture, ...) or "core". */
-function detectProduct(pathname: string): string {
+function detectProduct(pathname: string, siteDir: string): string {
   const p = pathSegments(pathname);
   if (p[0] === "sdks") {
     const i = p[1] === "net" ? 3 : 2; // first segment after the framework
     const rest = p.slice(i);
-    return rest.length >= 2 ? slug(rest[0]) : "core"; // product dir vs framework-level page
+    if (!rest.length) return "core";
+    const first = slug(rest[0]);
+    // A product directory, or a single page whose name IS a known product.
+    if (rest.length >= 2 || productKeys(siteDir).has(first)) return first;
+    return "core";
   }
   return p[0] ? slug(p[0]) : "general";
 }
@@ -316,6 +459,70 @@ function fmFirst(v: unknown): string {
  * source file (custom `slug:`, generated category page, redirect stub) — callers
  * then fall back to path/heuristic derivation, so this NEVER breaks extraction.
  */
+/**
+ * Last commit date per docs source file, as ISO strings keyed by repo-relative
+ * path. One batched `git log` rather than 616 spawns.
+ *
+ * Returns an EMPTY map when the answer cannot be trusted:
+ *  - not a git checkout, or git is unavailable
+ *  - the clone is SHALLOW, which is the normal CI case: actions/checkout@v4
+ *    defaults to fetch-depth 1, so every file's "last commit" is the same single
+ *    commit. A constant is worse than nothing here, because it looks like data.
+ *
+ * File mtime is not an option either: git does not preserve mtimes, so a fresh
+ * clone or worktree stamps every file with the checkout time.
+ */
+let GIT_DATES: Map<string, string> | null = null;
+function gitDates(siteDir: string): Map<string, string> {
+  if (GIT_DATES) return GIT_DATES;
+  GIT_DATES = new Map();
+  try {
+    // A shallow clone cannot answer this question; say so by staying empty.
+    const shallow = path.join(siteDir, ".git", "shallow");
+    if (fs.existsSync(shallow)) return GIT_DATES;
+    const out = execFileSync(
+      "git",
+      ["log", "--no-merges", "--name-only", "--format=%x00%cI", "--", "docs"],
+      { cwd: siteDir, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 },
+    );
+    let commitDate = "";
+    for (const raw of out.split("\n")) {
+      if (raw.startsWith("\u0000")) {
+        commitDate = raw.slice(1).trim();
+        continue;
+      }
+      const file = raw.trim();
+      // git log is newest-first, so the first sighting of a file is its latest.
+      if (file && commitDate && !GIT_DATES.has(file)) GIT_DATES.set(file, commitDate);
+    }
+  } catch {
+    // Never fatal: this plugin must not be able to break a deploy.
+    GIT_DATES = new Map();
+  }
+  return GIT_DATES;
+}
+
+/**
+ * Real last-modified date of the source behind a built pathname, or "" when it is
+ * genuinely unknown. Same path-guessing as readFrontMatter.
+ */
+function sourceDate(siteDir: string, pathname: string): string {
+  const dates = gitDates(siteDir);
+  if (!dates.size) return "";
+  const rel = pathname.replace(/^\/+|\/+$/g, "");
+  if (!rel) return "";
+  for (const cand of [
+    `docs/${rel}.mdx`,
+    `docs/${rel}.md`,
+    `docs/${rel}/index.mdx`,
+    `docs/${rel}/index.md`,
+  ]) {
+    const hit = dates.get(cand);
+    if (hit) return hit;
+  }
+  return "";
+}
+
 function readFrontMatter(siteDir: string, pathname: string): Record<string, unknown> {
   const rel = pathname.replace(/^\/+|\/+$/g, "");
   const base = path.join(siteDir, "docs");
@@ -354,10 +561,11 @@ function buildModule(args: {
   contentType: string;
   version: string;
   updatedAt: string;
+  sourceUpdatedAt: string;
   notAvailable: boolean;
   fm: Record<string, unknown>;
 }) {
-  const { pathname, url, sourceSite, site, title: rawTitle, description, chunk, idx, framework, product, products, contentType, version, updatedAt, notAvailable, fm } = args;
+  const { pathname, url, sourceSite, site, title: rawTitle, description, chunk, idx, framework, product, products, contentType, version, updatedAt, sourceUpdatedAt, notAvailable, fm } = args;
   const chunkClean = chunk.content.trim();
   const title = (rawTitle || pathname).trim();
   const displayTitle = idx === 1 ? title : `${title} (Part ${idx})`;
@@ -408,7 +616,10 @@ function buildModule(args: {
     priority: 60,
     status: "active",
     owner: OWNER,
-    last_verified: updatedAt.slice(0, 10),
+    // Only a date we can actually substantiate. Empty means "unknown", which a
+    // consumer can skip; a build-time constant would have been indistinguishable
+    // from every page having been checked today.
+    last_verified: sourceUpdatedAt ? sourceUpdatedAt.slice(0, 10) : "",
     dependencies: [] as string[],
     tags,
     user_intents: userIntents,
@@ -550,17 +761,26 @@ function buildGraph(modules: KModule[], site: string) {
     const src = `urn:module:${m.id}`;
     for (const v of m.intents) addEdge(`${src}#intent:${v}`, "HasIntent", src, `urn:intent:${v}`);
     for (const v of m.audiences) addEdge(`${src}#audience:${v}`, "HasAudience", src, `urn:audience:${v}`);
-    for (const v of m.channels) addEdge(`${src}#channel:${v}`, "HasChannel", src, `urn:channel:${v}`);
+    // No HasChannel edges: `channels` is a hardcoded constant for every module,
+    // so the edge carried no information while accounting for 3x every module -
+    // ~15k edges of pure noise. The field stays on the module for consumers that
+    // want it; only the meaningless edges go.
     if (m.metadata.framework) addEdge(`${src}#framework:${m.metadata.framework}`, "HasFramework", src, `urn:framework:${m.metadata.framework}`);
     for (const p of (m.metadata.products && m.metadata.products.length ? m.metadata.products : [m.metadata.product]).filter(Boolean)) addEdge(`${src}#product:${p}`, "BelongsToProduct", src, `urn:product:${p}`);
     for (const a of m.api_refs) addEdge(`${src}#api:${a}`, "CitesApi", src, `urn:api:${a}`);
     for (const ref of m.references) {
+      // A page linking to itself is not a "see also". Even with the hash-link fix
+      // above, in-page fragment links written by hand would still produce these,
+      // so drop them here too rather than relying on one layer.
+      if (ref === m.metadata.source_path) continue;
       if (indexedPaths.has(ref)) addEdge(`${src}#see:${ref}`, "SeeAlso", src, `urn:doc:${ref}`);
     }
-    // record availability
+    // Record availability. Synthetic buckets are excluded: they group unrelated
+    // pages, so both an "available" and a "not available" page land in the same
+    // bucket and the two edges contradict each other.
     const prod = m.metadata.product;
     const fw = m.metadata.framework;
-    if (prod && fw) {
+    if (prod && fw && !SYNTHETIC_PRODUCTS.has(prod)) {
       if (m.metadata.not_available) {
         if (!unavailable.has(prod)) unavailable.set(prod, new Set());
         unavailable.get(prod)!.add(fw);
@@ -620,7 +840,10 @@ export default function knowledgeExtractor(context: any, _options: any) {
     async postBuild({ siteConfig, outDir }: { siteConfig: any; outDir: string }) {
       const site = String(siteConfig?.url || "").replace(/\/+$/, "");
       const sourceSite = site ? new URL(site).hostname.toLowerCase() : "";
-      const updatedAt = new Date().toISOString();
+      // Build-time "now" made every module claim it was verified today, so any
+      // consumer ranking on freshness saw a constant. Per-page mtime is set
+      // below; this stays only as the fallback for pages with no source file.
+      const buildStamp = new Date().toISOString();
       const version = "current";
 
       // Index the CURRENT docs version only. Frozen versions (versions.json)
@@ -666,17 +889,20 @@ export default function knowledgeExtractor(context: any, _options: any) {
           pagesProcessed += 1;
 
           const fm = readFrontMatter(siteDir, pathname);
+          // "" when the real date is unknowable (shallow clone, no git). The
+          // module then ships last_verified: "" rather than a fake constant.
+          const sourceUpdatedAt = sourceDate(siteDir, pathname);
           const framework = detectFramework(pathname);
           // Frontmatter is authoritative when present; fall back to path/heuristics.
           const fmProducts = fmStringArray(fm.product).map(slug).filter(Boolean);
-          const products = fmProducts.length ? Array.from(new Set(fmProducts)) : [detectProduct(pathname)];
+          const products = fmProducts.length ? Array.from(new Set(fmProducts)) : [detectProduct(pathname, siteDir)];
           const product = products[0];
           const fmTopic = fmFirst(fm.topic_type).toLowerCase();
           const contentType = TOPIC_TYPE_TO_CONTENT[fmTopic] || detectContentType(pathname, title);
           const notAvailable = isAvailabilityStub(title, bodyMd);
           chunks.forEach((chunk, i) => {
             modules.push(
-              buildModule({ pathname, url, sourceSite, site, title, description, chunk, idx: i + 1, framework, product, products, contentType, version, updatedAt, notAvailable, fm }),
+              buildModule({ pathname, url, sourceSite, site, title, description, chunk, idx: i + 1, framework, product, products, contentType, version, updatedAt: buildStamp, sourceUpdatedAt, notAvailable, fm }),
             );
           });
         } catch (err) {
@@ -702,17 +928,43 @@ export default function knowledgeExtractor(context: any, _options: any) {
         );
       }
 
-      // Write both artifacts atomically: emit to temp files, then rename, so a
-      // failure between the two writes can never ship an index without a matching
-      // graph (or vice versa).
       const assetsDir = path.join(outDir, "assets");
       fs.mkdirSync(assetsDir, { recursive: true });
       const idxPath = path.join(assetsDir, "knowledge-retrieval-index.json");
       const graphPath = path.join(assetsDir, "knowledge-graph.jsonld");
-      fs.writeFileSync(idxPath + ".tmp", JSON.stringify(index, null, 2) + "\n", "utf8");
-      fs.writeFileSync(graphPath + ".tmp", JSON.stringify(graph, null, 2) + "\n", "utf8");
+      const idxJson = JSON.stringify(index, null, 2) + "\n";
+      const graphJson = JSON.stringify(graph, null, 2) + "\n";
+
+      // A size budget, because nothing consumes these yet and the only existing
+      // guard catches EMPTY output, not runaway growth. Both files are published
+      // publicly on every deploy, so silent growth is a real cost.
+      const mb = (bytes: number) => bytes / (1024 * 1024);
+      const idxMb = mb(Buffer.byteLength(idxJson));
+      const graphMb = mb(Buffer.byteLength(graphJson));
+      if (idxMb > MAX_INDEX_MB || graphMb > MAX_GRAPH_MB) {
+        throw new Error(
+          `[knowledge-extractor] artifacts exceed their budget: index ${idxMb.toFixed(1)} MB ` +
+            `(max ${MAX_INDEX_MB}), graph ${graphMb.toFixed(1)} MB (max ${MAX_GRAPH_MB}). ` +
+            `Either the corpus grew legitimately - then raise the budget deliberately - or ` +
+            `an edge type is multiplying. Refusing to publish silently.`,
+        );
+      }
+
+      // Two renameSync calls are NOT atomic as a pair - the previous comment here
+      // claimed they were, and a crash between them would ship a new index with
+      // the old graph, which is exactly what it said it prevented. Keep a copy of
+      // the previous index so the first rename can be rolled back.
+      fs.writeFileSync(idxPath + ".tmp", idxJson, "utf8");
+      fs.writeFileSync(graphPath + ".tmp", graphJson, "utf8");
+      const prevIdx = fs.existsSync(idxPath) ? fs.readFileSync(idxPath) : null;
       fs.renameSync(idxPath + ".tmp", idxPath);
-      fs.renameSync(graphPath + ".tmp", graphPath);
+      try {
+        fs.renameSync(graphPath + ".tmp", graphPath);
+      } catch (err) {
+        if (prevIdx) fs.writeFileSync(idxPath, prevIdx);
+        else fs.rmSync(idxPath, { force: true });
+        throw err;
+      }
 
       const edgeTypes: Record<string, number> = {};
       for (const n of graph["@graph"] as any[]) {
