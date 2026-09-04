@@ -294,7 +294,12 @@ function orderedSegments($: cheerio.CheerioAPI, el: any): string[] {
     const wrap = $("<span></span>");
     for (const nd of pending) wrap.append($(nd).clone());
     const t = inlineText($, wrap[0]);
-    if (t) segs.push(t);
+    // Returning a wrapper's bare text children surfaced SSR loading placeholders
+    // - "Loading features..." is what FeatureList renders before it hydrates, so
+    // nine label-definitions pages started asserting that where their feature
+    // tables should be. Matched narrowly: "Loading" plus a trailing ellipsis, so
+    // real prose that merely starts with the word survives.
+    if (t && !/^loading\b.{0,40}(\.{2,}|\u2026)$/i.test(t)) segs.push(t);
     pending = [];
   };
   const isBlockTag = (tag: string, node: any) =>
@@ -686,26 +691,33 @@ function contributingFiles(siteDir: string, pathname: string): string[] {
       continue;
     }
     const dir = path.posix.dirname(rel.split(path.sep).join("/"));
-    // Follow partials AND local components: the nine agent-skills pages are
-    // shells around @site/src/components/SkillsPage, whose prose lives in the
-    // component - so editing it changes what those pages say. Same staleness the
-    // partial-following fixes, one directory over. gitDates covers src/ for this.
-    const re = /from\s+['"]([^'"]*(?:partials\/|@site\/src\/components\/)[^'"]+)['"]/g;
+    // Match EVERY import spec and decide by where it RESOLVES, rather than by
+    // pattern. Matching only `partials/` and `@site/src/components/` stopped one
+    // hop short of the prose it was added for: it reached SkillsPage/index.tsx
+    // but not the src/data/skills.json that page renders, so adding a skill would
+    // change what nine pages say and move none of their dates. Package imports
+    // (react, @docusaurus/...) resolve outside docs/ and src/ and are dropped by
+    // the filter below, so widening the match costs nothing.
+    const re = /from\s+['"]([^'"]+)['"]/g;
     let m: RegExpExecArray | null;
     while ((m = re.exec(body))) {
       const spec = m[1].replace(/^@site\//, "");
+      // A bare package name has no path shape; only relative and @site specs can
+      // point at repo files.
+      if (!spec.startsWith(".") && !spec.startsWith("docs/") && !spec.startsWith("src/")) continue;
       const resolved =
         spec.startsWith("docs/") || spec.startsWith("src/")
           ? spec
           : path.posix.normalize(path.posix.join(dir, spec));
       if (!resolved.startsWith("docs/") && !resolved.startsWith("src/")) continue;
-      const withExt = /\.(mdx?|tsx?|jsx?)$/.test(resolved)
+      const withExt = /\.(mdx?|tsx?|jsx?|json)$/.test(resolved)
         ? [resolved]
         : [
             `${resolved}.mdx`,
             `${resolved}.md`,
             `${resolved}.tsx`,
             `${resolved}.ts`,
+            `${resolved}.json`,
             `${resolved}/index.tsx`,
             `${resolved}/index.ts`,
           ];
@@ -900,7 +912,11 @@ function toIndexRecord(m: KModule) {
     // real newlines in code samples made it more likely, not less (measured 693
     // -> 783 records). Cut at the last safe point instead.
     docs_excerpt: clipMarkdown(m.content.docs_markdown, 400),
-    assistant_excerpt: m.content.assistant_context.slice(0, 300),
+    // Same treatment as docs_excerpt directly above. Applying clipMarkdown to one
+    // and leaving its sibling on a hard slice left 466 records handing an
+    // assistant raw code with a dangling ``` - the identical defect, on the other
+    // published text field of the same record.
+    assistant_excerpt: clipMarkdown(m.content.assistant_context, 300),
     url: m.metadata.url,
     heading: m.metadata.heading,
     framework: m.metadata.framework,
