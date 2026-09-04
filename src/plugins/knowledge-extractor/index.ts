@@ -62,7 +62,12 @@ function clipMarkdown(text: string, limit: number): string {
   if (!open) return cut;
   // Dropping the half-included block is better than shipping it broken, unless
   // that would throw away almost everything.
-  const trimmed = lines.slice(0, lastFenceStart).join("\n").trimEnd();
+  const kept = lines.slice(0, lastFenceStart);
+  // A dropped block leaves its tab label behind on the previous line, which
+  // then advertises a variant this excerpt does not carry. Take the label too.
+  const LABEL_ONLY = /^\s*\*\*[^*]{1,40}\*\*\s*$/;
+  while (kept.length && LABEL_ONLY.test(kept[kept.length - 1])) kept.pop();
+  const trimmed = kept.join("\n").trimEnd();
   if (trimmed.length >= Math.floor(limit / 3)) return trimmed;
   return `${cut.trimEnd()}\n\u0060\u0060\u0060`;
 }
@@ -86,23 +91,19 @@ function assistantExcerpt(assistantContext: string, chunk: string): string {
 }
 
 /**
- * Escape `|` in a table cell, which would otherwise end the cell - but never
- * inside a markdown link target, where a backslash breaks the URL instead.
- * inlineText() has already produced `[label](href)` by this point, so the target
- * has to be stepped over rather than escaped.
+ * Escape EVERY `|` in a table cell, link targets included.
+ *
+ * I previously exempted link targets on the theory that a backslash would break
+ * the URL. That was wrong in both directions. CommonMark does recognise
+ * backslash escapes inside a link destination (spec 6.1), so `\|` round-trips to
+ * a literal pipe; and the GFM tables extension requires the escape for a pipe
+ * anywhere in a cell, "including inside other inline spans". Leaving it raw makes
+ * the parser split the row at the pipe: the URL is truncated mid-string, a
+ * phantom cell appears, and since the delimiter is sized to the widest row that
+ * phantom widens the delimiter and pads every other row with an empty column.
  */
 function escapeCell(text: string): string {
-  const out: string[] = [];
-  let i = 0;
-  const re = /\]\(([^)]*)\)/g;
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(text))) {
-    out.push(text.slice(i, m.index).replace(/\|/g, "\\|"));
-    out.push(m[0]); // ](href) verbatim
-    i = m.index + m[0].length;
-  }
-  out.push(text.slice(i).replace(/\|/g, "\\|"));
-  return out.join("");
+  return text.replace(/\|/g, "\\|");
 }
 
 function slug(value: string): string {
@@ -421,19 +422,48 @@ function orderedSegments($: cheerio.CheerioAPI, el: any): string[] {
  * paired with labels positionally, which is the only association in the markup.
  */
 function tabsToMd($: cheerio.CheerioAPI, el: any): string {
+  // OWN children only. find() reached into a nested <Tabs> block, so a nested
+  // block's tabs joined the outer tablist while its panels joined the outer panel
+  // list IN DOCUMENT ORDER - outer panel 1, then its nested panels, then outer
+  // panel 2 - and positional pairing then crossed the boundary. Live consequence
+  // on /sdks/react-native/add-sdk/: "Install Manually from Dashboard" was printed
+  // over a yarn command and "**Yarn**" over `npm install`, which is the exact
+  // mix-up this function exists to prevent, only now asserted with a label.
+  // Nested blocks are handled by the recursive orderedSegments() call below, so
+  // they must not be collected here at all - collecting them also emitted their
+  // content twice.
   const labels: string[] = [];
   $(el)
-    .find('[role="tab"]')
+    .children('[role="tablist"]')
+    .children('[role="tab"]')
     .each((_i, t) => labels.push(inlineText($, t)));
-  const out: string[] = [];
-  $(el)
+
+  // NOT children(): Docusaurus wraps the panels in a div (the container's own
+  // children are the tablist and a `margin-top--md` wrapper), so children()
+  // matched nothing and dropped every panel's content - measured at 621 fewer
+  // modules and 1131 fewer CitesApi edges. Scope by OWNERSHIP: a panel is ours
+  // when the nearest ancestor that owns a tablist is this container, which
+  // excludes a nested <Tabs> block's panels without assuming a wrapper depth.
+  const ownsTablist = (node: any) => $(node).children('[role="tablist"]').length > 0;
+  const panels = $(el)
     .find('[role="tabpanel"]')
-    .each((i, panel) => {
-      const body = orderedSegments($, panel).join("\n\n").trim();
-      if (!body) return;
-      const label = labels[i] || "";
-      out.push(label ? `**${label}**\n\n${body}` : body);
+    .filter((_i, p) => {
+      const owner = $(p).parents().filter((_j, a) => ownsTablist(a)).first();
+      return owner.length > 0 && owner.get(0) === el;
     });
+  const out: string[] = [];
+  panels.each((i, panel) => {
+    const body = orderedSegments($, panel).join("\n\n").trim();
+    if (!body) return;
+    const label = labels[i] || "";
+    // ONE newline, not a blank line. A blank line makes the label its own
+    // paragraph, and chunkBody splits on paragraphs - measured 273 chunks ending
+    // in a lone **label** whose body had moved to the next chunk, unlabelled.
+    // That is worse than no label: the chunk promises content it does not carry.
+    // Joined by a single newline, label and body are one paragraph unit and the
+    // splitter cannot separate them.
+    out.push(label ? `**${label}**\n${body}` : body);
+  });
   return out.join("\n\n");
 }
 
