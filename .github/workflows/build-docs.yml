@@ -8,6 +8,24 @@ on:
   push:
     branches:
       - main
+  # The post-crawl --strict run the search-tag gate is designed around.
+  #
+  # Every other trigger fires BEFORE the Algolia crawler has seen the deploy, so
+  # "the index has not caught up" is indistinguishable from "the index is wrong"
+  # and the gate can only warn. Once a day, hours after any merge, that ambiguity
+  # is gone: a tag still holding nothing is really holding nothing. No extra
+  # --strict wiring is needed - a scheduled run's github.ref IS refs/heads/main,
+  # so the expression on the verify step already picks it up.
+  #
+  # Without this, every condition the gate downgrades was downgraded everywhere
+  # and permanently: the release build warns, the push to main warns for the same
+  # pre-crawl reason, and an unreachable API reference would only surface on some
+  # later unrelated PR - in a green log nobody reads.
+  schedule:
+    - cron: "0 6 * * *"
+  # And so it can be run by hand right after a deploy, which is what the gate's
+  # own "re-run after the crawl" messages ask for.
+  workflow_dispatch:
 
 jobs:
   build:
@@ -29,6 +47,29 @@ jobs:
 
       - name: Build documentation
         run: yarn build
+
+      # Asserts what the widget actually sends to Algolia: the API reference is
+      # reachable on the served version and absent on frozen legacy versions.
+      # Both failure modes are silent in production.
+      - name: Test search facet filters
+        run: yarn test:search-facets
+
+      # Compares build/search-tags.json (what this build's widget will filter on)
+      # against the live Algolia index. Catches a docs-version rename quietly
+      # dropping content out of search - see scripts/verify-search-tags.cjs.
+      # --strict everywhere except pull requests. On a PR, a crawl still catching
+      # up after a deploy, a release build that renames the served version, or an
+      # Algolia outage must not block unrelated work; on main and on the daily
+      # schedule those same conditions are real and someone is watching. Without
+      # any --strict run the script's escape hatches were unconditional, so THIN,
+      # transport errors and Algolia-key drift could not fail any job.
+      #
+      # Safe on push-to-main even though that run is pre-crawl: the pending-release
+      # state is a fact about the index, not a severity preference, so --strict
+      # deliberately does NOT override it (see releasePending in the script). A
+      # release merge warns; it does not go red.
+      - name: Verify search tags
+        run: yarn verify:search-tags${{ github.ref == 'refs/heads/main' && ' --strict' || '' }}
 
       # The versioned API reference publishes the same page under several URLs
       # and declares no canonical form, so Google picks one - often the oldest.
