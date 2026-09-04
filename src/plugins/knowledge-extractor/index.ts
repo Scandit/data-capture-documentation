@@ -48,21 +48,28 @@ type Chunk = { heading: string; content: string };
  * instead. Consumers read this field directly, so a dangling ``` is not cosmetic.
  */
 /**
- * A line that is nothing but bold text - a tab-panel label, in practice.
+ * A line that only INTRODUCES content and carries none itself: a heading, or a
+ * bold-only line (a tab-panel label, in practice).
  *
- * Capped at 80, not 40: this corpus already has "Install from Package Registry
- * (Recommended)" at 43 characters, which the tighter cap silently exempted.
- * A bold lead-in whose following content was cut is the same problem as a tab
- * label whose panel was cut - both promise something the excerpt does not carry -
- * so treating them alike is deliberate.
+ * The bold cap is 80, not 40: this corpus already has "Install from Package
+ * Registry (Recommended)" at 43 characters, which a tighter cap silently
+ * exempted. There is no prose risk in that width - a prose bold line is always
+ * blank-separated, because orderedSegments joins prose segments with a blank
+ * line, whereas a label is glued to its body by a single newline.
  */
-const LABEL_ONLY_LINE = /^\s*\*\*[^*]{1,80}\*\*\s*$/;
+const INTRODUCER_LINE = /^\s*(?:\*\*[^*]{1,80}\*\*|#{1,6}\s+\S.*)\s*$/;
 
-/** Drop trailing label-only lines, so a clip never ends on a broken promise. */
-function dropTrailingLabels(lines: string[]): string[] {
-  const kept = lines.slice();
-  while (kept.length && LABEL_ONLY_LINE.test(kept[kept.length - 1])) kept.pop();
-  return kept;
+/** Trailing lines that introduce content the text does not (yet) contain. */
+function trailingIntroducers(lines: string[]): number {
+  let i = lines.length;
+  while (i > 0 && (!lines[i - 1].trim() || INTRODUCER_LINE.test(lines[i - 1]))) i--;
+  return lines.length - i;
+}
+
+/** Drop a trailing introducer run, so a clip never ends on a broken promise. */
+function dropTrailingIntroducers(lines: string[]): string[] {
+  const drop = trailingIntroducers(lines);
+  return drop ? lines.slice(0, lines.length - drop) : lines.slice();
 }
 
 function clipMarkdown(text: string, limit: number): string {
@@ -72,7 +79,7 @@ function clipMarkdown(text: string, limit: number): string {
   let open = false;
   let lastFenceStart = -1;
   for (let i = 0; i < lines.length; i++) {
-    if (/^\s*```/.test(lines[i])) {
+    if (/^\s*(?:>\s*)*```/.test(lines[i])) {
       if (!open) lastFenceStart = i;
       open = !open;
     }
@@ -82,13 +89,13 @@ function clipMarkdown(text: string, limit: number): string {
   // fence opener falling outside the window - the label shipped with nothing
   // after it. Two records did precisely that.
   if (!open) {
-    const plain = dropTrailingLabels(lines).join("\n").trimEnd();
+    const plain = dropTrailingIntroducers(lines).join("\n").trimEnd();
     // Never return nothing: if the clip was ONLY a label, the raw cut is better.
     return plain || cut;
   }
   // Dropping the half-included block is better than shipping it broken, unless
   // that would throw away almost everything.
-  const kept = dropTrailingLabels(lines.slice(0, lastFenceStart));
+  const kept = dropTrailingIntroducers(lines.slice(0, lastFenceStart));
   const trimmed = kept.join("\n").trimEnd();
   if (trimmed.length >= Math.floor(limit / 3)) return trimmed;
   return `${cut.trimEnd()}\n\u0060\u0060\u0060`;
@@ -171,7 +178,10 @@ function splitFenceAware(
     buf = [];
   };
   for (const line of body.split("\n")) {
-    if (/^\s*```/.test(line)) inFence = !inFence;
+    // The (?:> )* prefix matters: a fenced sample inside a blockquote is emitted
+    // as "> ```", which a bare /^\s*```/ never sees - so the splitter would cut
+    // straight through it.
+    if (/^\s*(?:>\s*)*```/.test(line)) inFence = !inFence;
     if (!inFence && isBoundary(line, buf.length ? buf[buf.length - 1] : "")) {
       if (dropBoundary) {
         flush();
@@ -186,24 +196,50 @@ function splitFenceAware(
 }
 
 /**
- * Heading boundaries: "## " / "### " at the start of a line, outside a fence -
- * EXCEPT immediately after a label-only line.
+ * Heading boundaries: "## " / "### " at the start of a line, outside a fence.
  *
- * Joining a tab label to its body with a single newline stops the paragraph
- * splitter separating them, but this splitter keys on the heading alone, so a
- * panel whose body opens with a heading still left the label as the tail of the
- * previous chunk - which then advertises content it does not contain.
+ * Deliberately plain again. Special-casing "a heading right after a label" here
+ * only moved the orphaned-label symptom to "orphaned label plus headings", and
+ * cost two chunks their correct section title. The invariant that a chunk may not
+ * end on an introducer is enforced once, after chunking, in enforceChunkInvariant.
  */
 function splitOnHeadings(body: string): string[] {
-  return splitFenceAware(
-    body,
-    (l, prev) => /^(##\s|###\s)/.test(l) && !LABEL_ONLY_LINE.test(prev),
-  );
+  return splitFenceAware(body, (l) => /^(##\s|###\s)/.test(l));
 }
 
 /** Paragraph boundaries: a blank line outside a fence. */
 function splitParagraphs(body: string): string[] {
   return splitFenceAware(body, (l) => l.trim() === "", true);
+}
+
+/**
+ * THE invariant, enforced in one place instead of by boundary heuristics.
+ *
+ * A chunk must not END on a run of lines that merely introduces content - a tab
+ * label, a heading, or several of them - because such a chunk advertises
+ * something a consumer will not find in it. The run is MOVED to the head of the
+ * next chunk, never dropped: it belongs with the content it introduces, and
+ * dropping it would lose text outright. A chunk left with nothing but its
+ * introducers disappears into its successor.
+ *
+ * Headings are then re-derived from each chunk's OWN leading heading. Taking the
+ * first heading anywhere in the source part is what indexed two chunks under the
+ * wrong section once the boundaries moved.
+ */
+function enforceChunkInvariant(chunks: Chunk[]): Chunk[] {
+  const out = chunks.map((c) => ({ ...c }));
+  for (let i = out.length - 2; i >= 0; i--) {
+    const lines = out[i].content.split("\n");
+    const drop = trailingIntroducers(lines);
+    if (!drop) continue;
+    const moved = lines.slice(lines.length - drop).join("\n").trim();
+    const keep = lines.slice(0, lines.length - drop).join("\n").trim();
+    if (moved) out[i + 1].content = `${moved}\n${out[i + 1].content}`.trim();
+    out[i].content = keep;
+  }
+  return out
+    .filter((c) => c.content.trim())
+    .map((c) => ({ content: c.content, heading: firstHeading(c.content) || c.heading }));
 }
 
 function chunkBody(body: string, target: number): Chunk[] {
@@ -248,7 +284,7 @@ function chunkBody(body: string, target: number): Chunk[] {
     currentHeading = paraHeading;
   }
   if (current) chunks.push({ heading: currentHeading, content: current });
-  return chunks;
+  return enforceChunkInvariant(chunks);
 }
 
 function pickIntents(contentType: string, title: string, body: string): string[] {
@@ -305,7 +341,11 @@ function serializeInline($: cheerio.CheerioAPI, node: any): string {
           const href = String($(n).attr("href") || "");
           // U+200B is not matched by \s, so trim() leaves it and !label is false.
           const label = serializeInline($, n)
-            .replace(/[\u200b\u200c\u200d\ufeff]/g, "")
+            // Also the private-use range: /sdks/web/matrixscan/get-started/ renders a
+            // second permalink anchor with no hash-link class whose label is a
+            // Font-Awesome glyph (U+F0C1), so the zero-width strip alone left it
+            // non-empty and it was published as a real link inside the heading.
+            .replace(/[\u200b\u200c\u200d\ufeff\ue000-\uf8ff]/g, "")
             .replace(/\s+/g, " ")
             .trim();
           if (!label) return;
@@ -992,7 +1032,12 @@ function buildModule(args: {
   const title = (rawTitle || pathname).trim();
   const displayTitle = idx === 1 ? title : `${title} (Part ${idx})`;
   const summary = extractSummary(description, chunkClean);
-  const resolvedHeading = (chunk.heading || displayTitle).trim();
+  // De-linked the same way extractSummary does. Left raw, a heading that
+  // contains a link was then hard-sliced to 180/120 chars, so `topic` shipped
+  // half a URL - noise for any reranker keyed on it.
+  const resolvedHeading = (chunk.heading || displayTitle)
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .trim();
   const links = classifyLinks(chunkClean, site);
   // Curated signal read from the page's own frontmatter (empty when absent).
   const userIntents = fmStringArray(fm.user_intents);
