@@ -47,6 +47,24 @@ type Chunk = { heading: string; content: string };
  * opens a fence too early for that to leave anything useful, closes the fence
  * instead. Consumers read this field directly, so a dangling ``` is not cosmetic.
  */
+/**
+ * A line that is nothing but bold text - a tab-panel label, in practice.
+ *
+ * Capped at 80, not 40: this corpus already has "Install from Package Registry
+ * (Recommended)" at 43 characters, which the tighter cap silently exempted.
+ * A bold lead-in whose following content was cut is the same problem as a tab
+ * label whose panel was cut - both promise something the excerpt does not carry -
+ * so treating them alike is deliberate.
+ */
+const LABEL_ONLY_LINE = /^\s*\*\*[^*]{1,80}\*\*\s*$/;
+
+/** Drop trailing label-only lines, so a clip never ends on a broken promise. */
+function dropTrailingLabels(lines: string[]): string[] {
+  const kept = lines.slice();
+  while (kept.length && LABEL_ONLY_LINE.test(kept[kept.length - 1])) kept.pop();
+  return kept;
+}
+
 function clipMarkdown(text: string, limit: number): string {
   if (text.length <= limit) return text;
   const cut = text.slice(0, limit);
@@ -59,14 +77,18 @@ function clipMarkdown(text: string, limit: number): string {
       open = !open;
     }
   }
-  if (!open) return cut;
+  // The label drop runs on BOTH paths. It used to sit only below this early
+  // return, so when the cut landed exactly at the end of a label line - the
+  // fence opener falling outside the window - the label shipped with nothing
+  // after it. Two records did precisely that.
+  if (!open) {
+    const plain = dropTrailingLabels(lines).join("\n").trimEnd();
+    // Never return nothing: if the clip was ONLY a label, the raw cut is better.
+    return plain || cut;
+  }
   // Dropping the half-included block is better than shipping it broken, unless
   // that would throw away almost everything.
-  const kept = lines.slice(0, lastFenceStart);
-  // A dropped block leaves its tab label behind on the previous line, which
-  // then advertises a variant this excerpt does not carry. Take the label too.
-  const LABEL_ONLY = /^\s*\*\*[^*]{1,40}\*\*\s*$/;
-  while (kept.length && LABEL_ONLY.test(kept[kept.length - 1])) kept.pop();
+  const kept = dropTrailingLabels(lines.slice(0, lastFenceStart));
   const trimmed = kept.join("\n").trimEnd();
   if (trimmed.length >= Math.floor(limit / 3)) return trimmed;
   return `${cut.trimEnd()}\n\u0060\u0060\u0060`;
@@ -137,7 +159,7 @@ function firstHeading(text: string): string {
  */
 function splitFenceAware(
   body: string,
-  isBoundary: (line: string) => boolean,
+  isBoundary: (line: string, prevLine: string) => boolean,
   dropBoundary = false,
 ): string[] {
   const out: string[] = [];
@@ -150,7 +172,7 @@ function splitFenceAware(
   };
   for (const line of body.split("\n")) {
     if (/^\s*```/.test(line)) inFence = !inFence;
-    if (!inFence && isBoundary(line)) {
+    if (!inFence && isBoundary(line, buf.length ? buf[buf.length - 1] : "")) {
       if (dropBoundary) {
         flush();
         continue; // the boundary itself is a separator, not content
@@ -163,9 +185,20 @@ function splitFenceAware(
   return out;
 }
 
-/** Heading boundaries: "## " / "### " at the start of a line, outside a fence. */
+/**
+ * Heading boundaries: "## " / "### " at the start of a line, outside a fence -
+ * EXCEPT immediately after a label-only line.
+ *
+ * Joining a tab label to its body with a single newline stops the paragraph
+ * splitter separating them, but this splitter keys on the heading alone, so a
+ * panel whose body opens with a heading still left the label as the tail of the
+ * previous chunk - which then advertises content it does not contain.
+ */
 function splitOnHeadings(body: string): string[] {
-  return splitFenceAware(body, (l) => /^(##\s|###\s)/.test(l));
+  return splitFenceAware(
+    body,
+    (l, prev) => /^(##\s|###\s)/.test(l) && !LABEL_ONLY_LINE.test(prev),
+  );
 }
 
 /** Paragraph boundaries: a blank line outside a fence. */
@@ -531,7 +564,19 @@ function blockToMd($: cheerio.CheerioAPI, el: any): string {
     return code ? "```\n" + code + "\n```" : "";
   }
   if (tag === "table") return tableToMd($, el);
-  if (tag === "blockquote") return inlineText($, el);
+  if (tag === "blockquote") {
+    // Recurse rather than flatten. inlineText() drops every newline, so a fenced
+    // sample inside a quote collapsed onto one line - the same failure the `pre`
+    // handler exists to prevent, where a `//` comment then swallows the rest of
+    // the sample. No blockquote in the corpus contains a fence today; this is so
+    // the first one that does is not silently mangled.
+    const inner = orderedSegments($, el).join("\n\n").trim();
+    if (!inner) return "";
+    return inner
+      .split("\n")
+      .map((l) => (l ? `> ${l}` : ">"))
+      .join("\n");
+  }
   if (tag === "div" || tag === "section" || tag === "details" || tag === "article" || tag === "aside") {
     // Shared walker: keeps direct text children (an admonition heading is
     // <div class="admonitionHeading"><span>icon</span>danger</div>, so the
