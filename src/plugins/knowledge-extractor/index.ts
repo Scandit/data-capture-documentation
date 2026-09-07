@@ -1536,11 +1536,26 @@ export default function knowledgeExtractor(context: any, _options: any) {
       // the per-page git commit date resolved below - using build time there made
       // every module claim it had been verified today.
       const buildStamp = new Date().toISOString();
-      const version = "current";
 
-      // Index the CURRENT docs version only. Frozen versions (versions.json)
-      // are archived duplicates; the external API reference (data-capture-sdk)
-      // is a separate tool; *.html dirs are client-redirect stubs.
+      // Which version sits at the ROOT of this build, from the config rather than
+      // assumed. `"current"` was hardcoded, and that holds only while
+      // `lastVersion` is "current". On a beta cycle - update-version.py
+      // minor_beta snapshots the release and sets DOCS_LAST_VERSION="8.6.0" -
+      // Docusaurus serves the FROZEN 8.6.0 at the root and moves the
+      // in-development tree to /next/. Two things then went wrong at once: the
+      // root pages, which are 8.6.0, were labelled `version: "current"`, and
+      // /next/ was indexed a SECOND time, also as "current", with no frontmatter
+      // match because its source path does not exist under docs/. Neither the
+      // empty-output guard nor the ratio guard fires on that, because the page
+      // count goes UP.
+      const servedVersion = String(siteConfig?.customFields?.lastVersion || "current");
+      const servesCurrent = servedVersion === "current";
+      const version = servedVersion;
+
+      // Index the version served at the ROOT only. Frozen versions
+      // (versions.json) are archived duplicates; `next` is the unreleased tree
+      // when it exists; the external API reference (data-capture-sdk) is a
+      // separate tool; *.html dirs are client-redirect stubs.
       let frozenVersions: string[] = [];
       try {
         const parsed = JSON.parse(fs.readFileSync(path.join(siteDir, "versions.json"), "utf8"));
@@ -1548,7 +1563,18 @@ export default function knowledgeExtractor(context: any, _options: any) {
       } catch {
         /* no versions.json */
       }
-      const excluded = new Set<string>([...frozenVersions, "data-capture-sdk", "assets", "img", "fonts", "search"]);
+      const excluded = new Set<string>([
+        ...frozenVersions,
+        "data-capture-sdk",
+        "assets",
+        "img",
+        "fonts",
+        "search",
+        // `next` exists only when a frozen version is served at the root, and it
+        // is then the unreleased tree - a duplicate of every page under a version
+        // label this artifact does not describe.
+        ...(servesCurrent ? [] : ["next"]),
+      ]);
       const skipDir = (name: string) => excluded.has(name) || name.endsWith(".html");
 
       const files = walkHtml(outDir, skipDir);

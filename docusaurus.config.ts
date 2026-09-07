@@ -466,6 +466,10 @@ const config: Config = {
     // reader on 6.28.11 finds the 6.28 API and never the 8.x one.
     apiReferenceTagsByVersionTag: buildApiReferenceTags(docsVersions),
     versionNumberByTag: buildVersionNumberByTag(docsVersions),
+    // Which version THIS build serves at the root. Read by the
+    // knowledge-extractor plugin, which cannot otherwise tell a frozen version
+    // served at the root from `current` - and the two need opposite handling.
+    lastVersion: effectiveLastVersion,
   },
 
   // Set the production url of your site here
