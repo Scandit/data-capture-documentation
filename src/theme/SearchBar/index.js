@@ -246,21 +246,57 @@ function stripRoutedTokens(query, stripVersion) {
   }
   return q.replace(/\s+/g, " ").trim();
 }
-// An exact single-token "Class.Member" API query (e.g.
-// "rectangularviewfinderstyle.legacy", "scanintention.smart") has no page of
-// its own - enum members/constants are documented on their parent symbol's
-// page. Strip the trailing ".member" so a zero-result exact query can retry
-// against the parent. Only single whitespace-free tokens with a dot qualify, so
-// natural-language queries and product paths are left untouched. Returns null
-// when there's nothing safe to strip.
-function stripTrailingMember(query) {
+/**
+ * The one retry for a dotted query that found nothing, chosen by SHAPE.
+ *
+ * Two dotted shapes fail for opposite reasons, so the fix is the opposite way
+ * round each time - and which one applies is decidable from the query, without
+ * spending a round trip to find out:
+ *
+ *   TWO segments - `rectangularviewfinderstyle.legacy` - is `Class.Member`. An
+ *   enum member has no page of its own; it is documented on its parent symbol's
+ *   page. Drop the member: 9 hits become 505.
+ *
+ *   THREE OR MORE - `this.state.settings.codeDuplicateFilter` - is a code
+ *   expression the reader pasted from their own source. Algolia holds `word.word`
+ *   as a single token, so the whole string matches nothing, and the meaning is in
+ *   the LAST segment. Keep only that: 0 hits become 106.
+ *
+ * Measured on the live index for every 3+ segment query that returns zero, the
+ * member-drop is never the better answer - it is either useless or worse:
+ *
+ *   this.state.settings.codeduplicatefilter    drop -> 0    keep -> 106
+ *   this.barcodeCapture.settings.symbologies   drop -> 0    keep -> 840
+ *   sdc.core.ui.viewfinder.rectangular         drop -> 0    keep -> 340
+ *   com.scandit…barcode.spark…SparkScanView    drop -> 6    keep -> 106
+ *   settings.barcodeCaptureSettings.codeDup…   drop -> 55   keep -> 106
+ *
+ * The namespace-qualified forms this might have been expected to protect -
+ * `scandit.datacapture.core.Anchor.TopLeft`, `Scandit.DataCapture.Core.
+ * MeasureUnit.Fraction` - return hits AS WRITTEN, so no retry runs for them at
+ * all. Trying the member-drop first would therefore have cost an extra request
+ * on every pasted expression and, where both found something, returned the worse
+ * of the two.
+ */
+function dottedFallback(query) {
   const q = (query || "").trim();
   if (!q || /\s/.test(q)) return null;
-  const m = q.match(/^(.+)\.[A-Za-z0-9_]+$/);
-  if (!m) return null;
-  const base = m[1];
-  return base.length >= 3 && base !== q ? base : null;
+  const parts = q.split(".");
+  if (parts.length >= 3) {
+    const last = parts[parts.length - 1];
+    // A bare identifier of some length: a trailing `js`, `md` or a number is not
+    // a symbol name worth searching for.
+    return /^[A-Za-z0-9_]{4,}$/.test(last) ? last : null;
+  }
+  if (parts.length === 2) {
+    const m = q.match(/^(.+)\.[A-Za-z0-9_]+$/);
+    if (!m) return null;
+    const base = m[1];
+    return base.length >= 3 && base !== q ? base : null;
+  }
+  return null;
 }
+
 function Hit({ hit, children }) {
   // Mouse clicks navigate through this Link directly and never reach the
   // modal's navigator (which only handles keyboard selection), so capture
@@ -688,24 +724,29 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // zero results and only adopts the retry when it actually finds hits, so
         // normal queries are untouched.
         // Resolve to BOTH the response and the query that actually produced it
-        // (the primary, or the member-stripped retry when that is what found the
+        // (the primary, or the dotted-fallback retry when that is what found the
         // hits), so the counted ping below logs the query the user really saw.
         const primaryQuery = strippedQuery != null ? strippedQuery : query || "";
-        const resultPromise = originalSearch(buildRequests(strippedQuery)).then(
-          (response) => {
-            if (nbHitsOf(response) !== 0)
-              return { response, effectiveQuery: primaryQuery };
-            const base = strippedQuery || query || "";
-            const memberStripped = stripTrailingMember(base);
-            if (!memberStripped || memberStripped === base)
-              return { response, effectiveQuery: primaryQuery };
-            return originalSearch(buildRequests(memberStripped)).then((retry) =>
-              nbHitsOf(retry) > 0
-                ? { response: retry, effectiveQuery: memberStripped }
-                : { response, effectiveQuery: primaryQuery }
-            );
+        // ONE retry, and which one is decided by the query's shape rather than by
+        // trying both in turn - see dottedFallback. Two dotted shapes fail for
+        // opposite reasons and need opposite fixes, and the shape says which.
+        const resultPromise = (async () => {
+          const first = await originalSearch(buildRequests(strippedQuery));
+          if (nbHitsOf(first) !== 0) {
+            return { response: first, effectiveQuery: primaryQuery };
           }
-        );
+          const base = strippedQuery || query || "";
+          const candidate = dottedFallback(base);
+          if (!candidate || candidate === base) {
+            return { response: first, effectiveQuery: primaryQuery };
+          }
+          const retry = await originalSearch(buildRequests(candidate));
+          // Adopted only when it actually finds something, so a normal query is
+          // never rewritten on the strength of a guess.
+          return nbHitsOf(retry) > 0
+            ? { response: retry, effectiveQuery: candidate }
+            : { response: first, effectiveQuery: primaryQuery };
+        })();
         if (query) {
           resultPromise
             .then(({ response }) =>
