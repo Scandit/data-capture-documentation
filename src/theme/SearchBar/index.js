@@ -127,10 +127,51 @@ function frameworksInQuery(query) {
   }
   return found;
 }
-// Major version typed in the query -> the newest docusaurus_tag on that line.
-// The map is derived from docsVersions in docusaurus.config.ts and passed in via
-// customFields (versionTagByMajor), so it can never drift from the real versions.
+// Major version typed in the query -> the docusaurus_tag of the version a reader
+// on that line is actually served. Derived from docsVersions + lastVersion in
+// docusaurus.config.ts and passed in via customFields. Being derived is not the
+// same as being right: this map was derived correctly from the wrong assumption
+// (that `current` is always the newest release) and pointed "v8" at an
+// unreleased beta for four days. `yarn verify:search-tags` is what checks it.
 const EMPTY_VERSION_MAP = {};
+const EMPTY_TAG_LIST = [];
+// `useAlgoliaContextualFacetFilters` returns [languageFilter, [tagFilter, ...]]:
+// a top-level AND whose one nested array is the OR group of docusaurus_tags.
+// The API reference lives in the same index but Docusaurus never tags it, so it
+// has to join that OR group - appending at the top level would AND it against
+// the page's own tag and match nothing at all.
+//
+// It is joined per version: the API reference is published per major.minor line,
+// so a reader on 6.28.11 gets the 6.28 API reference and never the 8.x one.
+// `map` comes from customFields (built in docusaurus.config.ts) and is keyed by
+// the docs tag the page itself carries.
+const API_TAG_PREFIX = "docusaurus_tag:api-reference-";
+function apiTagsFor(tagGroup, map) {
+  for (const entry of tagGroup) {
+    const tags = map[String(entry).replace("docusaurus_tag:", "")];
+    if (tags) return tags.map((t) => `docusaurus_tag:${t}`);
+  }
+  return EMPTY_TAG_LIST;
+}
+function withApiReferenceTags(contextualFilters, map) {
+  if (!map || !Object.keys(map).length) return contextualFilters;
+  let injected = false;
+  const out = contextualFilters.map((entry) => {
+    if (injected || !Array.isArray(entry)) return entry;
+    // Gate on CONTENT, not position. This used to latch on the first array it
+    // saw, which works only because useAlgoliaContextualFacetFilters happens to
+    // return the language filter as a bare string. If Docusaurus ever wraps it
+    // (`["language:en"]`), or a config filter gets prepended, the API tags would
+    // land in that group instead - silently dropped from the tag OR, which is
+    // the whole regression coming back. Every test here passes a string first,
+    // so nothing would have caught it.
+    if (!entry.some((t) => String(t).startsWith("docusaurus_tag:"))) return entry;
+    const extra = apiTagsFor(entry, map).filter((t) => !entry.includes(t));
+    injected = true;
+    return extra.length ? [...entry, ...extra] : entry;
+  });
+  return out;
+}
 function versionTagInQuery(query, versionTagByMajor) {
   const q = (query || "").toLowerCase();
   // Only an explicit version marker ("version 6", "ver 6", "v6", "sdk 6").
@@ -139,20 +180,56 @@ function versionTagInQuery(query, versionTagByMajor) {
   const m = q.match(/\b(?:version|ver|v|sdk)\s*\.?\s*(\d+)\b/);
   return m ? versionTagByMajor[m[1]] || null : null;
 }
-function rewriteVersionTag(facetFilters, targetTag) {
-  const swap = (f) => {
+function rewriteVersionTag(facetFilters, targetTag, apiMap) {
+  // Typing "v7" must move the API reference to 7.x as well, or the reader gets
+  // 7.6 guides beside 8.5 API pages.
+  const targetApi = ((apiMap && apiMap[targetTag]) || []).map(
+    (t) => `docusaurus_tag:${t}`,
+  );
+  const swap = (f, depth) => {
     if (typeof f === "string") {
-      // Swap only the versioned docs tag (docusaurus_tag:docs-*). Leave
+      // Swap only the tag of the version the page is served from. Leave
       // docusaurus_tag:default (framework-agnostic / non-doc pages) and any
       // other entry untouched, so the contextual OR isn't collapsed and those
-      // pages still match when a version is typed.
+      // pages still match when a version is typed. API-reference tags are
+      // handled separately below, because they must follow the version too.
       return f.startsWith("docusaurus_tag:docs-")
         ? `docusaurus_tag:${targetTag}`
         : f;
     }
-    return Array.isArray(f) ? f.map(swap) : f;
+    if (!Array.isArray(f)) return f;
+    // Swap the whole API-reference set for the target version's, keeping
+    // docusaurus_tag:default and anything else in the OR group untouched.
+    // Only STRINGS are tested against the prefix. String() on a nested array
+    // joins its elements, so an OR group whose first element is an
+    // `api-reference-*` tag stringified to "docusaurus_tag:api-reference-…,…"
+    // and the entire group was dropped from the top-level AND - removing the
+    // docusaurus_tag filter altogether and returning every version's results.
+    // Safe today only because the tags are appended last and `default` is first.
+    const rest = f.filter(
+      (t) => Array.isArray(t) || !String(t).startsWith(API_TAG_PREFIX),
+    );
+    const mapped = rest.map((t) => swap(t, depth + 1));
+    // WHERE the API tags are appended is the whole correctness of this function,
+    // and getting it wrong is silent both ways:
+    //
+    //   - at depth 0, facetFilters entries are ANDed, so appending there makes
+    //     every hit have to carry the API tag and filters out every guide page.
+    //     Typing "v7" then returns nothing but 7.6 API pages.
+    //   - in a nested group that is NOT the docusaurus_tag group - the
+    //     `["language:en"]` group, say - appending ORs the API tag against the
+    //     language filter and quietly widens it.
+    //
+    // So: nested only, and only the group that already carries the page's own
+    // docusaurus_tag.
+    const isTagOrGroup =
+      depth > 0 && f.some((t) => String(t).startsWith("docusaurus_tag:"));
+    if (!isTagOrGroup) return mapped;
+    // Dedupe: a version tag can appear more than once in the incoming group, and
+    // both copies swap to the same target.
+    return [...new Set([...mapped, ...targetApi])];
   };
-  return swap(facetFilters);
+  return swap(facetFilters, 0);
 }
 // Remove the framework tokens (and, when it actually routes, the version marker)
 // from the query TEXT sent to Algolia. Routing is unaffected - it's driven by the
@@ -265,6 +342,11 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   // Version-routing map derived at build time from docsVersions (see config).
   const versionTagByMajor =
     siteConfig.customFields?.versionTagByMajor || EMPTY_VERSION_MAP;
+  // Indexed content Docusaurus does not tag for this build (API reference).
+  // Stable reference from siteConfig, so it is safe in memo dependencies.
+  // Docs version tag -> the API-reference tag(s) documenting that version.
+  const apiReferenceTags =
+    siteConfig.customFields?.apiReferenceTagsByVersionTag || EMPTY_VERSION_MAP;
   const processSearchResultUrl = useSearchResultUrlProcessor();
   const contextualSearchFacetFilters = useAlgoliaContextualFacetFilters();
   const configFacetFilters = props.searchParameters?.facetFilters ?? [];
@@ -304,8 +386,12 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   }, [currentUrl]);
 
   const facetFilters = contextualSearch
-    ? // Merge contextual search filters with config filters
-      mergeFacetFilters(contextualSearchFacetFilters, configFacetFilters)
+    ? // Merge contextual search filters with config filters, after widening the
+      // contextual tag OR group with the tags Docusaurus cannot know about.
+      mergeFacetFilters(
+        withApiReferenceTags(contextualSearchFacetFilters, apiReferenceTags),
+        configFacetFilters,
+      )
     : // ... or use config facetFilters
       configFacetFilters;
 
@@ -496,6 +582,9 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   // Searches fire on every keystroke; debounce to one docs_search_performed
   // per finished search rather than one per keystroke.
   const searchPerformedDebounceRef = useRef(null);
+  // Debounce for the single Algolia analytics count per completed query (see
+  // transformSearchClient) - separate from the PostHog capture debounce below.
+  const analyticsCountRef = useRef(null);
   const captureSearchDebounced = useCallback((query, nbHits) => {
     if (searchPerformedDebounceRef.current) {
       clearTimeout(searchPerformedDebounceRef.current);
@@ -537,8 +626,17 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // Build a request array with an optional query-text override (routed
         // framework/version tokens stripped, or the enum-member fallback below)
         // and the version-facet swap. Reused for the primary search and retry.
-        const buildRequests = (queryOverride) =>
-          (queryOverride != null || targetTag) && Array.isArray(requests)
+        // Every keystroke calls searchClient.search, so each partial query
+        // ("l","li","lic",...) would otherwise be counted as its own search in
+        // Algolia Search Analytics - inflating the searches total and the
+        // no-result rate with prefixes that are not real queries. We run the
+        // interactive requests with analytics ON but tagged 'as-you-type' (so
+        // click/queryID attribution keeps working), and fire ONE count-only
+        // request per completed query, tagged 'whole-query', via the debounced
+        // ping below. The dashboard reads two segments: counts + no-result rate
+        // from 'whole-query'; CTR + conversion from 'as-you-type'.
+        const buildRequests = (queryOverride, { analyticsPing = false } = {}) =>
+          Array.isArray(requests)
             ? requests.map((r) => {
                 const p = r.params || r;
                 const params = { ...p };
@@ -548,8 +646,34 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
                 if (targetTag && params.facetFilters) {
                   params.facetFilters = rewriteVersionTag(
                     params.facetFilters,
-                    targetTag
+                    targetTag,
+                    apiReferenceTags
                   );
+                }
+                if (analyticsPing) {
+                  // The single counted whole-query record: analytics ON, no hits,
+                  // no click attribution, tagged 'whole-query' so the dashboard can
+                  // select it as its own segment. CTR/conversion on this segment are
+                  // 0 by design (no click can attach); those live on 'as-you-type'.
+                  params.analytics = true;
+                  params.hitsPerPage = 0;
+                  params.clickAnalytics = false;
+                  params.analyticsTags = [
+                    ...(Array.isArray(params.analyticsTags) ? params.analyticsTags : []),
+                    "whole-query",
+                  ];
+                } else {
+                  // Interactive as-you-type request. Keep analytics + clickAnalytics
+                  // ON so the queryID stays linkable and result-click attribution
+                  // (CTR/conversion, plus NeuralSearch / Dynamic Re-Ranking / A-B
+                  // testing, which all require the click to link back to a recorded
+                  // search) keeps working. Tag it 'as-you-type' so the keystroke
+                  // prefixes are segmentable out of the whole-query metrics.
+                  params.analytics = true;
+                  params.analyticsTags = [
+                    ...(Array.isArray(params.analyticsTags) ? params.analyticsTags : []),
+                    "as-you-type",
+                  ];
                 }
                 return r.params ? { ...r, params } : params;
               })
@@ -563,29 +687,63 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // ".member" stripped so the parent symbol's page is found. Fires only on
         // zero results and only adopts the retry when it actually finds hits, so
         // normal queries are untouched.
+        // Resolve to BOTH the response and the query that actually produced it
+        // (the primary, or the member-stripped retry when that is what found the
+        // hits), so the counted ping below logs the query the user really saw.
+        const primaryQuery = strippedQuery != null ? strippedQuery : query || "";
         const resultPromise = originalSearch(buildRequests(strippedQuery)).then(
           (response) => {
-            if (nbHitsOf(response) !== 0) return response;
+            if (nbHitsOf(response) !== 0)
+              return { response, effectiveQuery: primaryQuery };
             const base = strippedQuery || query || "";
             const memberStripped = stripTrailingMember(base);
-            if (!memberStripped || memberStripped === base) return response;
+            if (!memberStripped || memberStripped === base)
+              return { response, effectiveQuery: primaryQuery };
             return originalSearch(buildRequests(memberStripped)).then((retry) =>
-              nbHitsOf(retry) > 0 ? retry : response
+              nbHitsOf(retry) > 0
+                ? { response: retry, effectiveQuery: memberStripped }
+                : { response, effectiveQuery: primaryQuery }
             );
           }
         );
         if (query) {
           resultPromise
-            .then((response) =>
+            .then(({ response }) =>
               captureSearchDebounced(query, nbHitsOf(response))
             )
             .catch(() => {});
         }
-        return resultPromise;
+        // Count ONE search per completed query in Algolia Search Analytics,
+        // after the user pauses typing. Skips <3-char prefixes ("lc") so
+        // mid-typing noise is never counted, and re-checks latestQueryRef at
+        // fire time so only the final query in a burst is recorded. Uses the
+        // RESOLVED query (post enum-member fallback), so its no-result status
+        // reflects what the user actually saw, not the un-retried primary.
+        if (query && query.trim().length >= 3) {
+          if (analyticsCountRef.current) {
+            clearTimeout(analyticsCountRef.current);
+          }
+          analyticsCountRef.current = setTimeout(() => {
+            if (latestQueryRef.current !== query) return;
+            resultPromise
+              .then(({ effectiveQuery }) =>
+                originalSearch(
+                  buildRequests(effectiveQuery, { analyticsPing: true })
+                )
+              )
+              .catch(() => {});
+          }, 600);
+        }
+        return resultPromise.then((r) => r.response);
       };
       return searchClient;
     },
-    [siteMetadata.docusaurusVersion, captureSearchDebounced, versionTagByMajor]
+    [
+      siteMetadata.docusaurusVersion,
+      captureSearchDebounced,
+      versionTagByMajor,
+      apiReferenceTags,
+    ]
   );
   useDocSearchKeyboardEvents({
     isOpen,
@@ -629,9 +787,11 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
             hitComponent={Hit}
             transformSearchClient={transformSearchClient}
             getMissingResultsUrl={({ query }) => {
-              // Most zero-result queries are exact API symbol names that the
-              // main index doesn't contain (data-capture-sdk tree excluded) -
-              // offer the API reference's built-in search as a fallback.
+              // The API reference (data-capture-sdk tree) IS in this index, so
+              // most API-symbol queries do resolve here. This only fires on a
+              // genuine zero-result query - offer the API reference's own
+              // built-in search as a last-resort fallback for symbols/versions
+              // the main index may not cover.
               const sdkFw = (currentFramework || '/sdks/web').replace('/sdks/', '');
               const fw = sdkFrameworkToApi(sdkFw);
               return `https://docs.scandit.com/data-capture-sdk/${fw}/search.html?q=${encodeURIComponent(query)}`;

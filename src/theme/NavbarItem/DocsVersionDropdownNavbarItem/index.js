@@ -9,6 +9,11 @@ import {translate} from '@docusaurus/Translate';
 import {useLocation} from '@docusaurus/router';
 import DefaultNavbarItem from '@theme/NavbarItem/DefaultNavbarItem';
 import DropdownNavbarItem from '@theme/NavbarItem/DropdownNavbarItem';
+import {
+  filterVersionsForPath,
+  getVersionCategory,
+  VERSION_TAG_LABEL,
+} from '@site/src/utils/versionFilters';
 
 const getVersionMainDoc = (version) =>
   version.docs.find((doc) => doc.id === version.mainDocId);
@@ -26,36 +31,22 @@ export default function DocsVersionDropdownNavbarItem({
   const versions = useVersions(docsPluginId);
   const {savePreferredVersionName} = useDocsPreferredVersion(docsPluginId);
 
-  // Check if we're currently viewing Xamarin documentation
-  const isViewingXamarin = pathname.includes('/xamarin/');
-
-  // Filter versions for Xamarin - only show 7.6.14 and 6.28.11
-  const filteredVersions = isViewingXamarin
-    ? versions.filter(version => version.name === '7.6.14' || version.name === '6.28.11')
-    : versions;
-
-  const TAG_LABEL = { stable: 'Stable', beta: 'Beta', legacy: 'Legacy' };
-
-  const getCategory = (version) => {
-    if (version.isLast) return 'stable';
-    // useVersions() returns global-data version objects, which don't carry the
-    // `banner` config field — only the in-development "current" version does, so
-    // key on its name to flag the unreleased docs as beta rather than legacy.
-    if (version.name === 'current') return 'beta';
-    return 'legacy';
-  };
+  // Only offer versions that actually document the framework being viewed:
+  // Xamarin exists only in 7.6.14/6.28.11, Kotlin Multiplatform only in the
+  // current version. See src/utils/versionFilters.ts.
+  const filteredVersions = filterVersionsForPath(versions, pathname);
 
   const versionLinks = filteredVersions.map((version) => {
     const versionDoc =
       activeDocContext?.alternateDocVersions[version.name] ??
       getVersionMainDoc(version);
-    const category = getCategory(version);
+    const category = getVersionCategory(version);
     return {
       label: (
         <span className="version-link-content">
           <span className="version-link-label">{version.label}</span>
           <span className={`version-tag version-tag-${category}`}>
-            {TAG_LABEL[category]}
+            {VERSION_TAG_LABEL[category]}
           </span>
         </span>
       ),

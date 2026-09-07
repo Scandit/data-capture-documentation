@@ -267,6 +267,59 @@ In alternative to jsdeliver, unpkg can be used:
 </html>
 ```
 
+## Install via UMD build (plain `<script>` tags)
+
+:::caution Use UMD only as a last resort
+Prefer the ES module (ESM) build. The UMD bundles cannot be tree-shaken or optimized the way a bundler (or the browser) handles our ES modules, so the browser downloads considerably more code and your app starts up slower.
+
+[ESM is supported by every current browser](https://caniuse.com/?search=ESM). If the blocker is only [import map](#install-via-cdn) support, load [`es-module-shims`](https://github.com/guybedford/es-module-shims#usage) — as the [CDN example](#install-via-cdn) above does — instead of falling back to UMD.
+:::
+
+Alongside the ESM build, every Scandit package also ships a [UMD](https://github.com/umdjs/umd) build that exposes the package exports on a browser global, so the SDK can be loaded with plain `<script>` tags:
+
+| Package | Browser global |
+| --- | --- |
+| `@scandit/web-datacapture-core` | `SDCCore` |
+| `@scandit/web-datacapture-barcode` | `SDCBarcode` |
+| `@scandit/web-datacapture-id` | `SDCId` |
+| `@scandit/web-datacapture-label` | `SDCLabel` |
+| `@scandit/web-datacapture-parser` | `SDCParser` |
+
+The bundle is exposed as the `umd` subpath of each package (`@scandit/web-datacapture-<module>/umd`), which on a CDN or a self-hosted copy of the package resolves to `build/js/umd/index.js`. Load `@scandit/web-datacapture-core` **first**: the feature packages resolve the `SDCCore` global when they load, so their `<script>` tags must come after core's.
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-core@8/build/js/umd/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/build/js/umd/index.js"></script>
+```
+
+From there the setup is the same as in the [CDN example](#install-via-cdn) above, with two differences: you take the exports off the globals instead of importing them, and you wrap the setup in an async function, because a classic `<script>` (unlike `<script type="module">`) does not support top-level `await`:
+
+```js
+const { DataCaptureContext, DataCaptureView } = SDCCore;
+const { barcodeCaptureLoader } = SDCBarcode;
+
+(async () => {
+  await DataCaptureContext.forLicenseKey("-- ENTER LICENSE KEY HERE --", {
+    libraryLocation:
+      "https://cdn.jsdelivr.net/npm/@scandit/web-datacapture-barcode@8/sdc-lib/",
+    moduleLoaders: [barcodeCaptureLoader()],
+  });
+
+  const view = new DataCaptureView();
+  view.connectToElement(document.getElementById("app"));
+
+  // The context is initialized only once: use DataCaptureContext.sharedInstance
+  // to access it from anywhere in your app.
+  await view.setContext(DataCaptureContext.sharedInstance);
+
+  // Continue with the camera, mode and listener setup as in the CDN example.
+})();
+```
+
+:::tip
+The same production considerations described under [Install via CDN](#install-via-cdn) apply here: for production, self-host the UMD bundles and the `sdc-lib` files rather than depending on a public CDN.
+:::
+
 ## Configure the Library
 
 The library needs to be configured and initialized before it can be used, this is done via the DataCaptureContext [`forLicenseKey`](https://docs.scandit.com/data-capture-sdk/web/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) function.

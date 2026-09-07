@@ -7,6 +7,7 @@ import { FeatureListProps, Feature, Product, FilteredFeature } from './types';
 import productsData from '@site/src/data/products.json';
 import featuresData from '@site/src/data/features.json';
 import { FRAMEWORK_MAPPING } from '../utils/frameworks';
+import { withCurrentDocsPath } from '@site/src/constants/docsPaths';
 
 // Function to render description with inline code formatting
 const renderDescription = (description: string) => {
@@ -128,7 +129,10 @@ const FeatureList: React.FC<FeatureListProps> = ({
     
     if (currentFramework && feature.frameworks[currentFramework]) {
       const frameworkInfo = feature.frameworks[currentFramework];
-      return frameworkInfo.apiUrl || null;
+      // products.json stores version-agnostic /sdks/<framework>/... paths;
+      // frameworks that only exist in the unreleased docs need the current
+      // version prefix or they resolve into the released tree and 404.
+      return frameworkInfo.apiUrl ? withCurrentDocsPath(frameworkInfo.apiUrl) : null;
     }
     return null;
   };
@@ -200,7 +204,7 @@ const FeatureList: React.FC<FeatureListProps> = ({
                       .map(([frameworkName, frameworkInfo]) => (
                         <a
                           key={frameworkName}
-                          href={frameworkInfo.apiUrl}
+                          href={withCurrentDocsPath(frameworkInfo.apiUrl)}
                           className={styles.frameworkItem}
                           target="_blank"
                           rel="noopener noreferrer"

@@ -38,6 +38,14 @@ DOCS_DIRS = [
     REPO_ROOT / "docs" / "sdks",
 ]
 DOCUSAURUS_CONFIG = REPO_ROOT / "docusaurus.config.ts"
+
+# Doc subtrees excluded from snippet collection: this validator compiles
+# ```kotlin fences against the Android SDK classpath. KMP snippets import
+# com.kmp.* packages from KMP klibs that aren't published/toolchain-available
+# here, so they can't compile against the Android classpath.
+EXCLUDED_DOC_DIRS = {
+    REPO_ROOT / "docs" / "sdks" / "kmp",
+}
 VALIDATION_DIR = Path(__file__).parent
 CACHE_DIR = VALIDATION_DIR / "cache"
 BASELINES_DIR = VALIDATION_DIR / "baselines"
@@ -128,7 +136,13 @@ def _collect_snippets(fence: re.Pattern) -> list[Snippet]:
         if not docs_dir.exists():
             continue
         for path in sorted(docs_dir.rglob("*.md")) + sorted(docs_dir.rglob("*.mdx")):
-            seen.add(path.resolve())
+            resolved_path = path.resolve()
+            if any(
+                resolved_path == excluded or excluded in resolved_path.parents
+                for excluded in EXCLUDED_DOC_DIRS
+            ):
+                continue
+            seen.add(resolved_path)
             text = path.read_text(encoding="utf-8")
             all_snippets.extend(_extract_snippets(text, path, fence))
             for imported in _resolve_imports(text, path):

@@ -1,0 +1,25 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "dictionaryDefinitions": [
+    { "name": "scandit", "path": ".cspell/scandit-terms.txt", "addWords": true }
+  ],
+  "dictionaries": ["scandit", "software-terms", "typescript", "node", "html", "css"],
+  "ignorePaths": [
+    "node_modules/**",
+    "build/**",
+    ".docusaurus/**",
+    "versioned_docs/**",
+    "**/*.map"
+  ],
+  "ignoreRegExpList": [
+    "Urls",
+    "HexValues",
+    "/```[\\s\\S]*?```/",
+    "/`[^`]+`/",
+    "/<[^>]+>/",
+    "/\\{[^}]*\\}/",
+    "/import .*/",
+    "/export .*/"
+  ]
+}

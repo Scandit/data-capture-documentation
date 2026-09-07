@@ -9,6 +9,28 @@ hide_title: true
 title: Release Notes
 ---
 
+## 2.6.0
+
+**Released**: August 3, 2026
+
+### New Features
+
+- Added a UMD (Universal Module Definition) bundle to the ID Bolt SDK (`index.umd.js`) for environments that do not support ES modules.
+
+### Improvements
+
+- Added sound feedback when a document has been scanned.
+- Updated WebSDK to 8.5.1.
+
+### Bug fixes
+
+- Fixed a camera error on Microsoft Surface devices that prevented end users from starting the camera stream.
+- Fixed detection of camera access being denied by the user. When this happens, a screen now explains how to unblock the camera.
+
+#### ID Bolt configurator
+
+- Fixed the code snippet not updating when the `theme.banner` and `learnMore` options are changed through the UI.
+
 ## 2.5.0
 
 **Released**: June 4, 2026

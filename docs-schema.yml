@@ -1,0 +1,57 @@
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "https://scandit.com/schemas/docs-frontmatter.schema.json"
+title: "Scandit documentation frontmatter schema"
+description: "Validation schema for Scandit Docusaurus Markdown/MDX frontmatter."
+type: object
+additionalProperties: true
+
+# Only `description` is required today (incremental adoption); other Scandit fields are
+# validated when present. Tighten required fields as pages adopt them.
+required:
+  - description
+
+properties:
+  description:
+    type: string
+    minLength: 20
+    maxLength: 150
+    pattern: "^.*[^\\s:]$"   # no trailing whitespace or colon
+
+  title:
+    type: string
+    minLength: 2
+    maxLength: 120
+
+  topic_type:
+    type: string
+    enum: [product-overview, get-started, how-to, concept, reference, troubleshooting,
+           faq, glossary, migration, release-notes, installation, system-requirements,
+           supported-values, configuration-reference, api-overview, deployment,
+           licensing, scanning-performance, sample-catalog, use-case]
+
+  product:
+    type: string
+    enum: [sparkscan, barcode-capture, matrixscan, matrixscan-find, matrixscan-count,
+           matrixscan-ar, matrixscan-pick, barcode-selection, barcode-generator,
+           id-capture, id-bolt, label-capture, parser, express, core, platform]
+
+  frameworks:
+    type: array
+    minItems: 1
+    uniqueItems: true
+    items:
+      type: string
+      enum: [ios, android, web, react-native, flutter, cordova, capacitor, titanium,
+             linux, net-ios, net-android, hosted]
+
+  version_status:
+    type: string
+    enum: [current, legacy, beta]
+
+  canonical_id:
+    type: string
+    pattern: "^scandit\\.[a-z0-9-]+(\\.[a-z0-9-]+)*$"
+
+  available_since:
+    type: string
+    pattern: "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$"
