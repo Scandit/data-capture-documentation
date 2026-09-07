@@ -46,10 +46,18 @@ export interface SdksRouteInfo {
 }
 
 export function parseSdksRoute(pathname: string): SdksRouteInfo {
-  // Anchored, with an optional docs-version segment (/next/, /7.6.14/, ...):
-  // only the version served at the site root has none. Left unanchored,
-  // /foo/sdks/ios/... would parse as a real product route.
-  const match = /^(?:\/(?:next|\d+\.\d+\.\d+))?\/sdks\/(.+)$/.exec(pathname);
+  // An optional docs-version segment (/next/, /7.6.14/, ...) - only the version
+  // served at the site root has none - and an optional SITE BASE URL in front of
+  // it. The base url is why this cannot stay anchored at `^/`: PR previews build
+  // with `base_url=/data-capture-documentation/pr-preview/pr-N/`
+  // (.github/workflows/docs-preview.yml), and `useLocation().pathname` includes
+  // it. Anchored, this returned {} on every preview page, so DocItem computed
+  // `isKnownProductPage === false` everywhere and fell through to the shared
+  // Agent Skills callout, which then defaulted to iOS for every framework -
+  // while frameworkFromPath, matching `(?:^|\/)sdks\/`, resolved the same path
+  // correctly. Two parsers, one answer: the divergence showed up in exactly the
+  // previews reviewers look at.
+  const match = /(?:^|\/)(?:(?:next|\d+\.\d+\.\d+)\/)?sdks\/(.+)$/.exec(pathname);
   if (!match) return {};
 
   // Which framework the tail belongs to is the registry's business - it owns

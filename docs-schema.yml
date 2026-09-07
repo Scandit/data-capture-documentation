@@ -36,9 +36,16 @@ properties:
            id-capture, id-bolt, label-capture, parser, express, core, platform]
 
   # Canonical framework slugs. These are the SSOT for every framework identifier
-  # in the repo: they are exactly the `/sdks/<slug>/` URL segments (with `hosted`
-  # for the /hosted/ tree), and src/components/utils/frameworks.ts must cover
-  # this same set - `yarn verify:frameworks` fails the build if the two drift.
+  # under docs/ and in code: they are exactly the `/sdks/<slug>/` URL segments
+  # (with `hosted` for the /hosted/ tree), and src/components/utils/frameworks.ts
+  # must cover this same set - `yarn verify:frameworks` fails the build if the two
+  # drift.
+  #
+  # NOT versioned_docs/. Those snapshots still carry the pre-rename vocabulary
+  # (`react`, `netIos`, `xamarinForms`, `express`) and are exempt on purpose;
+  # see the scope note in scripts/verify-frameworks.cjs. Saying "every identifier
+  # in the repo" here was wrong: ~470 declarations in the snapshots are outside
+  # this enum and nothing checks them.
   #
   # `kmp` (Kotlin Multiplatform) is documented only in the in-development docs
   # version; that is tracked by UNRELEASED_FRAMEWORK_SLUGS in

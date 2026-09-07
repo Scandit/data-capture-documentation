@@ -149,7 +149,20 @@ const PARSE_SDKS_ROUTE_BASELINE = [
   ["/sdks/net/", {}],
   ["/hosted/id-bolt/overview", {}],
   ["/", {}],
-  ["/foo/sdks/ios/x/y", {}],
+  // A prefix before /sdks/ is ACCEPTED, because the site base url is one:
+  // PR previews serve from /data-capture-documentation/pr-preview/pr-N/ and
+  // useLocation().pathname includes it. This case previously asserted {},
+  // pinning in a divergence from frameworkFromPath that made every preview
+  // page fall through to the shared Agent Skills callout, defaulted to iOS.
+  ["/foo/sdks/ios/x/y", { framework: "iOS", product: "x", lastSegment: "y" }],
+  [
+    "/data-capture-documentation/pr-preview/pr-430/sdks/ios/x/y",
+    { framework: "iOS", product: "x", lastSegment: "y" },
+  ],
+  [
+    "/data-capture-documentation/pr-preview/pr-430/next/sdks/net/ios/x/y",
+    { framework: ".NET iOS", product: "x", lastSegment: "y" },
+  ],
 ];
 
 check("parseSdksRoute is unchanged by sharing the registry matcher", () => {

@@ -28,10 +28,18 @@ export default function ContentWrapper(props: Props): JSX.Element {
   const routeFramework = frameworkFromPath(pathname);
   const isSkillLessFramework = !!routeFramework && !routeFramework.agentSkills;
 
-  // ID Bolt docs live under /hosted/, outside the /sdks/ product routes, so
-  // the route-driven callout never fires there. Surface its skill explicitly.
+  // ID Bolt docs live under /hosted/, outside the /sdks/ product routes, so the
+  // route-driven callout never fires there. Surface its skill explicitly.
+  //
+  // Matched anywhere in the path, not with startsWith, for the same reason the
+  // titanium/linux check above was rewritten: a prefix defeats an anchor. Two of
+  // them occur here - a docs-version segment once an ID Bolt snapshot is cut, and
+  // the site base url, which PR previews set to
+  // /data-capture-documentation/pr-preview/pr-N/ - and on a preview this silently
+  // rendered the generic shared callout instead of the ID Bolt one.
   const isIdBoltPage =
-    pathname.startsWith('/hosted/id-bolt/') && !isOnFallbackDenylist(pathname);
+    /(?:^|\/)(?:next\/|\d+\.\d+\.\d+\/)?hosted\/id-bolt\//.test(pathname) &&
+    !isOnFallbackDenylist(pathname);
 
   let callout: JSX.Element | null;
   if (isSkillLessFramework) {

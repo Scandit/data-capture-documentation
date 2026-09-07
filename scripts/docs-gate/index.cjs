@@ -156,13 +156,18 @@ function main() {
   if (files.length === 0) { console.log("docs-gate: no changed docs — nothing to check."); process.exit(0); }
   console.log(`docs-gate: checking ${files.length} changed doc(s)…\n`);
 
-  // Prose checks only look at files whose body actually changed.
+  // VALE only looks at files whose body actually changed. cspell still sees all
+  // of them, because `description` and `title` ARE prose: this gate's own
+  // frontmatter.cjs runs anti-fluff checks on `description`, and cspell.json has
+  // no frontmatter exclusion. A PR that only rewrote
+  // `description: "Add the SDK to your Reakt Native projekt"` had its spelling
+  // check skipped entirely and would have shipped the typo.
   const metaOnly = frontmatterOnly(files, lastRatchetBase);
-  const proseFiles = files.filter((f) => !metaOnly.has(f));
+  const bodyChanged = files.filter((f) => !metaOnly.has(f));
   if (metaOnly.size) {
     console.log(
       `docs-gate: ${metaOnly.size} file(s) changed frontmatter only - ` +
-        `skipping prose checks for them (body identical to base).\n`,
+        `skipping Vale for them (body identical to base); cspell still runs, since description and title are prose.`,
     );
   }
 
@@ -172,11 +177,11 @@ function main() {
     findings.push(...validateFile(path.join(ROOT, f), schema).map((x) => ({ ...x, file: f })));
     findings.push(...checkLinks(path.join(ROOT, f)).map((x) => ({ ...x, file: f })));
   }
-  if (proseFiles.length) findings.push(...runCspell(proseFiles));
+  if (files.length) findings.push(...runCspell(files));
 
   const vale = findVale();
   if (vale) {
-    if (proseFiles.length) findings.push(...runVale(proseFiles, vale));
+    if (bodyChanged.length) findings.push(...runVale(bodyChanged, vale));
   } else if (process.env.CI) {
     // In CI, a missing Vale must fail — otherwise the headline prose-style check
     // silently no-ops while the job stays green. Locally it's still advisory.
