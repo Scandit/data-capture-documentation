@@ -10,9 +10,9 @@ keywords:
   - web
 ---
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -20,9 +20,10 @@ keywords:
 
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -34,7 +35,7 @@ keywords:
 #### Smart Label Capture
 
 * Restored SIMD support in WebAssembly for iOS 26, recovering performance across all capture modes, most noticeably Label Capture.
-* Added shipping-label support (`AdaptiveRecognitionResultType.ShippingLabel`, Carrier, ShippingLabelScanningResult) to adaptive recognition, matching iOS and Android.
+* Added shipping-label support (AdaptiveRecognitionResultType.ShippingLabel, Carrier, ShippingLabelScanningResult) to adaptive recognition, matching iOS and Android.
 * Added a new sample to quickly test and integrate Smart Label Capture to read and validate price shelf labels against a database - showing live AR overlays based on the match and mismatch of the content.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
@@ -57,8 +58,8 @@ keywords:
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -98,6 +99,7 @@ keywords:
 * Fixed a race condition in SimplePropertyBehaviorSubject where mutating the subscriber list during a callback could cause crashes or missed notifications.
 * Fixed EventsResponse::getRetryTimeoutInSeconds to return a fallback instead of aborting on out-of-range header values.
 * Fixed pinch-to-zoom and swipe-to-zoom becoming unresponsive after the browser interrupted a touch gesture, and duplicated tap and zoom handling after a data capture view was re-attached.
+* Fixed a memory leak that could make the browser tab run out of memory and crash when the data capture context was disposed and created again repeatedly.
 
 ### Deprecations
 

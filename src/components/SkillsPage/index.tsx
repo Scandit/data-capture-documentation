@@ -5,7 +5,11 @@ import productsData from '@site/src/data/products.json';
 import CommandBlock from '../SkillsCallout/CommandBlock';
 import InstallCommand from '../SkillsCallout/InstallCommand';
 import ManualInstall from '../SkillsCallout/ManualInstall';
-import { singleSkillCommand } from '../SkillsCallout/agents';
+import {
+  APP_BUILDER_GROUP,
+  agentInstallsFor,
+  singleSkillCommand,
+} from '../SkillsCallout/agents';
 import { frameworkToSlug } from '../utils/frameworks';
 import { withCurrentDocsPath } from '@site/src/constants/docsPaths';
 import styles from './styles.module.css';
@@ -63,6 +67,18 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
   const primarySlug = slugFor('sparkscan') || fwSkills[0]?.slug || skillsData.shared;
   const barcodeSlug = slugFor('barcode-capture') || primarySlug;
 
+  // AI app builders install skills through their own UI rather than the CLI,
+  // and only ship web apps — so they are offered on the Web page alone.
+  // Everywhere else these sections stay agent-only.
+  const appBuilders = agentInstallsFor(frameworkSlug).filter(
+    (a) => a.group === APP_BUILDER_GROUP,
+  );
+  const appBuilderNames = appBuilders.map((a) => a.label);
+  const joinNames = (conjunction: string): string =>
+    appBuilderNames.length > 1
+      ? `${appBuilderNames.slice(0, -1).join(', ')} ${conjunction} ${appBuilderNames[appBuilderNames.length - 1]}`
+      : appBuilderNames[0];
+
   return (
     <div className={styles.page}>
       <p className={styles.lede}>
@@ -81,6 +97,13 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
         framework={framework}
         manualInstallUrl="#manual-installation"
       />
+      {appBuilders.length > 0 && (
+        <p className={styles.appBuilders}>
+          Building in an AI app builder instead? The same skills import
+          straight from GitHub into {joinNames('and')} —{' '}
+          <a href="#manual-installation">see the steps</a>.
+        </p>
+      )}
 
       <h2>How to use it</h2>
       <p>
@@ -190,8 +213,12 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
 
       <h2 id="manual-installation">Manual installation</h2>
       <p>
-        The command above covers every agent. If you would rather install from
-        the plugin marketplace your agent ships with, pick it here.
+        The command above covers every agent that runs in your project
+        directory. If you would rather install from the plugin marketplace your
+        agent ships with{appBuilders.length > 0
+          ? ` — or you build with an AI app builder (${appBuilderNames.join(', ')} and the like) —`
+          : ','}{' '}
+        pick it here.
       </p>
       <ManualInstall framework={frameworkSlug} />
 

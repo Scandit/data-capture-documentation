@@ -91,17 +91,20 @@ def extract_current_banner(config_path: Path) -> str:
     return match.group(1) if match else 'none'
 
 
+# The served version is declared once, as DOCS_LAST_VERSION in
+# docusaurus.config.ts; the docs plugin and the search-tag derivation both read
+# that constant. Editing the `lastVersion:` line instead would leave the
+# constant stale and the two would disagree - which is what the constant exists
+# to prevent.
+LAST_VERSION_CONST = r'(const DOCS_LAST_VERSION\s*=\s*)"([^"]+)"'
+
+
 def extract_last_version(config_path: Path) -> str:
     content = config_path.read_text()
-    line_match = re.search(r'lastVersion:[^\n]*', content)
-    if not line_match:
-        raise ValueError("Could not extract lastVersion from docusaurus.config.ts")
-    # lastVersion may be a plain string or `isPreviewBuild ? "current" : "X"` —
-    # in both cases the real (non-preview) value is the last quoted string.
-    values = re.findall(r'"([^"]+)"', line_match.group(0))
-    if not values:
-        raise ValueError("Could not extract lastVersion from docusaurus.config.ts")
-    version = values[-1]
+    match = re.search(LAST_VERSION_CONST, content)
+    if not match:
+        raise ValueError("Could not extract DOCS_LAST_VERSION from docusaurus.config.ts")
+    version = match.group(2)
     if version == "current":
         raise ValueError("Already in production state (lastVersion is 'current')")
     return version
@@ -231,7 +234,7 @@ def update_config_version_entry(config_path: Path, old_version: str, new_version
     content = config_path.read_text()
     content = re.sub(rf'"{re.escape(old_version)}":', f'"{new_version}":', content)
     content = re.sub(
-        rf'(lastVersion:\s*(?:isPreviewBuild\s*\?\s*["\']current["\']\s*:\s*)?)["\']{re.escape(old_version)}["\']',
+        rf'(const DOCS_LAST_VERSION\s*=\s*)"{re.escape(old_version)}"',
         rf'\g<1>"{new_version}"',
         content,
     )
@@ -322,7 +325,7 @@ def update_config_for_minor_beta(config_path: Path, current_version: str, new_ve
     content = config_path.read_text()
 
     content = re.sub(
-        r'(lastVersion:\s*(?:isPreviewBuild\s*\?\s*["\']current["\']\s*:\s*)?)["\']current["\']',
+        r'(const DOCS_LAST_VERSION\s*=\s*)"current"',
         rf'\g<1>"{current_version}"',
         content,
     )
@@ -378,7 +381,7 @@ def update_config_for_minor_production(config_path: Path, version: str) -> None:
     content = config_path.read_text()
 
     content = re.sub(
-        r'(lastVersion:\s*(?:isPreviewBuild\s*\?\s*["\']current["\']\s*:\s*)?)["\'][^"\']+["\']',
+        r'(const DOCS_LAST_VERSION\s*=\s*)"[^"]+"',
         r'\g<1>"current"',
         content,
     )

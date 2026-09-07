@@ -10,26 +10,25 @@ keywords:
   - android
 ---
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
 #### Barcode
 
 * The [MatrixScan Sequence simple sample](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/06_Sequence/MatrixScanSequenceSimpleSample) is now publicly available, showing the minimum setup needed to run MatrixScan Sequence.
-* Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
-* BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
-* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set `barcodeCountSettings.AutomaticClusteringMethod` to `AutomaticClusteringMethod.Label` to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
+* MatrixScan Sequence: `initialOrderOnShelf` and `initialOrderOnTray` resume scanning from a previous session (already available since 8.5.1).
+* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set barcodeCountSettings.AutomaticClusteringMethod to AutomaticClusteringMethod.Label to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
 * When highlights inside a MatrixScan Count cluster would overlap, the cluster now collapses into a single badge showing how many barcodes it contains, instead of drawing every highlight on top of the others. This also applies in Scan Preview mode.
-* Added an API to customize the text of the hint shown when a new scan group starts (BarcodeCountView.setTextForNewGroupHint).
+* Added an API to customize the text of the hint shown when a new scan group starts (`BarcodeCountView.setTextForNewGroupHint`).
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
-* Added BarcodeSequenceDeserializer for creating and updating MatrixScan Sequence modes and settings from JSON.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -58,8 +57,8 @@ keywords:
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
