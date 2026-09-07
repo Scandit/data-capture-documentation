@@ -90,14 +90,37 @@ function dropTrailingIntroducers(lines: string[]): string[] {
  * heading is 246. Demoting keeps the text and drops only the promise.
  */
 function demoteIntroducers(text: string): string {
-  return text
-    .split("\n")
-    .map((l) =>
-      INTRODUCER_LINE.test(l)
-        ? l.replace(/^(\s*(?:>\s*)*)#{1,6}\s+/, "$1").replace(/\*\*([^*]*)\*\*/g, "$1")
-        : l,
-    )
-    .join("\n");
+  return text.split("\n").map(demoteLine).join("\n");
+}
+
+/**
+ * Strip markers from ONE line until it is no longer an introducer.
+ *
+ * A single pass was not enough, and the shortfall was not cosmetic: `### # Foo`
+ * demotes to `# Foo`, `**# Note**` to `# Note`, `**## # x**` to `## # x` - all
+ * still introducers, so the demotion handed the assertion precisely the shape it
+ * throws on. With that assertion in postBuild, a page containing one such line
+ * fails the main deploy and every PR preview, on content no docs author could
+ * clear without a code change. It also broke enforceChunkInvariant's fixpoint:
+ * a second application demoted `# Note` again, to `Note`.
+ *
+ * Terminates: while the line matches, one of the two patterns matches too - the
+ * heading branch needs a leading `#{1,6}` run, the bold branch a whole-line
+ * `**...**` - and either replacement strictly shortens the line.
+ */
+function demoteLine(line: string): string {
+  let out = line;
+  while (INTRODUCER_LINE.test(out)) {
+    const next = out
+      .replace(/^(\s*(?:>\s*)*)#{1,6}\s+/, "$1")
+      .replace(/\*\*([^*]*)\*\*/g, "$1");
+    // Believed unreachable by the argument above, but the cost of being wrong is
+    // a build nobody can unblock, so make no-progress terminal rather than a
+    // spin - and hand back something that CANNOT match either branch.
+    if (next === out) return out.replace(/[#*>]/g, "").trim();
+    out = next;
+  }
+  return out;
 }
 
 function clipMarkdown(text: string, limit: number): string {
@@ -293,12 +316,15 @@ function enforceChunkInvariant(chunks: Chunk[]): Chunk[] {
   if (out.length) {
     const last = out[out.length - 1];
     const dropped = dropTrailingIntroducers(last.content.split("\n")).join("\n").trim();
-    // If that empties the ONLY chunk, the page would leave the index entirely -
-    // postBuild skips a page with no chunks without even counting it, so it would
-    // vanish silently and drag down the drift-guard ratio. Demote instead: the
-    // heading's words stay, the promise goes.
-    last.content =
-      dropped || (out.length === 1 ? demoteIntroducers(last.content).trim() : "");
+    // Guarded on the RESULT, not on out.length. A body that is entirely
+    // introducer lines but long enough to split chunks twice has out.length > 1,
+    // so testing the array length let every chunk empty and the page leave the
+    // index - and postBuild skips a page with no chunks WITHOUT incrementing
+    // pagesProcessed, so it vanishes silently AND drags the drift-guard ratio
+    // down. Counting what still has content covers that case and the
+    // single-chunk one under one rule.
+    const survivors = out.slice(0, -1).filter((c) => c.content.trim()).length;
+    last.content = dropped || (survivors === 0 ? demoteIntroducers(last.content).trim() : "");
   }
 
   return out
@@ -1252,11 +1278,17 @@ type KModule = ReturnType<typeof buildModule>;
  * index. Checking here covers every build, and keeps ONE copy of each predicate
  * so the generator and its check cannot drift apart.
  *
- * Scope, measured rather than assumed: this guards the PUBLISHED fields, which is
- * the whole surface a consumer sees. It is not a regression test for the chunker -
- * with enforceChunkInvariant disabled the build still passes, because clipMarkdown
- * drops trailing introducers from the excerpts on its own. The chunker's fixpoint
- * property is a separate concern with its own tests.
+ * Scope, measured rather than assumed: this guards the two published excerpt
+ * fields, docs_excerpt and assistant_excerpt. Not every published field: `summary`
+ * is whitespace-collapsed to a single line, so a chunk opening `## Install` yields
+ * "## Install Do X..." - matching the predicate while carrying content, which
+ * would be a false positive.
+ *
+ * It is also NOT a regression test for the chunker: with enforceChunkInvariant
+ * disabled a full build still passes, because clipMarkdown drops trailing
+ * introducers from the excerpts on its own. The chunker's fixpoint property is
+ * argued in demoteLine and enforceChunkInvariant and checked by nothing
+ * automated - this repo has no chunker tests. Worth adding; not claimed here.
  *
  * Named rather than inline so it can be called directly: an assertion nobody has
  * seen fail is worth nothing, and proving this one fires should not cost a build.
