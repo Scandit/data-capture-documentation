@@ -532,6 +532,15 @@ const config: Config = {
               '/id-capture/get-started',
               '/id-capture/advanced',
               '/id-capture/supported-documents',
+              // The same Nov 2024 commit that removed /sdks/*/id-validate/* for
+              // the 9 frameworks handled in `redirects` below also removed
+              // docs/sdks/xamarin/{android,forms,ios}/id-validate/{intro,
+              // get-started}.md. All six are still live on S3 (verified 200,
+              // 2026-09-07) and were covered by neither list. The v6 copies of
+              // these pages are unaffected and still served, from
+              // versioned_docs/version-6.28.11/sdks/xamarin/*/id-validate/.
+              '/id-validate/intro',
+              '/id-validate/get-started',
               '/label-capture/intro',
               '/label-capture/get-started',
               '/label-capture/advanced',
@@ -560,6 +569,131 @@ const config: Config = {
           return undefined; // Return undefined when no redirects should be created
         },
         redirects: [
+          // ┌── ORPHANED PAGES: removed from the docs, still live on S3 ─────
+          // │
+          // │ The deploy does not delete files the build stops producing, so
+          // │ these 28 pages are still served from old builds, each still
+          // │ carrying that build's docusaurus_tag. They are absent from docs/
+          // │ and from the sitemap, but Google and AI crawlers still fetch them
+          // │ and get years-old documentation with nothing marking it stale.
+          // │
+          // │ Where the dates come from — `git log --diff-filter=D` over the
+          // │ deleted paths, so they stay checkable:
+          // │   /sdks/*/samples/       10 pages, removed 2025-12-11 in
+          // │                          43e447d67 ("Link samples directly to
+          // │                          GitHub", #277) — titanium included.
+          // │   /sdks/*/id-validate/*  removed across three Nov 2024 commits:
+          // │                          3893cfcb8 (11-14) android, ios;
+          // │                          edc7107c8 (11-18) capacitor, cordova,
+          // │                          web; 39011c440 (11-21) flutter,
+          // │                          net/android, net/ios, react-native AND
+          // │                          xamarin/{android,forms,ios}.
+          // │ That is 9 frameworks x 2 pages = the 18 handled here, plus the 6
+          // │ xamarin pages, which are handled by the xamarin `commonPages`
+          // │ list in createRedirects above rather than by this array.
+          // │
+          // │ WHY 9 ENTRIES BELOW AND 10 IN THE SAMPLES LIST — do not
+          // │ "complete" either list. Titanium is absent from the id-validate
+          // │ list because docs/sdks/titanium/id-validate/{intro,get-started}
+          // │ still exist: those are REAL current pages, and adding them would
+          // │ make the build throw. It IS in the samples list because
+          // │ 43e447d67 did remove docs/sdks/titanium/samples.md.
+          // │
+          // │ The 527 figure quoted in the commit message is stale SEARCH
+          // │ records, counted by browsing the Algolia index and grouping by
+          // │ docusaurus_tag (527 under docs-default-8.0.0 and
+          // │ docs-default-6.28.1). This change does NOT fix those: a redirect
+          // │ replaces the HTML on S3, it does not delete an index record.
+          // │ Reindexing those tags is a separate pass.
+          // │
+          // │ A redirect emits a file at each path, so the next deploy
+          // │ OVERWRITES the orphan. That is why this is here and not a crawler
+          // │ exclusion: an exclusion would only hide the pages from our own
+          // │ search while Google kept serving them. (The key for that is
+          // │ `exclusionPatterns`, and it belongs to the ALGOLIA CRAWLER
+          // │ config, which lives outside this repository — grepping this repo
+          // │ for it will only find this comment.)
+          // │
+          // │ ID Validate folded into ID Capture from v7 on, and ID Capture has
+          // │ intro + get-started for all 9 frameworks, so this maps
+          // │ page-for-page rather than dumping everyone on one hub. The v6
+          // │ content was not lost: versioned_docs/version-6.28.11/sdks/*/
+          // │ id-validate/ still exists, is still built, and is still in the
+          // │ sitemap at /6.28.11/sdks/<fw>/id-validate/*.
+          // │
+          // │ NOTE ON `from` WITHOUT A TRAILING SLASH (the form used here, and
+          // │ by every other entry in this array). The site sets
+          // │ trailingSlash: true, so route paths carry one and these `from`
+          // │ values never equal a route path. The plugin's collision guard,
+          // │ filterUnwantedRedirects, compares `from` against
+          // │ relativeRoutesPaths by exact string, so it never fires for these
+          // │ and never reports "would override existing paths". The build
+          // │ still fails if one of these pages comes BACK — but later, in
+          // │ writeRedirectFile, as "The redirect plugin is not supposed to
+          // │ override existing files", which reads like a stale build/
+          // │ directory. It is not: if you see that error for a path listed
+          // │ here, THIS ARRAY is the cause. Delete the entry for the page that
+          // │ returned.
+          // │
+          // │ THIS DOES NOT FIX THE CAUSE, AND IT ONLY REACHES PART OF THE
+          // │ PROBLEM. The 28 root-level pages below are the covered case. The
+          // │ larger case is the retired VERSION prefixes: 21 trees are still
+          // │ live — /7.6.3/ through /7.6.13/ and /6.28.1/ through /6.28.10/,
+          // │ roughly 450-500 pages each, so on the order of 10,000 orphaned
+          // │ pages against the 28 here. (/8.5.3/, /8.5.2/, /8.4.1/ and
+          // │ /8.3.1/ return 404, so those were cleaned up.) Redirects cannot
+          // │ ever reach them: the build emits nothing under /7.6.3/, so no
+          // │ redirect file can land there. Fixing the deploy is therefore not
+          // │ optional tidying — it is the only thing that addresses the bulk.
+          // │
+          // │ THE DEPLOY FIX IS A SCOPED PRUNE, NOT A BARE `--delete`. An
+          // │ unqualified `aws s3 sync --delete` at the bucket root would
+          // │ delete every path this build does not own, and the API reference
+          // │ is exactly that: a separate Sphinx build published to the same
+          // │ origin by a different pipeline. This build emits only redirect
+          // │ stubs under data-capture-sdk/ (78 of them) and nothing at all
+          // │ under 7.6/ or 6.28/, so a root `--delete` would take the whole
+          // │ API reference off the live site. (Its page count is not
+          // │ quoted here on purpose: the ~3,900 figure elsewhere in this
+          // │ file counts pages that left the SEARCH INDEX, not pages served
+          // │ under those prefixes, and the argument does not need it.)
+          // │ What is needed
+          // │ is a prune limited to the prefixes this build owns: a `--delete`
+          // │ scoped by `--exclude` for `data-capture-sdk/*`, `7.6/*`,
+          // │ `6.28/*` and the retired version prefixes, or a manifest diff of
+          // │ build output against the bucket. Confirm the actual origin layout
+          // │ with whoever owns the deploy pipeline BEFORE running any form of
+          // │ this — the exclusion list above is derived from one local build,
+          // │ not from the bucket.
+          ...['android', 'capacitor', 'cordova', 'flutter', 'ios', 'net/android', 'net/ios', 'react-native', 'web'].flatMap(
+            (fw) => [
+              { to: `/sdks/${fw}/id-capture/intro`, from: `/sdks/${fw}/id-validate/intro` },
+              { to: `/sdks/${fw}/id-capture/get-started`, from: `/sdks/${fw}/id-validate/get-started` },
+            ],
+          ),
+
+          // │ Samples moved to GitHub, so these reuse the destination already
+          // │ used by the /data-capture-sdk/<fw>/samples/run-samples.html
+          // │ entries FURTHER DOWN in this array, rather than inventing a
+          // │ different destination for the same content. net/ios and
+          // │ net/android share the dotnet repo.
+          ...Object.entries({
+            'android': 'android',
+            'capacitor': 'capacitor',
+            'cordova': 'cordova',
+            'flutter': 'flutter',
+            'ios': 'ios',
+            'net/android': 'dotnet',
+            'net/ios': 'dotnet',
+            'react-native': 'react-native',
+            'titanium': 'titanium',
+            'web': 'web',
+          }).map(([fw, repo]) => ({
+            to: `https://github.com/Scandit/datacapture-${repo}-samples`,
+            from: `/sdks/${fw}/samples`,
+          })),
+          // └── end orphaned-page redirects. Entries below are unrelated and
+          //     predate this block. ────────────────────────────────────────
           {
             to: '/sdks/ios/agent-skills',
             from: ['/connector-guides/windsurf', '/connector-guides/cursor'],
