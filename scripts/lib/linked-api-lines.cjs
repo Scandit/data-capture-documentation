@@ -31,6 +31,12 @@ function walk(dir, byLine, stats) {
   try {
     entries = fs.readdirSync(dir, { withFileTypes: true });
   } catch {
+    // Counted, like an unreadable file. Silently returning dropped the whole
+    // subtree, and the caller could not tell a genuinely empty branch from one
+    // it never saw - on Windows the longest path in the current build is 283
+    // characters, close enough to MAX_PATH for this to be reachable rather
+    // than theoretical.
+    stats.unreadableDirs += 1;
     return;
   }
   for (const entry of entries) {
@@ -60,10 +66,10 @@ function walk(dir, byLine, stats) {
   }
 }
 
-/** @returns {{byLine: Map<string, Set<string>>, stats: {files: number, unreadable: number}}} */
+/** @returns {{byLine: Map<string, Set<string>>, stats: {files: number, unreadable: number, unreadableDirs: number}}} */
 function linkedApiUrls(dir) {
   const byLine = new Map();
-  const stats = { files: 0, unreadable: 0 };
+  const stats = { files: 0, unreadable: 0, unreadableDirs: 0 };
   walk(dir, byLine, stats);
   return { byLine, stats };
 }

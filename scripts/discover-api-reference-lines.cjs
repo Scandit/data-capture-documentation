@@ -68,9 +68,16 @@ const WANT_PROBES = 3;
 /** Written for the gate, so both work from the same confirmed probe paths. */
 const ARTEFACT = "api-reference-lines.json";
 /**
- * Hard ceiling on live requests. A healthy sweep takes ~37; under rate limiting
- * every minor used to consume all three probes, measured at 105 requests with a
- * 15 s ceiling each - a multi-minute, near-useless run in an advisory step.
+ * Hard ceiling on live requests. A healthy sweep takes ~42 today; the figure
+ * tracks how many minors exist below the served one, so re-measure rather than
+ * trusting it. It can legitimately reach the cap: for a major with no linked
+ * line at all, `lowerMajorCeiling` falls back to the highest minor seen
+ * anywhere, so at 9.0.0 the sweep would try 8.28 down to 8.0 - minors that
+ * never shipped. Overflow is filed as "could not tell", never as absence.
+ *
+ * The cap earns its keep under rate limiting, where every minor used to consume
+ * all three probes: measured at 105 requests with a 15 s ceiling each, a
+ * multi-minute and near-useless run in a step that only advises.
  */
 const REQUEST_BUDGET = 90;
 const budget = { spent: 0 };
@@ -172,7 +179,16 @@ async function main() {
     return;
   }
 
-  const { byLine } = linkedApiUrls(BUILD);
+  const { byLine, stats: walk } = linkedApiUrls(BUILD);
+  if (walk.unreadableDirs) {
+    // Everything below an unreadable directory is missing from `byLine`, and
+    // every verdict below is derived from it - so a truncated scan can report a
+    // line as unlinked, or miss a probe path, with nothing to show it happened.
+    warn(
+      `line discovery: ${walk.unreadableDirs} directory(ies) under ${BUILD} could not ` +
+        `be read, so the link scan is incomplete and the lines below may be too.`,
+    );
+  }
   const linked = [...byLine.keys()].sort(compareLines);
   if (!linked.length) {
     warn("line discovery: the build links no versioned API-reference URLs, so");
@@ -206,6 +222,17 @@ async function main() {
     process.exitCode = 1;
     if (quiet) process.stdout.write("");
     return;
+  }
+  if (probes.length < WANT_PROBES) {
+    // Not fatal - one confirmed probe still distinguishes published from
+    // absent - but it makes every "absent" verdict rest on fewer paths, and a
+    // renamed path is exactly what extra probes are for. On stderr because the
+    // probe count is otherwise printed through `say`, which --quiet suppresses,
+    // and --quiet is how CI runs this.
+    warn(
+      `line discovery: only ${probes.length} of ${WANT_PROBES} probe paths could ` +
+        `be confirmed, so an "absent" verdict rests on fewer paths than intended.`,
+    );
   }
 
   const currentMajor = Number(major[1]);
@@ -335,7 +362,10 @@ async function main() {
   say(`  Also not listed: /${currentMajor}.${currentMinor}/, the served release's own`);
   say("  versioned copy. It is byte-identical to the unversioned tree, so it IS a");
   say("  duplicate - but de-indexing the current release is a different decision");
-  say("  from de-indexing old lines. Pass it with --lines if that decision is made.");
+  say("  from de-indexing old lines. Pass it with --lines if that decision is made -");
+  say("  which works as long as the build does not link that line itself. If it");
+  say("  does, the gate leaves it out of the linked set and --lines cannot add it");
+  say("  back; it says so rather than dropping the entry in silence.");
   say("");
   say("  Not looked for: a line under a major older than those probed, whose doc");
   say("  snapshot has been deleted. Nothing links it and nothing here probes it.");

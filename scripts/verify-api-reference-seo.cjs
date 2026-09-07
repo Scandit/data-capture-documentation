@@ -79,6 +79,38 @@ const CANONICAL_SIMILARITY = 0.05;
  * printed a clean pass off a single page.
  */
 const MIN_JUDGED_SHARE = 0.5;
+
+/**
+ * Link rot: most of a LINKED line's sampled urls 404, but not all of them, so
+ * the line itself is demonstrably there. Needing at least one judged page caps
+ * `absent` at `sampled - 1`, which means this share cannot be met below four
+ * sampled pages - no separate sample floor is needed, and an earlier one could
+ * never bind.
+ *
+ * This is deliberately NOT the test for a line that is gone. That one is
+ * `absent === sampled`, which carries no sample floor at all, because learning
+ * nothing is complete evidence about the run whatever its size. Conflating the
+ * two failed a line the run had just proved sound, and left a dead line
+ * unreported below four samples.
+ */
+const STALE_LINE_SHARE = 0.75;
+
+/**
+ * A line needs this many linked urls before its 404s are read as a statement
+ * about the LINE. Below it, the likelier explanation is one mistyped or
+ * hand-written href, which the per-url link-rot note already reports - and
+ * failing --strict on it says "this api-reference line is gone" about a
+ * typo. Real lines carry hundreds: the smallest in the current build has
+ * 725 durable paths.
+ */
+const MIN_LINE_URLS = 8;
+
+/**
+ * And this many of its urls must have been sampled before every one of them
+ * coming back 404 is read as "the line is gone". One pick out of one is a
+ * fact about that url, not about the line.
+ */
+const MIN_DEAD_PICKS = 2;
 /**
  * Picks per line that no page links to. Bounded separately from --sample
  * because those picks are borrowed guesses: a frozen line legitimately lacks
@@ -345,12 +377,37 @@ const VALUED_DIRECTIVES = new Set([
  */
 const HONOURED_SCOPES = new Set(["robots", "googlebot"]);
 
-/** A directive list with no scoping: what a meta `content` attribute holds. */
+/** Matches a valued directive together with its value: `max-image-preview: none`. */
+const VALUED_PAIR = new RegExp(
+  String.raw`\b(?:${[...VALUED_DIRECTIVES].join("|")})\s*:\s*[^,\s]*`,
+  "g",
+);
+
+/**
+ * A directive list with no scoping: what a meta `content` attribute holds.
+ *
+ * Valued directives are removed with their values BEFORE tokenizing. Without
+ * that, `index, follow, max-image-preview: none` tokenizes to a bare `none`
+ * and the page reads as de-indexed - a false pass on the one signal this gate
+ * verifies, since a versioned page that is actually indexable would be reported
+ * sound. The space after the colon is what makes it reachable: `none` only
+ * becomes its own token when the value is separated by whitespace, and the
+ * scope guard in `hasNoindexHeader` never touched this path.
+ *
+ * The pair is stripped anywhere in the part, not just at its start, so neither
+ * `max-image-preview: none noindex` nor `noindex, max-image-preview: none`
+ * is misread.
+ */
 function hasNoindexIn(directives) {
   return String(directives || "")
     .toLowerCase()
-    .split(/[,\s]+/)
-    .some((d) => d === "noindex" || d === "none");
+    .split(",")
+    .some((part) =>
+      part
+        .replace(VALUED_PAIR, " ")
+        .split(/\s+/)
+        .some((d) => d === "noindex" || d === "none"),
+    );
 }
 
 /**
@@ -455,7 +512,10 @@ function discoveredProbes(currentVersion) {
     // older release - and because borrowed picks are taken IN ORDER, those stale
     // paths were the FIRST ones checked. The seeded-overlap guarantee turned into
     // its opposite exactly when it mattered.
-    if (currentVersion && a.version && a.version !== currentVersion) return [];
+    // No `currentVersion &&`: an unknown current version cannot confirm the
+    // artefact is fresh, and treating "cannot tell" as "fine" seeded the picks
+    // from a stale artefact precisely when the build could not say what it is.
+    if (!currentVersion || !a.version || a.version !== currentVersion) return [];
     return Array.isArray(a.probes) ? a.probes : [];
   } catch {
     return [];
@@ -474,7 +534,7 @@ function discoveredUncertain(currentVersion) {
     const a = JSON.parse(
       fs.readFileSync(path.join(BUILD, "api-reference-lines.json"), "utf8"),
     );
-    if (currentVersion && a.version && a.version !== currentVersion) return [];
+    if (!currentVersion || !a.version || a.version !== currentVersion) return [];
     return Array.isArray(a.uncertain) ? a.uncertain : [];
   } catch {
     return [];
@@ -506,6 +566,7 @@ async function main() {
     throw new UsageError();
   }
 
+  let failedWalk = false;
   const { byLine, stats: walk } = linkedApiUrls(BUILD);
   const version = currentVersion();
 
@@ -514,6 +575,23 @@ async function main() {
     `  scanned ${walk.files} built pages` +
       (walk.unreadable ? ` (${walk.unreadable} unreadable, skipped)` : ""),
   );
+  // A directory that could not be read is not a skipped file: its whole subtree
+  // is missing from byLine, so an entire api-reference line can be invisible and
+  // the run would print an unqualified OK having never looked at it. Counted in
+  // the shared walker; reported and failed here, because only the gate knows
+  // what the omission costs.
+  if (walk.unreadableDirs) {
+    failedWalk = true;
+    console.error(
+      `
+${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD} could not be read.
+` +
+        `  Everything below them was not scanned, so a whole api-reference line may
+` +
+        `  be missing from this run rather than absent from the build.
+`,
+    );
+  }
 
   // Lines to check: what the build links, plus what the operator named. A named
   // line absent from the build has no known symbol paths, so it borrows the
@@ -528,6 +606,23 @@ async function main() {
   // came back as duplicate content. That is the permanent --strict block, and the
   // 20-line print cap spent on it, that discovery avoids by construction.
   const servedLine = (/^(\d+\.\d+)/.exec(version) || [])[1] || "";
+  if (!servedLine) {
+    // Everything below rests on knowing which line is the served one: it is the
+    // line excluded from `linked`, and without it the current release's own
+    // versioned copy is judged as an old line, so every one of its pages is
+    // reported as duplicate content. That is the permanent block this gate is
+    // written to avoid, arriving through a missing file rather than through a
+    // real finding. Discovery already refuses to run in this state.
+    console.error(
+      `\n${strict ? "FAIL" : "WARN"}: could not read the served version from ` +
+        `${path.join(BUILD, "search-tags.json")}.\n` +
+        `  Without it there is no way to tell the current release's own versioned\n` +
+        `  line from an old one, and judging the current release would report every\n` +
+        `  one of its pages as duplicate content. Nothing was checked.\n`,
+    );
+    process.exitCode = strict ? 1 : 0;
+    return;
+  }
   const linked = [...byLine.keys()]
     .filter((l) => l !== servedLine)
     .sort(compareLines);
@@ -543,10 +638,14 @@ async function main() {
     mk(line, byLine.get(line), `linked (${byLine.get(line).size} urls)`, false),
   );
   if (extraLines.length) {
-    if (!linked.length) {
+    // `byLine`, not `linked`. What --lines needs is symbol PATHS to borrow, and
+    // those come from the unfiltered map; `linked` excludes the served line, so
+    // a build that links only its own version aborted here claiming it links
+    // nothing while holding thousands of usable paths.
+    if (!byLine.size) {
       console.error(
-        `\n${strict ? "FAIL" : "WARN"}: --lines needs at least one linked line to borrow symbol paths from, ` +
-          `and this build links none.\n`,
+        `\n${strict ? "FAIL" : "WARN"}: --lines needs at least one versioned api-reference link to borrow ` +
+          `symbol paths from, and this build has none.\n`,
       );
       // Same severity as the sibling "this build links nothing" case below.
       // Exiting 1 unconditionally meant that following this gate's own footer
@@ -581,9 +680,41 @@ async function main() {
       ...discoveredProbes(version),
       ...probeCandidates(byLine, unlinkedPicks * 6),
     ]);
+    const alreadyLinked = [];
     for (const line of extraLines) {
-      if (byLine.has(line)) continue;
+      if (byLine.has(line)) {
+        // Reported, not skipped in silence. The served line is the case that
+        // bites: discovery's own report tells the operator to pass it with
+        // --lines, the build links it, and the entry then vanished with no
+        // output - while the non-empty extraLines also suppressed the "no
+        // --lines given" note, so the run said nothing about it either way.
+        alreadyLinked.push(line);
+        continue;
+      }
       targets.push(mk(line, borrowed, "named with --lines", true));
+    }
+    const alsoServed = alreadyLinked.filter((l) => l === servedLine);
+    const plainlyLinked = alreadyLinked.filter((l) => l !== servedLine);
+    if (plainlyLinked.length) {
+      console.error(
+        `NOTE: ${plainlyLinked.map((l) => `/${l}/`).join(" ")} named with --lines ` +
+          `${plainlyLinked.length === 1 ? "is" : "are"} already linked by this build,\n` +
+          `  so ${plainlyLinked.length === 1 ? "it is" : "they are"} checked from the ` +
+          `build's own urls rather than borrowed paths.\n`,
+      );
+    }
+    if (alsoServed.length) {
+      // NOT "checked from the build's own urls": the served line is filtered out
+      // of `linked`, so when the build links it the named entry is checked
+      // nowhere at all. Naming it only works when the build does NOT link it,
+      // which is the usual case and is how the served release's versioned copy
+      // gets checked on purpose.
+      console.error(
+        `NOTE: /${servedLine}/ is the served release's own line, which this gate\n` +
+          `  leaves out of the linked set on purpose - de-indexing the current release\n` +
+          `  is a different decision from de-indexing old lines. This build links it,\n` +
+          `  so naming it with --lines does not add it back: it is not checked here.\n`,
+      );
     }
     targets.sort((a, b) => compareLines(a.line, b.line));
   }
@@ -593,11 +724,21 @@ async function main() {
   // at. The links it reads are absolute; if the generator switches to relative
   // hrefs, that is what this reports.
   if (!targets.length) {
+    // Says which of the two reasons applies. Reasoning from `linked` claimed the
+    // build links nothing when it links only its own served version - which is
+    // excluded from `linked` on purpose - and it asserted "no --lines were
+    // given" even when they were and every one of them was dropped as linked.
+    // No --lines branch for the `!byLine.size` arm: that state returns earlier,
+    // where --lines is reported on its own terms.
+    const why = !byLine.size
+      ? `found no versioned API-reference links in ${walk.files} built pages, and no --lines were given`
+      : `the only versioned line this build links is its own served /${servedLine}/, ` +
+        `which this gate excludes on purpose` +
+        (extraLines.length ? `, and every --lines entry named a line the build already links` : `, and no --lines were given`);
     console.error(
-      `\n${strict ? "FAIL" : "WARN"}: found no versioned API-reference links in ` +
-        `${walk.files} built pages, and no --lines were given.\n` +
+      `\n${strict ? "FAIL" : "WARN"}: ${why}.\n` +
         `  This gate discovers what to check from absolute\n` +
-        `  https://docs.scandit.com/<line>/data-capture-sdk/ hrefs. Zero of them\n` +
+        `  https://docs.scandit.com/<line>/data-capture-sdk/ hrefs. Zero usable ones\n` +
         `  means the build is not what it should be, or those links are no longer\n` +
         `  written in that form - either way this run verified nothing.\n`,
     );
@@ -799,15 +940,77 @@ async function main() {
   // the share floor, so `--strict --lines 8.5` printed OK and exited 0 having
   // verified nothing about /8.5/. The two possible causes are not distinguishable
   // from here: the line may be unpublished, or published and simply renaming its
-  // symbol paths - the very case the flag exists for. So it is reported, and it
-  // is not green.
+  // symbol paths - the very case the flag exists for. So it is reported as a
+  // NOTE and the run stays green: a borrowed line is one the operator ASKED
+  // about, and "no sampled symbol resolves there" is an answer to that question.
+  // The linked half is different and fails - see `deadLines`.
   // Not gated on `borrowed` any more. A linked line taken offline while the build
   // still links it put every pick in `absent`, so requested === 0 kept it out of
   // blindLines, checked === 0 kept it out of thinLines, and the global floor skips
   // `requested === 0` - the run printed the stale-link note and then OK, exit 0
-  // even under --strict, with a whole line unverified.
+  // even under --strict, with a whole line unverified. Collecting it here was not
+  // enough on its own: the report treated the whole set as a note, so the linked
+  // half stayed green. Only the BORROWED half is a note now; the linked half is
+  // handled by `deadLines` below, which is keyed on `absent === sampled` rather
+  // than on this set - deliberately not on `checked === 0`, which would fold in
+  // a run whose picks were throttled rather than missing.
   const unknownLines = targets.filter(
     (t) => t.requested === 0 && t.absent > 0,
+  );
+  // Split by how the line got here, because the tolerance below is only earned
+  // by one of them. A BORROWED line came from --lines: the operator asked
+  // whether it is there, and "no sampled symbol resolves" is an answer. A LINKED
+  // line is one the built docs point at, so every url 404ing means the build
+  // links a whole line of dead pages - a finding, not an answer. Treating both
+  // as a note also made the gate asymmetric: the identical "judged nothing"
+  // state caused by 429s raises requested, lands in blindLines and fails, while
+  // 404s exited 0.
+  const unknownBorrowed = unknownLines.filter((t) => t.borrowed);
+  // A line the build links where every sampled url was a 404 - not throttled,
+  // not unreachable, absent. No sample-size floor on the SAMPLE, because
+  // learning nothing is complete evidence about the run at any size; the floor
+  // is on the LINE, so one mistyped href cannot become a one-url line whose
+  // single 404 turns --strict red.
+  //
+  // `absent === sampled` rather than `checked === 0`: with 2 picks missing and 2
+  // throttled, checked is also 0, but that is blindLines' case - it prints its
+  // own failure, and claiming "taken offline or renamed its paths" about a run
+  // half of which was 429s would be asserting more than was learned.
+  const allAbsent = targets.filter(
+    (t) => !t.borrowed && t.sampled > 0 && t.absent === t.sampled,
+  );
+  // Two floors, because they answer different objections. MIN_LINE_URLS asks
+  // whether this is a LINE at all rather than a typo'd href; MIN_DEAD_PICKS asks
+  // whether enough was looked at to say the line is gone. Without the second,
+  // `--strict --sample 1` turned one rotted url on a 1,000-url line into "taken
+  // offline or renamed its paths" - and `sample()` is deterministic, so it
+  // failed the same way on every retry rather than clearing.
+  const deadLines = allAbsent.filter(
+    (t) =>
+      (t.paths ? t.paths.size : 0) >= MIN_LINE_URLS &&
+      t.sampled >= MIN_DEAD_PICKS,
+  );
+  // Dropped by the url floor: reported, because otherwise such a line appeared
+  // in no footer category at all while the catch-all implied every linked line
+  // had been checked.
+  const thinlyLinked = allAbsent.filter(
+    (t) =>
+      (t.paths ? t.paths.size : 0) < MIN_LINE_URLS ||
+      t.sampled < MIN_DEAD_PICKS,
+  );
+  // Alive - something was judged - but most of the sample is missing. That is
+  // link rot in the build, not a retired line, so it is reported rather than
+  // failed.
+  //
+  // No separate sample floor: `checked > 0` caps `absent` at `sampled - 1`, so
+  // the 0.75 share already cannot be met below four sampled pages. An explicit
+  // floor was therefore never able to bind, and printing one claimed a
+  // threshold that never applied.
+  const rottedLines = targets.filter(
+    (t) =>
+      !t.borrowed &&
+      t.checked > 0 &&
+      t.absent / t.sampled >= STALE_LINE_SHARE,
   );
   // Excluding 404 picks from the floor is right - a frozen line legitimately
   // lacks symbols added since - but it also removed them from the DENOMINATOR, so
@@ -849,7 +1052,7 @@ async function main() {
       `, ${violations.length} not sound\n`,
   );
 
-  let failed = false;
+  let failed = failedWalk;
 
   if (undetermined.length) {
     console.error(`NOTE: ${undetermined.length} pick(s) could not be judged:`);
@@ -918,14 +1121,37 @@ async function main() {
   // the same silent-default class this file is written against. The OK line is
   // QUALIFIED when this fires (it names the lines it judged and says the rest was
   // not learned about), which is the honest statement; it is not suppressed.
-  if (unknownLines.length) {
+  if (unknownBorrowed.length) {
     console.error(
       `NOTE: learned nothing about ` +
-        unknownLines
-          .map((t) => `/${t.line}/${t.borrowed ? "" : " (linked, but every url 404s)"}`)
-          .join(" ") +
+        unknownBorrowed.map((t) => `/${t.line}/`).join(" ") +
         `.\n  Every sampled symbol 404s there, so the line is either not published\n` +
         `  or has renamed its paths - and this run cannot tell which.\n`,
+    );
+  }
+
+  if (deadLines.length) {
+    failed = true;
+    console.error(
+      `${strict ? "FAIL" : "WARN"}: nothing resolved on ` +
+        deadLines
+          .map((t) => `/${t.line}/ (${t.absent} of ${t.sampled} sampled urls 404)`)
+          .join(" ") +
+        `.\n  The build links those lines, so this is not a retired version - it is\n` +
+        `  either a line taken offline while the docs still link it, or one that\n` +
+        `  renamed its paths. Either way this run verified nothing about it.\n`,
+    );
+  }
+
+  if (rottedLines.length) {
+    console.error(
+      `NOTE: most sampled urls 404 on ` +
+        rottedLines
+          .map((t) => `/${t.line}/ (${t.absent} of ${t.sampled})`)
+          .join(" ") +
+        `, but not all.\n  The line is there and what resolved was judged; the rest is link rot in\n` +
+        `  the build. The share cannot be met below four sampled pages, so a small\n` +
+        `  --sample cannot raise it.\n`,
     );
   }
 
@@ -1033,10 +1259,26 @@ async function main() {
       (blindLines.length
         ? `  Sampled but judged nothing: ${blindLines.map((t) => `/${t.line}/`).join(" ")}\n`
         : "") +
-      (unknownLines.length
-        ? `  No sampled symbol exists on ${unknownLines
+      (unknownBorrowed.length
+        ? `  No sampled symbol exists on ${unknownBorrowed
             .map((t) => `/${t.line}/`)
             .join(" ")} - not published, or not carrying these symbols\n`
+        : "") +
+      (deadLines.length
+        ? `  Linked but nothing resolved: ${deadLines
+            .map((t) => `/${t.line}/`)
+            .join(" ")} - the build points at pages that are not there\n`
+        : "") +
+      (thinlyLinked.length
+        ? `  Too little to judge: ${thinlyLinked
+            .map(
+              (t) =>
+                `/${t.line}/ (${t.paths ? t.paths.size : 0} url(s), ${t.sampled} sampled)`,
+            )
+            .join(" ")} - every sampled url 404s, but too few links or\n` +
+          `  too few picks to call the line gone, so this is not failed ON ITS OWN.\n` +
+          `  If it was the only thing checked, the run still fails for having\n` +
+          `  judged nothing.\n`
         : "") +
       `  Not checked at all: any line this build does not link and --lines did\n` +
       `  not name. A line loses its links when its doc snapshot is deleted at a\n` +
