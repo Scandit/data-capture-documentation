@@ -10,7 +10,7 @@ keywords:
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -29,7 +29,7 @@ extension ViewController: BarcodePickListener {
 
 ## BarcodePickView Listener
 
-For lifecycle events on the `BarcodePickView` itself — when scanning starts, freezes, pauses, or stops — register a [`BarcodePickViewListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-pick-view-listener.html#interface-scandit.datacapture.barcode.pick.ui.BarcodePickViewListener) on the view. All callbacks are optional; implement only the ones you need.
+For lifecycle events on the `BarcodePickView` itself—when scanning starts, freezes, pauses, or stops—register a [`BarcodePickViewListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-pick-view-listener.html#interface-scandit.datacapture.barcode.pick.ui.BarcodePickViewListener) on the view. All callbacks are optional; implement only the ones you need.
 
 ```swift
 extension ViewController: BarcodePickViewListener {

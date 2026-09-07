@@ -3,22 +3,113 @@ message: "'%s' should have one space."
 link: 'https://developers.google.com/style/sentence-spacing'
 level: error
 nonword: true
-action:
-  name: remove
 # Replaces Google.Spacing, which is disabled in .vale.ini.
 #
-# Google's version matches `[a-z][.?!][A-Z]` anywhere. In API documentation that
-# is overwhelmingly a code identifier, not a sentence: SymbologySettings.Checksums,
-# context.SetFrameSourceAsync(), Scandit.DataCapture.Core.Maui. Measured across
-# the docs it produced 233 findings, of which 154 were identifiers and exactly
-# one was a real missing space - so it reported 154 corrections that would each
-# have corrupted a symbol name.
+# Google's version matches `[a-z][.?!][A-Z]` anywhere, which in API
+# documentation is overwhelmingly a dotted code identifier rather than a
+# sentence boundary. Re-measure any time by setting `Google.Spacing = YES` in
+# .vale.ini: on this tree it reports 232 alerts where this rule reports 0.
 #
-# RE2 has no lookaround, so the sentence boundary is expressed positionally:
-# a whole lowercase word, then the punctuation, then a single Capitalised word,
-# with whitespace on both outer edges. An identifier fails at least one part -
-# either it starts with a capital, or the right-hand side carries internal
-# capitals (SetFrameSourceAsync) or a trailing "()".
+# Treat 232 as a snapshot rather than a constant. It counts alerts, and the
+# count moves with anything that changes how much of the corpus Vale reads as
+# prose - an ignore pattern, a sample's indentation, a page added or removed.
+# Re-measure instead of trusting it. The alerts land on things like
+# SymbologySettings.Checksums, context.SetFrameSourceAsync() and
+# Scandit.DataCapture.Core.Maui - each of which it would "fix" by inserting a
+# space into a symbol name.
+#
+# No `action`. Google's version carries `action: {name: remove}`, which deletes
+# the whole matched span, and that is not safe at either size. Measured with
+# `Google.Spacing = YES` on this tree: its no-space token matches `e.I`, so the
+# quick-fix turns "on a smart device.It requires" into "on a smart devict
+# requires" - corruption, just quiet enough to miss in review. Its two-space
+# token is the same `[a-z][.?!] {2,}[A-Z]` used below, whose span is five
+# characters (`'d.  A'`), so "changed.  ALL devices" would become
+# "changeLL devices". Here the span is wider still - Vale reports the match as
+# ' device.It ', two whole words plus the surrounding whitespace. So: no action
+# on either token, at any span. An alert with no one-click fix beats a
+# one-click corruption.
+#
+# The two tokens are NOT symmetrical, because the risk is not.
+#
+# TOKEN 1, two or more spaces. Google's own shape, verbatim. No dotted
+# identifier can contain two consecutive spaces, so the identifier problem
+# cannot arise here and narrowing it would only lose real findings. Measured:
+# 0 alerts across docs/, and it catches "enabled.  ALL devices",
+# "changed.  A second scan", "changed.  Reset() the scanner" and
+# "changed.  MatrixScan handles it" - every one of which a narrower shape
+# missed. It still misses a following word that begins lowercase
+# ("scanned.  iOS devices"), which would need its own rule.
+#
+# TOKEN 2, no space at all. Here the identifier problem is the whole difficulty,
+# so the boundary is positional: a whole lowercase word, the punctuation, one
+# Capitalised word, then whitespace. Positional by CHOICE, not by necessity -
+# Vale's token engine does support lookaround, and this repo relies on it
+# already (styles/Google/Units.yml uses `(?<!...)` and styles/Google/Latin.yml
+# uses `(?=...)`, both visible only after `vale sync` since /styles/Google/ is
+# gitignored). A lookaround form was built and measured:
+#
+#   (?<=^|\s)[a-z]+[.?!](?=[A-Z][a-z]+(?:\s|$))
+#
+# It is better in two ways - it reports BOTH violations on a line that has two,
+# and its match span is just 'alpha.' instead of ' alpha.Beta ', which would also
+# make an `action` safe again. It is not used because it is worse in the way that
+# matters: 5 false positives across docs/, all where a soft-wrapped paragraph
+# ends a sentence and the next line begins with a capitalised word
+# (_batch-scanning.mdx, intro/_about-matrixscan-count.mdx x2,
+# intro/_about-matrixscan-find.mdx, sdks/kmp/matrixscan-count/intro.md). The
+# consuming form reports 0 there. Fixing that lookahead is the right next step
+# for this rule; it just is not a one-line swap.
+#
+# READ THIS BEFORE TRUSTING IT: token 2 is NARROWER than Google's, not immune to
+# the same mistake. What it does and does not do, each measured with Vale 3.15.1
+# rather than reasoned about:
+#
+#   - It DOES flag a member access whose member is a single capitalised word.
+#     "Configure settings.Checksums for this." and "Read the barcode.Data value
+#     now." are both reported, and the message tells the author to insert a
+#     space - producing `settings. Checksums`. Internal capitals protect
+#     `SetFrameSourceAsync`, a leading capital protects `Region.Colombia`, but
+#     nothing protects `settings.Checksums`. Corpus exposure today is 0 because
+#     the docs backtick identifiers in prose; keep doing that. This matters more
+#     now that the gate lints docs/partials/, where un-backticked identifier
+#     tables live.
+#   - It cannot take a closing delimiter other than whitespace. Measured with a
+#     wider class: Vale then flags "use region.Colombia, then continue" and
+#     "set it in info.Plist; then rebuild". The cost is that a new sentence
+#     whose first word is followed immediately by punctuation is missed -
+#     "the settings.Then, enable it", "the device.It's required". Those are
+#     indistinguishable from the identifiers above with this regex, so the rule
+#     under-reports rather than guessing.
+#   - It cannot widen its left side to `[A-Za-z]+`, which would catch a previous
+#     sentence ending in an acronym ("Enable the SDK.It requires a key").
+#     Measured: 9 alerts across docs/, all nine identifiers - Region.Colombia
+#     (x2), Region.Argentina, BarcodeCapture.Enabled (x2),
+#     BarcodeSelection.Enabled (x2), BarcodeBatch.Enabled (x2).
+#   - It does not catch a single-letter capital ("the device.A key is needed"),
+#     which needs `[A-Z][a-z]*` and then flags any dotted name whose last
+#     segment is capitalised.
+#   - It reports only the FIRST of two violations on one line, because this
+#     shape consumes both delimiters and the second violation has no delimiter
+#     left to match. Measured: "Two in a row: alpha.Beta gamma.Delta end."
+#     yields one alert, for ' alpha.Beta '. That is a property of the shape, not
+#     of the engine - the lookaround form above reports both. So re-run the gate
+#     after fixing rather than assuming the line is clean.
+#
+# Widen it only with a measurement in hand, and re-measure the numbers above
+# with it - two earlier rounds of this comment quoted figures produced by a
+# different token shape, and none of them reproduced.
+#
+# What it has actually caught: 4 findings across 4 files at 14cd10360, the commit
+# it was written against. Standing at c827234a8 only 3 are visible, because that
+# commit fixed the fourth (docs/hosted/express/overview.md) as it went; standing
+# on this branch 0 are, because it fixes all four - in docs/ and in the versioned
+# trees that actually publish them. These numbers describe commits, not a
+# backlog, so re-measure rather than expecting the rule to fire today. Two of
+# those 3 were in docs/partials/, which the gate did not lint at the time, so the
+# rule's own evidence was unenforceable. That hole is closed in this branch -
+# though only the _symbology-properties.mdx one was ever on a published page, the
+# other partial being unreferenced.
 tokens:
-  - '(?:^|\s)[a-z]+[.?!] {2,}[A-Z][a-z]+(?:\s|$)'
+  - '[a-z][.?!] {2,}[A-Z]'
   - '(?:^|\s)[a-z]+[.?!][A-Z][a-z]+(?:\s|$)'

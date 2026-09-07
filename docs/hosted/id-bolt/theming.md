@@ -77,7 +77,7 @@ The `dimensions` object allows you to customize sizes and spacing:
 | `radiusButton` | `string` | Border radius for buttons   | 1.1   |
 | `radiusCard`   | `string` | Border radius for cards     | 1.1   |
 
-All values are string and must be valid CSS dimension expressions. For example, "12px."
+All values are string and must be valid CSS dimension expressions. For example, `"12px"`.
 
 ## Image Customization
 

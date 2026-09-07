@@ -61,7 +61,7 @@ Remember to use URL encoding for the list name and the list of barcodes:
 
 ### Integrate into Your App
 
-You can also integrate the links for your Find lists (with the barcodes to find embedded in them) in your own application. Follow the instructions above to create your list, and then display the link in your app or your website. If a user clicks on the link it will start Scandit Express and show the list of codes that need to be found.
+You can also integrate the links for your Find Lists (with the barcodes to find embedded in them) in your own application. Follow the instructions above to create your list, and then display the link in your app or your website. If a user clicks on the link it will start Scandit Express and show the list of codes that need to be found.
 
  To integrate specific barcodes to find, you need to:
 

@@ -20,7 +20,7 @@ In addition to ID Bolt, Scandit provides an [ID Capture SDK for the Web](/sdks/w
 
 ID Bolt offers the following features:
 
-- **Fast Scanning**: ID Bolt scans an ID in just 1 second, so the whole interaction takes about a second. Scans are performed from video streams for the fastest possible scanning.
+- **Fast Scanning**: ID Bolt scans an ID in just 1 second. Scans are performed from video streams for the fastest possible scanning.
 - **On-Device Scanning/Processing**: ID Bolt scans IDs on-device, ensuring no identity information is collected by third-party servers, and handling all processing on the device for improved performance.
 - **Device Handover**: ID Bolt works on both desktop and mobile devices, providing a unified solution. Desktop/laptop users can scan IDs using their mobile device camera.
 - **Industry Leading UX**: ID Bolt presents a simple, intuitive interface, designed based on the millions of scans performed by Scandit customers each year.

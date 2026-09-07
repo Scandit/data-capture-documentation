@@ -105,7 +105,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior

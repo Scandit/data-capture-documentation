@@ -47,8 +47,34 @@ function changedDocs() {
   try { out += "\n" + sh("git ls-files --others --exclude-standard -- docs"); } catch {}
   const files = [...new Set(out.split(/\r?\n/).filter(Boolean))];
   return files.filter(
-    (f) => /\.(md|mdx)$/i.test(f) && !path.basename(f).startsWith("_") && fs.existsSync(path.join(ROOT, f))
+    (f) => /\.(md|mdx)$/i.test(f) && fs.existsSync(path.join(ROOT, f))
   );
+}
+
+// Partials must be skipped by the schema check (they carry no frontmatter) and
+// by the link check (links.cjs resolves relative targets against the file's own
+// directory, which for a partial is docs/partials/ rather than the directory of
+// whichever page imported it, so both false hits and misses follow) -
+// but they were being skipped by the FILE LIST, which also excluded them from
+// Vale and cspell. They are prose: docs/partials/_symbology-properties.mdx alone
+// renders into 12 published pages, and one of the findings that justified
+// styles/Scandit/Spacing.yml was in it, so the rule's own evidence could never
+// have been enforced. Prose checks now see every changed doc; only the
+// schema and link checks filter.
+//
+// (A second partial finding was in _barcode-scanning.mdx, which nothing imports
+// today. The file is kept deliberately, so note the consequence: 288 lines of
+// currently unpublished prose are now gate-blocking like any other partial, and
+// a one-word edit to it will require clearing its whole Vale backlog.)
+//
+// The cost, measured: this makes 50 Vale errors across 18 partials
+// gate-blocking, concentrated in _migrate-5-to-6.mdx (14),
+// _ai-powered-barcode-scanning.mdx (6) and _migrate-6-to-7.mdx (5). Combined
+// with the file-scoped ratchet that means a one-word edit to a partial forces
+// clearing that partial's whole backlog - the same surprise the workflow header
+// documents for pages, and partials are imported by many pages each.
+function pagesOnly(files) {
+  return files.filter((f) => !path.basename(f).startsWith("_"));
 }
 
 function findVale() {
@@ -113,7 +139,7 @@ function main() {
 
   const schema = loadSchema(path.join(ROOT, "docs-schema.yml"));
   let findings = [];
-  for (const f of files) {
+  for (const f of pagesOnly(files)) {
     findings.push(...validateFile(path.join(ROOT, f), schema).map((x) => ({ ...x, file: f })));
     findings.push(...checkLinks(path.join(ROOT, f)).map((x) => ({ ...x, file: f })));
   }

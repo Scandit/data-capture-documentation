@@ -60,7 +60,7 @@ Keep the following in mind when configuring 1D symbologies:
 
 * All symbologies and all extensions are disabled by default when using the low-level API.
 * Color-inverted (bright bars on dark background) decoding for symbologies that support it is disabled and must be explicitly enabled.
-* Optional checksum digits (e.g. for interleaved 2 of 5 codes, or MSI-Plessey codes) are always returned as part of the data.
+* Optional checksum digits (for example, in interleaved 2 of 5 or MSI-Plessey codes) are always returned as part of the data.
 
 | Symbology                     | Mandatory Checksums | Supported Optional <br/>Checksums | Default Optional<br/> Checksum | Default Symbol Count Range                      | Supported Symbol Count Range | Color-Inverted <br/>Codes | Extensions                                                       | Generator Support |
 |-------------------------------|---------------------|-----------------------------------|--------------------------------|-------------------------------------------------|------------------------------|---------------------------|------------------------------------------------------------------|-------------------|
@@ -132,7 +132,7 @@ Keep the following in mind when configuring 2D symbologies:
 | decode_bar_states | (For Australian Post 4-State) Returns the error-corrected customer information bars as a string of the bar states, A for ascending, D for descending, T for tracker and F for full. |
 | swiss_post_decoding | Enables scanning of proprietary Swiss Post UPU 4-State symbology. |
 | remove_delimiter_data | Removes start and stop patterns from the result of scanning a Codabar code. |
-| ocr_fallback | Enables Optical Character Recognition of text as a fallback when other readers fail. For more details, refer to section "Using OCR Fallback Symbology Extension". |
+| ocr_fallback | Enables Optical Character Recognition of text as a fallback when other readers fail. For more details, refer to the "Using OCR Fallback Symbology Extension" section. |
 
 ## Using OCR Fallback Symbology Extension
 
@@ -204,7 +204,7 @@ The symbol count corresponds to the number of finder patterns in the code. Each 
 
 ### GS1 DataBar Expanded
 
-The symbol count cannot be changed.  All lengths defined by the standard are supported.
+The symbol count cannot be changed. All lengths defined by the standard are supported.
 
 ### RM4SCC
 

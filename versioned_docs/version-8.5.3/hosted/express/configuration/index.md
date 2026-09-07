@@ -72,8 +72,8 @@ This feature is only supported for Android devices, and must be enabled by the S
 
 * Your Scandit account email address.
 * The project name you want to enable the feature for.
-* The device model(s) you want to enable the feature for.
-* The key code(s) you want to use to trigger the barcode scanner.
+* The device models you want to enable the feature for.
+* The key codes you want to use to trigger the barcode scanner.
 
 :::tip
 You can identify the key code with key code identifier apps available in the Play Store, such as [KeyEvent Display](https://play.google.com/store/apps/details?id=aws.apps.keyeventdisplay).
