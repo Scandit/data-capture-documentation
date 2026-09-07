@@ -66,3 +66,12 @@
 .table code {
   white-space: nowrap;
 }
+
+/* Sits under the one-command install as a secondary route, so it reads a step
+   below the command block without competing with it. */
+.appBuilders {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--ifm-color-content-secondary, #555);
+  margin: 0.25rem 0 0 0;
+}
