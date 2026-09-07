@@ -812,7 +812,7 @@ Remember to use URL encoding for the list name and the list of barcodes:
 
 ### Integrate into Your App
 
-You can also integrate the links for your Find lists (with the barcodes to find embedded in them) in your own application. Follow the instructions above to create your list, and then display the link in your app or your website. If a user clicks on the link it will start Scandit Express and show the list of codes that need to be found.
+You can also integrate the links for your Find Lists (with the barcodes to find embedded in them) in your own application. Follow the instructions above to create your list, and then display the link in your app or your website. If a user clicks on the link it will start Scandit Express and show the list of codes that need to be found.
 
  To integrate specific barcodes to find, you need to:
 
@@ -1165,7 +1165,7 @@ To automatically synchronize your Scandit Express configuration with Scandit, yo
 If your MDM system requires an AppConfig configuration, you can generate one [here](https://appconfig.jamfresearch.com/generator) by selecting Scandit Express as: `com.scandit.KeyboardWedge2/current`.
 :::
 
-### Third-Party Instructions
+### Third-Party Instructions {#3rd-party-instructions}
 
 This section provides links to the relevant sections of the documentation for popular MDM/EMM solutions:
 
@@ -1179,7 +1179,7 @@ This section provides links to the relevant sections of the documentation for po
 Scandit Express for Android supports MDM/EMM deployment via [Android Managed Configurations](https://developer.android.com/work/managed-configurations).
 
 :::warning
-Please note that Scandit Express might not be compatible with some Android for Work configurations (e.g. 3rd-party keyboards such as Scandit Express can typically not be installed in a work profile).
+Please note that Scandit Express might not be compatible with some Android for Work configurations (for example, third-party keyboards such as Scandit Express can typically not be installed in a work profile).
 
 Scandit recommends setting Android devices as either ["fully managed"](https://support.google.com/work/android/answer/9562029?hl=en&ref_topic=9563482&sjid=2353681360583047853-EU) and ["dedicated devices"](https://support.google.com/work/android/answer/9560920?hl=en&ref_topic=9563482&sjid=2353681360583047853-EU).
 :::
@@ -1207,7 +1207,7 @@ To automatically synchronize your Scandit Express configuration with Scandit, yo
 
 ![Add Project Code](/img/express/rollout_android_2.png)
 
-### Third-Party Instructions
+### Third-Party Instructions {#3rd-party-instructions-1}
 
 This section provides links to the relevant sections of the documentation for popular MDM/EMM solutions:
 
@@ -2636,7 +2636,7 @@ In addition to ID Bolt, Scandit provides an [ID Capture SDK for the Web](/sdks/w
 
 ID Bolt offers the following features:
 
-- **Fast Scanning**: ID Bolt scans an ID in just 1 second, so the whole interaction takes about a second. Scans are performed from video streams for the fastest possible scanning.
+- **Fast Scanning**: ID Bolt scans an ID in just 1 second. Scans are performed from video streams for the fastest possible scanning.
 - **On-Device Scanning/Processing**: ID Bolt scans IDs on-device, ensuring no identity information is collected by third-party servers, and handling all processing on the device for improved performance.
 - **Device Handover**: ID Bolt works on both desktop and mobile devices, providing a unified solution. Desktop/laptop users can scan IDs using their mobile device camera.
 - **Industry Leading UX**: ID Bolt presents a simple, intuitive interface, designed based on the millions of scans performed by Scandit customers each year.
@@ -3087,7 +3087,7 @@ The `dimensions` object allows you to customize sizes and spacing:
 | `radiusButton` | `string` | Border radius for buttons   | 1.1   |
 | `radiusCard`   | `string` | Border radius for cards     | 1.1   |
 
-All values are string and must be valid CSS dimension expressions. For example, "12px."
+All values are string and must be valid CSS dimension expressions. For example, `"12px"`.
 
 ## Image Customization
 
@@ -6138,7 +6138,7 @@ import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.m
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against a List
 
@@ -6213,7 +6213,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned.
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR overlays) but keep the list of barcodes scanned.
 
 For this you can enable the “Clear screen” button:
 
@@ -6441,7 +6441,7 @@ import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-coun
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## BarcodeFind Listener
 
@@ -6673,7 +6673,7 @@ import AboutFind from '../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -6992,26 +6992,25 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
 #### Barcode
 
 * The [MatrixScan Sequence simple sample](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/06_Sequence/MatrixScanSequenceSimpleSample) is now publicly available, showing the minimum setup needed to run MatrixScan Sequence.
-* Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
-* BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
-* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set `barcodeCountSettings.AutomaticClusteringMethod` to `AutomaticClusteringMethod.Label` to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
+* MatrixScan Sequence: `initialOrderOnShelf` and `initialOrderOnTray` resume scanning from a previous session (already available since 8.5.1).
+* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set barcodeCountSettings.AutomaticClusteringMethod to AutomaticClusteringMethod.Label to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
 * When highlights inside a MatrixScan Count cluster would overlap, the cluster now collapses into a single badge showing how many barcodes it contains, instead of drawing every highlight on top of the others. This also applies in Scan Preview mode.
-* Added an API to customize the text of the hint shown when a new scan group starts (BarcodeCountView.setTextForNewGroupHint).
+* Added an API to customize the text of the hint shown when a new scan group starts (`BarcodeCountView.setTextForNewGroupHint`).
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
-* Added BarcodeSequenceDeserializer for creating and updating MatrixScan Sequence modes and settings from JSON.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -7040,8 +7039,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -7838,7 +7837,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/a
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -7850,7 +7849,7 @@ SparkScan offers a built-in API to let you do this via [SparkScanViewSettings.ha
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
 
 You can customize:
 
@@ -7858,7 +7857,7 @@ You can customize:
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\
   This error state for a code that should not have been scanned.
 
   This error state for a code that has been scanned more than once.
@@ -7891,7 +7890,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -10706,7 +10705,7 @@ import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.m
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against A List
 
@@ -10777,7 +10776,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned.
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR overlays) but keep the list of barcodes scanned.
 
 If this is the case, you can enable the “Clear screen” button.
 
@@ -11005,7 +11004,7 @@ import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-coun
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## Set up a listener on the BarcodeFind mode
 
@@ -11171,7 +11170,7 @@ import AboutFind from '../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -11367,9 +11366,9 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -11379,9 +11378,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Added the zoomControlOrientation property to BarcodeArView.
 * Added the BarcodeArCircleHighlight.isPulsing property to toggle the highlight's pulsing animation.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -11392,7 +11392,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -11409,8 +11409,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -11447,6 +11447,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Hardened dependency resolution for Android native samples.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 * Fixed an issue where the VLM scanning screen remained permanently displayed if IdCaptureSettings were applied mid-scan.
+* Fixed BarcodeResult.barcodeDataElements always being empty. The field is now correctly populated with the parsed AAMVA barcode data elements.
 
 #### Smart Label Capture
 
@@ -11470,7 +11471,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
-* Deprecated the SparkScan target-mode APIs and `ScanIntention.SmartSelection` in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+* Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
 
 ## 8.5.3
 
@@ -12122,7 +12123,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/c
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -12134,13 +12135,13 @@ SparkScan offers a built-in API to let you do this via [`SparkScanViewSettings.h
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
 
 - The text message
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
         if (isValidBarcode(barcode)) {
             return new SparkScanBarcodeSuccessFeedback();
         } else {
@@ -12189,7 +12190,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -12227,7 +12228,7 @@ viewSettings.defaultScanningMode = new SparkScanScanningModeDefault(
 );
 ```
 
-Pass both arguments — the single-argument constructor is deprecated. Use
+Pass both arguments—the single-argument constructor is deprecated. Use
 `SparkScanScanningModeTarget` instead of `SparkScanScanningModeDefault` to force the
 aimer (target mode).
 
@@ -14308,7 +14309,7 @@ import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.m
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against A List
 
@@ -14379,7 +14380,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned.
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR overlays) but keep the list of barcodes scanned.
 
 If this is the case, you can enable the “Clear screen” button.
 
@@ -14605,7 +14606,7 @@ import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-coun
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## Set up a listener on the BarcodeFind mode
 
@@ -14771,7 +14772,7 @@ import AboutFind from '../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -14966,9 +14967,9 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -14978,9 +14979,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Added the zoomControlOrientation property to BarcodeArView.
 * Added the BarcodeArCircleHighlight.isPulsing property to toggle the highlight's pulsing animation.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -14991,7 +14993,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -15008,8 +15010,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -15046,6 +15048,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Hardened dependency resolution for Android native samples.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 * Fixed an issue where the VLM scanning screen remained permanently displayed if IdCaptureSettings were applied mid-scan.
+* Fixed BarcodeResult.barcodeDataElements always being empty. The field is now correctly populated with the parsed AAMVA barcode data elements.
 
 #### Smart Label Capture
 
@@ -15069,7 +15072,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
-* Deprecated the SparkScan target-mode APIs and `ScanIntention.SmartSelection` in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+* Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
 
 ## 8.5.3
 
@@ -15705,7 +15708,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/c
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -15717,13 +15720,13 @@ SparkScan offers a built-in API to let you do this via [`SparkScanViewSettings.h
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
 
 - The text message
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
         if (isValidBarcode(barcode)) {
             return new Scandit.SparkScanBarcodeSuccessFeedback();
         } else {
@@ -15772,7 +15775,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -15811,7 +15814,7 @@ sparkScanViewSettings.defaultScanningMode = new Scandit.SparkScanScanningModeDef
 );
 ```
 
-Pass both arguments — the single-argument constructor is deprecated. Use
+Pass both arguments—the single-argument constructor is deprecated. Use
 `Scandit.SparkScanScanningModeTarget` instead of `SparkScanScanningModeDefault` to force
 the aimer (target mode).
 
@@ -17892,7 +17895,7 @@ import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.m
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against A List
 
@@ -17956,7 +17959,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR
 overlays) but keep the list of barcodes scanned.
 
 If this is the case, you can enable the “Clear screen” button.
@@ -18164,7 +18167,7 @@ import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-coun
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## Set up a listener on the BarcodeFind mode
 
@@ -18360,7 +18363,7 @@ import AboutFind from '../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -18580,9 +18583,9 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -18591,9 +18594,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Added per-barcode highlight icon support to BarcodeCount through the BarcodeCountViewListener icon callbacks (recognized, not-in-list, accepted, and rejected).
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -18621,8 +18625,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -18663,6 +18667,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Hardened dependency resolution for Android native samples.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 * Fixed an issue where the VLM scanning screen remained permanently displayed if IdCaptureSettings were applied mid-scan.
+* Fixed BarcodeResult.barcodeDataElements always being empty. The field is now correctly populated with the parsed AAMVA barcode data elements.
 
 #### Smart Label Capture
 
@@ -19355,7 +19360,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/f
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -19367,7 +19372,7 @@ SparkScan offers a built-in API to let you do this via [SparkScanViewSettings.ha
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
 
 You can customize:
 
@@ -19375,7 +19380,7 @@ You can customize:
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\
   This error state for a code that should not have been scanned.
 
   This error state for a code that has been scanned more than once.
@@ -19408,7 +19413,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -22824,7 +22829,7 @@ import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.m
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against a List
 
@@ -22898,7 +22903,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned.
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR overlays) but keep the list of barcodes scanned.
 
 For this you can enable the “Clear screen” button:
 
@@ -23362,7 +23367,7 @@ import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-coun
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## BarcodeFind Listener
 
@@ -23819,7 +23824,7 @@ import AboutFind from '../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -23838,7 +23843,7 @@ extension ViewController: BarcodePickListener {
 
 ## BarcodePickView Listener
 
-For lifecycle events on the `BarcodePickView` itself — when scanning starts, freezes, pauses, or stops — register a [`BarcodePickViewListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-pick-view-listener.html#interface-scandit.datacapture.barcode.pick.ui.BarcodePickViewListener) on the view. All callbacks are optional; implement only the ones you need.
+For lifecycle events on the `BarcodePickView` itself—when scanning starts, freezes, pauses, or stops—register a [`BarcodePickViewListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-pick-view-listener.html#interface-scandit.datacapture.barcode.pick.ui.BarcodePickViewListener) on the view. All callbacks are optional; implement only the ones you need.
 
 ```swift
 extension ViewController: BarcodePickViewListener {
@@ -24397,30 +24402,28 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
 #### Barcode
 
 * The [MatrixScan Sequence simple sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/06_Sequence/MatrixScanSequenceSimpleSample) is now publicly available, showing the minimum setup needed to run MatrixScan Sequence.
-* Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
-* BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
-* Added support for configuring the accepted device orientation via the new `BarcodeSequenceSettings.shelfSequencingOrientation` property. Defaults to `.landscapeOnly`; set to `.portraitOnly` or `.any` to enable portrait (or any) orientation. The rotate-device prompt's default text now reflects the configured orientation.
-* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set `barcodeCountSettings.AutomaticClusteringMethod` to `AutomaticClusteringMethod.Label` to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
+* MatrixScan Sequence: introduced several new configurations to adapt the sequencing flow.
+  - `initialOrderOnShelf` and `initialOrderOnTray` resume scanning from a previous session (already available since 8.5.1).
+  - `shelfSequencingOrientation` sets the accepted device orientation, defaulting to `.landscapeOnly`; set `.portraitOnly` or `.any` to enable portrait or any orientation, and the rotate-device prompt's default text follows the setting.
+* [BETA] MatrixScan Count can now group barcodes by the physical label they share. Set barcodeCountSettings.AutomaticClusteringMethod to AutomaticClusteringMethod.Label to enable it: the barcodes within each label boundary get associated into a single cluster, so a product carrying several barcodes counts as one item.
 * When highlights inside a MatrixScan Count cluster would overlap, the cluster now collapses into a single badge showing how many barcodes it contains, instead of drawing every highlight on top of the others. This also applies in Scan Preview mode.
-* BarcodeCountView.shouldShowTorchControl now applies in Scan Preview, so the torch button can be shown in that mode.
-* The accept/reject popover for barcodes not in the list, enabled via BarcodeCountNotInListActionSettings.enabled, is now available in Scan Preview.
-* Added an API to customize the text of the hint shown when a new scan group starts (BarcodeCountView.setTextForNewGroupHint).
-* Extended the SparkScan SwiftUI Get Started guide.
+* Scan Preview now supports two controls that were previously available only in the standard mode: the torch button, shown via `BarcodeCountView.shouldShowTorchControl`, and the accept/reject popover for barcodes not in the list, enabled via `BarcodeCountNotInListActionSettings.enabled`.
+* Added an API to customize the text of the hint shown when a new scan group starts (`BarcodeCountView.setTextForNewGroupHint`).
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
-* Added BarcodeSequenceDeserializer for creating and updating MatrixScan Sequence modes and settings from JSON.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -24449,8 +24452,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -25198,7 +25201,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/i
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -25210,7 +25213,7 @@ SparkScan offers a built-in API to let you do this via [`SDCSparkScanViewSetting
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
 
 You can customize:
 
@@ -25218,7 +25221,7 @@ You can customize:
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ SparkScanBarcodeFeedback? {
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ SparkScanBarcodeFeedback? {
       guard !barcode.isRejected else {
           return SparkScanBarcodeErrorFeedback(message: "This code should not have been scanned",
               resumeCapturingDelay: 60)
@@ -25315,7 +25318,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -30417,9 +30420,9 @@ Each `ParsedField` carries its `name`, its decoded `parsed` value, the `rawStrin
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -30995,7 +30998,7 @@ Keep the following in mind when configuring 1D symbologies:
 
 * All symbologies and all extensions are disabled by default when using the low-level API.
 * Color-inverted (bright bars on dark background) decoding for symbologies that support it is disabled and must be explicitly enabled.
-* Optional checksum digits (e.g. for interleaved 2 of 5 codes, or MSI-Plessey codes) are always returned as part of the data.
+* Optional checksum digits (for example, in interleaved 2 of 5 or MSI-Plessey codes) are always returned as part of the data.
 
 | Symbology                     | Mandatory Checksums | Supported Optional Checksums | Default Optional Checksum | Default Symbol Count Range                      | Supported Symbol Count Range | Color-Inverted Codes | Extensions                                                       | Generator Support |
 |-------------------------------|---------------------|-----------------------------------|--------------------------------|-------------------------------------------------|------------------------------|---------------------------|------------------------------------------------------------------|-------------------|
@@ -31067,7 +31070,7 @@ Keep the following in mind when configuring 2D symbologies:
 | decode_bar_states | (For Australian Post 4-State) Returns the error-corrected customer information bars as a string of the bar states, A for ascending, D for descending, T for tracker and F for full. |
 | swiss_post_decoding | Enables scanning of proprietary Swiss Post UPU 4-State symbology. |
 | remove_delimiter_data | Removes start and stop patterns from the result of scanning a Codabar code. |
-| ocr_fallback | Enables Optical Character Recognition of text as a fallback when other readers fail. For more details, refer to section "Using OCR Fallback Symbology Extension". |
+| ocr_fallback | Enables Optical Character Recognition of text as a fallback when other readers fail. For more details, refer to the "Using OCR Fallback Symbology Extension" section. |
 
 ## Using OCR Fallback Symbology Extension
 
@@ -31139,7 +31142,7 @@ The symbol count corresponds to the number of finder patterns in the code. Each 
 
 ### GS1 DataBar Expanded
 
-The symbol count cannot be changed.  All lengths defined by the standard are supported.
+The symbol count cannot be changed. All lengths defined by the standard are supported.
 
 ### RM4SCC
 
@@ -31529,25 +31532,26 @@ Dynamic threading is used internally to accelerate the execution if available. T
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
 #### Barcode
 
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 ### Performance Improvements
 
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -31965,7 +31969,7 @@ You will always need to add the `Scandit.DataCapture.Core` package, which contai
 
 In addition, depending on the data capture task, you will need a reference to:
 
-| Functionality | Description | Required modules |
+| Functionality | Description | Required Modules |
 | --- | --- | --- |
 | Barcode Capture | [ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api.html) if you want to use barcode-related functionality, such as barcode capture or MatrixScan. | _com.scandit.datacapture:barcode_ |
 | Parser | [ScanditParser API](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api.html) if you want to parse data strings, for instance, as found in barcodes, into a set of key-value mappings. | _com.scandit.datacapture:parser_ |
@@ -34755,33 +34759,36 @@ More data formats will be added in future releases. Please contact us if the dat
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
 #### Barcode
 
-* Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
-* BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
+* MatrixScan Sequence: introduced several new configurations to adapt the sequencing flow.
+  - `initialOrderOnShelf` and `initialOrderOnTray` resume scanning from a previous session.
+  - `idleTimeout` sets the inactivity period in seconds before sequencing pauses automatically, defaulting to 10 seconds; 0 or less disables the automatic pause
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
-* Added missing BarcodeAr .NET APIs: `BarcodeArView.LogoAnchor` and `BarcodeArView.LogoOffset` to position the Scandit logo (iOS + Android); `BarcodeArView.LogoStyle` for minimal/extended logo style (iOS); `BarcodeArView.ZoomControlOrientation` for the zoom control's orientation (iOS); `BarcodeArStatusIconAnnotation.Anchor` plus the new `BarcodeArStatusIconAnnotationAnchor` enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and `BarcodeArResponsiveAnnotation.CloseUpAnnotation` and `BarcodeArResponsiveAnnotation.FarAwayAnnotation` to read the close-up/far-away annotation variations (iOS + Android).
-* Added `BarcodePickViewSettings.ZoomButtonPosition`, `ShowTorchButton`, `TorchButtonPosition`, `LogoAnchor`, and `LogoStyle` (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; `RectangularWithIcons.StatusIconSettings`; and `BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string)`.
-* Unified the .NET BarcodeCount API with native Android/iOS: added `BarcodeCountStatus.ExpiringSoon`, `BarcodeCountView.ShouldShowStatusIconsOnScan`/`LogoStyle`/`LogoAnchor`, and a public BarcodeCountNotInListActionSettings() constructor.
-* Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus `IBarcodeFindListener.OnSessionUpdated`, the `BarcodeFind.SessionUpdated` event, `BarcodeFindView.LogoAnchor`/`LogoStyle`, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
-* Added missing BarcodeSelection .NET APIs: `BarcodeSelectionSession.SelectUnselectedBarcodes()`, `BarcodeSelectionSettings.TapGestureForSelectionEnabled` and `SwipeGesturesEnabled`, and the `BarcodeSelectionSettings.Create(CapturePreset)` factory.
-* Added missing .NET BarcodeBatch and BarcodePick APIs: `BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes`, `BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary)`, `BarcodeBatchBasicOverlay.DotRadius`, the previously missing `TrackedObject` class (Location, Identifier, Data), and `BarcodePickSession.TrackedObjects`/`AddedObjects` exposing the new `TrackedObject`.
+* Added missing BarcodeAr .NET APIs: BarcodeArView.LogoAnchor and BarcodeArView.LogoOffset to position the Scandit logo (iOS + Android); BarcodeArView.LogoStyle for minimal/extended logo style (iOS); BarcodeArView.ZoomControlOrientation for the zoom control's orientation (iOS); BarcodeArStatusIconAnnotation.Anchor plus the new BarcodeArStatusIconAnnotationAnchor enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and BarcodeArResponsiveAnnotation.CloseUpAnnotation and BarcodeArResponsiveAnnotation.FarAwayAnnotation to read the close-up/far-away annotation variations (iOS + Android).
+* Added BarcodePickViewSettings.ZoomButtonPosition, ShowTorchButton, TorchButtonPosition, LogoAnchor, and LogoStyle (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; RectangularWithIcons.StatusIconSettings; and BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string).
+* Unified the .NET BarcodeCount API with native Android/iOS: added BarcodeCountStatus.ExpiringSoon, BarcodeCountView.ShouldShowStatusIconsOnScan/LogoStyle/LogoAnchor, and a public BarcodeCountNotInListActionSettings() constructor.
+* Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus IBarcodeFindListener.OnSessionUpdated, the BarcodeFind.SessionUpdated event, BarcodeFindView.LogoAnchor/LogoStyle, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
+* Added missing BarcodeSelection .NET APIs: BarcodeSelectionSession.SelectUnselectedBarcodes(), BarcodeSelectionSettings.TapGestureForSelectionEnabled and SwipeGesturesEnabled, and the BarcodeSelectionSettings.Create(CapturePreset) factory.
+* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously-missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
 * Added BarcodeSequence support to .NET, with MAUI consumption.
 * Added BarcodeGenerator for .NET to generate barcode/2D-code images from text or byte[] at a configurable width, with foreground/background color customization. Supports Code 39, Code 128, EAN-13, UPC-A, Interleaved 2 of 5, QR Code, Data Matrix, Aztec, and PDF417.
-* Added `BarcodeArPopoverAnnotation.Anchor` and the `BarcodeArPopoverAnnotationAnchor` enum (Left/Right/Bottom/Top, default Bottom).
-* Added `BarcodeArCircleHighlight.Pulsing` to enable/disable the pulsing highlight animation.
-* Added `BarcodeArAnnotationTrigger.BarcodeScan`, showing AR annotations immediately on scan with no tap-to-toggle.
-* Added IBarcodeArFilter functionality.
+* Added various Barcode AR APIs:
+  - `BarcodeArPopoverAnnotation.Anchor` and the `BarcodeArPopoverAnnotationAnchor` enum (`Left`/`Right`/`Bottom`/`Top`, defaults to `Bottom`).
+  - `BarcodeArCircleHighlight.Pulsing` to enable/disable the pulsing highlight animation.
+  - `BarcodeArAnnotationTrigger.BarcodeScan`, showing AR annotations immediately on scan with no tap-to-toggle.
+  - `IBarcodeArFilter` functionality.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -34807,8 +34814,8 @@ More data formats will be added in future releases. Please contact us if the dat
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -35524,7 +35531,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -35762,7 +35769,7 @@ You will always need to add the `Scandit.DataCapture.Core` package, which contai
 
 In addition, depending on the data capture task, you will need a reference to:
 
-| Functionality | Description | Required modules |
+| Functionality | Description | Required Modules |
 | --- | --- | --- |
 | Barcode Capture | [ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api.html) if you want to use barcode-related functionality, such as barcode capture or MatrixScan. | _com.scandit.datacapture:barcode_ |
 | Parser | [ScanditParser API](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api.html) if you want to parse data strings, for instance, as found in barcodes, into a set of key-value mappings. | _com.scandit.datacapture:parser_ |
@@ -38537,33 +38544,36 @@ More data formats will be added in future releases. Please contact us if the dat
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
 #### Barcode
 
-* Added `initialOrderOnShelf` and `initialOrderOnTray` properties to `BarcodeSequenceSettings`, allowing scanning to resume from a previous session.
-* BarcodeSequenceSettings.idleTimeout sets the inactivity period in seconds before sequencing pauses automatically. Defaults to 10 seconds; a value of 0 or less disables the automatic pause.
+* MatrixScan Sequence: introduced several new configurations to adapt the sequencing flow.
+  - `initialOrderOnShelf` and `initialOrderOnTray` resume scanning from a previous session.
+  - `idleTimeout` sets the inactivity period in seconds before sequencing pauses automatically, defaulting to 10 seconds; 0 or less disables the automatic pause
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
-* Added missing BarcodeAr .NET APIs: `BarcodeArView.LogoAnchor` and `BarcodeArView.LogoOffset` to position the Scandit logo (iOS + Android); `BarcodeArView.LogoStyle` for minimal/extended logo style (iOS); `BarcodeArView.ZoomControlOrientation` for the zoom control's orientation (iOS); `BarcodeArStatusIconAnnotation.Anchor` plus the new `BarcodeArStatusIconAnnotationAnchor` enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and `BarcodeArResponsiveAnnotation.CloseUpAnnotation` and `BarcodeArResponsiveAnnotation.FarAwayAnnotation` to read the close-up/far-away annotation variations (iOS + Android).
-* Added `BarcodePickViewSettings.ZoomButtonPosition`, `ShowTorchButton`, `TorchButtonPosition`, `LogoAnchor`, and `LogoStyle` (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; `RectangularWithIcons.StatusIconSettings`; and `BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string)`.
-* Unified the .NET BarcodeCount API with native Android/iOS: added `BarcodeCountStatus.ExpiringSoon`, `BarcodeCountView.ShouldShowStatusIconsOnScan`/`LogoStyle`/`LogoAnchor`, and a public BarcodeCountNotInListActionSettings() constructor.
-* Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus `IBarcodeFindListener.OnSessionUpdated`, the `BarcodeFind.SessionUpdated` event, `BarcodeFindView.LogoAnchor`/`LogoStyle`, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
-* Added missing BarcodeSelection .NET APIs: `BarcodeSelectionSession.SelectUnselectedBarcodes()`, `BarcodeSelectionSettings.TapGestureForSelectionEnabled` and `SwipeGesturesEnabled`, and the `BarcodeSelectionSettings.Create(CapturePreset)` factory.
-* Added missing .NET BarcodeBatch and BarcodePick APIs: `BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes`, `BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary)`, `BarcodeBatchBasicOverlay.DotRadius`, the previously missing `TrackedObject` class (Location, Identifier, Data), and `BarcodePickSession.TrackedObjects`/`AddedObjects` exposing the new `TrackedObject`.
+* Added missing BarcodeAr .NET APIs: BarcodeArView.LogoAnchor and BarcodeArView.LogoOffset to position the Scandit logo (iOS + Android); BarcodeArView.LogoStyle for minimal/extended logo style (iOS); BarcodeArView.ZoomControlOrientation for the zoom control's orientation (iOS); BarcodeArStatusIconAnnotation.Anchor plus the new BarcodeArStatusIconAnnotationAnchor enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and BarcodeArResponsiveAnnotation.CloseUpAnnotation and BarcodeArResponsiveAnnotation.FarAwayAnnotation to read the close-up/far-away annotation variations (iOS + Android).
+* Added BarcodePickViewSettings.ZoomButtonPosition, ShowTorchButton, TorchButtonPosition, LogoAnchor, and LogoStyle (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; RectangularWithIcons.StatusIconSettings; and BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string).
+* Unified the .NET BarcodeCount API with native Android/iOS: added BarcodeCountStatus.ExpiringSoon, BarcodeCountView.ShouldShowStatusIconsOnScan/LogoStyle/LogoAnchor, and a public BarcodeCountNotInListActionSettings() constructor.
+* Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus IBarcodeFindListener.OnSessionUpdated, the BarcodeFind.SessionUpdated event, BarcodeFindView.LogoAnchor/LogoStyle, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
+* Added missing BarcodeSelection .NET APIs: BarcodeSelectionSession.SelectUnselectedBarcodes(), BarcodeSelectionSettings.TapGestureForSelectionEnabled and SwipeGesturesEnabled, and the BarcodeSelectionSettings.Create(CapturePreset) factory.
+* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously-missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
 * Added BarcodeSequence support to .NET, with MAUI consumption.
 * Added BarcodeGenerator for .NET to generate barcode/2D-code images from text or byte[] at a configurable width, with foreground/background color customization. Supports Code 39, Code 128, EAN-13, UPC-A, Interleaved 2 of 5, QR Code, Data Matrix, Aztec, and PDF417.
-* Added `BarcodeArPopoverAnnotation.Anchor` and the `BarcodeArPopoverAnnotationAnchor` enum (Left/Right/Bottom/Top, default Bottom).
-* Added `BarcodeArCircleHighlight.Pulsing` to enable/disable the pulsing highlight animation.
-* Added `BarcodeArAnnotationTrigger.BarcodeScan`, showing AR annotations immediately on scan with no tap-to-toggle.
-* Added IBarcodeArFilter functionality.
+* Added various Barcode AR APIs:
+  - `BarcodeArPopoverAnnotation.Anchor` and the `BarcodeArPopoverAnnotationAnchor` enum (`Left`/`Right`/`Bottom`/`Top`, defaults to `Bottom`).
+  - `BarcodeArCircleHighlight.Pulsing` to enable/disable the pulsing highlight animation.
+  - `BarcodeArAnnotationTrigger.BarcodeScan`, showing AR annotations immediately on scan with no tap-to-toggle.
+  - `IBarcodeArFilter` functionality.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -38590,8 +38600,8 @@ More data formats will be added in future releases. Please contact us if the dat
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -39265,7 +39275,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -42377,9 +42387,9 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -42389,9 +42399,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Added the zoomControlOrientation property to BarcodeArView.
 * Added the BarcodeArCircleHighlight.isPulsing property to toggle the highlight's pulsing animation.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -42402,7 +42413,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -42419,8 +42430,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -42456,6 +42467,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Hardened dependency resolution for Android native samples.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 * Fixed an issue where the VLM scanning screen remained permanently displayed if IdCaptureSettings were applied mid-scan.
+* Fixed BarcodeResult.barcodeDataElements always being empty. The field is now correctly populated with the parsed AAMVA barcode data elements.
 
 #### Smart Label Capture
 
@@ -42481,7 +42493,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
-* Deprecated the SparkScan target-mode APIs and `ScanIntention.SmartSelection` in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+* Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
 
 ## 8.5.3
 
@@ -43279,7 +43291,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -46506,7 +46518,7 @@ The MatrixScan Count module is not available for the Web SDK. To view documentat
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## BarcodeFind Listener
 
@@ -46901,9 +46913,9 @@ For important information about CDN risks and recommendations for production env
 
 ## Release Notes
 
-## 8.6.0-beta.1
+## 8.6.0
 
-**Released**: August 14, 2026
+**Released**: August 31, 2026
 
 ### New Features
 
@@ -46911,9 +46923,10 @@ For important information about CDN risks and recommendations for production env
 
 * BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
-* Added decoding of the DotCode Code Set B first-position "Macro" codewords (97-100), which expand to the corresponding ISO/IEC 15434 format envelopes. Previously these symbols decoded to incorrect data.
-* Added Extended Channel Interpretation (ECI) support for DotCode. Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
-* Added structured append support for DotCode. The "m of n" sequencing metadata is now stripped from the barcode data and exposed via `sc_barcode_get_segment_index` and `sc_barcode_get_segment_count`. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
+* Extended the support for DotCode features by adding support for:
+  - Extended Channel Interpretation (ECI). Symbols that switch character sets (for example to Cyrillic or another code page) now report the correct per-segment encoding. As part of this, the default character set for DotCode is now reported as ISO 8859-1 instead of ASCII.
+  - Message envelopes as defined in ISO/IEC 15434.
+  - Structured append. DotCode has no file ID, so segments are not automatically grouped by the buffered barcode session.
 
 #### Id
 
@@ -46925,7 +46938,7 @@ For important information about CDN risks and recommendations for production env
 #### Smart Label Capture
 
 * Restored SIMD support in WebAssembly for iOS 26, recovering performance across all capture modes, most noticeably Label Capture.
-* Added shipping-label support (`AdaptiveRecognitionResultType.ShippingLabel`, Carrier, ShippingLabelScanningResult) to adaptive recognition, matching iOS and Android.
+* Added shipping-label support (AdaptiveRecognitionResultType.ShippingLabel, Carrier, ShippingLabelScanningResult) to adaptive recognition, matching iOS and Android.
 * Added a new sample to quickly test and integrate Smart Label Capture to read and validate price shelf labels against a database - showing live AR overlays based on the match and mismatch of the content.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
@@ -46948,8 +46961,8 @@ For important information about CDN risks and recommendations for production env
 #### Barcode
 
 * Reduced the false positive rate for EAN13, UPCA, EAN8, and UPC-E.
-* Improved ITF decoding robustness, reducing the number of unscanned codes.
-* Improved MicroQR decoding for rotated codes and cluttered backgrounds.
+* Improved ITF decoding robustness, reducing the number of unscanned codes. On our internal datasets, we measured an improvement of more than 20% true positives.
+* Improved MicroQR decoding for rotated codes and cluttered backgrounds. On our internal datasets, we measured an improvement of more than 40% true positives.
 
 #### Id
 
@@ -46989,6 +47002,7 @@ For important information about CDN risks and recommendations for production env
 * Fixed a race condition in SimplePropertyBehaviorSubject where mutating the subscriber list during a callback could cause crashes or missed notifications.
 * Fixed EventsResponse::getRetryTimeoutInSeconds to return a fallback instead of aborting on out-of-range header values.
 * Fixed pinch-to-zoom and swipe-to-zoom becoming unresponsive after the browser interrupted a touch gesture, and duplicated tap and zoom handling after a data capture view was re-attached.
+* Fixed a memory leak that could make the browser tab run out of memory and crash when the data capture context was disposed and created again repeatedly.
 
 ### Deprecations
 
@@ -47664,19 +47678,19 @@ import SingleScanning from '../../partials/_single-scanning.mdx';
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
 
 - The text message
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
           if (isValidBarcode(barcode)) {
               return new SparkScanBarcodeSuccessFeedback();
           } else {
@@ -47725,7 +47739,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
