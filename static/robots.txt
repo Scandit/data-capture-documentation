@@ -1,0 +1,119 @@
+# robots.txt for docs.scandit.com
+#
+# Written because /robots.txt returned 404, and a missing robots.txt is not
+# neutral: crawlers read it as "everything permitted". The policy below was
+# already in force by omission; this states it.
+#
+# GUIDES: every major stays open to every crawler, search engines included.
+# People still run 6.x and 7.x and must find their documentation — in search,
+# and through an assistant they ask. The guides ship exactly one tree per major
+# (/ for 8.x, /7.6.14/, /6.28.11/), so nothing there is restricted.
+#
+# API REFERENCE: a SEPARATE SITE on the same host — Sphinx, not Docusaurus,
+# built and deployed by a different pipeline. robots.txt is per-host, so this
+# one file governs both. Unlike the guides it ships a tree per MINOR version:
+# six versioned trees are live alongside the unversioned one. Each was verified
+# by fetching ONE real page from it (index.html is only a redirect stub, so
+# probing that proves nothing). The sizes below are that one page's size — no
+# claim is made here about how complete any tree is:
+#
+#   /data-capture-sdk/  38,575 bytes   current
+#   /8.6/               38,575 bytes   that PAGE is byte-identical to the
+#                                      unversioned tree's copy of it
+#   /8.5/ /8.4/ /8.3/   ~38 KB each    frozen 8.x minors
+#   /7.6/ /6.28/        ~35 / ~32 KB   the 7.x and 6.x majors
+#
+# The current version always lives at the UNVERSIONED path, so /8.6/ is a pure
+# duplicate and the older 8.x trees are superseded near-duplicates.
+#
+# THE RULE BELOW IS DEFAULT-DENY AND SELF-MAINTAINING. Bulk crawlers get the
+# unversioned tree, plus one explicitly named tree per OLDER major. Any other
+# versioned tree is excluded without an edit:
+#
+#   8.7 ships   -> /8.7/data-capture-sdk/ appears and is excluded automatically;
+#                  its content is already covered by the unversioned tree.
+#   9.0 ships   -> excluded automatically, and so is every 9.x minor after it.
+#                  Note there is no "/9.x/" path to write: the Disallow's `*`
+#                  matches whatever the first path segment happens to be, so it
+#                  catches /9.0/, /9.1/, /9.2/ … individually as each appears.
+#                  Add one Allow line naming the 8.x tree you want to keep as
+#                  the representative of major 8.
+#
+# So minor releases need no change at all, and a major release needs one line —
+# a deliberate decision made once, at a release, rather than a list that
+# silently goes stale. The same `*` also already covers the retired patch-level
+# trees noted under Sitemap below.
+#
+# ASYMMETRY — read this before editing. The VERSION rule self-maintains; the
+# AGENT LIST does not. New bulk crawlers appear continuously and are governed by
+# nothing here until a human adds them. Absent today, among others:
+# PerplexityBot, Applebot-Extended, AI2Bot, Diffbot,
+# cohere-training-data-crawler.
+#
+# NOT APPLIED TO SEARCH ENGINES, deliberately — but not for the usual reason.
+# Blocking crawl on an already-indexed URL can strand it: the crawler can no
+# longer read a canonical or noindex tag that would resolve the duplicate. The
+# normal advice is therefore "use canonical/noindex instead". That advice does
+# not apply cleanly here, because the API reference is NOT this site: it is a
+# separate Sphinx (Read the Docs theme) build, deployed to this host by another
+# pipeline, and its pages carry no <meta name="robots"> and no canonical link at
+# all. Adding those means changing the Sphinx build, not this repository.
+#
+# So robots.txt is the only lever reachable from here, and it is applied to bulk
+# crawlers only — where stranding does not matter, because nothing is trying to
+# rank them. Search-engine de-duplication still belongs in canonical/noindex on
+# the Sphinx side, and is left alone here rather than half-done.
+
+Sitemap: https://docs.scandit.com/sitemap.xml
+# The sitemap covers the GUIDES only. Measured from this repo's own build on
+# 2026-09-07: 1,508 URLs — 618 at the unversioned root, 498 under /7.6.14/, 392
+# under /6.28.11/ — and not one /data-capture-sdk/ URL among them. The API
+# reference is therefore in NO sitemap and is discoverable only by following
+# links; three of its trees are link-reachable (unversioned, /7.6/, /6.28/).
+#
+# No page count is given for it on purpose. The "~3,200" and "~3,900" figures
+# elsewhere in this repo (docusaurus.config.ts, scripts/verify-search-tags.cjs)
+# both count pages that dropped out of the SEARCH INDEX during a tag rename.
+# Neither is a census of sitemap-absent pages, so neither can be reused as one.
+#
+# Also live, and also in no sitemap: 21 retired version trees — /7.6.3/ through
+# /7.6.13/ (11) and /6.28.1/ through /6.28.10/ (10), roughly 450-500 pages each,
+# left behind because the deploy never deleted what the build stopped producing.
+# /8.5.3/, /8.5.2/, /8.4.1/ and /8.3.1/ return 404: the 8.x prefixes were
+# cleaned up at some point and the older ones never were.
+
+# --- Bulk and training crawlers ------------------------------------------
+#
+# PRECEDENCE — the Allow lines come FIRST deliberately; do not reorder them
+# below the Disallow. Under the longest-match precedence of RFC 9309 the order
+# is irrelevant, because the longer Allow beats the shorter Disallow either way.
+# But this group deliberately excludes Googlebot and Bingbot, and none of the
+# agents named below publishes a conformance statement — so nothing here is
+# guaranteed to be read by an RFC 9309 parser. A first-match-wins parser
+# (historical Nutch / crawler-commons behaviour, which is CCBot's lineage) reads
+# a leading Disallow and denies /7.6/ and /6.28/ outright, silently breaking the
+# requirement that every major stays reachable. Allow-first is identical under
+# longest-match and correct under first-match-wins. Keep the Allow paths exact.
+#
+# Bytespider reportedly ignores robots.txt wholesale. Its line here is
+# declarative only: do not assume the Disallow actually constrains it.
+
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: CCBot
+User-agent: Bytespider
+User-agent: Amazonbot
+User-agent: meta-externalagent
+Allow: /7.6/data-capture-sdk/
+Allow: /6.28/data-capture-sdk/
+Disallow: /*/data-capture-sdk/
+
+# --- Everyone else --------------------------------------------------------
+# Search engines and any agent not named above: the whole site, every version.
+#
+# NOTE FOR FUTURE EDITS: the agents above have their own group and do NOT
+# inherit anything added here. robots.txt group selection is winner-take-all,
+# so a rule meant for them must be repeated in their group.
+
+User-agent: *
+Disallow:
