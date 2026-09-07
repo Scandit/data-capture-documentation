@@ -221,41 +221,12 @@ function main() {
 
   const breaches = [];
 
-  // ---------------------------------------------------------------------------
-  // Artifact invariants, not retrieval quality - but this is the one place that
-  // already loads the published index on every build, so it is where they belong.
-  //
-  // Both properties cost eleven review rounds to establish, each round measuring
-  // by hand what a single assertion can check for good:
-  //
-  //  1. An excerpt must not END on a run of lines that only INTRODUCES content
-  //     (a heading, or a bold-only tab label). Such a record advertises
-  //     something a consumer will not find in it.
-  //  2. An excerpt must not carry an unbalanced code fence, which hands a
-  //     consumer raw code presented as prose. The (?:> )* prefix is required:
-  //     a fence inside a blockquote is emitted as "> ```".
-  // ---------------------------------------------------------------------------
-  const INTRODUCER_LINE = /^\s*(?:\*\*[^*]{1,80}\*\*|#{1,6}\s+\S.*)\s*$/;
-  const endsOnIntroducer = (text) => {
-    const lines = String(text || "").split("\n");
-    let i = lines.length;
-    while (i > 0 && (!lines[i - 1].trim() || INTRODUCER_LINE.test(lines[i - 1]))) i--;
-    return i < lines.length;
-  };
-  const unbalancedFence = (text) =>
-    (String(text || "").match(/^\s*(?:>\s*)*```/gm) || []).length % 2 !== 0;
-
-  const FIELDS = ["docs_excerpt", "assistant_excerpt"];
-  for (const field of FIELDS) {
-    const dangling = index.filter((r) => unbalancedFence(r[field]));
-    const promising = index.filter((r) => endsOnIntroducer(r[field]));
-    if (dangling.length) {
-      breaches.push(`${dangling.length} record(s) with an unbalanced code fence in ${field} (e.g. ${dangling[0].id})`);
-    }
-    if (promising.length) {
-      breaches.push(`${promising.length} record(s) whose ${field} ends on a heading or label with no content (e.g. ${promising[0].id})`);
-    }
-  }
+  // NOTE: the artifact invariants (no excerpt ending on a heading/label with no
+  // content, no unbalanced code fence) are asserted by the knowledge-extractor
+  // plugin itself, in postBuild - it refuses to publish a violation. They were
+  // briefly duplicated here, but this workflow is paths-filtered and limited to
+  // base `main`, so it does not run on the builds that publish the index, and a
+  // second copy of the predicate could only drift from the generator's.
 
   if (metrics.success_at_k < MIN_SUCCESS) breaches.push(`success@${K}=${metrics.success_at_k} < ${MIN_SUCCESS}`);
   if (metrics.precision_at_k < MIN_PRECISION) breaches.push(`precision@${K}=${metrics.precision_at_k} < ${MIN_PRECISION}`);
@@ -267,7 +238,7 @@ function main() {
   }
 
   if (breaches.length) {
-    console.log("Retrieval evals failed (quality thresholds and/or artifact invariants):");
+    console.log("Retrieval quality below threshold:");
     for (const b of breaches) console.log(`  breach: ${b}`);
     process.exit(1);
   }

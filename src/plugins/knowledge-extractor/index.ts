@@ -57,13 +57,20 @@ type Chunk = { heading: string; content: string };
  * blank-separated, because orderedSegments joins prose segments with a blank
  * line, whereas a label is glued to its body by a single newline.
  */
-const INTRODUCER_LINE = /^\s*(?:\*\*[^*]{1,80}\*\*|#{1,6}\s+\S.*)\s*$/;
+const INTRODUCER_LINE = /^\s*(?:>\s*)*(?:\*\*[^*]{1,80}\*\*|#{1,6}\s+\S.*)\s*$/;
 
 /** Trailing lines that introduce content the text does not (yet) contain. */
 function trailingIntroducers(lines: string[]): number {
   let i = lines.length;
-  while (i > 0 && (!lines[i - 1].trim() || INTRODUCER_LINE.test(lines[i - 1]))) i--;
-  return lines.length - i;
+  let sawIntroducer = false;
+  while (i > 0 && (!lines[i - 1].trim() || INTRODUCER_LINE.test(lines[i - 1]))) {
+    if (lines[i - 1].trim()) sawIntroducer = true;
+    i--;
+  }
+  // Trailing blank lines alone are not a broken promise - they are whitespace.
+  // Counting them made "ends on an introducer" true for "hello\n\n", which would
+  // have reported the wrong defect.
+  return sawIntroducer ? lines.length - i : 0;
 }
 
 /** Drop a trailing introducer run, so a clip never ends on a broken promise. */
@@ -72,13 +79,34 @@ function dropTrailingIntroducers(lines: string[]): string[] {
   return drop ? lines.slice(0, lines.length - drop) : lines.slice();
 }
 
+/**
+ * Strip the markers that make a line an INTRODUCER, keeping its words.
+ *
+ * The last-resort branch of clipMarkdown used to hand back the raw window when
+ * dropping introducers emptied it - which is exactly the output the invariant
+ * forbids, so with the assertion in postBuild it would be an unfixable build
+ * failure. The corpus is close: the longest existing leading introducer run is
+ * 247 characters against a 300-character assistant budget, and the longest single
+ * heading is 246. Demoting keeps the text and drops only the promise.
+ */
+function demoteIntroducers(text: string): string {
+  return text
+    .split("\n")
+    .map((l) =>
+      INTRODUCER_LINE.test(l)
+        ? l.replace(/^(\s*(?:>\s*)*)#{1,6}\s+/, "$1").replace(/\*\*([^*]*)\*\*/g, "$1")
+        : l,
+    )
+    .join("\n");
+}
+
 function clipMarkdown(text: string, limit: number): string {
   // The early return used to hand back the raw text, so for any chunk shorter
   // than the limit the drop never ran at all - the "no excerpt ends on an
   // introducer" property then held only by luck of the content.
   if (text.length <= limit) {
     const whole = dropTrailingIntroducers(text.split("\n")).join("\n").trimEnd();
-    return whole || text;
+    return whole || demoteIntroducers(text).trimEnd();
   }
   const cut = text.slice(0, limit);
   const lines = cut.split("\n");
@@ -96,8 +124,8 @@ function clipMarkdown(text: string, limit: number): string {
   // after it. Two records did precisely that.
   if (!open) {
     const plain = dropTrailingIntroducers(lines).join("\n").trimEnd();
-    // Never return nothing: if the clip was ONLY a label, the raw cut is better.
-    return plain || cut;
+    // Never nothing, and never the forbidden shape: demote instead of echoing.
+    return plain || demoteIntroducers(cut).trimEnd();
   }
   // Dropping the half-included block is better than shipping it broken, unless
   // that would throw away almost everything.
@@ -264,7 +292,13 @@ function enforceChunkInvariant(chunks: Chunk[]): Chunk[] {
   // heading of an empty trailing section.
   if (out.length) {
     const last = out[out.length - 1];
-    last.content = dropTrailingIntroducers(last.content.split("\n")).join("\n").trim();
+    const dropped = dropTrailingIntroducers(last.content.split("\n")).join("\n").trim();
+    // If that empties the ONLY chunk, the page would leave the index entirely -
+    // postBuild skips a page with no chunks without even counting it, so it would
+    // vanish silently and drag down the drift-guard ratio. Demote instead: the
+    // heading's words stay, the promise goes.
+    last.content =
+      dropped || (out.length === 1 ? demoteIntroducers(last.content).trim() : "");
   }
 
   return out
@@ -867,6 +901,7 @@ let GIT_DATES: Map<string, string> | null = null;
 function gitDates(siteDir: string): Map<string, string> {
   if (GIT_DATES) return GIT_DATES;
   GIT_DATES = new Map();
+  let gitFailed = false;
   try {
     // A shallow clone cannot answer this question; say so by staying empty.
     // Ask git rather than probing for .git/shallow: in a linked worktree (or with
@@ -904,9 +939,28 @@ function gitDates(siteDir: string): Map<string, string> {
       // git log is newest-first, so the first sighting of a file is its latest.
       if (file && commitStamp && !GIT_DATES.has(file)) GIT_DATES.set(file, commitStamp);
     }
-  } catch {
-    // Never fatal: this plugin must not be able to break a deploy.
+  } catch (err) {
+    // Never fatal: this plugin must not be able to break a deploy. But never
+    // silent either. A transient failure here - a lock held by a concurrent git
+    // process is enough - blanks last_verified for EVERY page, and this catch
+    // used to swallow it: one build in review shipped 4200 empty dates green,
+    // between two builds that carried 17 distinct real ones.
+    console.warn(
+      `[knowledge-extractor] git log failed: last_verified will be empty on ` +
+        `every page. ${err instanceof Error ? err.message : String(err)}`,
+    );
     GIT_DATES = new Map();
+    gitFailed = true;
+  }
+  // git answered, and resolved nothing. Not the shallow case (that returned
+  // above) and not a git failure (that warned already, and would make this
+  // message blame the wrong cause), so an assumption is broken - say so rather
+  // than publish 0 dates behind a green build.
+  if (!gitFailed && GIT_DATES.size === 0) {
+    console.warn(
+      "[knowledge-extractor] git resolved 0 file dates in a non-shallow repo: " +
+        "last_verified will be empty on every page.",
+    );
   }
   return GIT_DATES;
 }
@@ -1189,6 +1243,60 @@ type KModule = ReturnType<typeof buildModule>;
 // ---------------------------------------------------------------------------
 // consumable artifacts
 // ---------------------------------------------------------------------------
+/**
+ * Refuse to publish an artifact that breaks its own invariants.
+ *
+ * Asserted where the artifact is MADE, not in the eval script: that workflow is
+ * paths-filtered and limited to base `main`, so it does not run on build-docs.yml
+ * or docs-preview.yml - the two workflows that actually build and publish this
+ * index. Checking here covers every build, and keeps ONE copy of each predicate
+ * so the generator and its check cannot drift apart.
+ *
+ * Scope, measured rather than assumed: this guards the PUBLISHED fields, which is
+ * the whole surface a consumer sees. It is not a regression test for the chunker -
+ * with enforceChunkInvariant disabled the build still passes, because clipMarkdown
+ * drops trailing introducers from the excerpts on its own. The chunker's fixpoint
+ * property is a separate concern with its own tests.
+ *
+ * Named rather than inline so it can be called directly: an assertion nobody has
+ * seen fail is worth nothing, and proving this one fires should not cost a build.
+ *
+ * The two properties:
+ *  - no published excerpt may END on a run that only INTRODUCES content, because
+ *    such a record advertises what a consumer will not find in it;
+ *  - no published excerpt may carry an unbalanced code fence, which hands a
+ *    consumer raw code presented as prose.
+ */
+function assertArtifactInvariants(index: ReturnType<typeof toIndexRecord>[]): void {
+  const violations: string[] = [];
+  for (const field of ["docs_excerpt", "assistant_excerpt"] as const) {
+    const dangling = index.filter(
+      (r) => (String(r[field] || "").match(/^\s*(?:>\s*)*```/gm) || []).length % 2 !== 0,
+    );
+    const promising = index.filter(
+      (r) => trailingIntroducers(String(r[field] || "").split("\n")) > 0,
+    );
+    if (dangling.length) {
+      violations.push(
+        `${dangling.length} record(s) with an unbalanced code fence in ${field} ` +
+          `(e.g. ${dangling[0].id})`,
+      );
+    }
+    if (promising.length) {
+      violations.push(
+        `${promising.length} record(s) whose ${field} ends on a heading or label with ` +
+          `no content (e.g. ${promising[0].id})`,
+      );
+    }
+  }
+  if (violations.length) {
+    throw new Error(
+      `[knowledge-extractor] refusing to publish - artifact invariants broken:\n  ` +
+        violations.join("\n  "),
+    );
+  }
+}
+
 function toIndexRecord(m: KModule) {
   return {
     objectID: m.id,
@@ -1519,6 +1627,8 @@ export default function knowledgeExtractor(context: any, _options: any) {
             `refusing to overwrite the AI-layer artifacts with a partial corpus.`,
         );
       }
+
+      assertArtifactInvariants(index);
 
       const assetsDir = path.join(outDir, "assets");
       fs.mkdirSync(assetsDir, { recursive: true });
