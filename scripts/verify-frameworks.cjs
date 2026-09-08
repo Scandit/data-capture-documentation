@@ -178,8 +178,11 @@ function declaredFrameworks(file) {
   // renders such a page normally and nothing else would have noticed.
   const text = fs.readFileSync(file, "utf8").replace(/^\uFEFF/, "");
   // Anchored like scripts/docs-gate/frontmatter.cjs: `---` must be a line of
-  // its own, not merely the first three characters.
-  if (!/^---\r?\n/.test(text)) return [];
+  // its own, not merely the first three characters - but trailing whitespace on
+  // that line is allowed, because gray-matter accepts `--- ` and `---\t` and
+  // therefore Docusaurus renders such a page normally. Without the `[ \t]*` this
+  // check skipped it in silence while its `framework:` stayed live.
+  if (!/^---[ \t]*\r?\n/.test(text)) return [];
   const end = text.indexOf("\n---", 3);
   // An opening fence with no closing one is not "no framework field" - it is a
   // page whose frontmatter cannot be read, which is exactly what the sentinel
@@ -234,8 +237,17 @@ function declaredFrameworks(file) {
  * Values of `<field>:` inside the FRAMEWORKS registry literal, or null if its
  * shape changed. Used for both `slug` and `display`.
  */
+function readSource(rel) {
+  try {
+    return fs.readFileSync(path.join(ROOT, rel), "utf8");
+  } catch {
+    return null;
+  }
+}
+
 function registryValues(field) {
-  const src = fs.readFileSync(path.join(ROOT, REGISTRY_FILE), "utf8");
+  const src = readSource(REGISTRY_FILE);
+  if (src === null) return null;
   const start = src.indexOf("export const FRAMEWORKS");
   if (start === -1) return null;
   // Anchor on the assignment, not on the first `[`: a type annotation or a
@@ -269,12 +281,61 @@ function registryValues(field) {
 }
 
 /**
+ * The source text of each top-level entry in the FRAMEWORKS literal, or null if
+ * its shape changed.
+ *
+ * Brace-matched rather than matched with `\{[^{}]*\}`: that pattern cannot match
+ * an entry containing a nested object, so adding `meta: { ... }` to an entry
+ * dropped it from the agentSkills invariant below without a word of output.
+ * (Brace counting assumes no `{` or `}` inside a string literal in the
+ * registry; every value there is a slug, a display name or a route segment.)
+ */
+function registryEntries() {
+  const src = readSource(REGISTRY_FILE);
+  if (src === null) return null;
+  const start = src.indexOf("export const FRAMEWORKS");
+  if (start === -1) return null;
+  const eq = src.indexOf("=", start);
+  if (eq === -1) return null;
+  const open = src.indexOf("[", eq);
+  if (open === -1) return null;
+  let depth = 0;
+  let close = -1;
+  for (let i = open; i < src.length; i += 1) {
+    if (src[i] === "[") depth += 1;
+    else if (src[i] === "]") {
+      depth -= 1;
+      if (depth === 0) { close = i; break; }
+    }
+  }
+  if (close === -1) return null;
+  const body = src.slice(open + 1, close);
+  const entries = [];
+  let from = -1;
+  depth = 0;
+  for (let i = 0; i < body.length; i += 1) {
+    if (body[i] === "{") {
+      if (depth === 0) from = i;
+      depth += 1;
+    } else if (body[i] === "}") {
+      depth -= 1;
+      if (depth === 0 && from !== -1) {
+        entries.push(body.slice(from, i + 1));
+        from = -1;
+      }
+    }
+  }
+  return entries;
+}
+
+/**
  * Slugs listed in the `FrameworkSlug` union, or null if it is absent. Read from
  * source text for the same reason the registry is: this gate must not import
  * TypeScript.
  */
 function unionSlugs() {
-  const src = fs.readFileSync(path.join(ROOT, REGISTRY_FILE), "utf8");
+  const src = readSource(REGISTRY_FILE);
+  if (src === null) return null;
   const start = src.indexOf("export type FrameworkSlug");
   if (start === -1) return null;
   const end = src.indexOf(";", start);
@@ -285,8 +346,20 @@ function unionSlugs() {
 /** Framework display names each data file keys its availability map by. */
 function dataFileFrameworkNames(rel) {
   const full = path.join(ROOT, rel);
-  if (!fs.existsSync(full)) return null;
-  const parsed = JSON.parse(fs.readFileSync(full, "utf8"));
+  if (!fs.existsSync(full))
+    return { error: `${rel}: missing - per-framework data is unchecked` };
+  let parsed;
+  try {
+    parsed = JSON.parse(fs.readFileSync(full, "utf8"));
+  } catch (e) {
+    // Named, like every other failure here. Unguarded, this threw a Node stack
+    // trace, which fails closed but tells the author to read a parser.
+    return {
+      error:
+        `${rel}: does not parse as JSON (${e.message.split("\n")[0]}) - ` +
+        `per-framework data is unchecked`,
+    };
+  }
   const names = new Set();
   // skills.json is an OBJECT, not a list, and keys both `frameworks.<display>`
   // and `products.<product>.<display>` by display name - the same vocabulary in
@@ -294,7 +367,12 @@ function dataFileFrameworkNames(rel) {
   // there leaves productSkills?.[resolvedFramework] undefined in SkillsCallout,
   // so the product callout returns null and simply vanishes for that framework.
   if (!Array.isArray(parsed)) {
-    if (!parsed || typeof parsed !== "object") return null;
+    if (!parsed || typeof parsed !== "object")
+      return {
+        error:
+          `${rel}: neither a list of items nor an object with ` +
+          `frameworks/products - per-framework data is unchecked`,
+      };
     // Per key, not unioned into one Set. Unioned, renaming `frameworks` to
     // `platforms` still produced names through products.* - 31 of them, the
     // same count as before - so the zero-names guard saw nothing wrong while
@@ -306,25 +384,87 @@ function dataFileFrameworkNames(rel) {
         for (const n of Object.keys(product)) perKey.products.add(n);
       }
     }
+    const missing = [];
     for (const [key, set] of Object.entries(perKey)) {
-      if (!set.size) {
-        names.missing = names.missing || [];
-        names.missing.push(key);
-      }
+      if (!set.size) missing.push(`the "${key}" map`);
       for (const n of set) names.add(n);
     }
-    return names;
+    return { names, missing };
   }
-  const items = parsed;
-  for (const item of items) {
+  // Per ITEM, for the same reason the object branch above is per key. `if
+  // (!fw) continue` treated a row that declares no frameworks as nothing to
+  // check, so renaming ONE of features.json's 16 `frameworks` keys - or
+  // emptying one products.json item's map - left the other rows supplying the
+  // union, the total still reading 31, and the gate printing OK. Every item in
+  // both files carries the key today, so an absent one is a shape change, not
+  // an exemption; if a row ever legitimately omits it, that belongs here as a
+  // decision rather than as silence.
+  const missing = [];
+  parsed.forEach((item, i) => {
+    const label = `entry "${(item && (item.key || item.name)) || `#${i}`}"`;
     const fw = item && item.frameworks;
-    if (!fw) continue;
     // products.json maps name -> {version, apiUrl}; features.json has both
     // shapes across its history, so accept a plain list too.
-    if (Array.isArray(fw)) for (const n of fw) names.add(n);
-    else if (typeof fw === "object") for (const n of Object.keys(fw)) names.add(n);
+    const found = Array.isArray(fw)
+      ? fw
+      : fw && typeof fw === "object"
+        ? Object.keys(fw)
+        : null;
+    if (!found || !found.length) {
+      missing.push(label);
+      return;
+    }
+    for (const n of found) names.add(n);
+  });
+  return { names, missing };
+}
+
+/**
+ * The three hand-written UI copies are read from source text, not imported:
+ * this gate must not depend on the TypeScript toolchain. Both readers live at
+ * module scope so scripts/test-docs-gate.cjs can pin them - they were closures
+ * inside main(), which is why the single-quote hole in them went untested.
+ */
+function readList(file, re, group) {
+  const full = path.join(ROOT, file);
+  if (!fs.existsSync(full)) return null;
+  const src = fs.readFileSync(full, "utf8");
+  const out = [];
+  let m;
+  const rx = new RegExp(re.source, "gm");
+  while ((m = rx.exec(src))) out.push(m[group]);
+  return out;
+}
+// Values of one named object literal. Scoped by brace matching rather than by
+// a line regex: SearchBar carries other `key: "value"` shapes (analytics
+// payloads, query tokens) that a file-wide scan picks up as framework names.
+function readObjectValues(file, constName) {
+  const full = path.join(ROOT, file);
+  if (!fs.existsSync(full)) return null;
+  const src = fs.readFileSync(full, "utf8");
+  const start = src.indexOf(`const ${constName}`);
+  if (start === -1) return null;
+  const open = src.indexOf("{", start);
+  if (open === -1) return null;
+  let depth = 0;
+  let end = -1;
+  for (let i = open; i < src.length; i += 1) {
+    if (src[i] === "{") depth += 1;
+    else if (src[i] === "}") {
+      depth -= 1;
+      if (depth === 0) { end = i; break; }
+    }
   }
-  return names;
+  if (end === -1) return null;
+  // `['"]` for the reason registryValues documents: no formatter is
+  // configured, so a single-quoted value was invisible here while the
+  // double-quoted siblings kept `found.length` non-zero.
+  const body = src.slice(open + 1, end);
+  const out = [];
+  const rx = /:\s*['"]([^'"]+)['"]/g;
+  let m;
+  while ((m = rx.exec(body))) out.push(m[1]);
+  return out;
 }
 
 function main() {
@@ -339,7 +479,8 @@ function main() {
     // Only a real declaration counts. A page reported for a frontmatter-level
     // problem declares nothing, and counting it inflated "N declare a
     // framework" with pages that may declare none.
-    if (decls.some((d) => d.value !== UNREADABLE && d.value !== UNTERMINATED)) {
+    const SENTINELS = [UNREADABLE, UNTERMINATED, EMPTY];
+    if (decls.some((d) => !SENTINELS.includes(d.value))) {
       pagesWithField += 1;
     }
     for (const { field, value } of decls) {
@@ -447,42 +588,7 @@ function main() {
     }
   };
 
-  const readList = (file, re, group) => {
-    const full = path.join(ROOT, file);
-    if (!fs.existsSync(full)) return null;
-    const src = fs.readFileSync(full, "utf8");
-    const out = [];
-    let m;
-    const rx = new RegExp(re.source, "gm");
-    while ((m = rx.exec(src))) out.push(m[group]);
-    return out;
-  };
 
-  // Values of one named object literal. Scoped by brace matching rather than by
-  // a line regex: SearchBar carries other `key: "value"` shapes (analytics
-  // payloads, query tokens) that a file-wide scan picks up as framework names.
-  const readObjectValues = (file, constName) => {
-    const full = path.join(ROOT, file);
-    if (!fs.existsSync(full)) return null;
-    const src = fs.readFileSync(full, "utf8");
-    const start = src.indexOf(`const ${constName}`);
-    if (start === -1) return null;
-    const open = src.indexOf("{", start);
-    if (open === -1) return null;
-    let depth = 0;
-    let end = -1;
-    for (let i = open; i < src.length; i += 1) {
-      if (src[i] === "{") depth += 1;
-      else if (src[i] === "}") {
-        depth -= 1;
-        if (depth === 0) { end = i; break; }
-      }
-    }
-    if (end === -1) return null;
-    return (src.slice(open + 1, end).match(/:\s*"([^"]+)"/g) || []).map((x) =>
-      x.slice(x.indexOf('"') + 1, -1),
-    );
-  };
 
   // 4. DATA
   const registryDisplays = registryValues("display");
@@ -493,14 +599,12 @@ function main() {
     );
   } else {
     for (const rel of DATA_FILES) {
-      const names = dataFileFrameworkNames(rel);
-      if (!names) {
-        errors.push(
-          `${rel}: missing, or neither a list of items nor an object with ` +
-            `frameworks/products - per-framework data is unchecked`,
-        );
+      const parsedData = dataFileFrameworkNames(rel);
+      if (parsedData.error) {
+        errors.push(parsedData.error);
         continue;
       }
+      const { names, missing } = parsedData;
       // Zero names is a shape change, not a clean file: renaming skills.json's
       // `frameworks` key to `platforms` left this check reporting "3 checked"
       // and OK. Every sibling check fails loudly on parsing zero entries; this
@@ -512,14 +616,14 @@ function main() {
         );
         continue;
       }
-      // A per-key miss, which a total count cannot show: skills.json carries
-      // two independent maps, and losing one of them left the other supplying
-      // names and the gate reporting clean.
-      for (const key of names.missing || []) {
+      // A per-part miss, which a total count cannot show: every one of these
+      // files is several independent maps, and losing one of them left the rest
+      // supplying names and the gate reporting clean.
+      for (const label of missing) {
         errors.push(
-          `${rel}: the "${key}" map is absent or empty - that half of the file ` +
-            `is unchecked, and the other half still supplies names so the total ` +
-            `count does not show it`,
+          `${rel}: ${label} is absent or empty - that part of the file is ` +
+            `unchecked, and the rest still supplies names so the total count ` +
+            `does not show it`,
         );
       }
       dataNamesChecked += names.size;
@@ -542,7 +646,10 @@ function main() {
     uiErrors(
       "display name",
       ENUM_FILE,
-      readList(ENUM_FILE, /^\s*(\w+)\s*=\s*"([^"]+)",/m, 2),
+      // Trailing comma optional and both quote styles: `ios = 'iOS'` and a
+      // final member without a comma are both valid TS, and either shape used
+      // to leave that member unchecked.
+      readList(ENUM_FILE, /^\s*(\w+)\s*=\s*['"]([^'"]+)['"]\s*,?/m, 2),
       registryDisplays,
       ENUM_ALLOWED_EXTRA_DISPLAYS,
     );
@@ -559,7 +666,7 @@ function main() {
     uiErrors(
       "label",
       SWITCHER_FILE,
-      readList(SWITCHER_FILE, /label:\s*"([^"]+)"/m, 1),
+      readList(SWITCHER_FILE, /label:\s*['"]([^'"]+)['"]/m, 1),
       registryDisplays,
       ["Xamarin iOS", "Xamarin Android", "Xamarin Forms"],
     );
@@ -571,7 +678,7 @@ function main() {
     uiErrors(
       "route",
       SWITCHER_FILE,
-      readList(SWITCHER_FILE, /slug:\s*"([^"]+)"/m, 1),
+      readList(SWITCHER_FILE, /slug:\s*['"]([^'"]+)['"]/m, 1),
       registrySegments,
       LEGACY_ROUTE_SEGMENTS,
     );
@@ -585,8 +692,25 @@ function main() {
   // `/sdks/undefined/agent-skills`. Not hypothetical: `hosted` is the entry with
   // routeSegment: null, and skills.json already carries an id-bolt skill, so
   // flipping hosted.agentSkills is the natural next edit.
-  const registrySrc = fs.readFileSync(path.join(ROOT, REGISTRY_FILE), "utf8");
-  for (const entry of registrySrc.match(/\{[^{}]*slug:\s*['"][^'"]+['"][^{}]*\}/g) || []) {
+  const entries = registryEntries();
+  // registrySlugs is the same registryValues("slug") read the DRIFT check
+  // above already did; one read, one expected count.
+  // Counted, like every other reader here. Without this an entry the matcher
+  // cannot see costs the check silently, and this is the one invariant in the
+  // file guarding a runtime URL bug rather than a rendering one.
+  if (!entries || !entries.length) {
+    errors.push(
+      `${REGISTRY_FILE}: could not read the FRAMEWORKS entries, so the ` +
+        `agentSkills/routeSegment invariant is unchecked`,
+    );
+  } else if (registrySlugs && entries.length !== registrySlugs.length) {
+    errors.push(
+      `${REGISTRY_FILE}: read ${entries.length} entries but ${registrySlugs.length} ` +
+        `\`slug\` values - the literal's shape changed, so some entries are ` +
+        `unchecked rather than clean`,
+    );
+  }
+  for (const entry of entries || []) {
     if (!/agentSkills:\s*true/.test(entry)) continue;
     if (!/routeSegment:\s*['"][^'"]+['"]/.test(entry)) {
       const slug = (/slug:\s*['"]([^'"]+)['"]/.exec(entry) || [])[1] || "?";
@@ -616,4 +740,17 @@ function main() {
   console.log("OK: every framework identifier in docs, code and data resolves.\n");
 }
 
-main();
+if (require.main === module) main();
+
+module.exports = {
+  declaredFrameworks,
+  dataFileFrameworkNames,
+  readList,
+  readObjectValues,
+  registryEntries,
+  registryValues,
+  unionSlugs,
+  UNREADABLE,
+  UNTERMINATED,
+  EMPTY,
+};

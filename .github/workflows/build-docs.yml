@@ -57,6 +57,12 @@ jobs:
       - name: Test framework registry
         run: yarn test:frameworks
 
+      # The gate scripts' own readers. Every defect found in five review
+      # rounds on this change lived in them, and each one made a gate print
+      # OK while a check went unperformed.
+      - name: Test docs-gate readers
+        run: yarn test:docs-gate
+
       - name: Build documentation
         run: yarn build
 

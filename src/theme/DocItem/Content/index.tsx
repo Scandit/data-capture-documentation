@@ -14,8 +14,6 @@ type Props = WrapperProps<typeof ContentType>;
 
 const KNOWN_PRODUCTS = new Set(Object.keys(skillsData.products));
 
-
-
 export default function ContentWrapper(props: Props): JSX.Element {
   const { pathname } = useLocation();
   const route = parseSdksRoute(pathname);

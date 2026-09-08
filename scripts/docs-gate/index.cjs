@@ -160,14 +160,23 @@ function frontmatterEndLine(file) {
   } catch {
     return 0;
   }
-  // `---` with trailing whitespace, because bodyOf and frontmatter.cjs both
-  // accept it. Exact-matching it here returned 0, which is indistinguishable
-  // from "no frontmatter" and therefore charged the entire untouched body.
-  // `startsWith`, not equality: bodyOf (`indexOf("\\n---")`), frontmatter.cjs
-  // (`/\\r?\\n---/`) and gray-matter all accept a line that BEGINS with `---`, so
-  // a `----` fence parses everywhere else. Requiring exact equality here made
-  // such a page return -1 and drop out of Vale completely - a banned word in its
-  // description exited 0, where before this branch it was caught.
+  // `startsWith`, not equality, on BOTH fences - but for different reasons,
+  // and the distinction matters because an earlier version of this comment got
+  // it wrong:
+  //
+  //   - Closing fence: bodyOf (`indexOf("\\n---")`), frontmatter.cjs
+  //     (`/\\r?\\n---/`) and gray-matter all end the frontmatter at any line
+  //     BEGINNING with `---`, so a `----` fence closes it everywhere else.
+  //     Exact equality here returned -1 and dropped such a page out of Vale
+  //     completely - a banned word in its description exited 0, where before
+  //     this branch it was caught.
+  //   - Opening fence: gray-matter and frontmatter.cjs require `---` plus
+  //     optional trailing whitespace, NOT any `---`-prefixed line, so `----`
+  //     at the top opens nothing for them. `startsWith` is deliberately looser
+  //     here only because bodyOf makes the identical call - the cap and the
+  //     metadata-only decision therefore agree on every input, which is the
+  //     property the cap actually rests on - and because such a page is
+  //     blocked by the schema check regardless.
   if (!lines[0].replace(/^\uFEFF/, "").startsWith("---")) return 0;
   for (let i = 1; i < lines.length; i += 1) {
     if (lines[i].startsWith("---")) return i + 1;
@@ -175,6 +184,12 @@ function frontmatterEndLine(file) {
   // Opening fence, no closing one: the extent is unknown, so there is no honest
   // cap. Returning 0 would charge the whole file; -1 tells the caller to leave
   // the file out of Vale entirely rather than guess.
+  //
+  // Reaching this needs the BASE blob to be unterminated too. Deleting a
+  // closing fence moves the frontmatter text into bodyOf's output, so the file
+  // is body-changed and never gets here - measured: the count drops to 116
+  // metadata-only files and Vale runs uncapped on it. The branch exists for a
+  // page that was already unterminated on the base branch.
   return -1;
 }
 
@@ -183,6 +198,14 @@ function frontmatterEndLine(file) {
  *   A file in it had only its frontmatter changed, so alerts BELOW the
  *   frontmatter belong to prose this PR did not touch and are dropped; alerts
  *   inside it are this PR's.
+ *
+ *   What the cap preserves is bounded by what Vale itself reports. Measured on
+ *   3.15.1: a banned word is flagged in a single-line `description` (quoted,
+ *   plain or single-quoted) and in `title`, and in a literal block scalar, but
+ *   NOT inside a folded `>-` scalar spanning two lines, nor in a `keywords:`
+ *   list item. The cap never dropped an alert Vale emitted; it just cannot
+ *   restore one Vale never made. Single-line descriptions are what
+ *   docs-schema.yml's maxLength keeps true today.
  *
  *   The cap is the WHOLE frontmatter, not the frontmatter lines the diff
  *   touched. A mechanical `framework:` pass is therefore answerable for a
@@ -325,4 +348,6 @@ function main() {
   process.exit(0);
 }
 
-main();
+if (require.main === module) main();
+
+module.exports = { frontmatterEndLine, bodyOf };
