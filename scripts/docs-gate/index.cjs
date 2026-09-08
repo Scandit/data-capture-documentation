@@ -75,6 +75,11 @@ function changedDocs() {
 // follow). Applied at those two call sites rather than to the file list, so
 // that what the structural checks see stays a separate decision from what the
 // prose checks see.
+//
+// Note that this filters nothing when the file list already excludes
+// `_`-prefixed names: whether the PROSE checks see partials is decided by
+// changedDocs' predicate, not here. Applying it at the call sites keeps the two
+// decisions separable either way.
 function pagesOnly(files) {
   return files.filter((f) => !path.basename(f).startsWith("_"));
 }
