@@ -179,7 +179,10 @@ function declaredFrameworks(file) {
   // its own, not merely the first three characters.
   if (!/^---\r?\n/.test(text)) return [];
   const end = text.indexOf("\n---", 3);
-  if (end === -1) return [];
+  // An opening fence with no closing one is not "no framework field" - it is a
+  // page whose frontmatter cannot be read, which is exactly what the sentinel
+  // below is for. Returning [] here let `framework: unity` pass with an OK.
+  if (end === -1) return [{ field: "frontmatter", value: UNREADABLE }];
 
   let fm;
   try {
@@ -466,7 +469,21 @@ function main() {
     for (const rel of DATA_FILES) {
       const names = dataFileFrameworkNames(rel);
       if (!names) {
-        errors.push(`${rel}: missing or not an array - per-framework data is unchecked`);
+        errors.push(
+          `${rel}: missing, or neither a list of items nor an object with ` +
+            `frameworks/products - per-framework data is unchecked`,
+        );
+        continue;
+      }
+      // Zero names is a shape change, not a clean file: renaming skills.json's
+      // `frameworks` key to `platforms` left this check reporting "3 checked"
+      // and OK. Every sibling check fails loudly on parsing zero entries; this
+      // one used to be the exception because an empty Set is truthy.
+      if (!names.size) {
+        errors.push(
+          `${rel}: parsed zero framework names - its shape changed, so this ` +
+            `file is unchecked rather than clean`,
+        );
         continue;
       }
       dataNamesChecked += names.size;

@@ -70,7 +70,10 @@ function changedDocs() {
 function bodyOf(text) {
   // git show hands back the repo blob with LF while the Windows working copy
   // has CRLF; without this every file compares as changed and the skip never fires.
-  text = text.replace(/\r\n/g, "\n");
+  text = text.replace(/\r\n/g, "\n").replace(/^\uFEFF/, "");
+  // BOM stripped, like frontmatterEndLine and declaredFrameworks: without it
+  // `startsWith("---")` is false, the whole file counts as body, and a
+  // frontmatter-only edit to a BOM'd page never qualified for the skip.
   if (!text.startsWith("---")) return text;
   const end = text.indexOf("\n---", 3);
   return end === -1 ? text : text.slice(end + 4);
@@ -157,9 +160,17 @@ function frontmatterEndLine(file) {
   } catch {
     return 0;
   }
-  if (lines[0].replace(/^\uFEFF/, "") !== "---") return 0;
-  for (let i = 1; i < lines.length; i += 1) if (lines[i] === "---") return i + 1;
-  return 0;
+  // `---` with trailing whitespace, because bodyOf and frontmatter.cjs both
+  // accept it. Exact-matching it here returned 0, which is indistinguishable
+  // from "no frontmatter" and therefore charged the entire untouched body.
+  if (lines[0].replace(/^\uFEFF/, "").trimEnd() !== "---") return 0;
+  for (let i = 1; i < lines.length; i += 1) {
+    if (lines[i].trimEnd() === "---") return i + 1;
+  }
+  // Opening fence, no closing one: the extent is unknown, so there is no honest
+  // cap. Returning 0 would charge the whole file; -1 tells the caller to leave
+  // the file out of Vale entirely rather than guess.
+  return -1;
 }
 
 /**
@@ -167,6 +178,15 @@ function frontmatterEndLine(file) {
  *   A file in it had only its frontmatter changed, so alerts BELOW the
  *   frontmatter belong to prose this PR did not touch and are dropped; alerts
  *   inside it are this PR's.
+ *
+ *   The cap is the WHOLE frontmatter, not the frontmatter lines the diff
+ *   touched. A mechanical `framework:` pass is therefore answerable for a
+ *   pre-existing Vale error elsewhere in the same frontmatter. That is a
+ *   deliberate trade: line-level attribution needs the diff hunks, and the
+ *   alternative - skipping the file - is what disabled the check in the first
+ *   place. Corpus-wide there is exactly one such page today
+ *   (docs/sdks/android/unit-testing.mdx:4), and it is already blocked by a
+ *   schema error.
  */
 function runVale(files, bin, frontmatterOnly = new Map()) {
   const out = [];
@@ -217,7 +237,8 @@ function main() {
   if (metaOnly.size) {
     console.log(
       `docs-gate: ${metaOnly.size} file(s) changed frontmatter only - ` +
-        `skipping Vale for them (body identical to base); cspell still runs, since description and title are prose.`,
+        `Vale runs on them capped at the frontmatter (their body is identical to `
+          + `base, so its prose is not this change's); cspell runs on everything.`,
     );
   }
 
@@ -238,12 +259,21 @@ function main() {
     if (files.length) {
       const frontmatterOnly = new Map();
       const bodySet = new Set(bodyChanged);
+      const valeFiles = [];
       for (const f of files) {
-        if (bodySet.has(f)) continue;
+        if (bodySet.has(f)) {
+          valeFiles.push(f);
+          continue;
+        }
         const end = frontmatterEndLine(f);
+        // -1: the frontmatter has no readable extent, so neither charging the
+        // body nor capping is honest. Left out of Vale; the schema check
+        // already reports the malformed frontmatter itself.
+        if (end === -1) continue;
+        valeFiles.push(f);
         if (end) frontmatterOnly.set(f, end);
       }
-      findings.push(...runVale(files, vale, frontmatterOnly));
+      if (valeFiles.length) findings.push(...runVale(valeFiles, vale, frontmatterOnly));
     }
   } else if (process.env.CI) {
     // In CI, a missing Vale must fail — otherwise the headline prose-style check

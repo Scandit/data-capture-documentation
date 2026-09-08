@@ -38,7 +38,12 @@ jobs:
 
       - name: Install Vale (pinned)
         run: |
-          VALE_VERSION=3.7.1
+          # 3.15.1, the version the frontmatter cap in scripts/docs-gate was
+          # verified against: it rests on Vale attributing a `description`
+          # alert to its true file line, and a local pass on one version
+          # proves nothing about another. Keep this in step with whatever the
+          # gate's behaviour was measured on.
+          VALE_VERSION=3.15.1
           curl -sSfL "https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" \
             | sudo tar -xz -C /usr/local/bin vale
           vale -v
