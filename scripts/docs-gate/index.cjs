@@ -254,10 +254,26 @@ function runVale(files, bin, frontmatterOnly = new Map()) {
       return [{ file: ".vale.ini", level: "error", check: "vale", msg: `Vale failed to run (not an alert): ${stderr}` }];
     }
   }
+  out.push(...capAlerts(json, frontmatterOnly, ROOT));
+  return out;
+}
+
+/**
+ * Vale's alerts, with body alerts dropped on the files that changed
+ * frontmatter only.
+ *
+ * Pure and exported because nothing drove it: the cap could be made to drop
+ * everything, and every test stayed green. That is the regression 0d05551ca and
+ * c28f18e77 were written to fix - a frontmatter-only skip that disabled a
+ * blocking check, and a cap that failed open.
+ */
+function capAlerts(json, frontmatterOnly, root) {
+  const out = [];
+  const rootSlashes = String(root).replace(/\\/g, "/");
   for (const [file, alerts] of Object.entries(json || {})) {
-    const rel = file.replace(/\\/g, "/").replace(`${ROOT.replace(/\\/g, "/")}/`, "");
+    const rel = file.replace(/\\/g, "/").replace(`${rootSlashes}/`, "");
     const ceiling = frontmatterOnly.get(rel);
-    for (const a of alerts) {
+    for (const a of alerts || []) {
       // Body alerts on a metadata-only change are pre-existing prose, which the
       // ratchet is not asking this PR to fix. Frontmatter alerts are not.
       if (ceiling !== undefined && a.Line > ceiling) continue;
@@ -266,6 +282,37 @@ function runVale(files, bin, frontmatterOnly = new Map()) {
     }
   }
   return out;
+}
+
+/**
+ * Which changed files Vale sees, and with what ceiling.
+ *
+ * Pure and exported for the same reason as capAlerts: deleting the line that
+ * puts a metadata-only file into the Vale list left every test green, and that
+ * is exactly the "skipping the file disabled the check" bug.
+ */
+function partitionForVale(files, bodyChanged) {
+  const bodySet = new Set(bodyChanged);
+  const frontmatterOnly = new Map();
+  const valeFiles = [];
+  const skippedUnreadable = [];
+  for (const f of files) {
+    if (bodySet.has(f)) {
+      valeFiles.push(f);
+      continue;
+    }
+    const end = frontmatterEndLine(f);
+    // -1: the frontmatter has no readable extent, so neither charging the body
+    // nor capping is honest. Left out of Vale; the schema check already reports
+    // the malformed frontmatter itself.
+    if (end === -1) {
+      skippedUnreadable.push(f);
+      continue;
+    }
+    valeFiles.push(f);
+    if (end) frontmatterOnly.set(f, end);
+  }
+  return { valeFiles, frontmatterOnly, skippedUnreadable };
 }
 
 function main() {
@@ -304,26 +351,10 @@ function main() {
     // rewritten `description` is still checked while untouched body prose is
     // not - skipping those files entirely disabled a blocking check.
     if (files.length) {
-      const frontmatterOnly = new Map();
-      const bodySet = new Set(bodyChanged);
-      const valeFiles = [];
-      const skippedUnreadable = [];
-      for (const f of files) {
-        if (bodySet.has(f)) {
-          valeFiles.push(f);
-          continue;
-        }
-        const end = frontmatterEndLine(f);
-        // -1: the frontmatter has no readable extent, so neither charging the
-        // body nor capping is honest. Left out of Vale; the schema check
-        // already reports the malformed frontmatter itself.
-        if (end === -1) {
-          skippedUnreadable.push(f);
-          continue;
-        }
-        valeFiles.push(f);
-        if (end) frontmatterOnly.set(f, end);
-      }
+      const { valeFiles, frontmatterOnly, skippedUnreadable } = partitionForVale(
+        files,
+        bodyChanged,
+      );
       if (skippedUnreadable.length) {
         console.log(
           `docs-gate: frontmatter extent unreadable, so Vale was NOT run on ` +
@@ -369,4 +400,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { frontmatterEndLine, bodyOf };
+module.exports = { frontmatterEndLine, bodyOf, capAlerts, partitionForVale };

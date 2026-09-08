@@ -495,10 +495,11 @@ function stripComments(src) {
   // quote inside the class, and the whole file came back unreadable - so an
   // ordinary regex added anywhere in SearchBar turned the gate red with a
   // "shape changed" message. `>` covers `=>` for the same reason.
-  // The `[^.\w$]` rather than `[^\w$]`: a PROPERTY named like a keyword is not
-    // the keyword. `counts.in / 2` read as `in` and opened a regex on the
-    // division, which made the whole file unreadable - fail-closed, but a false
-    // positive on valid JS, which is the shape this test was added to remove.
+  // `[^.\w$]` rather than `[^\w$]`: a PROPERTY named like a keyword is not the
+  // keyword. `counts.in / 2` read as `in`, opened a regex on the division, and
+  // made the whole file unreadable - fail-closed, but a false positive on valid
+  // JS, which is the shape this test exists to remove. Depends on `emit`
+  // keeping the dot in `word`; without that this pattern matches anyway.
   const REGEX_AFTER_WORD = /(?:^|[^.\w$])(?:return|typeof|case|in|of|new|delete|void|yield|await|do|else)$/;
   let out = "";
   let quote = null;
@@ -515,6 +516,10 @@ function stripComments(src) {
     if (t) prev = t[t.length - 1];
     for (const ch of s) {
       if (/[\w$]/.test(ch)) word += ch;
+      // The dot is KEPT, or the property guard below cannot see it: resetting
+      // to "" left `counts.in` looking like the bare keyword `in`, so the
+      // guard was inert and `counts.in / 2` still made the file unreadable.
+      else if (ch === ".") word = ".";
       else if (!/\s/.test(ch)) word = "";
     }
   };
@@ -573,12 +578,15 @@ function stripComments(src) {
 /**
  * Index of the `const <name>` declaration, or -1.
  *
- * A word boundary, because `indexOf(`const ${name}`)` is a PREFIX match:
- * with `const FRAMEWORKS_ORDER` declared above `const FRAMEWORKS`, both
- * arrayEntries and registryValues read the wrong array. For the registry that
- * is loud (the drift and union checks fire); for the switcher it is not, so
- * a different array's labels would be validated while the real list went
- * unchecked.
+ * `indexOf(`const ${name}`)` is a PREFIX match: with `const FRAMEWORKS_ORDER`
+ * declared above `const FRAMEWORKS`, both arrayEntries and registryValues read
+ * the wrong array. For the registry that is loud (the drift and union checks
+ * fire); for the switcher it is not, so a different array's labels would be
+ * validated while the real list went unchecked.
+ *
+ * The trailing `\s*(?::|=)` is what fixes that - the name must be followed by
+ * an annotation or an assignment. The leading `(?:^|[^\w$])` is separate and
+ * cheaper: it stops `const` matching as the tail of a longer identifier.
  */
 function declStart(src, constName) {
   const m = new RegExp(`(?:^|[^\\w$])const\\s+${constName}\\s*(?::|=)`).exec(src);
@@ -667,7 +675,12 @@ function arrayEntries(src, constName) {
 
 /** One field, read off an entry's own top level. */
 function entryField(entry, field) {
-  const rx = new RegExp(`^\\s*${field}\\s*:\\s*${QUOTED}\\s*$`);
+  // The key may be quoted, as objectLiteralValues already allows: `"slug":
+  // "ios"` is legitimate TypeScript, and rejecting it reported "no plain
+  // `slug` literal" about an entry that has one.
+  const rx = new RegExp(
+    `^\\s*(?:['\"])?${field}(?:['\"])?\\s*:\\s*${QUOTED}\\s*$`,
+  );
   const hits = [];
   for (const pair of entryPairs(entry).pairs) {
     const m = rx.exec(pair);
@@ -693,8 +706,10 @@ function entryPairs(entry) {
   const inner = entry.trim().replace(/^{/, " ").replace(/}$/, " ");
   const pairs = [];
   const unreadable = [];
-  // A key, quoted or not, or a computed one. Anything else at this depth is a
-  // spread, a shorthand, or a method - none of which this can read a value from.
+  // A key, quoted or not, or a computed one. Anything else at this depth - a
+  // spread, a shorthand, a method, a getter, or a quoted key containing a space
+  // - is something this cannot read a value from, so it is reported rather than
+  // dropped.
   const keyRx = /^\s*(?:\[|["']?[\w$.-]+["']?)\s*:/;
   for (const { flat, raw } of topLevelPairsWithSource(inner)) {
     if (keyRx.test(flat)) pairs.push(flat);

@@ -10,6 +10,13 @@
  *
  * `build(dir)` writes a tree that passes cleanly. `mutate` names one thing to
  * break, so a test can assert the message rather than the exit code alone.
+ *
+ * This covers verify-frameworks only. docs-gate's main() has no equivalent
+ * harness: its two load-bearing decisions - which changed files reach Vale, and
+ * which of Vale's alerts survive the frontmatter cap - are pinned as the pure
+ * functions partitionForVale and capAlerts instead. The rest of that main() is
+ * still driven by nothing, so do not read the asymmetry as a judgement that it
+ * needs less.
  */
 const fs = require("fs");
 const path = require("path");
@@ -174,6 +181,13 @@ Body.
   }
   if (mutate === "registry-renamed") {
     registry = registry.replace("export const FRAMEWORKS", "export const FRAMEWORK_DEFS");
+  }
+  // A union member with no entry. Repurposing the spread row moved the union
+  // expectation onto the `other` message and left this direction uncovered -
+  // and it is the only check that catches it, since `tsc` accepts an extra
+  // member and FRAMEWORK_BY_SLUG then resolves undefined at runtime.
+  if (mutate === "registry-extra-union-slug") {
+    registry = registry.replace(`  | "hosted";`, `  | "hosted"\n  | "bogus";`);
   }
   if (mutate === "registry-union-removed") {
     registry = registry.replace(/export type FrameworkSlug =[^;]*;/, "export type FrameworkSlug = string;");

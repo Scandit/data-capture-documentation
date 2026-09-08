@@ -419,6 +419,23 @@ check("entryFieldValues reads a field off every entry or reports the entry", () 
       ["iOS"],
       [],
     ],
+    // A quoted key is legitimate TypeScript, and objectLiteralValues already
+    // accepts one. Rejecting it here reported "no plain `slug` literal" about
+    // an entry that plainly has one.
+    [
+      "double-quoted key",
+      `const T = [{ "label": "iOS" }];`,
+      "label",
+      ["iOS"],
+      [],
+    ],
+    [
+      "single-quoted key",
+      `const T = [{ 'label': 'iOS' }];`,
+      "label",
+      ["iOS"],
+      [],
+    ],
     // The round-7 critical: the match ran over the whole entry text, so a
     // NESTED field answered for the entry's own. The switcher entry that lost
     // its top-level `slug` that way builds `/undefined/add-sdk`, and the gate
@@ -927,6 +944,7 @@ const FIXTURE_CASES = [
   ["registry-spread-inside-entry", /`\.\.\.HOSTED_EXTRAS` inside an entry is not a `key: value` pair/],
   ["registry-renamed", /could not read the FRAMEWORKS registry/],
   ["registry-union-removed", /the FrameworkSlug union is missing or unreadable/],
+  ["registry-extra-union-slug", /FrameworkSlug lists "bogus", the registry has no such entry/],
   ["switcher-spread-inside-entry", /`\.\.\.OVERRIDES` is not a `key: value` pair/],
   ["searchbar-renamed-map", /SearchBar\/index\.js: could not read its framework list/],
   ["docs-unterminated-fence", /frontmatter opens with `---` but never closes/],
@@ -992,6 +1010,13 @@ check("a regex literal is recognised after a keyword or an arrow", () => {
     ["after typeof", `const b = typeof x === "s" ? /a/ : /b/;`],
     ["after && ", `const b = x && /a/.test(y);`],
     ["division after a call", "const r = f(x)/2;"],
+    // A PROPERTY named like a keyword is not the keyword. Without the dot
+    // surviving into `word`, this read as bare `in`, opened a regex on the
+    // division, and made the whole file unreadable - a false positive on valid
+    // JS, which is what the keyword test was added to remove.
+    ["property named like a keyword", "const half = counts.in / 2;"],
+    ["property named `of`", "const n = list.of / 2;"],
+    ["property named `return`", "const n = fn.return / 2;"],
   ];
   for (const [name, src] of untouched) {
     assert.strictEqual(verify.stripComments(src), src, name);
@@ -1009,6 +1034,97 @@ check("unionSlugs reads through the comment scan", () => {
     ["ios", "android"],
     "a `;` inside a comment does not truncate the union",
   );
+});
+
+/**
+ * The two docs-gate decisions the Vale cap rests on.
+ *
+ * Nothing drove either of them: the cap could be made to drop every alert, or
+ * a metadata-only file could be dropped from the Vale list entirely, and all
+ * tests stayed green. Those are precisely the two regressions this branch
+ * already fixed once each - a frontmatter-only skip that disabled a blocking
+ * check, and a cap that failed open.
+ */
+check("capAlerts keeps frontmatter alerts and drops untouched body prose", () => {
+  const json = {
+    "C:/repo/docs/a.md": [
+      { Line: 2, Severity: "error", Check: "X.Y", Message: "in the frontmatter" },
+      { Line: 12, Severity: "error", Check: "X.Y", Message: "in the body" },
+    ],
+    "C:/repo/docs/b.md": [
+      { Line: 40, Severity: "error", Check: "X.Y", Message: "body of a body-changed file" },
+    ],
+  };
+  const capped = gate.capAlerts(json, new Map([["docs/a.md", 3]]), "C:/repo");
+  assert.deepStrictEqual(
+    capped.map((f) => f.msg),
+    ["in the frontmatter (line 2)", "body of a body-changed file (line 40)"],
+    JSON.stringify(capped),
+  );
+
+  // No ceiling means no dropping at all.
+  assert.strictEqual(gate.capAlerts(json, new Map(), "C:/repo").length, 3);
+  // A ceiling of 0 is not "no ceiling": `frontmatterEndLine` returns 0 for a
+  // file with no frontmatter, and such a file must not be capped to nothing.
+  assert.strictEqual(gate.capAlerts(json, new Map([["docs/a.md", 0]]), "C:/repo").length, 1);
+  // Windows separators in Vale's output still match the map's forward slashes.
+  assert.strictEqual(
+    gate.capAlerts({ "C:\\repo\\docs\\a.md": json["C:/repo/docs/a.md"] }, new Map([["docs/a.md", 3]]), "C:\\repo")
+      .length,
+    1,
+  );
+  assert.deepStrictEqual(gate.capAlerts(null, new Map(), "C:/repo"), []);
+});
+
+check("partitionForVale sends every changed file to Vale, capped or not", () => {
+  withRepoTempDir((dir, rel) => {
+    const write = (name, text) => fs.writeFileSync(path.join(dir, name), text);
+    write("meta.md", "---\ntitle: T\n---\n\nBody\n");
+    write("body.md", "---\ntitle: T\n---\n\nBody\n");
+    write("plain.md", "Just body.\n");
+    write("broken.md", "---\ntitle: T\n\nBody with no closing fence\n");
+    const files = ["meta", "body", "plain", "broken"].map((n) => `${rel}/${n}.md`);
+    const got = gate.partitionForVale(files, [`${rel}/body.md`]);
+
+    // Every file except the unreadable one reaches Vale. Dropping a
+    // metadata-only file here is what disabled the check before.
+    assert.deepStrictEqual(
+      got.valeFiles,
+      [`${rel}/meta.md`, `${rel}/body.md`, `${rel}/plain.md`],
+      JSON.stringify(got.valeFiles),
+    );
+    assert.deepStrictEqual(got.skippedUnreadable, [`${rel}/broken.md`]);
+    // ...and the metadata-only one carries a ceiling, while the body-changed
+    // and no-frontmatter ones do not.
+    assert.deepStrictEqual([...got.frontmatterOnly.entries()], [[`${rel}/meta.md`, 3]]);
+  });
+});
+
+check("VERIFY_FRAMEWORKS_ROOT alone is ignored", () => {
+  // The root is honored only alongside the fixture flag. Without that, one
+  // stray environment value points a blocking gate at another tree and it
+  // prints OK for that tree.
+  const { build } = require("./fixtures/verify-frameworks-fixture.cjs");
+  const script = path.join(ROOT, "scripts", "verify-frameworks.cjs");
+  withTempDir((dir) => {
+    const tree = path.join(dir, "tree");
+    build(tree, "docs-bogus-framework");
+    let out = "";
+    try {
+      out = execFileSync(process.execPath, [script], {
+        env: { ...process.env, VERIFY_FRAMEWORKS_ROOT: tree, VERIFY_FRAMEWORKS_FIXTURE: "" },
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
+      });
+    } catch (e) {
+      out = (e.stdout || "") + (e.stderr || "");
+    }
+    // It scanned the repo, not the three-page fixture, and said nothing about
+    // the fixture's deliberately broken page.
+    assert.doesNotMatch(out, /bogus-slug/, out.slice(0, 400));
+    assert.match(out, /\d{3,} docs scanned/, out.slice(0, 400));
+    assert.doesNotMatch(out, /FIXTURE ROOT/, out.slice(0, 400));
+  });
 });
 
 if (failures.length) {
