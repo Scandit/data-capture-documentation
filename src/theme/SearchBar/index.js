@@ -255,7 +255,13 @@ function stripRoutedTokens(query, stripVersion) {
  *
  *   TWO segments - `rectangularviewfinderstyle.legacy` - is `Class.Member`. An
  *   enum member has no page of its own; it is documented on its parent symbol's
- *   page. Drop the member: 9 hits become 505.
+ *   page. Drop the member: 0 hits become 203.
+ *
+ * Every count here and in the table below is measured with the contextual
+ * filters an 8.x reader searches under, not against the whole index. The
+ * distinction matters: unfiltered, that same query reads 9 -> 505, and 9 is a
+ * number this retry can never see - it runs only when the primary returned
+ * ZERO, so a query with hits never reaches it.
  *
  *   THREE OR MORE - `this.state.settings.codeDuplicateFilter` - is a code
  *   expression the reader pasted from their own source. Algolia holds `word.word`
@@ -303,18 +309,33 @@ function dottedFallback(query) {
   const parts = q.split(".");
   if (parts.length >= 3) {
     const last = parts[parts.length - 1];
-    // A bare identifier of some length, containing at least one letter. A
-    // trailing `js` or `md` is too short, and `array.items.1234` ends in an
-    // index rather than a property name - searching for that returns whatever
-    // page happens to mention the number.
-    const isIdentifier = /^[A-Za-z0-9_]{4,}$/.test(last) && /[A-Za-z]/.test(last);
-    return isIdentifier ? last : null;
+    // The tail has to look like a SYMBOL, not like a word. `[A-Za-z0-9_]{4,}`
+    // alone admitted `width`, `count`, `state`, `value`, `enabled`, `text`,
+    // `size` and `color` - every one a plausible property at the end of a
+    // pasted expression, every one returning zero as written, and every one
+    // retrying into a thousand-plus unrelated pages that the reader never asked
+    // for. Measured: `this.overlay.viewfinder.width` -> `width` -> 2848 hits
+    // topped by release notes, and `this.state.settings.code` -> `code` ->
+    // 2913, which is reachable mid-way through typing the example above.
+    //
+    // A symbol name in this corpus carries a case boundary or an underscore, or
+    // is long: `codeDuplicateFilter`, `SparkScanView`, `arMode`, `symbologies`,
+    // `rectangular`, `strip_leading_zero`. A bare lowercase word of seven
+    // characters or fewer is prose, and an honest no-result beats a confident
+    // wrong one.
+    if (!/^[A-Za-z0-9_]{4,}$/.test(last) || !/[A-Za-z]/.test(last)) return null;
+    const looksLikeSymbol = /[A-Z_]/.test(last) || last.length >= 8;
+    return looksLikeSymbol ? last : null;
   }
   if (parts.length === 2) {
     const m = q.match(/^(.+)\.[A-Za-z0-9_]+$/);
     if (!m) return null;
     const base = m[1];
-    if (base.length < 3 || base === q) return null;
+    if (base.length < 3) return null;
+    // Symmetry with the tail rule above: a numeric base is a version or a
+    // number, not a class. `2024.11` and `1024.5` only fail to bite today
+    // because they happen to return hits as written, so no retry runs.
+    if (!/[A-Za-z]/.test(base)) return null;
     return EXPRESSION_ROOTS.has(base.toLowerCase()) ? null : base;
   }
   return null;
@@ -339,7 +360,13 @@ function Hit({ hit, children }) {
     </Link>
   );
 }
-function ResultsFooter({ state, onClose, currentFramework, hasSearchPage }) {
+function ResultsFooter({
+  state,
+  onClose,
+  currentFramework,
+  hasSearchPage,
+  effectiveQueryRef,
+}) {
   const createSearchLink = useSearchLinkCreator();
   // API results are now shown for whichever single framework each symbol
   // resolved to (web when available, else the next in the fallback order), so
@@ -379,8 +406,34 @@ function ResultsFooter({ state, onClose, currentFramework, hasSearchPage }) {
           open a specific SDK&rsquo;s docs for another platform.
         </div>
       )}
+      {/*
+        `nbHits` is the count of the response DocSearch received, which after a
+        dotted fallback is the RETRY's. Linking to `state.query` then promised
+        "See all 107 results" and landed the reader on a search page measuring
+        zero, because the query they typed is the one that found nothing. The
+        link follows the query the count came from, and the line above says so -
+        otherwise the results mention nothing the reader pasted and there is no
+        way to tell why.
+      */}
+      {effectiveQueryRef &&
+        effectiveQueryRef.current &&
+        state.query &&
+        effectiveQueryRef.current !== state.query && (
+          <div
+            className="DocSearch-DottedFallbackNote"
+            style={{ padding: "6px 12px", fontSize: "0.85em", opacity: 0.8 }}
+          >
+            Showing results for <code>{effectiveQueryRef.current}</code> &mdash;
+            nothing matched <code>{state.query}</code> as written.
+          </div>
+        )}
       {hasSearchPage && (
-        <Link to={createSearchLink(state.query)} onClick={onClose}>
+        <Link
+          to={createSearchLink(
+            (effectiveQueryRef && effectiveQueryRef.current) || state.query
+          )}
+          onClick={onClose}
+        >
           <Translate
             id="theme.SearchBar.seeAll"
             values={{ count: state.context.nbHits }}
@@ -414,6 +467,10 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   // The live query text, updated on every search so transformItems (which only
   // receives items) can route by a framework the user typed in the query.
   const latestQueryRef = useRef("");
+  // The query the displayed results actually came from - the primary, or the
+  // dotted retry when that is what found them. Read by ResultsFooter so its
+  // count and its link agree.
+  const effectiveQueryRef = useRef("");
 
   useEffect(() => {
     const handleUrlChange = () => {
@@ -634,6 +691,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
             onClose={closeModal}
             currentFramework={currentFramework}
             hasSearchPage={Boolean(props.searchPagePath)}
+            effectiveQueryRef={effectiveQueryRef}
           />
         ),
     [closeModal, currentFramework, props.searchPagePath]
@@ -683,7 +741,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
             ? strippedRaw
             : null;
         // Build a request array with an optional query-text override (routed
-        // framework/version tokens stripped, or the enum-member fallback below)
+        // framework/version tokens stripped, or the dotted fallback below)
         // and the version-facet swap. Reused for the primary search and retry.
         // Every keystroke calls searchClient.search, so each partial query
         // ("l","li","lic",...) would otherwise be counted as its own search in
@@ -694,7 +752,10 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // request per completed query, tagged 'whole-query', via the debounced
         // ping below. The dashboard reads two segments: counts + no-result rate
         // from 'whole-query'; CTR + conversion from 'as-you-type'.
-        const buildRequests = (queryOverride, { analyticsPing = false } = {}) =>
+        const buildRequests = (
+          queryOverride,
+          { analyticsPing = false, dottedRetry = false } = {}
+        ) =>
           Array.isArray(requests)
             ? requests.map((r) => {
                 const p = r.params || r;
@@ -734,6 +795,19 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
                     "as-you-type",
                   ];
                 }
+                if (dottedRetry) {
+                  // Tagged so the feature's own effect stays selectable. Without
+                  // it the retry is invisible in both directions: Algolia's
+                  // popular-searches and no-result reports would show
+                  // `codeduplicatefilter` - a query nobody typed - and the
+                  // PostHog ping would stop flagging the paste as a zero-result
+                  // search, so the phenomenon this exists to fix becomes
+                  // unmeasurable the moment it ships.
+                  params.analyticsTags = [
+                    ...(Array.isArray(params.analyticsTags) ? params.analyticsTags : []),
+                    "dotted-fallback",
+                  ];
+                }
                 return r.params ? { ...r, params } : params;
               })
             : requests;
@@ -741,19 +815,21 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
           response && response.results && response.results[0]
             ? response.results[0].nbHits
             : undefined;
-        // Enum-member fallback: when an exact "Class.Member" query returns zero
-        // (the member has no page of its own), retry once with the trailing
-        // ".member" stripped so the parent symbol's page is found. Fires only on
-        // zero results and only adopts the retry when it actually finds hits, so
-        // normal queries are untouched.
-        // Resolve to BOTH the response and the query that actually produced it
-        // (the primary, or the dotted-fallback retry when that is what found the
-        // hits), so the counted ping below logs the query the user really saw.
+        // The dotted fallback: when a dotted query returns zero, retry once
+        // with whichever rewrite its SHAPE calls for - the parent symbol for a
+        // `Class.Member`, the last segment for a pasted expression. See
+        // dottedFallback. Fires only on zero results and only adopts the retry
+        // when it actually finds hits, so normal queries are untouched.
+        //
+        // Resolve to BOTH the response and the query that actually produced it,
+        // so the counted ping and the footer below can use the query the reader
+        // really saw results for rather than the one they typed.
         const primaryQuery = strippedQuery != null ? strippedQuery : query || "";
         // ONE retry, and which one is decided by the query's shape rather than by
         // trying both in turn - see dottedFallback. Two dotted shapes fail for
         // opposite reasons and need opposite fixes, and the shape says which.
         const resultPromise = (async () => {
+          effectiveQueryRef.current = primaryQuery;
           const first = await originalSearch(buildRequests(strippedQuery));
           if (nbHitsOf(first) !== 0) {
             return { response: first, effectiveQuery: primaryQuery };
@@ -763,12 +839,16 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
           if (!candidate || candidate === base) {
             return { response: first, effectiveQuery: primaryQuery };
           }
-          const retry = await originalSearch(buildRequests(candidate));
+          const retry = await originalSearch(
+            buildRequests(candidate, { dottedRetry: true })
+          );
           // Adopted only when it actually finds something, so a normal query is
           // never rewritten on the strength of a guess.
-          return nbHitsOf(retry) > 0
-            ? { response: retry, effectiveQuery: candidate }
-            : { response: first, effectiveQuery: primaryQuery };
+          if (nbHitsOf(retry) > 0) {
+            effectiveQueryRef.current = candidate;
+            return { response: retry, effectiveQuery: candidate };
+          }
+          return { response: first, effectiveQuery: primaryQuery };
         })();
         if (query) {
           resultPromise
@@ -781,7 +861,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // after the user pauses typing. Skips <3-char prefixes ("lc") so
         // mid-typing noise is never counted, and re-checks latestQueryRef at
         // fire time so only the final query in a burst is recorded. Uses the
-        // RESOLVED query (post enum-member fallback), so its no-result status
+        // RESOLVED query (post dotted fallback), so its no-result status
         // reflects what the user actually saw, not the un-retried primary.
         if (query && query.trim().length >= 3) {
           if (analyticsCountRef.current) {
@@ -792,7 +872,10 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
             resultPromise
               .then(({ effectiveQuery }) =>
                 originalSearch(
-                  buildRequests(effectiveQuery, { analyticsPing: true })
+                  buildRequests(effectiveQuery, {
+                    analyticsPing: true,
+                    dottedRetry: effectiveQuery !== primaryQuery,
+                  })
                 )
               )
               .catch(() => {});

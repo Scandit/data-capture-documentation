@@ -69,11 +69,18 @@ const rewriteVersionTag = eval(`(${extract("rewriteVersionTag")})`);
 const EXPRESSION_ROOTS = extractConst("EXPRESSION_ROOTS");
 const dottedFallback = eval(`(${extract("dottedFallback")})`);
 // Named guard for the brace-counting limitation in extract(): if any of the
-// three came back truncated, eval would have thrown something unrelated-looking.
+// four came back truncated, eval would have thrown something unrelated-looking.
+//
+// dottedFallback matters most here - it is the only one whose source carries a
+// brace inside a regex quantifier (`{4,}`), which happens to be balanced and in
+// order. A future edit adding a regex that matches a closing brace, or an
+// unbalanced brace in one of its comments, truncates the extraction and
+// surfaces as a bare SyntaxError before this guard runs.
 for (const [name, fn] of Object.entries({
   apiTagsFor,
   withApiReferenceTags,
   rewriteVersionTag,
+  dottedFallback,
 })) {
   assert.strictEqual(typeof fn, "function", `${name} did not extract cleanly`);
 }
@@ -303,6 +310,26 @@ const DOTTED = [
   ["pasted expression", "this.state.settings.codeDuplicateFilter", "codeDuplicateFilter"],
   ["pasted expression, lower case", "this.barcodecapture.settings.symbologies", "symbologies"],
   ["namespace path", "sdc.core.ui.viewfinder.rectangular", "rectangular"],
+  // Exactly three segments. Without a positive row here, raising the threshold
+  // to four survived - and this query is one of the rows in the function's own
+  // evidence table.
+  [
+    "three segments exactly",
+    "settings.barcodeCaptureSettings.codeDuplicateFilter",
+    "codeDuplicateFilter",
+  ],
+  // The tail has to look like a symbol rather than a word. A case boundary
+  // carries it at any length; without one it has to be long.
+  ["a short tail with a case boundary", "barcode.data.arMode", "arMode"],
+  ["a short tail with an underscore", "express.config.max_codes", "max_codes"],
+  ["eight lowercase characters", "this.settings.symbology", "symbology"],
+  // ...and these are the words that used to be rewritten into a thousand-plus
+  // unrelated pages: measured, `width` returns 2848 hits topped by release
+  // notes, and `code` 2913 - the latter reachable partway through typing the
+  // flagship example.
+  ["a common property name is not a symbol", "this.overlay.viewfinder.width", null],
+  ["another one", "this.state.settings.enabled", null],
+  ["and mid-typing the example itself", "this.state.settings.code", null],
   // Two segments: Class.Member. An enum member has no page of its own, so the
   // parent is what to search for.
   ["enum member", "rectangularviewfinderstyle.legacy", "rectangularviewfinderstyle"],
@@ -314,7 +341,22 @@ const DOTTED = [
   ["a file name keeps its stem", "readme.md", "readme"],
   ["a dotted path ending in an extension", "docs.sdks.ios.md", null],
   ["a numeric tail is an index, not a property", "array.items.1234", null],
+  // Symmetry: a numeric BASE is a version or a number, not a class. Neither
+  // side of the rule was pinned before.
+  ["a numeric base", "2024.11", null],
+  ["a decimal", "1024.5", null],
+  // The tail regex is anchored. Unanchored, a tail containing a non-identifier
+  // character alongside a long identifier run would match.
+  ["a URL path in the tail", "docs.scandit.com/data-capture-sdk", null],
+  ["a call in the tail", "foo.bar.applySettings(settings)", null],
+  // The two-segment branch reads the member through its own regex, so a member
+  // that is not an identifier declines rather than falling back to parts[0].
+  ["a two-segment member that is not an identifier", "scandit.com/docs", null],
   ["a short tail", "a.b.c", null],
+  // Three characters is short even with a case boundary: the length floor
+  // and the symbol-shape rule are separate decisions, and lowering the floor
+  // to three passed every other row.
+  ["a three-character tail with a case boundary", "barcode.data.arM", null],
   ["a two-segment name with too short a base", "a.legacy", null],
   ["no dot at all", "codeDuplicateFilter", null],
   ["a phrase containing a dot", "see settings.symbologies for more", null],
