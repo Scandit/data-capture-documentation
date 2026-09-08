@@ -112,9 +112,15 @@
   text-decoration: none;
 }
 
+/* No API reference for this framework yet. Dimmed through the border and a
+   colour token rather than `opacity`, which composited the label to 3.19:1 in
+   light mode - below AA - while looking merely faint. Measured against the
+   BUILT css rather than assumed token values: 5.29:1 light, 12.26:1 dark.
+   `border-style: dashed` carries the state without relying on colour. */
 .frameworkItemUnavailable {
-  opacity: 0.5;
-  cursor: not-allowed;
+  color: var(--ifm-color-emphasis-700);
+  border-style: dashed;
+  cursor: default;
 }
 
 .frameworkItemUnavailable:hover {

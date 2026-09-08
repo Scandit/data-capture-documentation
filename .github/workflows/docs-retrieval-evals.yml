@@ -1,0 +1,82 @@
+name: Docs Retrieval Evals
+
+# Measures retrieval quality of the build-generated knowledge index against a
+# gold set of real queries (success@k / precision@k / MRR). Runs on PRs that
+# touch docs, the extractor, or the gold set — a regression in descriptions or
+# partials that hurts retrieval fails here. Also runs on push to main, so the
+# deploy branch is checked too (an empty index from a cause outside the PR
+# paths — e.g. a Docusaurus upgrade renaming article selectors — is caught here
+# as well as by the plugin's own fail-loud floor check during the build).
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      - 'src/plugins/knowledge-extractor/**'
+      - 'scripts/retrieval-evals/**'
+      - '.github/workflows/docs-retrieval-evals.yml'
+      # These decide WHAT gets indexed at all: assistantIgnoreFiles and
+      # lastVersion live in the config, and versions.json decides which
+      # trees are frozen. Without them a PR that widens or narrows the
+      # curation list changes the corpus and skips both evals.
+      - 'docusaurus.config.ts'
+      - 'versions.json'
+  push:
+    branches:
+      - main
+
+jobs:
+  retrieval-evals:
+    name: Docs Retrieval Evals
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Full history: the knowledge-extractor takes each page's
+          # `last_verified` from its last commit date. The default shallow
+          # clone (depth 1) makes every file resolve to the same single
+          # commit, so the plugin deliberately emits "" rather than a
+          # constant that looks like data - which would leave the artifact
+          # this workflow evaluates with no freshness signal at all.
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build docs (generates the knowledge retrieval index)
+        id: build
+        run: yarn build
+
+      - name: Run retrieval evals
+        run: node scripts/retrieval-evals/run.cjs --report reports/retrieval-evals.json
+
+      # The gold-set run above measures 20 curated queries. This one asks every
+      # module to retrieve itself, which is the only check that covers pages
+      # nobody wrote a query for - and until now MIN_AUTO_SUCCESS gated nothing
+      # because no workflow passed --auto. Reported separately so a corpus-wide
+      # regression is attributable.
+      - name: Run corpus-wide self-retrieval
+        # Not always(): a gold-set breach above must not hide the corpus-wide
+        # number, but a FAILED BUILD must not add a second red step blaming a
+        # missing index instead - and always() fires on cancellation too.
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/retrieval-evals/run.cjs --auto --report reports/retrieval-evals-auto.json
+
+      - name: Upload eval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: retrieval-evals-report
+          path: |
+            reports/retrieval-evals.json
+            reports/retrieval-evals-auto.json
+          if-no-files-found: ignore

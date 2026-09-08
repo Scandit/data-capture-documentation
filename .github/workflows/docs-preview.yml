@@ -21,6 +21,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          # Full history, because the knowledge-extractor sets each page's
+          # `last_verified` from that file's last commit date. A depth-1 clone
+          # makes every file resolve to the same single commit, and the plugin
+          # then emits "" rather than a constant that looks like data - so a
+          # preview would carry no freshness signal at all.
+          #
+          # Only this job needs it: `deploy` below just downloads the artifact.
+          # Cheap here - 796 commits, and the `git log` over docs/ measures at
+          # ~0.13s.
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

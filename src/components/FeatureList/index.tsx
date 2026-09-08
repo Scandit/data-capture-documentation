@@ -202,15 +202,36 @@ const FeatureList: React.FC<FeatureListProps> = ({
                     {Object.entries(feature.frameworks)
                       .filter(([, info]) => info.version !== 'n/a')
                       .map(([frameworkName, frameworkInfo]) => (
-                        <a
-                          key={frameworkName}
-                          href={withCurrentDocsPath(frameworkInfo.apiUrl)}
-                          className={styles.frameworkItem}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {frameworkName} v{frameworkInfo.version}
-                        </a>
+                        // The ELEMENT changes, not just the href. Guarding the
+                        // href alone rendered the same DOM - withCurrentDocsPath
+                        // returns undefined for undefined and React omits the
+                        // attribute - so the chip stayed an <a> with no href:
+                        // not keyboard-focusable, navigating nowhere, still
+                        // showing the link hover. 17 cells in features.json
+                        // carry no apiUrl, of which 16 reach this branch - the
+                        // 17th is Web / 7-Segment Display, filtered out earlier
+                        // by version === "n/a".
+                        // Latent only while every usage is compact mode, which
+                        // skips this column. Same shape as the feature-name cell
+                        // above, which swaps <a> for <h4>.
+                        frameworkInfo.apiUrl ? (
+                          <a
+                            key={frameworkName}
+                            href={withCurrentDocsPath(frameworkInfo.apiUrl)}
+                            className={styles.frameworkItem}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {frameworkName} v{frameworkInfo.version}
+                          </a>
+                        ) : (
+                          <span
+                            key={frameworkName}
+                            className={`${styles.frameworkItem} ${styles.frameworkItemUnavailable}`}
+                          >
+                            {frameworkName} v{frameworkInfo.version}
+                          </span>
+                        )
                       ))}
                   </div>
                 </td>

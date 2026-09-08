@@ -9,6 +9,7 @@ import remarkHideComments from "./src/plugins/remark-hide-comments";
 import remarkOffloadPreviewMedia from "./src/plugins/remark-offload-preview-media";
 import stripPreviewMediaPlugin from "./src/plugins/plugin-strip-preview-media";
 import { UNRELEASED_FRAMEWORK_SLUGS } from "./src/constants/unreleasedFrameworks";
+import knowledgeExtractor from "./src/plugins/knowledge-extractor";
 dotenv.config();  // Load environment variables from .env file
 
 const productionUrl = "https://docs.scandit.com";
@@ -95,18 +96,39 @@ const llmsRootRedirectOnlyDocs: string[] = [
   "docs/system-requirements.mdx",
 ];
 
-// Paths are matched by docusaurus-plugin-llms relative to siteDir (e.g. docs/...).
-const llmsIgnoreFiles: string[] = [
+/**
+ * CURATION: pages no AI consumer should be given at all - deprecated platforms,
+ * features a platform does not have, redirect-only stubs with no prose, and
+ * partials that are not routes. Shared by both AI exports, so a decision about
+ * what an assistant may see is made once.
+ */
+const assistantIgnoreFiles: string[] = [
   "docs/connector-guides/**",
   // Partials are imported into real pages, not standalone doc routes; omit so llms.txt URLs work.
   "docs/partials/**",
   ...llmsRootRedirectOnlyDocs,
   ...llmsIgnoredSdkTrees,
   ...llmsLinuxPartialIgnore,
-  ...llmsNonWebSdkRoots.flatMap((root) =>
-    llmsSharedPartialPageNames.map((name) => `docs/${root}/${name}`),
-  ),
 ];
+
+/**
+ * CORPUS SHAPE, for the llms export only: the same prose repeated under every
+ * non-Web SDK root, deduped to Web so a flat text corpus does not carry nine
+ * copies of it.
+ *
+ * Deliberately NOT shared with the knowledge-extractor, and this is the one
+ * place the two exports differ on purpose. That index exists to route a reader
+ * to the page they are on: someone reading Flutter docs needs the Flutter URL,
+ * not the Web one that happens to hold the canonical copy of the text. Applying
+ * this list there removed about 1,400 modules and with them the ability to
+ * answer "where in the Flutter docs does this live".
+ */
+const llmsDedupedToWeb: string[] = llmsNonWebSdkRoots.flatMap((root) =>
+  llmsSharedPartialPageNames.map((name) => `docs/${root}/${name}`),
+);
+
+// Paths are matched by docusaurus-plugin-llms relative to siteDir (e.g. docs/...).
+const llmsIgnoreFiles: string[] = [...assistantIgnoreFiles, ...llmsDedupedToWeb];
 
 // ---------------------------------------------------------------------------
 // SINGLE SOURCE OF TRUTH: docs versions and every `docusaurus_tag` derived
@@ -465,6 +487,17 @@ const config: Config = {
     // reader on 6.28.11 finds the 6.28 API and never the 8.x one.
     apiReferenceTagsByVersionTag: buildApiReferenceTags(docsVersions),
     versionNumberByTag: buildVersionNumberByTag(docsVersions),
+    // The CURATION half of the llms ignore list - what no AI consumer should be
+    // given - exported so the knowledge-extractor applies the same decision
+    // rather than a paraphrase of it. Exporting only `llmsIgnoredSdkTrees` left
+    // the two disagreeing about 39 modules; exporting the WHOLE llms list
+    // over-corrected, because it also carries a corpus-shape decision (see
+    // llmsDedupedToWeb) that a routing index must not inherit.
+    assistantIgnoreFiles,
+    // Which version THIS build serves at the root. Read by the
+    // knowledge-extractor plugin, which cannot otherwise tell a frozen version
+    // served at the root from `current` - and the two need opposite handling.
+    lastVersion: effectiveLastVersion,
   },
 
   // Set the production url of your site here
@@ -734,6 +767,28 @@ const config: Config = {
   // gate can check a real build artifact instead of re-deriving the same
   // assumption from this file and agreeing with itself.
   searchTagsManifestPlugin,
+  // Build-generate AI layer: emits /assets/knowledge-retrieval-index.json and
+  // /assets/knowledge-graph.jsonld from the rendered HTML (see
+  // src/plugins/knowledge-extractor).
+  //
+  // Division of labour with docusaurus-plugin-llms above, which also exports for
+  // AI consumers: that plugin ships the PROSE (llms.txt as a link index,
+  // llms-full.txt as the text - 0.08 and 2.28 MiB on this build). This one ships
+  // TYPED METADATA AND EDGES for deciding what to read - intents, audiences,
+  // channels, frameworks, products, cites-API, see-also, availability - with
+  // only an excerpt of the prose, because the text is already published next to
+  // it (10.41 MiB index, 11.62 MiB graph). Neither replaces the other.
+  //
+  // They share assistantIgnoreFiles, so what an assistant may SEE is decided
+  // once. They differ, on purpose, on llmsDedupedToWeb: a flat corpus wants one
+  // copy of prose repeated across frameworks, a routing index needs the module
+  // that points at the framework the reader is actually on.
+  //
+  // LAST in the array on purpose: its postBuild reads the rendered HTML, so it
+  // must run after any plugin that rewrites the build - stripPreviewMediaPlugin
+  // on a preview build in particular. Ordered before, it would extract from a
+  // state the deploy does not serve.
+  knowledgeExtractor,
 ],
 
   presets: [

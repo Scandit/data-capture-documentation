@@ -18,16 +18,19 @@
     "docs:gate": "node scripts/docs-gate/index.cjs",
     "docs:gate:setup": "node scripts/setup-vale.cjs",
     "verify:search-tags": "node scripts/verify-search-tags.cjs",
-    "test:search-facets": "node scripts/test-search-facets.cjs"
+    "test:search-facets": "node scripts/test-search-facets.cjs",
+    "docs:retrieval-evals": "node scripts/retrieval-evals/run.cjs"
   },
   "dependencies": {
     "@docusaurus/core": "^3.4.0",
     "@docusaurus/plugin-client-redirects": "3.4.0",
     "@docusaurus/preset-classic": "^3.4.0",
     "@mdx-js/react": "^3.0.0",
+    "cheerio": "1.0.0-rc.12",
     "classnames": "^2.5.1",
     "clsx": "^1.2.1",
     "docusaurus-plugin-sass": "^0.2.5",
+    "gray-matter": "4.0.3",
     "prism-react-renderer": "^2.1.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
