@@ -101,6 +101,27 @@ function build(dir, mutate) {
   if (mutate === "docs-bogus-framework") {
     write(dir, "docs/c.md", `---\nframework: bogus-slug\n---\n\nBody.\n`);
   }
+  // The three frontmatter sentinels. Each was a silent pass once - a page
+  // whose frontmatter cannot be read must be REPORTED, never counted as
+  // declaring nothing.
+  if (mutate === "docs-unterminated-fence") {
+    write(dir, "docs/c.md", `---\nframework: ios\n\nBody with no closing fence.\n`);
+  }
+  if (mutate === "docs-empty-framework") {
+    write(dir, "docs/c.md", `---\nframework:\n---\n\nBody.\n`);
+  }
+  if (mutate === "docs-nonstring-framework") {
+    write(dir, "docs/c.md", `---\nframework: 5\n---\n\nBody.\n`);
+  }
+  // No docs/ at all, which the env-overridable ROOT makes reachable: it used to
+  // throw a raw ENOENT stack instead of a sentence.
+  if (mutate === "docs-absent") {
+    fs.rmSync(path.join(dir, "docs"), { recursive: true, force: true });
+  }
+  if (mutate === "docs-empty-dir") {
+    fs.rmSync(path.join(dir, "docs"), { recursive: true, force: true });
+    fs.mkdirSync(path.join(dir, "docs"), { recursive: true });
+  }
   if (mutate === "docs-none-declare") {
     write(dir, "docs/a.md", `---\ntitle: A\n---\n\nBody.\n`);
     write(dir, "docs/b.md", `---\ntitle: B\n---\n\nBody.\n`);
@@ -135,11 +156,27 @@ Body.
     registryEntries[2].agentSkills = true;
   }
   let registry = REGISTRY(registryEntries);
+  // Additive, not a replacement. Replacing an entry left the FrameworkSlug
+  // union listing a slug the literal no longer had, so the row passed on the
+  // UNION check and the `other` reporting loop could be deleted with every row
+  // still green - it certified a check it never exercised.
   if (mutate === "registry-spread-entry") {
+    registry = registry.replace("];", "  ...EXTRA_FRAMEWORKS,\n];");
+  }
+  // A spread INSIDE an entry, which at runtime can supply the very field the
+  // invariant reads. One brace deeper than the case above, and invisible until
+  // entryPairs reported it.
+  if (mutate === "registry-spread-inside-entry") {
     registry = registry.replace(
       `  { slug: "hosted", display: "Hosted", routeSegment: null, agentSkills: false },`,
-      "  ...EXTRA_FRAMEWORKS,",
+      `  { slug: "hosted", display: "Hosted", routeSegment: null, ...HOSTED_EXTRAS },`,
     );
+  }
+  if (mutate === "registry-renamed") {
+    registry = registry.replace("export const FRAMEWORKS", "export const FRAMEWORK_DEFS");
+  }
+  if (mutate === "registry-union-removed") {
+    registry = registry.replace(/export type FrameworkSlug =[^;]*;/, "export type FrameworkSlug = string;");
   }
   if (mutate === "registry-nested-routesegment") {
     registry = registry
@@ -159,11 +196,13 @@ Body.
     "src/components/constants/frameworksName.ts",
     ENUM(mutate === "enum-bogus-display" ? [...displays.slice(0, 2), "Bogus Display"] : displays),
   );
-  write(
-    dir,
-    "src/theme/SearchBar/index.js",
-    SEARCHBAR(mutate === "searchbar-bogus-display" ? [...displays.slice(0, 2), "Bogus Display"] : displays),
+  let searchbar = SEARCHBAR(
+    mutate === "searchbar-bogus-display" ? [...displays.slice(0, 2), "Bogus Display"] : displays,
   );
+  if (mutate === "searchbar-renamed-map") {
+    searchbar = searchbar.replace(/API_FRAMEWORK_LABELS/g, "LABELS_BY_TOKEN");
+  }
+  write(dir, "src/theme/SearchBar/index.js", searchbar);
   let switcher = SWITCHER(entries);
   if (mutate === "switcher-bogus-label") {
     switcher = switcher.replace(`label: "Web"`, `label: "Bogus Display"`);
@@ -173,6 +212,12 @@ Body.
   }
   if (mutate === "switcher-spread-entry") {
     switcher = switcher.replace(`  { label: "Web", slug: "web" },`, "  ...MORE_ENTRIES,");
+  }
+  if (mutate === "switcher-spread-inside-entry") {
+    switcher = switcher.replace(
+      `  { label: "Web", slug: "web" },`,
+      `  { label: "Web", ...OVERRIDES },`,
+    );
   }
   write(dir, "src/utils/useFrameworkItems.js", switcher);
 

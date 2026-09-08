@@ -56,11 +56,23 @@ const path = require("path");
 const yaml = require("js-yaml");
 
 // Overridable so scripts/test-docs-gate.cjs can run this whole script against
-// a fixture tree. Every check and every report in main() was deletable with a
-// green suite until there was a way to drive it end to end.
-const ROOT = process.env.VERIFY_FRAMEWORKS_ROOT
-  ? path.resolve(process.env.VERIFY_FRAMEWORKS_ROOT)
-  : path.join(__dirname, "..");
+// a fixture tree - which is what makes the decisions inside main() testable at
+// all, rather than only the readers they call.
+//
+// It covers the decisions the fixture rows exercise, not every line of main()
+// by construction. Each round that found a deletable decision here found it by
+// mutation testing, so the honest statement is: if you add a check, add a row -
+// nothing structural stops the next one going unpinned.
+//
+// Both variables are required, and the resolved root is echoed whenever it is
+// not the repo. This is a blocking gate: one stray environment value would
+// otherwise point it at another tree and print OK for that tree, with only the
+// `N docs scanned` line to give it away.
+const FIXTURE_ROOT =
+  process.env.VERIFY_FRAMEWORKS_FIXTURE === "1" && process.env.VERIFY_FRAMEWORKS_ROOT
+    ? path.resolve(process.env.VERIFY_FRAMEWORKS_ROOT)
+    : null;
+const ROOT = FIXTURE_ROOT || path.join(__dirname, "..");
 const DOCS = path.join(ROOT, "docs");
 /** A `frameworks:` declaration written in a shape this gate cannot read. */
 const UNREADABLE = "\0unreadable";
@@ -483,7 +495,11 @@ function stripComments(src) {
   // quote inside the class, and the whole file came back unreadable - so an
   // ordinary regex added anywhere in SearchBar turned the gate red with a
   // "shape changed" message. `>` covers `=>` for the same reason.
-  const REGEX_AFTER_WORD = /(?:^|[^\w$])(?:return|typeof|case|in|of|new|delete|void|yield|await|do|else)$/;
+  // The `[^.\w$]` rather than `[^\w$]`: a PROPERTY named like a keyword is not
+    // the keyword. `counts.in / 2` read as `in` and opened a regex on the
+    // division, which made the whole file unreadable - fail-closed, but a false
+    // positive on valid JS, which is the shape this test was added to remove.
+  const REGEX_AFTER_WORD = /(?:^|[^.\w$])(?:return|typeof|case|in|of|new|delete|void|yield|await|do|else)$/;
   let out = "";
   let quote = null;
   let regex = false;
@@ -651,14 +667,40 @@ function arrayEntries(src, constName) {
 
 /** One field, read off an entry's own top level. */
 function entryField(entry, field) {
-  const inner = entry.trim().replace(/^{/, " ").replace(/}$/, " ");
   const rx = new RegExp(`^\\s*${field}\\s*:\\s*${QUOTED}\\s*$`);
   const hits = [];
-  for (const pair of topLevelPairs(inner)) {
+  for (const pair of entryPairs(entry).pairs) {
     const m = rx.exec(pair);
     if (m) hits.push(m.groups.v);
   }
   return hits;
+}
+
+/**
+ * An entry's own `key: value` pairs, plus every depth-0 chunk of it that is not
+ * one.
+ *
+ * The second half is the point. arrayEntries reports the chunks of the ARRAY it
+ * cannot read and objectLiteralValues reports the PAIRS it cannot read; reading
+ * a field off an entry did neither, so a spread one brace deeper was invisible.
+ * Measured: `{ slug: "hosted", display: "Hosted", routeSegment: null,
+ * ...HOSTED_EXTRAS }` with `HOSTED_EXTRAS = { agentSkills: true }` is
+ * `agentSkills: true` with a null route at runtime - the exact input the
+ * invariant below exists to catch - and the gate printed OK. It type-checks,
+ * too, so nothing else was going to notice.
+ */
+function entryPairs(entry) {
+  const inner = entry.trim().replace(/^{/, " ").replace(/}$/, " ");
+  const pairs = [];
+  const unreadable = [];
+  // A key, quoted or not, or a computed one. Anything else at this depth is a
+  // spread, a shorthand, or a method - none of which this can read a value from.
+  const keyRx = /^\s*(?:\[|["']?[\w$.-]+["']?)\s*:/;
+  for (const { flat, raw } of topLevelPairsWithSource(inner)) {
+    if (keyRx.test(flat)) pairs.push(flat);
+    else unreadable.push(raw.trim());
+  }
+  return { pairs, unreadable };
 }
 
 /**
@@ -781,6 +823,11 @@ function entryFieldValues(src, constName, field) {
     const hits = entryField(entry, field);
     const named = entryField(entry, "label");
     const id = named.length === 1 ? `"${named[0]}"` : `#${i}`;
+    // A chunk of the entry itself that is not a `key: value` pair. A spread
+    // here can supply the very field being read, so silence is a silent pass.
+    for (const chunk of entryPairs(entry).unreadable) {
+      missing.push(`entry ${id}: \`${chunk.slice(0, 40)}\` is not a \`key: value\` pair`);
+    }
     if (!hits.length) {
       missing.push(`entry ${id} has no plain \`${field}\` literal`);
       return;
@@ -1007,9 +1054,12 @@ function registryInvariantErrors(read, registrySlugs, file) {
         `whatever it contributes to the registry is unchecked`,
     );
   }
-  // Counted, like every other reader here. registrySlugs is one depth-0 `slug`
-  // per entry, so a mismatch means an entry declares none - or declares it
-  // somewhere this cannot see.
+  // Counted, like every other reader here. registrySlugs is the depth-0 `slug`
+  // values of these same entries, so a mismatch means an entry declares none
+  // where this can see it. It is no longer an independent cross-check the way
+  // counting every occurrence in the literal was: an entry declaring `slug`
+  // twice would contribute two and balance a miss elsewhere. `tsc` is what
+  // rules that out - a duplicate key in an object literal is TS1117.
   if (registrySlugs && entries.length !== registrySlugs.length) {
     errors.push(
       `${file}: read ${entries.length} entries but ${registrySlugs.length} ` +
@@ -1018,6 +1068,14 @@ function registryInvariantErrors(read, registrySlugs, file) {
     );
   }
   for (const entry of entries) {
+    // Same reporting as entryFieldValues: a spread inside the entry can supply
+    // `agentSkills` or `routeSegment`, and this scan would not see either.
+    for (const chunk of entryPairs(entry).unreadable) {
+      errors.push(
+        `${file}: \`${chunk.slice(0, 40)}\` inside an entry is not a ` +
+          `\`key: value\` pair, so what it contributes is unchecked`,
+      );
+    }
     // Depth 0 only, and `\s*:` on each test: no formatter is configured, so
     // `agentSkills : true` is a shape this file has to expect - and a space
     // before the colon skipped the entry without tripping the count assertion,
@@ -1036,12 +1094,23 @@ function registryInvariantErrors(read, registrySlugs, file) {
 }
 
 function main() {
+  if (FIXTURE_ROOT) console.log(`framework gate: FIXTURE ROOT ${FIXTURE_ROOT}\n`);
   const vocabulary = enumSlugs();
   const allowed = vocabulary.slugs;
   const errors = [...vocabulary.errors];
 
   // 1. CONTENT
-  const files = walk(DOCS);
+  let files = [];
+  try {
+    files = walk(DOCS);
+  } catch (e) {
+    // A sentence, like every other failure here. ROOT is env-overridable now,
+    // so a tree with no docs/ is reachable rather than hypothetical.
+    errors.push(
+      `docs/ could not be read (${e.message.split("\n")[0]}) - the content ` +
+        `check is unperformed rather than clean`,
+    );
+  }
   let pagesWithField = 0;
   for (const file of files) {
     const decls = declaredFrameworks(file);
@@ -1275,6 +1344,7 @@ module.exports = {
   enumSlugs,
   registryInvariantErrors,
   entryField,
+  entryPairs,
   splitTopLevel,
   topLevelPairsWithSource,
   topLevelOnly,

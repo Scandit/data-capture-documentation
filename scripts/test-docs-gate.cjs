@@ -923,7 +923,17 @@ const FIXTURE_CASES = [
   ["schema-enums-differ", /`framework` and `frameworks` enums differ in docs-schema\.yml/],
   ["registry-agentskills-no-route", /has agentSkills: true but no routeSegment/],
   ["registry-nested-routesegment", /has agentSkills: true but no routeSegment/],
-  ["registry-spread-entry", /FrameworkSlug lists "hosted", the registry has no such entry/],
+  ["registry-spread-entry", /`\.\.\.EXTRA_FRAMEWORKS` is not an entry this can read/],
+  ["registry-spread-inside-entry", /`\.\.\.HOSTED_EXTRAS` inside an entry is not a `key: value` pair/],
+  ["registry-renamed", /could not read the FRAMEWORKS registry/],
+  ["registry-union-removed", /the FrameworkSlug union is missing or unreadable/],
+  ["switcher-spread-inside-entry", /`\.\.\.OVERRIDES` is not a `key: value` pair/],
+  ["searchbar-renamed-map", /SearchBar\/index\.js: could not read its framework list/],
+  ["docs-unterminated-fence", /frontmatter opens with `---` but never closes/],
+  ["docs-empty-framework", /framework is declared with nothing in it/],
+  ["docs-nonstring-framework", /framework must be a string/],
+  ["docs-empty-dir", /no \.md or \.mdx files found under docs\//],
+  ["docs-absent", /docs\/ could not be read/],
   ["registry-missing-union-member", /registry defines "hosted", FrameworkSlug omits it/],
   ["enum-bogus-display", /frameworksName\.ts: display name "Bogus Display" is not in the registry/],
   ["searchbar-bogus-display", /SearchBar\/index\.js: display name "Bogus Display" is not in the registry/],
@@ -945,7 +955,13 @@ check("verify-frameworks catches each break in a fixture tree", () => {
       let out = "";
       try {
         out = execFileSync(process.execPath, [script], {
-          env: { ...process.env, VERIFY_FRAMEWORKS_ROOT: tree },
+          env: {
+            ...process.env,
+            VERIFY_FRAMEWORKS_ROOT: tree,
+            // Both, deliberately: the script ignores the root without this, so a
+            // stray environment value cannot point the real gate at another tree.
+            VERIFY_FRAMEWORKS_FIXTURE: "1",
+          },
           encoding: "utf8",
           stdio: ["ignore", "pipe", "pipe"],
         });
