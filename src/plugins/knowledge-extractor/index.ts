@@ -7,7 +7,8 @@
  * and every chunk gets the real, user-facing URL and the frontmatter-derived
  * `<meta name="description">` as its summary.
  *
- * It splits each CURRENT-version page into small self-contained knowledge
+ * It splits each page of the version SERVED AT THE ROOT into small
+ * self-contained knowledge
  * modules (chunks, ~1400 chars) with rule-based metadata, preserving link URLs
  * inside the prose (so citations — including external API-reference links —
  * survive), then emits the two artifacts an assistant / in-docs search consume:
@@ -15,14 +16,21 @@
  *   - <outDir>/assets/knowledge-graph.jsonld          (enriched concept graph)
  *
  * A POINTER INDEX, NOT A TEXT STORE - and deliberately so. `toIndexRecord`
- * publishes `docs_excerpt` (<=400 chars, averaging 374) and `assistant_excerpt`
- * (averaging 518) and does NOT publish `content.docs_markdown`; the consumer
- * follows `url` for the full text. That is not an oversight, it is the only
- * shape that makes sense next to the sibling export: measured on this build the
- * index is already 11.0 MB and the graph 12.3 MB, while `llms-full.txt` carries
- * the FULL prose of every page in 2.3 MB. Adding ~1,400 chars per module would
- * put ~6.5 MB more onto an 11 MB artifact in order to restate, five times less
- * efficiently, text that ships next to it.
+ * publishes `docs_excerpt` (averaging 376.5 chars, max 404 - `clipMarkdown`
+ * appends the fence closer AFTER slicing to 400, so 400 is the slice budget and
+ * not an enforced bound) and `assistant_excerpt` (averaging 521.2, max 623),
+ * and does NOT publish `content.docs_markdown`; the consumer follows `url` for
+ * the full text - which is the page itself, so it is always reachable.
+ *
+ * The cost of the alternative is measurable: the index is already 10.41 MiB and
+ * the graph 11.62 MiB, and adding ~1,400 chars per module would put roughly
+ * 6 MiB more onto it. For scale, `llms-full.txt` carries the site's prose in
+ * 2.28 MiB, so per-module text is an expensive way to store text. The argument
+ * rests on that and on the `url`, NOT on a claim that each module's prose also
+ * ships in llms-full.txt: the two artifacts cut the corpus differently - 452
+ * page sections there against 4,386 modules here - so there is no per-module
+ * correspondence to appeal to. Units are MiB throughout, to match `mb()` and
+ * MAX_INDEX_MB below.
  *
  * So CHUNK_TARGET_CHARS is a GRANULARITY knob, not a payload size: it decides
  * how finely a page is split into retrievable units, and the excerpt is a
@@ -38,9 +46,9 @@
  * dump cannot express. They share a source of truth for what an assistant may
  * see (`customFields.llmsIgnoredSdkTrees`) so they cannot disagree about scope.
  *
- * Known limit: 11 MB is large for a browser consumer to fetch whole. Nothing in
- * the repo consumes it that way yet; if something does, it needs a served index
- * or a split by framework rather than a smaller excerpt.
+ * Known limit: 10 MiB is large for a browser consumer to fetch whole. Nothing
+ * in the repo consumes it that way yet; if something does, it needs a served
+ * index or a split by framework rather than a smaller excerpt.
  *
  * The graph is not just faceting: alongside intent/audience/channel/framework
  * it mines real edges from the content — product membership, cites-API,
@@ -1037,7 +1045,57 @@ function gitDates(siteDir: string): Map<string, string> {
  * device-pairing/ shipped an empty date even from a full-history clone: its
  * source is device-pairing/device-pairing.md, a shape neither list covered.
  */
-function sourceCandidates(pathname: string): string[] {
+/**
+ * Compile one llms ignore glob to a RegExp, or refuse.
+ *
+ * Deliberately NOT a full glob engine, and deliberately loud about it. The
+ * shapes the repo's ignore list uses are literal paths and `<literal>/**`; a
+ * previous version tried to handle them by string surgery on the prefix, which
+ * understood exactly one of them and silently matched NOTHING for the rest -
+ * so adding a tree in any other form gave a green build that kept feeding an
+ * assistant what the repo had just decided to hide. Anything this cannot
+ * express now throws at build time instead.
+ *
+ * No matcher is a declared dependency of this site, and reaching for a
+ * transitive one is the mistake this plugin was already corrected on once
+ * (cheerio). Twelve lines beat a lockfile change.
+ */
+function ignoreGlobToRegExp(glob: string): RegExp {
+  const unsupported = /[{}!\[\]?+@()|]/.exec(glob);
+  if (unsupported) {
+    throw new Error(
+      `[knowledge-extractor] cannot express the ignore glob ${JSON.stringify(glob)}: ` +
+        `unsupported character ${JSON.stringify(unsupported[0])}. Supported shapes are a ` +
+        `literal path and one using * or ** as whole-segment wildcards. Extend ` +
+        `ignoreGlobToRegExp rather than leaving the pattern to match nothing.`,
+    );
+  }
+  let out = "";
+  for (let i = 0; i < glob.length; i += 1) {
+    const c = glob[i];
+    if (c === "*") {
+      const doubled = glob[i + 1] === "*";
+      if (doubled && glob[i + 2] === "/") {
+        out += "(?:[^/]+/)*";
+        i += 2;
+      } else if (doubled) {
+        out += ".*";
+        i += 1;
+      } else {
+        out += "[^/]*";
+      }
+      continue;
+    }
+    out += c.replace(/[.+^${}()|[\]\\]/g, "\\$&");
+  }
+  return new RegExp(`^${out}$`);
+}
+
+/**
+ * Every spelling of the DOCS-relative source path a route can come from. Used
+ * for matching the llms ignore globs, which are written against `docs/`.
+ */
+function docsRelCandidates(pathname: string): string[] {
   const rel = pathname.replace(/^\/+|\/+$/g, "");
   if (!rel) return ["docs/index.md", "docs/index.mdx", "docs/intro.md", "docs/intro.mdx"];
   const leaf = rel.split("/").pop() || "";
@@ -1053,9 +1111,31 @@ function sourceCandidates(pathname: string): string[] {
   ];
 }
 
+/**
+ * Where the file BEHIND a served route actually lives.
+ *
+ * Not always `docs/`. When a frozen version is served at the root - the beta
+ * cycle, where `update-version.py minor_beta` snapshots the release and sets
+ * `DOCS_LAST_VERSION` - the root is served from
+ * `versioned_docs/version-<served>/` and `docs/` becomes the unreleased tree.
+ * Reading `docs/` then gave every root module the NEXT version's frontmatter:
+ * correct on the day of the snapshot, wrong from the first edit after it.
+ * Comparing version-7.6.14 against today's docs/ shows 388 of 449 shared pages
+ * with differing frontmatter, so this is not a hypothetical drift.
+ *
+ * The label alone does not expose it, which is why a 7.6.14 build looked fine:
+ * that test served the docs/ tree at the root, so the two paths coincided.
+ */
+function sourceCandidates(pathname: string, servedVersion = "current"): string[] {
+  const candidates = docsRelCandidates(pathname);
+  if (servedVersion === "current") return candidates;
+  const prefix = `versioned_docs/version-${servedVersion}/`;
+  return candidates.map((c) => c.replace(/^docs\//, prefix));
+}
+
 /** Repo-relative path of the source file behind a pathname, or "". */
-function resolveSource(siteDir: string, pathname: string): string {
-  for (const cand of sourceCandidates(pathname)) {
+function resolveSource(siteDir: string, pathname: string, servedVersion = "current"): string {
+  for (const cand of sourceCandidates(pathname, servedVersion)) {
     try {
       if (fs.statSync(path.join(siteDir, cand)).isFile()) return cand;
     } catch {
@@ -1075,8 +1155,8 @@ function resolveSource(siteDir: string, pathname: string): string {
  * _features-by-framework.mdx last changed 2026-08-14 while every shell around it
  * still reads 2026-01-19.
  */
-function contributingFiles(siteDir: string, pathname: string): string[] {
-  const root = resolveSource(siteDir, pathname);
+function contributingFiles(siteDir: string, pathname: string, servedVersion = "current"): string[] {
+  const root = resolveSource(siteDir, pathname, servedVersion);
   if (!root) return [];
   const seen = new Set<string>([root]);
   const queue = [root];
@@ -1154,24 +1234,28 @@ function contributingFiles(siteDir: string, pathname: string): string[] {
  * was this checked" - a formatting sweep moves it. Real verification needs a
  * human-set frontmatter field, which is a separate thing from this.
  */
-function sourceDate(siteDir: string, pathname: string): string {
+function sourceDate(siteDir: string, pathname: string, servedVersion = "current"): string {
   const dates = gitDates(siteDir);
   if (!dates.size) return "";
   let newest = 0;
-  for (const rel of contributingFiles(siteDir, pathname)) {
+  for (const rel of contributingFiles(siteDir, pathname, servedVersion)) {
     const secs = Number(dates.get(rel) || 0);
     if (Number.isFinite(secs) && secs > newest) newest = secs;
   }
   return newest ? new Date(newest * 1000).toISOString() : "";
 }
 
-function readFrontMatter(siteDir: string, pathname: string): Record<string, unknown> {
+function readFrontMatter(
+  siteDir: string,
+  pathname: string,
+  servedVersion = "current",
+): Record<string, unknown> {
   // Actually shares sourceCandidates() now. It previously kept its own list with
   // a comment claiming otherwise, and the lists had drifted: a folder/folder.md
   // page resolved for dating but not for frontmatter, so its curated fields
   // (keywords, and any topic_type / product / user_intents / canonical_id) were
   // silently dropped and semantic_status stayed "rule_based".
-  for (const rel of sourceCandidates(pathname)) {
+  for (const rel of sourceCandidates(pathname, servedVersion)) {
     const file = path.join(siteDir, rel);
     try {
       if (!fs.existsSync(file)) continue;
@@ -1602,14 +1686,40 @@ export default function knowledgeExtractor(context: any, _options: any) {
       } catch {
         /* no versions.json */
       }
-      // Route prefixes the sibling llms export is told to skip, read from the
-      // config rather than restated here. `docs/sdks/titanium/**` becomes
-      // `sdks/titanium/`, which is how it appears in a built route.
-      const ignoredRoutePrefixes = (
-        (siteConfig?.customFields?.llmsIgnoredSdkTrees as readonly string[] | undefined) || []
-      )
-        .map((glob) => String(glob).replace(/^docs\//, "").replace(/\*+$/, ""))
-        .filter(Boolean);
+      // The curation decision, applied rather than paraphrased: the same globs
+      // docusaurus-plugin-llms is given for what an assistant may not see,
+      // matched against each page's source path - which is what the globs were
+      // written against.
+      //
+      // NOT the llms plugin's full ignore list. That list also dedupes prose
+      // repeated under every non-Web SDK root, which is right for a flat corpus
+      // and wrong here: this index exists to route a reader to the page they are
+      // on, and inheriting the dedup removed ~1,400 modules along with the
+      // ability to say where in the Flutter docs something lives. See
+      // llmsDedupedToWeb in docusaurus.config.ts.
+      //
+      // An earlier version derived route PREFIXES by string surgery. That
+      // understood exactly one shape, `docs/<literal segments>/**`, and every
+      // other form failed open: a brace list, a leading `**/`, a bare file, a
+      // mid-path `*` all matched nothing and left the tree indexed with no
+      // warning - a green build quietly feeding an assistant what the repo had
+      // just decided to hide.
+      const ignoreGlobs = siteConfig?.customFields?.assistantIgnoreFiles as
+        | readonly string[]
+        | undefined;
+      if (!Array.isArray(ignoreGlobs)) {
+        // Absent means "index everything", which is the wrong default for a
+        // curation list: renaming this customFields key would silently widen
+        // what an assistant is fed, and neither the empty-output guard nor the
+        // drift ratio catches it because the page count goes UP.
+        throw new Error(
+          "[knowledge-extractor] customFields.assistantIgnoreFiles is missing. It " +
+            "carries the repo's decision about what an assistant may see, and " +
+            "indexing everything is not a safe fallback. Export it from " +
+            "docusaurus.config.ts.",
+        );
+      }
+      const ignorePatterns = ignoreGlobs.map((g) => ignoreGlobToRegExp(String(g)));
 
       const excluded = new Set<string>([
         ...frozenVersions,
@@ -1625,12 +1735,17 @@ export default function knowledgeExtractor(context: any, _options: any) {
       ]);
       const skipDir = (name: string) => excluded.has(name) || name.endsWith(".html");
 
-      // Filtered here rather than in skipDir, which sees one directory NAME and
-      // so cannot express a multi-segment route like `sdks/titanium/`. Applied to
-      // the list, not inside the loop, so an ignored page is never read or parsed.
+      // Filtered on the list, not inside the loop, so an ignored page is never
+      // read or parsed. Matched on the DOCS-relative source path rather than the
+      // route, because that is what the globs describe - and on every candidate
+      // spelling of it, since a route maps to `docs/x.md`, `docs/x/index.md` and
+      // the folder/folder.md convention alike.
       const files = walkHtml(outDir, skipDir).filter((f) => {
         const rel = path.relative(outDir, path.dirname(f)).split(path.sep).join("/");
-        return !ignoredRoutePrefixes.some((prefix) => `${rel}/`.startsWith(prefix));
+        const pathname = rel ? `/${rel}/` : "/";
+        return !docsRelCandidates(pathname).some((cand) =>
+          ignorePatterns.some((re) => re.test(cand)),
+        );
       });
       const modules: KModule[] = [];
       let pagesProcessed = 0;
@@ -1660,10 +1775,10 @@ export default function knowledgeExtractor(context: any, _options: any) {
           if (!chunks.length) continue;
           pagesProcessed += 1;
 
-          const fm = readFrontMatter(siteDir, pathname);
+          const fm = readFrontMatter(siteDir, pathname, servedVersion);
           // "" when the real date is unknowable (shallow clone, no git). The
           // module then ships last_verified: "" rather than a fake constant.
-          const sourceUpdatedAt = sourceDate(siteDir, pathname);
+          const sourceUpdatedAt = sourceDate(siteDir, pathname, servedVersion);
           const framework = detectFramework(pathname);
           // Frontmatter is authoritative when present; fall back to path/heuristics.
           const fmProducts = fmStringArray(fm.product).map(slug).filter(Boolean);

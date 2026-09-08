@@ -42,9 +42,16 @@ const MIN_MRR = parseFloat(arg("min-mrr", "0.6"));
 const AUTO = process.argv.includes("--auto");
 const AUTO_LIMIT = parseInt(arg("auto-limit", "0"), 10);
 // Not 0: every possible rate is >= 0, so the old default printed "(min 0)"
-// and gated nothing. Measured on this corpus - page-success@3 = 0.8653 over
-// all 616 pages / 4,637 modules - so 0.80 absorbs ordinary drift and still
-// fails a real regression. Re-measure with `--auto` before moving it.
+// and gated nothing.
+//
+// Measured on the corpus this branch actually ships - page-success@3 =
+// 0.8493 over 531 pages / 4,386 modules - so 0.80 leaves 4.9 points of
+// headroom and still fails a real regression. An earlier note here said
+// 0.8653 over 616 pages / 4,637 modules, which was true before the same
+// change's curation filter removed Titanium and the stub pages: a figure
+// measured against a corpus the branch no longer produces. Re-measure with
+// `--auto` after anything that changes what is indexed, not just before
+// moving this number.
 const MIN_AUTO_SUCCESS = parseFloat(arg("min-auto-success", "0.80"));
 const REPORT = arg("report", "");
 

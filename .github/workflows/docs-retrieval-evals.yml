@@ -52,10 +52,20 @@ jobs:
       - name: Run retrieval evals
         run: node scripts/retrieval-evals/run.cjs --report reports/retrieval-evals.json
 
+      # The gold-set run above measures 20 curated queries. This one asks every
+      # module to retrieve itself, which is the only check that covers pages
+      # nobody wrote a query for - and until now MIN_AUTO_SUCCESS gated nothing
+      # because no workflow passed --auto. Reported separately so a corpus-wide
+      # regression is attributable.
+      - name: Run corpus-wide self-retrieval
+        run: node scripts/retrieval-evals/run.cjs --auto --report reports/retrieval-evals-auto.json
+
       - name: Upload eval report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: retrieval-evals-report
-          path: reports/retrieval-evals.json
+          path: |
+            reports/retrieval-evals.json
+            reports/retrieval-evals-auto.json
           if-no-files-found: ignore
