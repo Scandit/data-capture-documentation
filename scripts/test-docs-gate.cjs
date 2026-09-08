@@ -1,21 +1,26 @@
 #!/usr/bin/env node
 "use strict";
 /**
- * Table-driven tests for the readers inside the two gate scripts.
+ * Table-driven tests for the readers inside the gate scripts.
  *
  * scripts/test-frameworks.cjs pins the registry and the path parsers. It does
- * not touch the gate scripts themselves - and every defect found in five
- * rounds of review on this change lived there: a regex that could not see a
+ * not touch the gate scripts themselves - and every defect found in six rounds
+ * of review on this change lived there: a regex that could not see a
  * single-quoted entry, a fence test stricter than its three siblings, a `!fw`
- * that read "nothing to check" as "nothing wrong". Each of those made a gate
- * print OK while a check went unperformed, which is the one failure mode a
- * gate cannot have.
+ * that read "nothing to check" as "nothing wrong", a brace pattern that could
+ * not match an entry containing a nested object. Each made a gate print OK
+ * while a check went unperformed, which is the one failure a gate cannot have.
  *
- * So the tables below are organised around that failure mode rather than
- * around the functions: every case states what the reader must NOT do
- * silently. Four of them are regression pins for a bug that shipped.
+ * So the tables are organised around that failure rather than around the
+ * functions: every case states what a reader must NOT do silently.
  *
- * Usage: node scripts/test-docs-gate.cjs
+ * Every case drives its reader with FIXTURE text, not with the repo's real
+ * files. The first version of this suite read the real registry, which happens
+ * to contain no nested object - so it passed identically with the brace-matching
+ * fix reverted, and pinned nothing. Where a test does read a real file, it says
+ * so and asserts a property of that file rather than of the reader.
+ *
+ * Usage: node scripts/test-docs-gate.cjs   (or: yarn test:docs-gate)
  */
 const fs = require("fs");
 const os = require("os");
@@ -23,8 +28,13 @@ const path = require("path");
 const assert = require("assert");
 
 const ROOT = path.join(__dirname, "..");
+// docs-gate/index.cjs takes its ROOT from process.cwd(), so the suite has to
+// agree with it or every path-taking reader resolves against the wrong tree.
+process.chdir(ROOT);
+
 const verify = require("./verify-frameworks.cjs");
 const gate = require("./docs-gate/index.cjs");
+const frontmatter = require("./docs-gate/frontmatter.cjs");
 
 let passed = 0;
 const failures = [];
@@ -50,9 +60,13 @@ function withTempDir(fn) {
   }
 }
 
-/** A scratch directory INSIDE the repo, for readers that take a ROOT-relative path. */
+/**
+ * A scratch directory INSIDE the repo, for readers that take a ROOT-relative
+ * path. Suffixed with the pid so two runs cannot collide, and gitignored so a
+ * hard kill leaves nothing that looks like a source file.
+ */
 function withRepoTempDir(fn) {
-  const rel = "scripts/.test-docs-gate-tmp";
+  const rel = `scripts/.test-docs-gate-tmp-${process.pid}`;
   const dir = path.join(ROOT, rel);
   fs.rmSync(dir, { recursive: true, force: true });
   fs.mkdirSync(dir, { recursive: true });
@@ -68,8 +82,8 @@ const { UNREADABLE, UNTERMINATED, EMPTY } = verify;
 /**
  * declaredFrameworks: what each frontmatter shape must yield.
  *
- * `want` is the list of declared values in order. A sentinel means the page has
- * a frontmatter-level problem and must be REPORTED, never read as "declares no
+ * `want` is the declared values in order. A sentinel means the page has a
+ * frontmatter-level problem and must be REPORTED, never read as "declares no
  * framework" - that reading is what let a bogus `framework:` pass with an OK.
  */
 const DECLARED = [
@@ -84,12 +98,16 @@ const DECLARED = [
   ["frontmatter without the field", "---\ntitle: T\n---\n\nBody\n", []],
   ["CRLF throughout", "---\r\nframework: ios\r\n---\r\n\r\nBody\r\n", ["ios"]],
 
-  // --- shapes that must be REPORTED, not silently skipped ------------------
+  // --- shapes that must be READ, not silently skipped ----------------------
   // Each of these read as "declares nothing" at some point in this change's
   // history, which is a silent pass on whatever the page actually declared.
   ["BOM then fence", "﻿---\nframework: ios\n---\n\nBody\n", ["ios"]],
   ["trailing space on opening fence", "--- \nframework: ios\n---\n\nBody\n", ["ios"]],
   ["tab on opening fence", "---\t\nframework: ios\n---\n\nBody\n", ["ios"]],
+  ["`----` closing fence", "---\nframework: ios\n----\n\nBody\n", ["ios"]],
+  ["thematic break in body", "---\nframework: ios\n---\n\nBody\n\n---\n\nMore\n", ["ios"]],
+
+  // --- shapes that must be REPORTED ---------------------------------------
   ["unterminated fence", "---\nframework: ios\n\nBody\n", [UNTERMINATED]],
   ["unparseable YAML", "---\nframework: [ios\n---\n\nBody\n", [UNREADABLE]],
   ["singular with no value", "---\nframework:\n---\n\nBody\n", [EMPTY]],
@@ -98,10 +116,6 @@ const DECLARED = [
   ["null item in plural list", "---\nframeworks:\n  - ios\n  -\n---\n\nBody\n", ["ios", EMPTY]],
   ["non-string value", "---\nframework: 5\n---\n\nBody\n", [UNREADABLE]],
   ["nested map value", "---\nframework:\n  slug: ios\n---\n\nBody\n", [UNREADABLE]],
-
-  // --- shapes where a `---` appears below the frontmatter ------------------
-  ["thematic break in body", "---\nframework: ios\n---\n\nBody\n\n---\n\nMore\n", ["ios"]],
-  ["`----` closing fence", "---\nframework: ios\n----\n\nBody\n", ["ios"]],
 ];
 
 check("declaredFrameworks reads every frontmatter shape without a silent skip", () => {
@@ -116,26 +130,31 @@ check("declaredFrameworks reads every frontmatter shape without a silent skip", 
 });
 
 /**
- * The four fence readers must agree about where the frontmatter ends.
+ * The fence readers must agree about where the frontmatter ends.
  *
- * The cap in docs-gate rests on exactly this: alerts above the cap are the
- * change's, alerts below it are in the region bodyOf compares against base. If
- * frontmatterEndLine and bodyOf ever disagree about the boundary, the cap either
+ * The Vale cap rests on exactly this: alerts above the cap are the change's,
+ * alerts below it sit in the region bodyOf compares against base. If
+ * frontmatterEndLine and bodyOf disagree about the boundary, the cap either
  * drops a real alert or charges an untouched one. An earlier version of
  * frontmatterEndLine was stricter than bodyOf on a `----` fence and dropped the
  * file out of Vale entirely.
+ *
+ * `schemaSees` is what frontmatter.cjs must make of the same text: a page
+ * gray-matter parses must not be reported as having no frontmatter, because
+ * that diagnostic names the wrong problem and the page renders fine.
  */
 const FENCES = [
-  ["exact fences", "---\ntitle: T\n---\n\nBody\n", 3],
-  ["`----` closing fence", "---\ntitle: T\n----\n\nBody\n", 3],
-  ["`-----` closing fence", "---\ntitle: T\n-----\n\nBody\n", 3],
-  ["trailing space on closing fence", "---\ntitle: T\n--- \n\nBody\n", 3],
-  ["trailing space on opening fence", "--- \ntitle: T\n---\n\nBody\n", 3],
-  ["BOM then fence", "﻿---\ntitle: T\n---\n\nBody\n", 3],
-  ["CRLF", "---\r\ntitle: T\r\n---\r\n\r\nBody\r\n", 3],
-  ["block scalar containing `---`", "---\ntitle: |\n  a\n---\n\nBody\n", 4],
-  ["no frontmatter", "Just body.\n", 0],
-  ["unterminated", "---\ntitle: T\n\nBody\n", -1],
+  ["exact fences", "---\ntitle: T\n---\n\nBody\n", 3, true],
+  ["`----` closing fence", "---\ntitle: T\n----\n\nBody\n", 3, true],
+  ["`-----` closing fence", "---\ntitle: T\n-----\n\nBody\n", 3, true],
+  ["trailing space on closing fence", "---\ntitle: T\n--- \n\nBody\n", 3, true],
+  ["trailing space on opening fence", "--- \ntitle: T\n---\n\nBody\n", 3, true],
+  ["tab on opening fence", "---\t\ntitle: T\n---\n\nBody\n", 3, true],
+  ["BOM then fence", "﻿---\ntitle: T\n---\n\nBody\n", 3, true],
+  ["CRLF", "---\r\ntitle: T\r\n---\r\n\r\nBody\r\n", 3, true],
+  ["block scalar containing `---`", "---\ntitle: |\n  a\n---\n\nBody\n", 4, true],
+  ["no frontmatter", "Just body.\n", 0, false],
+  ["unterminated", "---\ntitle: T\n\nBody\n", -1, false],
 ];
 
 check("frontmatterEndLine agrees with bodyOf about where the frontmatter ends", () => {
@@ -155,13 +174,32 @@ check("frontmatterEndLine agrees with bodyOf about where the frontmatter ends", 
       // does not always begin on a line boundary.
       const norm = text.replace(/\r\n/g, "\n").replace(/^﻿/, "");
       const capLineStart = norm.split("\n").slice(0, end - 1).join("\n").length;
-      const fromCap = norm.slice(capLineStart);
       const body = gate.bodyOf(text);
       assert.ok(
-        fromCap.endsWith(body),
+        norm.slice(capLineStart).endsWith(body),
         `${name}: bodyOf output is not contained at or below cap line ${end}\n` +
-          `       from cap: ${JSON.stringify(fromCap)}\n` +
+          `       from cap: ${JSON.stringify(norm.slice(capLineStart))}\n` +
           `       bodyOf:   ${JSON.stringify(body)}`,
+      );
+    }
+  });
+});
+
+check("frontmatter.cjs reads the same fences as the cap does", () => {
+  withRepoTempDir((dir) => {
+    // Only `required` matters here; the point is whether the fence is FOUND,
+    // not whether the page satisfies the schema.
+    const schema = { required: [], properties: {} };
+    for (const [name, text, , schemaSees] of FENCES) {
+      const file = path.join(dir, "page.md");
+      fs.writeFileSync(file, text);
+      const errs = frontmatter.validateFile(file, schema);
+      const missing = errs.some((e) => /missing or invalid frontmatter/.test(e.msg));
+      assert.strictEqual(
+        !missing,
+        schemaSees,
+        `${name}: validateFile ${missing ? "reported" : "accepted"}, expected ` +
+          `${schemaSees ? "accepted" : "reported"}`,
       );
     }
   });
@@ -176,55 +214,84 @@ check("frontmatterEndLine returns 0 rather than throwing on an unreadable path",
  *
  * These files are several independent maps each. Losing one of them left the
  * rest supplying names, so the total count was unchanged and the gate printed
- * OK - twice, in two different branches of this function.
+ * OK - three rounds running, at three different granularities: the top-level
+ * key, the array item, and the individual product.
  */
 const DATA = [
   [
     "array file, every item declares",
-    JSON.stringify([{ key: "a", frameworks: { iOS: {} } }, { key: "b", frameworks: ["Android"] }]),
+    [{ key: "a", frameworks: { iOS: {} } }, { key: "b", frameworks: ["Android"] }],
     { names: ["iOS", "Android"], missing: [] },
   ],
   [
     "array file, ONE item's key renamed",
-    JSON.stringify([{ key: "a", frameworks: { iOS: {} } }, { key: "b", platforms: ["Android"] }]),
+    [{ key: "a", frameworks: { iOS: {} } }, { key: "b", platforms: ["Android"] }],
     { names: ["iOS"], missing: ['entry "b"'] },
   ],
   [
     "array file, ONE item's map emptied",
-    JSON.stringify([{ key: "a", frameworks: { iOS: {} } }, { key: "b", frameworks: {} }]),
+    [{ key: "a", frameworks: { iOS: {} } }, { key: "b", frameworks: {} }],
     { names: ["iOS"], missing: ['entry "b"'] },
   ],
   [
+    "array file, frameworks is a string",
+    [{ key: "a", frameworks: "iOS" }],
+    { names: [], missing: ['entry "a"'] },
+  ],
+  [
     "array file, item identified by name when it has no key",
-    JSON.stringify([{ name: "Feature One" }]),
+    [{ name: "Feature One" }],
     { names: [], missing: ['entry "Feature One"'] },
   ],
   [
     "array file, item with neither key nor name",
-    JSON.stringify([{ frameworks: [] }]),
+    [{ frameworks: [] }],
     { names: [], missing: ['entry "#0"'] },
   ],
   [
+    "array file, a null item",
+    [null, { key: "a", frameworks: ["iOS"] }],
+    { names: ["iOS"], missing: ['entry "#0"'] },
+  ],
+  [
     "object file, both maps present",
-    JSON.stringify({ frameworks: { iOS: {} }, products: { p: { Android: {} } } }),
+    { frameworks: { iOS: {} }, products: { p: { Android: {} } } },
     { names: ["iOS", "Android"], missing: [] },
   ],
   [
     "object file, ONLY `frameworks` renamed",
-    JSON.stringify({ platforms: { iOS: {} }, products: { p: { Android: {} } } }),
+    { platforms: { iOS: {} }, products: { p: { Android: {} } } },
     { names: ["Android"], missing: ['the "frameworks" map'] },
   ],
   [
     "object file, ONLY `products` renamed",
-    JSON.stringify({ frameworks: { iOS: {} }, suites: { p: { Android: {} } } }),
+    { frameworks: { iOS: {} }, suites: { p: { Android: {} } } },
     { names: ["iOS"], missing: ['the "products" map'] },
+  ],
+  [
+    "object file, ONE product's map emptied",
+    { frameworks: { iOS: {} }, products: { p: { Android: {} }, q: {} } },
+    { names: ["iOS", "Android"], missing: ['the "products.q" map'] },
+  ],
+  [
+    "object file, ONE product is not a map",
+    { frameworks: { iOS: {} }, products: { p: { Android: {} }, q: "oops" } },
+    { names: ["iOS", "Android"], missing: ['the "products.q" map'] },
+  ],
+  [
+    "object file, every product emptied",
+    { frameworks: { iOS: {} }, products: { p: {}, q: {} } },
+    {
+      names: ["iOS"],
+      missing: ['the "products.p" map', 'the "products.q" map', 'the "products" map'],
+    },
   ],
 ];
 
 check("dataFileFrameworkNames reports a per-part miss the total count cannot show", () => {
   withRepoTempDir((dir, rel) => {
-    for (const [name, json, want] of DATA) {
-      fs.writeFileSync(path.join(dir, "d.json"), json);
+    for (const [name, value, want] of DATA) {
+      fs.writeFileSync(path.join(dir, "d.json"), JSON.stringify(value, null, 2));
       const got = verify.dataFileFrameworkNames(`${rel}/d.json`);
       assert.ok(!got.error, `${name}: unexpected error ${got.error}`);
       assert.deepStrictEqual([...got.names], want.names, `${name}: names`);
@@ -248,68 +315,190 @@ check("dataFileFrameworkNames names the problem instead of throwing", () => {
   });
 });
 
-check("registryEntries sees one entry per slug, nested objects included", () => {
-  const entries = verify.registryEntries();
-  const slugs = verify.registryValues("slug");
-  assert.ok(entries && entries.length, "no entries read");
-  // The count assertion the agentSkills invariant now relies on: a matcher that
-  // cannot see an entry must not silently check fewer of them.
-  assert.strictEqual(entries.length, slugs.length, `${entries.length} entries, ${slugs.length} slugs`);
-  for (const entry of entries) {
-    assert.ok(/slug:\s*['"]/.test(entry), `entry without a slug: ${entry.slice(0, 60)}`);
-  }
-});
+/**
+ * arrayEntries: brace matching, driven by fixtures.
+ *
+ * The version this replaced was `/\{[^{}]*slug:\s*['"][^'"]+['"][^{}]*\}/g`,
+ * which cannot match an entry containing a nested object - so adding
+ * `meta: { ... }` to a registry entry dropped it from the agentSkills
+ * invariant, the one check here guarding a runtime URL rather than a rendering.
+ */
+const ENTRIES = [
+  ["flat entries", `const T = [{ slug: "a" }, { slug: "b" }];`, 2],
+  ["entry with a nested object", `const T = [{ slug: "a", meta: { x: 1 } }];`, 1],
+  ["two nested objects", `const T = [{ slug: "a", m: { x: { y: 1 } } }, { slug: "b" }];`, 2],
+  ["type annotation before the `=`", `const T: Def[] = [{ slug: "a" }];`, 1],
+  ["a brace in a line comment", `const T = [\n  // note {x}\n  { slug: "a" },\n];`, 1],
+  ["a brace in a block comment", `const T = [\n  /* {x} */\n  { slug: "a" },\n];`, 1],
+  ["a template placeholder in a comment", `const T = [\n  // \${a}/\${b}\n  { slug: "a" },\n];`, 1],
+  ["a `//` inside a string is not a comment", `const T = [{ slug: "https://x", n: 1 }];`, 1],
+  ["trailing comma", `const T = [{ slug: "a" },];`, 1],
+  ["empty array", `const T = [];`, 0],
+  ["absent const", `const OTHER = [{ slug: "a" }];`, null],
+];
 
-check("registryValues reads both quote styles", () => {
-  const slugs = verify.registryValues("slug");
-  assert.ok(slugs.includes("ios") && slugs.includes("linux"), slugs.join(","));
-  assert.deepStrictEqual([...new Set(slugs)], slugs, "duplicate slugs");
-  const union = verify.unionSlugs();
-  assert.deepStrictEqual([...slugs].sort(), [...union].sort(), "registry and union disagree");
+check("arrayEntries brace-matches entries, comments and annotations included", () => {
+  for (const [name, src, want] of ENTRIES) {
+    const got = verify.arrayEntries(src, "T");
+    if (want === null) {
+      assert.strictEqual(got, null, `${name}: got ${JSON.stringify(got)}`);
+      continue;
+    }
+    assert.ok(got !== null, `${name}: got null`);
+    assert.strictEqual(got.length, want, `${name}: got ${JSON.stringify(got)}`);
+  }
+  // The nested-object entry must come back WHOLE, or the invariant that reads
+  // `agentSkills:` off it still misses what it needs.
+  const [entry] = verify.arrayEntries(
+    `const T = [{ slug: "a", meta: { x: 1 }, agentSkills: true }];`,
+    "T",
+  );
+  assert.ok(/agentSkills:\s*true/.test(entry), entry);
+  assert.ok(/meta: \{ x: 1 \}/.test(entry), entry);
 });
 
 /**
- * readList / readObjectValues: quoting must not decide whether a value is
- * checked.
+ * Quoting must not decide whether a value is checked, and a value a reader
+ * cannot read must be counted.
  *
  * No formatter is configured in this repo, so both quote styles occur. While
- * these readers were double-quote-only, a single-quoted entry in any of the
- * three UI copies was skipped - and because the miss was partial, the
- * `found.length === 0` guard never fired and the gate printed OK.
+ * these readers were double-quote-only, a single-quoted entry was skipped - and
+ * because the miss is partial, the zero-entries guard never fired. Nor was a
+ * value that is not a plain literal reported at all.
  */
-const QUOTING = [
-  ["double-quoted enum member", 'export enum E {\n  ios = "iOS",\n}\n', /^\s*(\w+)\s*=\s*['"]([^'"]+)['"]\s*,?/m, 2, ["iOS"]],
-  ["single-quoted enum member", "export enum E {\n  ios = 'iOS',\n}\n", /^\s*(\w+)\s*=\s*['"]([^'"]+)['"]\s*,?/m, 2, ["iOS"]],
-  ["final member without a trailing comma", 'export enum E {\n  ios = "iOS",\n  web = "Web"\n}\n', /^\s*(\w+)\s*=\s*['"]([^'"]+)['"]\s*,?/m, 2, ["iOS", "Web"]],
-  ["double-quoted label", 'const a = [{ label: "iOS" }];\n', /label:\s*['"]([^'"]+)['"]/m, 1, ["iOS"]],
-  ["single-quoted label", "const a = [{ label: 'iOS' }];\n", /label:\s*['"]([^'"]+)['"]/m, 1, ["iOS"]],
-  ["mixed quoting across entries", "const a = [{ slug: \"ios\" }, { slug: 'web' }];\n", /slug:\s*['"]([^'"]+)['"]/m, 1, ["ios", "web"]],
-];
-
-check("readList checks a value regardless of how it is quoted", () => {
-  withRepoTempDir((dir, rel) => {
-    for (const [name, src, re, group, want] of QUOTING) {
-      fs.writeFileSync(path.join(dir, "ui.ts"), src);
-      const got = verify.readList(`${rel}/ui.ts`, re, group);
-      assert.deepStrictEqual(got, want, `${name}: got ${JSON.stringify(got)}`);
+check("enumMemberValues reads every member or reports the one it cannot", () => {
+  const cases = [
+    ["double-quoted", `enum E {\n  ios = "iOS",\n}`, ["iOS"], []],
+    ["single-quoted", `enum E {\n  ios = 'iOS',\n}`, ["iOS"], []],
+    [
+      "final member without a trailing comma",
+      `enum E {\n  ios = "iOS",\n  web = "Web"\n}`,
+      ["iOS", "Web"],
+      [],
+    ],
+    [
+      "value containing an apostrophe",
+      `enum E {\n  legacy = "iOS's Legacy",\n}`,
+      ["iOS's Legacy"],
+      [],
+    ],
+    [
+      "empty value",
+      `enum E {\n  ios = "iOS",\n  linux = "",\n}`,
+      ["iOS"],
+      ['member "linux" has no plain string value'],
+    ],
+    [
+      "value that is not a literal",
+      `enum E {\n  ios = "iOS",\n  linux = LINUX_DISPLAY,\n}`,
+      ["iOS"],
+      ['member "linux" has no plain string value'],
+    ],
+    ["absent enum", `const x = 1;`, null, null],
+  ];
+  for (const [name, src, values, missing] of cases) {
+    const got = verify.enumMemberValues(src, "E");
+    if (values === null) {
+      assert.strictEqual(got, null, `${name}: got ${JSON.stringify(got)}`);
+      continue;
     }
-  });
+    assert.deepStrictEqual(got.values, values, `${name}: values`);
+    assert.deepStrictEqual(got.missing, missing, `${name}: missing`);
+  }
 });
 
-check("readObjectValues reads both quote styles and stays inside its literal", () => {
-  withRepoTempDir((dir, rel) => {
-    fs.writeFileSync(
-      path.join(dir, "ui.ts"),
-      'const LABELS = {\n  ios: "iOS",\n  web: \'Web\',\n  nested: { deep: "Deep" },\n};\n' +
-        'const OTHER = { stray: "Should Not Be Read" };\n',
-    );
-    const got = verify.readObjectValues(`${rel}/ui.ts`, "LABELS");
-    assert.deepStrictEqual(got, ["iOS", "Web", "Deep"], JSON.stringify(got));
+check("entryFieldValues reads a field off every entry or reports the entry", () => {
+  const cases = [
+    ["double-quoted", `const T = [{ label: "iOS" }];`, ["iOS"], []],
+    ["single-quoted", `const T = [{ label: 'iOS' }];`, ["iOS"], []],
+    [
+      "mixed quoting across entries",
+      `const T = [{ label: "iOS" }, { label: 'Web' }];`,
+      ["iOS", "Web"],
+      [],
+    ],
+    [
+      "value containing an apostrophe read whole",
+      `const T = [{ label: "iOS's Legacy" }];`,
+      ["iOS's Legacy"],
+      [],
+    ],
+    [
+      "value containing a quote read whole",
+      `const T = [{ label: 'say "hi"' }];`,
+      ['say "hi"'],
+      [],
+    ],
+    [
+      "field absent from one entry",
+      `const T = [{ label: "iOS" }, { slug: "web" }];`,
+      ["iOS"],
+      ["entry #1 has no plain `label` literal"],
+    ],
+    [
+      "field is not a literal, entry named by its label",
+      `const T = [{ label: "iOS", slug: SLUG }];`,
+      [],
+      ['entry "iOS" has no plain `slug` literal'],
+    ],
+    [
+      "whitespace before the colon",
+      `const T = [{ label : "iOS" }];`,
+      ["iOS"],
+      [],
+    ],
+    ["empty array", `const T = [];`, null, null],
+  ];
+  for (const [name, src, values, missing] of cases) {
+    const field = /slug: SLUG/.test(src) ? "slug" : "label";
+    const got = verify.entryFieldValues(src, "T", field);
+    if (values === null) {
+      assert.strictEqual(got, null, `${name}: got ${JSON.stringify(got)}`);
+      continue;
+    }
+    assert.deepStrictEqual(got.values, values, `${name}: values`);
+    assert.deepStrictEqual(got.missing, missing, `${name}: missing`);
+  }
+});
 
-    // A renamed literal must read as "unchecked", not as "clean".
-    assert.strictEqual(verify.readObjectValues(`${rel}/ui.ts`, "ABSENT"), null);
-    assert.strictEqual(verify.readList(`${rel}/absent.ts`, /x/, 0), null);
-  });
+check("objectLiteralValues stays inside its literal and reads both quote styles", () => {
+  const src =
+    `const LABELS = {\n  ios: "iOS",\n  web: 'Web',\n  "react-native": "React Native",\n};\n` +
+    `const OTHER = { stray: "Should Not Be Read" };\n`;
+  const got = verify.objectLiteralValues(src, "LABELS");
+  assert.deepStrictEqual(got.values, ["iOS", "Web", "React Native"], JSON.stringify(got));
+  assert.deepStrictEqual(got.missing, [], JSON.stringify(got.missing));
+
+  const partial = verify.objectLiteralValues(`const L = {\n  ios: "iOS",\n  web: WEB,\n};`, "L");
+  assert.deepStrictEqual(partial.values, ["iOS"]);
+  assert.deepStrictEqual(partial.missing, ['key "web" has no plain string value']);
+
+  assert.strictEqual(verify.objectLiteralValues(src, "ABSENT"), null);
+});
+
+check("registryValues reads both quote styles and matches the quote", () => {
+  const src = `const FRAMEWORKS: Def[] = [\n  { slug: "ios" },\n  { slug: 'web' },\n];`;
+  assert.deepStrictEqual(verify.registryValues("slug", src), ["ios", "web"]);
+  assert.deepStrictEqual(
+    verify.registryValues("display", `const FRAMEWORKS = [{ display: "iOS's" }];`),
+    ["iOS's"],
+  );
+  assert.strictEqual(verify.registryValues("slug", `const OTHER = [];`), null);
+});
+
+// The one deliberate real-file assertion: the entry count the agentSkills
+// invariant relies on has to hold for the registry as it actually is.
+check("the real registry reads one entry per slug", () => {
+  const entries = verify.registryEntries();
+  const slugs = verify.registryValues("slug");
+  assert.ok(entries && entries.length, "no entries read");
+  assert.strictEqual(
+    entries.length,
+    slugs.length,
+    `${entries.length} entries, ${slugs.length} slugs`,
+  );
+  assert.deepStrictEqual([...slugs].sort(), [...verify.unionSlugs()].sort(),
+    "registry and FrameworkSlug union disagree");
 });
 
 check("bodyOf strips frontmatter identically across fence shapes", () => {

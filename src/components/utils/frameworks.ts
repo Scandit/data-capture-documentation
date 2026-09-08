@@ -65,6 +65,10 @@ export function parseSdksRoute(pathname: string): SdksRouteInfo {
   // hardcode as `(?:net\/)?` and then undo with `.replace('/', '-')`. That copy
   // is why FeatureList's own regex could disagree with this one.
   const def = frameworkFromRouteTail(match[1]);
+  // The null check is unreachable today - frameworkFromRouteTail searches only
+  // the routed frameworks, so `hosted` cannot come back from it. Kept because
+  // the next line dereferences routeSegment: if the routed set ever widens,
+  // the alternative to this branch is a runtime throw, not a type error.
   if (!def || def.routeSegment === null) return {};
 
   const rest = match[1].slice(def.routeSegment.length).replace(/^\//, '');

@@ -245,87 +245,31 @@ function readSource(rel) {
   }
 }
 
-function registryValues(field) {
-  const src = readSource(REGISTRY_FILE);
-  if (src === null) return null;
-  const start = src.indexOf("export const FRAMEWORKS");
-  if (start === -1) return null;
-  // Anchor on the assignment, not on the first `[`: a type annotation or a
-  // trailing `satisfies readonly FrameworkDef[]` both put a stray pair of
-  // brackets nearby, and reading those yields zero entries - a gate that checks
-  // nothing while reporting success.
-  const eq = src.indexOf("=", start);
-  if (eq === -1) return null;
-  const open = src.indexOf("[", eq);
-  if (open === -1) return null;
-  let depth = 0;
-  let end = -1;
-  for (let i = open; i < src.length; i += 1) {
-    if (src[i] === "[") depth += 1;
-    else if (src[i] === "]") {
-      depth -= 1;
-      if (depth === 0) { end = i; break; }
-    }
-  }
-  if (end === -1) return null;
+function registryValues(field, source) {
+  const body = arrayBody(
+    source === undefined ? readSource(REGISTRY_FILE) : source,
+    "FRAMEWORKS",
+  );
+  if (body === null) return null;
   const values = [];
-  // `['\"]`: no formatter is configured in this repo and the file this registry
-  // replaced used single quotes, so a single-quoted entry was invisible here and
-  // a mixed-quote entry failed with a message about a missing routeSegment it
-  // actually had.
-  const re = new RegExp(field + ':\\s*[\'"]([^\'"]+)[\'"]', "g");
-  const body = src.slice(open + 1, end);
+  // Quote-matched, for the reason QUOTED documents: no formatter is configured
+  // in this repo and the file this registry replaced used single quotes, so a
+  // single-quoted entry was invisible here, and a value containing an
+  // apostrophe was truncated at it and the truncation checked instead.
+  //
+  // Every occurrence in the literal, nested ones included: this count is what
+  // the entry-count assertion in main() compares against, so a `slug:` the
+  // entry splitter cannot see must still show up here as a disagreement.
+  const re = new RegExp(`${field}\\s*:\\s*${QUOTED}`, "g");
   let m;
-  while ((m = re.exec(body))) values.push(m[1]);
+  while ((m = re.exec(body))) values.push(m.groups.v);
   return values;
 }
 
-/**
- * The source text of each top-level entry in the FRAMEWORKS literal, or null if
- * its shape changed.
- *
- * Brace-matched rather than matched with `\{[^{}]*\}`: that pattern cannot match
- * an entry containing a nested object, so adding `meta: { ... }` to an entry
- * dropped it from the agentSkills invariant below without a word of output.
- * (Brace counting assumes no `{` or `}` inside a string literal in the
- * registry; every value there is a slug, a display name or a route segment.)
- */
-function registryEntries() {
-  const src = readSource(REGISTRY_FILE);
-  if (src === null) return null;
-  const start = src.indexOf("export const FRAMEWORKS");
-  if (start === -1) return null;
-  const eq = src.indexOf("=", start);
-  if (eq === -1) return null;
-  const open = src.indexOf("[", eq);
-  if (open === -1) return null;
-  let depth = 0;
-  let close = -1;
-  for (let i = open; i < src.length; i += 1) {
-    if (src[i] === "[") depth += 1;
-    else if (src[i] === "]") {
-      depth -= 1;
-      if (depth === 0) { close = i; break; }
-    }
-  }
-  if (close === -1) return null;
-  const body = src.slice(open + 1, close);
-  const entries = [];
-  let from = -1;
-  depth = 0;
-  for (let i = 0; i < body.length; i += 1) {
-    if (body[i] === "{") {
-      if (depth === 0) from = i;
-      depth += 1;
-    } else if (body[i] === "}") {
-      depth -= 1;
-      if (depth === 0 && from !== -1) {
-        entries.push(body.slice(from, i + 1));
-        from = -1;
-      }
-    }
-  }
-  return entries;
+/** The FRAMEWORKS registry entries. See arrayEntries for the how and why. */
+function registryEntries(source) {
+  const src = source === undefined ? readSource(REGISTRY_FILE) : source;
+  return arrayEntries(src, "FRAMEWORKS");
 }
 
 /**
@@ -333,9 +277,9 @@ function registryEntries() {
  * source text for the same reason the registry is: this gate must not import
  * TypeScript.
  */
-function unionSlugs() {
-  const src = readSource(REGISTRY_FILE);
-  if (src === null) return null;
+function unionSlugs(source) {
+  const src = source === undefined ? readSource(REGISTRY_FILE) : source;
+  if (src === null || src === undefined) return null;
   const start = src.indexOf("export type FrameworkSlug");
   if (start === -1) return null;
   const end = src.indexOf(";", start);
@@ -379,12 +323,23 @@ function dataFileFrameworkNames(rel) {
     // the frameworks map went unchecked.
     const perKey = { frameworks: new Set(), products: new Set() };
     for (const n of Object.keys(parsed.frameworks || {})) perKey.frameworks.add(n);
-    for (const product of Object.values(parsed.products || {})) {
-      if (product && typeof product === "object") {
-        for (const n of Object.keys(product)) perKey.products.add(n);
-      }
-    }
     const missing = [];
+    // Per PRODUCT, not per `products`. The top-level key was made granular in
+    // one round and the array branch in the next, but this layer still folded
+    // all 8 products into one Set - so emptying `products["matrixscan-pick"]`
+    // left the other seven supplying names, the total still reading 31, and the
+    // gate printing OK. Which is precisely the failure named above: an empty
+    // product map makes the callout vanish for every framework of that product.
+    //
+    // Content may vary - matrixscan-pick lists 2 frameworks today and that is
+    // legitimate - so only an empty or non-object map is reported.
+    for (const [key, product] of Object.entries(parsed.products || {})) {
+      if (!product || typeof product !== "object" || !Object.keys(product).length) {
+        missing.push(`the "products.${key}" map`);
+        continue;
+      }
+      for (const n of Object.keys(product)) perKey.products.add(n);
+    }
     for (const [key, set] of Object.entries(perKey)) {
       if (!set.size) missing.push(`the "${key}" map`);
       for (const n of set) names.add(n);
@@ -419,52 +374,215 @@ function dataFileFrameworkNames(rel) {
   return { names, missing };
 }
 
-/**
+/*
  * The three hand-written UI copies are read from source text, not imported:
- * this gate must not depend on the TypeScript toolchain. Both readers live at
- * module scope so scripts/test-docs-gate.cjs can pin them - they were closures
- * inside main(), which is why the single-quote hole in them went untested.
+ * this gate must not depend on the TypeScript toolchain.
+ *
+ * Two rules hold for every reader below, both learned from a silent pass:
+ *
+ *   1. Quotes are MATCHED, not a character class at each end. `['"]([^'"]+)['"]`
+ *      truncated `label: "iOS's Legacy"` at the apostrophe and then checked the
+ *      truncation - which happens to be a valid display name, so the gate
+ *      printed OK on a value it never saw whole.
+ *   2. Whatever a reader could not read is COUNTED and reported. A partial miss
+ *      keeps `found.length` non-zero, so the zero-entries guard never fires:
+ *      `linux = ""` and `linux = LINUX_DISPLAY` both left that member unchecked
+ *      while the gate said OK.
+ *
+ * Each takes its source text as an argument so scripts/test-docs-gate.cjs can
+ * pin it against a fixture. Reading the real file only proves the reader agrees
+ * with today's content, which is why the first version of that test passed
+ * identically with the bug reverted.
  */
-function readList(file, re, group) {
-  const full = path.join(ROOT, file);
-  if (!fs.existsSync(full)) return null;
-  const src = fs.readFileSync(full, "utf8");
-  const out = [];
-  let m;
-  const rx = new RegExp(re.source, "gm");
-  while ((m = rx.exec(src))) out.push(m[group]);
-  return out;
+
+/**
+ * A quoted literal whose closing quote matches its opening one.
+ *
+ * NAMED groups, not numbered: a numbered backreference shifts when this is
+ * concatenated after another group, so `^(\w+)\s*=\s*` + QUOTED made
+ * `\1` point at the member name instead of at the opening quote. Named
+ * references are position-independent, which is the only reason this composes.
+ */
+const QUOTED = "(?<q>['\"])(?<v>(?:(?!\\k<q>).)+)\\k<q>";
+
+/**
+ * Line and block comments removed, quote-aware so a `//` inside a string
+ * survives. Needed because prose contains braces: the switcher's array carries
+ * a comment mentioning `${linkVersion}/${slug}`, and counting those as entries
+ * produced phantom entries with no `label`.
+ */
+function stripComments(src) {
+  const lines = src.replace(/\/\*[\s\S]*?\*\//g, "").split("\n");
+  return lines
+    .map((line) => {
+      let quote = null;
+      let cut = line.length;
+      for (let i = 0; i < line.length; i += 1) {
+        const c = line[i];
+        if (quote) {
+          if (c === "\\") i += 1;
+          else if (c === quote) quote = null;
+        } else if (c === '"' || c === "'" || c === "`") quote = c;
+        else if (c === "/" && line[i + 1] === "/") {
+          cut = i;
+          break;
+        }
+      }
+      return line.slice(0, cut);
+    })
+    .join("\n");
 }
-// Values of one named object literal. Scoped by brace matching rather than by
-// a line regex: SearchBar carries other `key: "value"` shapes (analytics
-// payloads, query tokens) that a file-wide scan picks up as framework names.
-function readObjectValues(file, constName) {
-  const full = path.join(ROOT, file);
-  if (!fs.existsSync(full)) return null;
-  const src = fs.readFileSync(full, "utf8");
-  const start = src.indexOf(`const ${constName}`);
-  if (start === -1) return null;
-  const open = src.indexOf("{", start);
-  if (open === -1) return null;
+
+/** The span of the balanced bracket pair opening at `from`, or null. */
+function balanced(src, from, openCh, closeCh) {
   let depth = 0;
-  let end = -1;
-  for (let i = open; i < src.length; i += 1) {
-    if (src[i] === "{") depth += 1;
-    else if (src[i] === "}") {
+  for (let i = from; i < src.length; i += 1) {
+    if (src[i] === openCh) depth += 1;
+    else if (src[i] === closeCh) {
       depth -= 1;
-      if (depth === 0) { end = i; break; }
+      if (depth === 0) return { open: from, close: i };
     }
   }
-  if (end === -1) return null;
-  // `['"]` for the reason registryValues documents: no formatter is
-  // configured, so a single-quoted value was invisible here while the
-  // double-quoted siblings kept `found.length` non-zero.
-  const body = src.slice(open + 1, end);
-  const out = [];
-  const rx = /:\s*['"]([^'"]+)['"]/g;
+  return null;
+}
+
+/**
+ * The body text of the named array literal, or null if its shape changed.
+ *
+ * Anchored on `const <name>`, which also matches `export const <name>`, and on
+ * the assignment rather than on the first `[`: a type annotation such as
+ * `: FrameworkDef[]` puts a stray pair of brackets before it, and reading those
+ * yields zero entries - a gate that checks nothing while reporting success.
+ */
+function arrayBody(src, constName) {
+  if (src === null || src === undefined) return null;
+  const clean = stripComments(src);
+  const start = clean.indexOf(`const ${constName}`);
+  if (start === -1) return null;
+  const eq = clean.indexOf("=", start);
+  if (eq === -1) return null;
+  const open = clean.indexOf("[", eq);
+  if (open === -1) return null;
+  const span = balanced(clean, open, "[", "]");
+  if (!span) return null;
+  return clean.slice(span.open + 1, span.close);
+}
+
+/**
+ * Top-level `{...}` entries of the named array literal, or null if its shape
+ * changed.
+ *
+ * Brace-matched rather than matched with a `{[^{}]*}` pattern: that cannot match
+ * an entry containing a nested object, so adding `meta: { ... }` to a registry
+ * entry dropped it from the agentSkills invariant without a word of output.
+ */
+function arrayEntries(src, constName) {
+  const body = arrayBody(src, constName);
+  if (body === null) return null;
+  const entries = [];
+  let from = -1;
+  let depth = 0;
+  for (let i = 0; i < body.length; i += 1) {
+    if (body[i] === "{") {
+      if (depth === 0) from = i;
+      depth += 1;
+    } else if (body[i] === "}") {
+      depth -= 1;
+      if (depth === 0 && from !== -1) {
+        entries.push(body.slice(from, i + 1));
+        from = -1;
+      }
+    }
+  }
+  return entries;
+}
+
+/**
+ * One field read off every entry of a named array literal, plus the entries
+ * where that field is absent or is not a simple quoted literal.
+ */
+function entryFieldValues(src, constName, field) {
+  const entries = arrayEntries(src, constName);
+  if (!entries || !entries.length) return null;
+  const values = [];
+  const missing = [];
+  const rx = new RegExp(`${field}\\s*:\\s*${QUOTED}`);
+  entries.forEach((entry, i) => {
+    const m = rx.exec(entry);
+    if (!m) {
+      const found = new RegExp(`label\\s*:\\s*${QUOTED}`).exec(entry);
+      const id = found && found.groups.v;
+      missing.push(`entry ${id ? `"${id}"` : `#${i}`} has no plain \`${field}\` literal`);
+      return;
+    }
+    values.push(m.groups.v);
+  });
+  return { values, missing };
+}
+
+/**
+ * Values of the members of a named enum, plus the members whose value is not a
+ * simple quoted literal.
+ */
+function enumMemberValues(src, enumName) {
+  if (src === null || src === undefined) return null;
+  const clean = stripComments(src);
+  const decl = clean.indexOf(`enum ${enumName}`);
+  if (decl === -1) return null;
+  const open = clean.indexOf("{", decl);
+  if (open === -1) return null;
+  const span = balanced(clean, open, "{", "}");
+  if (!span) return null;
+  const values = [];
+  const missing = [];
+  // Trailing comma optional: dropping it on the final member is valid TS, and
+  // requiring it exempted that member from the check.
+  const rx = new RegExp(`^(\\w+)\\s*=\\s*${QUOTED}\\s*,?$`);
+  for (const line of clean.slice(span.open + 1, span.close).split("\n")) {
+    const t = line.trim();
+    if (!t) continue;
+    const named = /^(\w+)\s*=/.exec(t);
+    if (!named) continue;
+    const m = rx.exec(t);
+    if (!m) {
+      missing.push(`member "${named[1]}" has no plain string value`);
+      continue;
+    }
+    values.push(m.groups.v);
+  }
+  return { values, missing };
+}
+
+/**
+ * Values of one named object literal, plus nothing to report: every `key:
+ * value` pair inside it is read, so there is no partial miss to count.
+ *
+ * Scoped by brace matching rather than by a line regex: SearchBar carries other
+ * `key: "value"` shapes (analytics payloads, query tokens) that a file-wide
+ * scan picks up as framework names.
+ */
+function objectLiteralValues(src, constName) {
+  if (src === null || src === undefined) return null;
+  const clean = stripComments(src);
+  const start = clean.indexOf(`const ${constName}`);
+  if (start === -1) return null;
+  const open = clean.indexOf("{", start);
+  if (open === -1) return null;
+  const span = balanced(clean, open, "{", "}");
+  if (!span) return null;
+  const body = clean.slice(span.open + 1, span.close);
+  const values = [];
+  const missing = [];
+  const rx = new RegExp(`:\\s*${QUOTED}`, "g");
   let m;
-  while ((m = rx.exec(body))) out.push(m[1]);
-  return out;
+  while ((m = rx.exec(body))) values.push(m.groups.v);
+  for (const pair of body.split(",")) {
+    const key = /^\s*(?:['"]?)([\w.-]+)(?:['"]?)\s*:/.exec(pair);
+    if (key && !new RegExp(`:\\s*${QUOTED}`).test(pair)) {
+      missing.push(`key "${key[1]}" has no plain string value`);
+    }
+  }
+  return { values, missing };
 }
 
 function main() {
@@ -572,14 +690,24 @@ function main() {
   }
 
   // 5. UI COPIES - read the three hand-written lists out of source text.
-  const uiErrors = (label, file, found, allowed, extra) => {
-    if (found === null) {
+  const uiErrors = (label, file, read, allowed, extra) => {
+    if (read === null) {
       errors.push(`${file}: could not read its framework list, so it is unchecked`);
       return;
     }
+    const found = read.values;
     if (found.length === 0) {
       errors.push(`${file}: parsed zero framework entries - its shape changed`);
       return;
+    }
+    // What the reader could not read. Without this a partial miss was free:
+    // `linux = ""` and `linux = LINUX_DISPLAY` each left one member unchecked
+    // while `found.length` stayed non-zero and the gate said OK.
+    for (const what of read.missing) {
+      errors.push(
+        `${file}: ${what} - it is unchecked, and the others still parse so the ` +
+          `entry count does not show it`,
+      );
     }
     for (const value of found) {
       if (!allowed.includes(value) && !(extra || []).includes(value)) {
@@ -587,7 +715,6 @@ function main() {
       }
     }
   };
-
 
 
   // 4. DATA
@@ -646,10 +773,7 @@ function main() {
     uiErrors(
       "display name",
       ENUM_FILE,
-      // Trailing comma optional and both quote styles: `ios = 'iOS'` and a
-      // final member without a comma are both valid TS, and either shape used
-      // to leave that member unchecked.
-      readList(ENUM_FILE, /^\s*(\w+)\s*=\s*['"]([^'"]+)['"]\s*,?/m, 2),
+      enumMemberValues(readSource(ENUM_FILE), "FrameworksName"),
       registryDisplays,
       ENUM_ALLOWED_EXTRA_DISPLAYS,
     );
@@ -658,7 +782,7 @@ function main() {
     uiErrors(
       "display name",
       SEARCHBAR_FILE,
-      readObjectValues(SEARCHBAR_FILE, "API_FRAMEWORK_LABELS"),
+      objectLiteralValues(readSource(SEARCHBAR_FILE), "API_FRAMEWORK_LABELS"),
       registryDisplays,
       [],
     );
@@ -666,7 +790,7 @@ function main() {
     uiErrors(
       "label",
       SWITCHER_FILE,
-      readList(SWITCHER_FILE, /label:\s*['"]([^'"]+)['"]/m, 1),
+      entryFieldValues(readSource(SWITCHER_FILE), "FRAMEWORKS", "label"),
       registryDisplays,
       ["Xamarin iOS", "Xamarin Android", "Xamarin Forms"],
     );
@@ -678,7 +802,7 @@ function main() {
     uiErrors(
       "route",
       SWITCHER_FILE,
-      readList(SWITCHER_FILE, /slug:\s*['"]([^'"]+)['"]/m, 1),
+      entryFieldValues(readSource(SWITCHER_FILE), "FRAMEWORKS", "slug"),
       registrySegments,
       LEGACY_ROUTE_SEGMENTS,
     );
@@ -711,9 +835,14 @@ function main() {
     );
   }
   for (const entry of entries || []) {
-    if (!/agentSkills:\s*true/.test(entry)) continue;
-    if (!/routeSegment:\s*['"][^'"]+['"]/.test(entry)) {
-      const slug = (/slug:\s*['"]([^'"]+)['"]/.exec(entry) || [])[1] || "?";
+    // `\s*:` on each of these, for the reason the readers above give: no
+    // formatter is configured, so `agentSkills : true` is a shape this file has
+    // to expect - and a space before the colon skipped the entry without
+    // tripping the count assertion, because the entry was still read.
+    if (!/agentSkills\s*:\s*true/.test(entry)) continue;
+    if (!new RegExp(`routeSegment\\s*:\\s*${QUOTED}`).test(entry)) {
+      const found = new RegExp(`slug\\s*:\\s*${QUOTED}`).exec(entry);
+      const slug = (found && found.groups.v) || "?";
       errors.push(
         `${REGISTRY_FILE}: "${slug}" has agentSkills: true but no routeSegment - ` +
           `resolveAgentSkillsUrl would build /sdks/undefined/agent-skills`,
@@ -745,8 +874,12 @@ if (require.main === module) main();
 module.exports = {
   declaredFrameworks,
   dataFileFrameworkNames,
-  readList,
-  readObjectValues,
+  arrayBody,
+  arrayEntries,
+  entryFieldValues,
+  enumMemberValues,
+  objectLiteralValues,
+  stripComments,
   registryEntries,
   registryValues,
   unionSlugs,
