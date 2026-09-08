@@ -163,9 +163,14 @@ function frontmatterEndLine(file) {
   // `---` with trailing whitespace, because bodyOf and frontmatter.cjs both
   // accept it. Exact-matching it here returned 0, which is indistinguishable
   // from "no frontmatter" and therefore charged the entire untouched body.
-  if (lines[0].replace(/^\uFEFF/, "").trimEnd() !== "---") return 0;
+  // `startsWith`, not equality: bodyOf (`indexOf("\\n---")`), frontmatter.cjs
+  // (`/\\r?\\n---/`) and gray-matter all accept a line that BEGINS with `---`, so
+  // a `----` fence parses everywhere else. Requiring exact equality here made
+  // such a page return -1 and drop out of Vale completely - a banned word in its
+  // description exited 0, where before this branch it was caught.
+  if (!lines[0].replace(/^\uFEFF/, "").startsWith("---")) return 0;
   for (let i = 1; i < lines.length; i += 1) {
-    if (lines[i].trimEnd() === "---") return i + 1;
+    if (lines[i].startsWith("---")) return i + 1;
   }
   // Opening fence, no closing one: the extent is unknown, so there is no honest
   // cap. Returning 0 would charge the whole file; -1 tells the caller to leave
@@ -260,6 +265,7 @@ function main() {
       const frontmatterOnly = new Map();
       const bodySet = new Set(bodyChanged);
       const valeFiles = [];
+      const skippedUnreadable = [];
       for (const f of files) {
         if (bodySet.has(f)) {
           valeFiles.push(f);
@@ -269,9 +275,19 @@ function main() {
         // -1: the frontmatter has no readable extent, so neither charging the
         // body nor capping is honest. Left out of Vale; the schema check
         // already reports the malformed frontmatter itself.
-        if (end === -1) continue;
+        if (end === -1) {
+          skippedUnreadable.push(f);
+          continue;
+        }
         valeFiles.push(f);
         if (end) frontmatterOnly.set(f, end);
+      }
+      if (skippedUnreadable.length) {
+        console.log(
+          `docs-gate: frontmatter extent unreadable, so Vale was NOT run on ` +
+            `${skippedUnreadable.join(", ")} - the schema check reports the ` +
+            `frontmatter itself.\n`,
+        );
       }
       if (valeFiles.length) findings.push(...runVale(valeFiles, vale, frontmatterOnly));
     }

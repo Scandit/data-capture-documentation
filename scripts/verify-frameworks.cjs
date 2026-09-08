@@ -61,6 +61,8 @@ const DOCS = path.join(ROOT, "docs");
 const UNREADABLE = "\0unreadable";
 /** Declared, but with nothing in it - a schema violation, not a value. */
 const EMPTY = "\0empty";
+/** Opening `---` with no closing one: nothing was handed to the parser. */
+const UNTERMINATED = "\0unterminated";
 
 // The registry is now the only hand-written list of framework slugs in the
 // code; every map derives from it (src/constants/frameworks.ts). So this gate
@@ -182,7 +184,7 @@ function declaredFrameworks(file) {
   // An opening fence with no closing one is not "no framework field" - it is a
   // page whose frontmatter cannot be read, which is exactly what the sentinel
   // below is for. Returning [] here let `framework: unity` pass with an OK.
-  if (end === -1) return [{ field: "frontmatter", value: UNREADABLE }];
+  if (end === -1) return [{ field: "frontmatter", value: UNTERMINATED }];
 
   let fm;
   try {
@@ -293,11 +295,23 @@ function dataFileFrameworkNames(rel) {
   // so the product callout returns null and simply vanishes for that framework.
   if (!Array.isArray(parsed)) {
     if (!parsed || typeof parsed !== "object") return null;
-    for (const n of Object.keys(parsed.frameworks || {})) names.add(n);
+    // Per key, not unioned into one Set. Unioned, renaming `frameworks` to
+    // `platforms` still produced names through products.* - 31 of them, the
+    // same count as before - so the zero-names guard saw nothing wrong while
+    // the frameworks map went unchecked.
+    const perKey = { frameworks: new Set(), products: new Set() };
+    for (const n of Object.keys(parsed.frameworks || {})) perKey.frameworks.add(n);
     for (const product of Object.values(parsed.products || {})) {
       if (product && typeof product === "object") {
-        for (const n of Object.keys(product)) names.add(n);
+        for (const n of Object.keys(product)) perKey.products.add(n);
       }
+    }
+    for (const [key, set] of Object.entries(perKey)) {
+      if (!set.size) {
+        names.missing = names.missing || [];
+        names.missing.push(key);
+      }
+      for (const n of set) names.add(n);
     }
     return names;
   }
@@ -322,9 +336,21 @@ function main() {
   let pagesWithField = 0;
   for (const file of files) {
     const decls = declaredFrameworks(file);
-    if (decls.length) pagesWithField += 1;
+    // Only a real declaration counts. A page reported for a frontmatter-level
+    // problem declares nothing, and counting it inflated "N declare a
+    // framework" with pages that may declare none.
+    if (decls.some((d) => d.value !== UNREADABLE && d.value !== UNTERMINATED)) {
+      pagesWithField += 1;
+    }
     for (const { field, value } of decls) {
       const rel = path.relative(ROOT, file).split(path.sep).join("/");
+      if (value === UNTERMINATED) {
+        errors.push(
+          `${rel}: frontmatter opens with \`---\` but never closes, so its ` +
+            `framework declaration could not be read - add the closing \`---\``,
+        );
+        continue;
+      }
       if (value === EMPTY) {
         errors.push(
           `${rel}: ${field} is declared with nothing in it - ` +
@@ -485,6 +511,16 @@ function main() {
             `file is unchecked rather than clean`,
         );
         continue;
+      }
+      // A per-key miss, which a total count cannot show: skills.json carries
+      // two independent maps, and losing one of them left the other supplying
+      // names and the gate reporting clean.
+      for (const key of names.missing || []) {
+        errors.push(
+          `${rel}: the "${key}" map is absent or empty - that half of the file ` +
+            `is unchecked, and the other half still supplies names so the total ` +
+            `count does not show it`,
+        );
       }
       dataNamesChecked += names.size;
       for (const name of names) {

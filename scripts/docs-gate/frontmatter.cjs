@@ -41,7 +41,11 @@ function validateValue(val, sch, loc, errs) {
 }
 
 function validateFile(file, schema) {
-  const text = fs.readFileSync(file, "utf8");
+  // BOM stripped, as in docs-gate's bodyOf/frontmatterEndLine and
+  // verify-frameworks' declaredFrameworks. Without it a BOM'd page with
+  // perfectly valid frontmatter was reported "missing or invalid" - fail closed,
+  // but the diagnostic named the wrong problem.
+  const text = fs.readFileSync(file, "utf8").replace(/^﻿/, "");
   if (text.includes("<Redirect")) return []; // redirect-only stub: exempt
   const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (!m) return [{ file, level: "error", check: "frontmatter", msg: "missing or invalid frontmatter" }];
