@@ -60,7 +60,11 @@ jobs:
 
       - name: Install Vale (pinned)
         run: |
-          # The version the rules in styles/Scandit/ were measured against.
+          # The version the rules in styles/Scandit/ and the frontmatter cap in
+          # scripts/docs-gate were both measured against. The cap rests on Vale
+          # attributing a `description` alert to its true file line, and a local
+          # pass on one version proves nothing about another.
+          #
           # CI only. scripts/setup-vale.cjs does not install Vale at all - it
           # checks for it, prints winget/brew guidance if it is missing, and
           # exits 0 - so locally Vale may be any version, or absent, in which
