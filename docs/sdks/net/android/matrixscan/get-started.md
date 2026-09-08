@@ -1,7 +1,7 @@
 ---
 description: "Add MatrixScan to your .NET Android app to detect, track, and highlight multiple barcodes in the same frame."
 sidebar_position: 2
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 ---

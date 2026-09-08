@@ -1,7 +1,7 @@
 ---
 description: "Add MatrixScan Count to your .NET Android app: set up the mode, scan and count multiple barcodes, and handle the results."
 sidebar_position: 2
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 ---

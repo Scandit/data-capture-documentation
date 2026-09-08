@@ -3,7 +3,7 @@ description: "Advanced SparkScan settings for React Native: customize the UI, sc
 
 sidebar_position: 3
 pagination_next: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---

@@ -2,7 +2,7 @@
 description: "Enable and configure barcode symbologies for Barcode Capture on .NET iOS."
 sidebar_position: 3
 pagination_next: null
-framework: netIos
+framework: net-ios
 keywords:
   - netIos
 ---

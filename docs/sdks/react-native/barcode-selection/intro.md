@@ -3,7 +3,7 @@ description: "Barcode Selection lets users tap or aim to pick one barcode among 
 
 sidebar_position: 1
 pagination_prev: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---

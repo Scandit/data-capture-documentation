@@ -2,7 +2,7 @@
 description: "Add SparkScan to your React Native app: create a data capture context, configure the mode, add the view, and handle scanned barcodes."
 
 sidebar_position: 2
-framework: react
+framework: react-native
 keywords:
   - react
 ---

@@ -3,7 +3,7 @@ description: "Advanced MatrixScan Count settings for React Native to tune counti
 
 sidebar_position: 3
 pagination_next: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---

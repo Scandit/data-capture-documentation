@@ -1,7 +1,7 @@
 ---
 description: "Define label layouts for Smart Label Capture on React Native: the barcodes and text fields to extract."
 
-framework: react
+framework: react-native
 toc_max_heading_level: 4
 keywords:
   - react

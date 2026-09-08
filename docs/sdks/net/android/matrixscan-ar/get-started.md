@@ -1,7 +1,7 @@
 ---
 description: "Add MatrixScan AR to your .NET Android app: set up the view and the overlays that guide users to the right items."
 sidebar_position: 2
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 ---

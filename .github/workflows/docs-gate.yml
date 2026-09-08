@@ -38,7 +38,25 @@ jobs:
 
       - name: Install Vale (pinned)
         run: |
-          VALE_VERSION=3.7.1
+          # The version the rules in styles/Scandit/ and the frontmatter cap in
+          # scripts/docs-gate were both measured against. The cap rests on Vale
+          # attributing a `description` alert to its true file line, and a local
+          # pass on one version proves nothing about another.
+          #
+          # CI only. scripts/setup-vale.cjs does not install Vale at all - it
+          # checks for it, prints winget/brew guidance if it is missing, and
+          # exits 0 - so locally Vale may be any version, or absent, in which
+          # case docs:gate prints "Vale not installed" and skips the prose
+          # checks entirely. A contributor can pass the local gate and still
+          # meet a red CI job. Same story one level down for the rules:
+          # NOTE this pins the Vale BINARY only. `.vale.ini` requests the Google
+          # package by bare name, .gitignore excludes styles/Google/, and
+          # `docs:gate:setup` runs `vale sync`, so the Google rules are whatever
+          # the registry serves at job time - and Google supplies 159 of the 177
+          # corpus errors. A Google release that adds or tightens a rule can
+          # therefore turn this gate red with no change in the repo. Pin the
+          # package too (a release URL in `Packages`) if that ever bites.
+          VALE_VERSION=3.15.1
           curl -sSfL "https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" \
             | sudo tar -xz -C /usr/local/bin vale
           vale -v

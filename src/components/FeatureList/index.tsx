@@ -6,7 +6,7 @@ import { FeatureListProps, Feature, Product, FilteredFeature } from './types';
 // Import data files
 import productsData from '@site/src/data/products.json';
 import featuresData from '@site/src/data/features.json';
-import { FRAMEWORK_MAPPING } from '../utils/frameworks';
+import { frameworkFromPath } from '@site/src/constants/frameworks';
 import { withCurrentDocsPath } from '@site/src/constants/docsPaths';
 
 // Function to render description with inline code formatting
@@ -38,14 +38,12 @@ const FeatureList: React.FC<FeatureListProps> = ({
   const detectFramework = (): string | undefined => {
     if (framework) return framework;
     
-    // Try to detect from URL path
+    // Try to detect from URL path. Resolved through the registry rather than a
+    // local regex: features.json is keyed by DISPLAY name, and a single-segment
+    // match returned `net` for /sdks/net/ios/, which is not a framework, so
+    // every feature was filtered out on both .NET platforms.
     if (typeof window !== 'undefined') {
-      const path = window.location.pathname;
-      const frameworkMatch = path.match(/\/sdks\/([^\/]+)\//);
-      if (frameworkMatch) {
-        const frameworkKey = frameworkMatch[1];
-        return FRAMEWORK_MAPPING[frameworkKey] || frameworkKey;
-      }
+      return frameworkFromPath(window.location.pathname)?.display;
     }
     
     return undefined;

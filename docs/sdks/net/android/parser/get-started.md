@@ -3,7 +3,7 @@ description: "Use the Scandit parser in your .NET Android app to turn barcode da
 sidebar_position: 2
 pagination_prev: null
 pagination_next: null
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 ---

@@ -2,7 +2,7 @@
 description: "Advanced SparkScan settings for .NET iOS: customize the UI, scanning behavior, and feedback beyond the defaults."
 sidebar_position: 3
 pagination_next: null
-framework: netIos
+framework: net-ios
 keywords:
   - netIos
 ---

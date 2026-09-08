@@ -11,10 +11,20 @@
  * Remove a slug from this list once it ships in a release and gets a
  * versioned_docs snapshot.
  *
- * Kept free of imports so docusaurus.config.ts can read it too: the config is
- * loaded by Node, where webpack's `@generated` alias does not resolve.
+ * Readable by docusaurus.config.ts, which Node loads directly - so nothing on
+ * this file's import chain may use a webpack alias (`@site`, `@generated`),
+ * since Node cannot resolve one. It imports ./frameworks, which is itself
+ * alias-free today; keep it that way, or the config stops loading rather than
+ * some browser bundle breaking.
  */
-export const UNRELEASED_FRAMEWORK_SLUGS = ["kmp"];
+import { FRAMEWORKS } from "./frameworks";
+
+// Annotated `string[]`, not `FrameworkSlug[]`: this is a membership-test array
+// queried with arbitrary route segments, and narrowing it would make
+// `.includes(someString)` a type error at every call site.
+export const UNRELEASED_FRAMEWORK_SLUGS: string[] = FRAMEWORKS.filter(
+  (f) => f.unreleased,
+).map((f) => f.slug);
 
 /** True when `slug` is documented only in the current docs version. */
 export function isUnreleasedFramework(

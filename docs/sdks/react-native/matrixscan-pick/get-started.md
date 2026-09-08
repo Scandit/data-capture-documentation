@@ -2,7 +2,7 @@
 description: "Add MatrixScan Pick to your React Native app to guide users through order picking with AR cues."
 
 sidebar_position: 2
-framework: react
+framework: react-native
 keywords:
   - react
 ---

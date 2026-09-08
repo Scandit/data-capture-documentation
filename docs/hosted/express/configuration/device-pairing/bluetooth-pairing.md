@@ -1,6 +1,7 @@
 ---
 description: "Set up Bluetooth device pairing in Scandit Express to send scanned data from one device to another."
-framework: express
+framework: hosted
+product: express
 keywords:
   - express
 ---

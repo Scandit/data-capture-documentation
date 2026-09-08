@@ -2,7 +2,7 @@
 description: "Add Barcode Capture to your React Native app: configure the mode, set up the camera and view, and handle scanned barcodes."
 sidebar_position: 2
 pagination_prev: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---

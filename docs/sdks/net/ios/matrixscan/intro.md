@@ -2,7 +2,7 @@
 description: "MatrixScan detects, tracks, and highlights multiple barcodes in the same frame in your .NET iOS app."
 sidebar_position: 1
 pagination_prev: null
-framework: netIos
+framework: net-ios
 keywords:
   - netIos
 ---

@@ -6,7 +6,7 @@ title: About ID Capture
 sidebar_position: 1
 toc_max_heading_level: 4
 pagination_prev: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---

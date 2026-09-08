@@ -3,7 +3,8 @@ description: "Install Scandit Express on iOS or Android and activate it to add b
 sidebar_label: 'Installation'
 displayed_sidebar: expressSidebar
 sidebar_position: 1
-framework: express
+framework: hosted
+product: express
 keywords:
   - express
 ---

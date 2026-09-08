@@ -1,6 +1,7 @@
 ---
 description: "Scan Labels in Scandit Express, powered by Smart Label Capture, reads multiple barcodes and printed text on a label in one scan."
-framework: express
+framework: hosted
+product: express
 keywords:
   - express
 ---

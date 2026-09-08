@@ -3,7 +3,7 @@ description: "Add the Scandit Data Capture SDK to your .NET iOS project: depende
 sidebar_position: 1
 toc_max_heading_level: 4
 pagination_next: null
-framework: netIos
+framework: net-ios
 keywords:
   - netIos
 ---

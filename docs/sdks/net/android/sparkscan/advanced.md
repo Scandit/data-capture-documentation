@@ -2,7 +2,7 @@
 description: "Advanced SparkScan settings for .NET Android: customize the UI, scanning behavior, and feedback beyond the defaults."
 sidebar_position: 3
 pagination_next: null
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 ---

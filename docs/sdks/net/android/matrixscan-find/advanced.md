@@ -2,7 +2,7 @@
 description: "Advanced MatrixScan Find settings for .NET Android: customize matching, overlays, and search behavior."
 sidebar_position: 3
 pagination_next: null
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 ---

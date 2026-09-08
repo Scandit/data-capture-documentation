@@ -1,6 +1,7 @@
 ---
 description: "Define the input fields Custom Data Transfer collects during scanning in Scandit Express, and set each field's type and format."
-framework: express
+framework: hosted
+product: express
 sidebar_label: Input Configuration
 keywords:
   - express

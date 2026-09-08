@@ -1,6 +1,7 @@
 ---
 description: "Import and export data in Scandit Express using a configurable CSV file or Google Sheet, aligning formats with your system without coding."
-framework: express
+framework: hosted
+product: express
 sidebar_label: Overview
 keywords:
   - express
