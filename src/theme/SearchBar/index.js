@@ -255,37 +255,43 @@ function stripRoutedTokens(query, stripVersion) {
  *
  *   TWO segments - `rectangularviewfinderstyle.legacy` - is `Class.Member`. An
  *   enum member has no page of its own; it is documented on its parent symbol's
- *   page. Drop the member: 0 hits become 30.
+ *   page. Drop the member: 0 hits become 203.
  *
  *   THREE OR MORE - `this.state.settings.codeDuplicateFilter` - is a code
  *   expression the reader pasted from their own source. Algolia holds `word.word`
  *   as a single token, so the whole string matches nothing, and the meaning is in
- *   the LAST segment. Keep only that: 0 hits become 36.
+ *   the LAST segment. Keep only that: 0 hits become 107.
  *
- * BASIS for every count in this comment: the live index on 2026-09-08, with the
- * facet filters a current-version reader searches under -
- * `language:en` AND (`docusaurus_tag:default` OR `docs-default-current` OR
- * `api-reference-8.6`). Unfiltered counts are roughly an order of magnitude
- * larger and are NOT what a reader sees; mixing the two bases is how an earlier
- * version of this comment came to cite a 9-hit query, which this retry can
- * never see because it runs only after a ZERO.
+ * BASIS for every count in this comment and in scripts/test-search-facets.cjs:
+ * the live index on 2026-09-08 under
+ *   `language:en` AND (`docusaurus_tag:default` OR `docs-default-current`
+ *                      OR `api-reference-latest`)
+ * which is what a current-version reader searches under -
+ * `apiReferenceTagsByVersionTag` maps the served version to
+ * `api-reference-latest`, and the suite asserts that mapping.
+ *
+ * An earlier version of this paragraph named `api-reference-8.6`, a tag that
+ * appears nowhere as a value, and every figure taken under it was 3-6x too
+ * small. Two conclusions were drawn from those figures that the real ones
+ * reverse, so the basis is not a footnote: it decided the design.
  *
  * Why the last segment rather than dropping the member, for a 3+ segment query
  * that returned zero - the member-drop is useless where keeping the tail works:
  *
- *   this.state.settings.codeDuplicateFilter    drop -> 0   keep -> 36
- *   settings.barcodeCaptureSettings.codeDup…   drop -> 1   keep -> 36
+ *   this.state.settings.codeDuplicateFilter    drop ->  0   keep -> 107
+ *   settings.barcodeCaptureSettings.codeDup…   drop -> 55   keep -> 107
  *   com.scandit.datacapture.barcode.spark.ui
- *     .SparkScanView                           drop -> 0   keep -> 29
+ *     .SparkScanView                           drop -> 22   keep -> 106
  *
  * So trying the member-drop first would have cost an extra request on every
- * pasted expression and returned the worse answer where both found something.
+ * pasted expression and returned the worse answer where both found something -
+ * and on the real basis two of those drops DO find something (55 and 22), which
+ * is a stronger argument for the ordering than the zeroes were.
  *
  * A namespace-qualified constant - `scandit.datacapture.core.Anchor.TopLeft` -
- * does reach the retry on this basis (it returns 0 as written, not hits as an
- * earlier version of this comment claimed), but its tail `TopLeft` also returns
- * 0, so nothing is adopted and the reader keeps an honest no-result. The
- * adoption check, not the shape check, is what protects that case.
+ * returns 14 as written, all of them `anchor.html` pages, so no retry runs for
+ * it at all. An earlier version of this comment said so, a later one "corrected"
+ * it to 0 on a basis no reader searches under, and this restores it.
  */
 /**
  * Roots of a pasted expression, which are never a class name.
@@ -325,6 +331,90 @@ function applyQueryOverride(request, params, queryOverride) {
     : withQuery;
 }
 
+/**
+ * How many hits a retry may return and still be believed.
+ *
+ * This is the test that shape could not be: a precise symbol match returns
+ * tens to low hundreds, an ordinary word returns thousands. Measured on the
+ * basis stated below, the two groups do not overlap - they are separated by a
+ * clear gap, and this constant sits in it:
+ *
+ *   ADOPTED            max_codes 2   arMode 12   legacy 37   SparkScanView 106
+ *                      codeDuplicateFilter 107   TopLeft 170   codeDu 183
+ *                      rectangularviewfinderstyle 203   barcodecapturesettings 212
+ *   ---- 250 ----
+ *   DECLINED           rectangular 340   options 883   symbologies 842
+ *                      config 1259   enabled 1264   codeD 1505   settings 1678
+ *                      barcodecapture 2633   width 2848   core 3488
+ *
+ * It is a property of this corpus (~4,400 indexed pages) and will need
+ * re-measuring if the index grows a lot. The test suite pins that the ceiling
+ * is APPLIED, not its value - a number cannot be checked offline.
+ *
+ * Note what this costs: `rectangular` (340) and `symbologies` (842) are
+ * documented terms whose retry would have helped, and they are declined. That
+ * is the conservative direction, and it is the same answer three different
+ * lexical rules arrived at for the wrong reasons.
+ */
+const RETRY_HIT_CEILING = 250;
+
+/**
+ * Whether to believe a retry, given both hit counts.
+ *
+ * Separate and exported so it can be tested: the zero-gate and the ceiling are
+ * the two decisions that make the retry safe, and both used to live inside a
+ * closure that nothing could reach.
+ */
+function nbHitsOf(response) {
+  return response && response.results && response.results[0]
+    ? response.results[0].nbHits
+    : undefined;
+}
+
+/**
+ * The one retry, start to finish: search, decide, decide again.
+ *
+ * At module scope with its collaborators injected, because both defects this
+ * change shipped lived in the closure this replaces and nothing could reach
+ * them: an override that never applied, and a candidate chosen from the
+ * stripped query instead of the typed one. The suite can drive this with a fake
+ * `search` and assert the requests that come out.
+ *
+ * Returns the response to show, the query it came from (for the counted
+ * analytics ping), and `adopted` - non-null only when the retry was believed,
+ * which is what the footer may surface. The caller owns the refs; this owns no
+ * state.
+ */
+async function runDottedRetry(input) {
+  // Destructured inside rather than in the signature: the test suite extracts
+  // this function by counting braces from `function`, and a `{ … }` parameter
+  // list closes that count before the body begins.
+  const { typedQuery, strippedQuery, search, buildRequests } = input;
+  const typed = typedQuery || "";
+  const primaryQuery = strippedQuery != null ? strippedQuery : typed;
+  const first = await search(buildRequests(strippedQuery));
+  const unchanged = { response: first, effectiveQuery: primaryQuery, adopted: null };
+  if (nbHitsOf(first) !== 0) return unchanged;
+  // The TYPED query, not the stripped one. `settings.viewfinder.web` strips to
+  // `settings.viewfinder.` - three segments become two, the branch changes, and
+  // the retry became a search for `settings` (1678 hits). The strip is for
+  // relevance; it must not decide which rewrite a dotted query gets.
+  const candidate = dottedFallback(typed);
+  if (!candidate || candidate === typed) return unchanged;
+  const retry = await search(buildRequests(candidate, { dottedRetry: true }));
+  if (!adoptRetry(nbHitsOf(first), nbHitsOf(retry))) return unchanged;
+  return {
+    response: retry,
+    effectiveQuery: candidate,
+    adopted: { typed, used: candidate },
+  };
+}
+
+function adoptRetry(firstHits, retryHits) {
+  if (firstHits !== 0) return false;
+  return retryHits > 0 && retryHits <= RETRY_HIT_CEILING;
+}
+
 function dottedFallback(query) {
   // Trailing dots dropped. A reader partway through typing a member leaves
   // `RectangularViewfinderStyle.LEGACY.`, whose last segment is empty, and the
@@ -335,50 +425,31 @@ function dottedFallback(query) {
   const parts = q.split(".");
   if (parts.length >= 3) {
     const last = parts[parts.length - 1];
-    // The tail has to look like a SYMBOL, not like a word. `[A-Za-z0-9_]{4,}`
-    // alone admitted `width`, `count`, `state`, `value`, `enabled`, `text`,
-    // `size` and `color` - every one a plausible property at the end of a
-    // pasted expression, every one returning zero as written, and every one
-    // retrying into a thousand-plus unrelated pages that the reader never asked
-    // for. Measured: `this.overlay.viewfinder.width` -> `width` -> 2848 hits
-    // topped by release notes, and `this.state.settings.code` -> `code` ->
-    // 2913, which is reachable mid-way through typing the example above.
+    // An identifier with a letter in it, and nothing more. Whether it is a
+    // symbol or an ordinary word is NOT decided here - see adoptRetry.
     //
-    // The boundary has to be INTERNAL, and the tail at least six characters.
-    //
-    // "contains an uppercase letter" was a bypass, because Algolia matches
-    // case-insensitively: the same words came straight back capitalised, and a
-    // PascalCase tail is the norm in .NET, which this file treats as a
-    // first-class framework. And "eight characters or more" was not the line
-    // between prose and symbol either. Measured on the basis stated above:
-    //
-    //   Text 408   Size 126   Color 158   Value 154      no internal boundary
-    //   codeD 355                                        five characters
-    //   available 325   configured 327   selection 245   bare lowercase
-    //
-    //   codeDu 59   arMode 11   SparkScanView 29         accepted
-    //
-    // A bare lowercase tail gets no retry at whatever length. `symbologies`
-    // (271) and `rectangular` (55) are documented terms and would have been
-    // useful; `selection` (245) and `configured` (327) are prose. Nothing in
-    // the string separates them - the counts overlap - so the conservative
-    // reading wins and those two lose their retry. Both are still reachable as
-    // a two-segment query.
-    // One floor, not two: `{4,}` here was unreachable once the length check
-    // below moved to six, and read as if it were doing something.
-    if (!/^[A-Za-z0-9_]+$/.test(last) || !/[A-Za-z]/.test(last)) return null;
-    if (last.length < 6) return null;
-    return /[a-z0-9][A-Z]|_[A-Za-z0-9]/.test(last) ? last : null;
+    // Three rounds went into trying to read that out of the string, and the
+    // string does not carry it. `[A-Za-z0-9_]{4,}` admitted `width` and
+    // `enabled`; "contains an uppercase letter" admitted them capitalised,
+    // because Algolia matches case-insensitively; "eight characters or more"
+    // admitted `available` and `configured`; and an internal case boundary
+    // admitted `codeD`, one keystroke past the example above. Meanwhile the
+    // rule that excluded prose also excluded `symbologies` and `rectangular`,
+    // which are documented terms. There is no lexical test here: on the basis
+    // stated above, `barcodecapture` is a real class name and returns 2633,
+    // while `options` is a word and returns 883.
+    if (!/^[A-Za-z0-9_]{4,}$/.test(last) || !/[A-Za-z]/.test(last)) return null;
+    return last;
   }
   if (parts.length === 2) {
     const m = q.match(/^(.+)\.[A-Za-z0-9_]+$/);
     if (!m) return null;
     const base = m[1];
     if (base.length < 3) return null;
-    // Symmetry with the tail rule above: a numeric base is a version or a
-    // number, not a class. `2024.11` and `1024.5` only fail to bite today
-    // because they happen to return hits as written, so no retry runs.
+    // A numeric base is a version or a number, not a class.
     if (!/[A-Za-z]/.test(base)) return null;
+    // The receiver of a pasted expression is never a class name, and unlike
+    // "is this a word?" that IS decidable from the string.
     return EXPRESSION_ROOTS.has(base.toLowerCase()) ? null : base;
   }
   return null;
@@ -858,52 +929,29 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
                 return applyQueryOverride(r, params, queryOverride);
               })
             : requests;
-        const nbHitsOf = (response) =>
-          response && response.results && response.results[0]
-            ? response.results[0].nbHits
-            : undefined;
-        // The dotted fallback: when a dotted query returns zero, retry once
-        // with whichever rewrite its SHAPE calls for - the parent symbol for a
-        // `Class.Member`, the last segment for a pasted expression. See
-        // dottedFallback. Fires only on zero results and only adopts the retry
-        // when it actually finds hits, so normal queries are untouched.
-        //
-        // Resolve to BOTH the response and the query that actually produced it,
-        // so the counted ping and the footer below can use the query the reader
-        // really saw results for rather than the one they typed.
-        const primaryQuery = strippedQuery != null ? strippedQuery : query || "";
-        // ONE retry, and which one is decided by the query's shape rather than by
-        // trying both in turn - see dottedFallback. Two dotted shapes fail for
-        // opposite reasons and need opposite fixes, and the shape says which.
+        // The retry itself is runDottedRetry - see there for what it decides
+        // and why. What is left here is the ref bookkeeping, which is React's
+        // business rather than the search's.
         const resultPromise = (async () => {
           // Cleared synchronously, before any await: a new query must not
           // inherit the previous one's note.
           adoptedRetryRef.current = null;
-          const first = await originalSearch(buildRequests(strippedQuery));
-          if (nbHitsOf(first) !== 0) {
-            return { response: first, effectiveQuery: primaryQuery };
+          const outcome = await runDottedRetry({
+            typedQuery: query,
+            strippedQuery,
+            search: originalSearch,
+            buildRequests,
+          });
+          // Recorded only if this query is still the live one. A slow retry
+          // from an abandoned query used to land after a later query had
+          // rendered, leaving the footer showing the old retry against the new
+          // count.
+          if (outcome.adopted && latestQueryRef.current === (query || "")) {
+            adoptedRetryRef.current = outcome.adopted;
           }
-          const base = strippedQuery || query || "";
-          const candidate = dottedFallback(base);
-          if (!candidate || candidate === base) {
-            return { response: first, effectiveQuery: primaryQuery };
-          }
-          const retry = await originalSearch(
-            buildRequests(candidate, { dottedRetry: true })
-          );
-          // Adopted only when it actually finds something, so a normal query is
-          // never rewritten on the strength of a guess.
-          if (nbHitsOf(retry) > 0) {
-            // Only if this query is still the live one. A slow retry from an
-            // abandoned query used to land after a later query had rendered,
-            // leaving the footer showing the old retry against the new count.
-            if (latestQueryRef.current === (query || "")) {
-              adoptedRetryRef.current = { typed: query || "", used: candidate };
-            }
-            return { response: retry, effectiveQuery: candidate };
-          }
-          return { response: first, effectiveQuery: primaryQuery };
+          return outcome;
         })();
+        const primaryQuery = strippedQuery != null ? strippedQuery : query || "";
         if (query) {
           resultPromise
             .then(({ response }) =>

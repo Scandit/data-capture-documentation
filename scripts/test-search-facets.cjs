@@ -32,7 +32,9 @@ const src = fs.readFileSync(SRC, "utf8");
  * or comment in one of these functions, this is what to fix.
  */
 function extract(name) {
-  const start = src.indexOf(`function ${name}(`);
+  let start = src.indexOf(`function ${name}(`);
+  // Keep a leading `async`, or the extracted body's `await` is a syntax error.
+  if (start > 6 && src.slice(start - 6, start) === "async ") start -= 6;
   assert.notStrictEqual(start, -1, `${name} not found in SearchBar - test is stale`);
   let depth = 0;
   let started = false;
@@ -69,20 +71,27 @@ const rewriteVersionTag = eval(`(${extract("rewriteVersionTag")})`);
 const EXPRESSION_ROOTS = extractConst("EXPRESSION_ROOTS");
 const dottedFallback = eval(`(${extract("dottedFallback")})`);
 const applyQueryOverride = eval(`(${extract("applyQueryOverride")})`);
+const RETRY_HIT_CEILING = extractConst("RETRY_HIT_CEILING");
+const adoptRetry = eval(`(${extract("adoptRetry")})`);
+const nbHitsOf = eval(`(${extract("nbHitsOf")})`);
+const runDottedRetry = eval(`(${extract("runDottedRetry")})`);
 // Named guard for the brace-counting limitation in extract(): if any of the
-// four came back truncated, eval would have thrown something unrelated-looking.
+// five came back truncated, eval would have thrown something unrelated-looking.
 //
-// dottedFallback matters most here - it is the only one whose source carries a
-// brace inside a regex quantifier (`{4,}`), which happens to be balanced and in
-// order. A future edit adding a regex that matches a closing brace, or an
-// unbalanced brace in one of its comments, truncates the extraction and
-// surfaces as a bare SyntaxError before this guard runs.
+// The limitation is real regardless of which function currently trips it: a
+// regex literal that matches a closing brace, or an unbalanced brace inside a
+// comment, truncates the extraction and surfaces as a bare SyntaxError before
+// this guard runs. dottedFallback's `{4,}` quantifier is balanced and in order,
+// so it extracts cleanly today.
 for (const [name, fn] of Object.entries({
   apiTagsFor,
   withApiReferenceTags,
   rewriteVersionTag,
   dottedFallback,
   applyQueryOverride,
+  adoptRetry,
+  nbHitsOf,
+  runDottedRetry,
 })) {
   assert.strictEqual(typeof fn, "function", `${name} did not extract cleanly`);
 }
@@ -150,8 +159,29 @@ function maybeCheck(condition, label, fn) {
   }
   check(label, fn);
 }
+// A check may be async. `fn()` used to be called and its result dropped, so an
+// async body that threw printed "ok" and the rejection went to an unhandled
+// handler - a test that cannot fail. Promises are collected and settled at the
+// end instead.
+const pending = [];
+
 function check(label, fn) {
-  fn();
+  const result = fn();
+  if (result && typeof result.then === "function") {
+    pending.push(
+      result.then(
+        () => {
+          passed += 1;
+          console.log(`  ok  ${label}`);
+        },
+        (err) => {
+          console.error(`  FAIL  ${label}`);
+          throw err;
+        }
+      )
+    );
+    return;
+  }
   passed += 1;
   console.log(`  ok  ${label}`);
 }
@@ -314,8 +344,8 @@ const DOTTED = [
   // counted as a symbol. It no longer does: `symbologies` (271 hits) and
   // `selection` (245) are indistinguishable by shape, so the conservative
   // reading applies and this loses its retry.
-  ["a lower-case namespace path", "this.barcodecapture.settings.symbologies", null],
-  ["a bare lowercase tail, however deep the path", "sdc.core.ui.viewfinder.rectangular", null],
+  ["a lower-case namespace path", "this.barcodecapture.settings.symbologies", "symbologies"],
+  ["a deep namespace path", "sdc.core.ui.viewfinder.rectangular", "rectangular"],
   // Exactly three segments. Without a positive row here, raising the threshold
   // to four survived - and this query is one of the rows in the function's own
   // evidence table.
@@ -333,32 +363,40 @@ const DOTTED = [
   // before, it passed on length alone.
   ["an underscore and no case boundary", "express.config.max_codes", "max_codes"],
   // ...and the six-character floor applies to the underscore clause too.
-  ["an underscore below the floor", "express.config.max_c", null],
+  ["a partly typed underscore name", "express.config.max_c", "max_c"],
   // Six is the floor, and five is below it: `codeD` is one keystroke past the
   // example above and returned 355 hits, `codeDu` 59.
   ["six characters with a case boundary", "this.state.settings.codeDu", "codeDu"],
-  ["five characters with a case boundary", "this.state.settings.codeD", null],
+  ["a partly typed member", "this.state.settings.codeD", "codeD"],
   // A bare lowercase tail gets no retry at any length: nothing in the string
   // separates `symbologies` (271) from `selection` (245).
-  ["a bare lowercase word", "this.state.settings.available", null],
+  ["an ordinary word as the tail", "this.state.settings.available", "available"],
   // Capitalisation is not a symbol signal, because Algolia matches
   // case-insensitively: these came back as words with a capital letter.
-  ["a capitalised word", "barcode.data.Text", null],
-  ["another capitalised word", "this.viewfinder.style.Color", null],
-  ["an all-caps tail", "settings.mode.LEGACY", null],
+  ["a capitalised word", "barcode.data.Text", "Text"],
+  ["another capitalised word", "this.viewfinder.style.Color", "Color"],
+  ["an all-caps enum member", "settings.mode.LEGACY", "LEGACY"],
   // The letter guard, which the symbol-shape rule no longer covers.
   // Six characters of digits and underscores passes the shape rule, so the
   // letter guard is what declines it. The five-character version is declined by
   // the floor instead, which is why it pinned nothing.
   ["an underscore and digits is not a name", "foo.bar._12345", null],
   ["the same below the floor", "foo.bar._1234", null],
-  // ...and these are the words that used to be rewritten into a thousand-plus
-  // unrelated pages: measured, `width` returns 2848 hits topped by release
-  // notes, and `code` 2913 - the latter reachable partway through typing the
-  // flagship example.
-  ["a common property name is not a symbol", "this.overlay.viewfinder.width", null],
-  ["another one", "this.state.settings.enabled", null],
-  ["and mid-typing the example itself", "this.state.settings.code", null],
+  // What follows is NOT a judgement about whether the retry is believed -
+  // dottedFallback only picks the candidate, and adoptRetry decides. Measured
+  // counts for these candidates, on the basis the module states:
+  //
+  //   believed:  max_c 2   LEGACY 37   (both under the ceiling)
+  //   declined:  rectangular 340   Color 793   symbologies 842
+  //              available 1029   enabled 1264   codeD 1505   Text 1694
+  //              width 2848   code 2913
+  //
+  // Three rounds of lexical rules tried to make this distinction here and
+  // could not: every rule that excluded `width` also excluded something
+  // documented, and `codeD` slipped past each of them.
+  ["a common property name", "this.overlay.viewfinder.width", "width"],
+  ["another common one", "this.state.settings.enabled", "enabled"],
+  ["mid-typing the example itself", "this.state.settings.code", "code"],
   // Two segments: Class.Member. An enum member has no page of its own, so the
   // parent is what to search for.
   ["enum member", "rectangularviewfinderstyle.legacy", "rectangularviewfinderstyle"],
@@ -390,12 +428,31 @@ const DOTTED = [
   // The base floor is three, pinned from both sides.
   ["a two-segment base of exactly three", "sdc.legacy", "sdc"],
   ["a two-segment base of two", "sd.legacy", null],
+  // The two-segment cases the review reproduced as harm. dottedFallback picks
+  // the receiver; the ceiling is what declines it - `config` 1259,
+  // `options` 883, `settings` 1678, against `rectangularviewfinderstyle` 203
+  // and `barcodecapturesettings` 212.
+  ["a generic receiver", "config.enabled", "config"],
+  ["another generic receiver", "options.timeout", "options"],
+  ["a real class name", "rectangularviewfinderstyle.legacy", "rectangularviewfinderstyle"],
+  // The strip must not decide which branch applies: `settings.viewfinder.web`
+  // stripped to two segments and retried as `settings`. dottedFallback sees the
+  // TYPED query now, so this stays a three-segment case with `web` as its tail.
+  ["a framework word as the tail", "settings.viewfinder.web", null],
+  ["a framework word after a class", "config.barcodeCapture.ios", null],
   ["no dot at all", "codeDuplicateFilter", null],
   ["a phrase containing a dot", "see settings.symbologies for more", null],
-  // Needs the whitespace guard specifically: without it this splits into three
-  // segments and would be rewritten to a search for "settings", discarding
-  // words the reader typed.
+  // These two are declined by other rules as well, so neither pins the
+  // whitespace guard - the comment used to claim they did.
   ["a phrase ending in a dotted expression", "see this.state.settings", null],
+  // THIS one needs the guard: a natural-language question carrying a pasted
+  // symbol would otherwise be rewritten to a search for that symbol, throwing
+  // away every word the reader typed around it.
+  [
+    "a question containing a pasted symbol",
+    "how do I set this.state.settings.codeDuplicateFilter",
+    null,
+  ],
   // A trailing dot is dropped, so the query the reader was partway through
   // typing is the one that gets retried. `RectangularViewfinderStyle.LEGACY.`
   // appears in the docs-search events beside the same query without it.
@@ -472,4 +529,138 @@ check("applyQueryOverride replaces the query DocSearch actually sends", () => {
   assert.strictEqual(flatOut.hitsPerPage, 5);
 });
 
-console.log(`\n${passed} passed${skipped ? `, ${skipped} skipped` : ""}\n`);
+/**
+ * The two decisions that make the retry safe.
+ *
+ * Whether a rewrite is believed is NOT decided from the string - three rounds
+ * of lexical rules could not separate a class name from an ordinary word, and
+ * the measured counts show why: `barcodecapture` is a real class and returns
+ * 2633, `options` is a word and returns 883. What separates them is how
+ * specific the answer is, so the retry is believed only when it returns few
+ * enough hits to be a symbol match.
+ *
+ * The measured groups and the gap the ceiling sits in are recorded beside the
+ * constant in the module. These rows pin that the ceiling is APPLIED and that
+ * the zero-gate holds; the constant's VALUE cannot be checked offline.
+ */
+check("adoptRetry believes a retry only when it is specific enough", () => {
+  // The gate: nothing is retried, let alone adopted, unless the primary
+  // returned exactly zero.
+  assert.strictEqual(adoptRetry(1, 5), false, "a primary with hits is never rewritten");
+  assert.strictEqual(adoptRetry(107, 5), false);
+  assert.strictEqual(adoptRetry(undefined, 5), false, "a malformed response is not a zero");
+
+  // The ceiling, on both sides of it and exactly on it.
+  assert.strictEqual(adoptRetry(0, 0), false, "a retry that finds nothing is not adopted");
+  assert.strictEqual(adoptRetry(0, 1), true);
+  assert.strictEqual(adoptRetry(0, RETRY_HIT_CEILING), true, "the ceiling is inclusive");
+  assert.strictEqual(adoptRetry(0, RETRY_HIT_CEILING + 1), false);
+
+  // The measured pairs, as data rather than as prose: every accepted count
+  // below the gap and every declined one above it. A number that drifts here
+  // is a failing assertion, not a stale comment.
+  const accepted = [2, 12, 37, 106, 107, 170, 183, 203, 212];
+  const declined = [340, 842, 883, 1259, 1264, 1505, 1678, 2633, 2848, 3488];
+  for (const n of accepted) assert.strictEqual(adoptRetry(0, n), true, `accepted: ${n}`);
+  for (const n of declined) assert.strictEqual(adoptRetry(0, n), false, `declined: ${n}`);
+  assert.ok(
+    Math.max(...accepted) < RETRY_HIT_CEILING && RETRY_HIT_CEILING < Math.min(...declined),
+    `the ceiling ${RETRY_HIT_CEILING} must sit in the gap ${Math.max(...accepted)}..${Math.min(...declined)}`,
+  );
+});
+
+/**
+ * The retry end to end, with a fake search.
+ *
+ * Both defects this change shipped lived in the closure runDottedRetry
+ * replaces, and neither was reachable from a test: an override that never
+ * applied to the request, and a candidate chosen from the STRIPPED query so
+ * that stripping a framework token changed which branch ran. These rows assert
+ * the requests that come out, not just the predicate that names them.
+ */
+check("runDottedRetry issues the retry it should, with the query it should", async () => {
+  const hits = (n) => ({ results: [{ nbHits: n }] });
+  const drive = async ({ typed, stripped, first, retry }) => {
+    const sent = [];
+    const search = async (req) => {
+      sent.push(req);
+      return sent.length === 1 ? hits(first) : hits(retry);
+    };
+    const buildRequests = (q, opts) => ({ q, dottedRetry: Boolean(opts && opts.dottedRetry) });
+    const outcome = await runDottedRetry({
+      typedQuery: typed,
+      strippedQuery: stripped,
+      search,
+      buildRequests,
+    });
+    return { sent, outcome };
+  };
+
+  // A dotted paste that finds nothing, whose retry is specific: two requests,
+  // the second carrying the tail and tagged as the retry.
+  let r = await drive({
+    typed: "this.state.settings.codeDuplicateFilter",
+    stripped: "this.state.settings.codeDuplicateFilter",
+    first: 0,
+    retry: 107,
+  });
+  assert.deepStrictEqual(
+    r.sent.map((s) => s.q),
+    ["this.state.settings.codeDuplicateFilter", "codeDuplicateFilter"],
+  );
+  assert.deepStrictEqual(r.sent.map((s) => s.dottedRetry), [false, true]);
+  assert.strictEqual(r.outcome.effectiveQuery, "codeDuplicateFilter");
+  assert.deepStrictEqual(r.outcome.adopted, {
+    typed: "this.state.settings.codeDuplicateFilter",
+    used: "codeDuplicateFilter",
+  });
+
+  // The same retry, but it lands on a word's worth of pages: one extra request,
+  // nothing adopted, and the reader keeps the honest no-result.
+  r = await drive({ typed: "this.overlay.viewfinder.width", stripped: "this.overlay.viewfinder.width", first: 0, retry: 2848 });
+  assert.strictEqual(r.sent.length, 2);
+  assert.strictEqual(r.outcome.adopted, null);
+  assert.strictEqual(r.outcome.effectiveQuery, "this.overlay.viewfinder.width");
+
+  // A primary with hits is never retried at all.
+  r = await drive({ typed: "barcode.data.arMode", stripped: "barcode.data.arMode", first: 3, retry: 1 });
+  assert.strictEqual(r.sent.length, 1, "no retry when the primary found something");
+  assert.strictEqual(r.outcome.adopted, null);
+
+  // The candidate comes from the TYPED query. Stripping a trailing framework
+  // token used to turn three segments into two and retry `settings` - 1678
+  // pages - so the strip decided the branch.
+  r = await drive({ typed: "settings.viewfinder.web", stripped: "settings.viewfinder.", first: 0, retry: 1678 });
+  assert.deepStrictEqual(r.sent.map((s) => s.q), ["settings.viewfinder."],
+    "the tail `web` is too short to retry, so there is no second request");
+  assert.strictEqual(r.outcome.adopted, null);
+
+  // The FIRST request still carries the stripped query - the strip is for
+  // relevance and must keep working.
+  r = await drive({ typed: "sparkscan web", stripped: "sparkscan", first: 28, retry: 0 });
+  assert.deepStrictEqual(r.sent.map((s) => s.q), ["sparkscan"]);
+  assert.strictEqual(r.outcome.effectiveQuery, "sparkscan");
+
+  // A malformed response is not a zero.
+  const sent = [];
+  const outcome = await runDottedRetry({
+    typedQuery: "this.state.settings.codeDuplicateFilter",
+    strippedQuery: "this.state.settings.codeDuplicateFilter",
+    search: async (req) => { sent.push(req); return {}; },
+    buildRequests: (q) => ({ q }),
+  });
+  assert.strictEqual(sent.length, 1, "an unreadable response is not retried");
+  assert.strictEqual(outcome.adopted, null);
+});
+
+check("nbHitsOf reads the count or nothing", () => {
+  assert.strictEqual(nbHitsOf({ results: [{ nbHits: 0 }] }), 0);
+  assert.strictEqual(nbHitsOf({ results: [{ nbHits: 42 }] }), 42);
+  assert.strictEqual(nbHitsOf({}), undefined);
+  assert.strictEqual(nbHitsOf({ results: [] }), undefined);
+  assert.strictEqual(nbHitsOf(null), undefined);
+});
+
+Promise.all(pending).then(() => {
+  console.log(`\n${passed} passed${skipped ? `, ${skipped} skipped` : ""}\n`);
+});
