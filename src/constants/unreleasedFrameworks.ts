@@ -11,8 +11,11 @@
  * Remove a slug from this list once it ships in a release and gets a
  * versioned_docs snapshot.
  *
- * Kept free of imports so docusaurus.config.ts can read it too: the config is
- * loaded by Node, where webpack's `@generated` alias does not resolve.
+ * Readable by docusaurus.config.ts, which Node loads directly - so nothing on
+ * this file's import chain may use a webpack alias (`@site`, `@generated`),
+ * since Node cannot resolve one. It imports ./frameworks, which is itself
+ * alias-free today; keep it that way, or the config stops loading rather than
+ * some browser bundle breaking.
  */
 import { FRAMEWORKS } from "./frameworks";
 
