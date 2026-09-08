@@ -137,7 +137,38 @@ function runCspell(files) {
   }
 }
 
-function runVale(files, bin) {
+/**
+ * Line of the frontmatter's closing `---`, or 0 if the file has none.
+ *
+ * Used to keep a metadata-only change answerable for the prose it DID change.
+ * Vale lints frontmatter: a banned word in `description` is a Severity: error
+ * alert on line 3, and .vale.ini sets MinAlertLevel = error. Skipping such a
+ * file wholesale therefore turned off a blocking check for exactly the workflow
+ * the skip was built for - a PR that rewrites descriptions and nothing else.
+ * Measured before the fix: a description reading "scans identity documents
+ * effortlessly and obviously" gave `0 error(s)`, where the same words in the
+ * body fail the build. Neither word is in frontmatter.cjs's FLUFF_WORDS, and
+ * cspell only catches misspellings, so nothing else covered it.
+ */
+function frontmatterEndLine(file) {
+  let lines;
+  try {
+    lines = fs.readFileSync(path.join(ROOT, file), "utf8").split(/\r?\n/);
+  } catch {
+    return 0;
+  }
+  if (lines[0].replace(/^\uFEFF/, "") !== "---") return 0;
+  for (let i = 1; i < lines.length; i += 1) if (lines[i] === "---") return i + 1;
+  return 0;
+}
+
+/**
+ * @param frontmatterOnly Map of file -> last line Vale alerts are kept for.
+ *   A file in it had only its frontmatter changed, so alerts BELOW the
+ *   frontmatter belong to prose this PR did not touch and are dropped; alerts
+ *   inside it are this PR's.
+ */
+function runVale(files, bin, frontmatterOnly = new Map()) {
   const out = [];
   let json;
   try {
@@ -157,7 +188,12 @@ function runVale(files, bin) {
     }
   }
   for (const [file, alerts] of Object.entries(json || {})) {
+    const rel = file.replace(/\\/g, "/").replace(`${ROOT.replace(/\\/g, "/")}/`, "");
+    const ceiling = frontmatterOnly.get(rel);
     for (const a of alerts) {
+      // Body alerts on a metadata-only change are pre-existing prose, which the
+      // ratchet is not asking this PR to fix. Frontmatter alerts are not.
+      if (ceiling !== undefined && a.Line > ceiling) continue;
       const level = a.Severity === "error" ? "error" : "warn";
       out.push({ file: file.replace(/\\/g, "/"), level, check: `vale:${a.Check}`, msg: `${a.Message} (line ${a.Line})` });
     }
@@ -195,7 +231,20 @@ function main() {
 
   const vale = findVale();
   if (vale) {
-    if (bodyChanged.length) findings.push(...runVale(bodyChanged, vale));
+    // Every changed file goes to Vale, not just the ones whose body changed.
+    // For the metadata-only ones the alerts are capped at the frontmatter, so a
+    // rewritten `description` is still checked while untouched body prose is
+    // not - skipping those files entirely disabled a blocking check.
+    if (files.length) {
+      const frontmatterOnly = new Map();
+      const bodySet = new Set(bodyChanged);
+      for (const f of files) {
+        if (bodySet.has(f)) continue;
+        const end = frontmatterEndLine(f);
+        if (end) frontmatterOnly.set(f, end);
+      }
+      findings.push(...runVale(files, vale, frontmatterOnly));
+    }
   } else if (process.env.CI) {
     // In CI, a missing Vale must fail — otherwise the headline prose-style check
     // silently no-ops while the job stays green. Locally it's still advisory.

@@ -59,6 +59,8 @@ const ROOT = path.join(__dirname, "..");
 const DOCS = path.join(ROOT, "docs");
 /** A `frameworks:` declaration written in a shape this gate cannot read. */
 const UNREADABLE = "\0unreadable";
+/** Declared, but with nothing in it - a schema violation, not a value. */
+const EMPTY = "\0empty";
 
 // The registry is now the only hand-written list of framework slugs in the
 // code; every map derives from it (src/constants/frameworks.ts). So this gate
@@ -69,7 +71,11 @@ const REGISTRY_FILE = "src/constants/frameworks.ts";
 // Per-framework availability data. Keyed by display name because that is what
 // the tables render, so these files cannot be checked against the slug enum -
 // they are checked against the registry's `display` values instead.
-const DATA_FILES = ["src/data/products.json", "src/data/features.json"];
+const DATA_FILES = [
+  "src/data/products.json",
+  "src/data/features.json",
+  "src/data/skills.json",
+];
 
 // Hand-written copies of the vocabulary that stay where they are, checked from
 // here. See check 5 in the header for why each one cannot simply be derived.
@@ -122,7 +128,12 @@ function walk(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, e.name);
     if (e.isDirectory()) walk(full, out);
-    else if (/\.mdx?$/i.test(e.name)) out.push(full);
+    // `_`-prefixed files skipped, as in scripts/docs-gate/index.cjs: partials
+    // are imported into pages rather than being routes, so they declare no
+    // framework - and one that opens with a `---` thematic break was reported
+    // here as "frontmatter does not parse as YAML", pointing the author at the
+    // wrong gate for a file with no frontmatter at all.
+    else if (/\.mdx?$/i.test(e.name) && !e.name.startsWith("_")) out.push(full);
   }
   return out;
 }
@@ -159,8 +170,14 @@ function walk(dir, out = []) {
  * `framework: [ios]` or a number is reported rather than coerced.
  */
 function declaredFrameworks(file) {
-  const text = fs.readFileSync(file, "utf8");
-  if (!text.startsWith("---")) return [];
+  // BOM stripped first. With it, `startsWith("---")` was false and this
+  // function returned [] - a page opening with U+FEFF could declare any
+  // framework and the gate printed OK. gray-matter strips it, so Docusaurus
+  // renders such a page normally and nothing else would have noticed.
+  const text = fs.readFileSync(file, "utf8").replace(/^\uFEFF/, "");
+  // Anchored like scripts/docs-gate/frontmatter.cjs: `---` must be a line of
+  // its own, not merely the first three characters.
+  if (!/^---\r?\n/.test(text)) return [];
   const end = text.indexOf("\n---", 3);
   if (end === -1) return [];
 
@@ -180,10 +197,17 @@ function declaredFrameworks(file) {
     if (typeof value === "string") {
       const v = value.trim();
       if (v) found.push({ field, value: v });
+      else found.push({ field, value: EMPTY });
       return;
     }
-    // null/undefined: the key is present with no value, which declares nothing.
-    if (value === null || value === undefined) return;
+    // Present with no value - `framework:`, `framework: ~`, or a `-` with
+    // nothing after it. docs-schema.yml forbids it (`type: string`), but
+    // frontmatter.cjs only checks files a PR touched, and closing that gap for
+    // the whole corpus is what this gate is for.
+    if (value === null || value === undefined) {
+      found.push({ field, value: EMPTY });
+      return;
+    }
     // A number, a boolean, a nested map, a list where a string belongs: legal
     // YAML, not a framework identifier, and not something to guess at.
     found.push({ field, value: UNREADABLE });
@@ -192,8 +216,11 @@ function declaredFrameworks(file) {
   if ("framework" in fm) take("framework", fm.framework);
   if ("frameworks" in fm) {
     const list = fm.frameworks;
-    if (Array.isArray(list)) for (const item of list) take("frameworks", item);
-    else take("frameworks", list);
+    if (Array.isArray(list)) {
+      // `minItems: 1` in the schema, unchecked corpus-wide until now.
+      if (!list.length) found.push({ field: "frameworks", value: EMPTY });
+      for (const item of list) take("frameworks", item);
+    } else take("frameworks", list);
   }
   return found;
 }
@@ -225,7 +252,11 @@ function registryValues(field) {
   }
   if (end === -1) return null;
   const values = [];
-  const re = new RegExp(field + ':\\s*"([^"]+)"', "g");
+  // `['\"]`: no formatter is configured in this repo and the file this registry
+  // replaced used single quotes, so a single-quoted entry was invisible here and
+  // a mixed-quote entry failed with a message about a missing routeSegment it
+  // actually had.
+  const re = new RegExp(field + ':\\s*[\'"]([^\'"]+)[\'"]', "g");
   const body = src.slice(open + 1, end);
   let m;
   while ((m = re.exec(body))) values.push(m[1]);
@@ -243,16 +274,31 @@ function unionSlugs() {
   if (start === -1) return null;
   const end = src.indexOf(";", start);
   if (end === -1) return null;
-  return (src.slice(start, end).match(/"([^"]+)"/g) || []).map((q) => q.slice(1, -1));
+  return (src.slice(start, end).match(/['"]([^'"]+)['"]/g) || []).map((q) => q.slice(1, -1));
 }
 
 /** Framework display names each data file keys its availability map by. */
 function dataFileFrameworkNames(rel) {
   const full = path.join(ROOT, rel);
   if (!fs.existsSync(full)) return null;
-  const items = JSON.parse(fs.readFileSync(full, "utf8"));
-  if (!Array.isArray(items)) return null;
+  const parsed = JSON.parse(fs.readFileSync(full, "utf8"));
   const names = new Set();
+  // skills.json is an OBJECT, not a list, and keys both `frameworks.<display>`
+  // and `products.<product>.<display>` by display name - the same vocabulary in
+  // which this check already found `.Net iOS`. It was not covered at all: a typo
+  // there leaves productSkills?.[resolvedFramework] undefined in SkillsCallout,
+  // so the product callout returns null and simply vanishes for that framework.
+  if (!Array.isArray(parsed)) {
+    if (!parsed || typeof parsed !== "object") return null;
+    for (const n of Object.keys(parsed.frameworks || {})) names.add(n);
+    for (const product of Object.values(parsed.products || {})) {
+      if (product && typeof product === "object") {
+        for (const n of Object.keys(product)) names.add(n);
+      }
+    }
+    return names;
+  }
+  const items = parsed;
   for (const item of items) {
     const fw = item && item.frameworks;
     if (!fw) continue;
@@ -276,6 +322,15 @@ function main() {
     if (decls.length) pagesWithField += 1;
     for (const { field, value } of decls) {
       const rel = path.relative(ROOT, file).split(path.sep).join("/");
+      if (value === EMPTY) {
+        errors.push(
+          `${rel}: ${field} is declared with nothing in it - ` +
+            `docs-schema.yml requires a string` +
+            (field === "frameworks" ? ` and at least one item` : "") +
+            `, and frontmatter.cjs only sees files a PR touched`,
+        );
+        continue;
+      }
       if (value === UNREADABLE) {
         errors.push(
           field === "frontmatter"
@@ -478,10 +533,10 @@ function main() {
   // routeSegment: null, and skills.json already carries an id-bolt skill, so
   // flipping hosted.agentSkills is the natural next edit.
   const registrySrc = fs.readFileSync(path.join(ROOT, REGISTRY_FILE), "utf8");
-  for (const entry of registrySrc.match(/\{[^{}]*slug:\s*"[^"]+"[^{}]*\}/g) || []) {
+  for (const entry of registrySrc.match(/\{[^{}]*slug:\s*['"][^'"]+['"][^{}]*\}/g) || []) {
     if (!/agentSkills:\s*true/.test(entry)) continue;
-    if (!/routeSegment:\s*"[^"]+"/.test(entry)) {
-      const slug = (/slug:\s*"([^"]+)"/.exec(entry) || [])[1] || "?";
+    if (!/routeSegment:\s*['"][^'"]+['"]/.test(entry)) {
+      const slug = (/slug:\s*['"]([^'"]+)['"]/.exec(entry) || [])[1] || "?";
       errors.push(
         `${REGISTRY_FILE}: "${slug}" has agentSkills: true but no routeSegment - ` +
           `resolveAgentSkillsUrl would build /sdks/undefined/agent-skills`,
