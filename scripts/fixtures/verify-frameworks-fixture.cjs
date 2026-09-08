@@ -11,12 +11,11 @@
  * `build(dir)` writes a tree that passes cleanly. `mutate` names one thing to
  * break, so a test can assert the message rather than the exit code alone.
  *
- * This covers verify-frameworks only. docs-gate's main() has no equivalent
- * harness: its two load-bearing decisions - which changed files reach Vale, and
- * which of Vale's alerts survive the frontmatter cap - are pinned as the pure
- * functions partitionForVale and capAlerts instead. The rest of that main() is
- * still driven by nothing, so do not read the asymmetry as a judgement that it
- * needs less.
+ * This covers verify-frameworks only. docs-gate has its own harness now -
+ * docs-gate-fixture.cjs - built after pinning capAlerts and partitionForVale as
+ * functions turned out not to pin that main() calls them with the right
+ * arguments: swapping partitionForVale's two arguments made the gate exit 0 on
+ * a real alert with every test green.
  */
 const fs = require("fs");
 const path = require("path");

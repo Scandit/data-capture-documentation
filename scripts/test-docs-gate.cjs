@@ -1127,6 +1127,92 @@ check("VERIFY_FRAMEWORKS_ROOT alone is ignored", () => {
   });
 });
 
+/**
+ * The whole docs-gate script, run against a fixture repository.
+ *
+ * Pinning capAlerts and partitionForVale as functions did not pin that main()
+ * calls them with the right arguments. Measured on the previous HEAD: swapping
+ * partitionForVale's two arguments, or passing an empty bodyChanged list, each
+ * made the gate print `0 error(s)` and exit 0 on prose the change introduced -
+ * with all 35 tests green. These rows drive the wiring instead of the leaves.
+ *
+ * Vale is required. Without it the gate prints "Vale not installed" and skips
+ * the prose checks, which would make the rows pass for the wrong reason, so the
+ * check fails rather than silently degrading.
+ */
+const DOCS_GATE_CASES = [
+  [undefined, null],
+  // The alert the cap exists to KEEP: a banned word in the description of a
+  // page whose body is byte-identical to base.
+  ["metaonly-banned-description", /vale:Scandit\.Banned\] Avoid 'Obviously'/],
+  // The alert the cap exists to DROP: the same page's pre-existing body prose,
+  // with only its description changed. Must pass.
+  ["metaonly-clean-description", null],
+  // A body change means no cap at all.
+  ["body-changed-banned-word", /vale:Scandit\.Banned\] Avoid 'obviously'/],
+  // The structural checks must see a metadata-only page too - that is
+  // pagesOnly(files) rather than pagesOnly(bodyChanged).
+  ["metaonly-schema-violation", /missing required field 'description'/],
+  ["metaonly-unreadable-fence", /missing or invalid frontmatter/],
+  // Leading whitespace is not cosmetic in Markdown: de-indenting the first body
+  // line turns an indented code block, which Vale skips, into a paragraph,
+  // which it lints. Comparing bodies with .trim() on both ends classified this
+  // metadata-only and dropped the new alert.
+  ["body-indentation-only", /vale:Scandit\.Banned\] Avoid 'Blatantly'/],
+];
+
+check("docs-gate catches each break in a fixture repository", () => {
+  let valePresent = true;
+  try {
+    execFileSync("vale", ["-v"], { stdio: "ignore" });
+  } catch {
+    valePresent = false;
+  }
+  assert.ok(
+    valePresent,
+    "vale is not on PATH; these rows assert prose alerts and would pass vacuously without it",
+  );
+  const { build } = require("./fixtures/docs-gate-fixture.cjs");
+  const script = path.join(ROOT, "scripts", "docs-gate", "index.cjs");
+  withTempDir((dir) => {
+    const repo = path.join(dir, "repo");
+    for (const [mutation, expected] of DOCS_GATE_CASES) {
+      build(repo, mutation);
+      let code = 0;
+      let out = "";
+      try {
+        out = execFileSync(process.execPath, [script], {
+          cwd: repo,
+          encoding: "utf8",
+          stdio: ["ignore", "pipe", "pipe"],
+        });
+      } catch (e) {
+        code = e.status;
+        out = (e.stdout || "") + (e.stderr || "");
+      }
+      const label = mutation || "(clean)";
+      if (expected === null) {
+        assert.strictEqual(code, 0, `${label}: expected a clean pass, got ${code}\n${out}`);
+        continue;
+      }
+      assert.notStrictEqual(code, 0, `${label}: expected a failure, got exit 0\n${out}`);
+      assert.match(out, expected, `${label}: message\n${out}`);
+    }
+  });
+});
+
+check("sameBody ignores a trailing newline but not leading indentation", () => {
+  const withFence = (body) => `---\ntitle: T\n---\n\n${body}`;
+  // A missing final newline is not a body change anyone needs to review.
+  assert.ok(gate.sameBody(withFence("Text.\n"), withFence("Text.")));
+  assert.ok(gate.sameBody(withFence("Text.\n\n"), withFence("Text.\n")));
+  // Leading indentation is: it decides code block versus paragraph.
+  assert.ok(!gate.sameBody(withFence("    Text.\n"), withFence("Text.\n")));
+  assert.ok(!gate.sameBody(withFence("Text.\n"), withFence("  Text.\n")));
+  // And a real body edit is still a body edit.
+  assert.ok(!gate.sameBody(withFence("Text.\n"), withFence("Other.\n")));
+});
+
 if (failures.length) {
   console.error(`\n${failures.length} failed, ${passed} passed\n`);
   for (const f of failures) console.error(`  ${f.name}\n    ${f.message}\n`);

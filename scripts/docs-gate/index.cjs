@@ -105,6 +105,24 @@ function bodyOf(text) {
 }
 
 /**
+ * Whether two versions of a file have the same body.
+ *
+ * The TRAILING edge is trimmed, not both. `.trim()` on both admitted any change
+ * that is purely leading whitespace, and indentation is not cosmetic in
+ * Markdown: de-indenting the first body line turns an indented code block,
+ * which Vale skips, into a paragraph, which it lints. Such a file was then
+ * classified metadata-only, capped at the frontmatter, and the new alert
+ * dropped - the gate printing OK on prose the change had made lintable.
+ * Reproduced end to end by the `body-indentation-only` row.
+ *
+ * The trailing trim stays: a missing or added final newline is not a body
+ * change anyone needs to review.
+ */
+function sameBody(before, after) {
+  return bodyOf(before).replace(/\s+$/, "") === bodyOf(after).replace(/\s+$/, "");
+}
+
+/**
  * Files whose diff against the ratchet base touches frontmatter only.
  *
  * The ratchet checks a whole file as soon as a PR touches one line of it, which
@@ -133,7 +151,7 @@ function frontmatterOnly(files, base) {
     } catch {
       continue;
     }
-    if (bodyOf(before).trim() === bodyOf(after).trim()) out.add(f);
+    if (sameBody(before, after)) out.add(f);
   }
   return out;
 }
@@ -287,9 +305,11 @@ function capAlerts(json, frontmatterOnly, root) {
 /**
  * Which changed files Vale sees, and with what ceiling.
  *
- * Pure and exported for the same reason as capAlerts: deleting the line that
- * puts a metadata-only file into the Vale list left every test green, and that
- * is exactly the "skipping the file disabled the check" bug.
+ * Extracted and exported for the same reason as capAlerts - deleting the line
+ * that puts a metadata-only file into the Vale list left every test green, and
+ * that is exactly the "skipping the file disabled the check" bug. Not pure,
+ * unlike capAlerts: it reads each file through frontmatterEndLine, which is why
+ * its test writes real files.
  */
 function partitionForVale(files, bodyChanged) {
   const bodySet = new Set(bodyChanged);
@@ -400,4 +420,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { frontmatterEndLine, bodyOf, capAlerts, partitionForVale };
+module.exports = { frontmatterEndLine, bodyOf, sameBody, capAlerts, partitionForVale };

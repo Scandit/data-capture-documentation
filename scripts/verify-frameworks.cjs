@@ -506,8 +506,16 @@ function stripComments(src) {
   let regex = false;
   let charClass = false;
   let prev = "";
-  // The run of identifier characters ending at the current position, so the
-  // keyword test above has something to match. Reset by anything else.
+  // The identifier run ending at the current position, prefixed by `.` when a
+  // dot precedes it, so the property guard below can tell `counts.in` from the
+  // keyword `in`.
+  //
+  // Whitespace does NOT reset it - deliberately, so `return /re/` is seen. The
+  // cost is that a keyword separated from an identifier by whitespace alone
+  // reads as part of that identifier: `o.p` then a newline then `return` gives
+  // `.preturn`, and a regex there is not recognised. Fail-closed (the file
+  // reports as unreadable), loud, and no shape like it exists in the four files
+  // this reads.
   let word = "";
   let i = 0;
   const emit = (s) => {
@@ -706,11 +714,16 @@ function entryPairs(entry) {
   const inner = entry.trim().replace(/^{/, " ").replace(/}$/, " ");
   const pairs = [];
   const unreadable = [];
-  // A key, quoted or not, or a computed one. Anything else at this depth - a
-  // spread, a shorthand, a method, a getter, or a quoted key containing a space
-  // - is something this cannot read a value from, so it is reported rather than
+  // A key, quoted or not. Anything else at this depth - a spread, a shorthand,
+  // a method, a getter, a computed key, or a quoted key containing a space - is
+  // something this cannot read a value from, so it is reported rather than
   // dropped.
-  const keyRx = /^\s*(?:\[|["']?[\w$.-]+["']?)\s*:/;
+  //
+  // A computed key deliberately does NOT match: topLevelOnly blanks the inside
+  // of `[KEY]` but leaves the brackets, so accepting `[` here would put
+  // `[ ]: "ios"` into `pairs`, where entryField's anchored match then rejects
+  // it - read by nothing and reported by nothing.
+  const keyRx = /^\s*["']?[\w$.-]+["']?\s*:/;
   for (const { flat, raw } of topLevelPairsWithSource(inner)) {
     if (keyRx.test(flat)) pairs.push(flat);
     else unreadable.push(raw.trim());
