@@ -1049,6 +1049,12 @@ function gitDates(siteDir: string): Map<string, string> {
 /**
  * Compile one llms ignore glob to a RegExp, or refuse.
  *
+ * One known divergence from minimatch, unreachable today and left documented
+ * rather than implemented: `*` and whole-segment `**` here also match a
+ * segment beginning with `.`, where minimatch defaults to `dot: false`. No
+ * doc source is dot-prefixed, so nothing in the corpus reaches it; if one
+ * appears it would be hidden from the index and kept in llms.
+ *
  * Deliberately NOT a full glob engine, and deliberately loud about it. The
  * shapes the repo's ignore list uses are literal paths and `<literal>/**`; a
  * previous version tried to handle them by string surgery on the prefix, which
@@ -1062,7 +1068,10 @@ function gitDates(siteDir: string): Map<string, string> {
  * (cheerio). Twelve lines beat a lockfile change.
  */
 function ignoreGlobToRegExp(glob: string): RegExp {
-  const unsupported = /[{}!\[\]?+@()|]/.exec(glob);
+  // Backslash included: a Windows-spelled `docs\\sdks\\titanium\\**` is a
+  // plausible authoring slip, and it matches nothing in EITHER artifact -
+  // minimatch reads it as an escape - so it would hide the tree from neither.
+  const unsupported = /[{}!\[\]?+@()|\\]/.exec(glob);
   if (unsupported) {
     throw new Error(
       `[knowledge-extractor] cannot express the ignore glob ${JSON.stringify(glob)}: ` +
@@ -1109,6 +1118,27 @@ function ignoreGlobToRegExp(glob: string): RegExp {
   // which is the failure this function was rewritten to stop.
   if (!glob.includes("/")) return new RegExp(`(?:^|/)${out}$`);
   return new RegExp(`^${out}$`);
+}
+
+/**
+ * Is this source path hidden from AI consumers?
+ *
+ * Tests the file AND every ancestor directory, because that is what the llms
+ * walker does: `readMarkdownFiles` calls `shouldIgnoreFile` on each directory
+ * before recursing into it, so a pattern that matches a DIRECTORY hides
+ * everything beneath it. Matching only the file path left three shapes hiding a
+ * subtree there and nothing here - `docs/connector-guides` with no `/**`,
+ * `docs/sdks/linux/matrixscan**`, and a bare `titanium` - which is the
+ * scope disagreement this whole mechanism exists to prevent. Verified against
+ * that walker's semantics rather than against minimatch on a file path.
+ */
+function hiddenFromAssistants(sourcePath: string, patterns: RegExp[]): boolean {
+  const parts = sourcePath.split("/");
+  for (let i = parts.length; i > 0; i -= 1) {
+    const prefix = parts.slice(0, i).join("/");
+    if (patterns.some((re) => re.test(prefix))) return true;
+  }
+  return false;
 }
 
 /**
@@ -1773,9 +1803,20 @@ export default function knowledgeExtractor(context: any, _options: any) {
       const files = walkHtml(outDir, skipDir).filter((f) => {
         const rel = path.relative(outDir, path.dirname(f)).split(path.sep).join("/");
         const pathname = rel ? `/${rel}/` : "/";
-        return !docsRelCandidates(pathname).some((cand) =>
-          ignorePatterns.some((re) => re.test(cand)),
-        );
+        // The RESOLVED source, not every candidate spelling of it. Matching all
+        // the candidates let a pattern over-hide: `docs/**/index.md` matches the
+        // `docs/<rel>/index.md` candidate of every route whether that file
+        // exists or not, so it would have emptied the index while llms dropped
+        // only the pages really sourced from an index.md.
+        //
+        // Normalised back to `docs/` first, because the globs are written
+        // against that while a frozen-at-root build resolves into
+        // versioned_docs/version-X/ - left unnormalised, nothing would match
+        // there and the entire curation list would fail open.
+        const resolved = resolveSource(siteDir, pathname, servedVersion);
+        if (!resolved) return true; // no source found: not this filter's call
+        const asDocs = resolved.replace(/^versioned_docs\/version-[^/]+\//, "docs/");
+        return !hiddenFromAssistants(asDocs, ignorePatterns);
       });
       const modules: KModule[] = [];
       let pagesProcessed = 0;

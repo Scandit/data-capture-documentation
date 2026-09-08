@@ -53,6 +53,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build docs (generates the knowledge retrieval index)
+        id: build
         run: yarn build
 
       - name: Run retrieval evals
@@ -64,10 +65,10 @@ jobs:
       # because no workflow passed --auto. Reported separately so a corpus-wide
       # regression is attributable.
       - name: Run corpus-wide self-retrieval
-        # always(): a gold-set breach above must not hide the corpus-wide
-        # number, which is the one that says whether a regression is broad
-        # or local.
-        if: always()
+        # Not always(): a gold-set breach above must not hide the corpus-wide
+        # number, but a FAILED BUILD must not add a second red step blaming a
+        # missing index instead - and always() fires on cancellation too.
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: node scripts/retrieval-evals/run.cjs --auto --report reports/retrieval-evals-auto.json
 
       - name: Upload eval report

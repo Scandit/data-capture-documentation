@@ -202,9 +202,19 @@ const FeatureList: React.FC<FeatureListProps> = ({
                     {Object.entries(feature.frameworks)
                       .filter(([, info]) => info.version !== 'n/a')
                       .map(([frameworkName, frameworkInfo]) => (
+                        // href guarded like the feature-name cell above: the
+                        // Kotlin Multiplatform rows carry no apiUrl, and an <a>
+                        // with href={undefined} renders link-styled, is not
+                        // keyboard-focusable and navigates nowhere. Latent only
+                        // because every current usage is compact mode, which
+                        // skips this column.
                         <a
                           key={frameworkName}
-                          href={withCurrentDocsPath(frameworkInfo.apiUrl)}
+                          href={
+                            frameworkInfo.apiUrl
+                              ? withCurrentDocsPath(frameworkInfo.apiUrl)
+                              : undefined
+                          }
                           className={styles.frameworkItem}
                           target="_blank"
                           rel="noopener noreferrer"
