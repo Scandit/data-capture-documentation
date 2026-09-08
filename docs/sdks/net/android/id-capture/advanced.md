@@ -52,7 +52,7 @@ settings.Scanner = new IdCaptureScanner(new SingleSideScanner(barcode: false, ma
 
 To configure the documents that should be accepted and/or rejected, set the `AcceptedDocuments` and `RejectedDocuments` properties in `IdCaptureSettings`.
 
-These properties take a list of [IIdCaptureDocument](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/id-capture-document.html) instances (e.g. `Passport`, `DriverLicense`, `IdCard`) combined with the [IdCaptureRegion](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enum to enable highly flexible document filtering.
+These properties take a list of [IIdCaptureDocument](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/id-capture-document.html) instances (for example, `Passport`, `DriverLicense`, `IdCard`) combined with the [IdCaptureRegion](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enum to enable highly flexible document filtering.
 
 For example, to accept only US Driver Licenses:
 

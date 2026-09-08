@@ -15,7 +15,7 @@ This guide explains how to configure output data for the **Custom Data Transfer*
 |-------|-------------|
 | `type` | Always set to `standard` for this configuration type. |
 | `behavior` | Defines how new data is written. Options: <br></br> - `replace`: overwrite existing data <br></br> - `append`: add new rows or entries. |
-| `target` | Defines the destination for the output (e.g., Google Sheets, CSV, API). |
+| `target` | Defines the destination for the output (for example, Google Sheets, CSV, API). |
 | `parserOptions` | (Optional) Array of parser configuration objects. |
 | `timestampOptions` | (Optional) Controls how timestamps are handled. |
 | `grouped` | Boolean (default: `true`). If `false`, the same barcode will be repeated when quantity > 1. |
@@ -40,7 +40,7 @@ When `type=barcodeValue`, the following `barcodeValue.type` options are availabl
 | Type | Description |
 |------|-------------|
 | `barcodeData` | Raw scanned barcode data. |
-| `symbology` | Symbology type (e.g., QR, Code128). |
+| `symbology` | Symbology type (for example, QR, Code128). |
 | `symbolCount` | Number of symbols in the barcode. |
 | `quantity` | Quantity derived from scanning. |
 | `timestamp` | Timestamp of the scan (see `timestampOptions`). |

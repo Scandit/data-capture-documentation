@@ -33,7 +33,7 @@ On start, you will have two options:
 
 * **Count without List** which will allow you to start scanning products and then export a list of them.
 * **Load Order List** which allows you to load a predefined list of barcodes and then scan products to see if they are on the list. Lists can be loaded:
-    - From a **deep-link URL** (e.g. `https://express.scandit.com/count/list?listName=myList&data=123,456,789`)
+    - From a **deep-link URL** (for example, `https://express.scandit.com/count/list?listName=myList&data=123,456,789`)
     - From a **QR code** encoding the same URL
     - From **multiple QR codes** (for very large lists)
 

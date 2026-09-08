@@ -2,8 +2,30 @@ name: Docs Quality Gate
 
 # Runs the docs quality gate (Vale/Google style, cspell, frontmatter schema,
 # link check) on every PR. The gate ratchets to the docs CHANGED in the PR
-# (git merge-base origin/main HEAD), so it never blocks on pre-existing legacy
-# pages — only new or modified docs must pass.
+# (git merge-base against the PR's target branch), so untouched legacy pages
+# never block it.
+#
+# The ratchet is FILE-scoped, not line-scoped: editing any part of a page means
+# the WHOLE page must pass. Measured on this branch, docs/ carries 177 Vale
+# errors across 79 files, so a one-word edit to a legacy page can surface that
+# page's entire backlog. That is deliberate - it is what stops the debt growing
+# - but it is the gate's most surprising behaviour, so budget for it when
+# touching an old page.
+#
+# Two things are outside the gate's reach, by construction rather than by
+# accident:
+#
+#   - versioned_docs/. The gate diffs `-- docs` only, so the 1,585 files under
+#     versioned_docs/ are never linted - including the tree that
+#     docusaurus.config.ts serves at the site root via lastVersion. A defect
+#     fixed in docs/ therefore stays live for readers until the next version
+#     snapshot is cut, and has to be fixed in the snapshot by hand.
+#   - prose inside ::: admonitions, which .vale.ini's BlockIgnores blanks
+#     wholesale. Measured: linting the block bodies adds 41 corpus findings and
+#     17 in a branch the size of this one, as Google.Units +16,
+#     Google.EmDash +13, Google.Latin +11 and Google.Quotes +1. Worth doing,
+#     but as its own change. Google.Units accounts for 16 of the 17 in-scope
+#     findings; the seventeenth is Google.Quotes.
 
 on:
   pull_request:
@@ -38,7 +60,25 @@ jobs:
 
       - name: Install Vale (pinned)
         run: |
-          VALE_VERSION=3.7.1
+          # The version the rules in styles/Scandit/ and the frontmatter cap in
+          # scripts/docs-gate were both measured against. The cap rests on Vale
+          # attributing a `description` alert to its true file line, and a local
+          # pass on one version proves nothing about another.
+          #
+          # CI only. scripts/setup-vale.cjs does not install Vale at all - it
+          # checks for it, prints winget/brew guidance if it is missing, and
+          # exits 0 - so locally Vale may be any version, or absent, in which
+          # case docs:gate prints "Vale not installed" and skips the prose
+          # checks entirely. A contributor can pass the local gate and still
+          # meet a red CI job. Same story one level down for the rules:
+          # NOTE this pins the Vale BINARY only. `.vale.ini` requests the Google
+          # package by bare name, .gitignore excludes styles/Google/, and
+          # `docs:gate:setup` runs `vale sync`, so the Google rules are whatever
+          # the registry serves at job time - and Google supplies 159 of the 177
+          # corpus errors. A Google release that adds or tightens a rule can
+          # therefore turn this gate red with no change in the repo. Pin the
+          # package too (a release URL in `Packages`) if that ever bites.
+          VALE_VERSION=3.15.1
           curl -sSfL "https://github.com/errata-ai/vale/releases/download/v${VALE_VERSION}/vale_${VALE_VERSION}_Linux_64-bit.tar.gz" \
             | sudo tar -xz -C /usr/local/bin vale
           vale -v

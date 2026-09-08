@@ -46,9 +46,42 @@ function changedDocs() {
   try { out += "\n" + sh("git diff --cached --name-only --diff-filter=ACMR -- docs"); } catch {}
   try { out += "\n" + sh("git ls-files --others --exclude-standard -- docs"); } catch {}
   const files = [...new Set(out.split(/\r?\n/).filter(Boolean))];
+  // No `_`-prefixed exclusion here, deliberately. Partials were being kept
+  // out of Vale and cspell by this FILE LIST, and they are prose:
+  // docs/partials/_symbology-properties.mdx alone renders into 12 published
+  // pages, and one of the findings that justified styles/Scandit/Spacing.yml
+  // was in it - so that rule's own evidence could never have been enforced.
+  // The prose checks now see every changed doc; pagesOnly() below keeps them
+  // out of the schema and link checks, which is where they genuinely cannot
+  // be handled.
+  //
+  // The cost, measured: 50 Vale errors across 18 partials become
+  // gate-blocking, concentrated in _migrate-5-to-6.mdx (14),
+  // _ai-powered-barcode-scanning.mdx (6) and _migrate-6-to-7.mdx (5). With
+  // the file-scoped ratchet that means a one-word edit to a partial forces
+  // clearing that partial's whole backlog - the same surprise the workflow
+  // header documents for pages, and partials are imported by many pages
+  // each. _barcode-scanning.mdx is 288 lines that nothing imports today and
+  // is kept deliberately, so it is gate-blocking like any other partial.
   return files.filter(
-    (f) => /\.(md|mdx)$/i.test(f) && !path.basename(f).startsWith("_") && fs.existsSync(path.join(ROOT, f))
+    (f) => /\.(md|mdx)$/i.test(f) && fs.existsSync(path.join(ROOT, f))
   );
+}
+
+// Partials are kept out of the schema check (they carry no frontmatter) and
+// out of the link check (links.cjs resolves a relative target against the
+// file's own directory, which for a partial is docs/partials/ rather than the
+// directory of whichever page imported it, so both false hits and misses
+// follow). Applied at those two call sites rather than to the file list, so
+// that what the structural checks see stays a separate decision from what the
+// prose checks see.
+//
+// Note that this filters nothing when the file list already excludes
+// `_`-prefixed names: whether the PROSE checks see partials is decided by
+// changedDocs' predicate, not here. Applying it at the call sites keeps the two
+// decisions separable either way.
+function pagesOnly(files) {
+  return files.filter((f) => !path.basename(f).startsWith("_"));
 }
 
 function findVale() {
@@ -113,7 +146,7 @@ function main() {
 
   const schema = loadSchema(path.join(ROOT, "docs-schema.yml"));
   let findings = [];
-  for (const f of files) {
+  for (const f of pagesOnly(files)) {
     findings.push(...validateFile(path.join(ROOT, f), schema).map((x) => ({ ...x, file: f })));
     findings.push(...checkLinks(path.join(ROOT, f)).map((x) => ({ ...x, file: f })));
   }

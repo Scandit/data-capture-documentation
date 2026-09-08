@@ -10,7 +10,7 @@ keywords:
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -22,13 +22,13 @@ SparkScan offers a built-in API to let you do this via [`SparkScanViewSettings.h
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
 
 - The text message
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\<2s) could allow the user to scan again without having to interact with the app, just momentarily pausing the workflow to acknowledge that a “special” barcode has been scanned.
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\<2s) could allow the user to scan again without having to interact with the app, just momentarily pausing the workflow to acknowledge that a “special” barcode has been scanned.
     :::
   
 - The color of the flashing screen upon scan. You can enable or disable the visual feedback via [SparkScanViewSettings.visualFeedbackEnabled](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.VisualFeedbackEnabled) and you can control the color via [SparkScanBarcodeFeedback](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-barcode-feedback.html#sparkscan-barcode-feedback).
@@ -98,7 +98,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -137,7 +137,7 @@ sparkScanViewSettings.defaultScanningMode = new Scandit.SparkScanScanningModeDef
 );
 ```
 
-Pass both arguments — the single-argument constructor is deprecated. Use
+Pass both arguments—the single-argument constructor is deprecated. Use
 `Scandit.SparkScanScanningModeTarget` instead of `SparkScanScanningModeDefault` to force
 the aimer (target mode).
 
