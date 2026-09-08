@@ -14,6 +14,34 @@
  *   - <outDir>/assets/knowledge-retrieval-index.json  (fast lookup)
  *   - <outDir>/assets/knowledge-graph.jsonld          (enriched concept graph)
  *
+ * A POINTER INDEX, NOT A TEXT STORE - and deliberately so. `toIndexRecord`
+ * publishes `docs_excerpt` (<=400 chars, averaging 374) and `assistant_excerpt`
+ * (averaging 518) and does NOT publish `content.docs_markdown`; the consumer
+ * follows `url` for the full text. That is not an oversight, it is the only
+ * shape that makes sense next to the sibling export: measured on this build the
+ * index is already 11.0 MB and the graph 12.3 MB, while `llms-full.txt` carries
+ * the FULL prose of every page in 2.3 MB. Adding ~1,400 chars per module would
+ * put ~6.5 MB more onto an 11 MB artifact in order to restate, five times less
+ * efficiently, text that ships next to it.
+ *
+ * So CHUNK_TARGET_CHARS is a GRANULARITY knob, not a payload size: it decides
+ * how finely a page is split into retrievable units, and the excerpt is a
+ * ranking and preview budget. Shrinking the chunk to match the excerpt would
+ * change what a module IS - more, smaller modules - which is a retrieval-quality
+ * decision to make against the evals, not a size cleanup.
+ *
+ * DIVISION OF LABOUR with docusaurus-plugin-llms, registered beside this one:
+ * that plugin emits the PROSE corpus for context-stuffing (`llms.txt` as a link
+ * index, `llms-full.txt` as the text). This one emits TYPED METADATA AND EDGES
+ * for deciding which page or chunk to read - intents, audiences, channels,
+ * frameworks, products, cites-API, see-also, availability - which a flat text
+ * dump cannot express. They share a source of truth for what an assistant may
+ * see (`customFields.llmsIgnoredSdkTrees`) so they cannot disagree about scope.
+ *
+ * Known limit: 11 MB is large for a browser consumer to fetch whole. Nothing in
+ * the repo consumes it that way yet; if something does, it needs a served index
+ * or a split by framework rather than a smaller excerpt.
+ *
  * The graph is not just faceting: alongside intent/audience/channel/framework
  * it mines real edges from the content — product membership, cites-API,
  * see-also (internal links), and per-product availability (from "not available"
@@ -402,7 +430,18 @@ function pickIntents(contentType: string, title: string, body: string): string[]
   if (contentType === "tutorial" || contentType === "how-to" || text.includes("configure")) intents.push("configure");
   if (contentType === "troubleshooting" || text.includes("error") || text.includes("fix")) intents.push("troubleshoot");
   if (contentType === "reference" || contentType === "concept" || text.includes("integrat")) intents.push("integrate");
-  if (text.includes("secure") || text.includes(" auth")) intents.push("secure");
+  // Word-boundary, not a substring. Counted across the built HTML, `" auth"`
+  // matched "authenticity" 12 times, "authentic" 10 and "authority" 5 - every
+  // one of them the ID-DOCUMENT sense, about whether a passport is genuine -
+  // against "authorization" twice. So the old test filed about 27
+  // document-verification mentions under the security intent, and 2 real ones.
+  //
+  // Verb forms are deliberately left out: "authenticate" does not occur in
+  // this corpus at all, while "authorized" does - in "authorized dealer" -
+  // so adding them would re-admit the false positives to catch nothing.
+  if (text.includes("secure") || /\bauth(?:n|entication|orization)?\b/.test(text)) {
+    intents.push("secure");
+  }
   if (intents.length === 0) intents.push("configure");
   return Array.from(new Set(intents)).sort();
 }
@@ -1563,6 +1602,15 @@ export default function knowledgeExtractor(context: any, _options: any) {
       } catch {
         /* no versions.json */
       }
+      // Route prefixes the sibling llms export is told to skip, read from the
+      // config rather than restated here. `docs/sdks/titanium/**` becomes
+      // `sdks/titanium/`, which is how it appears in a built route.
+      const ignoredRoutePrefixes = (
+        (siteConfig?.customFields?.llmsIgnoredSdkTrees as readonly string[] | undefined) || []
+      )
+        .map((glob) => String(glob).replace(/^docs\//, "").replace(/\*+$/, ""))
+        .filter(Boolean);
+
       const excluded = new Set<string>([
         ...frozenVersions,
         "data-capture-sdk",
@@ -1577,7 +1625,13 @@ export default function knowledgeExtractor(context: any, _options: any) {
       ]);
       const skipDir = (name: string) => excluded.has(name) || name.endsWith(".html");
 
-      const files = walkHtml(outDir, skipDir);
+      // Filtered here rather than in skipDir, which sees one directory NAME and
+      // so cannot express a multi-segment route like `sdks/titanium/`. Applied to
+      // the list, not inside the loop, so an ignored page is never read or parsed.
+      const files = walkHtml(outDir, skipDir).filter((f) => {
+        const rel = path.relative(outDir, path.dirname(f)).split(path.sep).join("/");
+        return !ignoredRoutePrefixes.some((prefix) => `${rel}/`.startsWith(prefix));
+      });
       const modules: KModule[] = [];
       let pagesProcessed = 0;
       let pageErrors = 0;

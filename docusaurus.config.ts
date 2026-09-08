@@ -466,6 +466,12 @@ const config: Config = {
     // reader on 6.28.11 finds the 6.28 API and never the 8.x one.
     apiReferenceTagsByVersionTag: buildApiReferenceTags(docsVersions),
     versionNumberByTag: buildVersionNumberByTag(docsVersions),
+    // Source trees the repo has decided an assistant should not be given.
+    // Declared once as globs for docusaurus-plugin-llms; the
+    // knowledge-extractor reads them here and derives its own route prefixes,
+    // so the two AI exports cannot drift into disagreeing about what an
+    // assistant may see - they had, and this one was indexing Titanium.
+    llmsIgnoredSdkTrees,
     // Which version THIS build serves at the root. Read by the
     // knowledge-extractor plugin, which cannot otherwise tell a frozen version
     // served at the root from `current` - and the two need opposite handling.
@@ -742,6 +748,15 @@ const config: Config = {
   // Build-generate AI layer: emits /assets/knowledge-retrieval-index.json and
   // /assets/knowledge-graph.jsonld from the rendered HTML (see
   // src/plugins/knowledge-extractor).
+  //
+  // Division of labour with docusaurus-plugin-llms above, which also exports for
+  // AI consumers: that plugin ships the PROSE (llms.txt as a link index,
+  // llms-full.txt as the text, 78 KB and 2.3 MB on this build). This one ships
+  // TYPED METADATA AND EDGES for deciding what to read - intents, audiences,
+  // channels, frameworks, products, cites-API, see-also, availability - with
+  // only an excerpt of the prose, because the text is already published next to
+  // it. Neither replaces the other, and both read llmsIgnoredSdkTrees from
+  // customFields so they cannot disagree about what an assistant may see.
   //
   // LAST in the array on purpose: its postBuild reads the rendered HTML, so it
   // must run after any plugin that rewrites the build - stripPreviewMediaPlugin

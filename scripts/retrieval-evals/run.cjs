@@ -41,7 +41,11 @@ const MIN_MRR = parseFloat(arg("min-mrr", "0.6"));
 // create/edit. --auto-limit caps it; --min-auto-success gates it.
 const AUTO = process.argv.includes("--auto");
 const AUTO_LIMIT = parseInt(arg("auto-limit", "0"), 10);
-const MIN_AUTO_SUCCESS = parseFloat(arg("min-auto-success", "0"));
+// Not 0: every possible rate is >= 0, so the old default printed "(min 0)"
+// and gated nothing. Measured on this corpus - page-success@3 = 0.8653 over
+// all 616 pages / 4,637 modules - so 0.80 absorbs ordinary drift and still
+// fails a real regression. Re-measure with `--auto` before moving it.
+const MIN_AUTO_SUCCESS = parseFloat(arg("min-auto-success", "0.80"));
 const REPORT = arg("report", "");
 
 const TOKEN = /[a-z0-9]{2,}/gi;
