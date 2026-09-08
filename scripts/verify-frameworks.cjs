@@ -55,7 +55,12 @@ const fs = require("fs");
 const path = require("path");
 const yaml = require("js-yaml");
 
-const ROOT = path.join(__dirname, "..");
+// Overridable so scripts/test-docs-gate.cjs can run this whole script against
+// a fixture tree. Every check and every report in main() was deletable with a
+// green suite until there was a way to drive it end to end.
+const ROOT = process.env.VERIFY_FRAMEWORKS_ROOT
+  ? path.resolve(process.env.VERIFY_FRAMEWORKS_ROOT)
+  : path.join(__dirname, "..");
 const DOCS = path.join(ROOT, "docs");
 /** A `frameworks:` declaration written in a shape this gate cannot read. */
 const UNREADABLE = "\0unreadable";
@@ -140,6 +145,15 @@ function enumSlugs() {
           "must be the same set.",
       );
     }
+  }
+  // Zero slugs is a shape change, not an empty vocabulary: `enum: []` is
+  // truthy, so it passed the two guards above and every downstream check then
+  // had nothing to compare against. Every other reader here has this guard.
+  if (singular && !singular.length) {
+    errors.push(
+      "docs-schema.yml `framework` enum parsed to zero slugs - the vocabulary " +
+        "is empty, so nothing below is actually checked",
+    );
   }
   return { slugs: new Set(singular || []), errors };
 }
@@ -262,25 +276,23 @@ function readSource(rel) {
     return null;
   }
 }
-
+/**
+ * Values of `<field>:` on the top level of each FRAMEWORKS entry, or null if
+ * the literal's shape changed.
+ *
+ * Per entry and at depth 0, not every occurrence in the literal. Counting
+ * nested ones widened the allowed set with nothing to notice it: a nested
+ * `display: "Bogus Name"` made that name acceptable in products.json,
+ * features.json and skills.json.
+ */
 function registryValues(field, source) {
-  const body = arrayBody(
+  const read = arrayEntries(
     source === undefined ? readSource(REGISTRY_FILE) : source,
     "FRAMEWORKS",
   );
-  if (body === null) return null;
+  if (read === null) return null;
   const values = [];
-  // Quote-matched, for the reason QUOTED documents: no formatter is configured
-  // in this repo and the file this registry replaced used single quotes, so a
-  // single-quoted entry was invisible here, and a value containing an
-  // apostrophe was truncated at it and the truncation checked instead.
-  //
-  // Every occurrence in the literal, nested ones included: this count is what
-  // the entry-count assertion in main() compares against, so a `slug:` the
-  // entry splitter cannot see must still show up here as a disagreement.
-  const re = new RegExp(`${field}\\s*:\\s*${QUOTED}`, "g");
-  let m;
-  while ((m = re.exec(body))) values.push(m.groups.v);
+  for (const entry of read.entries) values.push(...entryField(entry, field));
   return values;
 }
 
@@ -296,8 +308,13 @@ function registryEntries(source) {
  * TypeScript.
  */
 function unionSlugs(source) {
-  const src = source === undefined ? readSource(REGISTRY_FILE) : source;
-  if (src === null || src === undefined) return null;
+  const raw = source === undefined ? readSource(REGISTRY_FILE) : source;
+  if (raw === null || raw === undefined) return null;
+  // Through stripComments, like every sibling reader. Without it a
+  // commented-out member was read as live (`// | "bogus"` became a slug) and a
+  // `;` inside a trailing comment truncated the union early.
+  const src = stripComments(raw);
+  if (src === null) return null;
   const start = src.indexOf("export type FrameworkSlug");
   if (start === -1) return null;
   const end = src.indexOf(";", start);
@@ -434,10 +451,10 @@ const QUOTED = "(?<q>['\"])(?<v>(?:(?!\\k<q>).)+)\\k<q>";
 /**
  * `src` with comments removed.
  *
- * A single pass with three states, because two earlier shortcuts each blanked
- * real code:
+ * One pass that tracks a string, a regex literal, a character class inside
+ * that regex, and both comment forms - all of it, because two earlier
+ * shortcuts each blanked real code:
  *
- *   - Block comments were removed by a regex BEFORE any quote awareness, so a
  *   - Block comments were removed by a regex BEFORE any quote awareness, so
  *     an opening block-comment marker inside a STRING ate everything up to
  *     the next closing one. Measured: a glob string containing a star-slash
@@ -460,17 +477,30 @@ function stripComments(src) {
   // including real comments, which then survived into the output. A regex
   // literal directly after a brace (`{ /re/ }`) does not occur in the four
   // files this reads; every real one here follows `(`, `=`, `,`, `:` or `[`.
-  const REGEX_AFTER = /^$|^[(,=:[!&|?;+\-*%~^]$/;
+  const REGEX_AFTER = /^$|^[(,=:[!&|?;+\-*%~^>]$/;
+  // ...and after a keyword, which the single-character test above cannot see.
+  // Without these, `return /["']/.test(s)` opened a phantom string on the
+  // quote inside the class, and the whole file came back unreadable - so an
+  // ordinary regex added anywhere in SearchBar turned the gate red with a
+  // "shape changed" message. `>` covers `=>` for the same reason.
+  const REGEX_AFTER_WORD = /(?:^|[^\w$])(?:return|typeof|case|in|of|new|delete|void|yield|await|do|else)$/;
   let out = "";
   let quote = null;
   let regex = false;
   let charClass = false;
   let prev = "";
+  // The run of identifier characters ending at the current position, so the
+  // keyword test above has something to match. Reset by anything else.
+  let word = "";
   let i = 0;
   const emit = (s) => {
     out += s;
     const t = s.trimEnd();
     if (t) prev = t[t.length - 1];
+    for (const ch of s) {
+      if (/[\w$]/.test(ch)) word += ch;
+      else if (!/\s/.test(ch)) word = "";
+    }
   };
   while (i < src.length) {
     const c = src[i];
@@ -505,7 +535,12 @@ function stripComments(src) {
       continue;
     }
     if (c === '"' || c === "'" || c === "`") { quote = c; emit(c); i += 1; continue; }
-    if (c === "/" && REGEX_AFTER.test(prev)) { regex = true; emit(c); i += 1; continue; }
+    if (c === "/" && (REGEX_AFTER.test(prev) || REGEX_AFTER_WORD.test(word))) {
+      regex = true;
+      emit(c);
+      i += 1;
+      continue;
+    }
     if (c === "\n") { out += c; i += 1; continue; }
     emit(c);
     i += 1;
@@ -534,11 +569,27 @@ function declStart(src, constName) {
   return m ? m.index : -1;
 }
 
+/**
+ * The span of the balanced bracket pair opening at `from`, or null.
+ *
+ * Quote-aware: a closing bracket inside a string used to end the span early,
+ * so `[{ slug: "a]" }, ...M]` was read as ending at the `]` in the value. The
+ * array then looked empty and the reader returned null, which is loud - but a
+ * truncated span is the wrong reason for it.
+ */
 function balanced(src, from, openCh, closeCh) {
   let depth = 0;
+  let quote = null;
   for (let i = from; i < src.length; i += 1) {
-    if (src[i] === openCh) depth += 1;
-    else if (src[i] === closeCh) {
+    const c = src[i];
+    if (quote) {
+      if (c === "\\") i += 1;
+      else if (c === quote) quote = null;
+      continue;
+    }
+    if (c === '"' || c === "'" || c === "`") quote = c;
+    else if (c === openCh) depth += 1;
+    else if (c === closeCh) {
       depth -= 1;
       if (depth === 0) return { open: from, close: i };
     }
@@ -572,37 +623,47 @@ function arrayBody(src, constName) {
 }
 
 /**
- * Top-level `{...}` entries of the named array literal, or null if its shape
+ * The array literal's top-level chunks, classified - or null if its shape
  * changed.
  *
- * Brace-matched rather than matched with a `{[^{}]*}` pattern: that cannot match
- * an entry containing a nested object, so adding `meta: { ... }` to a registry
- * entry dropped it from the agentSkills invariant without a word of output.
+ * `entries` are the `{...}` object literals. `other` is every depth-0 chunk
+ * that is not one: a spread, an identifier reference, a conditional.
+ *
+ * Both halves are returned because keeping only what returned to brace depth 0
+ * dropped the rest without a word. Measured: rewriting the switcher's Linux
+ * entry as `...LINUX_SWITCHER_ENTRIES,` left its `label` unchecked against the
+ * registry displays and its `slug` unchecked against `routeSegment`, and the
+ * gate printed OK - the same input that makes useFrameworkItems build
+ * `${linkVersion}/undefined/add-sdk`.
  */
 function arrayEntries(src, constName) {
   const body = arrayBody(src, constName);
   if (body === null) return null;
   const entries = [];
-  let from = -1;
-  let depth = 0;
-  for (let i = 0; i < body.length; i += 1) {
-    if (body[i] === "{") {
-      if (depth === 0) from = i;
-      depth += 1;
-    } else if (body[i] === "}") {
-      depth -= 1;
-      if (depth === 0 && from !== -1) {
-        entries.push(body.slice(from, i + 1));
-        from = -1;
-      }
-    }
+  const other = [];
+  for (const chunk of splitTopLevel(body)) {
+    const t = chunk.trim();
+    if (t.startsWith("{") && t.endsWith("}")) entries.push(chunk);
+    else other.push(t);
   }
-  return entries;
+  return { entries, other };
+}
+
+/** One field, read off an entry's own top level. */
+function entryField(entry, field) {
+  const inner = entry.trim().replace(/^{/, " ").replace(/}$/, " ");
+  const rx = new RegExp(`^\\s*${field}\\s*:\\s*${QUOTED}\\s*$`);
+  const hits = [];
+  for (const pair of topLevelPairs(inner)) {
+    const m = rx.exec(pair);
+    if (m) hits.push(m.groups.v);
+  }
+  return hits;
 }
 
 /**
  * `body` with every nested `{...}` and `[...]` span blanked out, so a field
- * regex can only match at the top level.
+ * regex can only match at the top level of `body` itself.
  *
  * Matching the whole entry text found a field inside a NESTED object and
  * attributed it to the entry. Measured: rewriting the switcher's Linux entry
@@ -610,18 +671,40 @@ function arrayEntries(src, constName) {
  * `slug`, so useFrameworkItems builds `${linkVersion}/undefined/add-sdk` - and
  * the gate printed OK, because the nested one was what got read.
  *
- * Blanked rather than deleted so offsets and line structure survive.
+ * Quote-aware, which is what actually fixes `label: "Linux ]", meta: { slug:
+ * "x" }` - a `]` inside a string used to drive the depth negative, after which
+ * nothing was blanked at all. The `Math.max(0, ...)` clamp below is unreachable
+ * given that, and kept only so a future non-quote-aware caller cannot
+ * reintroduce the same failure silently.
+ *
+ * Blanked rather than deleted so offsets and length survive.
  */
 function topLevelOnly(body) {
   const out = body.split("");
   let depth = 0;
+  let quote = null;
   for (let i = 0; i < body.length; i += 1) {
     const c = body[i];
+    if (quote) {
+      if (depth > 0) out[i] = " ";
+      if (c === "\\") {
+        if (depth > 0 && i + 1 < body.length) out[i + 1] = " ";
+        i += 1;
+      } else if (c === quote) {
+        quote = null;
+      }
+      continue;
+    }
+    if (c === '"' || c === "'" || c === "`") {
+      quote = c;
+      if (depth > 0) out[i] = " ";
+      continue;
+    }
     if (c === "{" || c === "[") {
       if (depth > 0) out[i] = " ";
       depth += 1;
     } else if (c === "}" || c === "]") {
-      depth -= 1;
+      depth = Math.max(0, depth - 1);
       if (depth > 0) out[i] = " ";
     } else if (depth > 0 && c !== "\n") {
       out[i] = " ";
@@ -631,55 +714,73 @@ function topLevelOnly(body) {
 }
 
 /**
- * `key: value` chunks of an object-literal body, split only at commas that are
- * both at the top level and outside a string.
+ * Chunks of `text`, split only at commas that are at depth 0 and outside a
+ * string. Nested spans are left as they are.
  *
- * `body.split(",")` was wrong on both counts. A value containing a comma
+ * `text.split(",")` was wrong on both counts. A value containing a comma
  * (`"a, b"`) was reported as having no string value; worse, a key whose value
  * was a nested object kept that object's commas, so the chunk still contained a
  * quoted string, the key was reported as fine, and the NESTED string is what
  * got checked against the registry.
  */
-function topLevelPairs(body) {
-  const flat = topLevelOnly(body);
+function splitTopLevel(text) {
   const chunks = [];
   let from = 0;
+  let depth = 0;
   let quote = null;
-  for (let i = 0; i < flat.length; i += 1) {
-    const c = flat[i];
+  for (let i = 0; i < text.length; i += 1) {
+    const c = text[i];
     if (quote) {
       if (c === "\\") i += 1;
       else if (c === quote) quote = null;
-    } else if (c === '"' || c === "'" || c === "`") {
-      quote = c;
-    } else if (c === ",") {
-      chunks.push(flat.slice(from, i));
+      continue;
+    }
+    if (c === '"' || c === "'" || c === "`") quote = c;
+    else if (c === "{" || c === "[") depth += 1;
+    else if (c === "}" || c === "]") depth = Math.max(0, depth - 1);
+    else if (c === "," && depth === 0) {
+      chunks.push(text.slice(from, i));
       from = i + 1;
     }
   }
-  chunks.push(flat.slice(from));
+  chunks.push(text.slice(from));
   return chunks.filter((chunk) => chunk.trim().length);
 }
 
 /**
- * One field read off every entry of a named array literal, plus the entries
- * where that field is absent, is not a plain quoted literal, or is declared
- * more than once.
+ * `key: value` chunks of an object-literal body: split at depth 0, with every
+ * nested span blanked so a match cannot come from inside one.
+ */
+function topLevelPairs(body) {
+  return splitTopLevel(body).map((chunk) => topLevelOnly(chunk));
+}
+
+/** The same chunks, paired with their original text for error messages. */
+function topLevelPairsWithSource(body) {
+  return splitTopLevel(body).map((chunk) => ({ flat: topLevelOnly(chunk), raw: chunk }));
+}
+
+/**
+ * One field read off the top level of every entry of a named array literal,
+ * plus everything this cannot read: entries where the field is absent, is not
+ * a plain quoted literal, or is declared more than once, and any depth-0 chunk
+ * of the array that is not an object literal at all.
  */
 function entryFieldValues(src, constName, field) {
-  const entries = arrayEntries(src, constName);
-  if (!entries || !entries.length) return null;
+  const read = arrayEntries(src, constName);
+  if (read === null || !read.entries.length) return null;
   const values = [];
   const missing = [];
-  // `(?:^|[^\\w$])` so `mySlug:` cannot answer for `slug:`, and the match runs
-  // over depth-0 text only - see topLevelOnly.
-  const rx = new RegExp(`(?:^|[^\\w$])${field}\\s*:\\s*${QUOTED}`, "g");
-  const labelRx = new RegExp(`(?:^|[^\\w$])label\\s*:\\s*${QUOTED}`);
-  entries.forEach((entry, i) => {
-    const flat = topLevelOnly(entry.replace(/^\{/, " ").replace(/\}$/, " "));
-    const hits = [...flat.matchAll(rx)];
-    const named = labelRx.exec(flat);
-    const id = named ? `"${named.groups.v}"` : `#${i}`;
+  // A chunk the entry splitter could not read as an object. Reported for the
+  // same reason objectLiteralValues reports a spread: it is one entry's worth
+  // of unchecked, and the others still parse so no count shows it.
+  for (const chunk of read.other) {
+    missing.push(`\`${chunk.slice(0, 40)}\` is not an entry this can read`);
+  }
+  read.entries.forEach((entry, i) => {
+    const hits = entryField(entry, field);
+    const named = entryField(entry, "label");
+    const id = named.length === 1 ? `"${named[0]}"` : `#${i}`;
     if (!hits.length) {
       missing.push(`entry ${id} has no plain \`${field}\` literal`);
       return;
@@ -690,7 +791,7 @@ function entryFieldValues(src, constName, field) {
       missing.push(`entry ${id} declares \`${field}\` ${hits.length} times`);
       return;
     }
-    values.push(hits[0].groups.v);
+    values.push(hits[0]);
   });
   return { values, missing };
 }
@@ -764,19 +865,25 @@ function objectLiteralValues(src, constName) {
   if (!span) return null;
   const values = [];
   const missing = [];
-  const pairRx = new RegExp(`^\\s*(?:['\"])?([\\w.$-]+)(?:['\"])?\\s*:\\s*${QUOTED}\\s*$`);
-  const keyRx = /^\s*(?:['"])?([\w.$-]+)(?:['"])?\s*:/;
-  for (const pair of topLevelPairs(clean.slice(span.open + 1, span.close))) {
-    const m = pairRx.exec(pair);
+  // Anchored to the whole chunk, so `ios: "iOS" + SUFFIX` is reported rather
+  // than read as "iOS".
+  const pairRx = new RegExp(
+    `^\\s*(?:['\"])?([\\w.$-]+)(?:['\"])?\\s*:\\s*${QUOTED}\\s*$`,
+  );
+  const keyRx = /^\s*(?:['\"])?([\w.$-]+)(?:['\"])?\s*:/;
+  for (const { flat, raw } of topLevelPairsWithSource(clean.slice(span.open + 1, span.close))) {
+    const m = pairRx.exec(flat);
     if (m) {
       values.push(m.groups.v);
       continue;
     }
-    const key = keyRx.exec(pair);
+    const key = keyRx.exec(flat);
+    // `raw`, not `flat`: the blanked text reads as `[   ]: "x"` and names
+    // nothing the author would recognise.
     missing.push(
       key
         ? `key "${key[1]}" has no plain string value`
-        : `\`${pair.trim().slice(0, 40)}\` is not a \`key: value\` pair`,
+        : `\`${raw.trim().slice(0, 40)}\` is not a \`key: value\` pair`,
     );
   }
   return { values, missing };
@@ -858,9 +965,9 @@ function dataFileErrors(rel, parsedData, registryDisplays) {
 }
 
 /**
- * The registry invariants that do not fit the value checks: that the entry
- * splitter saw every entry, and that `agentSkills: true` implies a
- * `routeSegment` to build a URL from.
+ * The registry invariants that do not fit the value checks: that the splitter
+ * read every chunk of the literal, that every entry declares a slug, and that
+ * `agentSkills: true` implies a `routeSegment` to build a URL from.
  *
  * Both consumers cast the null away - QUERY_FRAMEWORK_TO_PATH in
  * src/components/utils/frameworks.ts and FRAMEWORK_URL_PATH in
@@ -869,35 +976,58 @@ function dataFileErrors(rel, parsedData, registryDisplays) {
  * hypothetical: `hosted` is the entry with routeSegment: null, and skills.json
  * already carries an id-bolt skill, so flipping hosted.agentSkills is the
  * natural next edit.
+ *
+ * Read at each entry's own top level. Testing the whole entry text let a
+ * NESTED `routeSegment` satisfy the invariant: `{ slug: "hosted",
+ * routeSegment: null, agentSkills: true, meta: { routeSegment: "id-bolt" } }`
+ * exited 0.
  */
-function registryInvariantErrors(entries, registrySlugs, file) {
+function registryInvariantErrors(read, registrySlugs, file) {
   const errors = [];
-  // Counted, like every other reader here. Without this an entry the matcher
-  // cannot see costs the check silently, and this is the one invariant in the
-  // file guarding a runtime URL bug rather than a rendering one.
-  if (!entries || !entries.length) {
+  if (read === null) {
     errors.push(
       `${file}: could not read the FRAMEWORKS entries, so the ` +
         `agentSkills/routeSegment invariant is unchecked`,
     );
-  } else if (registrySlugs && entries.length !== registrySlugs.length) {
+    return errors;
+  }
+  const { entries, other } = read;
+  if (!entries.length) {
     errors.push(
-      `${file}: read ${entries.length} entries but ${registrySlugs.length} ` +
-        `\`slug\` values - the literal's shape changed, so some entries are ` +
-        `unchecked rather than clean`,
+      `${file}: read zero FRAMEWORKS entries, so the ` +
+        `agentSkills/routeSegment invariant is unchecked`,
     );
   }
-  for (const entry of entries || []) {
-    // `\s*:` on each of these, for the reason the readers give: no formatter is
-    // configured, so `agentSkills : true` is a shape this file has to expect -
-    // and a space before the colon skipped the entry without tripping the
-    // count assertion, because the entry was still read.
-    if (!/agentSkills\s*:\s*true/.test(entry)) continue;
-    if (!new RegExp(`routeSegment\\s*:\\s*${QUOTED}`).test(entry)) {
-      const found = new RegExp(`slug\\s*:\\s*${QUOTED}`).exec(entry);
-      const slug = (found && found.groups.v) || "?";
+  // A chunk the splitter could not read as an entry - a spread, a reference,
+  // a conditional. One entry's worth of unchecked, and the others still parse
+  // so no count shows it.
+  for (const chunk of other) {
+    errors.push(
+      `${file}: \`${chunk.slice(0, 40)}\` is not an entry this can read, so ` +
+        `whatever it contributes to the registry is unchecked`,
+    );
+  }
+  // Counted, like every other reader here. registrySlugs is one depth-0 `slug`
+  // per entry, so a mismatch means an entry declares none - or declares it
+  // somewhere this cannot see.
+  if (registrySlugs && entries.length !== registrySlugs.length) {
+    errors.push(
+      `${file}: read ${entries.length} entries but ${registrySlugs.length} ` +
+        `top-level \`slug\` value(s) - at least one entry declares none where ` +
+        `this can see it, so it is unchecked rather than clean`,
+    );
+  }
+  for (const entry of entries) {
+    // Depth 0 only, and `\s*:` on each test: no formatter is configured, so
+    // `agentSkills : true` is a shape this file has to expect - and a space
+    // before the colon skipped the entry without tripping the count assertion,
+    // because the entry was still read.
+    const flat = topLevelOnly(entry.trim().replace(/^{/, " ").replace(/}$/, " "));
+    if (!/agentSkills\s*:\s*true/.test(flat)) continue;
+    if (!entryField(entry, "routeSegment").length) {
+      const slug = entryField(entry, "slug");
       errors.push(
-        `${file}: "${slug}" has agentSkills: true but no routeSegment - ` +
+        `${file}: "${slug[0] || "?"}" has agentSkills: true but no routeSegment - ` +
           `resolveAgentSkillsUrl would build /sdks/undefined/agent-skills`,
       );
     }
@@ -1091,6 +1221,31 @@ function main() {
     ...registryInvariantErrors(registryEntries(), registrySlugs, REGISTRY_FILE),
   );
 
+  // The counters are part of the check, not decoration. A reader that breaks
+  // outright reports nothing and every downstream count reads zero, which is
+  // indistinguishable from a clean corpus: gutting declaredFrameworks left
+  // "0 declare a framework" and an OK. Nothing asserted it, so nothing failed.
+  if (!files.length) {
+    errors.push(
+      `no .md or .mdx files found under docs/ - the walk found nothing, so the ` +
+        `content check is unperformed rather than clean`,
+    );
+  } else if (!pagesWithField) {
+    errors.push(
+      `${files.length} docs scanned and not one declares a framework - the ` +
+        `frontmatter reader is broken, not the corpus`,
+    );
+  }
+  // Belt and braces, and deliberately so: any route that actually leaves this
+  // at zero is already reported by dataFileErrors ("parsed zero framework
+  // names"). It exists for the route that is not - the loop not running at all.
+  if (!dataNamesChecked) {
+    errors.push(
+      `${DATA_FILES.length} data file(s) checked and zero framework names ` +
+        `resolved - the data readers are unperformed rather than clean`,
+    );
+  }
+
   console.log(
     `\nframework gate: ${files.length} docs scanned, ${pagesWithField} declare a framework`,
   );
@@ -1119,6 +1274,9 @@ module.exports = {
   declStart,
   enumSlugs,
   registryInvariantErrors,
+  entryField,
+  splitTopLevel,
+  topLevelPairsWithSource,
   topLevelOnly,
   topLevelPairs,
   uiCopyErrors,

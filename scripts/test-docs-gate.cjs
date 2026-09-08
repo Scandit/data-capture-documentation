@@ -26,6 +26,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const assert = require("assert");
+const { execFileSync } = require("child_process");
 
 const ROOT = path.join(__dirname, "..");
 // docs-gate/index.cjs takes its ROOT from process.cwd(), so the suite has to
@@ -317,47 +318,6 @@ check("dataFileFrameworkNames names the problem instead of throwing", () => {
   });
 });
 
-/**
- * arrayEntries: brace matching, driven by fixtures.
- *
- * The version this replaced was `/\{[^{}]*slug:\s*['"][^'"]+['"][^{}]*\}/g`,
- * which cannot match an entry containing a nested object - so adding
- * `meta: { ... }` to a registry entry dropped it from the agentSkills
- * invariant, the one check here guarding a runtime URL rather than a rendering.
- */
-const ENTRIES = [
-  ["flat entries", `const T = [{ slug: "a" }, { slug: "b" }];`, 2],
-  ["entry with a nested object", `const T = [{ slug: "a", meta: { x: 1 } }];`, 1],
-  ["two nested objects", `const T = [{ slug: "a", m: { x: { y: 1 } } }, { slug: "b" }];`, 2],
-  ["type annotation before the `=`", `const T: Def[] = [{ slug: "a" }];`, 1],
-  ["a brace in a line comment", `const T = [\n  // note {x}\n  { slug: "a" },\n];`, 1],
-  ["a brace in a block comment", `const T = [\n  /* {x} */\n  { slug: "a" },\n];`, 1],
-  ["a template placeholder in a comment", `const T = [\n  // \${a}/\${b}\n  { slug: "a" },\n];`, 1],
-  ["a `//` inside a string is not a comment", `const T = [{ slug: "https://x", n: 1 }];`, 1],
-  ["trailing comma", `const T = [{ slug: "a" },];`, 1],
-  ["empty array", `const T = [];`, 0],
-  ["absent const", `const OTHER = [{ slug: "a" }];`, null],
-];
-
-check("arrayEntries brace-matches entries, comments and annotations included", () => {
-  for (const [name, src, want] of ENTRIES) {
-    const got = verify.arrayEntries(src, "T");
-    if (want === null) {
-      assert.strictEqual(got, null, `${name}: got ${JSON.stringify(got)}`);
-      continue;
-    }
-    assert.ok(got !== null, `${name}: got null`);
-    assert.strictEqual(got.length, want, `${name}: got ${JSON.stringify(got)}`);
-  }
-  // The nested-object entry must come back WHOLE, or the invariant that reads
-  // `agentSkills:` off it still misses what it needs.
-  const [entry] = verify.arrayEntries(
-    `const T = [{ slug: "a", meta: { x: 1 }, agentSkills: true }];`,
-    "T",
-  );
-  assert.ok(/agentSkills:\s*true/.test(entry), entry);
-  assert.ok(/meta: \{ x: 1 \}/.test(entry), entry);
-});
 
 /**
  * Quoting must not decide whether a value is checked, and a value a reader
@@ -492,8 +452,18 @@ check("entryFieldValues reads a field off every entry or reports the entry", () 
       ["entry #0 declares `slug` 2 times"],
     ],
     [
+      // Lower-case, so the case-sensitive pattern COULD match it. `mySlug` was
+      // camelCase, which never matched with or without the guard - the case
+      // passed either way and pinned nothing.
       "a longer identifier cannot answer for the field",
-      `const T = [{ mySlug: "BOGUS", label: "iOS" }];`,
+      `const T = [{ myslug: "BOGUS", label: "iOS" }];`,
+      "slug",
+      [],
+      ['entry "iOS" has no plain `slug` literal'],
+    ],
+    [
+      "a shorter identifier cannot answer either",
+      `const T = [{ slugs: "BOGUS", label: "iOS" }];`,
       "slug",
       [],
       ['entry "iOS" has no plain `slug` literal'],
@@ -538,18 +508,6 @@ check("registryValues reads both quote styles and matches the quote", () => {
 
 // The one deliberate real-file assertion: the entry count the agentSkills
 // invariant relies on has to hold for the registry as it actually is.
-check("the real registry reads one entry per slug", () => {
-  const entries = verify.registryEntries();
-  const slugs = verify.registryValues("slug");
-  assert.ok(entries && entries.length, "no entries read");
-  assert.strictEqual(
-    entries.length,
-    slugs.length,
-    `${entries.length} entries, ${slugs.length} slugs`,
-  );
-  assert.deepStrictEqual([...slugs].sort(), [...verify.unionSlugs()].sort(),
-    "registry and FrameworkSlug union disagree");
-});
 
 check("bodyOf strips frontmatter identically across fence shapes", () => {
   assert.strictEqual(gate.bodyOf("---\ntitle: T\n---\n\nreal body\n").trim(), "real body");
@@ -631,42 +589,6 @@ check("dataFileErrors reports a per-part miss and counts what it checked", () =>
   );
 });
 
-check("registryInvariantErrors counts entries and tolerates spacing", () => {
-  const ok = [`{ slug: "ios", routeSegment: "ios", agentSkills: true }`];
-  assert.deepStrictEqual(verify.registryInvariantErrors(ok, ["ios"], "r.ts"), []);
-
-  // The invariant itself, with and without a space before the colon.
-  for (const entry of [
-    `{ slug: "hosted", routeSegment: null, agentSkills: true }`,
-    `{ slug: "hosted", routeSegment: null, agentSkills : true }`,
-    `{ slug: "hosted", routeSegment: null, agentSkills:true }`,
-  ]) {
-    const errs = verify.registryInvariantErrors([entry], ["hosted"], "r.ts");
-    assert.strictEqual(errs.length, 1, `${entry}: ${JSON.stringify(errs)}`);
-    assert.match(errs[0], /"hosted" has agentSkills: true but no routeSegment/);
-  }
-
-  // A single-quoted routeSegment satisfies it - the quote style must not decide.
-  assert.deepStrictEqual(
-    verify.registryInvariantErrors(
-      [`{ slug: 'ios', routeSegment: 'ios', agentSkills: true }`],
-      ["ios"],
-      "r.ts",
-    ),
-    [],
-  );
-
-  // The count assertion: an entry the splitter cannot pair with a slug.
-  const mismatch = verify.registryInvariantErrors(ok, ["ios", "web"], "r.ts");
-  assert.strictEqual(mismatch.length, 1, JSON.stringify(mismatch));
-  assert.match(mismatch[0], /read 1 entries but 2 `slug` values/);
-
-  // No entries at all is "unchecked", not "clean".
-  assert.match(
-    verify.registryInvariantErrors([], ["ios"], "r.ts")[0],
-    /could not read the FRAMEWORKS entries/,
-  );
-});
 
 check("topLevelOnly blanks nested spans and topLevelPairs splits at depth 0", () => {
   // Asserted as properties, not as an exact padding width: the point is that
@@ -719,12 +641,6 @@ check("stripComments leaves code alone and reports a scan it cannot finish", () 
   assert.strictEqual(verify.arrayEntries('const T = [{ slug: "a" }]; const b = "oops;', "T"), null);
 });
 
-check("declStart does not match a longer identifier", () => {
-  const src = `const FRAMEWORKS_ORDER = [{ slug: "zzz" }];\nconst FRAMEWORKS = [{ slug: "ios" }];`;
-  assert.deepStrictEqual(verify.arrayEntries(src, "FRAMEWORKS"), ['{ slug: "ios" }']);
-  assert.deepStrictEqual(verify.registryValues("slug", src), ["ios"]);
-  assert.strictEqual(verify.declStart(src, "ABSENT"), -1);
-});
 
 check("objectLiteralValues does not substitute a nested string for a key's value", () => {
   const cases = [
@@ -782,6 +698,301 @@ check("enumSlugs reports a broken vocabulary instead of throwing", () => {
   assert.ok(got && got.slugs instanceof Set, JSON.stringify(got));
   assert.deepStrictEqual(got.errors, [], JSON.stringify(got.errors));
   assert.ok(got.slugs.size > 5, `only ${got.slugs.size} slugs`);
+});
+
+/**
+ * arrayEntries: brace matching, driven by fixtures, and every depth-0 chunk
+ * accounted for.
+ *
+ * The version this replaced kept only what returned to brace depth 0 and
+ * dropped the rest in silence. Measured: rewriting the switcher's Linux entry
+ * as `...LINUX_SWITCHER_ENTRIES,` left its `label` unchecked against the
+ * registry displays and its `slug` unchecked against `routeSegment`, and the
+ * gate printed OK.
+ */
+const ENTRIES = [
+  ["flat entries", `const T = [{ slug: "a" }, { slug: "b" }];`, 2, []],
+  ["entry with a nested object", `const T = [{ slug: "a", meta: { x: 1 } }];`, 1, []],
+  ["two nested objects", `const T = [{ slug: "a", m: { x: { y: 1 } } }, { slug: "b" }];`, 2, []],
+  ["type annotation before the `=`", `const T: Def[] = [{ slug: "a" }];`, 1, []],
+  ["a brace in a line comment", `const T = [\n  // note {x}\n  { slug: "a" },\n];`, 1, []],
+  ["a brace in a block comment", `const T = [\n  /* {x} */\n  { slug: "a" },\n];`, 1, []],
+  ["a template placeholder in a comment", `const T = [\n  // \${a}/\${b}\n  { slug: "a" },\n];`, 1, []],
+  ["a `//` inside a string is not a comment", `const T = [{ slug: "https://x", n: 1 }];`, 1, []],
+  ["trailing comma", `const T = [{ slug: "a" },];`, 1, []],
+  ["empty array", `const T = [];`, 0, []],
+  // The round-8 critical: a chunk that is not an object literal.
+  ["a spread", `const T = [{ slug: "a" }, ...MORE];`, 1, ["...MORE"]],
+  ["an identifier reference", `const T = [{ slug: "a" }, OTHER_ENTRY];`, 1, ["OTHER_ENTRY"]],
+  ["a conditional spread", `const T = [{ slug: "a" }, ...(x ? y : [])];`, 1, ["...(x ? y : [])"]],
+  ["a `]` inside a string does not end the array", `const T = [{ slug: "a]" }, ...M];`, 1, ["...M"]],
+];
+
+check("arrayEntries accounts for every depth-0 chunk, not just the objects", () => {
+  for (const [name, src, wantEntries, wantOther] of ENTRIES) {
+    const got = verify.arrayEntries(src, "T");
+    assert.ok(got !== null, `${name}: got null`);
+    assert.strictEqual(got.entries.length, wantEntries, `${name}: entries ${JSON.stringify(got.entries)}`);
+    assert.deepStrictEqual(got.other, wantOther, `${name}: other`);
+  }
+  assert.strictEqual(verify.arrayEntries(`const OTHER = [{ slug: "a" }];`, "T"), null);
+
+  // The nested-object entry must come back WHOLE, or the invariant that reads
+  // `agentSkills:` off it still misses what it needs.
+  const { entries } = verify.arrayEntries(
+    `const T = [{ slug: "a", meta: { x: 1 }, agentSkills: true }];`,
+    "T",
+  );
+  assert.ok(/agentSkills:\s*true/.test(entries[0]), entries[0]);
+  assert.ok(/meta: \{ x: 1 \}/.test(entries[0]), entries[0]);
+});
+
+check("an unreadable array chunk is reported, not skipped", () => {
+  // entryFieldValues sees it...
+  const read = verify.entryFieldValues(`const T = [{ label: "iOS" }, ...MORE];`, "T", "label");
+  assert.deepStrictEqual(read.values, ["iOS"]);
+  assert.deepStrictEqual(read.missing, ["`...MORE` is not an entry this can read"]);
+  // ...and so does the registry invariant.
+  const errs = verify.registryInvariantErrors(
+    { entries: [`{ slug: "ios", routeSegment: "ios" }`], other: ["...MORE"] },
+    ["ios"],
+    "r.ts",
+  );
+  assert.strictEqual(errs.length, 1, JSON.stringify(errs));
+  assert.match(errs[0], /`\.\.\.MORE` is not an entry this can read/);
+});
+
+check("declStart does not match a longer identifier", () => {
+  const src = `const FRAMEWORKS_ORDER = [{ slug: "zzz" }];\nconst FRAMEWORKS = [{ slug: "ios" }];`;
+  assert.deepStrictEqual(verify.arrayEntries(src, "FRAMEWORKS").entries, ['{ slug: "ios" }']);
+  assert.deepStrictEqual(verify.registryValues("slug", src), ["ios"]);
+  assert.strictEqual(verify.declStart(src, "ABSENT"), -1);
+});
+
+check("registryValues reads each entry's own top level", () => {
+  const src = `const FRAMEWORKS: Def[] = [\n  { slug: "ios" },\n  { slug: 'web' },\n];`;
+  assert.deepStrictEqual(verify.registryValues("slug", src), ["ios", "web"]);
+  assert.deepStrictEqual(
+    verify.registryValues("display", `const FRAMEWORKS = [{ display: "iOS's" }];`),
+    ["iOS's"],
+  );
+  // A nested occurrence must NOT widen the allowed set: it used to make
+  // `display: "Bogus Name"` acceptable in every data file.
+  assert.deepStrictEqual(
+    verify.registryValues(
+      "display",
+      `const FRAMEWORKS = [{ display: "iOS", meta: { display: "Bogus Name" } }];`,
+    ),
+    ["iOS"],
+  );
+  assert.strictEqual(verify.registryValues("slug", `const OTHER = [];`), null);
+});
+
+check("registryInvariantErrors reads each entry's own top level", () => {
+  const ok = { entries: [`{ slug: "ios", routeSegment: "ios", agentSkills: true }`], other: [] };
+  assert.deepStrictEqual(verify.registryInvariantErrors(ok, ["ios"], "r.ts"), []);
+
+  // The invariant, with and without a space before either colon.
+  for (const entry of [
+    `{ slug: "hosted", routeSegment: null, agentSkills: true }`,
+    `{ slug: "hosted", routeSegment: null, agentSkills : true }`,
+    `{ slug: "hosted", routeSegment: null, agentSkills:true }`,
+    `{ slug: "hosted", routeSegment : null, agentSkills: true }`,
+    // The round-8 critical: a NESTED routeSegment must not satisfy it.
+    `{ slug: "hosted", routeSegment: null, agentSkills: true, meta: { routeSegment: "id-bolt" } }`,
+  ]) {
+    const errs = verify.registryInvariantErrors({ entries: [entry], other: [] }, ["hosted"], "r.ts");
+    assert.strictEqual(errs.length, 1, `${entry}: ${JSON.stringify(errs)}`);
+    assert.match(errs[0], /"hosted" has agentSkills: true but no routeSegment/);
+  }
+
+  // Quote style must not decide, on either field.
+  for (const entry of [
+    `{ slug: 'ios', routeSegment: 'ios', agentSkills: true }`,
+    `{ slug: "ios", routeSegment : "ios", agentSkills: true }`,
+  ]) {
+    assert.deepStrictEqual(
+      verify.registryInvariantErrors({ entries: [entry], other: [] }, ["ios"], "r.ts"),
+      [],
+      entry,
+    );
+  }
+
+  // The count assertion: an entry with no top-level slug.
+  const mismatch = verify.registryInvariantErrors(ok, ["ios", "web"], "r.ts");
+  assert.strictEqual(mismatch.length, 1, JSON.stringify(mismatch));
+  assert.match(mismatch[0], /read 1 entries but 2 top-level `slug` value\(s\)/);
+
+  // No entries at all, and an unreadable literal, are each their own message.
+  assert.match(
+    verify.registryInvariantErrors({ entries: [], other: [] }, [], "r.ts")[0],
+    /read zero FRAMEWORKS entries/,
+  );
+  assert.match(
+    verify.registryInvariantErrors(null, [], "r.ts")[0],
+    /could not read the FRAMEWORKS entries/,
+  );
+});
+
+check("the real registry reads one top-level slug per entry", () => {
+  const read = verify.registryEntries();
+  const slugs = verify.registryValues("slug");
+  assert.ok(read && read.entries.length, "no entries read");
+  assert.deepStrictEqual(read.other, [], `unreadable chunks: ${JSON.stringify(read.other)}`);
+  assert.strictEqual(
+    read.entries.length,
+    slugs.length,
+    `${read.entries.length} entries, ${slugs.length} slugs`,
+  );
+  assert.deepStrictEqual([...slugs].sort(), [...verify.unionSlugs()].sort(),
+    "registry and FrameworkSlug union disagree");
+});
+
+check("a value must be the whole of its pair, not a prefix of an expression", () => {
+  // `"iOS" + SUFFIX` used to read as "iOS" and report nothing.
+  assert.deepStrictEqual(
+    verify.objectLiteralValues(`const L = { ios: "iOS" + SUFFIX };`, "L"),
+    { values: [], missing: ['key "ios" has no plain string value'] },
+  );
+  assert.deepStrictEqual(
+    verify.enumMemberValues(`enum E { ios = "iOS" + SUFFIX }`, "E"),
+    { values: [], missing: ['member "ios" has no plain string value'] },
+  );
+  assert.deepStrictEqual(
+    verify.entryFieldValues(`const T = [{ label: "iOS" + SUFFIX }];`, "T", "label"),
+    { values: [], missing: ["entry #0 has no plain `label` literal"] },
+  );
+  // And an escaped quote inside the value is not a truncation to read.
+  assert.deepStrictEqual(
+    verify.entryFieldValues(`const T = [{ label: "a\\"b" }];`, "T", "label"),
+    { values: [], missing: ["entry #0 has no plain `label` literal"] },
+  );
+});
+
+check("a computed key is named by its source, not by the blanked text", () => {
+  const got = verify.objectLiteralValues(`const L = { [KEY]: "BOGUS", ios: "iOS" };`, "L");
+  assert.deepStrictEqual(got.values, ["iOS"]);
+  assert.strictEqual(got.missing.length, 1, JSON.stringify(got.missing));
+  assert.match(got.missing[0], /^`\[KEY\]: "BOGUS"` is not a `key: value` pair$/);
+});
+
+check("every stripComments-null call site reports it as unreadable", () => {
+  const broken = `const T = [{ slug: "a" }];\nconst L = { ios: "iOS" };\nenum E { ios = "iOS" }\nconst x = "oops;`;
+  assert.strictEqual(verify.stripComments(broken), null, "fixture must defeat the scan");
+  assert.strictEqual(verify.arrayEntries(broken, "T"), null, "arrayEntries");
+  assert.strictEqual(verify.objectLiteralValues(broken, "L"), null, "objectLiteralValues");
+  assert.strictEqual(verify.enumMemberValues(broken, "E"), null, "enumMemberValues");
+  // And a null reader is reported, not treated as clean.
+  assert.match(
+    verify.uiCopyErrors("label", "ui.ts", null, [], [])[0],
+    /could not read its framework list, so it is unchecked/,
+  );
+});
+
+check("topLevelOnly stays sane when a brace sits inside a string", () => {
+  // A `}` or `]` inside a string used to drive the depth negative, after which
+  // nothing was blanked for the rest of the input.
+  const flat = verify.topLevelOnly(` label: "Linux ]", meta: { slug: "linux" } `);
+  assert.ok(flat.includes(`"Linux ]"`), `depth-0 text changed: ${JSON.stringify(flat)}`);
+  assert.ok(!flat.includes(`"linux"`), `nested value survived: ${JSON.stringify(flat)}`);
+  assert.strictEqual(flat.length, ` label: "Linux ]", meta: { slug: "linux" } `.length);
+  // And the entry reader agrees.
+  assert.deepStrictEqual(
+    verify.entryFieldValues(`const T = [{ label: "Linux ]", meta: { slug: "x" } }];`, "T", "slug"),
+    { values: [], missing: ['entry "Linux ]" has no plain `slug` literal'] },
+  );
+});
+
+/**
+ * The whole script, run against a fixture tree.
+ *
+ * This is the check the last two rounds were missing. The readers were pinned
+ * and the reporting functions were pinned, but nothing pinned that main() CALLS
+ * them: twelve separate decisions in it - including `declaredFrameworks`, the
+ * check the gate is named for - could each be deleted with a fully green suite
+ * and the gate still printed OK. Each row below breaks one thing in the fixture
+ * and asserts the message, so deleting the corresponding call fails here.
+ */
+const FIXTURE_CASES = [
+  [undefined, null],
+  ["docs-bogus-framework", /docs\/c\.md: framework "bogus-slug" is not in the enum/],
+  ["docs-none-declare", /docs scanned and not one declares a framework/],
+  ["schema-drift", /is not in the enum/],
+  ["schema-extra-slug", /docs-schema\.yml allows "ghost", the registry does not define it/],
+  ["schema-omits-registry-slug", /registry defines "hosted", docs-schema\.yml does not/],
+  ["schema-enums-differ", /`framework` and `frameworks` enums differ in docs-schema\.yml/],
+  ["registry-agentskills-no-route", /has agentSkills: true but no routeSegment/],
+  ["registry-nested-routesegment", /has agentSkills: true but no routeSegment/],
+  ["registry-spread-entry", /FrameworkSlug lists "hosted", the registry has no such entry/],
+  ["registry-missing-union-member", /registry defines "hosted", FrameworkSlug omits it/],
+  ["enum-bogus-display", /frameworksName\.ts: display name "Bogus Display" is not in the registry/],
+  ["searchbar-bogus-display", /SearchBar\/index\.js: display name "Bogus Display" is not in the registry/],
+  ["switcher-bogus-label", /useFrameworkItems\.js: label "Bogus Display" is not in the registry/],
+  ["switcher-bogus-route", /useFrameworkItems\.js: route "bogus-route" is not in the registry/],
+  ["switcher-spread-entry", /`\.\.\.MORE_ENTRIES` is not an entry this can read/],
+  ["data-bogus-display", /features\.json: framework "Bogus Display" is not a display name/],
+  ["data-empty-product", /skills\.json: the "products\.p" map is absent or empty/],
+];
+
+check("verify-frameworks catches each break in a fixture tree", () => {
+  const { build } = require("./fixtures/verify-frameworks-fixture.cjs");
+  const script = path.join(ROOT, "scripts", "verify-frameworks.cjs");
+  withTempDir((dir) => {
+    const tree = path.join(dir, "tree");
+    for (const [mutation, expected] of FIXTURE_CASES) {
+      build(tree, mutation);
+      let code = 0;
+      let out = "";
+      try {
+        out = execFileSync(process.execPath, [script], {
+          env: { ...process.env, VERIFY_FRAMEWORKS_ROOT: tree },
+          encoding: "utf8",
+          stdio: ["ignore", "pipe", "pipe"],
+        });
+      } catch (e) {
+        code = e.status;
+        out = (e.stdout || "") + (e.stderr || "");
+      }
+      const label = mutation || "(clean)";
+      if (expected === null) {
+        assert.strictEqual(code, 0, `${label}: expected a clean pass, got ${code}\n${out}`);
+        assert.match(out, /OK: every framework identifier/, label);
+        continue;
+      }
+      assert.notStrictEqual(code, 0, `${label}: expected a failure, got exit 0\n${out}`);
+      assert.match(out, expected, `${label}: message\n${out}`);
+    }
+  });
+});
+
+check("a regex literal is recognised after a keyword or an arrow", () => {
+  // Without these, `return /["']/.test(s)` opened a phantom string on the
+  // quote inside the character class and the whole file came back unreadable,
+  // so an ordinary regex anywhere in SearchBar turned the gate red.
+  const Q = String.fromCharCode(34);
+  const untouched = [
+    ["after return", `function f(s) { return /[${Q}']/.test(s); }`],
+    ["after an arrow", `const f = (s) => /[${Q}']/.test(s);`],
+    ["after typeof", `const b = typeof x === "s" ? /a/ : /b/;`],
+    ["after && ", `const b = x && /a/.test(y);`],
+    ["division after a call", "const r = f(x)/2;"],
+  ];
+  for (const [name, src] of untouched) {
+    assert.strictEqual(verify.stripComments(src), src, name);
+  }
+});
+
+check("unionSlugs reads through the comment scan", () => {
+  assert.deepStrictEqual(
+    verify.unionSlugs('export type FrameworkSlug =\n | "ios"\n // | "bogus"\n | "android";'),
+    ["ios", "android"],
+    "a commented-out member is not a slug",
+  );
+  assert.deepStrictEqual(
+    verify.unionSlugs('export type FrameworkSlug =\n | "ios" // see note; below\n | "android";'),
+    ["ios", "android"],
+    "a `;` inside a comment does not truncate the union",
+  );
 });
 
 if (failures.length) {
