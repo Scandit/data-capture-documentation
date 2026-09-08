@@ -10529,7 +10529,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-android-label-capture-label-definitions-2",
@@ -10561,7 +10561,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-android-label-capture-label-definitions-3",
@@ -10593,7 +10593,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-android-label-capture-label-definitions-4",
@@ -10625,7 +10625,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-android-label-capture-label-definitions-5",
@@ -10658,7 +10658,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-android-matrixscan-advanced-1",
@@ -24982,7 +24982,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-capacitor-label-capture-label-definitions-2",
@@ -25014,7 +25014,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-capacitor-label-capture-label-definitions-3",
@@ -25046,7 +25046,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-capacitor-label-capture-label-definitions-4",
@@ -25078,7 +25078,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-capacitor-label-capture-label-definitions-5",
@@ -25111,7 +25111,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-capacitor-label-capture-label-definitions-6",
@@ -25143,7 +25143,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-capacitor-matrixscan-advanced-1",
@@ -37924,7 +37924,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-cordova-label-capture-label-definitions-2",
@@ -37956,7 +37956,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-cordova-label-capture-label-definitions-3",
@@ -37988,7 +37988,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-cordova-label-capture-label-definitions-4",
@@ -38020,7 +38020,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-cordova-label-capture-label-definitions-5",
@@ -38053,7 +38053,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-cordova-label-capture-label-definitions-6",
@@ -38085,7 +38085,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-cordova-matrixscan-advanced-1",
@@ -51029,7 +51029,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-flutter-label-capture-label-definitions-2",
@@ -51061,7 +51061,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-flutter-label-capture-label-definitions-3",
@@ -51093,7 +51093,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-flutter-label-capture-label-definitions-4",
@@ -51125,7 +51125,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-flutter-label-capture-label-definitions-5",
@@ -51158,7 +51158,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-flutter-label-capture-label-definitions-6",
@@ -51190,7 +51190,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-flutter-matrixscan-advanced-1",
@@ -64976,7 +64976,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-ios-label-capture-label-definitions-2",
@@ -65008,7 +65008,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-ios-label-capture-label-definitions-3",
@@ -65040,7 +65040,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-ios-label-capture-label-definitions-4",
@@ -65072,7 +65072,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-ios-label-capture-label-definitions-5",
@@ -65105,7 +65105,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-ios-matrixscan-advanced-1",
@@ -80983,7 +80983,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-kmp-label-capture-label-definitions-2",
@@ -81015,7 +81015,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-kmp-label-capture-label-definitions-3",
@@ -81047,7 +81047,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-kmp-label-capture-label-definitions-4",
@@ -81079,7 +81079,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-kmp-label-capture-label-definitions-5",
@@ -81112,7 +81112,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-kmp-label-capture-label-definitions-6",
@@ -81144,7 +81144,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-kmp-matrixscan-advanced-1",
@@ -93507,7 +93507,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-net-android-label-capture-label-definitions-2",
@@ -93539,7 +93539,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-net-android-label-capture-label-definitions-3",
@@ -93571,7 +93571,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-net-android-label-capture-label-definitions-4",
@@ -93603,7 +93603,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-net-android-label-capture-label-definitions-5",
@@ -93636,7 +93636,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-net-android-label-capture-label-definitions-6",
@@ -93668,7 +93668,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-net-android-matrixscan-advanced-1",
@@ -106611,7 +106611,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-net-ios-label-capture-label-definitions-2",
@@ -106643,7 +106643,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-net-ios-label-capture-label-definitions-3",
@@ -106675,7 +106675,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-net-ios-label-capture-label-definitions-4",
@@ -106707,7 +106707,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-net-ios-label-capture-label-definitions-5",
@@ -106740,7 +106740,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-net-ios-label-capture-label-definitions-6",
@@ -106772,7 +106772,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-net-ios-matrixscan-advanced-1",
@@ -119914,7 +119914,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-react-native-label-capture-label-definitions-2",
@@ -119946,7 +119946,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-react-native-label-capture-label-definitions-3",
@@ -119978,7 +119978,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-react-native-label-capture-label-definitions-4",
@@ -120010,7 +120010,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-react-native-label-capture-label-definitions-5",
@@ -120043,7 +120043,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-react-native-label-capture-label-definitions-6",
@@ -120075,7 +120075,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-react-native-matrixscan-advanced-1",
@@ -133827,7 +133827,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-web-label-capture-label-definitions-2",
@@ -133859,7 +133859,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-web-label-capture-label-definitions-3",
@@ -133891,7 +133891,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-web-label-capture-label-definitions-4",
@@ -133923,7 +133923,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-web-label-capture-label-definitions-5",
@@ -133956,7 +133956,7 @@
       "notFor": [],
       "canonicalId": "",
       "topicType": "",
-      "lastVerified": "2026-08-14"
+      "lastVerified": "2026-09-08"
     },
     {
       "@id": "urn:module:auto-sdks-web-matrixscan-advanced-1",
