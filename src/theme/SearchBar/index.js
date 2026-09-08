@@ -278,8 +278,27 @@ function stripRoutedTokens(query, stripVersion) {
  * on every pasted expression and, where both found something, returned the worse
  * of the two.
  */
+/**
+ * Roots of a pasted expression, which are never a class name.
+ *
+ * The two-segment branch searches for the part BEFORE the dot, and for a
+ * pasted expression that part is the receiver: `this.state` would retry as
+ * `this`, which matches pages containing the word and is worse than an honest
+ * no-result. The exposure predates trailing-dot trimming - `this.state` alone
+ * reaches the same branch - but trimming turns `this.state.` into it too, so it
+ * is closed here rather than widened.
+ */
+const EXPRESSION_ROOTS = new Set([
+  "this", "self", "window", "document", "props", "state", "obj", "item", "data",
+  "res", "result", "response", "err", "error", "event", "ev", "it"
+]);
+
 function dottedFallback(query) {
-  const q = (query || "").trim();
+  // Trailing dots dropped. A reader partway through typing a member leaves
+  // `RectangularViewfinderStyle.LEGACY.`, whose last segment is empty, and the
+  // query they meant is the one without it - which the docs-search events show
+  // arriving separately from the same reader.
+  const q = (query || "").trim().replace(/\.+$/, "");
   if (!q || /\s/.test(q)) return null;
   const parts = q.split(".");
   if (parts.length >= 3) {
@@ -295,7 +314,8 @@ function dottedFallback(query) {
     const m = q.match(/^(.+)\.[A-Za-z0-9_]+$/);
     if (!m) return null;
     const base = m[1];
-    return base.length >= 3 && base !== q ? base : null;
+    if (base.length < 3 || base === q) return null;
+    return EXPRESSION_ROOTS.has(base.toLowerCase()) ? null : base;
   }
   return null;
 }

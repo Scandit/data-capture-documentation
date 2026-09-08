@@ -66,6 +66,7 @@ const API_TAG_PREFIX = extractConst("API_TAG_PREFIX");
 const apiTagsFor = eval(`(${extract("apiTagsFor")})`);
 const withApiReferenceTags = eval(`(${extract("withApiReferenceTags")})`);
 const rewriteVersionTag = eval(`(${extract("rewriteVersionTag")})`);
+const EXPRESSION_ROOTS = extractConst("EXPRESSION_ROOTS");
 const dottedFallback = eval(`(${extract("dottedFallback")})`);
 // Named guard for the brace-counting limitation in extract(): if any of the
 // three came back truncated, eval would have thrown something unrelated-looking.
@@ -321,7 +322,17 @@ const DOTTED = [
   // segments and would be rewritten to a search for "settings", discarding
   // words the reader typed.
   ["a phrase ending in a dotted expression", "see this.state.settings", null],
-  ["a trailing dot", "this.state.", null],
+  // A trailing dot is dropped, so the query the reader was partway through
+  // typing is the one that gets retried. `RectangularViewfinderStyle.LEGACY.`
+  // appears in the docs-search events beside the same query without it.
+  ["a trailing dot is dropped", "RectangularViewfinderStyle.LEGACY.", "RectangularViewfinderStyle"],
+  ["several trailing dots", "rectangularviewfinderstyle.legacy..", "rectangularviewfinderstyle"],
+  ["a trailing dot on a bare word", "symbologies.", null],
+  // ...but the receiver of a pasted expression is not a class name, with or
+  // without the dot. Retrying `this` would match pages containing the word.
+  ["an expression root, with the dot", "this.state.", null],
+  ["an expression root, without it", "this.state", null],
+  ["another expression root", "window.location", null],
   ["a leading dot", ".symbologies", null],
   ["empty", "", null],
   ["whitespace only", "   ", null],
