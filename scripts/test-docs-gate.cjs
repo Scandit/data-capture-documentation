@@ -186,7 +186,9 @@ check("frontmatterEndLine agrees with bodyOf about where the frontmatter ends", 
 });
 
 check("frontmatter.cjs reads the same fences as the cap does", () => {
-  withRepoTempDir((dir) => {
+  // withTempDir: validateFile takes an absolute path, so this one needs no
+  // scratch directory inside the repo.
+  withTempDir((dir) => {
     // Only `required` matters here; the point is whether the fence is FOUND,
     // not whether the page satisfies the schema.
     const schema = { required: [], properties: {} };
@@ -409,48 +411,96 @@ check("enumMemberValues reads every member or reports the one it cannot", () => 
 
 check("entryFieldValues reads a field off every entry or reports the entry", () => {
   const cases = [
-    ["double-quoted", `const T = [{ label: "iOS" }];`, ["iOS"], []],
-    ["single-quoted", `const T = [{ label: 'iOS' }];`, ["iOS"], []],
+    // [name, source, field, values, missing]. The field is stated, not
+    // inferred from the fixture text - it used to be picked by testing the
+    // source for `slug: SLUG`, so a future case containing that string would
+    // silently switch which field the case exercises.
+    ["double-quoted", `const T = [{ label: "iOS" }];`, "label", ["iOS"], []],
+    ["single-quoted", `const T = [{ label: 'iOS' }];`, "label", ["iOS"], []],
     [
       "mixed quoting across entries",
       `const T = [{ label: "iOS" }, { label: 'Web' }];`,
+      "label",
       ["iOS", "Web"],
       [],
     ],
     [
       "value containing an apostrophe read whole",
       `const T = [{ label: "iOS's Legacy" }];`,
+      "label",
       ["iOS's Legacy"],
       [],
     ],
     [
       "value containing a quote read whole",
       `const T = [{ label: 'say "hi"' }];`,
+      "label",
       ['say "hi"'],
       [],
     ],
     [
       "field absent from one entry",
       `const T = [{ label: "iOS" }, { slug: "web" }];`,
+      "label",
       ["iOS"],
       ["entry #1 has no plain `label` literal"],
     ],
     [
       "field is not a literal, entry named by its label",
       `const T = [{ label: "iOS", slug: SLUG }];`,
+      "slug",
       [],
       ['entry "iOS" has no plain `slug` literal'],
     ],
     [
       "whitespace before the colon",
       `const T = [{ label : "iOS" }];`,
+      "label",
       ["iOS"],
       [],
     ],
-    ["empty array", `const T = [];`, null, null],
+    // The round-7 critical: the match ran over the whole entry text, so a
+    // NESTED field answered for the entry's own. The switcher entry that lost
+    // its top-level `slug` that way builds `/undefined/add-sdk`, and the gate
+    // printed OK.
+    [
+      "a nested field is not the entry's",
+      `const T = [{ label: "Linux", meta: { slug: "linux" } }];`,
+      "slug",
+      [],
+      ['entry "Linux" has no plain `slug` literal'],
+    ],
+    [
+      "the entry's own field wins over a nested decoy",
+      `const T = [{ label: "L", slug: "linux", meta: { slug: "BOGUS" } }];`,
+      "slug",
+      ["linux"],
+      [],
+    ],
+    [
+      "a field in a nested ARRAY is not the entry's",
+      `const T = [{ label: "L", alts: [{ slug: "BOGUS" }] }];`,
+      "slug",
+      [],
+      ['entry "L" has no plain `slug` literal'],
+    ],
+    [
+      "a field declared twice is reported, not guessed",
+      `const T = [{ slug: "ios", extra: 1, slug: "BOGUS" }];`,
+      "slug",
+      [],
+      ["entry #0 declares `slug` 2 times"],
+    ],
+    [
+      "a longer identifier cannot answer for the field",
+      `const T = [{ mySlug: "BOGUS", label: "iOS" }];`,
+      "slug",
+      [],
+      ['entry "iOS" has no plain `slug` literal'],
+    ],
+    ["empty array", `const T = [];`, "label", null, null],
   ];
-  for (const [name, src, values, missing] of cases) {
-    const field = /slug: SLUG/.test(src) ? "slug" : "label";
+  for (const [name, src, field, values, missing] of cases) {
     const got = verify.entryFieldValues(src, "T", field);
     if (values === null) {
       assert.strictEqual(got, null, `${name}: got ${JSON.stringify(got)}`);
@@ -506,6 +556,232 @@ check("bodyOf strips frontmatter identically across fence shapes", () => {
   assert.strictEqual(gate.bodyOf("﻿---\ntitle: T\n---\n\nreal body\n").trim(), "real body");
   assert.strictEqual(gate.bodyOf("---\r\ntitle: T\r\n---\r\n\r\nreal body\r\n").trim(), "real body");
   assert.strictEqual(gate.bodyOf("no frontmatter here\n").trim(), "no frontmatter here");
+});
+
+/**
+ * The reporting steps, pinned by their MESSAGES.
+ *
+ * This is where round 7 found the structural gap: the readers' `missing` arrays
+ * were well tested and nothing tested that anyone reports them. Five separate
+ * decisions in main() could each be deleted with a green suite - the uiErrors
+ * missing loop, the data-file missing loop, the entry-count assertion, and both
+ * halves of the whitespace-tolerant agentSkills scan. They are pure functions
+ * now, so each one's output is checkable directly.
+ */
+check("uiCopyErrors reports what a reader could not read", () => {
+  const partial = { values: ["iOS"], missing: ['member "linux" has no plain string value'] };
+  const errs = verify.uiCopyErrors("display name", "ui.ts", partial, ["iOS"], []);
+  assert.strictEqual(errs.length, 1, JSON.stringify(errs));
+  assert.match(errs[0], /^ui\.ts: member "linux" has no plain string value - it is unchecked/);
+
+  // A value outside the registry is still reported alongside.
+  const both = verify.uiCopyErrors(
+    "display name",
+    "ui.ts",
+    { values: ["Bogus"], missing: ["key \"x\" has no plain string value"] },
+    ["iOS"],
+    [],
+  );
+  assert.strictEqual(both.length, 2, JSON.stringify(both));
+  assert.ok(both.some((e) => /is not in the registry/.test(e)), JSON.stringify(both));
+
+  // An allowed extra is not an error.
+  assert.deepStrictEqual(
+    verify.uiCopyErrors("label", "ui.ts", { values: ["Xamarin iOS"], missing: [] }, [], ["Xamarin iOS"]),
+    [],
+  );
+  // Unreadable and empty are each their own message.
+  assert.match(verify.uiCopyErrors("label", "ui.ts", null, [], [])[0], /could not read its framework list/);
+  assert.match(
+    verify.uiCopyErrors("label", "ui.ts", { values: [], missing: [] }, [], [])[0],
+    /parsed zero framework entries/,
+  );
+});
+
+check("dataFileErrors reports a per-part miss and counts what it checked", () => {
+  const names = new Set(["iOS"]);
+  const withMiss = verify.dataFileErrors(
+    "d.json",
+    { names, missing: ['the "products.q" map'] },
+    ["iOS"],
+  );
+  assert.strictEqual(withMiss.namesChecked, 1);
+  assert.strictEqual(withMiss.errors.length, 1, JSON.stringify(withMiss.errors));
+  assert.match(withMiss.errors[0], /^d\.json: the "products\.q" map is absent or empty/);
+
+  // Zero names short-circuits, and says the file is unchecked rather than clean.
+  const empty = verify.dataFileErrors("d.json", { names: new Set(), missing: [] }, ["iOS"]);
+  assert.strictEqual(empty.namesChecked, 0);
+  assert.match(empty.errors[0], /parsed zero framework names/);
+
+  // A name the registry does not know.
+  const unknown = verify.dataFileErrors("d.json", { names: new Set(["Nope"]), missing: [] }, ["iOS"]);
+  assert.match(unknown.errors[0], /framework "Nope" is not a display name in the registry/);
+
+  // A read error passes straight through.
+  assert.deepStrictEqual(
+    verify.dataFileErrors("d.json", { error: "d.json: boom" }, ["iOS"]),
+    { errors: ["d.json: boom"], namesChecked: 0 },
+  );
+
+  // Clean input reports nothing.
+  assert.deepStrictEqual(
+    verify.dataFileErrors("d.json", { names, missing: [] }, ["iOS"]),
+    { errors: [], namesChecked: 1 },
+  );
+});
+
+check("registryInvariantErrors counts entries and tolerates spacing", () => {
+  const ok = [`{ slug: "ios", routeSegment: "ios", agentSkills: true }`];
+  assert.deepStrictEqual(verify.registryInvariantErrors(ok, ["ios"], "r.ts"), []);
+
+  // The invariant itself, with and without a space before the colon.
+  for (const entry of [
+    `{ slug: "hosted", routeSegment: null, agentSkills: true }`,
+    `{ slug: "hosted", routeSegment: null, agentSkills : true }`,
+    `{ slug: "hosted", routeSegment: null, agentSkills:true }`,
+  ]) {
+    const errs = verify.registryInvariantErrors([entry], ["hosted"], "r.ts");
+    assert.strictEqual(errs.length, 1, `${entry}: ${JSON.stringify(errs)}`);
+    assert.match(errs[0], /"hosted" has agentSkills: true but no routeSegment/);
+  }
+
+  // A single-quoted routeSegment satisfies it - the quote style must not decide.
+  assert.deepStrictEqual(
+    verify.registryInvariantErrors(
+      [`{ slug: 'ios', routeSegment: 'ios', agentSkills: true }`],
+      ["ios"],
+      "r.ts",
+    ),
+    [],
+  );
+
+  // The count assertion: an entry the splitter cannot pair with a slug.
+  const mismatch = verify.registryInvariantErrors(ok, ["ios", "web"], "r.ts");
+  assert.strictEqual(mismatch.length, 1, JSON.stringify(mismatch));
+  assert.match(mismatch[0], /read 1 entries but 2 `slug` values/);
+
+  // No entries at all is "unchecked", not "clean".
+  assert.match(
+    verify.registryInvariantErrors([], ["ios"], "r.ts")[0],
+    /could not read the FRAMEWORKS entries/,
+  );
+});
+
+check("topLevelOnly blanks nested spans and topLevelPairs splits at depth 0", () => {
+  // Asserted as properties, not as an exact padding width: the point is that
+  // nothing readable survives inside the nested span and the depth-0 text is
+  // untouched, not how many spaces replaced it.
+  const blanked = verify.topLevelOnly(`a: "x", b: { c: "y" }`);
+  assert.strictEqual(blanked.length, `a: "x", b: { c: "y" }`.length, "length preserved");
+  assert.ok(blanked.startsWith(`a: "x", b: {`), JSON.stringify(blanked));
+  assert.ok(!blanked.includes(`"y"`), `nested string survived: ${JSON.stringify(blanked)}`);
+  assert.deepStrictEqual(
+    verify.topLevelPairs(`a: "x, y", b: { c: 1, d: 2 }, e: "z"`).map((s) => s.trim().split(":")[0]),
+    ["a", "b", "e"],
+  );
+  assert.deepStrictEqual(
+    verify.topLevelPairs(`a: "x, y", b: { c: 1, d: 2 }, e: "z"`)
+      .filter((s) => /["']/.test(s))
+      .map((s) => s.trim()),
+    [`a: "x, y"`, `e: "z"`],
+  );
+  // A comma inside a string is not a split point.
+  assert.strictEqual(verify.topLevelPairs(`a: "x, y"`).length, 1);
+  // A nested array counts as nested.
+  assert.deepStrictEqual(
+    verify.topLevelPairs(`a: [1, 2], b: "z"`).map((s) => s.trim().split(":")[0]),
+    ["a", "b"],
+  );
+});
+
+check("stripComments leaves code alone and reports a scan it cannot finish", () => {
+  const BS = String.fromCharCode(92);
+  const untouched = [
+    ["regex ending in an escaped slash",
+      `const m = s.match(/${BS}/a${BS}/([^/]+)${BS}//);`],
+    ["regex in a replace", `const t = f.replace(/^${BS}/sdks${BS}//, "");`],
+    ["char class containing a slash", `const r = /[a${BS}/b]/.test(x);`],
+    ["division", "const r = a / b / c;"],
+    ["url in a string", 'const u = "https://x";'],
+    ["block-comment marker inside a string", 'const g = "src/**/*.ts";'],
+    ["JSX self-closing after a spread", "return <A {...b} />;"],
+  ];
+  for (const [name, src] of untouched) {
+    assert.strictEqual(verify.stripComments(src), src, name);
+  }
+  assert.strictEqual(verify.stripComments("const a = 1; // note {x}").trimEnd(), "const a = 1;");
+  assert.strictEqual(verify.stripComments("const a = /* {x} */ 1;").replace(/\s+/g, " "), "const a = 1;");
+  // Losing track must be null, so the callers report the file unchecked rather
+  // than reading a mis-stripped source.
+  assert.strictEqual(verify.stripComments('const a = "oops;'), null);
+  assert.strictEqual(verify.stripComments("const r = (/abc;"), null);
+  assert.strictEqual(verify.arrayEntries('const T = [{ slug: "a" }]; const b = "oops;', "T"), null);
+});
+
+check("declStart does not match a longer identifier", () => {
+  const src = `const FRAMEWORKS_ORDER = [{ slug: "zzz" }];\nconst FRAMEWORKS = [{ slug: "ios" }];`;
+  assert.deepStrictEqual(verify.arrayEntries(src, "FRAMEWORKS"), ['{ slug: "ios" }']);
+  assert.deepStrictEqual(verify.registryValues("slug", src), ["ios"]);
+  assert.strictEqual(verify.declStart(src, "ABSENT"), -1);
+});
+
+check("objectLiteralValues does not substitute a nested string for a key's value", () => {
+  const cases = [
+    [
+      "nested object value is reported",
+      `const L = { a: { b: "c" }, d: "Web" };`,
+      ["Web"],
+      ['key "a" has no plain string value'],
+    ],
+    [
+      "a spread is reported",
+      `const L = { ios: "iOS", ...EXTRA };`,
+      ["iOS"],
+      ["`...EXTRA` is not a `key: value` pair"],
+    ],
+    [
+      "a comma inside a value is not a false report",
+      `const L = { a: "x, y", b: "Web" };`,
+      ["x, y", "Web"],
+      [],
+    ],
+    ["a quoted key still reads", `const L = { "react-native": "RN" };`, ["RN"], []],
+    ["a nested array value is reported", `const L = { a: ["x"], b: "Web" };`, ["Web"],
+      ['key "a" has no plain string value']],
+  ];
+  for (const [name, src, values, missing] of cases) {
+    const got = verify.objectLiteralValues(src, "L");
+    assert.deepStrictEqual(got.values, values, `${name}: values`);
+    assert.deepStrictEqual(got.missing, missing, `${name}: missing`);
+  }
+});
+
+check("enumMemberValues reads a single-line enum", () => {
+  // Split on commas, not on lines: a one-line enum matched no member, so the
+  // first was reported and the rest were dropped with no output.
+  assert.deepStrictEqual(
+    verify.enumMemberValues(`enum E { ios = "iOS", web = "Web" }`, "E"),
+    { values: ["iOS", "Web"], missing: [] },
+  );
+  assert.deepStrictEqual(
+    verify.enumMemberValues(`enum E { ios = "iOS", web = BOGUS }`, "E"),
+    { values: ["iOS"], missing: ['member "web" has no plain string value'] },
+  );
+});
+
+check("unionSlugs matches its quotes", () => {
+  assert.deepStrictEqual(
+    verify.unionSlugs(`export type FrameworkSlug = | "iOS's" | "web";`),
+    ["iOS's", "web"],
+  );
+});
+
+check("enumSlugs reports a broken vocabulary instead of throwing", () => {
+  const got = verify.enumSlugs();
+  assert.ok(got && got.slugs instanceof Set, JSON.stringify(got));
+  assert.deepStrictEqual(got.errors, [], JSON.stringify(got.errors));
+  assert.ok(got.slugs.size > 5, `only ${got.slugs.size} slugs`);
 });
 
 if (failures.length) {

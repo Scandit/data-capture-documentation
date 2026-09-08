@@ -103,27 +103,45 @@ const ENUM_ALLOWED_EXTRA_DISPLAYS = [
 // route forms are exempt rather than errors.
 const LEGACY_ROUTE_SEGMENTS = ["xamarin/ios", "xamarin/android", "xamarin/forms"];
 
+/**
+ * The framework vocabulary from docs-schema.yml, plus anything wrong with it.
+ *
+ * Returns rather than throws, for the reason dataFileFrameworkNames was
+ * changed: a raw Node stack trace fails closed but tells the author to read a
+ * parser instead of a sentence, and every other failure in this file is a
+ * sentence.
+ */
 function enumSlugs() {
-  const schema = yaml.load(
-    fs.readFileSync(path.join(ROOT, "docs-schema.yml"), "utf8"),
-  );
-  const singular = schema.properties.framework && schema.properties.framework.enum;
-  const plural =
-    schema.properties.frameworks &&
-    schema.properties.frameworks.items &&
-    schema.properties.frameworks.items.enum;
-  if (!singular) throw new Error("docs-schema.yml defines no `framework` enum");
-  if (!plural) throw new Error("docs-schema.yml defines no `frameworks` enum");
-  const a = JSON.stringify([...singular].sort());
-  const b = JSON.stringify([...plural].sort());
-  if (a !== b) {
-    throw new Error(
-      "`framework` and `frameworks` enums differ in docs-schema.yml. " +
-        "One page states one platform, another states several - the vocabulary " +
-        "must be the same set.",
-    );
+  const errors = [];
+  let schema;
+  try {
+    schema = yaml.load(fs.readFileSync(path.join(ROOT, "docs-schema.yml"), "utf8"));
+  } catch (e) {
+    return {
+      slugs: new Set(),
+      errors: [
+        `docs-schema.yml could not be read or parsed (${e.message.split("\n")[0]}) - ` +
+          `the framework vocabulary is unknown, so nothing below is checked`,
+      ],
+    };
   }
-  return new Set(singular);
+  const props = (schema && schema.properties) || {};
+  const singular = props.framework && props.framework.enum;
+  const plural = props.frameworks && props.frameworks.items && props.frameworks.items.enum;
+  if (!singular) errors.push("docs-schema.yml defines no `framework` enum");
+  if (!plural) errors.push("docs-schema.yml defines no `frameworks` enum");
+  if (singular && plural) {
+    const a = JSON.stringify([...singular].sort());
+    const b = JSON.stringify([...plural].sort());
+    if (a !== b) {
+      errors.push(
+        "`framework` and `frameworks` enums differ in docs-schema.yml. " +
+          "One page states one platform, another states several - the vocabulary " +
+          "must be the same set.",
+      );
+    }
+  }
+  return { slugs: new Set(singular || []), errors };
 }
 
 function walk(dir, out = []) {
@@ -284,7 +302,15 @@ function unionSlugs(source) {
   if (start === -1) return null;
   const end = src.indexOf(";", start);
   if (end === -1) return null;
-  return (src.slice(start, end).match(/['"]([^'"]+)['"]/g) || []).map((q) => q.slice(1, -1));
+  // Quote-matched, like every sibling reader here. The character class at
+  // each end truncated a value at an apostrophe and returned the truncation
+  // plus a fragment of separator - harmless for URL segments, but this file
+  // states the rule and this was the one reader still breaking it.
+  const values = [];
+  const rx = new RegExp(QUOTED, "g");
+  let m;
+  while ((m = rx.exec(src.slice(start, end)))) values.push(m.groups.v);
+  return values;
 }
 
 /** Framework display names each data file keys its availability map by. */
@@ -406,34 +432,108 @@ function dataFileFrameworkNames(rel) {
 const QUOTED = "(?<q>['\"])(?<v>(?:(?!\\k<q>).)+)\\k<q>";
 
 /**
- * Line and block comments removed, quote-aware so a `//` inside a string
- * survives. Needed because prose contains braces: the switcher's array carries
- * a comment mentioning `${linkVersion}/${slug}`, and counting those as entries
- * produced phantom entries with no `label`.
+ * `src` with comments removed.
+ *
+ * A single pass with three states, because two earlier shortcuts each blanked
+ * real code:
+ *
+ *   - Block comments were removed by a regex BEFORE any quote awareness, so a
+ *   - Block comments were removed by a regex BEFORE any quote awareness, so
+ *     an opening block-comment marker inside a STRING ate everything up to
+ *     the next closing one. Measured: a glob string containing a star-slash
+ *     sequence lost six characters.
+ *   - A regex literal ending in an escaped slash reads as a `//` comment.
+ *     Measured against TypeScript's own comment ranges, this blanked 163
+ *     characters of live code in src/theme/SearchBar/index.js - two lines that
+ *     happen to sit below the literal this file reads, so nothing was
+ *     unchecked, but the failure mode is silent rather than loud.
+ *
+ * Newlines inside block comments are kept so line structure survives.
  */
 function stripComments(src) {
-  const lines = src.replace(/\/\*[\s\S]*?\*\//g, "").split("\n");
-  return lines
-    .map((line) => {
-      let quote = null;
-      let cut = line.length;
-      for (let i = 0; i < line.length; i += 1) {
-        const c = line[i];
-        if (quote) {
-          if (c === "\\") i += 1;
-          else if (c === quote) quote = null;
-        } else if (c === '"' || c === "'" || c === "`") quote = c;
-        else if (c === "/" && line[i + 1] === "/") {
-          cut = i;
-          break;
-        }
+  // Characters after which a `/` opens a regex rather than dividing. Empty
+  // means start of input.
+  //
+  // `{` and `}` are deliberately NOT here. SearchBar is JSX, and a
+  // self-closing tag after a spread - `{...config} />` - puts a `/` right
+  // after `}`; treating that as a regex opener swallowed the rest of the file,
+  // including real comments, which then survived into the output. A regex
+  // literal directly after a brace (`{ /re/ }`) does not occur in the four
+  // files this reads; every real one here follows `(`, `=`, `,`, `:` or `[`.
+  const REGEX_AFTER = /^$|^[(,=:[!&|?;+\-*%~^]$/;
+  let out = "";
+  let quote = null;
+  let regex = false;
+  let charClass = false;
+  let prev = "";
+  let i = 0;
+  const emit = (s) => {
+    out += s;
+    const t = s.trimEnd();
+    if (t) prev = t[t.length - 1];
+  };
+  while (i < src.length) {
+    const c = src[i];
+    const next = src[i + 1];
+    if (quote) {
+      if (c === "\\") { emit(c + (next === undefined ? "" : next)); i += 2; continue; }
+      emit(c);
+      if (c === quote) quote = null;
+      i += 1;
+      continue;
+    }
+    if (regex) {
+      if (c === "\\") { emit(c + (next === undefined ? "" : next)); i += 2; continue; }
+      emit(c);
+      if (c === "[") charClass = true;
+      else if (c === "]") charClass = false;
+      else if (c === "/" && !charClass) regex = false;
+      i += 1;
+      continue;
+    }
+    if (c === "/" && next === "/") {
+      while (i < src.length && src[i] !== "\n") i += 1;
+      continue;
+    }
+    if (c === "/" && next === "*") {
+      i += 2;
+      while (i < src.length && !(src[i] === "*" && src[i + 1] === "/")) {
+        if (src[i] === "\n") out += "\n";
+        i += 1;
       }
-      return line.slice(0, cut);
-    })
-    .join("\n");
+      i += 2;
+      continue;
+    }
+    if (c === '"' || c === "'" || c === "`") { quote = c; emit(c); i += 1; continue; }
+    if (c === "/" && REGEX_AFTER.test(prev)) { regex = true; emit(c); i += 1; continue; }
+    if (c === "\n") { out += c; i += 1; continue; }
+    emit(c);
+    i += 1;
+  }
+  // Ending mid-regex or mid-string means the heuristic above lost track, and
+  // a mis-stripped source silently mis-reads whatever the caller wanted from
+  // it. Report it as unreadable instead: the callers turn null into
+  // "could not read its framework list, so it is unchecked", which is loud.
+  if (regex || quote) return null;
+  return out;
 }
 
 /** The span of the balanced bracket pair opening at `from`, or null. */
+/**
+ * Index of the `const <name>` declaration, or -1.
+ *
+ * A word boundary, because `indexOf(`const ${name}`)` is a PREFIX match:
+ * with `const FRAMEWORKS_ORDER` declared above `const FRAMEWORKS`, both
+ * arrayEntries and registryValues read the wrong array. For the registry that
+ * is loud (the drift and union checks fire); for the switcher it is not, so
+ * a different array's labels would be validated while the real list went
+ * unchecked.
+ */
+function declStart(src, constName) {
+  const m = new RegExp(`(?:^|[^\\w$])const\\s+${constName}\\s*(?::|=)`).exec(src);
+  return m ? m.index : -1;
+}
+
 function balanced(src, from, openCh, closeCh) {
   let depth = 0;
   for (let i = from; i < src.length; i += 1) {
@@ -457,7 +557,10 @@ function balanced(src, from, openCh, closeCh) {
 function arrayBody(src, constName) {
   if (src === null || src === undefined) return null;
   const clean = stripComments(src);
-  const start = clean.indexOf(`const ${constName}`);
+  // null means the comment scan lost track of the source, so anything read
+  // from it would be a guess. Unchecked and loud beats mis-read and quiet.
+  if (clean === null) return null;
+  const start = declStart(clean, constName);
   if (start === -1) return null;
   const eq = clean.indexOf("=", start);
   if (eq === -1) return null;
@@ -498,24 +601,96 @@ function arrayEntries(src, constName) {
 }
 
 /**
+ * `body` with every nested `{...}` and `[...]` span blanked out, so a field
+ * regex can only match at the top level.
+ *
+ * Matching the whole entry text found a field inside a NESTED object and
+ * attributed it to the entry. Measured: rewriting the switcher's Linux entry
+ * as `{ label: "Linux", meta: { slug: "linux" } }` left it with no top-level
+ * `slug`, so useFrameworkItems builds `${linkVersion}/undefined/add-sdk` - and
+ * the gate printed OK, because the nested one was what got read.
+ *
+ * Blanked rather than deleted so offsets and line structure survive.
+ */
+function topLevelOnly(body) {
+  const out = body.split("");
+  let depth = 0;
+  for (let i = 0; i < body.length; i += 1) {
+    const c = body[i];
+    if (c === "{" || c === "[") {
+      if (depth > 0) out[i] = " ";
+      depth += 1;
+    } else if (c === "}" || c === "]") {
+      depth -= 1;
+      if (depth > 0) out[i] = " ";
+    } else if (depth > 0 && c !== "\n") {
+      out[i] = " ";
+    }
+  }
+  return out.join("");
+}
+
+/**
+ * `key: value` chunks of an object-literal body, split only at commas that are
+ * both at the top level and outside a string.
+ *
+ * `body.split(",")` was wrong on both counts. A value containing a comma
+ * (`"a, b"`) was reported as having no string value; worse, a key whose value
+ * was a nested object kept that object's commas, so the chunk still contained a
+ * quoted string, the key was reported as fine, and the NESTED string is what
+ * got checked against the registry.
+ */
+function topLevelPairs(body) {
+  const flat = topLevelOnly(body);
+  const chunks = [];
+  let from = 0;
+  let quote = null;
+  for (let i = 0; i < flat.length; i += 1) {
+    const c = flat[i];
+    if (quote) {
+      if (c === "\\") i += 1;
+      else if (c === quote) quote = null;
+    } else if (c === '"' || c === "'" || c === "`") {
+      quote = c;
+    } else if (c === ",") {
+      chunks.push(flat.slice(from, i));
+      from = i + 1;
+    }
+  }
+  chunks.push(flat.slice(from));
+  return chunks.filter((chunk) => chunk.trim().length);
+}
+
+/**
  * One field read off every entry of a named array literal, plus the entries
- * where that field is absent or is not a simple quoted literal.
+ * where that field is absent, is not a plain quoted literal, or is declared
+ * more than once.
  */
 function entryFieldValues(src, constName, field) {
   const entries = arrayEntries(src, constName);
   if (!entries || !entries.length) return null;
   const values = [];
   const missing = [];
-  const rx = new RegExp(`${field}\\s*:\\s*${QUOTED}`);
+  // `(?:^|[^\\w$])` so `mySlug:` cannot answer for `slug:`, and the match runs
+  // over depth-0 text only - see topLevelOnly.
+  const rx = new RegExp(`(?:^|[^\\w$])${field}\\s*:\\s*${QUOTED}`, "g");
+  const labelRx = new RegExp(`(?:^|[^\\w$])label\\s*:\\s*${QUOTED}`);
   entries.forEach((entry, i) => {
-    const m = rx.exec(entry);
-    if (!m) {
-      const found = new RegExp(`label\\s*:\\s*${QUOTED}`).exec(entry);
-      const id = found && found.groups.v;
-      missing.push(`entry ${id ? `"${id}"` : `#${i}`} has no plain \`${field}\` literal`);
+    const flat = topLevelOnly(entry.replace(/^\{/, " ").replace(/\}$/, " "));
+    const hits = [...flat.matchAll(rx)];
+    const named = labelRx.exec(flat);
+    const id = named ? `"${named.groups.v}"` : `#${i}`;
+    if (!hits.length) {
+      missing.push(`entry ${id} has no plain \`${field}\` literal`);
       return;
     }
-    values.push(m.groups.v);
+    if (hits.length > 1) {
+      // Two declarations means the later one wins at runtime and the earlier
+      // one is what this would have checked. Neither is safe to assume.
+      missing.push(`entry ${id} declares \`${field}\` ${hits.length} times`);
+      return;
+    }
+    values.push(hits[0].groups.v);
   });
   return { values, missing };
 }
@@ -527,6 +702,9 @@ function entryFieldValues(src, constName, field) {
 function enumMemberValues(src, enumName) {
   if (src === null || src === undefined) return null;
   const clean = stripComments(src);
+  // null means the comment scan lost track of the source, so anything read
+  // from it would be a guess. Unchecked and loud beats mis-read and quiet.
+  if (clean === null) return null;
   const decl = clean.indexOf(`enum ${enumName}`);
   if (decl === -1) return null;
   const open = clean.indexOf("{", decl);
@@ -535,27 +713,38 @@ function enumMemberValues(src, enumName) {
   if (!span) return null;
   const values = [];
   const missing = [];
-  // Trailing comma optional: dropping it on the final member is valid TS, and
+  // Split on top-level commas rather than on lines. A single-line enum put
+  // every member on one line, so the line-anchored regex matched none of them:
+  // the first was reported and the rest were dropped without a word. Trailing
+  // comma optional too - dropping it on the final member is valid TS, and
   // requiring it exempted that member from the check.
-  const rx = new RegExp(`^(\\w+)\\s*=\\s*${QUOTED}\\s*,?$`);
-  for (const line of clean.slice(span.open + 1, span.close).split("\n")) {
-    const t = line.trim();
-    if (!t) continue;
-    const named = /^(\w+)\s*=/.exec(t);
-    if (!named) continue;
-    const m = rx.exec(t);
-    if (!m) {
-      missing.push(`member "${named[1]}" has no plain string value`);
+  const rx = new RegExp(`^\\s*(\\w+)\\s*=\\s*${QUOTED}\\s*$`);
+  const namedRx = /^\s*(\w+)\s*=/;
+  for (const member of topLevelPairs(clean.slice(span.open + 1, span.close))) {
+    const m = rx.exec(member);
+    if (m) {
+      values.push(m.groups.v);
       continue;
     }
-    values.push(m.groups.v);
+    const named = namedRx.exec(member);
+    missing.push(
+      named
+        ? `member "${named[1]}" has no plain string value`
+        : `\`${member.trim().slice(0, 40)}\` is not an enum member`,
+    );
   }
   return { values, missing };
 }
 
 /**
- * Values of one named object literal, plus nothing to report: every `key:
- * value` pair inside it is read, so there is no partial miss to count.
+ * Values of one named object literal, plus the keys whose value this cannot
+ * read and any depth-0 chunk that is not a `key: value` pair at all.
+ *
+ * An earlier version claimed there was nothing to report here, "because every
+ * `key: value` pair inside it is read". That was false in two ways, both
+ * measured on the real SearchBar map: a key whose value is a nested object was
+ * reported as fine while the nested string was checked in its place, and a
+ * spread (`...EXTRA_LABELS`) was not reported at all.
  *
  * Scoped by brace matching rather than by a line regex: SearchBar carries other
  * `key: "value"` shapes (analytics payloads, query tokens) that a file-wide
@@ -564,30 +753,162 @@ function enumMemberValues(src, enumName) {
 function objectLiteralValues(src, constName) {
   if (src === null || src === undefined) return null;
   const clean = stripComments(src);
-  const start = clean.indexOf(`const ${constName}`);
+  // null means the comment scan lost track of the source, so anything read
+  // from it would be a guess. Unchecked and loud beats mis-read and quiet.
+  if (clean === null) return null;
+  const start = declStart(clean, constName);
   if (start === -1) return null;
   const open = clean.indexOf("{", start);
   if (open === -1) return null;
   const span = balanced(clean, open, "{", "}");
   if (!span) return null;
-  const body = clean.slice(span.open + 1, span.close);
   const values = [];
   const missing = [];
-  const rx = new RegExp(`:\\s*${QUOTED}`, "g");
-  let m;
-  while ((m = rx.exec(body))) values.push(m.groups.v);
-  for (const pair of body.split(",")) {
-    const key = /^\s*(?:['"]?)([\w.-]+)(?:['"]?)\s*:/.exec(pair);
-    if (key && !new RegExp(`:\\s*${QUOTED}`).test(pair)) {
-      missing.push(`key "${key[1]}" has no plain string value`);
+  const pairRx = new RegExp(`^\\s*(?:['\"])?([\\w.$-]+)(?:['\"])?\\s*:\\s*${QUOTED}\\s*$`);
+  const keyRx = /^\s*(?:['"])?([\w.$-]+)(?:['"])?\s*:/;
+  for (const pair of topLevelPairs(clean.slice(span.open + 1, span.close))) {
+    const m = pairRx.exec(pair);
+    if (m) {
+      values.push(m.groups.v);
+      continue;
     }
+    const key = keyRx.exec(pair);
+    missing.push(
+      key
+        ? `key "${key[1]}" has no plain string value`
+        : `\`${pair.trim().slice(0, 40)}\` is not a \`key: value\` pair`,
+    );
   }
   return { values, missing };
 }
 
-function main() {
-  const allowed = enumSlugs();
+/**
+ * What one UI copy's reader found, as error strings.
+ *
+ * Pure, and exported, because this is where two rounds of review found
+ * escapes: the readers' `missing` arrays were well tested and NOTHING tested
+ * that anyone reports them. Deleting the loop below left the suite green.
+ */
+function uiCopyErrors(label, file, read, allowed, extra) {
   const errors = [];
+  if (read === null) {
+    errors.push(`${file}: could not read its framework list, so it is unchecked`);
+    return errors;
+  }
+  const found = read.values;
+  if (found.length === 0) {
+    errors.push(`${file}: parsed zero framework entries - its shape changed`);
+    return errors;
+  }
+  // What the reader could not read. Without this a partial miss was free:
+  // `linux = ""` and `linux = LINUX_DISPLAY` each left one member unchecked
+  // while `found.length` stayed non-zero and the gate said OK.
+  for (const what of read.missing) {
+    errors.push(
+      `${file}: ${what} - it is unchecked, and the others still parse so the ` +
+        `entry count does not show it`,
+    );
+  }
+  for (const value of found) {
+    if (!allowed.includes(value) && !(extra || []).includes(value)) {
+      errors.push(`${file}: ${label} "${value}" is not in the registry`);
+    }
+  }
+  return errors;
+}
+
+/**
+ * One data file's reader output, as error strings plus the number of names it
+ * actually checked.
+ */
+function dataFileErrors(rel, parsedData, registryDisplays) {
+  const errors = [];
+  if (parsedData.error) return { errors: [parsedData.error], namesChecked: 0 };
+  const { names, missing } = parsedData;
+  // Zero names is a shape change, not a clean file: renaming skills.json's
+  // `frameworks` key to `platforms` left this check reporting "3 checked"
+  // and OK. Every sibling check fails loudly on parsing zero entries; this
+  // one used to be the exception because an empty Set is truthy.
+  if (!names.size) {
+    errors.push(
+      `${rel}: parsed zero framework names - its shape changed, so this ` +
+        `file is unchecked rather than clean`,
+    );
+    return { errors, namesChecked: 0 };
+  }
+  // A per-part miss, which a total count cannot show: every one of these
+  // files is several independent maps, and losing one of them left the rest
+  // supplying names and the gate reporting clean.
+  for (const label of missing) {
+    errors.push(
+      `${rel}: ${label} is absent or empty - that part of the file is ` +
+        `unchecked, and the rest still supplies names so the total count ` +
+        `does not show it`,
+    );
+  }
+  for (const name of names) {
+    if (!registryDisplays.includes(name)) {
+      errors.push(
+        `${rel}: framework "${name}" is not a display name in the registry - the ` +
+          `row renders but no component can match it`,
+      );
+    }
+  }
+  return { errors, namesChecked: names.size };
+}
+
+/**
+ * The registry invariants that do not fit the value checks: that the entry
+ * splitter saw every entry, and that `agentSkills: true` implies a
+ * `routeSegment` to build a URL from.
+ *
+ * Both consumers cast the null away - QUERY_FRAMEWORK_TO_PATH in
+ * src/components/utils/frameworks.ts and FRAMEWORK_URL_PATH in
+ * src/components/SkillsCallout/index.tsx both do `routeSegment as string` - so
+ * such an entry silently produces `/sdks/undefined/agent-skills`. Not
+ * hypothetical: `hosted` is the entry with routeSegment: null, and skills.json
+ * already carries an id-bolt skill, so flipping hosted.agentSkills is the
+ * natural next edit.
+ */
+function registryInvariantErrors(entries, registrySlugs, file) {
+  const errors = [];
+  // Counted, like every other reader here. Without this an entry the matcher
+  // cannot see costs the check silently, and this is the one invariant in the
+  // file guarding a runtime URL bug rather than a rendering one.
+  if (!entries || !entries.length) {
+    errors.push(
+      `${file}: could not read the FRAMEWORKS entries, so the ` +
+        `agentSkills/routeSegment invariant is unchecked`,
+    );
+  } else if (registrySlugs && entries.length !== registrySlugs.length) {
+    errors.push(
+      `${file}: read ${entries.length} entries but ${registrySlugs.length} ` +
+        `\`slug\` values - the literal's shape changed, so some entries are ` +
+        `unchecked rather than clean`,
+    );
+  }
+  for (const entry of entries || []) {
+    // `\s*:` on each of these, for the reason the readers give: no formatter is
+    // configured, so `agentSkills : true` is a shape this file has to expect -
+    // and a space before the colon skipped the entry without tripping the
+    // count assertion, because the entry was still read.
+    if (!/agentSkills\s*:\s*true/.test(entry)) continue;
+    if (!new RegExp(`routeSegment\\s*:\\s*${QUOTED}`).test(entry)) {
+      const found = new RegExp(`slug\\s*:\\s*${QUOTED}`).exec(entry);
+      const slug = (found && found.groups.v) || "?";
+      errors.push(
+        `${file}: "${slug}" has agentSkills: true but no routeSegment - ` +
+          `resolveAgentSkillsUrl would build /sdks/undefined/agent-skills`,
+      );
+    }
+  }
+  return errors;
+}
+
+function main() {
+  const vocabulary = enumSlugs();
+  const allowed = vocabulary.slugs;
+  const errors = [...vocabulary.errors];
 
   // 1. CONTENT
   const files = walk(DOCS);
@@ -690,31 +1011,8 @@ function main() {
   }
 
   // 5. UI COPIES - read the three hand-written lists out of source text.
-  const uiErrors = (label, file, read, allowed, extra) => {
-    if (read === null) {
-      errors.push(`${file}: could not read its framework list, so it is unchecked`);
-      return;
-    }
-    const found = read.values;
-    if (found.length === 0) {
-      errors.push(`${file}: parsed zero framework entries - its shape changed`);
-      return;
-    }
-    // What the reader could not read. Without this a partial miss was free:
-    // `linux = ""` and `linux = LINUX_DISPLAY` each left one member unchecked
-    // while `found.length` stayed non-zero and the gate said OK.
-    for (const what of read.missing) {
-      errors.push(
-        `${file}: ${what} - it is unchecked, and the others still parse so the ` +
-          `entry count does not show it`,
-      );
-    }
-    for (const value of found) {
-      if (!allowed.includes(value) && !(extra || []).includes(value)) {
-        errors.push(`${file}: ${label} "${value}" is not in the registry`);
-      }
-    }
-  };
+  const uiErrors = (label, file, read, allowed, extra) =>
+    errors.push(...uiCopyErrors(label, file, read, allowed, extra));
 
 
   // 4. DATA
@@ -726,42 +1024,13 @@ function main() {
     );
   } else {
     for (const rel of DATA_FILES) {
-      const parsedData = dataFileFrameworkNames(rel);
-      if (parsedData.error) {
-        errors.push(parsedData.error);
-        continue;
-      }
-      const { names, missing } = parsedData;
-      // Zero names is a shape change, not a clean file: renaming skills.json's
-      // `frameworks` key to `platforms` left this check reporting "3 checked"
-      // and OK. Every sibling check fails loudly on parsing zero entries; this
-      // one used to be the exception because an empty Set is truthy.
-      if (!names.size) {
-        errors.push(
-          `${rel}: parsed zero framework names - its shape changed, so this ` +
-            `file is unchecked rather than clean`,
-        );
-        continue;
-      }
-      // A per-part miss, which a total count cannot show: every one of these
-      // files is several independent maps, and losing one of them left the rest
-      // supplying names and the gate reporting clean.
-      for (const label of missing) {
-        errors.push(
-          `${rel}: ${label} is absent or empty - that part of the file is ` +
-            `unchecked, and the rest still supplies names so the total count ` +
-            `does not show it`,
-        );
-      }
-      dataNamesChecked += names.size;
-      for (const name of names) {
-        if (!registryDisplays.includes(name)) {
-          errors.push(
-            `${rel}: framework "${name}" is not a display name in the registry - the ` +
-              `row renders but no component can match it`,
-          );
-        }
-      }
+      const read = dataFileErrors(
+        rel,
+        dataFileFrameworkNames(rel),
+        registryDisplays,
+      );
+      errors.push(...read.errors);
+      dataNamesChecked += read.namesChecked;
     }
   }
   // Deliberately one-directional: a product or feature need not support every
@@ -816,39 +1085,11 @@ function main() {
   // `/sdks/undefined/agent-skills`. Not hypothetical: `hosted` is the entry with
   // routeSegment: null, and skills.json already carries an id-bolt skill, so
   // flipping hosted.agentSkills is the natural next edit.
-  const entries = registryEntries();
-  // registrySlugs is the same registryValues("slug") read the DRIFT check
-  // above already did; one read, one expected count.
-  // Counted, like every other reader here. Without this an entry the matcher
-  // cannot see costs the check silently, and this is the one invariant in the
-  // file guarding a runtime URL bug rather than a rendering one.
-  if (!entries || !entries.length) {
-    errors.push(
-      `${REGISTRY_FILE}: could not read the FRAMEWORKS entries, so the ` +
-        `agentSkills/routeSegment invariant is unchecked`,
-    );
-  } else if (registrySlugs && entries.length !== registrySlugs.length) {
-    errors.push(
-      `${REGISTRY_FILE}: read ${entries.length} entries but ${registrySlugs.length} ` +
-        `\`slug\` values - the literal's shape changed, so some entries are ` +
-        `unchecked rather than clean`,
-    );
-  }
-  for (const entry of entries || []) {
-    // `\s*:` on each of these, for the reason the readers above give: no
-    // formatter is configured, so `agentSkills : true` is a shape this file has
-    // to expect - and a space before the colon skipped the entry without
-    // tripping the count assertion, because the entry was still read.
-    if (!/agentSkills\s*:\s*true/.test(entry)) continue;
-    if (!new RegExp(`routeSegment\\s*:\\s*${QUOTED}`).test(entry)) {
-      const found = new RegExp(`slug\\s*:\\s*${QUOTED}`).exec(entry);
-      const slug = (found && found.groups.v) || "?";
-      errors.push(
-        `${REGISTRY_FILE}: "${slug}" has agentSkills: true but no routeSegment - ` +
-          `resolveAgentSkillsUrl would build /sdks/undefined/agent-skills`,
-      );
-    }
-  }
+  // The invariants that do not fit the value checks. See
+  // registryInvariantErrors for why each exists.
+  errors.push(
+    ...registryInvariantErrors(registryEntries(), registrySlugs, REGISTRY_FILE),
+  );
 
   console.log(
     `\nframework gate: ${files.length} docs scanned, ${pagesWithField} declare a framework`,
@@ -874,6 +1115,13 @@ if (require.main === module) main();
 module.exports = {
   declaredFrameworks,
   dataFileFrameworkNames,
+  dataFileErrors,
+  declStart,
+  enumSlugs,
+  registryInvariantErrors,
+  topLevelOnly,
+  topLevelPairs,
+  uiCopyErrors,
   arrayBody,
   arrayEntries,
   entryFieldValues,
