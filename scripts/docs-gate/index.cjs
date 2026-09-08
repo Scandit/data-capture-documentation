@@ -53,17 +53,37 @@ function changedDocs() {
       base = "";
     }
   }
+  // Recorded here rather than beside the filter below: frontmatterOnly()
+  // needs the resolved base, and keeping this next to the resolution it
+  // comes from also keeps it clear of the file-list predicate.
+  lastRatchetBase = base;
   let out = "";
   try { out = sh(`git diff --name-only --diff-filter=ACMR ${base} HEAD -- docs`); } catch {}
   // include staged, unstaged, and untracked changes so a local run before push also checks
   try { out += "\n" + sh("git diff --name-only --diff-filter=ACMR -- docs"); } catch {}
   try { out += "\n" + sh("git diff --cached --name-only --diff-filter=ACMR -- docs"); } catch {}
   try { out += "\n" + sh("git ls-files --others --exclude-standard -- docs"); } catch {}
-  lastRatchetBase = base; // reused by frontmatterOnly()
   const files = [...new Set(out.split(/\r?\n/).filter(Boolean))];
   return files.filter(
     (f) => /\.(md|mdx)$/i.test(f) && !path.basename(f).startsWith("_") && fs.existsSync(path.join(ROOT, f))
   );
+}
+
+// Partials are kept out of the schema check (they carry no frontmatter) and
+// out of the link check (links.cjs resolves a relative target against the
+// file's own directory, which for a partial is docs/partials/ rather than the
+// directory of whichever page imported it, so both false hits and misses
+// follow). Applied at those two call sites rather than to the file list, so
+// that what the structural checks see stays a separate decision from what the
+// prose checks see.
+function pagesOnly(files) {
+  return files.filter((f) => !path.basename(f).startsWith("_"));
+}
+
+function findVale() {
+  const local = path.join(ROOT, ".vale", "bin", process.platform === "win32" ? "vale.exe" : "vale");
+  const cand = fs.existsSync(local) ? local : "vale";
+  try { execFileSync(cand, ["-v"], { stdio: "ignore" }); return cand; } catch { return null; }
 }
 
 /** Everything after the frontmatter block, or the whole file if there is none. */
@@ -111,12 +131,6 @@ function frontmatterOnly(files, base) {
     if (bodyOf(before).trim() === bodyOf(after).trim()) out.add(f);
   }
   return out;
-}
-
-function findVale() {
-  const local = path.join(ROOT, ".vale", "bin", process.platform === "win32" ? "vale.exe" : "vale");
-  const cand = fs.existsSync(local) ? local : "vale";
-  try { execFileSync(cand, ["-v"], { stdio: "ignore" }); return cand; } catch { return null; }
 }
 
 function runCspell(files) {
@@ -272,7 +286,7 @@ function main() {
 
   const schema = loadSchema(path.join(ROOT, "docs-schema.yml"));
   let findings = [];
-  for (const f of files) {
+  for (const f of pagesOnly(files)) {
     findings.push(...validateFile(path.join(ROOT, f), schema).map((x) => ({ ...x, file: f })));
     findings.push(...checkLinks(path.join(ROOT, f)).map((x) => ({ ...x, file: f })));
   }
