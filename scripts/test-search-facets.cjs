@@ -66,6 +66,7 @@ const API_TAG_PREFIX = extractConst("API_TAG_PREFIX");
 const apiTagsFor = eval(`(${extract("apiTagsFor")})`);
 const withApiReferenceTags = eval(`(${extract("withApiReferenceTags")})`);
 const rewriteVersionTag = eval(`(${extract("rewriteVersionTag")})`);
+const dottedFallback = eval(`(${extract("dottedFallback")})`);
 // Named guard for the brace-counting limitation in extract(): if any of the
 // three came back truncated, eval would have thrown something unrelated-looking.
 for (const [name, fn] of Object.entries({
@@ -277,5 +278,72 @@ for (const versionTag of Object.keys(MAP)) {
     );
   });
 }
+
+/**
+ * dottedFallback: which retry a dotted query gets, if any.
+ *
+ * The retry exists because Algolia keeps `word.word` as one token, so a dotted
+ * string matches no page even when the property it names is documented on
+ * hundreds. Two shapes fail for opposite reasons and the segment count says
+ * which, so there is one retry rather than a chain - the function's own comment
+ * carries the live-index measurements that settled the order.
+ *
+ * Extracted from the module like its three siblings above, so changing the real
+ * function cannot leave this passing.
+ *
+ * `null` means no retry runs at all, and those rows matter as much as the
+ * positive ones: a query the reader wrote deliberately must not be rewritten,
+ * and a tail that is not a symbol name must not become a search for whatever
+ * page mentions it.
+ */
+const DOTTED = [
+  // Three or more segments: an expression pasted from the reader's own source.
+  // The meaning is in the last segment.
+  ["pasted expression", "this.state.settings.codeDuplicateFilter", "codeDuplicateFilter"],
+  ["pasted expression, lower case", "this.barcodecapture.settings.symbologies", "symbologies"],
+  ["namespace path", "sdc.core.ui.viewfinder.rectangular", "rectangular"],
+  // Two segments: Class.Member. An enum member has no page of its own, so the
+  // parent is what to search for.
+  ["enum member", "rectangularviewfinderstyle.legacy", "rectangularviewfinderstyle"],
+  ["class and method", "barcodecapture.applysettings", "barcodecapture"],
+  // No retry: nothing here is a symbol name worth searching for.
+  // Two segments, so the Class.Member branch applies and the extension is
+  // dropped - searching the stem is a reasonable answer for a file name, and
+  // this row records that rather than pretending the shape is rejected.
+  ["a file name keeps its stem", "readme.md", "readme"],
+  ["a dotted path ending in an extension", "docs.sdks.ios.md", null],
+  ["a numeric tail is an index, not a property", "array.items.1234", null],
+  ["a short tail", "a.b.c", null],
+  ["a two-segment name with too short a base", "a.legacy", null],
+  ["no dot at all", "codeDuplicateFilter", null],
+  ["a phrase containing a dot", "see settings.symbologies for more", null],
+  // Needs the whitespace guard specifically: without it this splits into three
+  // segments and would be rewritten to a search for "settings", discarding
+  // words the reader typed.
+  ["a phrase ending in a dotted expression", "see this.state.settings", null],
+  ["a trailing dot", "this.state.", null],
+  ["a leading dot", ".symbologies", null],
+  ["empty", "", null],
+  ["whitespace only", "   ", null],
+];
+
+check("dottedFallback picks the retry the segment count calls for", () => {
+  for (const [name, query, want] of DOTTED) {
+    assert.strictEqual(
+      dottedFallback(query),
+      want,
+      `${name}: dottedFallback(${JSON.stringify(query)})`,
+    );
+  }
+});
+
+check("dottedFallback declines anything that is not a dotted symbol", () => {
+  // It is only consulted when the first search returned zero, but it must
+  // still decline a bare word or a phrase: rewriting one of those would change
+  // a query the reader wrote deliberately.
+  for (const q of ["symbologies", "barcode capture", "matrixscan find", "8.5.3"]) {
+    assert.strictEqual(dottedFallback(q), null, q);
+  }
+});
 
 console.log(`\n${passed} passed${skipped ? `, ${skipped} skipped` : ""}\n`);

@@ -284,9 +284,12 @@ function dottedFallback(query) {
   const parts = q.split(".");
   if (parts.length >= 3) {
     const last = parts[parts.length - 1];
-    // A bare identifier of some length: a trailing `js`, `md` or a number is not
-    // a symbol name worth searching for.
-    return /^[A-Za-z0-9_]{4,}$/.test(last) ? last : null;
+    // A bare identifier of some length, containing at least one letter. A
+    // trailing `js` or `md` is too short, and `array.items.1234` ends in an
+    // index rather than a property name - searching for that returns whatever
+    // page happens to mention the number.
+    const isIdentifier = /^[A-Za-z0-9_]{4,}$/.test(last) && /[A-Za-z]/.test(last);
+    return isIdentifier ? last : null;
   }
   if (parts.length === 2) {
     const m = q.match(/^(.+)\.[A-Za-z0-9_]+$/);
