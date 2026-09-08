@@ -208,7 +208,9 @@ const FeatureList: React.FC<FeatureListProps> = ({
                         // attribute - so the chip stayed an <a> with no href:
                         // not keyboard-focusable, navigating nowhere, still
                         // showing the link hover. 17 cells in features.json
-                        // carry no apiUrl (16 Kotlin Multiplatform, 1 Web).
+                        // carry no apiUrl, of which 16 reach this branch - the
+                        // 17th is Web / 7-Segment Display, filtered out earlier
+                        // by version === "n/a".
                         // Latent only while every usage is compact mode, which
                         // skips this column. Same shape as the feature-name cell
                         // above, which swaps <a> for <h4>.
