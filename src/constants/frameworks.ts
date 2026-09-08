@@ -166,7 +166,9 @@ export function frameworkFromRouteTail(tail: string): FrameworkDef | undefined {
  *
  * Anchors on `sdks/` rather than the start of the path, so docs-version
  * prefixes (`/next/`, `/7.6.14/`) work. Use `parseSdksRoute` instead when the
- * product segment is needed too, or when a path outside `/sdks/` must not match.
+ * product segment is needed too - but NOT for anchoring: it was unanchored in
+ * the same change and for the same reason, so neither function rejects a path
+ * with something before `/sdks/`. scripts/test-frameworks.cjs pins that.
  */
 export function frameworkFromPath(pathname: string): FrameworkDef | undefined {
   const m = /(?:^|\/)sdks\/(.+)$/.exec(pathname);

@@ -19,6 +19,18 @@ function sh(cmd) {
   return execSync(cmd, { encoding: "utf8", stdio: ["ignore", "pipe", "inherit"] }).trim();
 }
 
+/**
+ * Like sh(), but for a lookup whose failure is EXPECTED and meaningless.
+ *
+ * `git show <base>:<path>` cannot succeed for a file the PR adds, and sh()
+ * inherits git's stderr on purpose, so a PR adding forty pages printed forty
+ * `fatal: path ... exists on disk, but not in ...` lines before the gate said
+ * anything - which reads as a crashed gate rather than as forty new files.
+ */
+function shQuiet(cmd) {
+  return execSync(cmd, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+}
+
 function changedDocs() {
   // Ratchet against the PR's target branch, not a hardcoded main — so a PR into
   // release/** diffs against that release branch, not main's fork point.
@@ -81,7 +93,9 @@ function frontmatterOnly(files, base) {
   for (const f of files) {
     let before;
     try {
-      before = sh(`git show ${base}:${f}`);
+      // shQuiet: a file the PR ADDS has no base blob, and that failure is
+      // both expected and meaningless here - see the note on shQuiet.
+      before = shQuiet(`git show ${base}:${f}`);
     } catch {
       continue; // new file - it is all new, check everything
     }
