@@ -27,8 +27,9 @@
  * 6 MiB more onto it. For scale, `llms-full.txt` carries the site's prose in
  * 2.28 MiB, so per-module text is an expensive way to store text. The argument
  * rests on that and on the `url`, NOT on a claim that each module's prose also
- * ships in llms-full.txt: the two artifacts cut the corpus differently - 452
- * page sections there against 4,386 modules here - so there is no per-module
+ * ships in llms-full.txt: the two artifacts cut the corpus differently - 423
+ * sections there and 410 links in llms.txt, against 4,386 modules here - so
+ * there is no per-module
  * correspondence to appeal to. Units are MiB throughout, to match `mb()` and
  * MAX_INDEX_MB below.
  *
@@ -44,7 +45,7 @@
  * for deciding which page or chunk to read - intents, audiences, channels,
  * frameworks, products, cites-API, see-also, availability - which a flat text
  * dump cannot express. They share a source of truth for what an assistant may
- * see (`customFields.llmsIgnoredSdkTrees`) so they cannot disagree about scope.
+ * see (`customFields.assistantIgnoreFiles`) so a curation decision is made once.
  *
  * Known limit: 10 MiB is large for a browser consumer to fetch whole. Nothing
  * in the repo consumes it that way yet; if something does, it needs a served
@@ -999,7 +1000,7 @@ function gitDates(siteDir: string): Map<string, string> {
     // older one. Seconds compare correctly regardless of zone.
     const out = execFileSync(
       "git",
-      ["log", "--no-merges", "--name-only", "--format=%x00%ct", "--", "docs", "src"],
+      ["log", "--no-merges", "--name-only", "--format=%x00%ct", "--", "docs", "src", "versioned_docs"],
       { cwd: siteDir, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 },
     );
     let commitStamp = "";
@@ -1075,11 +1076,24 @@ function ignoreGlobToRegExp(glob: string): RegExp {
     const c = glob[i];
     if (c === "*") {
       const doubled = glob[i + 1] === "*";
-      if (doubled && glob[i + 2] === "/") {
+      // `**` spans path segments ONLY as a whole segment - `a/**/b`, `a/**` or
+      // a leading `**/`. Adjacent to anything else minimatch degrades it to a
+      // single `*`, and emitting `.*` there made this matcher hide a whole
+      // subtree the llms export keeps: `docs/sdks/linux/matrixscan**` swallowed
+      // `matrixscan/get-started.md`. Two artifacts disagreeing about scope is
+      // the one thing this design is supposed to prevent.
+      const wholeSegment =
+        doubled &&
+        (i === 0 || glob[i - 1] === "/") &&
+        (i + 2 === glob.length || glob[i + 2] === "/");
+      if (wholeSegment && glob[i + 2] === "/") {
         out += "(?:[^/]+/)*";
         i += 2;
-      } else if (doubled) {
+      } else if (wholeSegment) {
         out += ".*";
+        i += 1;
+      } else if (doubled) {
+        out += "[^/]*";
         i += 1;
       } else {
         out += "[^/]*";
@@ -1088,6 +1102,12 @@ function ignoreGlobToRegExp(glob: string): RegExp {
     }
     out += c.replace(/[.+^${}()|[\]\\]/g, "\\$&");
   }
+  // A pattern with no `/` matches a BASENAME anywhere, because that is what
+  // docusaurus-plugin-llms does with it (`minimatch(..., {matchBase: true})`).
+  // Anchoring it against the full path instead compiled to something no
+  // candidate could ever match - a pattern accepted and then quietly ignored,
+  // which is the failure this function was rewritten to stop.
+  if (!glob.includes("/")) return new RegExp(`(?:^|/)${out}$`);
   return new RegExp(`^${out}$`);
 }
 
@@ -1189,7 +1209,17 @@ function contributingFiles(siteDir: string, pathname: string, servedVersion = "c
         spec.startsWith("docs/") || spec.startsWith("src/")
           ? spec
           : path.posix.normalize(path.posix.join(dir, spec));
-      if (!resolved.startsWith("docs/") && !resolved.startsWith("src/")) continue;
+      // versioned_docs too: on a frozen-at-root build the root file lives
+    // there, so its relative partial imports resolve there as well. Without
+    // it every snapshot page dated from its own two-line shell instead of
+    // the partial holding its prose - all 234 of them import relatively.
+    if (
+      !resolved.startsWith("docs/") &&
+      !resolved.startsWith("src/") &&
+      !resolved.startsWith("versioned_docs/")
+    ) {
+      continue;
+    }
       // The has-extension test accepts jsx? but the candidate list did not offer
       // it, so an extension-less import of a .js/.jsx component - there are ~40
       // in src/ - was silently not followed, which would quietly reintroduce the

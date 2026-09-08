@@ -17,6 +17,12 @@ on:
       - 'src/plugins/knowledge-extractor/**'
       - 'scripts/retrieval-evals/**'
       - '.github/workflows/docs-retrieval-evals.yml'
+      # These decide WHAT gets indexed at all: assistantIgnoreFiles and
+      # lastVersion live in the config, and versions.json decides which
+      # trees are frozen. Without them a PR that widens or narrows the
+      # curation list changes the corpus and skips both evals.
+      - 'docusaurus.config.ts'
+      - 'versions.json'
   push:
     branches:
       - main
@@ -58,6 +64,10 @@ jobs:
       # because no workflow passed --auto. Reported separately so a corpus-wide
       # regression is attributable.
       - name: Run corpus-wide self-retrieval
+        # always(): a gold-set breach above must not hide the corpus-wide
+        # number, which is the one that says whether a regression is broad
+        # or local.
+        if: always()
         run: node scripts/retrieval-evals/run.cjs --auto --report reports/retrieval-evals-auto.json
 
       - name: Upload eval report
