@@ -1134,7 +1134,13 @@ function ignoreGlobToRegExp(glob: string): RegExp {
  */
 function hiddenFromAssistants(sourcePath: string, patterns: RegExp[]): boolean {
   const parts = sourcePath.split("/");
-  for (let i = parts.length; i > 0; i -= 1) {
+  // `i > 1`, not `i > 0`: the walker starts INSIDE siteDir/docs, so the bare
+  // `docs` segment is never handed to shouldIgnoreFile. Testing it here meant an
+  // entry like `docs`, `doc*` or `**/docs` hid all 676 files while llms kept
+  // every one of them. It would have failed the build loudly rather than shipped
+  // a wrong artifact - an empty file list trips the pagesProcessed guard - but
+  // loud and wrong is still wrong.
+  for (let i = parts.length; i > 1; i -= 1) {
     const prefix = parts.slice(0, i).join("/");
     if (patterns.some((re) => re.test(prefix))) return true;
   }
