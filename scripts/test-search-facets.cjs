@@ -68,6 +68,7 @@ const withApiReferenceTags = eval(`(${extract("withApiReferenceTags")})`);
 const rewriteVersionTag = eval(`(${extract("rewriteVersionTag")})`);
 const EXPRESSION_ROOTS = extractConst("EXPRESSION_ROOTS");
 const dottedFallback = eval(`(${extract("dottedFallback")})`);
+const applyQueryOverride = eval(`(${extract("applyQueryOverride")})`);
 // Named guard for the brace-counting limitation in extract(): if any of the
 // four came back truncated, eval would have thrown something unrelated-looking.
 //
@@ -81,6 +82,7 @@ for (const [name, fn] of Object.entries({
   withApiReferenceTags,
   rewriteVersionTag,
   dottedFallback,
+  applyQueryOverride,
 })) {
   assert.strictEqual(typeof fn, "function", `${name} did not extract cleanly`);
 }
@@ -308,8 +310,12 @@ const DOTTED = [
   // Three or more segments: an expression pasted from the reader's own source.
   // The meaning is in the last segment.
   ["pasted expression", "this.state.settings.codeDuplicateFilter", "codeDuplicateFilter"],
-  ["pasted expression, lower case", "this.barcodecapture.settings.symbologies", "symbologies"],
-  ["namespace path", "sdc.core.ui.viewfinder.rectangular", "rectangular"],
+  // Was a positive while a bare lowercase tail of eight or more characters
+  // counted as a symbol. It no longer does: `symbologies` (271 hits) and
+  // `selection` (245) are indistinguishable by shape, so the conservative
+  // reading applies and this loses its retry.
+  ["a lower-case namespace path", "this.barcodecapture.settings.symbologies", null],
+  ["a bare lowercase tail, however deep the path", "sdc.core.ui.viewfinder.rectangular", null],
   // Exactly three segments. Without a positive row here, raising the threshold
   // to four survived - and this query is one of the rows in the function's own
   // evidence table.
@@ -321,8 +327,31 @@ const DOTTED = [
   // The tail has to look like a symbol rather than a word. A case boundary
   // carries it at any length; without one it has to be long.
   ["a short tail with a case boundary", "barcode.data.arMode", "arMode"],
-  ["a short tail with an underscore", "express.config.max_codes", "max_codes"],
-  ["eight lowercase characters", "this.settings.symbology", "symbology"],
+  // The underscore clause is what carries this one: `max_codes` has no case
+  // boundary at all, so without `_[A-Za-z0-9]` it would be declined. It only
+  // pins that clause now that the "eight characters or more" branch is gone -
+  // before, it passed on length alone.
+  ["an underscore and no case boundary", "express.config.max_codes", "max_codes"],
+  // ...and the six-character floor applies to the underscore clause too.
+  ["an underscore below the floor", "express.config.max_c", null],
+  // Six is the floor, and five is below it: `codeD` is one keystroke past the
+  // example above and returned 355 hits, `codeDu` 59.
+  ["six characters with a case boundary", "this.state.settings.codeDu", "codeDu"],
+  ["five characters with a case boundary", "this.state.settings.codeD", null],
+  // A bare lowercase tail gets no retry at any length: nothing in the string
+  // separates `symbologies` (271) from `selection` (245).
+  ["a bare lowercase word", "this.state.settings.available", null],
+  // Capitalisation is not a symbol signal, because Algolia matches
+  // case-insensitively: these came back as words with a capital letter.
+  ["a capitalised word", "barcode.data.Text", null],
+  ["another capitalised word", "this.viewfinder.style.Color", null],
+  ["an all-caps tail", "settings.mode.LEGACY", null],
+  // The letter guard, which the symbol-shape rule no longer covers.
+  // Six characters of digits and underscores passes the shape rule, so the
+  // letter guard is what declines it. The five-character version is declined by
+  // the floor instead, which is why it pinned nothing.
+  ["an underscore and digits is not a name", "foo.bar._12345", null],
+  ["the same below the floor", "foo.bar._1234", null],
   // ...and these are the words that used to be rewritten into a thousand-plus
   // unrelated pages: measured, `width` returns 2848 hits topped by release
   // notes, and `code` 2913 - the latter reachable partway through typing the
@@ -358,6 +387,9 @@ const DOTTED = [
   // to three passed every other row.
   ["a three-character tail with a case boundary", "barcode.data.arM", null],
   ["a two-segment name with too short a base", "a.legacy", null],
+  // The base floor is three, pinned from both sides.
+  ["a two-segment base of exactly three", "sdc.legacy", "sdc"],
+  ["a two-segment base of two", "sd.legacy", null],
   ["no dot at all", "codeDuplicateFilter", null],
   ["a phrase containing a dot", "see settings.symbologies for more", null],
   // Needs the whitespace guard specifically: without it this splits into three
@@ -375,6 +407,8 @@ const DOTTED = [
   ["an expression root, with the dot", "this.state.", null],
   ["an expression root, without it", "this.state", null],
   ["another expression root", "window.location", null],
+  // Capitalised: the roots are matched case-folded, and nothing pinned that.
+  ["a capitalised expression root", "This.state", null],
   ["a leading dot", ".symbologies", null],
   ["empty", "", null],
   ["whitespace only", "   ", null],
@@ -397,6 +431,45 @@ check("dottedFallback declines anything that is not a dotted symbol", () => {
   for (const q of ["symbologies", "barcode capture", "matrixscan find", "8.5.3"]) {
     assert.strictEqual(dottedFallback(q), null, q);
   }
+});
+
+/**
+ * The query override has to land where the widget actually put the query.
+ *
+ * DocSearch sends `{ query, indexName, params }` - top level, and `params` has
+ * no `query` key. The guard this replaces tested `typeof params.query ===
+ * "string"`, so it was never true and every override was silently dropped: the
+ * retry sent the identical query and was a duplicate request, and the
+ * routed-token strip never took effect either. Nothing in the suite covered
+ * the request shape, only the predicate that chooses the string - which is
+ * exactly how it reached review.
+ */
+check("applyQueryOverride replaces the query DocSearch actually sends", () => {
+  // The shape from @docsearch/react's searchClient.search call, verbatim.
+  const request = {
+    query: "this.state.settings.codeDuplicateFilter",
+    indexName: "scandit",
+    params: { hitsPerPage: 20, clickAnalytics: true, facetFilters: ["language:en"] },
+  };
+  const out = applyQueryOverride(request, { ...request.params }, "codeDuplicateFilter");
+  assert.strictEqual(out.query, "codeDuplicateFilter", "top-level query");
+  assert.strictEqual(out.params.query, "codeDuplicateFilter", "params.query wins, so it must be set");
+  assert.strictEqual(out.indexName, "scandit", "the rest of the request survives");
+  assert.strictEqual(out.params.hitsPerPage, 20);
+  assert.deepStrictEqual(out.params.facetFilters, ["language:en"]);
+
+  // No override: the request passes through with params swapped in and no
+  // `query` key invented.
+  const untouched = applyQueryOverride(request, { ...request.params, analytics: true }, null);
+  assert.strictEqual(untouched.query, "this.state.settings.codeDuplicateFilter");
+  assert.strictEqual(untouched.params.analytics, true);
+  assert.ok(!("query" in untouched.params), "no query key added when there is no override");
+
+  // A request that IS the params object (the other shape the wrapper accepts).
+  const flat = { query: "x", hitsPerPage: 5 };
+  const flatOut = applyQueryOverride(flat, { ...flat }, "y");
+  assert.strictEqual(flatOut.query, "y");
+  assert.strictEqual(flatOut.hitsPerPage, 5);
 });
 
 console.log(`\n${passed} passed${skipped ? `, ${skipped} skipped` : ""}\n`);
