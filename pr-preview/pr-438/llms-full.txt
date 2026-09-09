@@ -587,15 +587,15 @@ Sets the behavior for how barcodes are listed.
 Only used in `SingleListBuilding` and `ContinuousListBuilding` modes.
 :::
 
-#### `setDisconnectionTimeout(disconnectionTimeout: BarcodeLinkDisconnectionTimeout): BarcodeLink`
+#### `setDisconnectionTimeout(disconnectionTimeout: number): BarcodeLink`
 
 ```ts
-barcodeLink.setDisconnectionTimeout({ minutes: 30 });
+barcodeLink.setDisconnectionTimeout(30 * 60 * 1000);
 ```
 
 Sets how long Barcode Link keeps trying to reconnect after the desktop and the smartphone lose their connection to each other. If the connection is not restored within this window, the session is aborted on both devices.
 
-Defaults to 15 minutes. Values are clamped between 1 and 60 minutes — beyond 60 the session token expires, so reconnecting is no longer possible.
+The value is in milliseconds. It defaults to 15 minutes (`900000`) and is clamped between 1 minute (`60000`) and 60 minutes (`3600000`).
 
 #### `setPlatform(platform: BarcodeLinkPlatform): BarcodeLink`
 
