@@ -43,16 +43,35 @@
   border-color: var(--ifm-color-primary);
 }
 
+/* Tip and warning admonitions are the site's positive/negative pair, so these
+   two buttons take their exact recipe from doc-admonition.scss: a helpful vote
+   is the same green as a tip callout, an unhelpful one the same yellow as a
+   warning. */
 .on {
-  border-color: var(--ifm-color-success);
-  background: var(--ifm-color-success-contrast-background);
-  color: var(--ifm-color-success-contrast-foreground);
+  border-color: var(--light-green-60);
+  background: var(--light-green-40);
+  color: var(--light-green-100);
 }
 
+/* Warning admonitions leave the label at the base color in light and override
+   it only for dark, so this does the same rather than tinting on its own. */
 .bad {
-  border-color: var(--ifm-color-warning);
-  background: var(--ifm-color-warning-contrast-background);
-  color: var(--ifm-color-warning-contrast-foreground);
+  border-color: var(--light-yellow-80);
+  background: var(--light-yellow-40);
+}
+
+/* The yellow ramp redefines itself for the dark theme (see custom.scss); the
+   green ramp does not, so both are restated here, as doc-admonition.scss does. */
+html[data-theme='dark'] .on {
+  border-color: var(--dark-green-80);
+  background: var(--dark-green-100);
+  color: var(--dark-green-60);
+}
+
+html[data-theme='dark'] .bad {
+  border-color: var(--dark-brown-60);
+  background: var(--dark-brown-80);
+  color: var(--dark-brown-40);
 }
 
 .more {
@@ -143,11 +162,19 @@
 }
 
 .vote[aria-disabled='true'].on:hover {
-  border-color: var(--ifm-color-success);
+  border-color: var(--light-green-60);
 }
 
 .vote[aria-disabled='true'].bad:hover {
-  border-color: var(--ifm-color-warning);
+  border-color: var(--light-yellow-80);
+}
+
+html[data-theme='dark'] .vote[aria-disabled='true'].on:hover {
+  border-color: var(--dark-green-80);
+}
+
+html[data-theme='dark'] .vote[aria-disabled='true'].bad:hover {
+  border-color: var(--dark-brown-60);
 }
 
 .thanks:focus-visible {
@@ -178,11 +205,17 @@
 .failed {
   margin: 0 0 0.6rem;
   font-size: 0.85rem;
-  color: var(--ifm-color-warning-contrast-foreground);
-  background: var(--ifm-color-warning-contrast-background);
-  border: 1px solid var(--ifm-color-warning);
+  background: var(--light-yellow-40);
+  border: 1px solid var(--light-yellow-80);
   border-radius: 8px;
   padding: 0.5rem 0.65rem;
+}
+
+/* Same recipe as DesignLibraryNotice and the warning admonition it follows. */
+html[data-theme='dark'] .failed {
+  background: var(--dark-brown-80);
+  border-color: var(--dark-brown-60);
+  color: var(--dark-brown-40);
 }
 
 .failed:focus-visible {
