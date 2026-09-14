@@ -17,13 +17,7 @@ The AIO components internalize much of the complex logic in the classic componen
 
 Every classic API still works exactly as it did, and existing screens keep running untouched. This page explains what the AIO components do for you, which API to reach for, and how to migrate a screen.
 
-<!-- TODO(SDC-33129): link the getting-started guide once it is published. The page is
-     docs/sdks/react-native/aio/get-started.md, so the link becomes:
-     [Get Started](/sdks/react-native/aio/get-started)
-     It is a comment rather than a live link because onBrokenLinks is "throw" for
-     production builds, so linking an unpublished page fails CI. -->
-
-If you are starting a new app, begin with the AIO components getting-started guide. For installing the SDK and setting your license key, see [Installation](/sdks/react-native/add-sdk).
+If you are starting a new app, begin with [Get Started](/sdks/react-native/aio/get-started). For installing the SDK and setting your license key, see [Installation](/sdks/react-native/add-sdk).
 
 ## The classic API comes in two shapes
 
