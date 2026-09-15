@@ -193,6 +193,25 @@ function Inner({ url, title }: PageFeedbackProps) {
     const text = comment.trim();
     if (!text) return;
     // Flush the held vote first, so the pair arrives in the right order.
+    //
+    // Keep this UNCONDITIONAL and keep it here. It is what stops a comment
+    // arriving with no vote behind it: the poll above gives up after
+    // RETRY_LIMIT * RETRY_MS and both pagehide and unmount can be missed, so a
+    // reader who idles past that and only then writes can otherwise lose the
+    // vote while the comment lands. Reporting takes vote counts from
+    // `docs_page_feedback` alone, so that reader would leave a comment and no
+    // countable vote, with nothing failing visibly. Gating this on the comment
+    // succeeding, or dropping it because the poll "already covers it", is the
+    // edit that reopens the gap.
+    //
+    // The ORDER of these two is not what protects that - it only keeps the
+    // pair in sequence. Both go through the same helper, and three of its four
+    // exits - no window, no capture function, opted out - are shared state read
+    // synchronously one line apart, so swapping them cannot change whether the
+    // VOTE is accepted. The fourth is a throw, which drops both when its cause
+    // is the call itself; it cannot drop the vote ALONE, because the vote's
+    // properties are a subset of the comment's. Accepted, not received:
+    // capturePostHogEvent returns true once PostHog takes the event.
     if (heldVote.current !== null) sendVote(heldVote.current);
     const delivered = capturePostHogEvent('docs_page_feedback_comment', {
       ...base(),
