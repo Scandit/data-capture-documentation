@@ -118,9 +118,18 @@ Seven capture modes have an AIO component in 8.7:
 | [Barcode Count](/sdks/react-native/matrixscan-count/intro) | `BarcodeCountView` | `BarcodeCountAioView` |
 | [Barcode AR](/sdks/react-native/matrixscan-ar/intro) | `BarcodeArView` | `BarcodeArAioView` |
 
-<!-- TODO(SDC-33130): link each AIO component in the third column to its RST API
-     reference once those pages are published. They do not exist yet, and
-     onBrokenLinks is "throw", so linking them now fails the build. -->
+<!-- TODO(SDC-33130): link each AIO component in the third column to its API
+     reference, for example
+     https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-capture-aio-view.html
+
+     Blocked, checked 2026-09-15: the seven *-aio-view.rst sources exist on
+     data-capture-sdk `develop` but not on `release/8.7`, and all seven pages
+     404 on docs.scandit.com. Unblocks when the AIO RST reaches the release
+     branch the API reference is built from.
+
+     These are absolute URLs, which Docusaurus does NOT validate, so adding
+     them early keeps the build green and ships dead links instead. Re-run the
+     404 check before removing this comment. -->
 
 :::note[Each view exposes what its mode has]
 An AIO view's props mirror its mode's own API. Barcode Capture, Barcode Batch, ID Capture and Label Capture have overlay objects in the SDK, so their views take `*Overlay` props. SparkScan, Barcode Count and Barcode AR have no overlay, so their visual properties—brushes, providers, view settings—sit directly on the view, exactly as on the classic components.
