@@ -10,7 +10,7 @@ Symbologies often have different properties, such as symbol count (length of the
 ## 1D Symbology Properties
 
 * Color-inverted (bright bars on dark background) decoding for symbologies that support it is disabled and must be explicitly enabled.
-* Optional checksum digits (e.g. for interleaved 2 of 5 codes, or MSI-Plessey codes) are always returned as part of the data.
+* Optional checksum digits (for example, in interleaved 2 of 5 or MSI-Plessey codes) are always returned as part of the data.
 
 | Symbology | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Checksum&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  | Symbol Count | Supports Color-Inversion | Extensions    |
 |-----------|:-----------|--------------|:------------------------:|---------------|

@@ -6,9 +6,11 @@ name: Docs Quality Gate
 # never block it.
 #
 # The ratchet is FILE-scoped, not line-scoped: editing any part of a page means
-# the WHOLE page must pass. Measured on this branch, docs/ carries 177 Vale
-# errors across 79 files, so a one-word edit to a legacy page can surface that
-# page's entire backlog. That is deliberate - it is what stops the debt growing
+# the WHOLE page must pass. docs/ carries on the order of 180 Vale errors
+# spread over roughly 85 files, so a one-word edit to a legacy page can surface
+# that page's entire backlog. Re-measure with `vale docs` rather than trusting
+# that figure: it moves whenever main brings in pages, as the 8.6 release did
+# to this branch. That is deliberate - it is what stops the debt growing
 # - but it is the gate's most surprising behaviour, so budget for it when
 # touching an old page.
 #
@@ -79,7 +81,7 @@ jobs:
           # NOTE this pins the Vale BINARY only. `.vale.ini` requests the Google
           # package by bare name, .gitignore excludes styles/Google/, and
           # `docs:gate:setup` runs `vale sync`, so the Google rules are whatever
-          # the registry serves at job time - and Google supplies 159 of the 177
+          # the registry serves at job time - and Google supplies the large majority of
           # corpus errors. A Google release that adds or tightens a rule can
           # therefore turn this gate red with no change in the repo. Pin the
           # package too (a release URL in `Packages`) if that ever bites.

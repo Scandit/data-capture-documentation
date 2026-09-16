@@ -51,10 +51,11 @@ nonword: true
 #
 # Deliberately not widened. Each of these was tried and reverted: `[A-Za-z]+`
 # on the left (to catch "Enable the SDK.It requires") flags dotted names like
-# Region.Colombia and BarcodeCapture.Enabled; a closing class wider than
-# whitespace flags "use region.Colombia, then" and "set it in info.Plist;
-# then"; `[A-Z][a-z]*` (to catch "the device.A key is needed") flags any dotted
-# name whose last segment is capitalised. Widen it only with a fresh
+# Region.Colombia and BarcodeCapture.Enabled wherever whitespace follows them;
+# a closing class wider than whitespace flags "use region.Colombia, then" and
+# "set it in info.Plist; then"; `[A-Z][a-z]*` (to catch "the device.A key is
+# needed") additionally flags a dotted name whose last segment is a single
+# capital, such as matrix.T. Widen it only with a fresh
 # measurement in hand - earlier revisions of this comment quoted counts taken
 # against other token shapes, and none of them reproduced.
 tokens:
