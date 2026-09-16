@@ -55,14 +55,16 @@ function changedDocs() {
   // out of the schema and link checks, which is where they genuinely cannot
   // be handled.
   //
-  // The cost, measured: 50 Vale errors across 18 partials become
-  // gate-blocking, concentrated in _migrate-5-to-6.mdx (14),
-  // _ai-powered-barcode-scanning.mdx (6) and _migrate-6-to-7.mdx (5). With
-  // the file-scoped ratchet that means a one-word edit to a partial forces
-  // clearing that partial's whole backlog - the same surprise the workflow
-  // header documents for pages, and partials are imported by many pages
-  // each. _barcode-scanning.mdx is 288 lines that nothing imports today and
-  // is kept deliberately, so it is gate-blocking like any other partial.
+  // The backlog this exposed - 50 Vale errors across 18 partials, 14 of them
+  // in _migrate-5-to-6.mdx - was cleared in the same PR, so partials
+  // enter the gate at zero and `vale docs/partials` should stay there. That
+  // matters because of the file-scoped ratchet: a one-word edit to a partial
+  // forces clearing that partial's whole backlog, the same surprise the
+  // workflow header documents for pages, except partials are imported by
+  // many pages each. Letting errors accumulate here is therefore more
+  // expensive than on an ordinary page. _barcode-scanning.mdx is 288 lines
+  // that nothing imports today and is kept deliberately, so it is
+  // gate-blocking like any other partial.
   return files.filter(
     (f) => /\.(md|mdx)$/i.test(f) && fs.existsSync(path.join(ROOT, f))
   );

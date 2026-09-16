@@ -108,7 +108,7 @@ This section provides links to the relevant sections of the documentation for po
 
 ## Updating Configuration
 
-To update the configuration of Scandit Express on all devices, simply change the configuration in the Scandit Dashboard. The new configuration will be automatically distributed to all devices.
+To update the configuration of Scandit Express on all devices, change the configuration in the Scandit Dashboard. The new configuration will be automatically distributed to all devices.
 
 Scandit Express automatically updates the license and configuration when restarted, but if you need to force a reload:
 
