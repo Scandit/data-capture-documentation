@@ -15,11 +15,16 @@ name: Docs Quality Gate
 # Two things are outside the gate's reach, by construction rather than by
 # accident:
 #
-#   - versioned_docs/. The gate diffs `-- docs` only, so the 1,585 files under
-#     versioned_docs/ are never linted - including the tree that
-#     docusaurus.config.ts serves at the site root via lastVersion. A defect
-#     fixed in docs/ therefore stays live for readers until the next version
-#     snapshot is cut, and has to be fixed in the snapshot by hand.
+#   - versioned_docs/. The gate diffs `-- docs` only, so nothing under
+#     versioned_docs/ is ever linted. How much that costs depends on where
+#     docusaurus.config.ts points lastVersion, so read it rather than assuming
+#     either state. While lastVersion is "current" - as it is today, the 8.6
+#     release having retired the 8.5.3 snapshot - docs/ is what the site root
+#     serves, and a fix there is live immediately; the snapshots only serve
+#     their own older URLs. While it is pinned to a snapshot, as during a beta
+#     cycle, that snapshot is what the root serves, so a defect fixed in docs/
+#     stays live for readers until the next snapshot is cut and has to be
+#     fixed in the snapshot by hand.
 #   - prose inside ::: admonitions, which .vale.ini's BlockIgnores blanks
 #     wholesale. Measured: linting the block bodies adds 41 corpus findings and
 #     17 in a branch the size of this one, as Google.Units +16,
