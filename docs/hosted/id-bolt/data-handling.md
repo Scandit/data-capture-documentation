@@ -106,7 +106,7 @@ Each `AnonymizedFieldEntry` specifies a document type and the fields to anonymiz
 
 | Property   | Type                | Description                                                                                     | Since |
 | ---------- | ------------------- | ----------------------------------------------------------------------------------------------- | ----- |
-| `document` | `IdCaptureDocument` | The document type this entry applies to (e.g. `new Passport(Region.Any)`, `new IdCard("USA")`). | 2.2   |
+| `document` | `IdCaptureDocument` | The document type this entry applies to (for example, `new Passport(Region.Any)`, `new IdCard("USA")`). | 2.2   |
 | `fields`   | `IdFieldType[]`     | The fields to anonymize for this document type.                                                 | 2.2   |
 
 ### Available Field Types
@@ -147,4 +147,4 @@ The `IdFieldType` enum defines the fields that can be anonymized:
 
 ### Result
 
-The `CapturedId` object returned in the `onCompletion` callback includes an `anonymizedFields` property — an array of `IdFieldType` values indicating which fields were actually anonymized for the scanned document.
+The `CapturedId` object returned in the `onCompletion` callback includes an `anonymizedFields` property—an array of `IdFieldType` values indicating which fields were actually anonymized for the scanned document.

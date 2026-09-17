@@ -1,0 +1,63 @@
+extends: existence
+message: "'%s' needs one space after the sentence punctuation - unless it is a code identifier, which belongs in backticks."
+link: 'https://developers.google.com/style/sentence-spacing'
+level: error
+nonword: true
+# Replaces Google.Spacing, which is disabled in .vale.ini.
+#
+# Google's version matches `[a-z][.?!][A-Z]` anywhere, which in API
+# documentation is usually a dotted code identifier rather than a sentence
+# boundary. To compare the two on the tree in front of you, set
+# `Google.Spacing = YES` in .vale.ini and re-run: it lands on things like
+# SymbologySettings.Checksums and Scandit.DataCapture.Core.Maui, each of which
+# it would "fix" by inserting a space into a symbol name.
+#
+# No `action`. Google's version carries `action: {name: remove}`, which deletes
+# the whole matched span - turning "on a smart device.It requires" into "on a
+# smart devict requires", corruption quiet enough to miss in review. An alert
+# with no one-click fix beats a one-click corruption.
+#
+# The two tokens are not symmetrical, because the risk is not.
+#
+# TOKEN 1, two or more spaces. Google's shape verbatim. No dotted identifier
+# contains two consecutive spaces, so the identifier problem cannot arise here
+# and narrowing it would only lose real findings. It does still miss a
+# following word that begins lowercase ("scanned.  iOS devices"), which would
+# need its own rule.
+#
+# TOKEN 2, no space at all. Here the identifier problem is the whole
+# difficulty, so the boundary is positional: a whole lowercase word, the
+# punctuation, one capitalised word, then whitespace or end of line.
+#
+# Its trailing boundary is a LOOKAHEAD and has to stay one. A consuming
+# `(?:\s|$)` eats the delimiter the next match needs, so a line carrying two
+# violations reports only the first - "Two in a row: alpha.Beta gamma.Delta
+# end." yields a single alert, and an author who fixes it and re-pushes can
+# merge the second. A bare `\b` reports both but also flags an identifier
+# followed by punctuation ("use region.Colombia, then"), which is exactly what
+# the whitespace boundary exists to avoid.
+#
+# KNOWN LIMIT, and the reason the message reads as it does: token 2 is
+# narrower than Google's, not immune to the same mistake. It flags a member
+# access whose member is a single capitalised word - "Configure
+# settings.Checksums for this." is reported. Internal capitals protect
+# SetFrameSourceAsync and a leading capital protects Region.Colombia, but
+# nothing protects settings.Checksums. This rule is `level: error` and the gate
+# blocks on errors, so the message names both remedies rather than only the
+# space: unqualified, it would walk an author straight into
+# `settings. Checksums`. Backticking identifiers in prose avoids the alert
+# entirely, and that convention - not this regex - is what keeps corpus
+# exposure at zero. Nothing here enforces it.
+#
+# Deliberately not widened. Each of these was tried and reverted: `[A-Za-z]+`
+# on the left (to catch "Enable the SDK.It requires") flags dotted names like
+# Region.Colombia and BarcodeCapture.Enabled wherever whitespace follows them;
+# a closing class wider than whitespace flags "use region.Colombia, then" and
+# "set it in info.Plist; then"; `[A-Z][a-z]*` (to catch "the device.A key is
+# needed") additionally flags a dotted name whose last segment is a single
+# capital, such as matrix.T. Widen it only with a fresh
+# measurement in hand - earlier revisions of this comment quoted counts taken
+# against other token shapes, and none of them reproduced.
+tokens:
+  - '[a-z][.?!] {2,}[A-Z]'
+  - '(?:^|\s)[a-z]+[.?!][A-Z][a-z]+(?=\s|$)'

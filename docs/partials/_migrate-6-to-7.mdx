@@ -73,7 +73,7 @@ Version 7.0 introduces new naming conventions for the MatrixScan APIs that bette
 
 #### BarcodeTracking
 
-The `BarcodeTracking` API has been renamed to `BarcodeBatch`. Apart from the name change, the API remains largely the same and simply requires updating the class name in your code for migration.
+The `BarcodeTracking` API has been renamed to `BarcodeBatch`. Apart from the name change, the API remains largely the same and requires updating the class name in your code for migration.
 
 :::warning
 If your application uses of any `BarcodeTracking` APIs alongside another product (e.g. MatrixScan Count), you must update any mentions to conform with this naming change.
@@ -91,7 +91,7 @@ Version 7.0 introduces a completely redesigned ID Capture and Validation API. Th
 
 ### Document Selection
 
-Using the new ID Capture API, you can now select the document type(s) you want to capture or exclude based on geographic regions, along with the sections of the document(s) to be captured. This allows you to create a more tailored and efficient ID capture experience for your users.
+Using the new ID Capture API, you can now select the document types you want to capture or exclude based on geographic regions, along with the sections of the documents to be captured. This allows you to create a more tailored and efficient ID capture experience for your users.
 
 The tables below indicate the corresponding API and configurations for the previous ID Capture API in version 6.x and the new ID Capture API in version 7.0.
 
@@ -106,7 +106,7 @@ Previously you would need to configure the `supportedSides` for your desired doc
 
 #### Document Type Selection
 
-Previously there were separate document types based upon the zone(s) you wanted to capture, for example the VIZ zone or the MRZ zone. In version 7.0, this is simplified into a configuration of your scanner type based upon ending suffix in your previous configuration:
+Previously there were separate document types based upon the zones you wanted to capture, for example the VIZ zone or the MRZ zone. In version 7.0, this is simplified into a configuration of your scanner type based upon ending suffix in your previous configuration:
 
 | Version 6.x | Version 7.0 |
 |---|---|
@@ -121,7 +121,7 @@ If you need to scan certain documents in full, and others only a specific zone, 
 
 #### Document Category Selection
 
-Where previously there were separate document types for a given region and ID type (e.g. Colombia Driver's License, and Colombia ID), in version 7.0 you can select the document category and region to capture (or exclude).
+Where previously there were separate document types for a given region and ID type (for example, Colombia Driver's License, and Colombia ID), in version 7.0 you can select the document category and region to capture (or exclude).
 
 See [ID Capture Document](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-document.html#id-capture-document) for more information on **acceptedDocuments**.
 

@@ -23,7 +23,7 @@ There are three types of input data you must configure:
 
 ## Standard Input
 
-Standard inputs are fixed values or predefined fields. They are useful when you need to always attach the same kind of information (e.g., device ID, operator ID).
+Standard inputs are fixed values or predefined fields. They are useful when you need to always attach the same kind of information (for example, device ID, operator ID).
 
 | Field | Description |
 |-------|-------------|

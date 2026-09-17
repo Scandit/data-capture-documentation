@@ -14,7 +14,7 @@ The AI-powered features address four critical scanning challenges:
 
 4. **Filtering duplicates** – Distinguish intentional duplicate scans from accidental re-scans
 
-These capabilities work together seamlessly and are **enabled by default** in SDK 8.1+. In most cases, no additional configuration is required.
+These capabilities work together and are **enabled by default** in SDK 8.1+. In most cases, no additional configuration is required.
 
 ## Avoiding Unintentional Scans
 
@@ -57,7 +57,7 @@ In environments with multiple barcodes placed closely together, such as densely 
 
 The scanner **automatically detects dense barcode environments** and adapts its behavior and user interface accordingly.
 
-The interface transitions seamlessly based on environmental context:
+The interface transitions based on environmental context:
 
 * **Sparse environments**: Direct scanning with intent anticipation (no aimer needed)
 
@@ -97,7 +97,7 @@ This interrupts the scanning workflow, slows down operations, and introduces opp
 Scandit's barcode scanning engine already employs **advanced computer vision techniques** at the frontier of the industry to decode damaged, low-contrast, poorly printed, and partially obscured barcodes with exceptional reliability. The engine uses sophisticated image processing, error correction algorithms, and pattern reconstruction to successfully read barcodes that other scanners cannot.
 However, when the barcode's encoded information is physically lost or damaged beyond reconstruction, such as when critical sections are torn away, burned, or chemically degraded, our text recognition technology helps to get the data. 
 
-The transition is automatic and requires no user intervention. From the user's perspective, they simply point at a damaged label and get the data, whether through barcode decoding or OCR.
+The transition is automatic and requires no user intervention. From the user's perspective, they point at a damaged label and get the data, whether through barcode decoding or OCR.
 
 **Key benefits:**
 
@@ -118,13 +118,13 @@ Support and configuration details vary by symbology and may evolve over time. Fo
 
 ### The Problem
 
-Traditional duplicate filters use **time-based blocking**: after scanning a barcode, the same code cannot be scanned again for a fixed duration (e.g., 1.5 seconds). This approach creates two significant problems:
+Traditional duplicate filters use **time-based blocking**: after scanning a barcode, the same code cannot be scanned again for a fixed duration (for example, 1.5 seconds). This approach creates two significant problems:
 
-1. **Workflow delays** – When intentionally scanning duplicate items (e.g., multiple boxes or items with the same barcode during inventory), users must wait for the timeout to expire between each scan. This artificial delay slows down operations.
+1. **Workflow delays** – When intentionally scanning duplicate items (for example, multiple boxes or items with the same barcode during inventory), users must wait for the timeout to expire between each scan. This artificial delay slows down operations.
 
 2. **Accidental re-scans** – When dwelling on a barcode or moving slowly, the timeout expires and the same code is accidentally captured multiple times. Users must then clean up their scan list by identifying and removing duplicate entries.
 
-Both scenarios reduce efficiency and create friction in scanning workflows. Time-based filters cannot distinguish between intentional and accidental duplicates, they simply impose a fixed delay regardless of user intent.
+Both scenarios reduce efficiency and create friction in scanning workflows. Time-based filters cannot distinguish between intentional and accidental duplicates, they impose a fixed delay regardless of user intent.
 
 ### How Scandit Solves It
 
