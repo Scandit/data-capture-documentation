@@ -131,6 +131,16 @@ Sets the behavior for how barcodes are listed.
 Only used in `SingleListBuilding` and `ContinuousListBuilding` modes.
 :::
 
+#### `setDisconnectionTimeout(disconnectionTimeout: number): BarcodeLink`
+
+```ts
+barcodeLink.setDisconnectionTimeout(30 * 60 * 1000);
+```
+
+Sets how long Barcode Link keeps trying to reconnect after the desktop and the smartphone lose their connection to each other. If the connection is not restored within this window, the session is aborted on both devices.
+
+The value is in milliseconds. It defaults to 15 minutes (`900000`) and is clamped between 1 minute (`60000`) and 60 minutes (`3600000`).
+
 #### `setPlatform(platform: BarcodeLinkPlatform): BarcodeLink`
 
 ```ts
@@ -230,7 +240,7 @@ barcodeLink.addListener({
 });
 ```
 
-Tracks connection state changes. Only available in `BarcodeLinkUilessFlow`.
+Tracks connection state changes. Only available in `BarcodeLinkHeadlessFlow`.
 
 **Available connection states:**
 
@@ -267,7 +277,7 @@ Initializes Barcode Link using a specific flow.
 - Initializes with a pre-built UI.
 - Shows a QR code for smartphone connection.
 
-##### `BarcodeLinkUilessFlow`
+##### `BarcodeLinkHeadlessFlow`
 
 - Initializes a headless session.
 - Requires custom UI.
@@ -276,7 +286,7 @@ Initializes Barcode Link using a specific flow.
 Example:
 
 ```ts
-const qrcode = await barcodeLink.initialize(new BarcodeLinkUilessFlow());
+const qrcode = await barcodeLink.initialize(new BarcodeLinkHeadlessFlow());
 
 const img = document.createElement("img");
 img.src = qrcode.src;
