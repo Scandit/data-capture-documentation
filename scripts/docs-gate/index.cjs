@@ -64,8 +64,27 @@ function changedDocs() {
   try { out += "\n" + sh("git diff --cached --name-only --diff-filter=ACMR -- docs"); } catch {}
   try { out += "\n" + sh("git ls-files --others --exclude-standard -- docs"); } catch {}
   const files = [...new Set(out.split(/\r?\n/).filter(Boolean))];
+  // No `_`-prefixed exclusion here, deliberately. Partials were being kept
+  // out of Vale and cspell by this FILE LIST, and they are prose:
+  // docs/partials/_symbology-properties.mdx alone renders into 12 published
+  // pages, and one of the findings that justified styles/Scandit/Spacing.yml
+  // was in it - so that rule's own evidence could never have been enforced.
+  // The prose checks now see every changed doc; pagesOnly() below keeps them
+  // out of the schema and link checks, which is where they genuinely cannot
+  // be handled.
+  //
+  // The backlog this exposed - 50 Vale errors across 18 partials, 14 of them
+  // in _migrate-5-to-6.mdx - was cleared in the same PR, so partials
+  // enter the gate at zero and `vale docs/partials` should stay there. That
+  // matters because of the file-scoped ratchet: a one-word edit to a partial
+  // forces clearing that partial's whole backlog, the same surprise the
+  // workflow header documents for pages, except partials are imported by
+  // many pages each. Letting errors accumulate here is therefore more
+  // expensive than on an ordinary page. _barcode-scanning.mdx is 288 lines
+  // that nothing imports today and is kept deliberately, so it is
+  // gate-blocking like any other partial.
   return files.filter(
-    (f) => /\.(md|mdx)$/i.test(f) && !path.basename(f).startsWith("_") && fs.existsSync(path.join(ROOT, f))
+    (f) => /\.(md|mdx)$/i.test(f) && fs.existsSync(path.join(ROOT, f))
   );
 }
 

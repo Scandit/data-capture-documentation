@@ -2,8 +2,41 @@ name: Docs Quality Gate
 
 # Runs the docs quality gate (Vale/Google style, cspell, frontmatter schema,
 # link check) on every PR. The gate ratchets to the docs CHANGED in the PR
-# (git merge-base origin/main HEAD), so it never blocks on pre-existing legacy
-# pages — only new or modified docs must pass.
+# (git merge-base against the PR's target branch), so untouched legacy pages
+# never block it.
+#
+# The ratchet is FILE-scoped, not line-scoped: editing any part of a page means
+# the WHOLE page must pass. docs/ still carries a large Vale backlog spread
+# over many legacy pages, so a one-word edit to one of them can surface that
+# page's entire share of it. Run `vale docs` for the count; do not trust a
+# figure quoted here or anywhere else, because it moves both when main brings
+# in pages and when a cleanup lands, and this branch did both.
+#
+# That is deliberate - it is what stops the debt growing - but it is the
+# gate's most surprising behaviour, so budget for it when touching an old
+# page.
+#
+# Two things are outside the gate's reach, by construction rather than by
+# accident:
+#
+#   - versioned_docs/. The gate diffs `-- docs` only, so nothing under
+#     versioned_docs/ is ever linted. How much that costs depends on where
+#     docusaurus.config.ts points lastVersion, so read it rather than assuming
+#     either state. While lastVersion is "current" - as it is today, the 8.6
+#     release having retired the 8.5.3 snapshot - docs/ is what the site root
+#     serves, and a fix there is live immediately; the snapshots only serve
+#     their own older URLs. While it is pinned to a snapshot, as during a beta
+#     cycle, that snapshot is what the root serves, so a defect fixed in docs/
+#     stays live for readers until the next snapshot is cut and has to be
+#     fixed in the snapshot by hand.
+#   - prose inside ::: admonitions, which .vale.ini's BlockIgnores blanks
+#     wholesale. Linting the block bodies adds 41 findings across docs/, as
+#     Google.Units +16, Google.EmDash +13, Google.Latin +11 and
+#     Google.Quotes +1, Units the largest single bucket. Worth doing, but
+#     as its own change. How many land in scope depends entirely on which
+#     files a branch touches, so measure it for yours rather than reusing a
+#     figure: an earlier count here said 17, taken before partials entered
+#     the file list, and partials hide admonition findings of their own.
 
 on:
   pull_request:
@@ -39,9 +72,11 @@ jobs:
       - name: Install Vale (pinned)
         run: |
           # The version the rules in styles/Scandit/ and the frontmatter cap in
-          # scripts/docs-gate were both measured against. The cap rests on Vale
-          # attributing a `description` alert to its true file line, and a local
-          # pass on one version proves nothing about another.
+          # scripts/docs-gate were both measured against. Both encode behaviour
+          # that is version-specific, down to which regex constructs the token
+          # engine honours, and the cap additionally rests on Vale attributing a
+          # `description` alert to its true file line. A local pass on one
+          # version proves nothing about another.
           #
           # CI only. scripts/setup-vale.cjs does not install Vale at all - it
           # checks for it, prints winget/brew guidance if it is missing, and
@@ -52,7 +87,7 @@ jobs:
           # NOTE this pins the Vale BINARY only. `.vale.ini` requests the Google
           # package by bare name, .gitignore excludes styles/Google/, and
           # `docs:gate:setup` runs `vale sync`, so the Google rules are whatever
-          # the registry serves at job time - and Google supplies 159 of the 177
+          # the registry serves at job time - and Google supplies the large majority of
           # corpus errors. A Google release that adds or tightens a rule can
           # therefore turn this gate red with no change in the repo. Pin the
           # package too (a release URL in `Packages`) if that ever bites.

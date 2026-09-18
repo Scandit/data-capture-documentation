@@ -12,18 +12,18 @@ title: 'Barcode Scanning'
 
 Scandit Smart Data Capture is a powerful suite of solutions designed to enable mobile devices to capture and process a wide range of barcodes and other types of data, including ID scanning and validation. You can use Smart Data Capture to easily build high-performance data capture applications that leverage the latest advancements in computer vision and machine learning.
 
-Add barcode scanning to any application, using either the pre-built UI components and fully-customizable APIs of the Scandit Barcode Scanner SDK, or the Scandit Express application.
+Add barcode scanning to any application, using either the pre-built UI components and fully customizable APIs of the Scandit Barcode Scanner SDK, or the Scandit Express application.
 
 ## Feature Comparison
 
-The table below provides an overview of the features and capabilities, and the use cases, available for the pre-built UI components and the fully-customizable APIs:
+The table below provides an overview of the features and capabilities, and the use cases, available for the pre-built UI components and the fully customizable APIs:
 
 <table>
   <thead>
     <tr>
       <th></th>
       <th colSpan="4">Prebuilt Barcode Scanning Components</th>
-      <th colSpan="2">Fully-Customizable APIs</th>
+      <th colSpan="2">Fully Customizable APIs</th>
     </tr>
   </thead>
   <tbody>
@@ -219,7 +219,7 @@ Barcode Selection is a mode that enables you to quickly and easily scan multiple
 </CustomDocCardsWrapper>
 
 
-## Fully-customizable APIs
+## Fully customizable APIs
 
 The Scandit Barcode Scanner SDK provides a comprehensive set of APIs that enable you to fully customize the barcode scanning experience in your mobile application. These include:
 
@@ -259,7 +259,7 @@ Barcode Capture is a mode that enables you to quickly and easily scan and captur
 
 ### MatrixScan
 
-MatrixScanis a mode that enables you to quickly and easily scan multiple barcodes at the same time and overlay scan feedback on top of the camera view.
+MatrixScan is a mode that enables you to quickly and easily scan multiple barcodes at the same time and overlay scan feedback on top of the camera view.
 
 <CustomDocCardsWrapper>
 
@@ -291,7 +291,7 @@ MatrixScanis a mode that enables you to quickly and easily scan multiple barcode
 
 ## Scandit Express
 
-Scandit Express is an application that enables you to instantly add barcode scanning to any existing app or software tool on a smart device.It requires no software changes or coding effort, and is compatible with any app or system, even those that cannot be modified.
+Scandit Express is an application that enables you to instantly add barcode scanning to any existing app or software tool on a smart device. It requires no software changes or coding effort, and is compatible with any app or system, even those that cannot be modified.
 
 <CustomDocCardsWrapper>
 
