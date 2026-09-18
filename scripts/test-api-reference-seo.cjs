@@ -28,6 +28,7 @@ const path = require("path");
 const {
   spreadAcrossLines,
   borrowedPicks,
+  frameworkOf,
   attr,
   headOf,
   canonicalOf,
@@ -444,6 +445,60 @@ check("borrowedPicks spreads the rest instead of taking four neighbours", () => 
     ["android", "ios", "web"],
     "picks must not all come from the alphabetically first framework",
   );
+});
+
+check("borrowedPicks spreads frameworks even WITH seeded probes", () => {
+  // The case CI actually runs, and the one the old test missed: it pinned the
+  // spread only for `seeded: 0`. With a discovery artefact present, seeded is 3
+  // and want is 4, so the single free slot was `sample(rest, 1)` - which is
+  // `sorted[0]`, the alphabetically first entry, i.e. android again. Measured on
+  // the real build, every frozen line was checked on android, capacitor and
+  // cordova and nothing else, while a frozen line reached through --lines is
+  // checked ONLY this way. A generator shipping noindex for android but not ios
+  // got a clean OK.
+  const pool = [
+    "android/seed.html",
+    "capacitor/seed.html",
+    "cordova/seed.html",
+    ...many(30, "android/"),
+    ...many(30, "ios/"),
+    ...many(30, "web/"),
+  ];
+  const picks = borrowedPicks({ paths: pool, seeded: 3, line: "8.5" }, 6);
+  assert.strictEqual(picks.length, 6);
+  const frameworks = new Set(picks.map(frameworkOf));
+  assert.ok(
+    frameworks.has("ios") && frameworks.has("web"),
+    `the free slots must reach frameworks the seeds do not cover, got ${[...frameworks].join(" ")}`,
+  );
+});
+
+check("borrowedPicks gives different lines different frameworks", () => {
+  // Every --lines target borrows the SAME pool, so without a per-line spin all
+  // the discovered lines spent their free slots on whichever framework sorts
+  // first - three lines, one framework's worth of extra coverage between them.
+  const pool = [
+    "android/seed.html",
+    ...many(20, "flutter/"),
+    ...many(20, "ios/"),
+    ...many(20, "web/"),
+  ];
+  const at = (line) => borrowedPicks({ paths: pool, seeded: 1, line }, 2).map(frameworkOf);
+  const a = at("8.3");
+  const b = at("8.4");
+  const c = at("8.5");
+  assert.ok(
+    new Set([a[1], b[1], c[1]]).size > 1,
+    `three lines must not all pick the same framework: ${a[1]} ${b[1]} ${c[1]}`,
+  );
+  // ...and still deterministic, which the whole sampling design rests on.
+  assert.deepStrictEqual(at("8.3"), a, "the same line must pick the same pages");
+});
+
+check("frameworkOf reads the first path segment", () => {
+  assert.strictEqual(frameworkOf("ios/core/api/camera.html"), "ios");
+  assert.strictEqual(frameworkOf("dotnet.android/x.html"), "dotnet.android");
+  assert.strictEqual(frameworkOf("loose.html"), "loose.html");
 });
 
 check("borrowedPicks never returns more than asked, even when all seeded", () => {

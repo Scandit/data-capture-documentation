@@ -147,6 +147,12 @@ const MINOR_CEILING_FLOOR = 28;
  * stops: not asked is not absence.
  */
 const DEADLINE_MS = 4 * 60 * 1000;
+// startedAt is reset just before the sweep, for the reason the gate documents
+// at its own budget: captured at module load it is consumed by process startup,
+// argv validation and the recursive link walk over the whole build before the
+// first probe goes out. Small today - the walk is sub-second - but it is the
+// deadline for the SWEEP, and the two scripts are not allowed to disagree about
+// how their own accounting works.
 const budget = { spent: 0, startedAt: Date.now() };
 
 const argv = process.argv.slice(2);
@@ -253,6 +259,9 @@ async function main() {
   // Probe paths, confirmed on the unversioned tree before use.
   // The candidate list is shared with the gate, so the two cannot pick disjoint
   // sets and then disagree about whether a line was verifiable.
+  // The deadline covers the live sweep, which is the part that can run away.
+  budget.startedAt = Date.now();
+
   const probes = [];
   for (const rest of probeCandidates(byLine, WANT_PROBES * 3)) {
     // A 3xx that keeps the symbol path counts as confirmation. The question here

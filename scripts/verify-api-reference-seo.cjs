@@ -114,11 +114,28 @@ const MIN_LINE_URLS = 8;
  */
 const MIN_DEAD_PICKS = 2;
 /**
- * Picks per line that no page links to. Bounded separately from --sample
- * because those picks are borrowed guesses: a frozen line legitimately lacks
- * symbols added since, so spending the full sample on them buys little.
+ * Picks per line that no page links to.
+ *
+ * It was 4, on the reasoning that borrowed picks are guesses - a frozen line
+ * legitimately lacks symbols added since - so spending the full sample on them
+ * bought little. That was true while the four picks were near-identical adjacent
+ * paths from one framework, which is what they were: every frozen line was
+ * checked on android, capacitor and cordova and on nothing else.
+ *
+ * `diverseFill` changed what a pick is worth. Each slot now goes to a framework
+ * the others do not cover, and there are 13 of them in the durable pool
+ * (android, capacitor, cordova, dotnet.*, flutter, ios, react-native, titanium,
+ * web, xamarin.*). A frozen line reached through --lines is checked ONLY this
+ * way, so the slot count is now exactly how many frameworks that line gets
+ * looked at on, and a generator that de-indexed some but not others is caught
+ * or missed on that number.
+ *
+ * So it matches --sample's own default. The cost is measured rather than
+ * assumed: the CI command went from 48 live requests to 72, and from 3
+ * frameworks per frozen line to between 5 and 7, against a budget of
+ * 260 and an 8-minute deadline - and the step no longer runs on pull requests.
  */
-const UNLINKED_LINE_SAMPLE = 4;
+const UNLINKED_LINE_SAMPLE = 8;
 /** Ceiling on --sample. Each pick costs two live requests. */
 const MAX_SAMPLE = 100;
 /**
@@ -307,6 +324,78 @@ function parseExtraLines() {
 
 const timeout = () => AbortSignal.timeout(REQUEST_TIMEOUT_MS);
 
+/** The framework a symbol path belongs to: its first segment. */
+function frameworkOf(rest) {
+  const i = String(rest).indexOf("/");
+  return i === -1 ? String(rest) : String(rest).slice(0, i);
+}
+
+/**
+ * A small deterministic spin derived from the line.
+ *
+ * Deterministic so a rerun checks the same pages - the whole sampling design
+ * rests on that - but different per line, so the lines discovery hands over do
+ * not all land on the identical framework.
+ */
+function spinFor(line) {
+  let h = 0;
+  for (const ch of String(line)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return h;
+}
+
+/**
+ * Fill the non-seeded slots, preferring frameworks the seeds do not already
+ * cover.
+ *
+ * `sample()` cannot do this job. It spreads over a LEXICOGRAPHIC order, and the
+ * pool's low indices are all `android/...`, so with three seeds and four slots
+ * the single remaining pick was `sample(rest, 1)` - which is `sorted[0]`, the
+ * alphabetically first entry, i.e. android again. Measured on the real build,
+ * every frozen line was checked on android, capacitor and cordova and on
+ * nothing else: `dotnet.android`, `flutter`, `ios`, `react-native`, `web` and
+ * `xamarin.forms` were never sampled on any line reached through --lines, which
+ * is the ONLY way a frozen line is checked. A generator shipping noindex for
+ * android but not ios got a clean OK.
+ *
+ * Grouping by framework first is what makes the guarantee real rather than
+ * incidental: the slots go to frameworks that are not represented yet, and only
+ * once those run out to ones that are.
+ */
+function diverseFill(candidates, n, already, line) {
+  const covered = new Set(already.map(frameworkOf));
+  const groups = new Map();
+  for (const c of candidates) {
+    const f = frameworkOf(c);
+    if (!groups.has(f)) groups.set(f, []);
+    groups.get(f).push(c);
+  }
+  for (const list of groups.values()) list.sort();
+
+  const names = [...groups.keys()].sort();
+  const fresh = names.filter((f) => !covered.has(f));
+  const seen = names.filter((f) => covered.has(f));
+  // Rotated, so /8.3/, /8.4/ and /8.5/ do not all spend their one free slot on
+  // whichever framework happens to sort first.
+  const spin = fresh.length ? spinFor(line) % fresh.length : 0;
+  const order = [...fresh.slice(spin), ...fresh.slice(0, spin), ...seen];
+
+  const out = [];
+  // `round` also indexes within a framework, so a second slot on the same
+  // framework is a different page rather than a repeat.
+  for (let round = 0; out.length < n; round += 1) {
+    let placed = false;
+    for (const f of order) {
+      const list = groups.get(f);
+      if (round >= list.length) continue;
+      out.push(list[(spinFor(line) + round) % list.length]);
+      placed = true;
+      if (out.length === n) break;
+    }
+    if (!placed) break; // every framework exhausted
+  }
+  return out;
+}
+
 /**
  * Picks for a line nothing links, which has no urls of its own to sample.
  *
@@ -334,7 +423,10 @@ function borrowedPicks(target, want) {
   const seeded = pool.slice(0, target.seeded).slice(0, want);
   const remaining = want - seeded.length;
   if (remaining <= 0) return seeded;
-  return [...seeded, ...sample(pool.slice(target.seeded), remaining)];
+  return [
+    ...seeded,
+    ...diverseFill(pool.slice(target.seeded), remaining, seeded, target.line),
+  ];
 }
 
 /**
@@ -1707,6 +1799,8 @@ function run() {
 module.exports = {
   spreadAcrossLines,
   borrowedPicks,
+  diverseFill,
+  frameworkOf,
   attr,
   headOf,
   canonicalOf,
