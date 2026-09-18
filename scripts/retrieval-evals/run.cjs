@@ -123,10 +123,34 @@ function score(queryTokens, doc) {
 
 function search(index, query, k) {
   const qt = tokenize(query);
-  return index
+  const ranked = index
     .map((d) => ({ id: d.id, url: String(d.url || d.source_site || ""), s: score(qt, d) }))
-    .sort((a, b) => b.s - a.s || a.id.localeCompare(b.id))
-    .slice(0, k);
+    .sort((a, b) => b.s - a.s || a.id.localeCompare(b.id));
+  // One slot per PAGE, not per chunk. The index holds many chunks per page
+  // (4,364 modules over 532 pages) and this used to slice raw modules, so a
+  // single page could take every slot: "id capture supported documents" returned
+  // three chunks of /id-documents/ as its entire top 3.
+  //
+  // It does not move the gate - success@3 and MRR are the same either way, and
+  // precision@3 actually falls, because duplicate chunks of a relevant page each
+  // counted as relevant. That is the point. Un-deduped, precision@3 partly
+  // measured how finely a page happened to be chunked rather than how often the
+  // right page was found, and a consumer with three slots to spend got one page.
+  //
+  // The --auto half already ranks by "how many OTHER-page chunks outrank it", so
+  // it never spends a slot on a sibling. Deduping here makes both halves of this
+  // script agree about what a rank means - the same argument as the tie-break
+  // note above.
+  const seen = new Set();
+  const out = [];
+  for (const hit of ranked) {
+    const page = hit.url.split("#")[0];
+    if (seen.has(page)) continue;
+    seen.add(page);
+    out.push(hit);
+    if (out.length >= k) break;
+  }
+  return out;
 }
 
 function relevant(hit, expect) {
