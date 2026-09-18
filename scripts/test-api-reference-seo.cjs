@@ -26,6 +26,7 @@ const os = require("os");
 const path = require("path");
 
 const {
+  spreadAcrossLines,
   attr,
   headOf,
   canonicalOf,
@@ -258,6 +259,60 @@ check("samePage rejects another host, another page and junk", () => {
   assert.ok(!samePage("", TARGET, BASE));
   assert.ok(!samePage(null, TARGET, BASE));
   assert.ok(!samePage("http://[", TARGET, BASE), "an unparseable href is not a match");
+});
+
+// ------------------------------------------------------ spreadAcrossLines
+
+/** A violation as the gate builds one: only `url` matters to the spreader. */
+const v = (line, n) => ({ url: `https://docs.scandit.com/${line}/data-capture-sdk/s${n}.html` });
+
+check("spreadAcrossLines returns everything when it fits", () => {
+  const items = [v("6.28", 1), v("8.5", 1)];
+  assert.strictEqual(spreadAcrossLines(items, 20), items, "same array, not a copy");
+});
+
+check("spreadAcrossLines gives the newest line a place before any line repeats", () => {
+  // The real regression: targets are sorted oldest-first, so violations
+  // accumulate 6.28, 7.6, 8.3, 8.4, 8.5. Measured against the live site with the
+  // CI command, the flat slice(0, 20) printed /6.28/ x8, /7.6/ x8, /8.3/ x4 and
+  // dropped /8.4/ and /8.5/ entirely - the newest frozen line is the likeliest to
+  // outrank current docs and is the whole reason discovery passes those lines in.
+  const items = [
+    ...Array.from({ length: 8 }, (_, i) => v("6.28", i)),
+    ...Array.from({ length: 8 }, (_, i) => v("7.6", i)),
+    ...Array.from({ length: 4 }, (_, i) => v("8.3", i)),
+    ...Array.from({ length: 4 }, (_, i) => v("8.4", i)),
+    ...Array.from({ length: 4 }, (_, i) => v("8.5", i)),
+  ];
+  const shown = spreadAcrossLines(items, 20);
+  assert.strictEqual(shown.length, 20);
+  const lines = new Set(shown.map((x) => /com\/([0-9.]+)\//.exec(x.url)[1]));
+  assert.deepStrictEqual(
+    [...lines].sort(compareLines),
+    ["6.28", "7.6", "8.3", "8.4", "8.5"],
+    "every line asked about must appear in the printed violations",
+  );
+  // Newest first within a round, so a cap that runs out mid-round runs out on
+  // the oldest line rather than on the one that matters most.
+  assert.match(shown[0].url, /\/8\.5\//);
+});
+
+check("spreadAcrossLines exhausts short queues without looping for ever", () => {
+  // One line with far more violations than the rest: the round-robin must keep
+  // drawing from it once the others are empty, and must stop at the cap.
+  const items = [v("8.5", 0), ...Array.from({ length: 50 }, (_, i) => v("6.28", i))];
+  const shown = spreadAcrossLines(items, 10);
+  assert.strictEqual(shown.length, 10);
+  assert.strictEqual(shown.filter((x) => x.url.includes("/8.5/")).length, 1);
+});
+
+check("spreadAcrossLines tolerates a url with no line in it", () => {
+  // lineOf falls back to "0.0" so the sort stays total; without it compareLines
+  // gets NaN and the order is implementation-defined.
+  const items = [{ url: "https://example.com/odd" }, ...Array.from({ length: 30 }, (_, i) => v("8.5", i))];
+  const shown = spreadAcrossLines(items, 5);
+  assert.strictEqual(shown.length, 5);
+  assert.ok(shown.some((x) => x.url === "https://example.com/odd"));
 });
 
 // ======================================================= scripts/lib

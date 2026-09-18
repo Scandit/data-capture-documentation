@@ -60,6 +60,13 @@ jobs:
       - name: Test API-reference SEO parsers
         run: yarn test:api-reference-seo
 
+      # And the verdicts those parsers feed, against a stub origin on localhost:
+      # which branch a response lands in is an ordering question, and the bug that
+      # prompted this reported a line remediated exactly as the gate asks as
+      # "link rot ... a line taken offline". Offline too - no live requests.
+      - name: Test API-reference SEO verdicts
+        run: yarn test:api-reference-seo-verdicts
+
       # Compares build/search-tags.json (what this build's widget will filter on)
       # against the live Algolia index. Catches a docs-version rename quietly
       # dropping content out of search - see scripts/verify-search-tags.cjs.

@@ -120,6 +120,30 @@ const MIN_DEAD_PICKS = 2;
 const UNLINKED_LINE_SAMPLE = 4;
 /** Ceiling on --sample. Each pick costs two live requests. */
 const MAX_SAMPLE = 100;
+/**
+ * Hard ceiling on live requests, for the same reason discovery has one: nothing
+ * else bounds the total. --sample bounds the picks per LINE and MAX_SAMPLE bounds
+ * --sample, but the number of LINES is whatever --lines names, and CI passes
+ * discovery's whole `found` list straight in. Discovery can legitimately return
+ * a long one - for a major with no linked line it sweeps down from the highest
+ * minor seen anywhere, so a single 9.0.0 release could hand over ~29 lines per
+ * major - and at 4 picks each that is ~120 sequential requests at a 15 s ceiling,
+ * i.e. a half-hour worst case under rate limiting, in a step that only advises.
+ *
+ * Today's real run spends 48 of these (measured 2026-09-18, the CI command
+ * with the three lines discovery finds). The budget is a ceiling on a pathology,
+ * not a target: when it binds, the picks it stopped are reported as not asked -
+ * see the note `get` returns - and never as absence.
+ */
+const REQUEST_BUDGET = 260;
+const budget = { spent: 0 };
+
+/**
+ * How many violations are printed in full. A cap because an unremediated site
+ * produces one per pick, and 200 identical-shaped entries in a CI log are not
+ * more actionable than 20 - but see spreadAcrossLines for WHICH 20.
+ */
+const VIOLATION_PRINT_CAP = 20;
 
 const argv = process.argv.slice(2);
 const strict = argv.includes("--strict");
@@ -252,6 +276,59 @@ function parseExtraLines() {
 
 const timeout = () => AbortSignal.timeout(REQUEST_TIMEOUT_MS);
 
+/** The line a url belongs to, or "0.0" so the sort below stays total. */
+function lineOf(url) {
+  const m = /docs\.scandit\.com\/(\d+\.\d+)\//.exec(url);
+  return m ? m[1] : "0.0";
+}
+
+/**
+ * Up to `cap` entries, taken round-robin by line rather than in order.
+ *
+ * `targets` is sorted oldest-line-first, so violations accumulate that way too,
+ * and a flat `slice(0, cap)` spent the whole cap on the oldest lines. Measured on
+ * the real site with the CI command - no --sample, so 8 picks on each of the two
+ * linked lines and 4 on each line discovery found - all 28 picks were violations
+ * and the 20 printed were /6.28/ x8, /7.6/ x8, /8.3/ x4. /8.4/ and /8.5/ appeared
+ * nowhere except inside "... and 8 more".
+ *
+ * That inverts the point of the check. The newest frozen line is the one whose
+ * content is closest to current and so the likeliest to outrank it - it is why
+ * discovery exists and why those lines are passed in at all - and it is the one a
+ * flat cap is guaranteed to drop, because it sorts last. Round-robin gives every
+ * line a place in the report before any line gets a second entry.
+ *
+ * The file already carries this lesson for the served line, at `alsoServed`:
+ * feeding it in "would crowd real old-line findings out of the 20-line print
+ * cap". The same crowding arrives through the discovery-fed --lines list.
+ */
+function spreadAcrossLines(items, cap) {
+  if (items.length <= cap) return items;
+  const byLine = new Map();
+  for (const item of items) {
+    const key = lineOf(item.url);
+    if (!byLine.has(key)) byLine.set(key, []);
+    byLine.get(key).push(item);
+  }
+  // Newest line first within each round, so if the cap runs out mid-round it
+  // runs out on the oldest line rather than on the one that matters most.
+  const queues = [...byLine.values()].sort(
+    (a, b) => -compareLines(lineOf(a[0].url), lineOf(b[0].url)),
+  );
+  const out = [];
+  for (let round = 0; out.length < cap; round += 1) {
+    let placed = false;
+    for (const q of queues) {
+      if (round >= q.length) continue;
+      out.push(q[round]);
+      placed = true;
+      if (out.length === cap) break;
+    }
+    if (!placed) break; // every queue exhausted
+  }
+  return out;
+}
+
 /**
  * Body, status and FINAL url, so one request answers "does it exist", "how big
  * is it" and "where did it end up". The final url matters because the fetch
@@ -259,6 +336,14 @@ const timeout = () => AbortSignal.timeout(REQUEST_TIMEOUT_MS);
  * a correct canonical as wrong.
  */
 async function get(url) {
+  // Not asked, and said so rather than returning something that reads like an
+  // answer. `notAsked` is a distinct field because every status this function can
+  // return is already load-bearing somewhere: 404 means retired, 0 means
+  // transport failure, and either of those would file an unasked pick as evidence.
+  if (budget.spent >= REQUEST_BUDGET) {
+    return { status: 0, body: null, url, robots: "", notAsked: true };
+  }
+  budget.spent += 1;
   try {
     const res = await fetch(url, { redirect: "follow", signal: timeout() });
     const body = res.ok ? await res.text() : null;
@@ -778,6 +863,48 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
         counterpartOf(rest),
       ]);
 
+      // Budget exhausted before this pick. Handled FIRST, above every verdict:
+      // a not-asked response carries status 0 and body null, which the branches
+      // below would otherwise read as a transport failure - true, but it would
+      // land in `undetermined` as "page -> HTTP 0" and blame the network for a
+      // limit this script imposed on itself.
+      if (versionedRes.notAsked || currentRes.notAsked) {
+        target.requested += 1;
+        target.unknown += 1;
+        undetermined.push({
+          url: versioned,
+          why: `not asked - the ${REQUEST_BUDGET}-request budget ran out`,
+        });
+        continue;
+      }
+
+      // Redirected off its own line. Sound only if it landed on the unversioned
+      // counterpart: a 301 from /6.28/ to /7.6/ moves the duplicate, it does not
+      // remove it. Compared against `current`, not the counterpart's own final
+      // url, so this verdict does not depend on that request succeeding.
+      //
+      // BEFORE the 404 branch, because `get` follows redirects and reports the
+      // FINAL status. A line remediated exactly as this gate asks - 301 to the
+      // unversioned counterpart - for a symbol that has since been retired ends
+      // at 404, and the 404 branch charged it to `absent` and printed it under
+      // "url(s) the build links do not exist ... link rot in the docs". The
+      // versioned url does exist and is redirecting; that names the wrong problem.
+      // Worse, it is silent-to-loud in the wrong direction: on a line where many
+      // symbols were retired it pushes `absent/sampled` past STALE_LINE_SHARE, and
+      // if every pick lands there it trips `deadLines` into a --strict failure
+      // saying the line "was taken offline" - about a line that was fixed.
+      if (!versionedRes.url.includes(`/${target.line}/data-capture-sdk/`)) {
+        target.requested += 1;
+        target.checked += 1;
+        if (samePage(versionedRes.url, current, versioned)) continue;
+        violations.push({
+          url: versioned,
+          want: `the redirect to point at ${current}`,
+          got: `redirects to ${versionedRes.url} - neither this line nor the current page`,
+        });
+        continue;
+      }
+
       // A --lines pick is a symbol borrowed from another line, so a 404 here means
       // "this line does not carry that symbol" - the expected case for a frozen
       // line, not a coverage failure. Counting those against the floor made the
@@ -808,21 +935,6 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
       // Only an explicit 404 means "retired". A transport 0, 403, 429 or 5xx on
       // the counterpart used to land in the same branch, so a rate-limited request
       // reported a healthy current page as a retired API needing noindex.
-      // Redirected off its own line. Sound only if it landed on the unversioned
-      // counterpart: a 301 from /6.28/ to /7.6/ moves the duplicate, it does not
-      // remove it. Compared against `current`, not the counterpart's own final
-      // url, so this verdict does not depend on that request succeeding.
-      if (!versionedRes.url.includes(`/${target.line}/data-capture-sdk/`)) {
-        target.checked += 1;
-        if (samePage(versionedRes.url, current, versioned)) continue;
-        violations.push({
-          url: versioned,
-          want: `the redirect to point at ${current}`,
-          got: `redirects to ${versionedRes.url} - neither this line nor the current page`,
-        });
-        continue;
-      }
-
       // De-indexing is decided BEFORE the counterpart's status is consulted,
       // because neither signal depends on it - the comment used to say the header
       // "is read FIRST" while the counterpart branch above returned before either
@@ -1038,7 +1150,8 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
     `\n  ${checked} of ${sampled} sampled pages judged` +
       (undetermined.length ? `, ${undetermined.length} undetermined` : "") +
       (absent ? `, ${absent} not present on the line asked about` : "") +
-      `, ${violations.length} not sound\n`,
+      `, ${violations.length} not sound` +
+      `\n  ${budget.spent} of ${REQUEST_BUDGET} requests spent\n`,
   );
 
   let failed = failedWalk;
@@ -1068,13 +1181,18 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
   if (violations.length) {
     failed = true;
     console.error(`${strict ? "FAIL" : "WARN"}: duplicate content across API-reference lines.\n`);
-    for (const v of violations.slice(0, 20)) {
+    const shown = spreadAcrossLines(violations, VIOLATION_PRINT_CAP);
+    for (const v of shown) {
       console.error(`  ${v.url}`);
       console.error(`     want: ${v.want}`);
       console.error(`     got:  ${v.got}`);
     }
-    if (violations.length > 20) {
-      console.error(`  ... and ${violations.length - 20} more`);
+    if (violations.length > shown.length) {
+      // Says the cap is spread, so "and N more" does not read as "and N more
+      // of the same line you can already see".
+      console.error(
+        `  ... and ${violations.length - shown.length} more, across the same lines`,
+      );
     }
     console.error(
       `\n  Fix in the API-reference generator, not here: de-index an old line's\n` +
@@ -1338,6 +1456,7 @@ function run() {
  * `require`ing this file to reach them fired a full live-network run.
  */
 module.exports = {
+  spreadAcrossLines,
   attr,
   headOf,
   canonicalOf,

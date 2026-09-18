@@ -304,6 +304,8 @@ async function main() {
   }
 
   found.sort(compareLines);
+  // Same order as `found`, which it is printed beside.
+  redirects.sort(compareLines);
 
   // Before the quiet return, and through `warn`, which --quiet does not suppress.
   // The previous attempt added `warn` and then still reported this through `say`
@@ -324,7 +326,11 @@ async function main() {
   try {
     fs.writeFileSync(
       path.join(BUILD, ARTEFACT),
-      `${JSON.stringify({ version, probes, published: found, uncertain }, null, 2)}
+      `${JSON.stringify(
+        { version, probes, published: found, redirected: redirects, uncertain },
+        null,
+        2,
+      )}
 `,
     );
   } catch (e) {
@@ -346,6 +352,26 @@ async function main() {
   say("");
   if (found.length) {
     say(`  PUBLISHED but linked from nowhere: ${found.map((l) => `/${l}/`).join(" ")}`);
+    if (redirects.length) {
+      // Without this the headline says the opposite of what happened. A 3xx line
+      // is counted as published on purpose - it IS served here, and the gate has
+      // a verdict for a redirect that lands on ANOTHER frozen line, which moves
+      // the duplicate instead of removing it. But once the generator ships the
+      // redirects this whole check asks for, every remediated line would appear
+      // under "PUBLISHED but linked from nowhere" with nothing to distinguish it
+      // from an untouched one, telling an operator their fix had not landed.
+      //
+      // `redirects` was collected and then never read, so this was the state the
+      // code was already in.
+      say("");
+      say(
+        `  Of those, already redirecting: ${redirects
+          .map((l) => `/${l}/`)
+          .join(" ")} - served, but pointing elsewhere.`,
+      );
+      say("  Still passed to the gate, which checks WHERE a redirect lands: one to");
+      say("  another frozen line moves the duplicate rather than removing it.");
+    }
     say("");
     say("  Pass these to the SEO gate to include them:");
     say(`    yarn verify:api-reference-seo --lines ${found.join(",")}`);

@@ -21,6 +21,7 @@
     "test:search-facets": "node scripts/test-search-facets.cjs",
     "verify:api-reference-seo": "node scripts/verify-api-reference-seo.cjs",
     "test:api-reference-seo": "node scripts/test-api-reference-seo.cjs",
+    "test:api-reference-seo-verdicts": "node scripts/test-api-reference-seo-verdicts.cjs",
     "discover:api-reference-lines": "node scripts/discover-api-reference-lines.cjs"
   },
   "dependencies": {
