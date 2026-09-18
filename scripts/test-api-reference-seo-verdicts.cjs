@@ -9,7 +9,7 @@
  * nothing says so. Those are ordering bugs, and ordering bugs do not show up in a
  * unit test of a pure function.
  *
- * Two cases are pinned here because both were real and both were silent:
+ * Every case here was a real bug, and every one of them was silent:
  *
  *   - A line remediated exactly as the gate asks - 301 to the unversioned
  *     counterpart - for symbols that have since been retired, so the redirect
@@ -18,8 +18,17 @@
  *     rot in the docs ... a line taken offline". It judged nothing and said the
  *     opposite of what happened, to the one team that had just done the work.
  *
+ *   - The unversioned counterpart 30x-ing onward, which made a line that had
+ *     been remediated correctly follow that second hop and get reported as
+ *     redirecting somewhere it should not. The canonical path already guards
+ *     against this; the redirect path did not.
+ *
  *   - The request budget. Picks it stops must read as "not asked", never as
  *     absence, and the run must fail its coverage floor rather than print OK.
+ *
+ *   - Discovery's "could not determine" list, printed without checking whether
+ *     the operator then passed those lines in - so a run judged a line and said
+ *     in the same output that it had not been checked.
  *
  * HOW it runs the real code: the two scripts are copied to a temp directory with
  * ORIGIN rewritten to the stub, and executed as child processes. Copied, not
@@ -105,6 +114,12 @@ function stage(origin, edits = {}) {
     path.join(tmp, "build", "search-tags.json"),
     JSON.stringify({ lastVersionTag: "8.6.0", versionNumberByTag: { "8.6.0": "8.6.0" } }),
   );
+  if (edits.artefact) {
+    fs.writeFileSync(
+      path.join(tmp, "build", "api-reference-lines.json"),
+      JSON.stringify({ version: "8.6.0", probes: [], published: [], ...edits.artefact }),
+    );
+  }
   return tmp;
 }
 
@@ -255,6 +270,80 @@ async function main() {
       assert.match(out, new RegExp(`${SAMPLE} of ${SAMPLE} sampled pages judged`));
       assert.match(out, /^OK:/m);
       assert.strictEqual(status, 0, `a noindexed line must pass --strict:\n${out}`);
+    } finally {
+      server.close();
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  await check(
+    "a redirect that follows the counterpart's OWN onward hop is sound",
+    async () => {
+      // The unversioned url itself 30x-ing is not hypothetical here: the file
+      // already reasons about it on the canonical path, at `const counterpart =
+      // current`. On the redirect path it was unhandled, so a frozen line doing
+      // exactly what the gate asks - 301 to the unversioned counterpart - FOLLOWED
+      // that second hop, ended on /8.6/, and every pick was reported as
+      // "redirects to ... neither this line nor the current page". A team that had
+      // done the work got a red --strict run for it.
+      const { server, origin } = await startOrigin({
+        versioned: (line, rest, res) => {
+          if (line === "8.6") {
+            res.writeHead(200, { "content-type": "text/html" });
+            res.end("<html><head></head><body>served</body></html>");
+            return;
+          }
+          res.writeHead(301, { location: `/data-capture-sdk/${rest}` });
+          res.end();
+        },
+        // ...and the unversioned url redirects onward to the served line.
+        counterpart: (rest, res) => {
+          res.writeHead(301, { location: `/8.6/data-capture-sdk/${rest}` });
+          res.end();
+        },
+      });
+      const tmp = stage(origin);
+      try {
+        const { out, status } = await runGate(tmp, ["--sample", String(SAMPLE), "--strict"]);
+        assert.ok(
+          !/neither this line nor the current page/.test(out),
+          `a redirect converging with the counterpart must not be a violation:\n${out}`,
+        );
+        assert.match(out, new RegExp(`${SAMPLE} of ${SAMPLE} sampled pages judged`));
+        assert.match(out, /^OK:/m);
+        assert.strictEqual(status, 0, `--strict must pass:\n${out}`);
+      } finally {
+        server.close();
+        fs.rmSync(tmp, { recursive: true, force: true });
+      }
+    },
+  );
+
+  await check("a line named with --lines is not also reported as unchecked", async () => {
+    // Discovery prints the lines it could not determine so an operator can pass
+    // them explicitly. Following that advice produced a report that judged /7.6/
+    // and then stated, in the same output, that it was "not among the lines
+    // checked here".
+    const { server, origin } = await startOrigin({
+      versioned: (line, rest, res) => {
+        res.writeHead(200, { "content-type": "text/html" });
+        res.end('<html><head><meta name="robots" content="noindex"></head><body>x</body></html>');
+      },
+      counterpart: (rest, res) => {
+        res.writeHead(200, { "content-type": "text/html" });
+        res.end("<html><head></head><body>current</body></html>");
+      },
+    });
+    const tmp = stage(origin, { artefact: { uncertain: ["7.6", "8.4"] } });
+    try {
+      const { out } = await runGate(tmp, ["--sample", String(SAMPLE)]);
+      assert.ok(
+        !/could not determine[^\n]*\/7\.6\//.test(out),
+        `/7.6/ was checked, so it must not be listed as undetermined:\n${out}`,
+      );
+      // The line that really was not checked is still reported - the filter must
+      // narrow the list, not delete it.
+      assert.match(out, /could not determine[^\n]*\/8\.4\//);
     } finally {
       server.close();
       fs.rmSync(tmp, { recursive: true, force: true });

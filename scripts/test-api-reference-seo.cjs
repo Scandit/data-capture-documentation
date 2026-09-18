@@ -82,6 +82,45 @@ check("attr does not match a data- prefixed attribute", () => {
   assert.strictEqual(attr('<link data-rel="canonical" data-href="/x">', "href"), null);
 });
 
+check("attr does not read a name out of an earlier attribute's VALUE", () => {
+  // No boundary around the NAME can close this: values contain quotes AND
+  // spaces, so both `(?:^|[\s"'])name` and `(?:^|\s)name` matched inside one.
+  // This is the worst shape the function has had, because it manufactures a
+  // signal out of a page that carries none:
+  //   <meta content="see name=robots noindex" name="description"> returned
+  //   "robots", and isNoindex then read a page with NO robots directive at all
+  //   as de-indexed - a false pass, silent, on the only signal that matters.
+  assert.strictEqual(
+    attr('<meta content="see name=robots noindex" name="description">', "name"),
+    "description",
+  );
+  assert.strictEqual(
+    attr('<link title="rel=canonical" rel="stylesheet" href="/s.css">', "rel"),
+    "stylesheet",
+  );
+  // The same page, end to end through the two callers.
+  assert.ok(
+    !isNoindex(headOf(page('<meta content="see name=robots noindex" name="description">'))),
+    "a page with no robots directive must not read as de-indexed",
+  );
+  assert.strictEqual(
+    canonicalOf(headOf(page('<link title="rel=canonical" rel="stylesheet" href="/s.css">'))),
+    null,
+    "a canonical must not be fabricated out of another attribute's value",
+  );
+});
+
+check("attr walks attributes, so odd but legal spacing still parses", () => {
+  assert.strictEqual(attr('<meta  name = "robots"  content="noindex">', "name"), "robots");
+  // A newline between attributes is legal HTML and the generator emits it.
+  assert.strictEqual(attr('<meta\nname="robots">', "name"), "robots");
+  // Unterminated quote: takes the rest of the tag, as a browser does, rather
+  // than resyncing inside the value and reporting whatever follows.
+  assert.strictEqual(attr('<link rel="canonical href=/a>', "rel"), "canonical href=/a>");
+  // A valueless attribute of the same name is not an answer.
+  assert.strictEqual(attr("<meta name>", "name"), null);
+});
+
 // ---------------------------------------------------------------- headOf
 
 check("headOf stops at </head>, and falls back to <body", () => {

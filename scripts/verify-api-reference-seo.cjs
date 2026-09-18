@@ -136,7 +136,32 @@ const MAX_SAMPLE = 100;
  * see the note `get` returns - and never as absence.
  */
 const REQUEST_BUDGET = 260;
-const budget = { spent: 0 };
+/**
+ * And a wall-clock deadline, because the request count alone does not bound the
+ * time - which is the thing the budget above was added to bound.
+ *
+ * 260 requests at the 15 s per-request ceiling is over an hour if every one of
+ * them hangs, so the comment above named a half-hour worst case while the value
+ * permitted twice that. Under sustained throttling this advisory step would add
+ * that to every PR, push and daily build. The count still caps a pathological
+ * sweep cheaply; the clock is what actually stops one.
+ *
+ * Deliberately not a `timeout-minutes:` on the workflow step: that fails the job,
+ * and this step is non-blocking on purpose because the generator cannot pass it
+ * yet. Stopping here instead keeps the run advisory and, like the request cap,
+ * reports what it did not ask rather than reporting it as absence.
+ */
+const DEADLINE_MS = 8 * 60 * 1000;
+const budget = { spent: 0, startedAt: Date.now() };
+
+/** Why the sweep stopped early, or null while it has not. */
+function exhausted() {
+  if (budget.spent >= REQUEST_BUDGET) return `the ${REQUEST_BUDGET}-request budget ran out`;
+  if (Date.now() - budget.startedAt >= DEADLINE_MS) {
+    return `the ${DEADLINE_MS / 60000}-minute deadline passed`;
+  }
+  return null;
+}
 
 /**
  * How many violations are printed in full. A cap because an unremediated site
@@ -340,8 +365,9 @@ async function get(url) {
   // answer. `notAsked` is a distinct field because every status this function can
   // return is already load-bearing somewhere: 404 means retired, 0 means
   // transport failure, and either of those would file an unasked pick as evidence.
-  if (budget.spent >= REQUEST_BUDGET) {
-    return { status: 0, body: null, url, robots: "", notAsked: true };
+  const stop = exhausted();
+  if (stop) {
+    return { status: 0, body: null, url, robots: "", notAsked: stop };
   }
   budget.spent += 1;
   try {
@@ -360,22 +386,74 @@ async function get(url) {
 }
 
 /**
- * Attribute value with optional quotes, from a single tag.
+ * Attribute value from a single tag, or null.
  *
- * Anchored on a boundary that is NOT `\b`: `-` is a non-word character, so
- * `\bhref` matched `data-href` and `\bname` matched `data-name`, which made
- * `<link data-rel="canonical" data-href="...">` read as a declared canonical and
- * `<meta data-name="robots" content="noindex">` read as a real directive - false
- * passes on both of the two signals this gate exists to verify.
+ * Walks the tag's attributes rather than scanning its text, because no boundary
+ * around the NAME can tell an attribute from the same characters inside an
+ * earlier attribute's VALUE. Two regex boundaries were tried and both produced
+ * false passes on the only two signals this gate verifies:
+ *
+ *   - `\bname` treated `-` as a boundary, so `data-name="robots"` read as a real
+ *     directive and `<link data-rel data-href>` as a declared canonical.
+ *   - `(?:^|[\s"'])name` made the closing quote of a value a boundary, so
+ *     `<link title="rel=canonical" rel="stylesheet" href="/s.css">` reported
+ *     `/s.css` as a canonical.
+ *   - and plain `(?:^|\s)name` still matched inside a value, because values
+ *     contain spaces: `<meta content="see name=robots noindex"
+ *     name="description">` returned "robots", so isNoindex read a page carrying
+ *     NO robots directive as de-indexed.
+ *
+ * Skipping quoted values is the only thing that closes the class, and that is a
+ * tokenizer, not a pattern. Deliberately small: it does not decode entities or
+ * handle malformed nesting, because the input is one tag matched by
+ * `/<meta\b[^>]*>/`, which cannot contain `>` inside a value anyway.
  */
 function attr(tag, name) {
-  const re = new RegExp(
-    `(?:^|[\\s"'])${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s"'>]+))`,
-    "i",
-  );
-  const m = re.exec(tag);
-  if (!m) return null;
-  return m[1] !== undefined ? m[1] : m[2] !== undefined ? m[2] : m[3];
+  const want = name.toLowerCase();
+  const text = String(tag || "");
+  // Everything after `<tagname` is attributes. Without skipping the element name,
+  // a tag called `<name-thing>` would be read as an attribute.
+  const open = /^<\s*[a-z][^\s/>]*/i.exec(text);
+  let i = open ? open[0].length : 0;
+
+  while (i < text.length) {
+    const c = text[i];
+    if (c === ">") break;
+    if (/[\s/]/.test(c)) {
+      i += 1;
+      continue;
+    }
+    // Attribute name: up to whitespace, `=`, `/` or `>`.
+    let j = i;
+    while (j < text.length && !/[\s=/>]/.test(text[j])) j += 1;
+    const key = text.slice(i, j).toLowerCase();
+
+    let k = j;
+    while (k < text.length && /\s/.test(text[k])) k += 1;
+    let value = null;
+    if (text[k] === "=") {
+      k += 1;
+      while (k < text.length && /\s/.test(text[k])) k += 1;
+      const quote = text[k];
+      if (quote === '"' || quote === "'") {
+        const end = text.indexOf(quote, k + 1);
+        // An unterminated quote takes the rest of the tag, which is what a
+        // browser does, and stops the walk rather than resyncing on the value.
+        value = end === -1 ? text.slice(k + 1) : text.slice(k + 1, end);
+        k = end === -1 ? text.length : end + 1;
+      } else {
+        let e = k;
+        while (e < text.length && !/[\s>]/.test(text[e])) e += 1;
+        value = text.slice(k, e);
+        k = e;
+      }
+    }
+    // `value !== null` keeps the old contract: a valueless attribute of the same
+    // name is not an answer, and the next `name=` is still allowed to be one.
+    if (key === want && value !== null) return value;
+    i = k > i ? k : i + 1;
+  }
+  return null;
 }
 
 /**
@@ -873,7 +951,7 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
         target.unknown += 1;
         undetermined.push({
           url: versioned,
-          why: `not asked - the ${REQUEST_BUDGET}-request budget ran out`,
+          why: `not asked - ${versionedRes.notAsked || currentRes.notAsked}`,
         });
         continue;
       }
@@ -897,6 +975,19 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
         target.requested += 1;
         target.checked += 1;
         if (samePage(versionedRes.url, current, versioned)) continue;
+        // ...or it landed exactly where the unversioned url ITSELF lands. The
+        // canonical path below already reasons about /data-capture-sdk/X 30x-ing
+        // onward - see the `const counterpart = current` note - and the same
+        // hazard reaches here: if the unversioned url redirects to /8.6/, then a
+        // frozen line doing precisely what this gate asks (301 to the unversioned
+        // counterpart) FOLLOWS that second hop, ends on /8.6/, and every pick was
+        // reported as "redirects to ... neither this line nor the current page".
+        // A team that had done the work got a red --strict run for it.
+        //
+        // Ordered second on purpose, so the verdict still does not DEPEND on the
+        // counterpart request succeeding: when that request failed, currentRes.url
+        // is the unversioned url and this is the same comparison as above.
+        if (samePage(versionedRes.url, currentRes.url, versioned)) continue;
         violations.push({
           url: versioned,
           want: `the redirect to point at ${current}`,
@@ -1151,7 +1242,7 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
       (undetermined.length ? `, ${undetermined.length} undetermined` : "") +
       (absent ? `, ${absent} not present on the line asked about` : "") +
       `, ${violations.length} not sound` +
-      `\n  ${budget.spent} of ${REQUEST_BUDGET} requests spent\n`,
+      `\n  ${budget.spent} of ${REQUEST_BUDGET} requests spent in ${Math.round((Date.now() - budget.startedAt) / 1000)}s (deadline ${DEADLINE_MS / 60000}m)\n`,
   );
 
   let failed = failedWalk;
@@ -1334,7 +1425,15 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
   // this is the one line an operator reads to learn what was covered.
   // Lines discovery could not determine, if it ran. Without this the run could
   // report success while a line dropped by a 429 burst was never in --lines.
-  const undeterminedLines = discoveredUncertain(version);
+  // Minus the ones this run went on to check anyway. Discovery prints its
+  // uncertain lines so an operator can pass them explicitly, and following that
+  // advice - `--lines 8.5` after discovery filed /8.5/ as uncertain - produced a
+  // report that judged /8.5/ and then stated it was "not among the lines checked
+  // here", in the same output. CI only passes the lines discovery FOUND, so this
+  // contradicted the one invocation the tool documents for a human.
+  const undeterminedLines = discoveredUncertain(version).filter(
+    (l) => !targets.some((t) => t.line === l),
+  );
   if (undeterminedLines.length) {
     console.error(
       `NOTE: line discovery could not determine ` +

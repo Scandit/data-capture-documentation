@@ -85,7 +85,17 @@ const ARTEFACT = "api-reference-lines.json";
  * multi-minute and near-useless run in a step that only advises.
  */
 const REQUEST_BUDGET = 90;
-const budget = { spent: 0 };
+/**
+ * And a wall-clock deadline, because the request count does not bound the time.
+ * These HEADs are strictly sequential, so 90 of them at the 15 s per-request
+ * ceiling is ~22 minutes if every one hangs - the same runaway the budget above
+ * was added to prevent, arriving through the clock instead of the counter.
+ *
+ * A line the deadline stops is filed as `uncertain`, exactly like one the budget
+ * stops: not asked is not absence.
+ */
+const DEADLINE_MS = 4 * 60 * 1000;
+const budget = { spent: 0, startedAt: Date.now() };
 
 const argv = process.argv.slice(2);
 const KNOWN_FLAGS = new Set(["--quiet"]);
@@ -127,7 +137,9 @@ const warn = (line) => process.stderr.write(`${line}
  * opposite of what this looks for.
  */
 async function headStatus(url) {
-  if (budget.spent >= REQUEST_BUDGET) return -1; // -1 = not asked
+  // -1 = not asked, kept distinct from 0 ("asked, could not tell") by callers.
+  if (budget.spent >= REQUEST_BUDGET) return -1;
+  if (Date.now() - budget.startedAt >= DEADLINE_MS) return -1;
   budget.spent += 1;
   try {
     const res = await fetch(url, {
@@ -317,8 +329,8 @@ async function main() {
         .map((l) => `/${l}/`)
         .join(" ")} - a probe answered neither 200, 3xx nor 404`,
     );
-    warn("(transport error, 429, 5xx, or the request budget ran out), so absence");
-    warn("there is NOT established.");
+    warn("(transport error, 429, 5xx, or the request budget or deadline ran out),");
+    warn("so absence there is NOT established.");
   }
 
   // The gate reads this to seed its own picks with the paths proven to resolve,
@@ -348,7 +360,10 @@ async function main() {
   say(`  linked by the build:  ${linked.map((l) => `/${l}/`).join(" ") || "(none)"}`);
   say(`  probe paths:          ${probes.length} confirmed on the unversioned tree`);
   say(`  ranges probed:        ${ranges.join(", ")}`);
-  say(`  requests spent:       ${budget.spent} of ${REQUEST_BUDGET}`);
+  say(
+    `  requests spent:       ${budget.spent} of ${REQUEST_BUDGET} in ` +
+      `${Math.round((Date.now() - budget.startedAt) / 1000)}s (deadline ${DEADLINE_MS / 60000}m)`,
+  );
   say("");
   if (found.length) {
     say(`  PUBLISHED but linked from nowhere: ${found.map((l) => `/${l}/`).join(" ")}`);
