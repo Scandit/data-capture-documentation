@@ -68,46 +68,52 @@ check("the current API reference is allowed explicitly", () => {
 });
 
 /**
- * The API line a frozen snapshot actually LINKS, read out of its own content.
+ * The API line each docs tree actually LINKS, read out of its own content.
  *
- * This is the rule the generator applies (`linksToOwnApiLine`), and asserting
- * against versions.json instead was wrong in a way that only shows up at a
- * release. A snapshot keeps linking the UNVERSIONED tree until the freeze
- * rewrites its links, so during that window the version exists in versions.json
- * and correctly gets NO Allow line - it sends readers somewhere already open.
- * A versions.json-derived expectation demands one anyway and fails the build on
- * main, blaming the generated file for doing the right thing. The config
- * documents that window and measures it (version-8.5.3: 210 files linking the
- * unversioned tree, 0 versioned), and 8.6.0-beta.1 really did add 8.5.2 to
- * versions.json, so this is the normal release shape rather than a corner.
+ * This is the rule the generator applies (`linksToOwnApiLine`), and deriving it
+ * from versions.json instead was wrong in a way that only shows up at a
+ * release: a snapshot keeps linking the UNVERSIONED tree until the freeze
+ * rewrites its links, so during that window the version exists and correctly
+ * gets NO Allow line. Read from the trees rather than from the config that
+ * generated robots.txt, so this is a second opinion and not the same
+ * derivation twice.
  *
- * Read from the snapshot rather than from the config that generated the file,
- * so this is a second opinion and not the same derivation twice.
+ * Which trees, and paired with which number, is the fiddly part - both halves
+ * were wrong once:
+ *
+ *   - docs/ is ALWAYS the `current` version, so its number comes from the
+ *     `docs-default-current` tag. Reading `lastVersionTag` instead looked
+ *     equivalent and is not: update-version.py rewrites DOCS_LAST_VERSION from
+ *     "current" to a number during a beta window - the very window this check
+ *     exists for - and the tag then names the frozen release while docs/ still
+ *     holds the unreleased one. The test would scan the beta tree for the
+ *     previous release's line and disagree with the generator.
+ *   - only the snapshots that are REAL versions count. The generator walks
+ *     docsVersions; a directory left in versioned_docs/ but dropped from
+ *     versions.json (the config records version-8.5.3 in exactly that state)
+ *     would otherwise have this demanding an Allow the generator never emits.
  */
 function linesThatLinkThemselves() {
   const found = new Set();
   const trees = [];
 
-  // The CURRENT docs tree counts too, now that the generator no longer skips
-  // the served version - see the note on that skip in docusaurus.config.ts. Its
-  // number comes from build/search-tags.json, a build artifact that states what
-  // this build serves, rather than from the config that produced robots.txt.
+  // The current tree, from the build's own manifest rather than the config.
   try {
     const m = JSON.parse(
       fs.readFileSync(path.join(BUILD, "search-tags.json"), "utf8"),
     );
-    const number = (m.versionNumberByTag || {})[m.lastVersionTag] || "";
-    if (number) {
-      trees.push([path.join(__dirname, "..", "docs"), number]);
-    }
+    const number = (m.versionNumberByTag || {})["docs-default-current"] || "";
+    if (number) trees.push([path.join(__dirname, "..", "docs"), number]);
   } catch {
     // No manifest: the frozen snapshots below still carry the check.
   }
 
+  // The frozen ones, named by versions.json so a stale directory cannot vote.
   const root = path.join(__dirname, "..", "versioned_docs");
-  if (fs.existsSync(root)) {
-    for (const dir of fs.readdirSync(root)) {
-      trees.push([path.join(root, dir), dir.replace(/^version-/, "")]);
+  for (const number of versions) {
+    const dir = path.join(root, `version-${number}`);
+    if (fs.existsSync(dir) && fs.statSync(dir).isDirectory()) {
+      trees.push([dir, number]);
     }
   }
 
@@ -126,7 +132,7 @@ function linesThatLinkThemselves() {
       }
       return false;
     };
-    if (fs.existsSync(treeDir) && walk(treeDir)) found.add(line);
+    if (walk(treeDir)) found.add(line);
   }
   return found;
 }
@@ -148,14 +154,13 @@ check("exactly the frozen lines that link themselves are allowed", () => {
       `${JSON.stringify([...expected])}, so exactly those must be allowed - ` +
       `got ${JSON.stringify([...allowed])}`,
   );
-  // And nothing may be allowed for a line no docs version exists for at all.
-  const known = new Set(versions.map((v) => v.split(".").slice(0, 2).join(".")));
-  for (const line of allowed) {
-    assert.ok(
-      known.has(line),
-      `/${line}/ is allowed but is not a version in versions.json`,
-    );
-  }
+  // No second guard against versions.json here. There was one, and it
+  // contradicted the assertion above it: versions.json never contains the
+  // `current` version, while the expectation deliberately lets the current tree
+  // contribute a line - so the moment it did, deepStrictEqual passed and the
+  // guard hard-failed on the same line. The equality above is already exact,
+  // and every line in `expected` came from a real tree on disk, so a line for a
+  // version that does not exist cannot reach it.
 });
 
 check("other versioned trees are still excluded", () => {
@@ -234,6 +239,11 @@ check("it stays readable in a terminal", () => {
 check("the Agent Skills index exists and lists one page per SDK", () => {
   // The gap this closes: the skills pages were already in llms.txt, but only
   // nested per SDK, so nothing said the site publishes them at all.
+  // The existence check is not a formality. generateCustomLLMFiles only warns
+  // and writes nothing when includePatterns match no docs, and the plugin
+  // swallows that in postBuild - so a rename to agent-skills.md, or the tree
+  // moving under an ignored prefix, would ship a robots.txt and an llms.txt
+  // both pointing at a 404 with a green build. Nothing else catches that.
   const p = path.join(BUILD, "llms-agent-skills.txt");
   assert.ok(fs.existsSync(p), "build/llms-agent-skills.txt is missing");
   const text = fs.readFileSync(p, "utf8");

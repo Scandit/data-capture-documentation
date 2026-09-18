@@ -996,7 +996,14 @@ const config: Config = {
     "docusaurus-plugin-llms",
     {
       ignoreFiles: llmsIgnoreFiles,
-      // Strip the "docs" segment the plugin hardcodes into every URL.
+      // Strip the "docs" segment from the URLs the plugin emits.
+      //
+      // Wider than it sounds, so it is stated rather than assumed: the plugin
+      // applies this to the whole doc-relative path with a global regex, not
+      // just to the prefix it prepends. A page whose route genuinely contained
+      // a segment named "docs" - docs/sdks/web/docs/foo.mdx - would lose that
+      // segment too and emit a broken link. No such path exists today; if one
+      // is ever added, this option is where it breaks.
       //
       // docusaurus-plugin-llms builds links as <siteUrl>/docs/<path> - see
       // pathPrefix in its processor - but this site sets routeBasePath: "/" on
