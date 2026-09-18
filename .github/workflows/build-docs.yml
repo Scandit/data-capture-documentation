@@ -35,6 +35,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          # Full history, because the knowledge-extractor sets each page's
+          # `last_verified` from that file's last commit date. The default
+          # shallow clone (depth 1) makes every file resolve to the same single
+          # commit, and the plugin then deliberately emits "" rather than a
+          # constant that looks like data - which would leave the published
+          # retrieval index with no freshness signal at all.
+          #
+          # Cheap here: 796 commits, and the `git log` over docs/ measures at
+          # ~0.13s. Revisit only if the history grows by orders of magnitude.
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

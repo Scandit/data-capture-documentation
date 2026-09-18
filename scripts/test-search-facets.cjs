@@ -177,7 +177,11 @@ check("an unknown version tag adds nothing rather than guessing", () => {
 
 check("typing a version moves the guides AND the API reference together", () => {
   const filters = ["language:en", [DEFAULT, SERVED, APILATEST]];
-  const out = rewriteVersionTag(filters, "docs-default-7.6.14", MAP);
+  // The frozen tag from the manifest, not a literal. This file's premise is
+  // that no version may be hardcoded here - LEGACY and API76 either side of
+  // this line are derived - so retiring 7.6 would have failed the suite for a
+  // reason unrelated to search correctness.
+  const out = rewriteVersionTag(filters, LEGACY.replace("docusaurus_tag:", ""), MAP);
   const tags = tagsOf(out);
   assert.ok(tags.includes(LEGACY), "page tag must be swapped");
   assert.ok(tags.includes(API76), "API reference must follow to 7.6");
