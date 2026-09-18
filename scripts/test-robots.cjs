@@ -85,11 +85,33 @@ check("the current API reference is allowed explicitly", () => {
  * so this is a second opinion and not the same derivation twice.
  */
 function linesThatLinkThemselves() {
-  const root = path.join(__dirname, "..", "versioned_docs");
-  if (!fs.existsSync(root)) return new Set();
   const found = new Set();
-  for (const dir of fs.readdirSync(root)) {
-    const number = dir.replace(/^version-/, "");
+  const trees = [];
+
+  // The CURRENT docs tree counts too, now that the generator no longer skips
+  // the served version - see the note on that skip in docusaurus.config.ts. Its
+  // number comes from build/search-tags.json, a build artifact that states what
+  // this build serves, rather than from the config that produced robots.txt.
+  try {
+    const m = JSON.parse(
+      fs.readFileSync(path.join(BUILD, "search-tags.json"), "utf8"),
+    );
+    const number = (m.versionNumberByTag || {})[m.lastVersionTag] || "";
+    if (number) {
+      trees.push([path.join(__dirname, "..", "docs"), number]);
+    }
+  } catch {
+    // No manifest: the frozen snapshots below still carry the check.
+  }
+
+  const root = path.join(__dirname, "..", "versioned_docs");
+  if (fs.existsSync(root)) {
+    for (const dir of fs.readdirSync(root)) {
+      trees.push([path.join(root, dir), dir.replace(/^version-/, "")]);
+    }
+  }
+
+  for (const [treeDir, number] of trees) {
     const line = number.split(".").slice(0, 2).join(".");
     const needle = `docs.scandit.com/${line}/data-capture-sdk`;
     const walk = (d) => {
@@ -104,7 +126,7 @@ function linesThatLinkThemselves() {
       }
       return false;
     };
-    if (walk(path.join(root, dir))) found.add(line);
+    if (fs.existsSync(treeDir) && walk(treeDir)) found.add(line);
   }
   return found;
 }
@@ -250,8 +272,15 @@ check("the Agent Skills index exists and lists one page per SDK", () => {
     .map((name) => {
       const at = configSrc.indexOf(`const ${name}`);
       if (at === -1) return "";
-      const close = configSrc.indexOf("\n]", at);
-      return close === -1 ? "" : configSrc.slice(at, close);
+      // Ends at THIS declaration's own terminator. `indexOf("\n]")` looked
+      // scoped and was not: llmsIgnoredSdkTrees is written on one line, so its
+      // "block" ran forward to the closing bracket of whatever multi-line array
+      // came next. It captured only real ignore patterns by luck, and declaring
+      // any other array in between would have changed the answer silently -
+      // which is the failure the comment above claims to have avoided.
+      const rest = configSrc.slice(at);
+      const close = rest.search(/\]\s*(as const)?\s*;/);
+      return close === -1 ? "" : rest.slice(0, close);
     })
     .join("\n");
   assert.ok(

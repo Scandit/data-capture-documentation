@@ -445,7 +445,20 @@ const versionTagByMajor = buildVersionTagByMajor(
 function crawlableApiLines(): string[] {
   const lines = new Set<string>();
   for (const [name, cfg] of Object.entries(docsVersions)) {
-    if (name === effectiveLastVersion) continue; // served unversioned
+    // No skip for the served version. It used to be dropped on the grounds
+    // that it is "served unversioned", but whether a version's pages link the
+    // unversioned tree is precisely what linksToOwnApiLine already reads out of
+    // its content - so the guard was redundant where it agreed and wrong where
+    // it did not.
+    //
+    // Where it did not: scripts/update-version.py rewrites DOCS_LAST_VERSION
+    // from "current" to a numbered version during a beta window, so the served
+    // version becomes a real entry here AND a directory in versioned_docs/. If
+    // the freeze has rewritten that snapshot's links to its own line - which
+    // this config elsewhere says it expects to pick up on the next build - then
+    // the root-served guides link /8.5/data-capture-sdk/ while the catch-all
+    // Disallow blocks it and the Allow covers a tree nothing points at. Exactly
+    // backwards, and silent.
     const number = name === "current" ? cfg.label || "" : name;
     if (!number) continue;
     if (!linksToOwnApiLine(name, number)) continue;
@@ -983,6 +996,22 @@ const config: Config = {
     "docusaurus-plugin-llms",
     {
       ignoreFiles: llmsIgnoreFiles,
+      // Strip the "docs" segment the plugin hardcodes into every URL.
+      //
+      // docusaurus-plugin-llms builds links as <siteUrl>/docs/<path> - see
+      // pathPrefix in its processor - but this site sets routeBasePath: "/" on
+      // the docs plugin, so pages are served at /sdks/..., not /docs/sdks/... .
+      // Verified live: /docs/sdks/android/agent-skills is 404 and
+      // /sdks/android/agent-skills is 200.
+      //
+      // Every entry in llms.txt and llms-full.txt has carried the wrong prefix
+      // since those files were first generated - about 400 dead links each.
+      // That was survivable while nothing pointed at them; it stops being
+      // survivable here, because llms-agent-skills.txt below is a file whose
+      // ENTIRE payload is ten of these links, announced in the blockquote and
+      // allowed by name in robots.txt. An agent following the new pointer would
+      // have found ten 404s. One option fixes all three files.
+      pathTransformation: { ignorePaths: ["docs"] },
       // The blockquote at the top of llms.txt and llms-full.txt, which is the
       // one place in the llmstxt.org layout that an agent reads before the
       // table of contents.
