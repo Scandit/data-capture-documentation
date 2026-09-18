@@ -1,0 +1,244 @@
+.box {
+  margin: 2.5rem 0 0.5rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 10px;
+  background: var(--ifm-background-color);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.q {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.votes {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.vote {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.vote:hover {
+  border-color: var(--ifm-color-primary);
+}
+
+/* The dark state rules below outrank the bare .vote:hover, so without this a
+   held-but-unrecorded vote would keep its state border on hover in dark while
+   turning primary in light. Same rule, restated to win. */
+html[data-theme='dark'] .vote:hover {
+  border-color: var(--ifm-color-primary);
+}
+
+/* Tip and warning admonitions are the site's positive/negative pair, so these
+   two buttons take their fill and label from doc-admonition.scss: a helpful
+   vote is the same green as a tip callout, an unhelpful one the same yellow as
+   a warning.
+
+   The border is the one place they cannot follow it. On an admonition the
+   border merely encloses a full-width tinted block; here it is what says which
+   button you pressed, and the callout's soft step is too faint for that - it
+   read weaker than an untouched button's own border. So each state takes the
+   saturated step its own admonition already uses for the icon and inline code,
+   which keeps every colour inside the pair this widget is modelled on. */
+.on {
+  border-color: var(--light-green-80);
+  background: var(--light-green-40);
+  color: var(--light-green-100);
+}
+
+/* Warning admonitions leave the label at the base color in light and override
+   it only for dark, so this does the same rather than tinting on its own.
+   Yellow has no mid step that carries on white, so the border takes the step
+   the warning admonition gives its inline code. It reads heavier than .on's
+   green - the two ramps are not symmetrical. */
+.bad {
+  border-color: var(--light-yellow-120);
+  background: var(--light-yellow-40);
+}
+
+/* The green ramp does not redefine itself for the dark theme, so .on has to be
+   restated. The yellow ramp does, which makes .bad's background and border
+   restatement a no-op - it is kept only so both states read the same way here,
+   as doc-admonition.scss also does. Its color override is load-bearing. */
+html[data-theme='dark'] .on {
+  border-color: var(--dark-green-60);
+  background: var(--dark-green-100);
+  color: var(--dark-green-60);
+}
+
+html[data-theme='dark'] .bad {
+  border-color: var(--dark-brown-40);
+  background: var(--dark-brown-80);
+  color: var(--dark-brown-40);
+}
+
+.more {
+  margin-top: 0.9rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+  padding-top: 0.8rem;
+}
+
+.mlabel {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.45rem;
+}
+
+.row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.textarea {
+  flex: 1;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 0.88rem;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+}
+
+.textarea:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 1px;
+  border-color: var(--ifm-color-primary);
+}
+
+.send {
+  flex: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-primary);
+  background: var(--ifm-color-primary);
+  color: #fff;
+}
+
+.send:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.thanks {
+  margin: 0.9rem 0 0;
+  font-size: 0.88rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.note {
+  margin: 0.5rem 0 0;
+  font-size: 0.78rem;
+  color: var(--ifm-color-emphasis-700);
+}
+
+/* Recorded: still focusable and announced (aria-disabled), but inert. The
+   hover highlight would otherwise advertise a control that does nothing. */
+.vote[aria-disabled='true'] {
+  cursor: default;
+}
+
+/* The option not taken is visibly spent - previously the only difference from a
+   live button was the cursor, which is nothing for a mouse user who never
+   hovers it. Dimmed through the border and the label token rather than
+   `opacity`, which composited the label to 3.79:1 in light mode; these stay
+   at 5.72:1 light and 12.18:1 dark. The chosen button keeps full contrast. */
+.vote[aria-disabled='true']:not(.on):not(.bad) {
+  color: var(--ifm-color-emphasis-700);
+  border-color: var(--ifm-color-emphasis-200);
+  background: transparent;
+}
+
+.vote[aria-disabled='true']:hover {
+  border-color: var(--ifm-color-emphasis-300);
+}
+
+.vote[aria-disabled='true'].on:hover {
+  border-color: var(--light-green-80);
+}
+
+.vote[aria-disabled='true'].bad:hover {
+  border-color: var(--light-yellow-120);
+}
+
+html[data-theme='dark'] .vote[aria-disabled='true'].on:hover {
+  border-color: var(--dark-green-60);
+}
+
+html[data-theme='dark'] .vote[aria-disabled='true'].bad:hover {
+  border-color: var(--dark-brown-40);
+}
+
+.thanks:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
+
+/* Announcement-only: carries the live region without occupying layout. */
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.count {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* The undelivered notice lives inside the box, above the input it refers to,
+   so it reads as a problem with this control rather than a page-level status. */
+.failed {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+  background: var(--light-yellow-40);
+  border: 1px solid var(--light-yellow-80);
+  border-radius: 8px;
+  padding: 0.5rem 0.65rem;
+}
+
+/* Same colour recipe as DesignLibraryNotice and the warning admonition it
+   follows; the geometry stays the widget's own, to match the boxes around it. */
+html[data-theme='dark'] .failed {
+  background: var(--dark-brown-80);
+  border-color: var(--dark-brown-60);
+  color: var(--dark-brown-40);
+}
+
+.failed:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 2px;
+}
