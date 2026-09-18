@@ -109,9 +109,11 @@ function stage(origin, edits = {}) {
   // A build linking one frozen line, with enough urls to clear MIN_LINE_URLS.
   // The hrefs carry the real host: that is what the link walker matches on, and
   // rewriting them would test a different regex than the one that ships.
+  const linkedLine = edits.linkedLine || "7.6";
   const links = Array.from(
     { length: 12 },
-    (_, i) => `<a href="https://docs.scandit.com/7.6/data-capture-sdk/ios/api/s${i}.html">s</a>`,
+    (_, i) =>
+      `<a href="https://docs.scandit.com/${linkedLine}/data-capture-sdk/ios/api/s${i}.html">s</a>`,
   ).join("");
   fs.writeFileSync(path.join(tmp, "build", "index.html"), links);
   fs.writeFileSync(
@@ -564,6 +566,115 @@ async function main() {
         `lines swept by a catch-all belong in uncertain: ${JSON.stringify(artefact)}`,
       );
       assert.match(out, /could not tell for/);
+    } finally {
+      server.close();
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  await check("the upward walk finds a line far above the newest linked one", async () => {
+    // The old fixed `knownCeiling + 3` ceiling stopped dead three minors above
+    // what the build links, so a published line any further up was never probed
+    // and never reached the gate - the blind spot this script exists to close,
+    // failing silently. /7.6/ is linked here and /7.12/ is published.
+    const published = new Set(["7.12"]);
+    const { server, origin } = await startOrigin({
+      versioned: (line, rest, res) => {
+        if (published.has(line)) {
+          res.writeHead(200, { "content-type": "text/html" });
+          res.end("<html><head></head><body>frozen</body></html>");
+          return;
+        }
+        res.writeHead(404);
+        res.end();
+      },
+      counterpart: (rest, res) => {
+        res.writeHead(200, { "content-type": "text/html" });
+        res.end("<html><head></head><body>current</body></html>");
+      },
+    });
+    const tmp = stage(origin);
+    try {
+      const { out } = await runDiscovery(tmp, ["--quiet"]);
+      const artefact = JSON.parse(
+        fs.readFileSync(path.join(tmp, "build", "api-reference-lines.json"), "utf8"),
+      );
+      assert.ok(
+        artefact.published.includes("7.12"),
+        `a line six minors above the anchor must still be found: ` +
+          `${JSON.stringify(artefact)}\n${out}`,
+      );
+    } finally {
+      server.close();
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  await check("the lower-major sweep is bounded and says what it covered", async () => {
+    // The other half of completeness: sweeping a major in full must still stop
+    // somewhere, and must report the range it really searched rather than one it
+    // computed. Nothing above /7.6/ exists here.
+    const { server, origin } = await startOrigin({
+      versioned: (line, rest, res) => {
+        res.writeHead(404);
+        res.end();
+      },
+      counterpart: (rest, res) => {
+        res.writeHead(200, { "content-type": "text/html" });
+        res.end("<html><head></head><body>current</body></html>");
+      },
+    });
+    const tmp = stage(origin);
+    try {
+      const { out } = await runDiscovery(tmp);
+      assert.match(out, /7\.28-7\.0/, `the range actually swept must be printed:\n${out}`);
+      assert.ok(!/\/7\.29\//.test(out), `and must stop at the ceiling:\n${out}`);
+      // Inside its own budget, which is what makes the full sweep affordable.
+      // discovery prints "requests spent:  N of M"; the gate reverses the order.
+      const spent = /requests spent:\s+(\d+) of (\d+)/.exec(out);
+      assert.ok(spent, `the spend must be reported:\n${out}`);
+      assert.ok(
+        Number(spent[1]) < Number(spent[2]),
+        `a complete sweep must fit the budget: ${spent[1]} of ${spent[2]}`,
+      );
+    } finally {
+      server.close();
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  await check("one throttled counterpart does not cost every line a pick", async () => {
+    // Every --lines target borrows the SAME handful of paths, so caching a
+    // transient failure spent one blip on all of them at once: three lines with
+    // three of four shared paths throttled each dropped to checked === 1 against
+    // a floor of 2 and all three landed in thinLines together.
+    //
+    // The counterpart 429s once and then answers. With the failure cached, the
+    // second line reuses it and is judged on fewer pages; without, it re-asks.
+    let firstCall = true;
+    const { server, origin } = await startOrigin({
+      versioned: (line, rest, res) => {
+        res.writeHead(200, { "content-type": "text/html" });
+        res.end("<html><head></head><body>versioned</body></html>");
+      },
+      counterpart: (rest, res) => {
+        if (firstCall) {
+          firstCall = false;
+          res.writeHead(429);
+          res.end();
+          return;
+        }
+        res.writeHead(200, { "content-type": "text/html" });
+        res.end("<html><head></head><body>current</body></html>");
+      },
+    });
+    const tmp = stage(origin);
+    try {
+      const { out } = await runGate(tmp, ["--sample", String(SAMPLE), "--lines", "8.5,8.4"]);
+      // One pick is lost to the 429 - that is honest. The point is that it is
+      // ONE, not one per line sharing the path.
+      const lost = (out.match(/counterpart -> HTTP 429/g) || []).length;
+      assert.strictEqual(lost, 1, `a single 429 must cost a single pick:\n${out}`);
     } finally {
       server.close();
       fs.rmSync(tmp, { recursive: true, force: true });

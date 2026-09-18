@@ -99,18 +99,44 @@ function dropArtefact() {
   }
 }
 /**
- * Hard ceiling on live requests. A healthy sweep takes ~42 today; the figure
- * tracks how many minors exist below the served one, so re-measure rather than
- * trusting it. It can legitimately reach the cap: for a major with no linked
- * line at all, `lowerMajorCeiling` falls back to the highest minor seen
- * anywhere, so at 9.0.0 the sweep would try 8.28 down to 8.0 - minors that
- * never shipped. Overflow is filed as "could not tell", never as absence.
+ * Hard ceiling on live requests, sized for a COMPLETE sweep rather than a
+ * healthy one.
  *
- * The cap earns its keep under rate limiting, where every minor used to consume
- * all three probes: measured at 105 requests with a 15 s ceiling each, a
- * multi-minute and near-useless run in a step that only advises.
+ * The arithmetic, so this can be re-derived instead of trusted: every minor that
+ * is genuinely absent costs all WANT_PROBES requests, because a clean 404 only
+ * rules out that path and the loop goes on to the next. A published one usually
+ * costs a single request, since the first probe hits. So the worst case is
+ * roughly `3 x (minors on the current major + maxMinorSeen + 1)` plus up to
+ * WANT_PROBES * 3 to confirm the probe paths - about 180 at today's shape, where
+ * maxMinorSeen is 28.
+ *
+ * Measured on the live site on 2026-09-18: 99 requests in 21 s, sweeping
+ * 8.5-8.0 and 7.28-7.0. That is the real cost of not assuming which minors a
+ * major ever had - see the note on the lower-major sweep - and it is most of
+ * this budget, by design. It was 42 when the sweep stopped three minors above
+ * what the build links, and that cheapness was the bug.
+ *
+ * 250 rather than 180 leaves room for a major with more minors than 6.28 had.
+ * The cap is not the real bound any more; DEADLINE_MS is. This one stops a
+ * pathological sweep cheaply, and overflow is filed as "could not tell", never
+ * as absence.
  */
-const REQUEST_BUDGET = 90;
+const REQUEST_BUDGET = 250;
+
+/**
+ * The lowest upper bound the lower-major sweep will accept.
+ *
+ * `maxMinorSeen` is read off the link graph, which is the one thing that by
+ * definition does not contain the lines being searched for - so it collapses
+ * exactly when it matters. Today it reports 28 only because the build still
+ * links /6.28/; the day that snapshot is deleted it drops to 6, and the sweep
+ * for major 7 would silently shrink from 7.28-7.0 to 7.6-7.0, losing every line
+ * above the newest linked one without a word.
+ *
+ * 28 because this project has shipped a .28 minor. It is a floor, not a cap:
+ * `maxMinorSeen` still wins when the link graph knows about something wider.
+ */
+const MINOR_CEILING_FLOOR = 28;
 /**
  * And a wall-clock deadline, because the request count does not bound the time.
  * These HEADs are strictly sequential, so 90 of them at the 15 s per-request
@@ -183,26 +209,7 @@ async function headStatus(url) {
 }
 
 
-/**
- * How high to probe on a major below the current one.
- *
- * `Math.max(knownCeiling(maj), maxMinorSeen())` was dead arithmetic: maxMinorSeen
- * is the maximum over ALL lines, so it always won - major 7 was swept 7.28 to
- * 7.0 and the report claimed a range for 22 minors that never shipped, at three
- * requests each under throttling.
- *
- * The other extreme, capping at that major's own linked ceiling, derives the
- * upper bound of the search from the link graph, which by definition does not
- * contain the lines being looked for. So: a few minors ABOVE what is linked,
- * which is where a just-frozen-and-unlinked line would sit, and the full
- * maxMinorSeen range only for a major with nothing linked at all to learn from.
- */
-const LOOKAHEAD_MINORS = 3;
 
-function lowerMajorCeiling(byLine, major) {
-  const known = knownCeiling(byLine, major);
-  return known === null ? maxMinorSeen(byLine) : known + LOOKAHEAD_MINORS;
-}
 
 async function main() {
   if (!fs.existsSync(BUILD)) {
@@ -294,6 +301,90 @@ async function main() {
   let genericRedirects = 0;
   const redirects = [];
   const ranges = [];
+
+  /**
+   * Ask one line whether it is published, and record the answer.
+   *
+   * @returns {"published"|"absent"|"unknown"} - "absent" ONLY for a clean 404 on
+   * every probe. Anything else that could not be established is "unknown", which
+   * the callers must not read as absence.
+   */
+  async function probeLine(line) {
+    if (byLine.has(line)) return "published"; // already covered by the link walk
+    let hit = false;
+    let unknown = false;
+    let redirected = false;
+    /** A probe here was answered by a catch-all, which proves nothing. */
+    let swept = false;
+    for (const rest of probes) {
+      const { status, location } = await headStatus(
+        `${ORIGIN}/${line}/data-capture-sdk/${rest}`,
+      );
+      if (status === 200) {
+        hit = true;
+        break;
+      }
+      // A redirect means the line IS served here and points elsewhere. The gate
+      // has a verdict for that, including the case where it points at ANOTHER
+      // frozen line - which moves the duplicate instead of removing it - so the
+      // line must reach the gate rather than being filed as "could not tell".
+      if (status >= 300 && status < 400) {
+        if (servesSymbol(location, rest)) {
+          hit = true;
+          redirected = true;
+          break;
+        }
+        // A redirect that drops the symbol path is a catch-all, not this line.
+        // Try the next probe, so a hosting rule cannot report every minor ever
+        // released as published - but REMEMBER it, because unlike a 404 it is
+        // not evidence of absence either. Filing it as absence contradicted
+        // this file's own rule: a probe that proves nothing must not read as
+        // absence. Reproduced against a catch-all stub before this: 45 generic
+        // redirects counted, and the artefact still said
+        // {"published": [], "uncertain": []} with the report announcing
+        // "Nothing published-but-unlinked was found".
+        genericRedirects += 1;
+        swept = true;
+        continue;
+      }
+      if (status === -1) {
+        // The budget or the deadline ran out before this line was asked about.
+        // Not evidence of anything, so it must not read as absence.
+        unknown = true;
+        break;
+      }
+      if (status !== 404) {
+        // Throttling or a server error: stop this line rather than paying for
+        // the remaining probes to learn the same nothing.
+        unknown = true;
+        break;
+      }
+      // A clean 404 means THIS path is not on the line - not that the line is
+      // absent. Breaking here made probes[0] the sole judge and left WANT_PROBES
+      // dead for line probing: a line whose first durable symbol had been renamed
+      // read as absent, was dropped from --lines and was never checked - the
+      // newest-frozen-line blind spot this script exists to close, failing
+      // silently. So: try the next probe.
+    }
+    if (hit) {
+      found.push(line);
+      if (redirected) redirects.push(line);
+      return "published";
+    }
+    if (unknown || swept) {
+      uncertain.push(line);
+      return "unknown";
+    }
+    return "absent";
+  }
+
+  /** Probe `maj.ceiling` down to `maj.0`. Bounded by the ceiling itself. */
+  async function sweepDown(maj, ceiling) {
+    for (let minor = ceiling; minor >= 0; minor--) {
+      await probeLine(`${maj}.${minor}`);
+    }
+  }
+
   for (const maj of majors) {
     // The served line's OWN versioned copy is excluded. /8.6/ is byte-identical
     // to the unversioned tree (47,186 bytes each, measured 2026-09-04), so it IS
@@ -302,82 +393,55 @@ async function main() {
     // old line's pages", and feeding it in made every /8.6/ pick a violation that
     // would block --strict for ever and crowd real old-line findings out of the
     // 20-line print cap. It is stated in the report instead.
-    const ceiling =
-      maj === currentMajor
-        ? currentMinor - 1
-        : lowerMajorCeiling(byLine, maj);
-    // A `.0` release makes `currentMinor - 1` negative, and the range printed as
-    // "9.-1-9.0" - misleading in exactly the release where an operator is looking
-    // for the newly frozen line. The loop already probes nothing there.
-    if (ceiling < 0) {
-      ranges.push(`${maj}.x (none - the served release is ${maj}.0)`);
+    if (maj === currentMajor) {
+      const ceiling = currentMinor - 1;
+      // A `.0` release makes `currentMinor - 1` negative, and the range printed
+      // as "9.-1-9.0" - misleading in exactly the release where an operator is
+      // looking for the newly frozen line. The loop already probes nothing there.
+      if (ceiling < 0) {
+        ranges.push(`${maj}.x (none - the served release is ${maj}.0)`);
+        continue;
+      }
+      ranges.push(`${maj}.${ceiling}-${maj}.0`);
+      await sweepDown(maj, ceiling);
       continue;
     }
-    ranges.push(`${maj}.${ceiling}-${maj}.0`);
-    for (let minor = ceiling; minor >= 0; minor--) {
-      const line = `${maj}.${minor}`;
-      if (byLine.has(line)) continue; // already covered by the link walk
-      let hit = false;
-      let unknown = false;
-      let redirected = false;
-      /** A probe here was answered by a catch-all, which proves nothing. */
-      let swept = false;
-      for (const rest of probes) {
-        const { status, location } = await headStatus(
-          `${ORIGIN}/${line}/data-capture-sdk/${rest}`,
-        );
-        if (status === 200) {
-          hit = true;
-          break;
-        }
-        // A redirect means the line IS served here and points elsewhere. The gate
-        // has a verdict for that, including the case where it points at ANOTHER
-        // frozen line - which moves the duplicate instead of removing it - so the
-        // line must reach the gate rather than being filed as "could not tell".
-        if (status >= 300 && status < 400) {
-          if (servesSymbol(location, rest)) {
-            hit = true;
-            redirected = true;
-            break;
-          }
-          // A redirect that drops the symbol path is a catch-all, not this line.
-          // Try the next probe, so a hosting rule cannot report every minor ever
-          // released as published - but REMEMBER it, because unlike a 404 it is
-          // not evidence of absence either. Filing it as absence contradicted
-          // this file's own rule: a probe that proves nothing must not read as
-          // absence. Reproduced against a catch-all stub before this: 45 generic
-          // redirects counted, and the artefact still said
-          // {"published": [], "uncertain": []} with the report announcing
-          // "Nothing published-but-unlinked was found".
-          genericRedirects += 1;
-          swept = true;
-          continue;
-        }
-        if (status === -1) {
-          // The budget ran out before this line was asked about. Not evidence of
-          // anything, so it must not read as absence.
-          unknown = true;
-          break;
-        }
-        if (status !== 404) {
-          // Throttling or a server error: stop this line rather than paying for
-          // the remaining probes to learn the same nothing.
-          unknown = true;
-          break;
-        }
-        // A clean 404 means THIS path is not on the line - not that the line is
-        // absent. Breaking here made probes[0] the sole judge and left WANT_PROBES
-        // dead for line probing: a line whose first durable symbol had been renamed
-        // read as absent, was dropped from --lines and was never checked - the
-        // newest-frozen-line blind spot this script exists to close, failing
-        // silently. So: try the next probe.
-      }
-      if (hit) {
-        found.push(line);
-        if (redirected) redirects.push(line);
-      } else if (unknown || swept) uncertain.push(line);
-    }
+
+    // A major below the current one is swept in FULL, from the widest minor this
+    // project has shipped down to .0.
+    //
+    // Two cheaper bounds were tried and both lost lines:
+    //
+    //   - `knownCeiling(maj) + 3`, a fixed window above the newest LINKED minor.
+    //     It probed three minors whether or not they ever existed - 7.9, 7.8 and
+    //     7.7 have not - and it stopped dead at three, so anything further up was
+    //     never asked about.
+    //   - walking up until a streak of absent minors. That reads as if gaps were
+    //     small, and the gap here is the whole point: de-publication removes a
+    //     major's OLDEST lines and keeps its newest, so the surviving block sits
+    //     ABOVE a stretch of absent minors, not below one. With /7.6/ linked and
+    //     /7.12/ still served, /7.7/ through /7.11/ are gone and any streak ends
+    //     the walk before it arrives. Verified: a stub publishing only /7.12/ was
+    //     missed at a streak of three.
+    //
+    // So the honest bound is the one that does not assume anything about the
+    // gaps, and its cost is the price of not knowing which minors a major ever
+    // had. `maxMinorSeen` is the widest this project has actually shipped, which
+    // is why REQUEST_BUDGET is sized for it rather than for a healthy run.
+    //
+    // Downward, so the budget is spent newest-first: a line frozen recently is
+    // the one whose content is closest to current and the likeliest to outrank
+    // it, and if the sweep is cut short it is the oldest minors that go unasked.
+    const ceiling = Math.max(maxMinorSeen(byLine), MINOR_CEILING_FLOOR);
+    const anchor = knownCeiling(byLine, maj);
+    ranges.push(
+      anchor === null
+        ? `${maj}.${ceiling}-${maj}.0 (nothing linked on ${maj}.x)`
+        : `${maj}.${ceiling}-${maj}.0`,
+    );
+    await sweepDown(maj, ceiling);
   }
+
 
   found.sort(compareLines);
   // Same order as `found`, which it is printed beside.

@@ -952,9 +952,45 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
   // GETs of the same 8 urls. That redundancy feeds the 429 bursts this script
   // spends most of its coverage accounting on.
   const counterparts = new Map();
-  const counterpartOf = (rest) => {
-    if (!counterparts.has(rest)) counterparts.set(rest, get(`${ORIGIN}/data-capture-sdk/${rest}`));
-    return counterparts.get(rest);
+
+  /**
+   * Is this counterpart response worth remembering for the rest of the run?
+   *
+   * Only a DEFINITIVE answer. 200 means the current page exists, 404 means it was
+   * retired, and neither changes while the run is in flight. A 429, a 5xx or a
+   * transport failure is a statement about this moment, not about the page.
+   */
+  const definitive = (res) => res.status === 200 || res.status === 404;
+
+  /**
+   * The unversioned counterpart, fetched once per symbol path - but only CACHED
+   * once it has answered.
+   *
+   * The cache is what keeps a --lines run affordable: every borrowed line shares
+   * the same handful of picks, so without it the footer's own advice with two
+   * linked lines and --sample 8 issued 32 duplicate GETs of the same 8 urls.
+   *
+   * Caching a FAILURE, though, spends one blip on every line at once. All the
+   * --lines targets borrow the same four paths, so a single 429 on one
+   * unversioned url used to poison that pick for every discovered line in the
+   * run: with three lines and three of the four shared paths throttled, each
+   * line dropped to checked === 1 against a judgedFloor of 2 and all three
+   * landed in thinLines together, from one burst. This file already documents
+   * that poisoning for the noindex path and moved that check earlier to dodge
+   * it; the canonical path still had to consult the counterpart, so the fix
+   * belongs here instead.
+   *
+   * Re-asking is bounded by REQUEST_BUDGET and the deadline, and a site that is
+   * throttling this hard is one the run should be reporting as undetermined
+   * anyway - which it now does per line rather than for all of them at once.
+   */
+  const counterpartOf = async (rest) => {
+    if (!counterparts.has(rest)) {
+      counterparts.set(rest, get(`${ORIGIN}/data-capture-sdk/${rest}`));
+    }
+    const res = await counterparts.get(rest);
+    if (!definitive(res)) counterparts.delete(rest);
+    return res;
   };
 
   // The deadline covers the live sweep, which is the part that can run away.
