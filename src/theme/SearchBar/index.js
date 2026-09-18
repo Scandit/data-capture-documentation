@@ -261,6 +261,114 @@ function stripTrailingMember(query) {
   const base = m[1];
   return base.length >= 3 && base !== q ? base : null;
 }
+// Readers paste symbols straight out of their IDE - "IdCaptureSettings.
+// resultShouldContainImage", "sdc.core.ui.viewfinder.rectangular",
+// "strip_leading_zero". Algolia keeps a long dotted chain (3+ segments) as ONE
+// token and never splits camelCase, so those match nothing even though the
+// symbol is indexed hundreds of times: "this.state.settings.codeDuplicateFilter"
+// returned 0 while bare "codeduplicatefilter" returned 235. Splitting the
+// separators and the case boundaries turns every one of those into the right
+// page (sdc.core.ui.viewfinder.rectangular -> 0 hits becomes viewfinder.html).
+//
+// Only identifier-SHAPED queries qualify: no whitespace, and either a separator
+// or an internal capital. Prose and Japanese queries never contain both, so they
+// are left untouched. Returns null when there is nothing to decompose - notably
+// an all-lowercase run-on like "barcodetrackingadvancedoverlayviewadapter" has
+// no boundary to find, and needs the index-side fix rather than this one.
+// A pasted URL is separator-rich, so it passes every shape test below - but
+// decomposing it yields "https docs scandit com sdks ios add sdk", eight common
+// tokens that Algolia's word-optional matching turns into a page of unrelated
+// hits. Those hits then read as success both to the zero-hit ladder and to
+// search analytics, burying a genuine no-result state and with it the content
+// gap the no-result report exists to surface.
+//
+// Detected by URL shape rather than by token count: a real symbol can be long
+// ("IdCaptureSettings.resultShouldContainImage" is seven tokens), so counting
+// tokens rejects legitimate queries while still admitting a short URL.
+const URL_SCHEME_RE = /^[a-z][a-z0-9+.-]*:\/\//i;
+const URL_HOST_RE = /\b[a-z0-9-]+\.(?:com|org|net|io|dev|ai|co|app)\b/i;
+// Backstop for anything pathological that is neither: far past any symbol we index.
+const MAX_DECOMPOSED_TOKENS = 10;
+function decomposeIdentifier(query) {
+  const q = (query || "").trim();
+  if (!q || /\s/.test(q)) return null;
+  // URL_HOST_RE looks for "<word>.<tld>" ANYWHERE in the query, which also
+  // fires inside ordinary namespace paths: java.io.IOException,
+  // android.app.Activity, androidx.core.app.ActivityCompat,
+  // Scandit.DataCapture.Net. Those are IDE pastes - the exact input this
+  // function exists to rescue - and ".net" is the worst of them in a repo that
+  // ships net/ios and net/android as frameworks. A bare host match is therefore
+  // only believed when the query carries no capital: hostnames are never typed
+  // "Example.Com", and identifiers almost always carry a capital somewhere. A
+  // scheme is conclusive on its own. An all-lowercase paste ending in a
+  // TLD-shaped word ("scandit.datacapture.net") is genuinely ambiguous and
+  // still reads as a host; decomposition only runs on a zero-hit retry, so the
+  // cost of that is one missed rung, not a wrong result.
+  const looksLikeHost = URL_HOST_RE.test(q) && !/[A-Z]/.test(q);
+  if (URL_SCHEME_RE.test(q) || looksLikeHost) return null;
+  const hasSeparator = /[._/\\:>-]/.test(q);
+  const hasCamelHump = /[a-z0-9][A-Z]/.test(q);
+  // A pure acronym boundary ("IDCapture", "APIKey") has no lowercase before the
+  // capital, so hasCamelHump alone rejected the very queries the ACRONYM_SPLIT
+  // rule below was written to handle - it was unreachable for them.
+  const hasAcronymBoundary = /[A-Z][A-Z][a-z]/.test(q);
+  // Error codes arrive glued ("error1025"). They carry no separator and no case
+  // boundary, so without this gate decomposeIdentifier returned null and the
+  // retry never ran - even though "error 1025" finds context-status.html. One
+  // digit boundary covers every code, not just this one.
+  const hasDigitBoundary = /[A-Za-z]\d|\d[A-Za-z]/.test(q);
+  if (!hasSeparator && !hasCamelHump && !hasAcronymBoundary && !hasDigitBoundary)
+    return null;
+  const out = q
+    .replace(/[._/\\:>-]+/g, " ")
+    // fooBar -> foo Bar, then IDCapture -> ID Capture
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/([A-Z]+)([A-Z][a-z])/g, "$1 $2")
+    // error1025 -> error 1025, utf8 -> utf 8. Only ever reached on a zero-hit
+    // retry, so a split that reads oddly costs nothing a failed search did not
+    // already cost.
+    .replace(/([A-Za-z])(\d)/g, "$1 $2")
+    .replace(/(\d)([A-Za-z])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim();
+  if (!out || out.toLowerCase() === q.toLowerCase()) return null;
+  return out.split(" ").length <= MAX_DECOMPOSED_TOKENS ? out : null;
+}
+// Whether any word the reader typed actually landed on this hit.
+//
+// nbExactWords counts the query words that matched a word exactly, and it
+// cannot be used on its own for two separate reasons. DocSearch runs queryType
+// prefixLast, so the last word is matched as a prefix and a prefix is not
+// "exact" - "settings", "timeout" and "license" all report 0 while being
+// perfectly good searches. And a SYNONYM match is an alternative, not an exact
+// word, so every Japanese query resolved through the ja synonyms reports 0 too
+// while landing on exactly the right page.
+//
+// What is left is typo distance, and the cut is at three. minWordSizefor2Typos
+// is 7 on this index and the content is mostly long identifiers, so two-typo
+// tolerance is what realistic misspellings rely on: "recangularviewfindr"
+// (2 typos) finds rectangular-viewfinder.html and "barcodcapturesetings"
+// (2 typos) finds configure-barcode-symbologies. Three is where it stops being
+// a misspelling and starts being a coincidence: "wyoming" matched nothing
+// exactly and still returned 462 pages topped by the Android release notes,
+// reached through three typos.
+//
+// An earlier version of this guard also dropped a hit when the query produced
+// several words and none matched exactly. That was aimed at CJK queries, which
+// used to match nothing at all and return the whole corpus ranked by pageRank.
+// That is now fixed where it belonged - the index carries ja in
+// queryLanguages/indexLanguages and Japanese synonyms - so an unsupported
+// language returns an honest zero (Korean, Chinese, Russian and Arabic all do)
+// and the rule only destroyed the Japanese results that started working.
+//
+// Hits with no _rankingInfo are kept, so nothing is dropped if getRankingInfo
+// is ever turned off.
+function hitMatchedQuery(hit) {
+  const ranking = hit && hit._rankingInfo;
+  if (!ranking) return true;
+  if (ranking.nbExactWords > 0) return true;
+  return ranking.nbTypos < 3;
+}
 function Hit({ hit, children }) {
   // Mouse clicks navigate through this Link directly and never reach the
   // modal's navigator (which only handles keyboard selection), so capture
@@ -398,6 +506,9 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   // We let user override default searchParameters if she wants to
   const searchParameters = {
     hitsPerPage: 1000,
+    // Needed for the nbExactWords guard in transformItems: without it Algolia
+    // omits _rankingInfo and the guard cannot tell a real match from noise.
+    getRankingInfo: true,
     ...props.searchParameters,
     facetFilters: facetFilters,
   };
@@ -472,6 +583,9 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   }).current;
   const transformItems = useCallback(
     (items) => {
+      // Drop hits that matched nothing before the framework routing below, so
+      // noise cannot skew the per-symbol framework choice. See hitMatchedQuery.
+      const matched = items.filter(hitMatchedQuery);
       // API pages live under /data-capture-sdk/<fw>/, not /sdks/<fw>/, so match
       // them by their own framework segment (net.ios -> net/ios).
       //
@@ -509,7 +623,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
       let bestFwBySymbol = null;
       if (!apiFwTargets) {
         bestFwBySymbol = {};
-        for (const it of items) {
+        for (const it of matched) {
           const m = apiMatchOf(it.url);
           if (!m) continue;
           const fw = apiFrameworkToSdk(m[1]);
@@ -524,7 +638,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
           }
         }
       }
-      const filteredItems = items.filter((elem) => {
+      const filteredItems = matched.filter((elem) => {
         const url = elem.url || "";
         const apiMatch = apiMatchOf(url);
         if (apiMatch) {
@@ -604,6 +718,36 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
       // prop is silently ignored), so intercept the search client itself:
       // every keystroke's request passes through here.
       const originalSearch = searchClient.search.bind(searchClient);
+      // hitMatchedQuery also runs in transformItems, but that is the RENDER
+      // path - it happens after nbHitsOf() is read below. So a query whose every
+      // hit fails the guard still reported its raw count: the reader saw an
+      // empty modal while the retry ladder saw 128 hits (and so never retried)
+      // and docs_search_performed logged a result-ful search. Apply the guard to
+      // the response when it empties the result set entirely, so every count
+      // downstream matches what the reader actually gets.
+      //
+      // This cannot fix Algolia's OWN no-results report. The counted
+      // 'whole-query' ping is a separate request sent with hitsPerPage 0, so
+      // Algolia computes and stores its nbHits server-side with no hits for us
+      // to inspect. Japanese queries will keep showing as result-ful in the
+      // Algolia dashboard; the honest count lives in PostHog.
+      const guardAllNoise = (response) => {
+        const first = response?.results?.[0];
+        if (!first || !Array.isArray(first.hits) || first.hits.length === 0) {
+          return response;
+        }
+        if (first.hits.some(hitMatchedQuery)) return response;
+        return {
+          ...response,
+          results: response.results.map((result, index) =>
+            index === 0
+              ? { ...result, hits: [], nbHits: 0, nbPages: 0 }
+              : result
+          ),
+        };
+      };
+      const guardedSearch = (requests) =>
+        originalSearch(requests).then(guardAllNoise);
       searchClient.search = (requests) => {
         const first = Array.isArray(requests) ? requests[0] : null;
         const query =
@@ -691,18 +835,77 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         // (the primary, or the member-stripped retry when that is what found the
         // hits), so the counted ping below logs the query the user really saw.
         const primaryQuery = strippedQuery != null ? strippedQuery : query || "";
-        const resultPromise = originalSearch(buildRequests(strippedQuery)).then(
+        // Two rungs, both zero-hit only, ordered by the SHAPE of the query
+        // rather than by a fixed preference.
+        //
+        // Ordering by "decomposition is more precise" was wrong in practice.
+        // decomposeIdentifier accepts every query stripTrailingMember accepts,
+        // so a fixed decompose-first order meant rung 2 ran only when rung 1
+        // returned literally zero - and because Algolia treats words as
+        // optional, the decomposed form nearly always returns something. For
+        // "rectangularviewfinderstyle.legacy": decomposing gives
+        // "rectangularviewfinderstyle legacy" -> 10 loose hits (migrate-5-to-6
+        // anchors), which was adopted, while stripping the member gives
+        // "rectangularviewfinderstyle" -> 203 hits topped by the correct
+        // viewfinder API page, which never ran. The enum-member fallback was
+        // dead for exactly the queries it was added for.
+        //
+        // The discriminator is what the base looks like once the member is
+        // removed. An enum member on an all-lowercase parent
+        // ("rectangularviewfinderstyle.legacy") leaves a single run-on token
+        // that only stripTrailingMember can reach. Anything else - a multi-
+        // segment chain ("sdc.core.ui.viewfinder.rectangular") or a camelCase
+        // symbol ("IdCaptureSettings.resultShouldContainImage") - leaves a base
+        // Algolia still cannot tokenise, so decomposition has to go first.
+        const memberFirst = (base) => {
+          const stripped = stripTrailingMember(base);
+          if (!stripped) return false;
+          return !/[._/\\:>-]/.test(stripped) && !/[a-z0-9][A-Z]/.test(stripped);
+        };
+        const zeroHitRetries = (base) => {
+          const rungs = memberFirst(base)
+            ? [stripTrailingMember(base), decomposeIdentifier(base)]
+            : [decomposeIdentifier(base), stripTrailingMember(base)];
+          return rungs.filter((candidate) => candidate && candidate !== base);
+        };
+        const resultPromise = guardedSearch(buildRequests(strippedQuery)).then(
           (response) => {
             if (nbHitsOf(response) !== 0)
               return { response, effectiveQuery: primaryQuery };
             const base = strippedQuery || query || "";
-            const memberStripped = stripTrailingMember(base);
-            if (!memberStripped || memberStripped === base)
+            // A retry below 3 characters is never worth an extra round trip:
+            // it is a transient mid-typing prefix, and the analytics ping
+            // already ignores queries this short.
+            if (base.trim().length < 3)
               return { response, effectiveQuery: primaryQuery };
-            return originalSearch(buildRequests(memberStripped)).then((retry) =>
-              nbHitsOf(retry) > 0
-                ? { response: retry, effectiveQuery: memberStripped }
-                : { response, effectiveQuery: primaryQuery }
+            // Sequential: each rung is only paid for when the previous missed.
+            return zeroHitRetries(base).reduce(
+              (chain, candidate) =>
+                chain.then((settled) => {
+                  if (settled.response !== response) return settled;
+                  // Decomposition can CREATE a routed token the primary strip
+                  // pass could not see: "\bios\b" does not match inside
+                  // "iosSparkScan", but decomposing yields "ios Spark Scan" and
+                  // the framework word re-enters as a scored term - the skew
+                  // cf5327560 removed. Route the retry through the same strip.
+                  const retryQuery = stripRoutedTokens(candidate, !!targetTag);
+                  // The digit split can leave a candidate that the routed-token
+                  // strip then reduces to noise: "ios15" decomposes to "ios 15"
+                  // and the framework word is removed, so the retry actually
+                  // sent is "15" ("android12" -> "12", "v7.6" -> "v 7 6").
+                  // Algolia returns pages for a bare numeral, the retry is
+                  // adopted, and the counted ping logs a query nobody typed.
+                  // Require at least one token of real length to survive.
+                  if (!retryQuery || !/[A-Za-z0-9]{3,}/.test(retryQuery))
+                    return settled;
+                  return guardedSearch(buildRequests(retryQuery)).then(
+                    (retry) =>
+                      nbHitsOf(retry) > 0
+                        ? { response: retry, effectiveQuery: retryQuery }
+                        : settled
+                  );
+                }),
+              Promise.resolve({ response, effectiveQuery: primaryQuery })
             );
           }
         );
