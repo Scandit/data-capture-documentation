@@ -8,9 +8,9 @@
 <script>!function(e,t,a,n,g){e[n]=e[n]||[],e[n].push({"gtm.start":(new Date).getTime(),event:"gtm.js"});var m=t.getElementsByTagName(a)[0],r=t.createElement(a);r.async=!0,r.src="https://www.googletagmanager.com/gtm.js?id=GTM-THQQFD7",m.parentNode.insertBefore(r,m)}(window,document,"script","dataLayer")</script>
 
 
-<link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-431/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-431/assets/css/styles.1a9bc21c.css">
-<script src="/data-capture-documentation/pr-preview/pr-431/assets/js/runtime~main.02336ade.js" defer="defer"></script>
-<script src="/data-capture-documentation/pr-preview/pr-431/assets/js/main.eb616e44.js" defer="defer"></script>
+<link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-431/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-431/assets/css/styles.f93666dc.css">
+<script src="/data-capture-documentation/pr-preview/pr-431/assets/js/runtime~main.cb895941.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-431/assets/js/main.52a13c41.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THQQFD7" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -35,7 +35,7 @@
 <p><strong>Filtering duplicates</strong> – Distinguish intentional duplicate scans from accidental re-scans</p>
 </li>
 </ol>
-<p>These capabilities work together seamlessly and are <strong>enabled by default</strong> in SDK 8.1+. In most cases, no additional configuration is required.</p>
+<p>These capabilities work together and are <strong>enabled by default</strong> in SDK 8.1+. In most cases, no additional configuration is required.</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="avoiding-unintentional-scans">Avoiding Unintentional Scans<a class="hash-link" aria-label="Direct link to Avoiding Unintentional Scans" title="Direct link to Avoiding Unintentional Scans" href="/data-capture-documentation/pr-preview/pr-431/sdks/net/ios/ai-powered-barcode-scanning/#avoiding-unintentional-scans">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="the-problem">The Problem<a class="hash-link" aria-label="Direct link to The Problem" title="Direct link to The Problem" href="/data-capture-documentation/pr-preview/pr-431/sdks/net/ios/ai-powered-barcode-scanning/#the-problem">​</a></h3>
 <p>When scanning items from a distance or with imperfect aiming, which is common in retail backrooms, warehouses, or during replenishment, users often accidentally capture barcodes in the background or periphery instead of their intended target. This forces them to open their scan list, identify the wrong entry, delete it, and try again.</p>
@@ -65,7 +65,7 @@
 <p>In environments with multiple barcodes placed closely together, such as densely packed warehouse shelves, multi-label packages, or retail displays, traditional scanners often capture the wrong code. Users must manually adjust their position, zoom in, or repeatedly attempt the scan until the correct barcode is recognized. In some cases, they resort to covering adjacent barcodes with their hands, a slow and awkward workaround.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="how-scandit-solves-it-1">How Scandit Solves It<a class="hash-link" aria-label="Direct link to How Scandit Solves It" title="Direct link to How Scandit Solves It" href="/data-capture-documentation/pr-preview/pr-431/sdks/net/ios/ai-powered-barcode-scanning/#how-scandit-solves-it-1">​</a></h3>
 <p>The scanner <strong>automatically detects dense barcode environments</strong> and adapts its behavior and user interface accordingly.</p>
-<p>The interface transitions seamlessly based on environmental context:</p>
+<p>The interface transitions based on environmental context:</p>
 <ul>
 <li>
 <p><strong>Sparse environments</strong>: Direct scanning with intent anticipation (no aimer needed)</p>
@@ -104,7 +104,7 @@
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="how-scandit-solves-it-2">How Scandit Solves It<a class="hash-link" aria-label="Direct link to How Scandit Solves It" title="Direct link to How Scandit Solves It" href="/data-capture-documentation/pr-preview/pr-431/sdks/net/ios/ai-powered-barcode-scanning/#how-scandit-solves-it-2">​</a></h3>
 <p>Scandit&#x27;s barcode scanning engine already employs <strong>advanced computer vision techniques</strong> at the frontier of the industry to decode damaged, low-contrast, poorly printed, and partially obscured barcodes with exceptional reliability. The engine uses sophisticated image processing, error correction algorithms, and pattern reconstruction to successfully read barcodes that other scanners cannot.
 However, when the barcode&#x27;s encoded information is physically lost or damaged beyond reconstruction, such as when critical sections are torn away, burned, or chemically degraded, our text recognition technology helps to get the data.</p>
-<p>The transition is automatic and requires no user intervention. From the user&#x27;s perspective, they simply point at a damaged label and get the data, whether through barcode decoding or OCR.</p>
+<p>The transition is automatic and requires no user intervention. From the user&#x27;s perspective, they point at a damaged label and get the data, whether through barcode decoding or OCR.</p>
 <p><strong>Key benefits:</strong></p>
 <ul>
 <li>
@@ -123,16 +123,16 @@ Support and configuration details vary by symbology and may evolve over time. Fo
 <div style="width:1200;height:360px"></div>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="filtering-duplicate-scans">Filtering Duplicate Scans<a class="hash-link" aria-label="Direct link to Filtering Duplicate Scans" title="Direct link to Filtering Duplicate Scans" href="/data-capture-documentation/pr-preview/pr-431/sdks/net/ios/ai-powered-barcode-scanning/#filtering-duplicate-scans">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="the-problem-3">The Problem<a class="hash-link" aria-label="Direct link to The Problem" title="Direct link to The Problem" href="/data-capture-documentation/pr-preview/pr-431/sdks/net/ios/ai-powered-barcode-scanning/#the-problem-3">​</a></h3>
-<p>Traditional duplicate filters use <strong>time-based blocking</strong>: after scanning a barcode, the same code cannot be scanned again for a fixed duration (e.g., 1.5 seconds). This approach creates two significant problems:</p>
+<p>Traditional duplicate filters use <strong>time-based blocking</strong>: after scanning a barcode, the same code cannot be scanned again for a fixed duration (for example, 1.5 seconds). This approach creates two significant problems:</p>
 <ol>
 <li>
-<p><strong>Workflow delays</strong> – When intentionally scanning duplicate items (e.g., multiple boxes or items with the same barcode during inventory), users must wait for the timeout to expire between each scan. This artificial delay slows down operations.</p>
+<p><strong>Workflow delays</strong> – When intentionally scanning duplicate items (for example, multiple boxes or items with the same barcode during inventory), users must wait for the timeout to expire between each scan. This artificial delay slows down operations.</p>
 </li>
 <li>
 <p><strong>Accidental re-scans</strong> – When dwelling on a barcode or moving slowly, the timeout expires and the same code is accidentally captured multiple times. Users must then clean up their scan list by identifying and removing duplicate entries.</p>
 </li>
 </ol>
-<p>Both scenarios reduce efficiency and create friction in scanning workflows. Time-based filters cannot distinguish between intentional and accidental duplicates, they simply impose a fixed delay regardless of user intent.</p>
+<p>Both scenarios reduce efficiency and create friction in scanning workflows. Time-based filters cannot distinguish between intentional and accidental duplicates, they impose a fixed delay regardless of user intent.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="how-scandit-solves-it-3">How Scandit Solves It<a class="hash-link" aria-label="Direct link to How Scandit Solves It" title="Direct link to How Scandit Solves It" href="/data-capture-documentation/pr-preview/pr-431/sdks/net/ios/ai-powered-barcode-scanning/#how-scandit-solves-it-3">​</a></h3>
 <p>The <strong>Smart Duplicate Filter</strong> uses AI algorithms to analyze user behavior and intent in real-time, distinguishing between:</p>
 <ul>
