@@ -375,6 +375,25 @@ check("spreadAcrossLines groups by line whatever the urls look like", () => {
   assert.strictEqual(shown[0].line, "8.5", "newest line still goes first");
 });
 
+check("spreadAcrossLines works for the diagnostic lists too", () => {
+  // `undetermined` and `stale` are accumulated in targets order like violations
+  // are, and both were flat-sliced. The undetermined list is the one that says
+  // WHY coverage was lost, so reporting only the oldest lines' failures hides
+  // exactly the line the run was extended to cover.
+  const u = (line, n) => ({ line, url: `https://docs.scandit.com/${line}/x${n}.html`, why: "429" });
+  const items = [
+    ...Array.from({ length: 8 }, (_, i) => u("6.28", i)),
+    ...Array.from({ length: 8 }, (_, i) => u("7.6", i)),
+    ...Array.from({ length: 4 }, (_, i) => u("8.5", i)),
+  ];
+  const shown = spreadAcrossLines(items, 10);
+  assert.strictEqual(shown.length, 10);
+  assert.ok(
+    shown.some((x) => x.line === "8.5"),
+    "the newest line must appear among the reasons coverage was lost",
+  );
+});
+
 check("spreadAcrossLines exhausts short queues without looping for ever", () => {
   // One line with far more violations than the rest: the round-robin must keep
   // drawing from it once the others are empty, and must stop at the cap.

@@ -153,6 +153,9 @@ const REQUEST_BUDGET = 260;
  * reports what it did not ask rather than reporting it as absence.
  */
 const DEADLINE_MS = 8 * 60 * 1000;
+// startedAt is reset just before the pick loop. Captured at module load it was
+// being consumed by argument parsing and the 3,000-file link walk, so the
+// deadline bounded the whole process rather than the sweep it was written for.
 const budget = { spent: 0, startedAt: Date.now() };
 
 /** Why the sweep stopped early, or null while it has not. */
@@ -170,6 +173,8 @@ function exhausted() {
  * more actionable than 20 - but see spreadAcrossLines for WHICH 20.
  */
 const VIOLATION_PRINT_CAP = 20;
+/** Same idea for the two supporting lists, which are diagnostics rather than findings. */
+const UNDETERMINED_PRINT_CAP = 10;
 
 const argv = process.argv.slice(2);
 const strict = argv.includes("--strict");
@@ -952,9 +957,17 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
     return counterparts.get(rest);
   };
 
+  // The deadline covers the live sweep, which is the part that can run away.
+  budget.startedAt = Date.now();
+
   const violations = [];
   const undetermined = [];
-  /** URLs the build links that 404 - link rot, reported as itself. */
+  /**
+   * URLs the build links that 404 - link rot, reported as itself.
+   *
+   * `{line, url}` rather than a bare url so the print below can be spread across
+   * lines like the violations are.
+   */
   const stale = [];
 
   for (const target of targets) {
@@ -993,6 +1006,7 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
         target.requested += 1;
         target.unknown += 1;
         undetermined.push({
+          line: target.line,
           url: versioned,
           why: `not asked - ${versionedRes.notAsked || currentRes.notAsked}`,
         });
@@ -1037,6 +1051,7 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
         if (!servesSymbol(versionedRes.url, rest)) {
           target.unknown += 1;
           undetermined.push({
+            line: target.line,
             url: versioned,
             why:
               `redirects to ${versionedRes.url}, which no longer carries the symbol ` +
@@ -1088,14 +1103,18 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
         // unrelated docs PR print "judged too few pages", while the actual finding
         // - a dead link in the build - was never named.
         target.absent += 1;
-        if (!target.borrowed) stale.push(versioned);
+        if (!target.borrowed) stale.push({ line: target.line, url: versioned });
         continue;
       }
       target.requested += 1;
       if (versionedRes.body === null) {
         // A stale link, or a transport failure. This pick proves nothing, and
         // saying so is the point - it used to be skipped in silence.
-        undetermined.push({ url: versioned, why: `page -> HTTP ${versionedRes.status}` });
+        undetermined.push({
+          line: target.line,
+          url: versioned,
+          why: `page -> HTTP ${versionedRes.status}`,
+        });
         target.unknown += 1;
         continue;
       }
@@ -1125,14 +1144,22 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
       // reported a healthy current page as a retired API needing noindex.
       const counterpartExists = currentRes.status === 200;
       if (!counterpartExists && currentRes.status !== 404) {
-        undetermined.push({ url: versioned, why: `counterpart -> HTTP ${currentRes.status}` });
+        undetermined.push({
+          line: target.line,
+          url: versioned,
+          why: `counterpart -> HTTP ${currentRes.status}`,
+        });
         target.unknown += 1;
         continue;
       }
 
       const head = headEarly;
       if (head === null) {
-        undetermined.push({ url: versioned, why: "no <head> or <body> in the response" });
+        undetermined.push({
+          line: target.line,
+          url: versioned,
+          why: "no <head> or <body> in the response",
+        });
         target.unknown += 1;
         continue;
       }
@@ -1328,7 +1355,13 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
 
   if (undetermined.length) {
     console.error(`NOTE: ${undetermined.length} pick(s) could not be judged:`);
-    for (const u of undetermined.slice(0, 10)) {
+    // Spread, not sliced. This is the list that says WHY coverage was lost, and
+    // it accumulates in targets order - oldest line first - so a flat slice
+    // reported only the oldest lines' failures. With 8 throttled picks on each of
+    // two linked lines, the 10 printed were all /6.28/ and /7.6/ and the newest
+    // frozen line appeared nowhere, which is the same crowding spreadAcrossLines
+    // was written for and the same line it was written to protect.
+    for (const u of spreadAcrossLines(undetermined, UNDETERMINED_PRINT_CAP)) {
       console.error(`  ${u.url}\n     ${u.why}`);
     }
     console.error("");
@@ -1341,7 +1374,9 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
         `  in the docs, not an SEO problem, and it is not counted against coverage:
 `,
     );
-    for (const u of stale.slice(0, 10)) console.error(`  ${u}`);
+    for (const u of spreadAcrossLines(stale, UNDETERMINED_PRINT_CAP)) {
+      console.error(`  ${u.url}`);
+    }
     console.error("");
   }
 
