@@ -41,6 +41,15 @@ on:
     branches:
       - main
 
+# Same pattern as docs-preview.yml, for the same reason: every run here is a
+# full yarn build plus two eval passes, and this workflow watches paths a docs
+# PR touches on nearly every push. Without a group they queue and all run; with
+# it, a new push supersedes the one still running. Keyed on the PR number so
+# runs on main are never cancelled by a PR.
+concurrency:
+  group: docs-retrieval-evals-${{ github.event.number || github.sha }}
+  cancel-in-progress: true
+
 jobs:
   retrieval-evals:
     name: Docs Retrieval Evals

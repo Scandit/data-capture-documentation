@@ -21,7 +21,7 @@ The general steps are:
 - Start the Capture Process
 
 :::warning
-Using ID Capture at the same time as other modes (e.g. Barcode Capture) is not supported.
+Using ID Capture at the same time as other modes (for example, Barcode Capture) is not supported.
 :::
 
 ## Prerequisites
@@ -91,7 +91,7 @@ To receive scan results, implement and [IdCaptureListener](https://docs.scandit.
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 ```js
 const listener = {

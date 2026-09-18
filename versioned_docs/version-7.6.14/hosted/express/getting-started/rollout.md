@@ -43,7 +43,7 @@ To automatically synchronize your Scandit Express configuration with Scandit, yo
 If your MDM system requires an AppConfig configuration, you can generate one [here](https://appconfig.jamfresearch.com/generator) by selecting Scandit Express as: `com.scandit.KeyboardWedge2/current`.
 :::
 
-### 3rd-Party Instructions
+### Third-Party Instructions {#3rd-party-instructions}
 
 This section provides links to the relevant sections of the documentation for popular MDM/EMM solutions:
 
@@ -57,7 +57,7 @@ This section provides links to the relevant sections of the documentation for po
 Scandit Express for Android supports MDM/EMM deployment via [Android Managed Configurations](https://developer.android.com/work/managed-configurations).
 
 :::warning
-Please note that Scandit Express might not be compatible with some Android for Work configurations (e.g. 3rd-party keyboards such as Scandit Express can typically not be installed in a work profile).
+Please note that Scandit Express might not be compatible with some Android for Work configurations (for example, third-party keyboards such as Scandit Express can typically not be installed in a work profile).
 
 Scandit recommends setting Android devices as either ["fully managed"](https://support.google.com/work/android/answer/9562029?hl=en&ref_topic=9563482&sjid=2353681360583047853-EU) and ["dedicated devices"](https://support.google.com/work/android/answer/9560920?hl=en&ref_topic=9563482&sjid=2353681360583047853-EU).
 :::
@@ -95,7 +95,7 @@ To automatically synchronize your Scandit Express configuration with Scandit, yo
 
 ![Add Project Code](/img/express/rollout_android_2.png)
 
-### 3rd-Party Instructions
+### Third-Party Instructions {#3rd-party-instructions-1}
 
 This section provides links to the relevant sections of the documentation for popular MDM/EMM solutions:
 
@@ -108,7 +108,7 @@ This section provides links to the relevant sections of the documentation for po
 
 ## Updating Configuration
 
-To update the configuration of Scandit Express on all devices, simply change the configuration in the Scandit Dashboard. The new configuration will be automatically distributed to all devices.
+To update the configuration of Scandit Express on all devices, change the configuration in the Scandit Dashboard. The new configuration will be automatically distributed to all devices.
 
 Scandit Express automatically updates the license and configuration when restarted, but if you need to force a reload:
 

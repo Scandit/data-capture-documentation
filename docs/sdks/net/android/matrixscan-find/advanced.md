@@ -9,7 +9,7 @@ keywords:
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## BarcodeFind Listener
 
