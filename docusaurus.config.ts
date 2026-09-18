@@ -95,6 +95,31 @@ const llmsRootRedirectOnlyDocs: string[] = [
   "docs/system-requirements.mdx",
 ];
 
+/**
+ * A dedicated index of the Agent Skills pages, published at
+ * /llms-agent-skills.txt.
+ *
+ * Why a separate file rather than only a line in the main index: an agent that
+ * wants to know whether Scandit ships skills for its host should not have to
+ * pull llms.txt (80 KB) or llms-full.txt (1.9 MB) and pick ten entries out of
+ * four hundred. This is the whole answer in a few hundred bytes, at a
+ * predictable path, and it is generated from the same pages - so a new SDK's
+ * skills page appears here by existing, not by anyone remembering.
+ *
+ * Links only, not full content: these pages are install instructions whose real
+ * payload is the skill itself, hosted elsewhere.
+ */
+const llmsAgentSkillsFile = {
+  filename: "llms-agent-skills.txt",
+  includePatterns: ["docs/sdks/**/agent-skills.mdx"],
+  fullContent: false,
+  title: "Scandit Agent Skills",
+  description:
+    "Agent Skills published by Scandit, one per SDK. Install them so a coding " +
+    "agent (Claude Code, Codex, Cursor) can integrate, debug and customize the " +
+    "Data Capture SDK directly. Each entry links to that SDK's install page.",
+};
+
 // Paths are matched by docusaurus-plugin-llms relative to siteDir (e.g. docs/...).
 const llmsIgnoreFiles: string[] = [
   "docs/connector-guides/**",
@@ -567,6 +592,7 @@ Sitemap: ${origin}/sitemap.xml
 #
 #   ${origin}/llms.txt        curated index of the guides
 #   ${origin}/llms-full.txt   the same guides as full text
+#   ${origin}/llms-agent-skills.txt   the Agent Skills, one per SDK
 #
 # Comments, not directives - robots.txt has no registered field for these, and
 # nothing discovers them from here. An agent finds /llms.txt the same way it
@@ -612,6 +638,7 @@ User-agent: meta-externalagent
 Allow: /data-capture-sdk/
 Allow: /llms.txt
 Allow: /llms-full.txt
+Allow: /llms-agent-skills.txt
 ${allows}
 Disallow: /*/data-capture-sdk/
 
@@ -956,6 +983,22 @@ const config: Config = {
     "docusaurus-plugin-llms",
     {
       ignoreFiles: llmsIgnoreFiles,
+      // The blockquote at the top of llms.txt and llms-full.txt, which is the
+      // one place in the llmstxt.org layout that an agent reads before the
+      // table of contents.
+      //
+      // Agent Skills were already in llms.txt - ten entries, one per SDK - but
+      // only nested inside each SDK's section, so nothing said "this site
+      // publishes Agent Skills" until you had read ten repetitions of the same
+      // line. An agent skimming for what Scandit offers had no top-level signal
+      // and no single URL to fetch. This is that signal; llmsAgentSkillsFile
+      // below is that URL.
+      description:
+        "Developer Guides, API References, and Code Samples for building with " +
+        "Scandit Smart Data Capture. Scandit also publishes Agent Skills for " +
+        "coding agents (Claude Code, Codex, Cursor) - one per SDK, indexed at " +
+        "/llms-agent-skills.txt.",
+      customLLMFiles: [llmsAgentSkillsFile],
     },
   ],
   ...(isPreviewBuild ? [stripPreviewMediaPlugin] : []),

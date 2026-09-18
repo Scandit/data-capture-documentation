@@ -18,7 +18,8 @@
     "docs:gate": "node scripts/docs-gate/index.cjs",
     "docs:gate:setup": "node scripts/setup-vale.cjs",
     "verify:search-tags": "node scripts/verify-search-tags.cjs",
-    "test:search-facets": "node scripts/test-search-facets.cjs"
+    "test:search-facets": "node scripts/test-search-facets.cjs",
+    "test:robots": "node scripts/test-robots.cjs"
   },
   "dependencies": {
     "@docusaurus/core": "^3.4.0",
