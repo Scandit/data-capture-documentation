@@ -67,20 +67,73 @@ check("the current API reference is allowed explicitly", () => {
   );
 });
 
-check("every frozen major's API line is allowed, and only those", () => {
-  // The line was hand-written and the file said a major release "needs one
-  // line - a deliberate decision made once". This is what makes forgetting it
-  // fail instead of going quiet.
-  const expected = versions.map((v) => v.split(".").slice(0, 2).join("."));
-  const allowed = directives
-    .filter((l) => /^Allow: \/\d+\.\d+\/data-capture-sdk\/$/.test(l))
-    .map((l) => l.split("/")[1]);
-  assert.deepStrictEqual(
-    allowed.slice().sort(),
-    expected.slice().sort(),
-    `versions.json holds ${JSON.stringify(versions)}, so exactly those API ` +
-      `lines must be allowed - got ${JSON.stringify(allowed)}`,
+/**
+ * The API line a frozen snapshot actually LINKS, read out of its own content.
+ *
+ * This is the rule the generator applies (`linksToOwnApiLine`), and asserting
+ * against versions.json instead was wrong in a way that only shows up at a
+ * release. A snapshot keeps linking the UNVERSIONED tree until the freeze
+ * rewrites its links, so during that window the version exists in versions.json
+ * and correctly gets NO Allow line - it sends readers somewhere already open.
+ * A versions.json-derived expectation demands one anyway and fails the build on
+ * main, blaming the generated file for doing the right thing. The config
+ * documents that window and measures it (version-8.5.3: 210 files linking the
+ * unversioned tree, 0 versioned), and 8.6.0-beta.1 really did add 8.5.2 to
+ * versions.json, so this is the normal release shape rather than a corner.
+ *
+ * Read from the snapshot rather than from the config that generated the file,
+ * so this is a second opinion and not the same derivation twice.
+ */
+function linesThatLinkThemselves() {
+  const root = path.join(__dirname, "..", "versioned_docs");
+  if (!fs.existsSync(root)) return new Set();
+  const found = new Set();
+  for (const dir of fs.readdirSync(root)) {
+    const number = dir.replace(/^version-/, "");
+    const line = number.split(".").slice(0, 2).join(".");
+    const needle = `docs.scandit.com/${line}/data-capture-sdk`;
+    const walk = (d) => {
+      for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+        const full = path.join(d, e.name);
+        if (e.isDirectory()) {
+          if (walk(full)) return true;
+          continue;
+        }
+        if (!/\.(md|mdx)$/.test(e.name)) continue;
+        if (fs.readFileSync(full, "utf8").includes(needle)) return true;
+      }
+      return false;
+    };
+    if (walk(path.join(root, dir))) found.add(line);
+  }
+  return found;
+}
+
+check("exactly the frozen lines that link themselves are allowed", () => {
+  // Retire a major and the Allow must go with it; freeze one whose pages point
+  // at their own line and the Allow must appear. Both used to be a hand edit
+  // the file itself described as "a deliberate decision made once".
+  const allowed = new Set(
+    directives
+      .filter((l) => /^Allow: \/\d+\.\d+\/data-capture-sdk\/$/.test(l))
+      .map((l) => l.split("/")[1]),
   );
+  const expected = linesThatLinkThemselves();
+  assert.deepStrictEqual(
+    [...allowed].sort(),
+    [...expected].sort(),
+    `the snapshots in versioned_docs/ that link their own API line are ` +
+      `${JSON.stringify([...expected])}, so exactly those must be allowed - ` +
+      `got ${JSON.stringify([...allowed])}`,
+  );
+  // And nothing may be allowed for a line no docs version exists for at all.
+  const known = new Set(versions.map((v) => v.split(".").slice(0, 2).join(".")));
+  for (const line of allowed) {
+    assert.ok(
+      known.has(line),
+      `/${line}/ is allowed but is not a version in versions.json`,
+    );
+  }
 });
 
 check("other versioned trees are still excluded", () => {
@@ -178,11 +231,51 @@ check("the Agent Skills index exists and lists one page per SDK", () => {
       return d.name === "agent-skills.mdx" ? [full] : [];
     });
   const withSkills = walk(path.join(__dirname, "..", "docs", "sdks"));
+
+  // Minus the trees the llms plugin is told to ignore. docs/sdks/titanium is on
+  // that list today, so a strict equality here fails the build the moment
+  // anyone adds an agent-skills page under an ignored SDK - claiming the index
+  // is wrong when the index is right. The ignore globs are read out of the
+  // config rather than restated, so adding one does not silently loosen this.
+  const configSrc = fs.readFileSync(
+    path.join(__dirname, "..", "docusaurus.config.ts"),
+    "utf8",
+  );
+  // Scoped to the ignore declarations. Scraping the whole file swept up this
+  // index's OWN includePatterns - "docs/sdks/**/agent-skills.mdx" - whose
+  // literal prefix is "docs/sdks/", which then matched every page and made the
+  // expectation zero. A pattern list cannot be read without knowing which list
+  // it is.
+  const ignoreBlocks = ["llmsIgnoredSdkTrees", "llmsIgnoreFiles"]
+    .map((name) => {
+      const at = configSrc.indexOf(`const ${name}`);
+      if (at === -1) return "";
+      const close = configSrc.indexOf("\n]", at);
+      return close === -1 ? "" : configSrc.slice(at, close);
+    })
+    .join("\n");
+  assert.ok(
+    ignoreBlocks.includes("docs/sdks/"),
+    "neither llmsIgnoredSdkTrees nor llmsIgnoreFiles could be read from " +
+      "docusaurus.config.ts - this check would silently expect every page",
+  );
+  const ignoredPrefixes = [
+    ...ignoreBlocks.matchAll(/"(docs\/sdks\/[^"*]*)\*/g),
+  ]
+    .map((m) => m[1])
+    // "docs/sdks/" itself is not an ignore of anything; it is what a `**` right
+    // after the root leaves behind.
+    .filter((prefix) => prefix !== "docs/sdks/");
+  const rel = (f) => f.split(path.sep).join("/").split("/docs/sdks/")[1];
+  const expected = withSkills.filter(
+    (f) => !ignoredPrefixes.some((p) => `docs/sdks/${rel(f)}`.startsWith(p)),
+  );
   assert.strictEqual(
     entries.length,
-    withSkills.length,
-    `${withSkills.length} agent-skills pages exist under docs/sdks but the ` +
-      `index lists ${entries.length}`,
+    expected.length,
+    `${expected.length} agent-skills pages are eligible under docs/sdks ` +
+      `(${withSkills.length} on disk, minus ignored trees ` +
+      `${JSON.stringify(ignoredPrefixes)}) but the index lists ${entries.length}`,
   );
 });
 
@@ -191,8 +284,19 @@ check("llms.txt announces the skills above its table of contents", () => {
   // before the contents. Without this, the only signal was ten identical
   // entries buried in ten SDK sections.
   const text = fs.readFileSync(path.join(BUILD, "llms.txt"), "utf8");
-  const head = text.slice(0, text.indexOf("## Table of Contents"));
-  assert.ok(head.length > 0, "llms.txt has no table of contents heading");
+  // Guarded before slicing. `indexOf` returns -1 when the heading is absent and
+  // `slice(0, -1)` is then the WHOLE document, so the length check could never
+  // fire and the assertions below silently widened from the blockquote to all
+  // 400 entries - where "agent skills" appears anyway. The heading is a
+  // hardcoded literal in docusaurus-plugin-llms, so an upgrade can move it.
+  const toc = text.indexOf("## Table of Contents");
+  assert.notStrictEqual(
+    toc,
+    -1,
+    "llms.txt has no '## Table of Contents' heading - the plugin's layout " +
+      "changed, and this check can no longer tell the blockquote from the body",
+  );
+  const head = text.slice(0, toc);
   assert.match(
     head,
     /agent skills/i,

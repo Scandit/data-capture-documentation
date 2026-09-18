@@ -61,6 +61,19 @@ jobs:
       - name: Test robots.txt and llms indexes
         run: yarn test:robots
 
+      # The parsers the API-reference SEO gate judges pages with, run offline.
+      # Every bug they have had was a false PASS - a page Google indexes reported
+      # as sound - which is the one failure the gate cannot reveal by running.
+      - name: Test API-reference SEO parsers
+        run: yarn test:api-reference-seo
+
+      # And the verdicts those parsers feed, against a stub origin on localhost:
+      # which branch a response lands in is an ordering question, and the bug that
+      # prompted this reported a line remediated exactly as the gate asks as
+      # "link rot ... a line taken offline". Offline too - no live requests.
+      - name: Test API-reference SEO verdicts
+        run: yarn test:api-reference-seo-verdicts
+
       # Compares build/search-tags.json (what this build's widget will filter on)
       # against the live Algolia index. Catches a docs-version rename quietly
       # dropping content out of search - see scripts/verify-search-tags.cjs.
@@ -77,3 +90,58 @@ jobs:
       # release merge warns; it does not go red.
       - name: Verify search tags
         run: yarn verify:search-tags${{ github.ref == 'refs/heads/main' && ' --strict' || '' }}
+
+      # The versioned API reference publishes the same page under several URLs
+      # and declares no canonical form, so Google picks one - often the oldest.
+      # Warns for now: the API-reference HTML is generated outside this repo, so
+      # this cannot pass until that generator emits canonical/noindex. Add
+      # --strict to make it blocking once it does.
+      # Which lines to check is discovered, not hard-coded. A line keeps being
+      # published after its doc snapshot is deleted at a release - /8.5/ went that
+      # way at 8.6 - and then nothing links it, so the gate alone would never see
+      # the newest frozen line, the one whose content is closest to current and so
+      # the likeliest to outrank it. Discovery probes for those and prints them.
+      #
+      # `|| true` on purpose: if discovery cannot reach the site, API_LINES is
+      # empty and the gate runs on the linked lines instead of the step going red.
+      # The gate says in its own output when it ran without --lines.
+      #
+      # API_LINES, not LINES: zsh declares LINES as a typed integer, so the same
+      # assignment there arithmetic-evaluates the comma list and `8.3,8.4,8.5`
+      # becomes `8`. This step runs under bash, where the name is safe - but it is
+      # the block a maintainer copies into a local shell to reproduce the step, and
+      # the script header documents the same invocation.
+      # NOT on pull requests, unlike every other step in this job.
+      #
+      # What this checks is the LIVE published site, and the API-reference HTML is
+      # generated outside this repo. So no change on a PR branch can alter the
+      # verdict: whether /6.28/ carries a noindex tag is the same fact before and
+      # after the merge. The one PR-sensitive input is which lines build/ links,
+      # and even that only changes WHICH lines get looked at, never what is found.
+      # Running it per-PR therefore bought no PR-specific signal and charged every
+      # author live requests to production docs for it.
+      #
+      # The two test steps above DO stay on pull requests: they are offline, they
+      # take milliseconds, and unlike this step they test the code in the diff.
+      #
+      # What is kept is the monitoring, which is what an advisory gate is for -
+      # push to main, the daily schedule, and a manual run after a deploy.
+      #
+      # timeout-minutes is a backstop, not the budget. Both scripts stop
+      # themselves first (4 minutes for discovery, 8 for the gate) and say what
+      # they did not ask; this only catches a hang neither can see, such as a
+      # fetch that outlives its own AbortSignal. Set above their combined ceiling
+      # so a normal throttled run finishes on its own terms rather than being
+      # killed - a killed step fails the job, and this step is non-blocking on
+      # purpose because the generator cannot pass it yet.
+      - name: Verify API-reference canonical tags
+        if: github.event_name != 'pull_request'
+        timeout-minutes: 15
+        run: |
+          API_LINES=$(node scripts/discover-api-reference-lines.cjs --quiet || true)
+          if [ -n "$API_LINES" ]; then
+            echo "Discovered unlinked API-reference lines: $API_LINES"
+            yarn verify:api-reference-seo --lines "$API_LINES"
+          else
+            yarn verify:api-reference-seo
+          fi

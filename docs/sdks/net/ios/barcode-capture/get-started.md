@@ -110,7 +110,7 @@ if (barcode.Data?.StartsWith("09:") == false)
 
 ## Use the Built-in Camera
 
-The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
+The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, for example, the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
 :::important
 In iOS, the user must explicitly grant permission for each app to access cameras. Your app needs to provide static messages to display to the user when the system asks for camera permission. To do that include the [NSCameraUsageDescription](https://learn.microsoft.com/en-us/xamarin/ios/app-fundamentals/security-privacy?tabs=macos#:~:text=NSCameraUsageDescription) key in your app’s Info.plist file.
