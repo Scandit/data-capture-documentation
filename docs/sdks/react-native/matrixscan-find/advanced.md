@@ -3,7 +3,7 @@ description: "Advanced MatrixScan Find settings for React Native: customize matc
 
 sidebar_position: 3
 pagination_next: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---

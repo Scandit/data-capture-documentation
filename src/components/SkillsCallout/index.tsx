@@ -14,6 +14,7 @@ import {
   FRAMEWORK_CHANGE_EVENT,
 } from '../utils/frameworks';
 import { withCurrentDocsPath } from '@site/src/constants/docsPaths';
+import { AGENT_SKILL_FRAMEWORKS } from '@site/src/constants/frameworks';
 import { capturePostHogEvent } from './analytics';
 import InstallCommand from './InstallCommand';
 import styles from './styles.module.css';
@@ -43,32 +44,18 @@ interface ProductEntry {
   name: string;
 }
 
-const FRAMEWORK_URL_PATH: Record<string, string> = {
-  iOS: 'ios',
-  Android: 'android',
-  Web: 'web',
-  Cordova: 'cordova',
-  Capacitor: 'capacitor',
-  Flutter: 'flutter',
-  'Kotlin Multiplatform': 'kmp',
-  'React Native': 'react-native',
-  '.NET iOS': 'net/ios',
-  '.NET Android': 'net/android',
-};
+// Both derived from the framework registry (src/constants/frameworks.ts).
+// These used to be two hand-written maps keyed by display name, a third and
+// fourth copy of the same set - which is how `linux` went missing from one map
+// and nowhere else without anyone noticing.
+const FRAMEWORK_URL_PATH: Record<string, string> = Object.fromEntries(
+  AGENT_SKILL_FRAMEWORKS.map((f) => [f.display, f.routeSegment as string]),
+);
 
 // Analytics-friendly slug for the framework, used as the data-skills-callout-framework attribute.
-const FRAMEWORK_SLUG: Record<string, string> = {
-  iOS: 'ios',
-  Android: 'android',
-  Web: 'web',
-  Cordova: 'cordova',
-  Capacitor: 'capacitor',
-  Flutter: 'flutter',
-  'Kotlin Multiplatform': 'kmp',
-  'React Native': 'react-native',
-  '.NET iOS': 'net-ios',
-  '.NET Android': 'net-android',
-};
+const FRAMEWORK_SLUG: Record<string, string> = Object.fromEntries(
+  AGENT_SKILL_FRAMEWORKS.map((f) => [f.display, f.slug]),
+);
 
 // Resolves the framework for the shared callout, preferring the framework in
 // the current path (so "More info" keeps the reader on the framework they are

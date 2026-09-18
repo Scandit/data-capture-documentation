@@ -4,7 +4,7 @@ description: "Use the Scandit parser in React Native to turn barcode data string
 sidebar_position: 2
 pagination_prev: null
 pagination_next: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---

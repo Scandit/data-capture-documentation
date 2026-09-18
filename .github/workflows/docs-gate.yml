@@ -71,10 +71,12 @@ jobs:
 
       - name: Install Vale (pinned)
         run: |
-          # The version the rules in styles/Scandit/ were measured against -
-          # both of them encode behaviour that is version-specific, down to
-          # which regex constructs the token engine honours, and a local pass
-          # on one version proves nothing about another.
+          # The version the rules in styles/Scandit/ and the frontmatter cap in
+          # scripts/docs-gate were both measured against. Both encode behaviour
+          # that is version-specific, down to which regex constructs the token
+          # engine honours, and the cap additionally rests on Vale attributing a
+          # `description` alert to its true file line. A local pass on one
+          # version proves nothing about another.
           #
           # CI only. scripts/setup-vale.cjs does not install Vale at all - it
           # checks for it, prints winget/brew guidance if it is missing, and

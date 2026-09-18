@@ -3,7 +3,7 @@ description: "MatrixScan detects, tracks, and highlights multiple barcodes in th
 
 sidebar_position: 1
 pagination_prev: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---

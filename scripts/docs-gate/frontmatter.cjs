@@ -41,9 +41,16 @@ function validateValue(val, sch, loc, errs) {
 }
 
 function validateFile(file, schema) {
-  const text = fs.readFileSync(file, "utf8");
+  // BOM stripped, as in docs-gate's bodyOf/frontmatterEndLine and
+  // verify-frameworks' declaredFrameworks. Without it a BOM'd page with
+  // perfectly valid frontmatter was reported "missing or invalid" - fail closed,
+  // but the diagnostic named the wrong problem.
+  const text = fs.readFileSync(file, "utf8").replace(/^﻿/, "");
   if (text.includes("<Redirect")) return []; // redirect-only stub: exempt
-  const m = text.match(/^---\r?\n([\s\S]*?)\r?\n---/);
+  // `[ \t]*` on the opening fence, matching declaredFrameworks and what
+  // gray-matter itself accepts: `--- ` opened valid frontmatter for Docusaurus
+  // while this reported the page as having none.
+  const m = text.match(/^---[ \t]*\r?\n([\s\S]*?)\r?\n---/);
   if (!m) return [{ file, level: "error", check: "frontmatter", msg: "missing or invalid frontmatter" }];
   let fm;
   try { fm = yaml.load(m[1]); } catch (e) { return [{ file, level: "error", check: "frontmatter", msg: "invalid YAML frontmatter" }]; }
