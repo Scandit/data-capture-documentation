@@ -228,8 +228,16 @@ const FeatureList: React.FC<FeatureListProps> = ({
                           <span
                             key={frameworkName}
                             className={`${styles.frameworkItem} ${styles.frameworkItemUnavailable}`}
+                            aria-disabled="true"
+                            title={`${frameworkName} v${frameworkInfo.version} - API reference not available`}
                           >
                             {frameworkName} v{frameworkInfo.version}
+                            {/* The dashed border and the dimmed token say "unavailable"
+                                to someone who can see them. Without this the chip
+                                announces exactly what an available one announces -
+                                "iOS v1.2.3" - so a screen-reader user gets no signal
+                                that this one is different and does not link anywhere. */}
+                            <span className={styles.visuallyHidden}> (not available)</span>
                           </span>
                         )
                       ))}
