@@ -27,6 +27,7 @@ const path = require("path");
 
 const {
   spreadAcrossLines,
+  borrowedPicks,
   attr,
   headOf,
   canonicalOf,
@@ -35,6 +36,8 @@ const {
   hasNoindexHeader,
   samePage,
 } = require("./verify-api-reference-seo.cjs");
+
+const { servesSymbol } = require("./discover-api-reference-lines.cjs");
 
 const {
   currentVersion,
@@ -57,6 +60,12 @@ function check(label, fn) {
 /** Wraps a fragment as a document, so the head cases read as real pages. */
 const page = (head, body = "<p>x</p>") =>
   `<!doctype html><html><head>${head}</head><body>${body}</body></html>`;
+
+/**
+ * `n` fake symbol paths under `prefix`. Used both as a candidate pool and, at 20
+ * entries, to put a single stray link below durablePaths' 10% share.
+ */
+const many = (n, prefix) => Array.from({ length: n }, (_, i) => `${prefix}${i}.html`);
 
 const BASE = "https://docs.scandit.com/6.28/data-capture-sdk/ios/core/api/camera.html";
 const TARGET = "https://docs.scandit.com/data-capture-sdk/ios/core/api/camera.html";
@@ -302,8 +311,17 @@ check("samePage rejects another host, another page and junk", () => {
 
 // ------------------------------------------------------ spreadAcrossLines
 
-/** A violation as the gate builds one: only `url` matters to the spreader. */
-const v = (line, n) => ({ url: `https://docs.scandit.com/${line}/data-capture-sdk/s${n}.html` });
+/**
+ * A violation in the shape the gate builds one.
+ *
+ * `line` is carried on the object rather than parsed back out of the url: the
+ * url is built from ORIGIN, so reading the line out of it tied the spreader to
+ * one hostname and sent every entry to the "0.0" fallback anywhere else.
+ */
+const v = (line, n) => ({
+  line,
+  url: `https://docs.scandit.com/${line}/data-capture-sdk/s${n}.html`,
+});
 
 check("spreadAcrossLines returns everything when it fits", () => {
   const items = [v("6.28", 1), v("8.5", 1)];
@@ -325,7 +343,7 @@ check("spreadAcrossLines gives the newest line a place before any line repeats",
   ];
   const shown = spreadAcrossLines(items, 20);
   assert.strictEqual(shown.length, 20);
-  const lines = new Set(shown.map((x) => /com\/([0-9.]+)\//.exec(x.url)[1]));
+  const lines = new Set(shown.map((x) => x.line));
   assert.deepStrictEqual(
     [...lines].sort(compareLines),
     ["6.28", "7.6", "8.3", "8.4", "8.5"],
@@ -334,6 +352,28 @@ check("spreadAcrossLines gives the newest line a place before any line repeats",
   // Newest first within a round, so a cap that runs out mid-round runs out on
   // the oldest line rather than on the one that matters most.
   assert.match(shown[0].url, /\/8\.5\//);
+});
+
+check("spreadAcrossLines groups by line whatever the urls look like", () => {
+  // The urls are built from ORIGIN, and the line used to be parsed back out of
+  // them against a hardcoded docs.scandit.com. Point ORIGIN anywhere else - a
+  // staging host, or the stub the verdict suite runs against - and every entry
+  // fell to the "0.0" fallback, leaving one queue and the flat slice this
+  // function exists to replace. Silently, and in the one suite that runs the
+  // whole gate. So: same assertion, non-production urls.
+  const at = (line, n) => ({ line, url: `http://127.0.0.1:8080/${line}/data-capture-sdk/s${n}.html` });
+  const items = [
+    ...Array.from({ length: 16 }, (_, i) => at("6.28", i)),
+    ...Array.from({ length: 4 }, (_, i) => at("8.5", i)),
+  ];
+  const shown = spreadAcrossLines(items, 6);
+  assert.strictEqual(shown.length, 6);
+  assert.deepStrictEqual(
+    [...new Set(shown.map((x) => x.line))].sort(compareLines),
+    ["6.28", "8.5"],
+    "both lines must be represented even though the host is not docs.scandit.com",
+  );
+  assert.strictEqual(shown[0].line, "8.5", "newest line still goes first");
 });
 
 check("spreadAcrossLines exhausts short queues without looping for ever", () => {
@@ -348,10 +388,74 @@ check("spreadAcrossLines exhausts short queues without looping for ever", () => 
 check("spreadAcrossLines tolerates a url with no line in it", () => {
   // lineOf falls back to "0.0" so the sort stays total; without it compareLines
   // gets NaN and the order is implementation-defined.
-  const items = [{ url: "https://example.com/odd" }, ...Array.from({ length: 30 }, (_, i) => v("8.5", i))];
+  // No `line` at all - the shape a future caller could produce by accident.
+  const items = [
+    { url: "https://example.com/odd" },
+    ...Array.from({ length: 30 }, (_, i) => v("8.5", i)),
+  ];
   const shown = spreadAcrossLines(items, 5);
   assert.strictEqual(shown.length, 5);
   assert.ok(shown.some((x) => x.url === "https://example.com/odd"));
+});
+
+// -------------------------------------------------------- borrowedPicks
+
+check("borrowedPicks keeps discovery's confirmed probes", () => {
+  // They are the paths discovery PROVED resolve, so using them is what makes the
+  // gate's coverage and discovery's findings agree by construction rather than by
+  // coincidence. Running the whole pool through sample() sorted and spread it,
+  // which scattered them out - measured at 1 of 4 picks instead of the 3 seeded.
+  const pool = ["zz/probe-a.html", "zz/probe-b.html", ...many(40, "android/")];
+  const picks = borrowedPicks({ paths: pool, seeded: 2 }, 4);
+  assert.deepStrictEqual(picks.slice(0, 2), ["zz/probe-a.html", "zz/probe-b.html"]);
+  assert.strictEqual(picks.length, 4);
+});
+
+check("borrowedPicks spreads the rest instead of taking four neighbours", () => {
+  // sample() sorts lexicographically and the real pool is dominated at its low
+  // indices by android/..., so slice(0, 4) off the front took 3 of 4 Android
+  // picks with an artefact and 4 of 4 without one. A borrowed line is checked
+  // ONLY this way, so a generator that de-indexed Android but not iOS or Web
+  // passed. Measured against the live site after the fix: android, cordova,
+  // flutter, web.
+  const pool = [...many(20, "android/"), ...many(20, "ios/"), ...many(20, "web/")];
+  const picks = borrowedPicks({ paths: pool, seeded: 0 }, 3);
+  const prefixes = new Set(picks.map((p) => p.split("/")[0]));
+  assert.deepStrictEqual(
+    [...prefixes].sort(),
+    ["android", "ios", "web"],
+    "picks must not all come from the alphabetically first framework",
+  );
+});
+
+check("borrowedPicks never returns more than asked, even when all seeded", () => {
+  const pool = many(10, "seeded/");
+  assert.strictEqual(borrowedPicks({ paths: pool, seeded: 10 }, 4).length, 4);
+  assert.strictEqual(borrowedPicks({ paths: [], seeded: 0 }, 4).length, 0);
+});
+
+// --------------------------------------------------------- servesSymbol
+
+check("servesSymbol accepts a redirect that keeps the symbol path", () => {
+  const rest = "ios/core/api/camera.html";
+  // The remediation this check asks for.
+  assert.ok(servesSymbol(`/data-capture-sdk/${rest}`, rest));
+  // And one that moves the duplicate to another frozen line - still published,
+  // and the gate has its own verdict for it.
+  assert.ok(servesSymbol(`/7.6/data-capture-sdk/${rest}`, rest));
+  assert.ok(servesSymbol(`https://docs.scandit.com/data-capture-sdk/${rest}`, rest));
+});
+
+check("servesSymbol rejects a catch-all redirect", () => {
+  // Ordinary static-hosting behaviour, and counting it as "published" made every
+  // minor in the sweep - about 15 today - come back as a discovered line, which
+  // CI feeds straight into --lines.
+  const rest = "ios/core/api/camera.html";
+  assert.ok(!servesSymbol("/", rest));
+  assert.ok(!servesSymbol("/404.html", rest));
+  assert.ok(!servesSymbol("/data-capture-sdk/", rest));
+  assert.ok(!servesSymbol("", rest));
+  assert.ok(!servesSymbol(null, rest));
 });
 
 // ======================================================= scripts/lib
@@ -383,8 +487,6 @@ check("sample is deterministic and spreads evenly", () => {
   assert.deepStrictEqual(sample([], 3), []);
 });
 
-/** 20 paths, so one stray link is below the 10% share and cannot contribute. */
-const many = (n, prefix) => Array.from({ length: n }, (_, i) => `${prefix}${i}.html`);
 
 check("durablePaths intersects the lines with a substantial set", () => {
   const byLine = new Map([

@@ -95,6 +95,10 @@ function stage(origin, edits = {}) {
       `const ORIGIN = ${JSON.stringify(origin)};`,
     ),
   );
+  fs.copyFileSync(
+    path.join(REPO, "scripts", "discover-api-reference-lines.cjs"),
+    path.join(tmp, "scripts", "discover-api-reference-lines.cjs"),
+  );
   if (edits.gate) put("scripts/verify-api-reference-seo.cjs", edits.gate);
   else
     fs.copyFileSync(
@@ -135,6 +139,21 @@ function runGate(tmp, args) {
     const child = spawn(
       process.execPath,
       [path.join(tmp, "scripts", "verify-api-reference-seo.cjs"), ...args],
+      { stdio: ["ignore", "pipe", "pipe"] },
+    );
+    let out = "";
+    child.stdout.on("data", (d) => (out += d));
+    child.stderr.on("data", (d) => (out += d));
+    child.on("close", (status) => resolve({ out, status }));
+  });
+}
+
+/** Same as runGate, for the discovery script. */
+function runDiscovery(tmp, args = []) {
+  return new Promise((resolve) => {
+    const child = spawn(
+      process.execPath,
+      [path.join(tmp, "scripts", "discover-api-reference-lines.cjs"), ...args],
       { stdio: ["ignore", "pipe", "pipe"] },
     );
     let out = "";
@@ -344,6 +363,76 @@ async function main() {
       // The line that really was not checked is still reported - the filter must
       // narrow the list, not delete it.
       assert.match(out, /could not determine[^\n]*\/8\.4\//);
+    } finally {
+      server.close();
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  await check("discovery removes a stale artefact when it cannot replace it", async () => {
+    // Four paths return before the write, and the file survived all of them. The
+    // gate's freshness check cannot catch that: it compares the artefact's
+    // version against the served RELEASE number, which does not change between
+    // builds of the same release. So a developer who ran discovery once and then
+    // rebuilt with the network down got a gate seeding its picks from the old
+    // file and printing "could not determine /X/" from a run that never happened.
+    const { server, origin } = await startOrigin({
+      // Nothing resolves, so no probe path can be confirmed and discovery bails.
+      versioned: (line, rest, res) => {
+        res.writeHead(404);
+        res.end();
+      },
+      counterpart: (rest, res) => {
+        res.writeHead(404);
+        res.end();
+      },
+    });
+    const tmp = stage(origin, {
+      artefact: { probes: ["stale/probe.html"], published: ["9.9"], uncertain: ["9.8"] },
+    });
+    const artefact = path.join(tmp, "build", "api-reference-lines.json");
+    try {
+      assert.ok(fs.existsSync(artefact), "fixture did not write the artefact");
+      const { out } = await runDiscovery(tmp);
+      assert.match(out, /no probe path could be confirmed/);
+      assert.ok(
+        !fs.existsSync(artefact),
+        `a run that could not produce an artefact must not leave the old one:\n${out}`,
+      );
+    } finally {
+      server.close();
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  await check("a catch-all redirect is not reported as a published line", async () => {
+    // Ordinary static-hosting behaviour. Counting any 3xx as "published" made
+    // every minor in the sweep come back as a discovered line, and CI feeds that
+    // list straight into --lines.
+    const { server, origin } = await startOrigin({
+      versioned: (line, rest, res) => {
+        // The unversioned tree is what probes are confirmed against, so the
+        // versioned urls are the ones that get the catch-all.
+        res.writeHead(302, { location: "/" });
+        res.end();
+      },
+      counterpart: (rest, res) => {
+        res.writeHead(200, { "content-type": "text/html" });
+        res.end("<html><head></head><body>current</body></html>");
+      },
+    });
+    const tmp = stage(origin);
+    try {
+      const { out } = await runDiscovery(tmp, ["--quiet"]);
+      assert.match(out, /answered by a redirect that drops the symbol path/);
+      const artefact = JSON.parse(
+        fs.readFileSync(path.join(tmp, "build", "api-reference-lines.json"), "utf8"),
+      );
+      assert.deepStrictEqual(
+        artefact.published,
+        [],
+        `a catch-all must not publish lines: ${JSON.stringify(artefact)}`,
+      );
     } finally {
       server.close();
       fs.rmSync(tmp, { recursive: true, force: true });

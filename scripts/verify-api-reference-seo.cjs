@@ -301,10 +301,48 @@ function parseExtraLines() {
 
 const timeout = () => AbortSignal.timeout(REQUEST_TIMEOUT_MS);
 
-/** The line a url belongs to, or "0.0" so the sort below stays total. */
-function lineOf(url) {
-  const m = /docs\.scandit\.com\/(\d+\.\d+)\//.exec(url);
-  return m ? m[1] : "0.0";
+/**
+ * Picks for a line nothing links, which has no urls of its own to sample.
+ *
+ * Two competing requirements, and taking the pool in order served only one:
+ *
+ *   - discovery's confirmed probes must actually be among the picks. They are
+ *     the paths it PROVED resolve, so using them is what makes the gate's
+ *     coverage and discovery's findings agree by construction. Running the whole
+ *     pool through `sample()` sorts and spreads it, which scattered them back
+ *     out - measured at 1 of 4 picks hitting a probe instead of the 3 seeded.
+ *
+ *   - the picks must not all come from one framework. `sample()` sorts
+ *     lexicographically and the candidate pool is dominated at its low indices by
+ *     `android/...`, so `slice(0, 4)` off the front took 3 of 4 Android picks
+ *     with an artefact present and 4 of 4 without one. The newest frozen lines
+ *     are checked ONLY this way - they are the whole point of passing --lines -
+ *     so a generator that de-indexed Android but not iOS or Web passed.
+ *
+ * So: the seeded probes first, in order, then the remainder spread with
+ * `sample()`. Both properties hold, and with no artefact the whole budget goes
+ * to the spread rather than to four adjacent entries.
+ */
+function borrowedPicks(target, want) {
+  const pool = [...target.paths];
+  const seeded = pool.slice(0, target.seeded).slice(0, want);
+  const remaining = want - seeded.length;
+  if (remaining <= 0) return seeded;
+  return [...seeded, ...sample(pool.slice(target.seeded), remaining)];
+}
+
+/**
+ * The line an entry belongs to, or "0.0" so the sort below stays total.
+ *
+ * Read off the entry, NOT parsed back out of its url. The url is built from
+ * ORIGIN, and this used to match a hardcoded `docs.scandit.com`, so anything
+ * pointing ORIGIN elsewhere - a staging host, or the stub the verdict tests run
+ * against - sent every entry to the "0.0" fallback. spreadAcrossLines then saw
+ * one queue and degenerated into exactly the flat slice it exists to replace,
+ * silently, and the end-to-end tests never covered the round-robin at all.
+ */
+function lineOf(item) {
+  return item && item.line ? item.line : "0.0";
 }
 
 /**
@@ -331,14 +369,14 @@ function spreadAcrossLines(items, cap) {
   if (items.length <= cap) return items;
   const byLine = new Map();
   for (const item of items) {
-    const key = lineOf(item.url);
+    const key = lineOf(item);
     if (!byLine.has(key)) byLine.set(key, []);
     byLine.get(key).push(item);
   }
   // Newest line first within each round, so if the cap runs out mid-round it
   // runs out on the oldest line rather than on the one that matters most.
   const queues = [...byLine.values()].sort(
-    (a, b) => -compareLines(lineOf(a[0].url), lineOf(b[0].url)),
+    (a, b) => -compareLines(lineOf(a[0]), lineOf(b[0])),
   );
   const out = [];
   for (let round = 0; out.length < cap; round += 1) {
@@ -782,8 +820,8 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
   // judged nothing: four 503s on one line and four sound pages on another gave
   // exactly 50%, which is not below the floor, so --strict exited 0 and printed
   // OK with a whole API-reference line unverified.
-  const mk = (line, paths, how, borrowed) => ({
-    line, paths, how, borrowed,
+  const mk = (line, paths, how, borrowed, seeded = 0) => ({
+    line, paths, how, borrowed, seeded,
     sampled: 0, requested: 0, checked: 0, absent: 0, unknown: 0,
   });
   const targets = linked.map((line) =>
@@ -828,10 +866,14 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
     // published could therefore have every gate pick 404, land in `absent`, and
     // come back "learned nothing about". Reading the paths it actually confirmed
     // makes the overlap true by construction instead of by coincidence.
-    const borrowed = new Set([
-      ...discoveredProbes(version),
-      ...probeCandidates(byLine, unlinkedPicks * 6),
-    ]);
+    // Kept as two parts rather than one Set, so the pick loop can tell
+    // discovery's confirmed probes from the rest of the pool and treat them
+    // differently - see the note there.
+    const seededProbes = [...new Set(discoveredProbes(version))];
+    const borrowed = [
+      ...seededProbes,
+      ...probeCandidates(byLine, unlinkedPicks * 6).filter((c) => !seededProbes.includes(c)),
+    ];
     const alreadyLinked = [];
     for (const line of extraLines) {
       if (byLine.has(line)) {
@@ -843,7 +885,7 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
         alreadyLinked.push(line);
         continue;
       }
-      targets.push(mk(line, borrowed, "named with --lines", true));
+      targets.push(mk(line, borrowed, "named with --lines", true, seededProbes.length));
     }
     const alsoServed = alreadyLinked.filter((l) => l === servedLine);
     const plainlyLinked = alreadyLinked.filter((l) => l !== servedLine);
@@ -929,7 +971,7 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
     // A linked line has 1,000+ real urls, so the even spread is what is wanted
     // there.
     const picks = target.borrowed
-      ? [...target.paths].slice(0, Math.min(UNLINKED_LINE_SAMPLE, sampleSize))
+      ? borrowedPicks(target, Math.min(UNLINKED_LINE_SAMPLE, sampleSize))
       : sample(target.paths, sampleSize);
     target.sampled = picks.length;
     console.log(`  /${target.line}/ - ${target.how}, checking ${picks.length}`);
@@ -989,6 +1031,7 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
         // is the unversioned url and this is the same comparison as above.
         if (samePage(versionedRes.url, currentRes.url, versioned)) continue;
         violations.push({
+          line: target.line,
           url: versioned,
           want: `the redirect to point at ${current}`,
           got: `redirects to ${versionedRes.url} - neither this line nor the current page`,
@@ -1065,6 +1108,7 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
       const canonical = canonicalOf(head);
       if (!counterpartExists) {
         violations.push({
+          line: target.line,
           url: versioned,
           want: "robots noindex (the current page 404s, so a canonical cannot help)",
           got: canonical ? `canonical -> ${canonical}` : "neither canonical nor noindex",
@@ -1081,6 +1125,7 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
       const counterpart = current;
       if (!samePage(canonical, counterpart, versioned)) {
         violations.push({
+          line: target.line,
           url: versioned,
           want: `robots noindex, or canonical -> ${counterpart}`,
           got:
@@ -1101,6 +1146,7 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
         // a violation rather than a note, because a run full of these must not
         // read as a pass - that is exactly the unresolved ranking bug.
         violations.push({
+          line: target.line,
           url: versioned,
           want: "robots noindex, or content close enough for the canonical to hold",
           got:
@@ -1556,6 +1602,7 @@ function run() {
  */
 module.exports = {
   spreadAcrossLines,
+  borrowedPicks,
   attr,
   headOf,
   canonicalOf,

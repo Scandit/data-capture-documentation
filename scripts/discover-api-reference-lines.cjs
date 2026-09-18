@@ -72,6 +72,31 @@ const {
 const WANT_PROBES = 3;
 /** Written for the gate, so both work from the same confirmed probe paths. */
 const ARTEFACT = "api-reference-lines.json";
+
+/**
+ * Remove any previous artefact.
+ *
+ * Four paths return before the write below - no linked lines, no version, no
+ * confirmed probe, and the write's own catch - and the file survived all of
+ * them. The gate's freshness check cannot see that: it compares `a.version`
+ * against the served release number, which does NOT change between builds of the
+ * same release. So a developer who ran discovery once, then rebuilt with the
+ * network down, got a gate that seeded its borrowed picks from the old file and
+ * printed "line discovery could not determine /X/" from a run that no longer
+ * happened.
+ *
+ * Deleting is right rather than writing an empty one: a missing artefact is
+ * already a supported state that the gate handles by working on its own, and it
+ * cannot be mistaken for a result.
+ */
+function dropArtefact() {
+  try {
+    fs.rmSync(path.join(BUILD, ARTEFACT), { force: true });
+  } catch {
+    // Best effort. A leftover we could not remove is reported by the gate as a
+    // stale artefact rather than being hidden here.
+  }
+}
 /**
  * Hard ceiling on live requests. A healthy sweep takes ~42 today; the figure
  * tracks how many minors exist below the served one, so re-measure rather than
@@ -138,8 +163,8 @@ const warn = (line) => process.stderr.write(`${line}
  */
 async function headStatus(url) {
   // -1 = not asked, kept distinct from 0 ("asked, could not tell") by callers.
-  if (budget.spent >= REQUEST_BUDGET) return -1;
-  if (Date.now() - budget.startedAt >= DEADLINE_MS) return -1;
+  if (budget.spent >= REQUEST_BUDGET) return { status: -1, location: "" };
+  if (Date.now() - budget.startedAt >= DEADLINE_MS) return { status: -1, location: "" };
   budget.spent += 1;
   try {
     const res = await fetch(url, {
@@ -147,10 +172,39 @@ async function headStatus(url) {
       redirect: "manual",
       signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
     });
-    return res.status;
+    // Location comes back too, because "it answered 3xx" alone does not say the
+    // line is there - see `servesSymbol`.
+    return { status: res.status, location: (res.headers && res.headers.get("location")) || "" };
   } catch {
     // 0 is "could not tell", kept distinct from 404 by every caller below.
-    return 0;
+    return { status: 0, location: "" };
+  }
+}
+
+/**
+ * Does a 3xx at `/<line>/data-capture-sdk/<rest>` mean the LINE is served there?
+ *
+ * Only when the redirect keeps the symbol path. A redirect to
+ * /data-capture-sdk/<rest> is the remediation this check asks for, and one to
+ * /<other line>/data-capture-sdk/<rest> moves the duplicate - both mean the line
+ * is published and both must reach the gate, which has a verdict for each.
+ *
+ * A redirect that DROPS the path is the other thing entirely: a catch-all rule
+ * sending unknown urls to the root or an error page, which is ordinary static
+ * hosting and says nothing about the line. Counting those as published made
+ * every minor in the sweep - roughly 15 today - come back "PUBLISHED but linked
+ * from nowhere", and CI pipes that list straight into --lines, so the gate would
+ * then spend its budget emitting a violation per pick for lines that do not
+ * exist. Verified on the live site that /8.2/ genuinely 404s today, so this is a
+ * guard against a hosting change rather than a bug being fixed.
+ */
+function servesSymbol(location, rest) {
+  if (!location) return false;
+  try {
+    // Relative Locations are legal and common; resolve before comparing.
+    return new URL(location, ORIGIN).pathname.endsWith(`/${rest}`);
+  } catch {
+    return false;
   }
 }
 
@@ -197,6 +251,7 @@ async function main() {
   }
   const linked = [...byLine.keys()].sort(compareLines);
   if (!linked.length) {
+    dropArtefact();
     warn("line discovery: the build links no versioned API-reference URLs, so");
     warn("there is nothing to draw probe paths from. Nothing discovered.");
     if (quiet) process.stdout.write("");
@@ -206,6 +261,7 @@ async function main() {
   const version = currentVersion();
   const major = /^(\d+)\.(\d+)/.exec(version);
   if (!major) {
+    dropArtefact();
     warn("line discovery: build/search-tags.json states no version for the served");
     warn("tag, so the majors to probe are unknown. Nothing discovered.");
     if (quiet) process.stdout.write("");
@@ -217,12 +273,13 @@ async function main() {
   // sets and then disagree about whether a line was verifiable.
   const probes = [];
   for (const rest of probeCandidates(byLine, WANT_PROBES * 3)) {
-    if ((await headStatus(`${ORIGIN}/data-capture-sdk/${rest}`)) === 200) {
+    if ((await headStatus(`${ORIGIN}/data-capture-sdk/${rest}`)).status === 200) {
       probes.push(rest);
       if (probes.length >= WANT_PROBES) break;
     }
   }
   if (!probes.length) {
+    dropArtefact();
     warn("line discovery: no probe path could be confirmed on the unversioned");
     warn("tree, so no line was probed. A failure to look, not a result.");
     process.exitCode = 1;
@@ -246,6 +303,8 @@ async function main() {
   const majors = [currentMajor, currentMajor - 1].filter((m) => m >= 0);
   const found = [];
   const uncertain = [];
+  /** Probes answered by a catch-all redirect. Reported, so it is not silent. */
+  let genericRedirects = 0;
   const redirects = [];
   const ranges = [];
   for (const maj of majors) {
@@ -275,7 +334,9 @@ async function main() {
       let unknown = false;
       let redirected = false;
       for (const rest of probes) {
-        const status = await headStatus(`${ORIGIN}/${line}/data-capture-sdk/${rest}`);
+        const { status, location } = await headStatus(
+          `${ORIGIN}/${line}/data-capture-sdk/${rest}`,
+        );
         if (status === 200) {
           hit = true;
           break;
@@ -285,9 +346,16 @@ async function main() {
         // frozen line - which moves the duplicate instead of removing it - so the
         // line must reach the gate rather than being filed as "could not tell".
         if (status >= 300 && status < 400) {
-          hit = true;
-          redirected = true;
-          break;
+          if (servesSymbol(location, rest)) {
+            hit = true;
+            redirected = true;
+            break;
+          }
+          // A redirect that drops the symbol path is a catch-all, not this line.
+          // Treated like a 404 - try the next probe - so a hosting rule cannot
+          // report every minor ever released as published.
+          genericRedirects += 1;
+          continue;
         }
         if (status === -1) {
           // The budget ran out before this line was asked about. Not evidence of
@@ -323,6 +391,16 @@ async function main() {
   // The previous attempt added `warn` and then still reported this through `say`
   // BELOW the quiet return, so the case it was written for - every probe for a
   // line answering 429 - stayed completely silent in the only mode CI uses.
+  if (genericRedirects) {
+    // Loud, because it changes what "not found" means here: these probes were
+    // answered, just not with anything about the line.
+    warn(
+      `line discovery: ${genericRedirects} probe(s) were answered by a redirect ` +
+        `that drops the symbol path - a catch-all rule, not a published line.`,
+    );
+    warn("Those probes prove nothing either way and were not counted as published.");
+  }
+
   if (uncertain.length) {
     warn(
       `line discovery: could not tell for ${uncertain
@@ -347,6 +425,9 @@ async function main() {
     );
   } catch (e) {
     warn(`line discovery: could not write ${ARTEFACT} (${e.message})`);
+    // Whatever is there now is from an earlier run, and the gate would seed from
+    // it believing it matched this one.
+    dropArtefact();
   }
 
   if (quiet) {
@@ -414,3 +495,10 @@ if (require.main === module) {
     process.exitCode = 1;
   });
 }
+
+/**
+ * Exported for scripts/test-api-reference-seo.cjs. Safe because of the
+ * `require.main` guard above: without it, requiring this file to reach
+ * `servesSymbol` would fire a full live probing sweep.
+ */
+module.exports = { servesSymbol };
