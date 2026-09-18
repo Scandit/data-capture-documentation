@@ -1872,7 +1872,10 @@ export default function knowledgeExtractor(context: any, _options: any) {
       // mid-path `*` all matched nothing and left the tree indexed with no
       // warning - a green build quietly feeding an assistant what the repo had
       // just decided to hide.
-      const ignoreGlobs = siteConfig?.customFields?.assistantIgnoreFiles as
+      // knowledgeIndexIgnoreFiles, not assistantIgnoreFiles: the shared curation
+      // list PLUS this export's own corpus-shape exclusions, the same way the
+      // llms plugin reads llmsIgnoreFiles rather than the bare curation list.
+      const ignoreGlobs = siteConfig?.customFields?.knowledgeIndexIgnoreFiles as
         | readonly string[]
         | undefined;
       if (!Array.isArray(ignoreGlobs)) {

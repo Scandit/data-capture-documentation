@@ -127,8 +127,35 @@ const llmsDedupedToWeb: string[] = llmsNonWebSdkRoots.flatMap((root) =>
   llmsSharedPartialPageNames.map((name) => `docs/${root}/${name}`),
 );
 
+/**
+ * CORPUS SHAPE, for the knowledge index only: the feature-availability matrix,
+ * every copy of it.
+ *
+ * The counterpart of llmsDedupedToWeb - each export states its own corpus shape
+ * while both share the curation decision in assistantIgnoreFiles. The llms
+ * export keeps ONE copy of this page, because a flat text corpus can carry a
+ * table; the index keeps none.
+ *
+ * A token-overlap consumer cannot use it and is actively harmed by it. The
+ * matrices are 120 modules over 10 URLs at 23-33 distinct tokens against an
+ * index median of 50, and they name every product - so they score well on ANY
+ * single-product query while answering none of them. Measured: the whole top 10
+ * for the query "sparkscan" was the ten framework copies of this page, with the
+ * SparkScan pages below all of them.
+ *
+ * Nothing is lost. What the table says - which product exists on which
+ * framework - is exactly what the graph's AvailableOn / NotAvailableOn edges
+ * carry, in a form a consumer can query rather than one it has to parse.
+ */
+const knowledgeIndexDeduped: string[] = [
+  "docs/features-by-framework.mdx",
+  ...llmsNonWebSdkRoots.map((root) => `docs/${root}/features-by-framework.mdx`),
+  "docs/sdks/web/features-by-framework.mdx",
+];
+
 // Paths are matched by docusaurus-plugin-llms relative to siteDir (e.g. docs/...).
 const llmsIgnoreFiles: string[] = [...assistantIgnoreFiles, ...llmsDedupedToWeb];
+const knowledgeIndexIgnoreFiles: string[] = [...assistantIgnoreFiles, ...knowledgeIndexDeduped];
 
 // ---------------------------------------------------------------------------
 // SINGLE SOURCE OF TRUTH: docs versions and every `docusaurus_tag` derived
@@ -494,6 +521,10 @@ const config: Config = {
     // over-corrected, because it also carries a corpus-shape decision (see
     // llmsDedupedToWeb) that a routing index must not inherit.
     assistantIgnoreFiles,
+    // The same curation list plus the index's own corpus-shape exclusions; see
+    // knowledgeIndexDeduped. Read by the knowledge-extractor in place of
+    // assistantIgnoreFiles, exactly as the llms plugin reads llmsIgnoreFiles.
+    knowledgeIndexIgnoreFiles,
     // Which version THIS build serves at the root. Read by the
     // knowledge-extractor plugin, which cannot otherwise tell a frozen version
     // served at the root from `current` - and the two need opposite handling.

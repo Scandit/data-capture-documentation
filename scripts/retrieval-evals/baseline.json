@@ -1,8 +1,8 @@
 {
-  "page_success_at_k": 0.7876,
-  "page_mrr": 0.6895,
-  "pages": 532,
-  "modules": 4364,
+  "page_success_at_k": 0.7969,
+  "page_mrr": 0.6992,
+  "pages": 522,
+  "modules": 4244,
   "k": 3,
   "recorded_at": "2026-09-18"
 }
