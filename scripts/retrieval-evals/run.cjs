@@ -61,6 +61,7 @@ const BASELINE_PATH = path.join(__dirname, "baseline.json");
 const AUTO_TOLERANCE = parseFloat(arg("auto-tolerance", "0.03"));
 const AUTO_FLOOR = parseFloat(arg("auto-floor", "0.60"));
 const AUTO_MRR_FLOOR = parseFloat(arg("auto-mrr-floor", "0.40"));
+const MIN_AUTO_MRR = parseFloat(arg("min-auto-mrr", "0"));
 const UPDATE_BASELINE = process.argv.includes("--update-baseline");
 function readBaseline() {
   let raw;
@@ -173,14 +174,35 @@ function main() {
     const misses = [];
     for (const r of rows) {
       const qt = tokenize(r.query);
-      // best score among chunks of the SAME page
+      // Best-ranking chunk of the SAME page. Ties are broken by id, exactly as
+      // the gold-set path sorts (b.s - a.s || a.id.localeCompare(b.id)): the two
+      // halves of this script have to agree about what rank means.
       let bestSame = 0;
-      for (const d of docs) if (d.url === r.url) bestSame = Math.max(bestSame, fastScore(qt, d.tokens));
-      // rank of that best same-page chunk = # of OTHER-page chunks scoring higher
+      let bestSameId = "";
+      for (const d of docs) {
+        if (d.url !== r.url) continue;
+        const s = fastScore(qt, d.tokens);
+        if (s > bestSame || (s === bestSame && (!bestSameId || d.id.localeCompare(bestSameId) < 0))) {
+          bestSame = s;
+          bestSameId = d.id;
+        }
+      }
+      // Rank of that chunk = how many OTHER-page chunks outrank it.
+      //
+      // A tie counts against it when the competitor's id sorts first. The
+      // comparison used to be a bare `>`, which handed the page every tie - and
+      // this corpus is ~11 near-duplicate copies of the same prose, so ties are
+      // the common case, not the edge case. Measured on the same artifact:
+      // page-success@3 0.8459 optimistic vs 0.7350 with ties counted, page-MRR
+      // 0.7669 vs 0.6526. A baseline resting on that difference moves further
+      // than the tolerance whenever an edit perturbs tokenisation enough to flip
+      // a batch of ties - a red gate with no regression behind it - and hides a
+      // real regression that only converts strictly-better competitors into ties.
       let better = 0;
       for (const d of docs) {
         if (d.url === r.url) continue;
-        if (fastScore(qt, d.tokens) > bestSame) {
+        const s = fastScore(qt, d.tokens);
+        if (s > bestSame || (s === bestSame && d.id.localeCompare(bestSameId) < 0)) {
           better++;
           if (better >= K) break;
         }
@@ -203,6 +225,9 @@ function main() {
     console.log(`\nRetrieval self-eval (AUTO, page-level over all docs): ${rows.length} pages / ${docs.length} modules, k=${K}`);
     const baseline = readBaseline();
     // An explicit --min-auto-success still wins, so a caller can pin a number.
+    // --min-auto-mrr does the same for MRR: with only the success override the
+    // documented "a caller can pin a number" could not actually relax the AUTO
+    // gate, because MRR kept failing it.
     const floor = MIN_AUTO_SUCCESS > 0
       ? MIN_AUTO_SUCCESS
       : baseline
@@ -214,9 +239,11 @@ function main() {
     // consumer feels, has halved.
     // readBaseline guarantees a finite page_mrr when a baseline exists, so the
     // only way here without one is having no baseline at all - the first run.
-    const mrrFloor = baseline
-      ? Math.max(AUTO_MRR_FLOOR, +(baseline.page_mrr - AUTO_TOLERANCE).toFixed(4))
-      : AUTO_MRR_FLOOR;
+    const mrrFloor = MIN_AUTO_MRR > 0
+      ? MIN_AUTO_MRR
+      : baseline
+        ? Math.max(AUTO_MRR_FLOOR, +(baseline.page_mrr - AUTO_TOLERANCE).toFixed(4))
+        : AUTO_MRR_FLOOR;
     const breached =
       metrics.page_success_at_k < floor || metrics.page_mrr < mrrFloor;
     console.log(`  page-success@${K} = ${metrics.page_success_at_k}  (min ${floor})`);

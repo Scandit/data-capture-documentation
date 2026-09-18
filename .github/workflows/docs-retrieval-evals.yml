@@ -25,6 +25,12 @@ on:
       # signal is the push-to-main trigger after it has merged.
       - 'src/components/**'
       - 'src/data/**'
+      # And src/theme, which decides the MARKUP: MDXComponents.js maps Tabs /
+      # TabItem and every custom component rendered inside article .markdown -
+      # tabsToMd is built entirely around that markup - and DocItem is swizzled.
+      # Swapping the Tabs implementation, or wrapping a component in one more
+      # element, changes the indexed text on hundreds of pages.
+      - 'src/theme/**'
       # These decide WHAT gets indexed at all: assistantIgnoreFiles and
       # lastVersion live in the config, and versions.json decides which
       # trees are frozen. Without them a PR that widens or narrows the

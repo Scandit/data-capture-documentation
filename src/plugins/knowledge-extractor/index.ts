@@ -951,14 +951,23 @@ function isAvailabilityStub(title: string, body: string): boolean {
   // system-requirements, migrate-* - the title arrives as a plain block with
   // no "#" on it and gets selected as the opening. The check then reads the
   // title instead of the prose and can never match.
+  // BOTH, not either. Filtering on "#" alone missed the 147 pages that render
+  // their h1 inside <header>, where the title arrives with no "#" on it.
+  // Filtering on the title alone then broke a different shape: for
+  // "# ID Capture / ## Requirements / ID Capture is not available on the Linux
+  // SDK." the first non-title block is the SUB-heading, so the stub sentence was
+  // never reached and the page went back to emitting AvailableOn for a platform
+  // it rules out. Skip heading blocks AND the title block; take the first block
+  // of actual prose.
   const titleText = title.replace(/\s+/g, " ").trim().toLowerCase();
   const opening =
     body
       .trim()
       .split(/\n\s*\n/)
       .find((block) => {
-        const text = block.replace(/^#+\s*/, "").replace(/\s+/g, " ").trim();
-        return text && text.toLowerCase() !== titleText;
+        if (/^\s*#/.test(block)) return false;
+        const text = block.replace(/\s+/g, " ").trim();
+        return Boolean(text) && text.toLowerCase() !== titleText;
       }) || "";
   return /is not available (on|for) the/i.test(opening);
 }
