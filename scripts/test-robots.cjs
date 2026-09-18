@@ -217,7 +217,16 @@ check("no internal narrative is published", () => {
     /postmortem/i,
     /search index/i,
     /\d{4}-\d{2}-\d{2}/, // a dated measurement
-    /\b\d{2},\d{3}\b/, // a byte count like 38,575
+    // Any comma-grouped number. This was /\b\d{2},\d{3}\b/, which caught the
+    // byte counts (38,575) and none of the other measurements the comment above
+    // names: the sitemap census was 1,508 / 618 / 498 and the stale-tree figure
+    // ~9,500. Someone re-adding "the sitemap carries 1,508 guide URLs" at a
+    // release would have passed this and shipped the number.
+    /\b\d{1,3}(?:,\d{3})+\b/,
+    // ...and a bare count with a unit, which is the other way these get
+    // written. Deliberately not "any long number": RFC 9309 is cited in the
+    // file and is not a measurement.
+    /\b\d{3,}\s+(?:URLs?|pages?|files?|bytes?|trees?)\b/i,
   ];
   for (const re of banned) {
     assert.ok(
@@ -236,86 +245,56 @@ check("it stays readable in a terminal", () => {
 
 // ------------------------------------------------------- the llms indexes
 
-check("the Agent Skills index exists and lists one page per SDK", () => {
-  // The gap this closes: the skills pages were already in llms.txt, but only
-  // nested per SDK, so nothing said the site publishes them at all.
+check("the Agent Skills index lists exactly the pages llms.txt does", () => {
   // The existence check is not a formality. generateCustomLLMFiles only warns
   // and writes nothing when includePatterns match no docs, and the plugin
   // swallows that in postBuild - so a rename to agent-skills.md, or the tree
   // moving under an ignored prefix, would ship a robots.txt and an llms.txt
   // both pointing at a 404 with a green build. Nothing else catches that.
-  const p = path.join(BUILD, "llms-agent-skills.txt");
-  assert.ok(fs.existsSync(p), "build/llms-agent-skills.txt is missing");
-  const text = fs.readFileSync(p, "utf8");
-  const entries = text.match(/^- \[/gm) || [];
-  assert.ok(
-    entries.length >= 5,
-    `expected an entry per SDK, found ${entries.length}`,
-  );
-  // Derived from the source tree, so adding an SDK cannot leave this behind.
-  // Walked rather than listed one level deep: .NET keeps its pages at
-  // sdks/net/android and sdks/net/ios, so a flat scan undercounts by two and
-  // this assertion fails for a reason that has nothing to do with the index.
-  const walk = (dir) =>
-    fs.readdirSync(dir, { withFileTypes: true }).flatMap((d) => {
-      const full = path.join(dir, d.name);
-      if (d.isDirectory()) return walk(full);
-      return d.name === "agent-skills.mdx" ? [full] : [];
-    });
-  const withSkills = walk(path.join(__dirname, "..", "docs", "sdks"));
+  const indexPath = path.join(BUILD, "llms-agent-skills.txt");
+  assert.ok(fs.existsSync(indexPath), "build/llms-agent-skills.txt is missing");
 
-  // Minus the trees the llms plugin is told to ignore. docs/sdks/titanium is on
-  // that list today, so a strict equality here fails the build the moment
-  // anyone adds an agent-skills page under an ignored SDK - claiming the index
-  // is wrong when the index is right. The ignore globs are read out of the
-  // config rather than restated, so adding one does not silently loosen this.
-  const configSrc = fs.readFileSync(
-    path.join(__dirname, "..", "docusaurus.config.ts"),
-    "utf8",
+  // Compared against llms.txt rather than against the source tree.
+  //
+  // Counting agent-skills.mdx files on disk was wrong twice over. It ignored
+  // the plugin's ignore lists, so a page under an ignored SDK failed the build
+  // claiming the index was wrong when it was right. The fix for that - reading
+  // the ignore globs out of docusaurus.config.ts - only ever read two of the
+  // four lists, because llmsIgnoreFiles assembles the other two by spreading
+  // identifiers rather than literals, and its own comment claimed otherwise.
+  //
+  // llms.txt is produced by the SAME plugin from the SAME ignore set, so any
+  // agent-skills page it lists is one that was not ignored. Comparing the two
+  // build outputs needs no knowledge of how the ignore lists are written, and
+  // cannot drift when someone adds a fifth one.
+  const urlsIn = (file) =>
+    new Set(
+      [...fs.readFileSync(file, "utf8").matchAll(/^- \[[^\]]*\]\((https?:[^)]+)\)/gm)].map(
+        (m) => m[1],
+      ),
+    );
+  const inIndex = urlsIn(indexPath);
+  const inMain = new Set(
+    [...urlsIn(path.join(BUILD, "llms.txt"))].filter((u) => /\/agent-skills\/?$/.test(u)),
   );
-  // Scoped to the ignore declarations. Scraping the whole file swept up this
-  // index's OWN includePatterns - "docs/sdks/**/agent-skills.mdx" - whose
-  // literal prefix is "docs/sdks/", which then matched every page and made the
-  // expectation zero. A pattern list cannot be read without knowing which list
-  // it is.
-  const ignoreBlocks = ["llmsIgnoredSdkTrees", "llmsIgnoreFiles"]
-    .map((name) => {
-      const at = configSrc.indexOf(`const ${name}`);
-      if (at === -1) return "";
-      // Ends at THIS declaration's own terminator. `indexOf("\n]")` looked
-      // scoped and was not: llmsIgnoredSdkTrees is written on one line, so its
-      // "block" ran forward to the closing bracket of whatever multi-line array
-      // came next. It captured only real ignore patterns by luck, and declaring
-      // any other array in between would have changed the answer silently -
-      // which is the failure the comment above claims to have avoided.
-      const rest = configSrc.slice(at);
-      const close = rest.search(/\]\s*(as const)?\s*;/);
-      return close === -1 ? "" : rest.slice(0, close);
-    })
-    .join("\n");
-  assert.ok(
-    ignoreBlocks.includes("docs/sdks/"),
-    "neither llmsIgnoredSdkTrees nor llmsIgnoreFiles could be read from " +
-      "docusaurus.config.ts - this check would silently expect every page",
+
+  assert.ok(inIndex.size > 0, "the Agent Skills index is empty");
+  assert.deepStrictEqual(
+    [...inIndex].sort(),
+    [...inMain].sort(),
+    "the dedicated index and llms.txt must list the same Agent Skills pages",
   );
-  const ignoredPrefixes = [
-    ...ignoreBlocks.matchAll(/"(docs\/sdks\/[^"*]*)\*/g),
-  ]
-    .map((m) => m[1])
-    // "docs/sdks/" itself is not an ignore of anything; it is what a `**` right
-    // after the root leaves behind.
-    .filter((prefix) => prefix !== "docs/sdks/");
-  const rel = (f) => f.split(path.sep).join("/").split("/docs/sdks/")[1];
-  const expected = withSkills.filter(
-    (f) => !ignoredPrefixes.some((p) => `docs/sdks/${rel(f)}`.startsWith(p)),
-  );
-  assert.strictEqual(
-    entries.length,
-    expected.length,
-    `${expected.length} agent-skills pages are eligible under docs/sdks ` +
-      `(${withSkills.length} on disk, minus ignored trees ` +
-      `${JSON.stringify(ignoredPrefixes)}) but the index lists ${entries.length}`,
-  );
+
+  // And every one of them is a page this repo actually has, so the index cannot
+  // advertise a URL nothing builds.
+  for (const url of inIndex) {
+    const rel = new URL(url).pathname.replace(/^\/|\/$/g, "");
+    const src = path.join(__dirname, "..", "docs", `${rel}.mdx`);
+    assert.ok(
+      fs.existsSync(src),
+      `${url} is indexed but docs/${rel}.mdx does not exist`,
+    );
+  }
 });
 
 check("llms.txt announces the skills above its table of contents", () => {
