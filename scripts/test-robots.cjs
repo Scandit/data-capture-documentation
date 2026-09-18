@@ -211,8 +211,14 @@ check("no internal narrative is published", () => {
   // argues against duplicates. The deploy postmortem and the search-index
   // history went with it. This keeps them out.
   const banned = [
-    /\/7\.6\.\d+\//, // a retired patch-level guide tree
-    /\/6\.28\.\d+\//,
+    // Any patch-level tree path, derived rather than listed. This named
+    // /7.6.x/ and /6.28.x/ explicitly - which are precisely the lines that stop
+    // being the retired ones. After the next major transition, a discovery list
+    // for the then-frozen major (/8.6.1/ ... /8.6.9/) would have passed every
+    // pattern here and shipped, which is the one thing this check exists to
+    // stop. Three-part versions only: the file legitimately writes two-part
+    // lines like /8.7/ when explaining the rule.
+    /\/\d+\.\d+\.\d+\//,
     /deploy never/i,
     /postmortem/i,
     /search index/i,
@@ -274,8 +280,18 @@ check("the Agent Skills index lists exactly the pages llms.txt does", () => {
       ),
     );
   const inIndex = urlsIn(indexPath);
+  // Guarded like its siblings. The llms plugin catches its own postBuild
+  // errors and logs them, so the failure this suite exists to diagnose - the
+  // indexes not being produced at all - reached here as a raw ENOENT stack
+  // instead of the message the rest of this file takes care to give.
+  const mainPath = path.join(BUILD, "llms.txt");
+  assert.ok(
+    fs.existsSync(mainPath),
+    "build/llms.txt is missing - docusaurus-plugin-llms did not produce it, " +
+      "and it logs its own failures rather than failing the build",
+  );
   const inMain = new Set(
-    [...urlsIn(path.join(BUILD, "llms.txt"))].filter((u) => /\/agent-skills\/?$/.test(u)),
+    [...urlsIn(mainPath)].filter((u) => /\/agent-skills\/?$/.test(u)),
   );
 
   assert.ok(inIndex.size > 0, "the Agent Skills index is empty");
@@ -287,12 +303,21 @@ check("the Agent Skills index lists exactly the pages llms.txt does", () => {
 
   // And every one of them is a page this repo actually has, so the index cannot
   // advertise a URL nothing builds.
+  const docsDir = path.join(__dirname, "..", "docs");
   for (const url of inIndex) {
     const rel = new URL(url).pathname.replace(/^\/|\/$/g, "");
-    const src = path.join(__dirname, "..", "docs", `${rel}.mdx`);
+    // Every shape the plugin can produce a route from. Probing only `.mdx` was
+    // unreachable solely because includePatterns was `.mdx`-only too; widening
+    // that pattern would have made a correct, building page fail here.
+    const candidates = [
+      `${rel}.mdx`,
+      `${rel}.md`,
+      path.join(rel, "index.mdx"),
+      path.join(rel, "index.md"),
+    ];
     assert.ok(
-      fs.existsSync(src),
-      `${url} is indexed but docs/${rel}.mdx does not exist`,
+      candidates.some((c) => fs.existsSync(path.join(docsDir, c))),
+      `${url} is indexed but no page builds it - tried ${candidates.join(", ")}`,
     );
   }
 });

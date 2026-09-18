@@ -111,7 +111,13 @@ const llmsRootRedirectOnlyDocs: string[] = [
  */
 const llmsAgentSkillsFile = {
   filename: "llms-agent-skills.txt",
-  includePatterns: ["docs/sdks/**/agent-skills.mdx"],
+  // Both extensions. All ten pages are .mdx today, but the plugin indexes .md
+  // and .mdx alike and .md is the dominant convention in this tree - 448 files
+  // against 123. So an SDK adding docs/sdks/<new>/agent-skills.md would land in
+  // llms.txt and NOT in this index: the advertised file would quietly omit that
+  // SDK, and the gate would fail the build on an otherwise valid docs change
+  // while blaming the index.
+  includePatterns: ["docs/sdks/**/agent-skills.{md,mdx}"],
   fullContent: false,
   title: "Scandit Agent Skills",
   description:
