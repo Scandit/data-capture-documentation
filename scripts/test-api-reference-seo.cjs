@@ -37,9 +37,8 @@ const {
   samePage,
 } = require("./verify-api-reference-seo.cjs");
 
-const { servesSymbol } = require("./discover-api-reference-lines.cjs");
-
 const {
+  servesSymbol,
   currentVersion,
   linkedApiUrls,
   compareLines,

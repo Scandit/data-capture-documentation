@@ -439,6 +439,137 @@ async function main() {
     }
   });
 
+  await check("a host catch-all does not make every pick SOUND", async () => {
+    // The worst shape this gate can have, and it shipped: the convergence check
+    // added for the counterpart-redirect case says "the versioned url and the
+    // unversioned url ended in the same place". A catch-all satisfies that
+    // trivially - both land on `/` - so every pick read as sound on /8.5/, a line
+    // that does not exist in this stub at all. samePage cannot catch it: it
+    // strips a trailing slash, after which "/" compares equal to "".
+    const { server, origin } = await startOrigin({
+      versioned: (line, rest, res) => {
+        res.writeHead(302, { location: "/" });
+        res.end();
+      },
+      counterpart: (rest, res) => {
+        res.writeHead(302, { location: "/" });
+        res.end();
+      },
+    });
+    const tmp = stage(origin);
+    try {
+      const { out } = await runGate(tmp, ["--sample", String(SAMPLE), "--lines", "8.5"]);
+      assert.ok(
+        !/^OK:/m.test(out),
+        `a run that learned nothing must not print OK:\n${out}`,
+      );
+      assert.match(out, /no longer carries the symbol path/);
+      // Not judged, and said so - the coverage floor is what "learned nothing"
+      // is supposed to trip.
+      assert.match(out, /judged nothing at all|judged only 0 of/);
+    } finally {
+      server.close();
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  await check("a host catch-all does not invent violations either", async () => {
+    // The same hosting rule with the counterpart answering 200 put every pick in
+    // the redirect branch, counted it as judged, and emitted a duplicate-content
+    // violation - findings against a line that is not published.
+    const { server, origin } = await startOrigin({
+      versioned: (line, rest, res) => {
+        res.writeHead(302, { location: "/" });
+        res.end();
+      },
+      counterpart: (rest, res) => {
+        res.writeHead(200, { "content-type": "text/html" });
+        res.end("<html><head></head><body>current</body></html>");
+      },
+    });
+    const tmp = stage(origin);
+    try {
+      const { out } = await runGate(tmp, ["--sample", String(SAMPLE), "--lines", "8.5"]);
+      assert.ok(
+        !/duplicate content across API-reference lines/.test(out),
+        `a catch-all must not be reported as duplicate content:\n${out}`,
+      );
+      assert.ok(!/^OK:/m.test(out), `and must not pass either:\n${out}`);
+      assert.match(out, /no longer carries the symbol path/);
+    } finally {
+      server.close();
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  await check("discovery confirms a probe that 3xx-es to the same symbol", async () => {
+    // `redirect: "manual"` is right for probing a LINE and wrong for confirming a
+    // path on the unversioned tree, where the question is only "does this
+    // resolve?". One normalisation hop made every candidate fail confirmation,
+    // discovery exited 1, and the workflow's `|| true` turned that into an empty
+    // API_LINES - dropping the newest frozen line from CI with one stderr line.
+    const { server, origin } = await startOrigin({
+      versioned: (line, rest, res) => {
+        res.writeHead(200, { "content-type": "text/html" });
+        res.end("<html><head></head><body>versioned</body></html>");
+      },
+      // Resolves, but only after a normalising hop to itself.
+      counterpart: (rest, res) => {
+        if (!/\?ok$/.test(res.req.url)) {
+          res.writeHead(301, { location: `/data-capture-sdk/${rest}?ok` });
+          res.end();
+          return;
+        }
+        res.writeHead(200, { "content-type": "text/html" });
+        res.end("<html><head></head><body>current</body></html>");
+      },
+    });
+    const tmp = stage(origin);
+    try {
+      const { out } = await runDiscovery(tmp);
+      assert.ok(
+        !/no probe path could be confirmed/.test(out),
+        `a normalising redirect must still confirm a probe:\n${out}`,
+      );
+      assert.match(out, /probe paths:\s+\d+ confirmed/);
+    } finally {
+      server.close();
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
+  await check("a line swept by a catch-all is undetermined, not absent", async () => {
+    // Those probes prove nothing, so filing the line as absent contradicted this
+    // script's own rule. It was omitted from BOTH the --lines output and the
+    // uncertain list, and the report announced that nothing was found.
+    const { server, origin } = await startOrigin({
+      versioned: (line, rest, res) => {
+        res.writeHead(302, { location: "/" });
+        res.end();
+      },
+      counterpart: (rest, res) => {
+        res.writeHead(200, { "content-type": "text/html" });
+        res.end("<html><head></head><body>current</body></html>");
+      },
+    });
+    const tmp = stage(origin);
+    try {
+      const { out } = await runDiscovery(tmp);
+      const artefact = JSON.parse(
+        fs.readFileSync(path.join(tmp, "build", "api-reference-lines.json"), "utf8"),
+      );
+      assert.deepStrictEqual(artefact.published, [], "a catch-all publishes nothing");
+      assert.ok(
+        artefact.uncertain.length > 0,
+        `lines swept by a catch-all belong in uncertain: ${JSON.stringify(artefact)}`,
+      );
+      assert.match(out, /could not tell for/);
+    } finally {
+      server.close();
+      fs.rmSync(tmp, { recursive: true, force: true });
+    }
+  });
+
   console.log(`\n${passed} passed\n`);
 }
 

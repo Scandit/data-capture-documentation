@@ -70,6 +70,34 @@ function currentVersion(buildDir = BUILD) {
   }
 }
 
+/**
+ * Does a response at `<something>/data-capture-sdk/<rest>` still concern THAT
+ * symbol after redirects, or did it get swept somewhere generic?
+ *
+ * Shared because the two scripts have to answer it the same way about the same
+ * response. Discovery had this test and the gate did not, and that disagreement
+ * was a false PASS: the gate treated "the versioned url and the unversioned url
+ * ended in the same place" as remediation, so a host-level catch-all sending
+ * unknown paths to `/` made both converge there and every pick read as sound -
+ * on a line that did not exist at all. `samePage` cannot catch it, because it
+ * strips a trailing slash and `"/"` then compares equal to `""`.
+ *
+ * A landing path that KEEPS the symbol is a real statement about the page: a
+ * redirect to /data-capture-sdk/<rest> is the remediation this gate asks for,
+ * and one to /<other line>/data-capture-sdk/<rest> moves the duplicate rather
+ * than removing it. A landing path that drops it - `/`, `/404.html`, a landing
+ * page - is a hosting rule and says nothing about the line either way.
+ */
+function servesSymbol(location, rest) {
+  if (!location) return false;
+  try {
+    // Relative Locations are legal and common; resolve before comparing.
+    return new URL(location, ORIGIN).pathname.endsWith(`/${rest}`);
+  } catch {
+    return false;
+  }
+}
+
 const VERSIONED_API_URL =
   /https:\/\/docs\.scandit\.com\/(\d+\.\d+)\/data-capture-sdk\/([^"'#\s<>(),]+)/g;
 
@@ -203,6 +231,7 @@ function knownCeiling(byLine, major) {
 }
 
 module.exports = {
+  servesSymbol,
   BUILD,
   ORIGIN,
   REQUEST_TIMEOUT_MS,

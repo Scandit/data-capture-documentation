@@ -57,6 +57,7 @@
 const fs = require("fs");
 const path = require("path");
 const {
+  servesSymbol,
   BUILD,
   ORIGIN,
   REQUEST_TIMEOUT_MS,
@@ -181,32 +182,6 @@ async function headStatus(url) {
   }
 }
 
-/**
- * Does a 3xx at `/<line>/data-capture-sdk/<rest>` mean the LINE is served there?
- *
- * Only when the redirect keeps the symbol path. A redirect to
- * /data-capture-sdk/<rest> is the remediation this check asks for, and one to
- * /<other line>/data-capture-sdk/<rest> moves the duplicate - both mean the line
- * is published and both must reach the gate, which has a verdict for each.
- *
- * A redirect that DROPS the path is the other thing entirely: a catch-all rule
- * sending unknown urls to the root or an error page, which is ordinary static
- * hosting and says nothing about the line. Counting those as published made
- * every minor in the sweep - roughly 15 today - come back "PUBLISHED but linked
- * from nowhere", and CI pipes that list straight into --lines, so the gate would
- * then spend its budget emitting a violation per pick for lines that do not
- * exist. Verified on the live site that /8.2/ genuinely 404s today, so this is a
- * guard against a hosting change rather than a bug being fixed.
- */
-function servesSymbol(location, rest) {
-  if (!location) return false;
-  try {
-    // Relative Locations are legal and common; resolve before comparing.
-    return new URL(location, ORIGIN).pathname.endsWith(`/${rest}`);
-  } catch {
-    return false;
-  }
-}
 
 /**
  * How high to probe on a major below the current one.
@@ -273,7 +248,19 @@ async function main() {
   // sets and then disagree about whether a line was verifiable.
   const probes = [];
   for (const rest of probeCandidates(byLine, WANT_PROBES * 3)) {
-    if ((await headStatus(`${ORIGIN}/data-capture-sdk/${rest}`)).status === 200) {
+    // A 3xx that keeps the symbol path counts as confirmation. The question here
+    // is only "does this path resolve on current?", and `redirect: "manual"` -
+    // right for probing a LINE, where a 3xx means "redirected away" - makes one
+    // normalisation hop (trailing slash, host canonicalisation, a CDN rewrite)
+    // answer no. If that ever happened to every candidate, no probe confirmed,
+    // discovery exited 1, and the workflow's `|| true` turned that into an empty
+    // API_LINES - so the gate ran with no --lines and the newest frozen line, the
+    // whole reason this script exists, was dropped from CI with one stderr line.
+    const confirm = await headStatus(`${ORIGIN}/data-capture-sdk/${rest}`);
+    const resolves =
+      confirm.status === 200 ||
+      (confirm.status >= 300 && confirm.status < 400 && servesSymbol(confirm.location, rest));
+    if (resolves) {
       probes.push(rest);
       if (probes.length >= WANT_PROBES) break;
     }
@@ -333,6 +320,8 @@ async function main() {
       let hit = false;
       let unknown = false;
       let redirected = false;
+      /** A probe here was answered by a catch-all, which proves nothing. */
+      let swept = false;
       for (const rest of probes) {
         const { status, location } = await headStatus(
           `${ORIGIN}/${line}/data-capture-sdk/${rest}`,
@@ -352,9 +341,16 @@ async function main() {
             break;
           }
           // A redirect that drops the symbol path is a catch-all, not this line.
-          // Treated like a 404 - try the next probe - so a hosting rule cannot
-          // report every minor ever released as published.
+          // Try the next probe, so a hosting rule cannot report every minor ever
+          // released as published - but REMEMBER it, because unlike a 404 it is
+          // not evidence of absence either. Filing it as absence contradicted
+          // this file's own rule: a probe that proves nothing must not read as
+          // absence. Reproduced against a catch-all stub before this: 45 generic
+          // redirects counted, and the artefact still said
+          // {"published": [], "uncertain": []} with the report announcing
+          // "Nothing published-but-unlinked was found".
           genericRedirects += 1;
+          swept = true;
           continue;
         }
         if (status === -1) {
@@ -379,7 +375,7 @@ async function main() {
       if (hit) {
         found.push(line);
         if (redirected) redirects.push(line);
-      } else if (unknown) uncertain.push(line);
+      } else if (unknown || swept) uncertain.push(line);
     }
   }
 
@@ -398,7 +394,8 @@ async function main() {
       `line discovery: ${genericRedirects} probe(s) were answered by a redirect ` +
         `that drops the symbol path - a catch-all rule, not a published line.`,
     );
-    warn("Those probes prove nothing either way and were not counted as published.");
+    warn("Those probes prove nothing either way, so the lines they answered for");
+    warn("are listed as undetermined below rather than as absent.");
   }
 
   if (uncertain.length) {
@@ -496,9 +493,3 @@ if (require.main === module) {
   });
 }
 
-/**
- * Exported for scripts/test-api-reference-seo.cjs. Safe because of the
- * `require.main` guard above: without it, requiring this file to reach
- * `servesSymbol` would fire a full live probing sweep.
- */
-module.exports = { servesSymbol };

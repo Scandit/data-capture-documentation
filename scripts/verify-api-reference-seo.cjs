@@ -58,6 +58,7 @@ const path = require("path");
 // between them shows up not as a conflict but as a confident report about
 // something neither checked.
 const {
+  servesSymbol,
   BUILD,
   ORIGIN,
   REQUEST_TIMEOUT_MS,
@@ -1015,6 +1016,34 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
       // saying the line "was taken offline" - about a line that was fixed.
       if (!versionedRes.url.includes(`/${target.line}/data-capture-sdk/`)) {
         target.requested += 1;
+        // Did it land somewhere that still concerns this symbol, or did a hosting
+        // rule sweep it away? Without this test the branch below read a catch-all
+        // BOTH ways and both were wrong:
+        //
+        //   - it made every pick SOUND, because the versioned url and the
+        //     unversioned url both ended at `/` and the convergence check saw them
+        //     match - a false pass on a line that did not exist at all, and
+        //     `samePage` cannot catch it because it strips a trailing slash, after
+        //     which "/" compares equal to "".
+        //   - or, where the counterpart answered 200, it made every pick a
+        //     duplicate-content VIOLATION and asserted the line had been judged -
+        //     findings against a line that is not published.
+        //
+        // Neither is a statement about the line, so it is filed as one that could
+        // not be judged: it drags the coverage floor, which is what "this run
+        // learned nothing here" is supposed to do. Discovery has had this test
+        // since the last round; the gate not having it is what let the two
+        // scripts disagree about the same response.
+        if (!servesSymbol(versionedRes.url, rest)) {
+          target.unknown += 1;
+          undetermined.push({
+            url: versioned,
+            why:
+              `redirects to ${versionedRes.url}, which no longer carries the symbol ` +
+              `path - a catch-all rule, not a statement about this line`,
+          });
+          continue;
+        }
         target.checked += 1;
         if (samePage(versionedRes.url, current, versioned)) continue;
         // ...or it landed exactly where the unversioned url ITSELF lands. The
@@ -1029,6 +1058,10 @@ ${strict ? "FAIL" : "WARN"}: ${walk.unreadableDirs} directory(ies) under ${BUILD
         // Ordered second on purpose, so the verdict still does not DEPEND on the
         // counterpart request succeeding: when that request failed, currentRes.url
         // is the unversioned url and this is the same comparison as above.
+        //
+        // Safe only because of the servesSymbol guard above. On its own this
+        // comparison says "both ended in the same place", which a catch-all
+        // satisfies trivially - that was a false pass, and it shipped.
         if (samePage(versionedRes.url, currentRes.url, versioned)) continue;
         violations.push({
           line: target.line,
