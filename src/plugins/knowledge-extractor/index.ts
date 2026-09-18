@@ -166,7 +166,17 @@ function clipMarkdown(text: string, limit: number): string {
   // introducer" property then held only by luck of the content.
   if (text.length <= limit) {
     const whole = dropTrailingIntroducers(text.split("\n")).join("\n").trimEnd();
-    return whole || demoteIntroducers(text).trimEnd();
+    const short = whole || demoteIntroducers(text).trimEnd();
+    // Balance here as well. This path returned its input verbatim, so an
+    // unbalanced fence arriving from the content itself reached
+    // assertArtifactInvariants, which throws and fails `docusaurus build` -
+    // for main and for every PR preview. That contradicts the rule the rest
+    // of this plugin follows, that extraction must never break a deploy, and
+    // the fix would have to be a code change on a docs-only PR with main red.
+    const fences = short.match(/^\s*(?:>\s*)*```/gm) || [];
+    if (fences.length % 2 === 0) return short;
+    const openerPrefix = (fences[fences.length - 1] || "").match(/^\s*(?:>\s*)*/);
+    return `${short}\n${openerPrefix ? openerPrefix[0] : ""}\u0060\u0060\u0060`;
   }
   const cut = text.slice(0, limit);
   const lines = cut.split("\n");
@@ -423,7 +433,13 @@ function chunkBody(body: string, target: number): Chunk[] {
       } else {
         if (para) chunks.push({ heading: paraHeading, content: para });
         para = p;
-        paraHeading = firstHeading(p);
+        // `|| partHeading`: this used to overwrite unconditionally, so a
+        // continuation paragraph carrying no heading of its own reset the
+        // heading to "". enforceChunkInvariant then had nothing to fall back on
+        // and buildModule substituted the page title, leaving 1,179 of 3,855
+        // "(Part N)" modules titled "<Page> (Part N)" instead of the section
+        // they are in - and `topic`, which a reranker keys on, with them.
+        paraHeading = firstHeading(p) || partHeading;
       }
     }
     current = para;
@@ -765,7 +781,14 @@ function blockToMd($: cheerio.CheerioAPI, el: any): string {
             .join("\n")
         : $(el).text()
     ).replace(/\s+$/g, "");
-    return code ? "```\n" + code + "\n```" : "";
+    // Carry Prism's language through. Without it a Swift and a Kotlin sample
+    // are byte-identical in an excerpt whose stated job is helping an
+    // assistant pick the right page, and framework routing is this
+    // artifact's headline feature.
+    const langAttr = `${$(el).attr("class") || ""} ${$(el).find("code").first().attr("class") || ""}`;
+    const langMatch = langAttr.match(/language-([A-Za-z0-9+#-]+)/);
+    const lang = langMatch ? langMatch[1] : "";
+    return code ? "```" + lang + "\n" + code + "\n```" : "";
   }
   if (tag === "table") return tableToMd($, el);
   if (tag === "blockquote") {
@@ -781,7 +804,24 @@ function blockToMd($: cheerio.CheerioAPI, el: any): string {
       .map((l) => (l ? `> ${l}` : ">"))
       .join("\n");
   }
-  if (tag === "div" || tag === "section" || tag === "details" || tag === "article" || tag === "aside") {
+  if (tag === "details") {
+    // <summary> is the LABEL for the block it introduces, and it is not a block
+    // tag - so orderedSegments flushed it as its own inline run and the "\n\n"
+    // join below turned it into a paragraph boundary. chunkBody then cut there
+    // and shipped 44 modules whose entire content was a bare region label
+    // ("Europe", "North America"), while the country table that label
+    // introduces shipped with no region context at all. tabsToMd avoids exactly
+    // this with a single newline; a collapsible section needs the same.
+    const summaryEl = $(el).children("summary").first();
+    const label = summaryEl.length ? inlineText($, summaryEl[0]) : "";
+    const rest = $(el).clone();
+    rest.children("summary").remove();
+    const inner = orderedSegments($, rest[0]).join("\n\n").trim();
+    if (!label) return inner;
+    if (!inner) return label;
+    return `${label}\n${inner}`;
+  }
+  if (tag === "div" || tag === "section" || tag === "article" || tag === "aside") {
     // Shared walker: keeps direct text children (an admonition heading is
     // <div class="admonitionHeading"><span>icon</span>danger</div>, so the
     // severity word used to vanish) AND keeps link URLs, which a per-child walk
@@ -889,11 +929,19 @@ function detectContentType(pathname: string, title: string): string {
 }
 
 function isAvailabilityStub(title: string, body: string): boolean {
-  return /\bnot available\b/i.test(title) || /is not available (on|for) the/i.test(body);
+  if (/\bnot available\b/i.test(title)) return true;
+  // Anchor to the page's OWN opening, not the whole body. Scanning everything
+  // meant a normal product page that notes one unsupported sub-feature marked
+  // EVERY chunk not_available, so the page contributed NotAvailableOn while
+  // its siblings contributed AvailableOn - the self-contradiction
+  // SYNTHETIC_PRODUCTS was introduced to prevent, this time on real products.
+  // A genuine stub says so in its first paragraph.
+  const opening = body.trim().split(/\n\s*\n/)[0] || "";
+  return /is not available (on|for) the/i.test(opening);
 }
 
 /** Classify links found in chunk prose into internal doc paths and API-ref URLs. */
-function classifyLinks(chunkMarkdown: string, site: string): { internal: string[]; api: string[] } {
+function classifyLinks(chunkMarkdown: string, site: string, baseUrl: string): { internal: string[]; api: string[] } {
   const internal = new Set<string>();
   const api = new Set<string>();
   const re = /\[[^\]]*\]\(([^)]+)\)/g;
@@ -908,7 +956,17 @@ function classifyLinks(chunkMarkdown: string, site: string): { internal: string[
     // normalize same-host absolute URLs to a site path
     if (site && href.startsWith(site)) href = href.slice(site.length) || "/";
     if (href.startsWith("/")) {
-      const p = href.split(/[?#]/)[0];
+      let p = href.split(/[?#]/)[0];
+      // Rendered hrefs carry baseUrl; `pathname` is derived from the outDir
+      // and does not. On a PR preview baseUrl is
+      // /data-capture-documentation/pr-preview/pr-N/, so every reference
+      // gained that prefix, indexedPaths.has(ref) matched nothing, all 1,014
+      // SeeAlso edges vanished, and the r !== pathname self-link filter
+      // stopped working - the artifact a reviewer inspects on a preview was
+      // not the artifact main publishes.
+      if (baseUrl && baseUrl !== "/" && p.startsWith(baseUrl)) {
+        p = "/" + p.slice(baseUrl.length).replace(/^\/+/, "");
+      }
       if (p.startsWith("/img") || p.startsWith("/assets") || /\.(png|jpe?g|gif|svg|mp4|pdf|zip)$/i.test(p)) continue;
       // Docusaurus routes end in "/", but a link to a FILE must not: the asset
       // filter above only covers images and archives, so /llms.txt and the
@@ -1338,6 +1396,7 @@ function buildModule(args: {
   url: string;
   sourceSite: string;
   site: string;
+  baseUrl: string;
   title: string;
   description: string;
   chunk: Chunk;
@@ -1352,7 +1411,7 @@ function buildModule(args: {
   notAvailable: boolean;
   fm: Record<string, unknown>;
 }) {
-  const { pathname, url, sourceSite, site, title: rawTitle, description, chunk, idx, framework, product, products, contentType, version, updatedAt, sourceUpdatedAt, notAvailable, fm } = args;
+  const { pathname, url, sourceSite, site, baseUrl, title: rawTitle, description, chunk, idx, framework, product, products, contentType, version, updatedAt, sourceUpdatedAt, notAvailable, fm } = args;
   const chunkClean = chunk.content.trim();
   const title = (rawTitle || pathname).trim();
   const displayTitle = idx === 1 ? title : `${title} (Part ${idx})`;
@@ -1363,7 +1422,7 @@ function buildModule(args: {
   const resolvedHeading = (chunk.heading || displayTitle)
     .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
     .trim();
-  const links = classifyLinks(chunkClean, site);
+  const links = classifyLinks(chunkClean, site, baseUrl);
   // Curated signal read from the page's own frontmatter (empty when absent).
   const userIntents = fmStringArray(fm.user_intents);
   const notFor = fmStringArray(fm.not_for);
@@ -1719,6 +1778,17 @@ export default function knowledgeExtractor(context: any, _options: any) {
     name: "knowledge-extractor",
     async postBuild({ siteConfig, outDir }: { siteConfig: any; outDir: string }) {
       const site = String(siteConfig?.url || "").replace(/\/+$/, "");
+      // Rendered hrefs are baseUrl-prefixed; pathname is not. classifyLinks
+      // strips it so the two can be compared (see F2 note there).
+      const baseUrl = String(siteConfig?.baseUrl || "/");
+      // A preview build must not emit these. pr-preview-action commits the whole
+      // build/ into the gh-pages branch, so every push added ~22 MB of generated
+      // JSON (10.4 index + 11.6 graph) permanently - closing the PR deletes the
+      // files but not the blobs. Nothing on a preview consumes them either.
+      if (siteConfig?.customFields?.isPreviewBuild) {
+        console.log("[knowledge-extractor] preview build - skipping artifact emission");
+        return;
+      }
       const sourceSite = site ? new URL(site).hostname.toLowerCase() : "";
       // When the artifact was produced. Honest and unconditional: it populates
       // `updated_at`. It is deliberately NOT used for `last_verified`, which is
@@ -1886,7 +1956,7 @@ export default function knowledgeExtractor(context: any, _options: any) {
           const contentType = TOPIC_TYPE_TO_CONTENT[fmTopic] || detectContentType(pathname, title);
           chunks.forEach((chunk, i) => {
             modules.push(
-              buildModule({ pathname, url, sourceSite, site, title, description, chunk, idx: i + 1, framework, product, products, contentType, version, updatedAt: buildStamp, sourceUpdatedAt, notAvailable, fm }),
+              buildModule({ pathname, url, sourceSite, site, baseUrl, title, description, chunk, idx: i + 1, framework, product, products, contentType, version, updatedAt: buildStamp, sourceUpdatedAt, notAvailable, fm }),
             );
           });
         } catch (err) {

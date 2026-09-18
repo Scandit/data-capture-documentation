@@ -498,6 +498,10 @@ const config: Config = {
     // knowledge-extractor plugin, which cannot otherwise tell a frozen version
     // served at the root from `current` - and the two need opposite handling.
     lastVersion: effectiveLastVersion,
+    // Read by the knowledge-extractor, which must NOT emit its ~22 MB of JSON
+    // into a preview: pr-preview-action commits the whole build/ into gh-pages,
+    // so every preview push would add those blobs there permanently.
+    isPreviewBuild,
   },
 
   // Set the production url of your site here
@@ -784,10 +788,16 @@ const config: Config = {
   // copy of prose repeated across frameworks, a routing index needs the module
   // that points at the framework the reader is actually on.
   //
-  // LAST in the array on purpose: its postBuild reads the rendered HTML, so it
-  // must run after any plugin that rewrites the build - stripPreviewMediaPlugin
-  // on a preview build in particular. Ordered before, it would extract from a
-  // state the deploy does not serve.
+  // Last in the array by convention, NOT by guarantee. Docusaurus runs every
+  // plugin's postBuild through Promise.all (core/lib/commands/build.js), so
+  // array position implies nothing about execution order and this hook races
+  // any other postBuild.
+  //
+  // That is safe today only because the one other postBuild,
+  // stripPreviewMediaPlugin, deletes files under build/img, which walkHtml
+  // skips via `excluded` - so whichever wins, this plugin reads the same HTML.
+  // A future postBuild that REWRITES html would race non-deterministically and
+  // must instead be sequenced explicitly, not moved above this line.
   knowledgeExtractor,
 ],
 

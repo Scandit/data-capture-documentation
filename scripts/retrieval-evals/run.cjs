@@ -41,18 +41,34 @@ const MIN_MRR = parseFloat(arg("min-mrr", "0.6"));
 // create/edit. --auto-limit caps it; --min-auto-success gates it.
 const AUTO = process.argv.includes("--auto");
 const AUTO_LIMIT = parseInt(arg("auto-limit", "0"), 10);
-// Not 0: every possible rate is >= 0, so the old default printed "(min 0)"
-// and gated nothing.
+// Gated as a REGRESSION against a recorded baseline, not against an absolute
+// floor.
 //
-// Measured on the corpus this branch actually ships - page-success@3 =
-// 0.8493 over 531 pages / 4,386 modules - so 0.80 leaves 4.9 points of
-// headroom and still fails a real regression. An earlier note here said
-// 0.8653 over 616 pages / 4,637 modules, which was true before the same
-// change's curation filter removed Titanium and the stub pages: a figure
-// measured against a corpus the branch no longer produces. Re-measure with
-// `--auto` after anything that changes what is indexed, not just before
-// moving this number.
-const MIN_AUTO_SUCCESS = parseFloat(arg("min-auto-success", "0.80"));
+// An absolute floor is the wrong instrument for this metric. Self-retrieval asks
+// whether a page surfaces itself, and this corpus is ~11 near-duplicate copies
+// of the same prose, one per framework - so every page competes with its own
+// siblings. Adding a framework makes the score fall for a reason that has
+// nothing to do with retrieval quality, and the last measurement (0.8493 over
+// 531 pages / 4,386 modules) sat under 5 points above a 0.80 floor. The next
+// SDK would have turned a green pipeline red and taught everyone to raise the
+// number, which is how a gate stops meaning anything.
+//
+// So: fail when the score drops more than AUTO_TOLERANCE below the baseline in
+// baseline.json, and keep a low absolute floor as a backstop for the case where
+// the baseline itself is wrong. Re-record with --update-baseline after a change
+// that legitimately alters what is indexed, and say so in the commit.
+const BASELINE_PATH = path.join(__dirname, "baseline.json");
+const AUTO_TOLERANCE = parseFloat(arg("auto-tolerance", "0.03"));
+const AUTO_FLOOR = parseFloat(arg("auto-floor", "0.60"));
+const UPDATE_BASELINE = process.argv.includes("--update-baseline");
+function readBaseline() {
+  try {
+    return JSON.parse(fs.readFileSync(BASELINE_PATH, "utf8"));
+  } catch {
+    return null;
+  }
+}
+const MIN_AUTO_SUCCESS = parseFloat(arg("min-auto-success", "0"));
 const REPORT = arg("report", "");
 
 const TOKEN = /[a-z0-9]{2,}/gi;
@@ -158,7 +174,52 @@ function main() {
       page_mrr: +(rrSum / rows.length).toFixed(4),
     };
     console.log(`\nRetrieval self-eval (AUTO, page-level over all docs): ${rows.length} pages / ${docs.length} modules, k=${K}`);
-    console.log(`  page-success@${K} = ${metrics.page_success_at_k}  (min ${MIN_AUTO_SUCCESS})`);
+    const baseline = readBaseline();
+    // An explicit --min-auto-success still wins, so a caller can pin a number.
+    const floor = MIN_AUTO_SUCCESS > 0
+      ? MIN_AUTO_SUCCESS
+      : baseline
+        ? Math.max(AUTO_FLOOR, +(baseline.page_success_at_k - AUTO_TOLERANCE).toFixed(4))
+        : AUTO_FLOOR;
+    const breached = metrics.page_success_at_k < floor;
+    console.log(`  page-success@${K} = ${metrics.page_success_at_k}  (min ${floor})`);
+    if (baseline) {
+      const delta = +(metrics.page_success_at_k - baseline.page_success_at_k).toFixed(4);
+      console.log(
+        `  baseline          = ${baseline.page_success_at_k} ` +
+          `(${baseline.pages} pages / ${baseline.modules} modules, ${baseline.recorded_at})` +
+          `  delta ${delta >= 0 ? "+" : ""}${delta}`,
+      );
+      // Corpus growth is the expected reason for a drop here, so say it out loud
+      // rather than leaving someone to infer it from a red pipeline.
+      if (metrics.pages !== baseline.pages || metrics.modules !== baseline.modules) {
+        console.log(
+          `  NOTE: corpus changed since the baseline ` +
+            `(${baseline.pages}->${metrics.pages} pages, ${baseline.modules}->${metrics.modules} modules). ` +
+            `If that was intended, re-record with --update-baseline.`,
+        );
+      }
+    } else {
+      console.log(`  baseline          = none recorded; gating on the ${AUTO_FLOOR} backstop only`);
+    }
+    if (UPDATE_BASELINE) {
+      fs.writeFileSync(
+        BASELINE_PATH,
+        JSON.stringify(
+          {
+            page_success_at_k: metrics.page_success_at_k,
+            page_mrr: metrics.page_mrr,
+            pages: metrics.pages,
+            modules: metrics.modules,
+            k: metrics.k,
+            recorded_at: new Date().toISOString().slice(0, 10),
+          },
+          null,
+          2,
+        ) + "\n",
+      );
+      console.log(`  baseline recorded -> ${path.relative(process.cwd(), BASELINE_PATH)}`);
+    }
     console.log(`  page-MRR          = ${metrics.page_mrr}`);
     console.log(`  ${misses.length} page(s) not surfaced in top ${K} by their own content.`);
     misses.slice(0, 10).forEach((m) => console.log(`    ✗ ${m}`));
@@ -166,10 +227,10 @@ function main() {
       fs.mkdirSync(path.dirname(REPORT), { recursive: true });
       fs.writeFileSync(
         REPORT,
-        JSON.stringify({ status: metrics.page_success_at_k < MIN_AUTO_SUCCESS ? "breach" : "ok", metrics, misses: misses.slice(0, 200) }, null, 2) + "\n",
+        JSON.stringify({ status: breached ? "breach" : "ok", floor, baseline, metrics, misses: misses.slice(0, 200) }, null, 2) + "\n",
       );
     }
-    process.exit(metrics.page_success_at_k < MIN_AUTO_SUCCESS ? 1 : 0);
+    process.exit(breached && !UPDATE_BASELINE ? 1 : 0);
   }
 
   if (!gold.length) {
