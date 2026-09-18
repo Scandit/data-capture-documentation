@@ -60,6 +60,7 @@ const AUTO_LIMIT = parseInt(arg("auto-limit", "0"), 10);
 const BASELINE_PATH = path.join(__dirname, "baseline.json");
 const AUTO_TOLERANCE = parseFloat(arg("auto-tolerance", "0.03"));
 const AUTO_FLOOR = parseFloat(arg("auto-floor", "0.60"));
+const AUTO_MRR_FLOOR = parseFloat(arg("auto-mrr-floor", "0.40"));
 const UPDATE_BASELINE = process.argv.includes("--update-baseline");
 function readBaseline() {
   let raw;
@@ -81,10 +82,16 @@ function readBaseline() {
     console.error("Fix it or delete it - refusing to run an ungated check.");
     process.exit(1);
   }
-  if (!parsed || !Number.isFinite(parsed.page_success_at_k)) {
-    console.error(`retrieval-evals: ${BASELINE_PATH} has no finite page_success_at_k.`);
-    console.error("Re-record it with --update-baseline - refusing to run an ungated check.");
-    process.exit(1);
+  for (const key of ["page_success_at_k", "page_mrr"]) {
+    // Both, not just the first. page_mrr went unchecked, so a baseline that
+    // dropped the key - a hand edit, or one written by a pre-MRR version of
+    // this script - set mrrFloor to 0, and nothing is ever below 0: the MRR
+    // gate disabled itself while the report still said "ok".
+    if (!parsed || !Number.isFinite(parsed[key])) {
+      console.error(`retrieval-evals: ${BASELINE_PATH} has no finite ${key}.`);
+      console.error("Re-record it with --update-baseline - refusing to run an ungated check.");
+      process.exit(1);
+    }
   }
   return parsed;
 }
@@ -205,10 +212,11 @@ function main() {
     // keeps every page inside the top 3 while pushing it from rank 1 to rank 3 -
     // the corpus looks unchanged and ranking quality, which is what a retrieval
     // consumer feels, has halved.
-    const mrrFloor =
-      baseline && Number.isFinite(baseline.page_mrr)
-        ? +(baseline.page_mrr - AUTO_TOLERANCE).toFixed(4)
-        : 0;
+    // readBaseline guarantees a finite page_mrr when a baseline exists, so the
+    // only way here without one is having no baseline at all - the first run.
+    const mrrFloor = baseline
+      ? Math.max(AUTO_MRR_FLOOR, +(baseline.page_mrr - AUTO_TOLERANCE).toFixed(4))
+      : AUTO_MRR_FLOOR;
     const breached =
       metrics.page_success_at_k < floor || metrics.page_mrr < mrrFloor;
     console.log(`  page-success@${K} = ${metrics.page_success_at_k}  (min ${floor})`);

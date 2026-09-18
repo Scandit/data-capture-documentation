@@ -17,6 +17,14 @@ on:
       - 'src/plugins/knowledge-extractor/**'
       - 'scripts/retrieval-evals/**'
       - '.github/workflows/docs-retrieval-evals.yml'
+      # The extractor reads RENDERED html, so a component decides what the
+      # indexed text IS - it already carries a special case for FeatureList's
+      # "Loading features..." SSR placeholder, and productKeys() reads
+      # src/data. Without these, a PR that changes what a component renders
+      # (this one changes FeatureList) never runs the evals, and the first
+      # signal is the push-to-main trigger after it has merged.
+      - 'src/components/**'
+      - 'src/data/**'
       # These decide WHAT gets indexed at all: assistantIgnoreFiles and
       # lastVersion live in the config, and versions.json decides which
       # trees are frozen. Without them a PR that widens or narrows the

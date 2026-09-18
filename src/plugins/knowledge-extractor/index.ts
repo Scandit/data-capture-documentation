@@ -942,12 +942,24 @@ function isAvailabilityStub(title: string, body: string): boolean {
   // prose, which is where a stub actually says it: a page headed plainly
   // "ID Capture" whose opening sentence is "ID Capture is not available for
   // the Linux SDK." went undetected and emitted AvailableOn for a platform
-  // it explicitly rules out. Take the first block that is not a heading.
+  // it explicitly rules out.
+  //
+  // Skip the TITLE block, not blocks that start with "#". A `#` filter was
+  // the first attempt and it is wrong for the same reason it was wrong in the
+  // page loop: <header> is not a block tag, so on the 147 pages that render
+  // their h1 inside one - every */intro/, core-concepts, symbology-properties,
+  // system-requirements, migrate-* - the title arrives as a plain block with
+  // no "#" on it and gets selected as the opening. The check then reads the
+  // title instead of the prose and can never match.
+  const titleText = title.replace(/\s+/g, " ").trim().toLowerCase();
   const opening =
     body
       .trim()
       .split(/\n\s*\n/)
-      .find((block) => block.trim() && !/^\s*#/.test(block)) || "";
+      .find((block) => {
+        const text = block.replace(/^#+\s*/, "").replace(/\s+/g, " ").trim();
+        return text && text.toLowerCase() !== titleText;
+      }) || "";
   return /is not available (on|for) the/i.test(opening);
 }
 

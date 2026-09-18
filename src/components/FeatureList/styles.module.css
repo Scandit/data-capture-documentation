@@ -123,9 +123,15 @@
   cursor: default;
 }
 
+/* Hold the dimmed colour on hover. This rule exists to cancel
+   .frameworkItem:hover, but it was left over from the opacity version and
+   restored --ifm-color-content - the full-contrast colour - so hovering an
+   unavailable chip made it look available, with only the dashed border
+   still carrying the state. The span is not interactive; cursor: default
+   already says so. */
 .frameworkItemUnavailable:hover {
   background: var(--ifm-color-emphasis-100);
-  color: var(--ifm-color-content);
+  color: var(--ifm-color-emphasis-700);
   border-color: var(--ifm-color-emphasis-200);
 }
 
