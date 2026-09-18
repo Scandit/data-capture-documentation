@@ -25,13 +25,12 @@ jobs:
           # Full history, because the knowledge-extractor sets each page's
           # `last_verified` from that file's last commit date. A depth-1 clone
           # makes every file resolve to the same single commit, and the plugin
-          # then emits "" rather than a constant that looks like data - so a
-          # preview would carry no freshness signal at all.
-          #
-          # Only this job needs it: `deploy` below just downloads the artifact.
-          # Cheap here - 796 commits, and the `git log` over docs/ measures at
-          # ~0.13s.
-          fetch-depth: 0
+          # A shallow clone is enough HERE. last_verified is the only thing that
+          # needed full history, and the knowledge-extractor now returns before
+          # any git call on a preview build (it must not emit its ~22 MB of JSON
+          # into gh-pages), so a full clone would buy a freshness signal nobody
+          # computes. The build job on main still fetches full history.
+          fetch-depth: 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

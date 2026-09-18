@@ -936,7 +936,18 @@ function isAvailabilityStub(title: string, body: string): boolean {
   // its siblings contributed AvailableOn - the self-contradiction
   // SYNTHETIC_PRODUCTS was introduced to prevent, this time on real products.
   // A genuine stub says so in its first paragraph.
-  const opening = body.trim().split(/\n\s*\n/)[0] || "";
+  // The first BLOCK is the page heading - extractMarkdownish emits the
+  // header as its own block, so every body starts "# <title>\n\n...". Taking
+  // block 0 therefore tested the title line twice and never reached the
+  // prose, which is where a stub actually says it: a page headed plainly
+  // "ID Capture" whose opening sentence is "ID Capture is not available for
+  // the Linux SDK." went undetected and emitted AvailableOn for a platform
+  // it explicitly rules out. Take the first block that is not a heading.
+  const opening =
+    body
+      .trim()
+      .split(/\n\s*\n/)
+      .find((block) => block.trim() && !/^\s*#/.test(block)) || "";
   return /is not available (on|for) the/i.test(opening);
 }
 
@@ -1916,7 +1927,18 @@ export default function knowledgeExtractor(context: any, _options: any) {
           const title = ($("h1").first().text() || $("title").text() || "").replace(/​/g, "").trim();
           const description = ($('meta[name="description"]').attr("content") || "").trim();
           const bodyMd = extractMarkdownish($, root);
-          if (!bodyMd.trim()) continue;
+          // Not just empty: a body that reduces to the page heading alone is not
+          // a page either. /hosted/id-bolt/session/ renders its content outside
+          // article .markdown, so the element holds only <header><h1>, and it
+          // shipped one module whose entire content was "ID Bolt session" - the
+          // single best token match for that query, returning nothing to read.
+          // Compare against the TITLE, not against heading syntax. <header> is
+          // not a block tag, so this page's h1 arrives as the plain string
+          // "ID Bolt session" with no "#" for a heading filter to catch - the
+          // first version of this guard looked for one and let the page through.
+          const bodyText = bodyMd.replace(/^#+\s*/gm, "").replace(/\s+/g, " ").trim();
+          const titleText = title.replace(/\s+/g, " ").trim();
+          if (!bodyText || bodyText.toLowerCase() === titleText.toLowerCase()) continue;
 
           const chunks = chunkBody(bodyMd, CHUNK_TARGET_CHARS);
           if (!chunks.length) continue;

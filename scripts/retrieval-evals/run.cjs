@@ -62,11 +62,31 @@ const AUTO_TOLERANCE = parseFloat(arg("auto-tolerance", "0.03"));
 const AUTO_FLOOR = parseFloat(arg("auto-floor", "0.60"));
 const UPDATE_BASELINE = process.argv.includes("--update-baseline");
 function readBaseline() {
+  let raw;
   try {
-    return JSON.parse(fs.readFileSync(BASELINE_PATH, "utf8"));
+    raw = fs.readFileSync(BASELINE_PATH, "utf8");
   } catch {
+    // Genuinely absent is a legitimate state - the first run records it.
     return null;
   }
+  // Present but unusable is NOT. Swallowing it dropped the gate to the bare
+  // backstop, so a 24-point regression would have gone green; and a parsed
+  // object missing the key made the floor NaN, which every comparison is false
+  // against - the gate then passed unconditionally and still reported "ok".
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (err) {
+    console.error(`retrieval-evals: ${BASELINE_PATH} is not valid JSON (${err.message}).`);
+    console.error("Fix it or delete it - refusing to run an ungated check.");
+    process.exit(1);
+  }
+  if (!parsed || !Number.isFinite(parsed.page_success_at_k)) {
+    console.error(`retrieval-evals: ${BASELINE_PATH} has no finite page_success_at_k.`);
+    console.error("Re-record it with --update-baseline - refusing to run an ungated check.");
+    process.exit(1);
+  }
+  return parsed;
 }
 const MIN_AUTO_SUCCESS = parseFloat(arg("min-auto-success", "0"));
 const REPORT = arg("report", "");
@@ -181,7 +201,16 @@ function main() {
       : baseline
         ? Math.max(AUTO_FLOOR, +(baseline.page_success_at_k - AUTO_TOLERANCE).toFixed(4))
         : AUTO_FLOOR;
-    const breached = metrics.page_success_at_k < floor;
+    // MRR is recorded, so gate it. Success@k alone cannot see a change that
+    // keeps every page inside the top 3 while pushing it from rank 1 to rank 3 -
+    // the corpus looks unchanged and ranking quality, which is what a retrieval
+    // consumer feels, has halved.
+    const mrrFloor =
+      baseline && Number.isFinite(baseline.page_mrr)
+        ? +(baseline.page_mrr - AUTO_TOLERANCE).toFixed(4)
+        : 0;
+    const breached =
+      metrics.page_success_at_k < floor || metrics.page_mrr < mrrFloor;
     console.log(`  page-success@${K} = ${metrics.page_success_at_k}  (min ${floor})`);
     if (baseline) {
       const delta = +(metrics.page_success_at_k - baseline.page_success_at_k).toFixed(4);
@@ -220,14 +249,14 @@ function main() {
       );
       console.log(`  baseline recorded -> ${path.relative(process.cwd(), BASELINE_PATH)}`);
     }
-    console.log(`  page-MRR          = ${metrics.page_mrr}`);
+    console.log(`  page-MRR          = ${metrics.page_mrr}  (min ${mrrFloor})`);
     console.log(`  ${misses.length} page(s) not surfaced in top ${K} by their own content.`);
     misses.slice(0, 10).forEach((m) => console.log(`    ✗ ${m}`));
     if (REPORT) {
       fs.mkdirSync(path.dirname(REPORT), { recursive: true });
       fs.writeFileSync(
         REPORT,
-        JSON.stringify({ status: breached ? "breach" : "ok", floor, baseline, metrics, misses: misses.slice(0, 200) }, null, 2) + "\n",
+        JSON.stringify({ status: breached ? "breach" : "ok", floor, mrrFloor, baseline, metrics, misses: misses.slice(0, 200) }, null, 2) + "\n",
       );
     }
     process.exit(breached && !UPDATE_BASELINE ? 1 : 0);
