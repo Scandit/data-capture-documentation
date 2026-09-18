@@ -22,7 +22,7 @@ There are three types of input data you must configure:
 
 ## Standard Input
 
-Standard inputs are fixed values or predefined fields. They are useful when you need to always attach the same kind of information (e.g., device ID, operator ID).
+Standard inputs are fixed values or predefined fields. They are useful when you need to always attach the same kind of information (for example, device ID, operator ID).
 
 | Field | Description |
 |-------|-------------|
@@ -112,7 +112,7 @@ This guide explains how to configure output data for the **Custom Data Transfer*
 |-------|-------------|
 | `type` | Always set to `standard` for this configuration type. |
 | `behavior` | Defines how new data is written. Options:  - `replace`: overwrite existing data  - `append`: add new rows or entries. |
-| `target` | Defines the destination for the output (e.g., Google Sheets, CSV, API). |
+| `target` | Defines the destination for the output (for example, Google Sheets, CSV, API). |
 | `parserOptions` | (Optional) Array of parser configuration objects. |
 | `timestampOptions` | (Optional) Controls how timestamps are handled. |
 | `grouped` | Boolean (default: `true`). If `false`, the same barcode will be repeated when quantity > 1. |
@@ -137,7 +137,7 @@ When `type=barcodeValue`, the following `barcodeValue.type` options are availabl
 | Type | Description |
 |------|-------------|
 | `barcodeData` | Raw scanned barcode data. |
-| `symbology` | Symbology type (e.g., QR, Code128). |
+| `symbology` | Symbology type (for example, QR, Code128). |
 | `symbolCount` | Number of symbols in the barcode. |
 | `quantity` | Quantity derived from scanning. |
 | `timestamp` | Timestamp of the scan (see `timestampOptions`). |
@@ -251,7 +251,7 @@ When `type=barcodeValue`, the following `barcodeValue.type` options are availabl
 
 # Custom Data Transfer
 
-The **Custom Data Transfer** feature in Scandit Express lets you import and export data using a configurable CSV file or Google Sheet. By aligning data formats between Scandit Express and your system, this feature ensures seamless integration into your workflow without the need for coding or reformatting.
+The **Custom Data Transfer** feature in Scandit Express lets you import and export data using a configurable CSV file or Google Sheet. By aligning data formats between Scandit Express and your system, this feature fits into your workflow without the need for coding or reformatting.
 
 ## Key Benefits
 
@@ -760,7 +760,7 @@ Closes the Barcode Link session, useful when unmounting components or ending a s
 
 # Find Items
 
-Powered by [MatrixScan Find](https://www.scandit.com/products/matrixscan-find/), a feature available in the Scandit Smart Data Capture SDK, this mode enables you to speed up finding and picking workflows by scanning multiple items at once and highlighting the correct item(s) in real-time using an AR overlay.
+Powered by [MatrixScan Find](https://www.scandit.com/products/matrixscan-find/), a feature available in the Scandit Smart Data Capture SDK, this mode enables you to speed up finding and picking workflows by scanning multiple items at once and highlighting the correct items in real-time using an AR overlay.
 
 ## Create the Find List
 
@@ -812,7 +812,7 @@ Remember to use URL encoding for the list name and the list of barcodes:
 
 ### Integrate into Your App
 
-You can also integrate the links for your Find List(s) (with the barcodes to find embedded in them) in your own application. Follow the instructions above to create your list, and then display the link in your app or your website. If a user clicks on the link it will start Scandit Express and show the list of codes that need to be found.
+You can also integrate the links for your Find Lists (with the barcodes to find embedded in them) in your own application. Follow the instructions above to create your list, and then display the link in your app or your website. If a user clicks on the link it will start Scandit Express and show the list of codes that need to be found.
 
  To integrate specific barcodes to find, you need to:
 
@@ -836,7 +836,7 @@ You can also integrate the links for your Find List(s) (with the barcodes to fin
     }
     ```
 
-    The space in QR codes is limited, so if you have more codes that can fit into a single QR code you can create multiple codes. A good rule of thumb is to limit to 2000 barcode characters for a single QR code. Simply adjust the “partsTotal” field (`"partsTotal": 2`) and number each code using the `"part"` field accordingly (`"part": 1` and `"part": 2`).
+    The space in QR codes is limited, so if you have more codes that can fit into a single QR code you can create multiple codes. A good rule of thumb is to limit to 2000 barcode characters for a single QR code. Adjust the “partsTotal” field (`"partsTotal": 2`) and number each code using the `"part"` field accordingly (`"part": 1` and `"part": 2`).
 
 2. Generate a QR code from the JSON string and display it to the user.
 
@@ -995,8 +995,8 @@ This feature is only supported for Android devices, and must be enabled by the S
 
 * Your Scandit account email address.
 * The project name you want to enable the feature for.
-* The device model(s) you want to enable the feature for.
-* The key code(s) you want to use to trigger the barcode scanner.
+* The device models you want to enable the feature for.
+* The key codes you want to use to trigger the barcode scanner.
 
 :::tip
 You can identify the key code with key code identifier apps available in the Play Store, such as [KeyEvent Display](https://play.google.com/store/apps/details?id=aws.apps.keyeventdisplay).
@@ -1045,7 +1045,7 @@ On start, you will have two options:
 
 * **Count without List** which will allow you to start scanning products and then export a list of them.
 * **Load Order List** which allows you to load a predefined list of barcodes and then scan products to see if they are on the list. Lists can be loaded:
-    - From a **deep-link URL** (e.g. `https://express.scandit.com/count/list?listName=myList&data=123,456,789`)
+    - From a **deep-link URL** (for example, `https://express.scandit.com/count/list?listName=myList&data=123,456,789`)
     - From a **QR code** encoding the same URL
     - From **multiple QR codes** (for very large lists)
 
@@ -1165,7 +1165,7 @@ To automatically synchronize your Scandit Express configuration with Scandit, yo
 If your MDM system requires an AppConfig configuration, you can generate one [here](https://appconfig.jamfresearch.com/generator) by selecting Scandit Express as: `com.scandit.KeyboardWedge2/current`.
 :::
 
-### 3rd-Party Instructions
+### Third-Party Instructions {#3rd-party-instructions}
 
 This section provides links to the relevant sections of the documentation for popular MDM/EMM solutions:
 
@@ -1179,7 +1179,7 @@ This section provides links to the relevant sections of the documentation for po
 Scandit Express for Android supports MDM/EMM deployment via [Android Managed Configurations](https://developer.android.com/work/managed-configurations).
 
 :::warning
-Please note that Scandit Express might not be compatible with some Android for Work configurations (e.g. 3rd-party keyboards such as Scandit Express can typically not be installed in a work profile).
+Please note that Scandit Express might not be compatible with some Android for Work configurations (for example, third-party keyboards such as Scandit Express can typically not be installed in a work profile).
 
 Scandit recommends setting Android devices as either ["fully managed"](https://support.google.com/work/android/answer/9562029?hl=en&ref_topic=9563482&sjid=2353681360583047853-EU) and ["dedicated devices"](https://support.google.com/work/android/answer/9560920?hl=en&ref_topic=9563482&sjid=2353681360583047853-EU).
 :::
@@ -1207,7 +1207,7 @@ To automatically synchronize your Scandit Express configuration with Scandit, yo
 
 ![Add Project Code](/img/express/rollout_android_2.png)
 
-### 3rd-Party Instructions
+### Third-Party Instructions {#3rd-party-instructions-1}
 
 This section provides links to the relevant sections of the documentation for popular MDM/EMM solutions:
 
@@ -1220,7 +1220,7 @@ This section provides links to the relevant sections of the documentation for po
 
 ## Updating Configuration
 
-To update the configuration of Scandit Express on all devices, simply change the configuration in the Scandit Dashboard. The new configuration will be automatically distributed to all devices.
+To update the configuration of Scandit Express on all devices, change the configuration in the Scandit Dashboard. The new configuration will be automatically distributed to all devices.
 
 Scandit Express automatically updates the license and configuration when restarted, but if you need to force a reload:
 
@@ -1287,7 +1287,7 @@ Developers can limit the scan button to appear only for specific fields by provi
 
 ## Scandit Express
 
-Scandit Express is an application that enables you to instantly add barcode scanning to any existing app or software tool on a smart device.It requires no software changes or coding effort, and is compatible with any app or system, even those that cannot be modified. By adding a keyboard that has a scan button above the standard keys (a keyboard wedge), it allows users to scan barcodes directly into any input field.
+Scandit Express is an application that enables you to instantly add barcode scanning to any existing app or software tool on a smart device. It requires no software changes or coding effort, and is compatible with any app or system, even those that cannot be modified. By adding a keyboard that has a scan button above the standard keys (a keyboard wedge), it allows users to scan barcodes directly into any input field.
 
 Scandit Express is built for enterprise use and supports distribution through mobile device management (MDM) and enterprise mobility management (EMM) systems.
 
@@ -1879,7 +1879,7 @@ The `CapturedId` object contains the extracted data from the scanned document. T
 | `dateOfExpiry`             | `DateResult`            | Expiration date of the document                                                                                                                     | 1.0   |
 | `isExpired`                | `boolean`               | Whether the document is expired                                                                                                                     | 1.0   |
 | `dateOfIssue`              | `DateResult`            | Date when the document was issued                                                                                                                   | 1.0   |
-| `documentType`             | `DocumentType`          | Type of document (e.g. `"Passport"`, `"IdCard"`, `"DriverLicense"`, `"VisaIcao"`, `"ResidencePermit"`, `"HealthInsuranceCard"`, `"RegionSpecific"`) | 1.0   |
+| `documentType`             | `DocumentType`          | Type of document (for example, `"Passport"`, `"IdCard"`, `"DriverLicense"`, `"VisaIcao"`, `"ResidencePermit"`, `"HealthInsuranceCard"`, `"RegionSpecific"`) | 1.0   |
 | `documentSubtype`          | `string \| null`        | Subtype of the document, if applicable                                                                                                              | 2.1   |
 | `capturedResultTypes`      | `string[]`              | Types of data that were captured                                                                                                                    | 1.0   |
 | `nationalityISO`           | `string \| null`        | ISO code of the nationality                                                                                                                         | 2.1   |
@@ -2289,7 +2289,7 @@ Each `AnonymizedFieldEntry` specifies a document type and the fields to anonymiz
 
 | Property   | Type                | Description                                                                                     | Since |
 | ---------- | ------------------- | ----------------------------------------------------------------------------------------------- | ----- |
-| `document` | `IdCaptureDocument` | The document type this entry applies to (e.g. `new Passport(Region.Any)`, `new IdCard("USA")`). | 2.2   |
+| `document` | `IdCaptureDocument` | The document type this entry applies to (for example, `new Passport(Region.Any)`, `new IdCard("USA")`). | 2.2   |
 | `fields`   | `IdFieldType[]`     | The fields to anonymize for this document type.                                                 | 2.2   |
 
 ### Available Field Types
@@ -2330,7 +2330,7 @@ The `IdFieldType` enum defines the fields that can be anonymized:
 
 ### Result
 
-The `CapturedId` object returned in the `onCompletion` callback includes an `anonymizedFields` property — an array of `IdFieldType` values indicating which fields were actually anonymized for the scanned document.
+The `CapturedId` object returned in the `onCompletion` callback includes an `anonymizedFields` property—an array of `IdFieldType` values indicating which fields were actually anonymized for the scanned document.
 
 ---
 
@@ -2636,12 +2636,12 @@ In addition to ID Bolt, Scandit provides an [ID Capture SDK for the Web](/sdks/w
 
 ID Bolt offers the following features:
 
-- **Fast Scanning**: ID Bolt scans an ID in just 1 second, ensuring a quick and seamless customer experience. Scans are performed from video streams for the fastest possible scanning.
+- **Fast Scanning**: ID Bolt scans an ID in just 1 second. Scans are performed from video streams for the fastest possible scanning.
 - **On-Device Scanning/Processing**: ID Bolt scans IDs on-device, ensuring no identity information is collected by third-party servers, and handling all processing on the device for improved performance.
 - **Device Handover**: ID Bolt works on both desktop and mobile devices, providing a unified solution. Desktop/laptop users can scan IDs using their mobile device camera.
-- **Industry Leading UX**: ID Bolt provides a seamless user experience with a simple and intuitive interface, designed based on the millions of scans performed by Scandit customers each year.
+- **Industry Leading UX**: ID Bolt presents a simple, intuitive interface, designed based on the millions of scans performed by Scandit customers each year.
 - **Compliance**: ID Bolt ensures compliance with data protection regulations, such as GDPR, by processing all data on-device and not collecting any identity information on third-party servers.
-- **White-Label Solution**: ID Bolt can be placed behind your own domain, allowing you to maintain brand consistency and provide a seamless, integrated experience to your customers while leveraging Scandit's powerful ID scanning capabilities.
+- **White-Label Solution**: ID Bolt can be placed behind your own domain, allowing you to maintain brand consistency and provide an integrated experience to your customers while leveraging Scandit's powerful ID scanning capabilities.
 
 ---
 
@@ -3087,7 +3087,7 @@ The `dimensions` object allows you to customize sizes and spacing:
 | `radiusButton` | `string` | Border radius for buttons   | 1.1   |
 | `radiusCard`   | `string` | Border radius for cards     | 1.1   |
 
-All values are string and must be valid CSS dimension expressions. E.g. "12px".
+All values are string and must be valid CSS dimension expressions. For example, `"12px"`.
 
 ## Image Customization
 
@@ -3185,7 +3185,7 @@ const theme = {
 
 - Format: WOFF2, WOFF, TTF, or OTF (must be provided as data URLs)
 - Maximum size: 100KB per font file (size of the base64 data url)
-- Data URL format: Must start with appropriate mime type prefixes (e.g., `data:font/woff2`, `data:font/woff`)
+- Data URL format: Must start with appropriate mime type prefixes (for example, `data:font/woff2`, `data:font/woff`)
 
 ## Style Overrides
 
@@ -6138,7 +6138,7 @@ import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.m
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against a List
 
@@ -6213,7 +6213,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned.
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR overlays) but keep the list of barcodes scanned.
 
 For this you can enable the “Clear screen” button:
 
@@ -6441,7 +6441,7 @@ import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-coun
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## BarcodeFind Listener
 
@@ -6673,7 +6673,7 @@ import AboutFind from '../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -7837,7 +7837,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/a
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -7849,7 +7849,7 @@ SparkScan offers a built-in API to let you do this via [SparkScanViewSettings.ha
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
 
 You can customize:
 
@@ -7857,7 +7857,7 @@ You can customize:
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\
   This error state for a code that should not have been scanned.
 
   This error state for a code that has been scanned more than once.
@@ -7890,7 +7890,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -10705,7 +10705,7 @@ import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.m
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against A List
 
@@ -10776,7 +10776,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned.
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR overlays) but keep the list of barcodes scanned.
 
 If this is the case, you can enable the “Clear screen” button.
 
@@ -11004,7 +11004,7 @@ import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-coun
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## Set up a listener on the BarcodeFind mode
 
@@ -11170,7 +11170,7 @@ import AboutFind from '../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -12123,7 +12123,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/c
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -12135,13 +12135,13 @@ SparkScan offers a built-in API to let you do this via [`SparkScanViewSettings.h
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
 
 - The text message
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
         if (isValidBarcode(barcode)) {
             return new SparkScanBarcodeSuccessFeedback();
         } else {
@@ -12190,7 +12190,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -12228,7 +12228,7 @@ viewSettings.defaultScanningMode = new SparkScanScanningModeDefault(
 );
 ```
 
-Pass both arguments — the single-argument constructor is deprecated. Use
+Pass both arguments—the single-argument constructor is deprecated. Use
 `SparkScanScanningModeTarget` instead of `SparkScanScanningModeDefault` to force the
 aimer (target mode).
 
@@ -14309,7 +14309,7 @@ import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.m
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against A List
 
@@ -14380,7 +14380,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned.
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR overlays) but keep the list of barcodes scanned.
 
 If this is the case, you can enable the “Clear screen” button.
 
@@ -14606,7 +14606,7 @@ import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-coun
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## Set up a listener on the BarcodeFind mode
 
@@ -14772,7 +14772,7 @@ import AboutFind from '../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -15708,7 +15708,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/c
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -15720,13 +15720,13 @@ SparkScan offers a built-in API to let you do this via [`SparkScanViewSettings.h
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
 
 - The text message
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
         if (isValidBarcode(barcode)) {
             return new Scandit.SparkScanBarcodeSuccessFeedback();
         } else {
@@ -15775,7 +15775,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -15814,7 +15814,7 @@ sparkScanViewSettings.defaultScanningMode = new Scandit.SparkScanScanningModeDef
 );
 ```
 
-Pass both arguments — the single-argument constructor is deprecated. Use
+Pass both arguments—the single-argument constructor is deprecated. Use
 `Scandit.SparkScanScanningModeTarget` instead of `SparkScanScanningModeDefault` to force
 the aimer (target mode).
 
@@ -17895,7 +17895,7 @@ import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.m
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against A List
 
@@ -17959,7 +17959,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR
 overlays) but keep the list of barcodes scanned.
 
 If this is the case, you can enable the “Clear screen” button.
@@ -18167,7 +18167,7 @@ import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-coun
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## Set up a listener on the BarcodeFind mode
 
@@ -18363,7 +18363,7 @@ import AboutFind from '../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -19360,7 +19360,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/f
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -19372,7 +19372,7 @@ SparkScan offers a built-in API to let you do this via [SparkScanViewSettings.ha
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
 
 You can customize:
 
@@ -19380,7 +19380,7 @@ You can customize:
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\
   This error state for a code that should not have been scanned.
 
   This error state for a code that has been scanned more than once.
@@ -19413,7 +19413,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -22829,7 +22829,7 @@ import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.m
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against a List
 
@@ -22903,7 +22903,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned.
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR overlays) but keep the list of barcodes scanned.
 
 For this you can enable the “Clear screen” button:
 
@@ -23367,7 +23367,7 @@ import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-coun
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## BarcodeFind Listener
 
@@ -23824,7 +23824,7 @@ import AboutFind from '../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -23843,7 +23843,7 @@ extension ViewController: BarcodePickListener {
 
 ## BarcodePickView Listener
 
-For lifecycle events on the `BarcodePickView` itself — when scanning starts, freezes, pauses, or stops — register a [`BarcodePickViewListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-pick-view-listener.html#interface-scandit.datacapture.barcode.pick.ui.BarcodePickViewListener) on the view. All callbacks are optional; implement only the ones you need.
+For lifecycle events on the `BarcodePickView` itself—when scanning starts, freezes, pauses, or stops—register a [`BarcodePickViewListener`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/barcode-pick-view-listener.html#interface-scandit.datacapture.barcode.pick.ui.BarcodePickViewListener) on the view. All callbacks are optional; implement only the ones you need.
 
 ```swift
 extension ViewController: BarcodePickViewListener {
@@ -25201,7 +25201,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/i
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -25213,7 +25213,7 @@ SparkScan offers a built-in API to let you do this via [`SDCSparkScanViewSetting
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
 
 You can customize:
 
@@ -25221,7 +25221,7 @@ You can customize:
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ SparkScanBarcodeFeedback? {
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ SparkScanBarcodeFeedback? {
       guard !barcode.isRejected else {
           return SparkScanBarcodeErrorFeedback(message: "This code should not have been scanned",
               resumeCapturingDelay: 60)
@@ -25318,7 +25318,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -30998,7 +30998,7 @@ Keep the following in mind when configuring 1D symbologies:
 
 * All symbologies and all extensions are disabled by default when using the low-level API.
 * Color-inverted (bright bars on dark background) decoding for symbologies that support it is disabled and must be explicitly enabled.
-* Optional checksum digits (e.g. for interleaved 2 of 5 codes, or MSI-Plessey codes) are always returned as part of the data.
+* Optional checksum digits (for example, in interleaved 2 of 5 or MSI-Plessey codes) are always returned as part of the data.
 
 | Symbology                     | Mandatory Checksums | Supported Optional Checksums | Default Optional Checksum | Default Symbol Count Range                      | Supported Symbol Count Range | Color-Inverted Codes | Extensions                                                       | Generator Support |
 |-------------------------------|---------------------|-----------------------------------|--------------------------------|-------------------------------------------------|------------------------------|---------------------------|------------------------------------------------------------------|-------------------|
@@ -31070,7 +31070,7 @@ Keep the following in mind when configuring 2D symbologies:
 | decode_bar_states | (For Australian Post 4-State) Returns the error-corrected customer information bars as a string of the bar states, A for ascending, D for descending, T for tracker and F for full. |
 | swiss_post_decoding | Enables scanning of proprietary Swiss Post UPU 4-State symbology. |
 | remove_delimiter_data | Removes start and stop patterns from the result of scanning a Codabar code. |
-| ocr_fallback | Enables Optical Character Recognition of text as a fallback when other readers fail. For more details, refer to section "Using OCR Fallback Symbology Extension". |
+| ocr_fallback | Enables Optical Character Recognition of text as a fallback when other readers fail. For more details, refer to the "Using OCR Fallback Symbology Extension" section. |
 
 ## Using OCR Fallback Symbology Extension
 
@@ -31142,7 +31142,7 @@ The symbol count corresponds to the number of finder patterns in the code. Each 
 
 ### GS1 DataBar Expanded
 
-The symbol count cannot be changed.  All lengths defined by the standard are supported.
+The symbol count cannot be changed. All lengths defined by the standard are supported.
 
 ### RM4SCC
 
@@ -31969,7 +31969,7 @@ You will always need to add the `Scandit.DataCapture.Core` package, which contai
 
 In addition, depending on the data capture task, you will need a reference to:
 
-| Functionality | Description | Required Module(s) |
+| Functionality | Description | Required Modules |
 | --- | --- | --- |
 | Barcode Capture | [ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api.html) if you want to use barcode-related functionality, such as barcode capture or MatrixScan. | _com.scandit.datacapture:barcode_ |
 | Parser | [ScanditParser API](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api.html) if you want to parse data strings, for instance, as found in barcodes, into a set of key-value mappings. | _com.scandit.datacapture:parser_ |
@@ -32192,7 +32192,7 @@ if (barcode.Data?.StartsWith("09:") == false)
 
 ## Use the Built-in Camera
 
-The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
+The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, for example, the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
 :::important
 In Android, the user must explicitly grant permission for each app to access cameras. Your app needs to declare the use of the Camera permission in the AndroidManifest.xml file and request it at runtime so the user can grant or deny the permission. To do that follow the guidelines from [Permissions in Android](https://learn.microsoft.com/en-us/xamarin/android/app-fundamentals/permissions) to request the android.permission.CAMERA permission.
@@ -32291,7 +32291,7 @@ The general steps are:
 - Create a new [data capture context](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) instance, initialized with your license key.
 - Create a [barcode selection settings](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-selection-settings.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionSettings) and choose the right configuration.
 - Create a new [barcode selection mode](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) instance and initialize it with the settings created above.
-- Register a [barcode selection listener](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) to receive scan events. Process the successful scans according to your application’s needs, e.g. by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
+- Register a [barcode selection listener](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) to receive scan events. Process the successful scans according to your application’s needs, for example, by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
 - Obtain a [camera](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/camera.html#class-scandit.datacapture.core.Camera) instance and set it as the frame source on the data capture context.
 - Display the camera preview by creating a [data capture view](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 - If displaying a preview, optionally create a new [overlay](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/barcode-selection-basic-overlay.html#class-scandit.datacapture.barcode.selection.ui.BarcodeSelectionBasicOverlay) and add it to [data capture view](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) for a better visual feedback.
@@ -32411,7 +32411,7 @@ IList newlyUnselectedBarcodes = args.Session.NewlyUnselectedBarcodes;
 
 ## Use the Built-in Camera
 
-The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
+The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, for example, the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
 :::important
 In Android, the user must explicitly grant permission for each app to access cameras. Your app needs to declare the use of the Camera permission in the AndroidManifest.xml file and request it at runtime so the user can grant or deny the permission. To do that follow the guidelines from [Permissions in Android](https://learn.microsoft.com/en-us/xamarin/android/app-fundamentals/permissions) to request the android.permission.CAMERA permission.
@@ -32514,7 +32514,7 @@ settings.Scanner = new IdCaptureScanner(new SingleSideScanner(barcode: false, ma
 
 To configure the documents that should be accepted and/or rejected, set the `AcceptedDocuments` and `RejectedDocuments` properties in `IdCaptureSettings`.
 
-These properties take a list of [IIdCaptureDocument](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/id-capture-document.html) instances (e.g. `Passport`, `DriverLicense`, `IdCard`) combined with the [IdCaptureRegion](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enum to enable highly flexible document filtering.
+These properties take a list of [IIdCaptureDocument](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/id-capture-document.html) instances (for example, `Passport`, `DriverLicense`, `IdCard`) combined with the [IdCaptureRegion](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enum to enable highly flexible document filtering.
 
 For example, to accept only US Driver Licenses:
 
@@ -32577,7 +32577,7 @@ The general steps are:
 - Starting the Capture Process
 
 :::warning
-Using ID Capture at the same time as other modes (e.g. Barcode Capture) is not supported.
+Using ID Capture at the same time as other modes (for example, Barcode Capture) is not supported.
 :::
 
 ## Prerequisites
@@ -32646,7 +32646,7 @@ To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/dotnet.android/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 ```csharp
 public class MyListener : IIdCaptureListener
@@ -33653,7 +33653,7 @@ BarcodeBatch barcodeBatch = BarcodeBatch.Create(context, settings);
 
 ## Use the Built-in Camera
 
-The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
+The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, for example, the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
 :::important
 In Android, the user must explicitly grant permission for each app to access cameras. Your app needs to declare the use of the Camera permission in the AndroidManifest.xml file and request it at runtime so the user can grant or deny the permission. To do that follow the guidelines from [Permissions in Android](https://learn.microsoft.com/en-us/xamarin/android/app-fundamentals/permissions) to request the android.permission.CAMERA permission.
@@ -33968,7 +33968,7 @@ import AboutMatrixScanCheck from '../../../../partials/intro/_about-matrixscan-a
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against A List
 
@@ -34034,7 +34034,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned.
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR overlays) but keep the list of barcodes scanned.
 
 If this is the case, you can enable the “Clear screen” button.
 
@@ -34132,7 +34132,7 @@ BarcodeCountSettings settings = new BarcodeCountSettings();
 settings.EnableSymbology(Symbology.Ean13Upca, true);
 ```
 
-If you are sure that your environment will only have unique barcodes (i.e. no duplicated values), you can also enable [BarcodeCountSettings.ExpectsOnlyUniqueBarcodes](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-count-settings.html#property-scandit.datacapture.barcode.count.BarcodeCountSettings.ExpectsOnlyUniqueBarcodes). This option improves scanning performance as long as you are sure that no duplicates will be present. Next, create a [BarcodeCount](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount) instance with the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) and the settings initialized in the previous step:
+If you are sure that your environment will only have unique barcodes (that is, no duplicated values), you can also enable [BarcodeCountSettings.ExpectsOnlyUniqueBarcodes](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-count-settings.html#property-scandit.datacapture.barcode.count.BarcodeCountSettings.ExpectsOnlyUniqueBarcodes). This option improves scanning performance as long as you are sure that no duplicates will be present. Next, create a [BarcodeCount](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount) instance with the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/dotnet.android/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) and the settings initialized in the previous step:
 
 ```csharp
 BarcodeCount barcodeCount = BarcodeCount.Create(dataCaptureContext, settings);
@@ -34279,7 +34279,7 @@ import AboutMatrixScanCount from '../../../../partials/intro/_about-matrixscan-c
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## BarcodeFind Listener
 
@@ -34376,9 +34376,9 @@ DataCaptureContext dataCaptureContext = DataCaptureContext.ForLicenseKey("-- ENT
 
 ## Configure the Barcode Find Mode
 
-The main entry point for the Barcode Find Mode is the [BarcodeFind](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [BarcodeFindSettings](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight (e.g. a list of products).
+The main entry point for the Barcode Find Mode is the [BarcodeFind](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [BarcodeFindSettings](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight (for example, a list of products).
 
-For this tutorial, we will set up Barcode Find for tracking EAN13 codes. Change this to the correct symbologies for your use case (e.g. Code 128, Code 39…).
+For this tutorial, we will set up Barcode Find for tracking EAN13 codes. Change this to the correct symbologies for your use case (for example, Code 128, Code 39…).
 
 First create the settings:
 
@@ -34488,7 +34488,7 @@ import AboutFind from '../../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -34741,7 +34741,7 @@ import AboutMatrixScanPick from '../../../../partials/intro/_about-matrixscan-pi
 
 # Get Started
 
-The parser parses data strings, e.g. as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/hibc.html), [GS1 Application Identifier (https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/iata-bcbp.html)
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/hibc.html), [GS1 Application Identifier (https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/iata-bcbp.html)
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -35470,7 +35470,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/n
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -35480,7 +35480,7 @@ Allowing the end user to control the scanner with hardware buttons can be useful
 
 SparkScan offers a built-in API to let you do this via [scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
 
-10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
+10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
           if (isValidBarcode(barcode)) {
               return new SparkScanBarcodeSuccessFeedback();
           } else {
@@ -35531,7 +35531,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -35769,7 +35769,7 @@ You will always need to add the `Scandit.DataCapture.Core` package, which contai
 
 In addition, depending on the data capture task, you will need a reference to:
 
-| Functionality | Description | Required Module(s) |
+| Functionality | Description | Required Modules |
 | --- | --- | --- |
 | Barcode Capture | [ScanditBarcodeCapture API](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api.html) if you want to use barcode-related functionality, such as barcode capture or MatrixScan. | _com.scandit.datacapture:barcode_ |
 | Parser | [ScanditParser API](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api.html) if you want to parse data strings, for instance, as found in barcodes, into a set of key-value mappings. | _com.scandit.datacapture:parser_ |
@@ -35990,7 +35990,7 @@ if (barcode.Data?.StartsWith("09:") == false)
 
 ## Use the Built-in Camera
 
-The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
+The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, for example, the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
 :::important
 In iOS, the user must explicitly grant permission for each app to access cameras. Your app needs to provide static messages to display to the user when the system asks for camera permission. To do that include the [NSCameraUsageDescription](https://learn.microsoft.com/en-us/xamarin/ios/app-fundamentals/security-privacy?tabs=macos#:~:text=NSCameraUsageDescription) key in your app’s Info.plist file.
@@ -36089,7 +36089,7 @@ The general steps are:
 - Create a new [data capture context](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) instance, initialized with your license key.
 - Create a [barcode selection settings](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-selection-settings.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionSettings) and choose the right configuration.
 - Create a new [barcode selection mode](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection) instance and initialize it with the settings created above.
-- Register a [barcode selection listener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) to receive scan events. Process the successful scans according to your application’s needs, e.g. by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
+- Register a [barcode selection listener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) to receive scan events. Process the successful scans according to your application’s needs, for example, by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
 - Obtain a [camera](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/camera.html#class-scandit.datacapture.core.Camera) instance and set it as the frame source on the data capture context.
 - Display the camera preview by creating a [data capture view](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 - If displaying a preview, optionally create a new [overlay](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/barcode-selection-basic-overlay.html#class-scandit.datacapture.barcode.selection.ui.BarcodeSelectionBasicOverlay) and add it to [data capture view](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) for a better visual feedback.
@@ -36217,7 +36217,7 @@ barcodeSelection.SelectionUpdated += (object sender, BarcodeSelectionEventArgs a
 
 ## Use the Built-in Camera
 
-The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
+The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, for example, the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
 :::important
 In iOS, the user must explicitly grant permission for each app to access cameras. Your app needs to provide static messages to display to the user when the system asks for camera permission. To do that include the [NSCameraUsageDescription](https://learn.microsoft.com/en-us/xamarin/ios/app-fundamentals/security-privacy?tabs=macos#:~:text=NSCameraUsageDescription) key in your app’s Info.plist file.
@@ -36320,7 +36320,7 @@ settings.Scanner = new IdCaptureScanner(new SingleSideScanner(barcode: false, ma
 
 To configure the documents that should be accepted and/or rejected, set the `AcceptedDocuments` and `RejectedDocuments` properties in `IdCaptureSettings`.
 
-These properties take a list of [IIdCaptureDocument](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-document.html) instances (e.g. `Passport`, `DriverLicense`, `IdCard`) combined with the [IdCaptureRegion](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enum to enable highly flexible document filtering.
+These properties take a list of [IIdCaptureDocument](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-document.html) instances (for example, `Passport`, `DriverLicense`, `IdCard`) combined with the [IdCaptureRegion](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/id-capture-region.html#enum-scandit.datacapture.id.IdCaptureRegion) enum to enable highly flexible document filtering.
 
 For example, to accept only US Driver Licenses:
 
@@ -36383,7 +36383,7 @@ The general steps are:
 - Starting the Capture Process
 
 :::warning
-Using ID Capture at the same time as other modes (e.g. Barcode Capture) is not supported.
+Using ID Capture at the same time as other modes (for example, Barcode Capture) is not supported.
 :::
 
 ## Prerequisites
@@ -36452,7 +36452,7 @@ To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/dotnet.ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 ```csharp
 public class MyListener : IIdCaptureListener
@@ -37449,7 +37449,7 @@ BarcodeBatch barcodeBatch = BarcodeBatch.Create(context, settings);
 
 ## Use the Built-in Camera
 
-The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
+The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, for example, the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
 :::important
 In iOS, the user must explicitly grant permission for each app to access cameras. Your app needs to provide static messages to display to the user when the system asks for camera permission. To do that include the [NSCameraUsageDescription](https://learn.microsoft.com/en-us/xamarin/ios/app-fundamentals/security-privacy?tabs=macos#:~:text=NSCameraUsageDescription) key in your app’s Info.plist file.
@@ -37758,7 +37758,7 @@ import AboutMatrixScanCheck from '../../../../partials/intro/_about-matrixscan-a
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against A List
 
@@ -37824,7 +37824,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned.
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR overlays) but keep the list of barcodes scanned.
 
 If this is the case, you can enable the “Clear screen” button.
 
@@ -37922,7 +37922,7 @@ BarcodeCountSettings settings = new BarcodeCountSettings();
 settings.EnableSymbology(Symbology.Ean13Upca, true);
 ```
 
-If you are sure that your environment will only have unique barcodes (i.e. no duplicated values), you can also enable [BarcodeCountSettings.ExpectsOnlyUniqueBarcodes](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-count-settings.html#property-scandit.datacapture.barcode.count.BarcodeCountSettings.ExpectsOnlyUniqueBarcodes). This option improves scanning performance as long as you are sure that no duplicates will be present. Next, create a [BarcodeCount](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount) instance with the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) and the settings initialized in the previous step:
+If you are sure that your environment will only have unique barcodes (that is, no duplicated values), you can also enable [BarcodeCountSettings.ExpectsOnlyUniqueBarcodes](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-count-settings.html#property-scandit.datacapture.barcode.count.BarcodeCountSettings.ExpectsOnlyUniqueBarcodes). This option improves scanning performance as long as you are sure that no duplicates will be present. Next, create a [BarcodeCount](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount) instance with the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/dotnet.ios/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) and the settings initialized in the previous step:
 
 ```csharp
 BarcodeCount barcodeCount = BarcodeCount.Create(dataCaptureContext, settings);
@@ -38070,7 +38070,7 @@ import AboutMatrixScanCount from '../../../../partials/intro/_about-matrixscan-c
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## BarcodeFind Listener
 
@@ -38167,9 +38167,9 @@ DataCaptureContext dataCaptureContext = DataCaptureContext.ForLicenseKey("-- ENT
 
 ## Configure the Barcode Find Mode
 
-The main entry point for the Barcode Find Mode is the [BarcodeFind](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [BarcodeFindSettings](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight (e.g. a list of products).
+The main entry point for the Barcode Find Mode is the [BarcodeFind](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [BarcodeFindSettings](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight (for example, a list of products).
 
-For this tutorial, we will set up Barcode Find for tracking EAN13 codes. Change this to the correct symbologies for your use case (e.g. Code 128, Code 39…).
+For this tutorial, we will set up Barcode Find for tracking EAN13 codes. Change this to the correct symbologies for your use case (for example, Code 128, Code 39…).
 
 First create the settings:
 
@@ -38274,7 +38274,7 @@ import AboutFind from '../../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -38526,7 +38526,7 @@ import AboutMatrixScanPick from '../../../../partials/intro/_about-matrixscan-pi
 
 # Get Started
 
-The parser parses data strings, e.g. as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/hibc.html), [GS1 Application Identifier (https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/iata-bcbp.html)
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/hibc.html), [GS1 Application Identifier (https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/iata-bcbp.html)
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -39214,7 +39214,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/n
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -39224,7 +39224,7 @@ Allowing the end user to control the scanner with hardware buttons can be useful
 
 SparkScan offers a built-in API to let you do this via [scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
 
-10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
+10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
           if (isValidBarcode(barcode)) {
               return new SparkScanBarcodeSuccessFeedback();
           } else {
@@ -39275,7 +39275,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -39558,7 +39558,7 @@ To add Scandit plugins from the package registry, run the corresponding commands
 	```
 	
 
-**Then add the plugin(s) for your desired functionality:**
+**Then add the plugins for your desired functionality:**
 
 	
 	```sh
@@ -39603,7 +39603,7 @@ You can add only the plugins you need as described in the [Internal Dependencies
 
 #### Step 2: Extract and locate the plugins
 
-1. Extract the downloaded `.zip` file to a location of your choice (e.g., `~/Downloads/scandit-react-native-sdk/`)
+1. Extract the downloaded `.zip` file to a location of your choice (for example, `~/Downloads/scandit-react-native-sdk/`)
 2. The extracted archive contains multiple React Native plugin folders, each representing a different SDK module.
 
 #### Step 3: Install the plugins to your project
@@ -39623,7 +39623,7 @@ Navigate to your React Native project root directory and install the plugins usi
 	```
 	
 
-**Then add the plugin(s) for your desired functionality:**
+**Then add the plugins for your desired functionality:**
 
 	
 	```sh
@@ -39812,7 +39812,7 @@ The general steps are:
 - Create a new [DataCaptureContext](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) instance, initialized with your license key.
 - Create a [BarcodeCaptureSettings](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-settings.html#class-scandit.datacapture.barcode.BarcodeCaptureSettings) and enable the [BarcodeSymbologies](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/symbology.html#enum-scandit.datacapture.barcode.Symbology) you want to read in your application.
 - Create a new [BarcodeCaptureMode](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture.html#class-scandit.datacapture.barcode.BarcodeCapture) instance and initialize it with the settings created above.
-- Register a [BarcodeCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) to receive scan events. Process the successful scans according to your application’s needs, e.g. by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
+- Register a [BarcodeCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-capture-listener.html#interface-scandit.datacapture.barcode.IBarcodeCaptureListener) to receive scan events. Process the successful scans according to your application’s needs, for example, by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
 - Obtain a [Camera](https://docs.scandit.com/data-capture-sdk/react-native/core/api/camera.html#class-scandit.datacapture.core.Camera) instance and set it as the frame source on the data capture context.
 - Display the camera preview by creating a [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 - If displaying a preview, optionally create a new [BarcodeCaptureOverlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-capture-overlay.html#class-scandit.datacapture.barcode.ui.BarcodeCaptureOverlay) and add it to [DataCaptureView](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) for a better visual feedback.
@@ -39869,7 +39869,7 @@ Each additional Symbology may reduce recognition speed, therefore only enable th
 	
 	```ts
 	const settings = new BarcodeCaptureSettings();
-	settings.codeDuplicateFilter = 300; // optionally add a 300ms timeout between scanning identical barcodes
+	settings.codeDuplicateFilter = 300; // optionally add a timeout of 300 milliseconds between scanning identical barcodes
 	settings.enableSymbologies([
 		Symbology.Code128,
 		Symbology.Code39,
@@ -39887,7 +39887,7 @@ Each additional Symbology may reduce recognition speed, therefore only enable th
 	
 	```js
 	const settings = new BarcodeCaptureSettings();
-	settings.codeDuplicateFilter = 300; // optionally add a 300ms timeout between scanning identical barcodes
+	settings.codeDuplicateFilter = 300; // optionally add a timeout of 300 milliseconds between scanning identical barcodes
 	settings.enableSymbologies([
 		Symbology.Code128,
 		Symbology.Code39,
@@ -39962,7 +39962,7 @@ if (!barcode.data?.startsWith('09:')) {
 
 ## Use the Built-in Camera
 
-The `DataCaptureContext` supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
+The `DataCaptureContext` supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, for example, the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
 :::important
 In iOS, the user must explicitly grant permission for each app to access cameras. Your app needs to provide static messages to display to the user when the system asks for camera permission. To do that include the [NSCameraUsageDescription](https://developer.apple.com/documentation/bundleresources/information%5Fproperty%5Flist/nscamerausagedescription)
@@ -40145,7 +40145,7 @@ The general steps are:
 - Create a new [data capture context](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) instance, initialized with your license key.
 - Create a [barcode selection settings](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-selection-settings.html#class-scandit.datacapture.barcode.selection.BarcodeSelectionSettings) and choose the right configuration.
 - Create a new [barcode selection mode](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-selection.html#class-scandit.datacapture.barcode.selection.BarcodeSelection 'barcode selection mode class') instance and initialize it with the settings created above.
-- Register a [barcode selection listener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) to receive scan events. Process the successful scans according to your application’s needs, e.g. by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
+- Register a [barcode selection listener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-selection-listener.html#interface-scandit.datacapture.barcode.selection.IBarcodeSelectionListener) to receive scan events. Process the successful scans according to your application’s needs, for example, by looking up information in a database. After a successful scan, decide whether more codes will be scanned, or the scanning process should be stopped.
 - Obtain a [camera](https://docs.scandit.com/data-capture-sdk/react-native/core/api/camera.html#class-scandit.datacapture.core.Camera) instance and set it as the frame source on the data capture context.
 - Display the camera preview by creating a [data capture view](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView).
 - If displaying a preview, optionally create a new [overlay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-selection-basic-overlay.html#class-scandit.datacapture.barcode.selection.ui.BarcodeSelectionBasicOverlay) and add it to [data capture view](https://docs.scandit.com/data-capture-sdk/react-native/core/api/ui/data-capture-view.html#class-scandit.datacapture.core.ui.DataCaptureView) for a better visual feedback.
@@ -40228,7 +40228,7 @@ barcodeSelection.addListener(listener);
 
 ## Use the Built-in Camera
 
-The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
+The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, for example, the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
 :::important
 In iOS, the user must explicitly grant permission for each app to access cameras. Your app needs to provide static messages to display to the user when the system asks for camera permission. To do that include the [NSCameraUsageDescription](https://developer.apple.com/documentation/bundleresources/information%5Fproperty%5Flist/nscamerausagedescription) key in your app’s Info.plist file.
@@ -40401,7 +40401,7 @@ The general steps are:
 - Start the Capture Process
 
 :::warning
-Using ID Capture at the same time as other modes (e.g. Barcode Capture) is not supported.
+Using ID Capture at the same time as other modes (for example, Barcode Capture) is not supported.
 :::
 
 ## Prerequisites
@@ -40467,7 +40467,7 @@ To receive scan results, implement and [IdCaptureListener](https://docs.scandit.
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 ```js
 const listener = {
@@ -41171,7 +41171,7 @@ The following properties are available to configure custom fields:
 | Property | Required | Description |
 |----------|----------|-------------|
 | `valueRegexes` | Yes | The regex patterns that identify the target string in the scanned content. |
-| `anchorRegexes` | No | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (e.g., when both packaging and expiry dates are present). |
+| `anchorRegexes` | No | Used to specify keywords or phrases that help identify the context of the field. This is particularly useful when the label contains multiple fields that could match the same pattern (for example, when both packaging and expiry dates are present). |
 | `symbologies` | Yes (barcode fields) | The barcode symbologies to match for barcode fields. This is important for ensuring that the field only captures data from specific barcode types, enhancing accuracy and relevance. |
 | `optional` | No | Whether the field is optional or mandatory. This is helpful when certain fields may not be present on every scan. |
 
@@ -41453,7 +41453,7 @@ context.addMode(barcodeBatch);
 
 ## Use the Built-in Camera
 
-The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, e.g. the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
+The data capture context supports using different frame sources to perform recognition on. Most applications will use the built-in camera of the device, for example, the world-facing camera of a device. The remainder of this tutorial will assume that you use the built-in camera.
 
 :::important
 In iOS, the user must explicitly grant permission for each app to access cameras. Your app needs to provide static messages to display to the user when the system asks for camera permission. To do that include the [NSCameraUsageDescription](https://developer.apple.com/documentation/bundleresources/information%5Fproperty%5Flist/nscamerausagedescription) key in your app’s Info.plist file.
@@ -41677,7 +41677,7 @@ import AboutMatrixScanCheck from '../../../partials/intro/_about-matrixscan-ar.m
 
 # Advanced Configurations
 
-MatrixScan Count is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
+MatrixScan Count is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Count to best fit your needs.
 
 ## Scanning Against A List
 
@@ -41755,7 +41755,7 @@ By default the filters applied to the relevant barcodes are transparent, but you
 
 ## Clear Screen Button
 
-There are situations in which the user may find it helpful to clean up their screen (i.e. clear all the AR overlays) but keep the list of barcodes scanned.
+There are situations in which the user may find it helpful to clean up their screen (that is, clear all the AR overlays) but keep the list of barcodes scanned.
 
 If this is the case, you can enable the “Clear screen” button.
 
@@ -41900,7 +41900,7 @@ const settings = new BarcodeCountSettings();
 settings.enableSymbologies([Symbology.EAN13UPCA]);
 ```
 
-If you are sure that your environment will only have unique barcodes (i.e. no duplicated values), you can also enable [BarcodeCountSettings.expectsOnlyUniqueBarcodes](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-count-settings.html#property-scandit.datacapture.barcode.count.BarcodeCountSettings.ExpectsOnlyUniqueBarcodes). This option improves scanning performance as long as you are sure that no duplicates will be present. Next, create a [BarcodeCount](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount) instance with the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) and the settings initialized in the previous step:
+If you are sure that your environment will only have unique barcodes (that is, no duplicated values), you can also enable [BarcodeCountSettings.expectsOnlyUniqueBarcodes](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-count-settings.html#property-scandit.datacapture.barcode.count.BarcodeCountSettings.ExpectsOnlyUniqueBarcodes). This option improves scanning performance as long as you are sure that no duplicates will be present. Next, create a [BarcodeCount](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-count.html#class-scandit.datacapture.barcode.count.BarcodeCount) instance with the [Data Capture Context](https://docs.scandit.com/data-capture-sdk/react-native/core/api/data-capture-context.html#class-scandit.datacapture.core.DataCaptureContext) and the settings initialized in the previous step:
 
 ```js
 const barcodeCount = new BarcodeCount(settings);
@@ -42032,7 +42032,7 @@ import AboutMatrixScanCount from '../../../partials/intro/_about-matrixscan-coun
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## Set up a listener on the BarcodeFind mode
 
@@ -42100,9 +42100,9 @@ import DataCaptureContextReactNative from '../../../partials/get-started/_create
 
 ## Configure the Barcode Find Mode
 
-The main entry point for the Barcode Find Mode is the [BarcodeFind](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [BarcodeFindSettings](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight (e.g. a list of products).
+The main entry point for the Barcode Find Mode is the [BarcodeFind](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [BarcodeFindSettings](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight (for example, a list of products).
 
-For this tutorial, we will set up Barcode Find for tracking EAN13 codes. Change this to the correct symbologies for your use case (e.g. Code 128, Code 39…).
+For this tutorial, we will set up Barcode Find for tracking EAN13 codes. Change this to the correct symbologies for your use case (for example, Code 128, Code 39…).
 
 First create the settings:
 
@@ -42196,7 +42196,7 @@ import AboutFind from '../../../partials/intro/_about-matrixscan-find.mdx'
 
 # Advanced Configurations
 
-MatrixScan Pick is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
+MatrixScan Pick is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Pick to best fit your needs.
 
 ## BarcodePick Listener
 
@@ -42354,7 +42354,7 @@ import AboutMatrixScanPick from '../../../partials/intro/_about-matrixscan-pick.
 
 # Get Started
 
-The parser parses data strings, e.g. as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/react-native/parser/hibc.html), [GS1 Application Identifier (https://docs.scandit.com/data-capture-sdk/react-native/parser/AI) system](https://docs.scandit.com/data-capture-sdk/react-native/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/react-native/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/react-native/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/react-native/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/react-native/parser/epc.html).
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/react-native/parser/hibc.html), [GS1 Application Identifier (https://docs.scandit.com/data-capture-sdk/react-native/parser/AI) system](https://docs.scandit.com/data-capture-sdk/react-native/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/react-native/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/react-native/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/react-native/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/react-native/parser/epc.html).
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -43195,7 +43195,7 @@ Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/r
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
@@ -43207,7 +43207,7 @@ SparkScan offers a built-in API to let you do this via [scandit.datacapture.barc
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user.
 
 You can customize:
 
@@ -43215,7 +43215,7 @@ You can customize:
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button.
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
           if (isValidBarcode(barcode)) {
               return new SparkScanBarcodeSuccessFeedback();
           } else {
@@ -43291,7 +43291,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior
@@ -43329,7 +43329,7 @@ viewSettings.defaultScanningMode = new SparkScanScanningModeDefault(
 );
 ```
 
-Pass both arguments — the single-argument constructor is deprecated. Use
+Pass both arguments—the single-argument constructor is deprecated. Use
 `SparkScanScanningModeTarget` instead of `SparkScanScanningModeDefault` to force the
 aimer (target mode).
 
@@ -46518,7 +46518,7 @@ The MatrixScan Count module is not available for the Web SDK. To view documentat
 
 # Advanced Configurations
 
-MatrixScan Find is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
+MatrixScan Find is optimized by default for efficiency, accuracy, and responsiveness. However, there are multiple advanced settings available to further customize MatrixScan Find to best fit your needs.
 
 ## BarcodeFind Listener
 
@@ -47678,19 +47678,19 @@ import SingleScanning from '../../partials/_single-scanning.mdx';
 
 # Advanced Configurations
 
-SparkScan is optimized by default for efficiency, accuracy, and a seamless user experience. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
+SparkScan is optimized by default for efficiency, accuracy, and responsiveness. However, there are some cases where you might want to customize the behavior of SparkScan. This guide will show you how to add additional capabilities and further customize SparkScan to best fit your needs.
 
 ## Advanced Capabilities
 
 ### Trigger Error State
 
-You may want to introduce logic in your app to show an error message when scanning specific barcodes (e.g. barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
+You may want to introduce logic in your app to show an error message when scanning specific barcodes (for example, barcodes already added to the list, barcodes from the wrong lot etc.). SparkScan offers a built-in error state you can easily set to trigger an error feedback prompt to the user. You will be able to customize:
 
 - The text message
 - The timeout of the error message: the scanner will be paused for the specified amount of time, but the user can quickly restart the scanning process by tapping the trigger button
 
     :::tip
-    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (e.g. because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
+    A high timeout (>10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
           if (isValidBarcode(barcode)) {
               return new SparkScanBarcodeSuccessFeedback();
           } else {
@@ -47739,7 +47739,7 @@ The scanning mode determines the programmatic presence of an aimer in the previe
 | **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode will simply force this "precision selection" state to be on at all time.
+Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
 :::
 
 ### Scanning Behavior

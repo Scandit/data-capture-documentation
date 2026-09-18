@@ -8,9 +8,9 @@
 <script>!function(e,t,a,n,g){e[n]=e[n]||[],e[n].push({"gtm.start":(new Date).getTime(),event:"gtm.js"});var m=t.getElementsByTagName(a)[0],r=t.createElement(a);r.async=!0,r.src="https://www.googletagmanager.com/gtm.js?id=GTM-THQQFD7",m.parentNode.insertBefore(r,m)}(window,document,"script","dataLayer")</script>
 
 
-<link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-418/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-418/assets/css/styles.067411ba.css">
-<script src="/data-capture-documentation/pr-preview/pr-418/assets/js/runtime~main.80fdedf1.js" defer="defer"></script>
-<script src="/data-capture-documentation/pr-preview/pr-418/assets/js/main.4f0db2da.js" defer="defer"></script>
+<link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-418/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-418/assets/css/styles.b3f563a7.css">
+<script src="/data-capture-documentation/pr-preview/pr-418/assets/js/runtime~main.a4400663.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-418/assets/js/main.b1ed679e.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THQQFD7" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -21,7 +21,7 @@
 <p>There are three types of input data you must configure:</p>
 <table><thead><tr><th>Input Type</th><th>Description</th></tr></thead><tbody><tr><td><strong>Standard Input</strong></td><td>Predefined or fixed input fields configured in advance.</td></tr><tr><td><strong>User Session Input</strong></td><td>Data provided by the user once at the beginning of a scanning session.</td></tr><tr><td><strong>User Scan Input</strong></td><td>Data provided by the user for each scanned barcode.</td></tr></tbody></table>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="standard-input">Standard Input<a class="hash-link" aria-label="Direct link to Standard Input" title="Direct link to Standard Input" href="/data-capture-documentation/pr-preview/pr-418/hosted/express/configuration/custom-data-transfer/input-configuration/#standard-input">​</a></h2>
-<p>Standard inputs are fixed values or predefined fields. They are useful when you need to always attach the same kind of information (e.g., device ID, operator ID).</p>
+<p>Standard inputs are fixed values or predefined fields. They are useful when you need to always attach the same kind of information (for example, device ID, operator ID).</p>
 <table><thead><tr><th>Field</th><th>Description</th></tr></thead><tbody><tr><td><code>type</code></td><td>Always set to <code>standardInput</code> for this input type.</td></tr><tr><td><code>target</code></td><td>Either of <code>picker</code>, <code>googleSheets</code>, or <code>share</code>. This defines where the data will be sent. Additional fields may be required depending on the target.</td></tr><tr><td><code>fields</code></td><td>An array of <strong>InputField</strong> objects that define the data to be included.</td></tr></tbody></table>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="target">Target<a class="hash-link" aria-label="Direct link to Target" title="Direct link to Target" href="/data-capture-documentation/pr-preview/pr-418/hosted/express/configuration/custom-data-transfer/input-configuration/#target">​</a></h3>
 <table><thead><tr><th>Target</th><th>Description</th><th>Additional Fields</th></tr></thead><tbody><tr><td><code>picker</code></td><td>Data will be included in a CSV.</td><td><code>format: &#x27;csv&#x27;</code></td></tr><tr><td><code>googleSheets</code></td><td>Data will be sent to a Google Sheet.</td><td><code>spreadSheetsId</code> (string)<br> <code>sheetId</code> (Int)</td></tr><tr><td><code>share</code></td><td>Data will be shared via Android&#x27;s share functionality as a CSV file.</td><td><code>format: &#x27;csv&#x27;</code></td></tr></tbody></table>
