@@ -1,9 +1,17 @@
 "use strict";
 /**
- * Shared reader for the versioned API-reference URLs a built site links to.
+ * What scripts/discover-api-reference-lines.cjs and scripts/verify-api-reference-seo.cjs
+ * share: where the build is, where the site is, how long a request may take, what
+ * version is served, and the versioned API-reference URLs the build links to.
  *
- * Lives in one place because the extraction encodes findings that took several
- * review rounds to get right, and two copies would drift:
+ * The rule for this file is "the two scripts must not be able to disagree". They
+ * run as one CI step and one hands the other an artefact, so a difference between
+ * them does not surface as a conflict - it surfaces as a confident report about
+ * something neither of them checked.
+ *
+ * The extraction below lives here for the same reason plus one more: it encodes
+ * findings that took several review rounds to get right, and two copies would
+ * drift:
  *
  *   - no file cap. A 6,000-file budget returned silently once exhausted, so the
  *     candidate set narrowed with no signal - and it was already below the build
@@ -22,6 +30,45 @@
 
 const fs = require("fs");
 const path = require("path");
+
+/**
+ * The built site, and the two settings every live request in either script uses.
+ *
+ * Here rather than in each script because they were duplicated literals: a
+ * timeout raised in the gate but not in discovery, or an ORIGIN pointed at a
+ * staging host in one of the two, gives a run whose two halves disagree about
+ * what they measured while both report success.
+ *
+ * BUILD is resolved from THIS file, which sits one directory deeper than its
+ * callers - `scripts/lib/` - so the `..` count is not the one either script had.
+ */
+const BUILD = path.join(__dirname, "..", "..", "build");
+const ORIGIN = "https://docs.scandit.com";
+/** Per-request ceiling. undici's default is 300s, which is not a CI budget. */
+const REQUEST_TIMEOUT_MS = 15000;
+
+/**
+ * The served version number, as the search-tag manifest states it.
+ *
+ * Both scripts read this same field from this same file to decide what "current"
+ * means - discovery to pick the majors to probe and to stamp its artefact, the
+ * gate to decide whether that artefact is stale. Two readers disagreeing about
+ * the current version is precisely the stale-artefact bug the gate's version
+ * check exists to catch, so they read it through one function.
+ *
+ * `buildDir` is a parameter so a test can point it at a fixture; callers pass
+ * nothing and get the real build.
+ */
+function currentVersion(buildDir = BUILD) {
+  try {
+    const m = JSON.parse(
+      fs.readFileSync(path.join(buildDir, "search-tags.json"), "utf8"),
+    );
+    return (m.versionNumberByTag || {})[m.lastVersionTag] || "";
+  } catch {
+    return "";
+  }
+}
 
 const VERSIONED_API_URL =
   /https:\/\/docs\.scandit\.com\/(\d+\.\d+)\/data-capture-sdk\/([^"'#\s<>(),]+)/g;
@@ -156,6 +203,10 @@ function knownCeiling(byLine, major) {
 }
 
 module.exports = {
+  BUILD,
+  ORIGIN,
+  REQUEST_TIMEOUT_MS,
+  currentVersion,
   linkedApiUrls,
   compareLines,
   sample,

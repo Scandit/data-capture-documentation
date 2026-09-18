@@ -42,8 +42,13 @@
  * the comma list. The `discover:api-reference-lines` script entry is for reading
  * the human report; anything parsing the output must call node directly.
  *
- *   LINES=$(node scripts/discover-api-reference-lines.cjs --quiet)
- *   yarn verify:api-reference-seo ${LINES:+--lines "$LINES"}
+ * NOT `LINES`, which zsh declares as a typed integer: `LINES=$(...)` there
+ * arithmetic-evaluates the comma list, so `8.3,8.4,8.5` becomes `8`, and the gate
+ * then exits with `--lines takes major.minor values (got "8")`. CI runs bash,
+ * where the name is harmless, but this line is pasted into local shells too.
+ *
+ *   API_LINES=$(node scripts/discover-api-reference-lines.cjs --quiet)
+ *   yarn verify:api-reference-seo ${API_LINES:+--lines "$API_LINES"}
  *
  * It also writes build/api-reference-lines.json, which the gate reads to seed its
  * own samples with the probe paths confirmed here.
@@ -52,6 +57,10 @@
 const fs = require("fs");
 const path = require("path");
 const {
+  BUILD,
+  ORIGIN,
+  REQUEST_TIMEOUT_MS,
+  currentVersion,
   linkedApiUrls,
   compareLines,
   probeCandidates,
@@ -59,10 +68,6 @@ const {
   maxMinorSeen,
 } = require("./lib/linked-api-lines.cjs");
 
-const ROOT = path.join(__dirname, "..");
-const BUILD = path.join(ROOT, "build");
-const ORIGIN = "https://docs.scandit.com";
-const REQUEST_TIMEOUT_MS = 15000;
 /** Probe paths to confirm. More than one so a single retired symbol cannot silence the run. */
 const WANT_PROBES = 3;
 /** Written for the gate, so both work from the same confirmed probe paths. */
@@ -137,17 +142,6 @@ async function headStatus(url) {
   }
 }
 
-function currentNumber() {
-  try {
-    const m = JSON.parse(
-      fs.readFileSync(path.join(BUILD, "search-tags.json"), "utf8"),
-    );
-    return (m.versionNumberByTag || {})[m.lastVersionTag] || "";
-  } catch {
-    return "";
-  }
-}
-
 /**
  * How high to probe on a major below the current one.
  *
@@ -197,7 +191,7 @@ async function main() {
     return;
   }
 
-  const version = currentNumber();
+  const version = currentVersion();
   const major = /^(\d+)\.(\d+)/.exec(version);
   if (!major) {
     warn("line discovery: build/search-tags.json states no version for the served");

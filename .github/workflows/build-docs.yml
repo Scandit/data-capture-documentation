@@ -54,6 +54,12 @@ jobs:
       - name: Test search facet filters
         run: yarn test:search-facets
 
+      # The parsers the API-reference SEO gate judges pages with, run offline.
+      # Every bug they have had was a false PASS - a page Google indexes reported
+      # as sound - which is the one failure the gate cannot reveal by running.
+      - name: Test API-reference SEO parsers
+        run: yarn test:api-reference-seo
+
       # Compares build/search-tags.json (what this build's widget will filter on)
       # against the live Algolia index. Catches a docs-version rename quietly
       # dropping content out of search - see scripts/verify-search-tags.cjs.
@@ -82,15 +88,21 @@ jobs:
       # the newest frozen line, the one whose content is closest to current and so
       # the likeliest to outrank it. Discovery probes for those and prints them.
       #
-      # `|| true` on purpose: if discovery cannot reach the site, LINES is empty
-      # and the gate runs on the linked lines instead of the step going red. The
-      # gate says in its own output when it ran without --lines.
+      # `|| true` on purpose: if discovery cannot reach the site, API_LINES is
+      # empty and the gate runs on the linked lines instead of the step going red.
+      # The gate says in its own output when it ran without --lines.
+      #
+      # API_LINES, not LINES: zsh declares LINES as a typed integer, so the same
+      # assignment there arithmetic-evaluates the comma list and `8.3,8.4,8.5`
+      # becomes `8`. This step runs under bash, where the name is safe - but it is
+      # the block a maintainer copies into a local shell to reproduce the step, and
+      # the script header documents the same invocation.
       - name: Verify API-reference canonical tags
         run: |
-          LINES=$(node scripts/discover-api-reference-lines.cjs --quiet || true)
-          if [ -n "$LINES" ]; then
-            echo "Discovered unlinked API-reference lines: $LINES"
-            yarn verify:api-reference-seo --lines "$LINES"
+          API_LINES=$(node scripts/discover-api-reference-lines.cjs --quiet || true)
+          if [ -n "$API_LINES" ]; then
+            echo "Discovered unlinked API-reference lines: $API_LINES"
+            yarn verify:api-reference-seo --lines "$API_LINES"
           else
             yarn verify:api-reference-seo
           fi

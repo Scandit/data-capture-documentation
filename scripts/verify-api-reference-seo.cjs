@@ -52,21 +52,22 @@
 
 const fs = require("fs");
 const path = require("path");
-// Shared with scripts/discover-api-reference-lines.cjs so the URL extraction -
-// which encodes several review rounds of lessons about caps and artefacts -
-// cannot drift between the two.
+// Shared with scripts/discover-api-reference-lines.cjs, which runs immediately
+// before this in the same CI step and hands it an artefact. Where they run, what
+// they call current, and how long they wait must be one definition: a difference
+// between them shows up not as a conflict but as a confident report about
+// something neither checked.
 const {
+  BUILD,
+  ORIGIN,
+  REQUEST_TIMEOUT_MS,
+  currentVersion,
   linkedApiUrls,
   compareLines,
   sample,
   probeCandidates,
 } = require("./lib/linked-api-lines.cjs");
 
-const ROOT = path.join(__dirname, "..");
-const BUILD = path.join(ROOT, "build");
-const ORIGIN = "https://docs.scandit.com";
-/** Per-request ceiling. undici's default is 300s, which is not a CI budget. */
-const REQUEST_TIMEOUT_MS = 15000;
 /**
  * Below this relative size difference, two pages are close enough that a
  * canonical is a credible duplicate-content claim. Deliberately loose: the
@@ -502,7 +503,7 @@ function samePage(href, target, base) {
  * is usable on its own - it only loses the guarantee that its picks and
  * discovery's agree about what is verifiable.
  */
-function discoveredProbes(currentVersion) {
+function discoveredProbes(version) {
   try {
     const a = JSON.parse(
       fs.readFileSync(path.join(BUILD, "api-reference-lines.json"), "utf8"),
@@ -512,10 +513,10 @@ function discoveredProbes(currentVersion) {
     // older release - and because borrowed picks are taken IN ORDER, those stale
     // paths were the FIRST ones checked. The seeded-overlap guarantee turned into
     // its opposite exactly when it mattered.
-    // No `currentVersion &&`: an unknown current version cannot confirm the
+    // No `version &&`: an unknown current version cannot confirm the
     // artefact is fresh, and treating "cannot tell" as "fine" seeded the picks
     // from a stale artefact precisely when the build could not say what it is.
-    if (!currentVersion || !a.version || a.version !== currentVersion) return [];
+    if (!version || !a.version || a.version !== version) return [];
     return Array.isArray(a.probes) ? a.probes : [];
   } catch {
     return [];
@@ -529,27 +530,15 @@ function discoveredProbes(currentVersion) {
  * footer asserted coverage of everything it was named. The only trace was a warn
  * earlier in the step.
  */
-function discoveredUncertain(currentVersion) {
+function discoveredUncertain(version) {
   try {
     const a = JSON.parse(
       fs.readFileSync(path.join(BUILD, "api-reference-lines.json"), "utf8"),
     );
-    if (!currentVersion || !a.version || a.version !== currentVersion) return [];
+    if (!version || !a.version || a.version !== version) return [];
     return Array.isArray(a.uncertain) ? a.uncertain : [];
   } catch {
     return [];
-  }
-}
-
-/** The served version number, as the search-tag manifest states it. */
-function currentVersion() {
-  try {
-    const m = JSON.parse(
-      fs.readFileSync(path.join(BUILD, "search-tags.json"), "utf8"),
-    );
-    return (m.versionNumberByTag || {})[m.lastVersionTag] || "";
-  } catch {
-    return "";
   }
 }
 
@@ -1335,3 +1324,25 @@ function run() {
   process.exitCode = isDefect || strict ? 1 : 0;
 });
 }
+
+/**
+ * The parsers, for scripts/test-api-reference-seo.cjs.
+ *
+ * Every one of them carries a comment describing a false PASS it used to
+ * produce - a commented-out canonical read as declared, `data-name="robots"`
+ * read as a directive, `max-image-preview: none` read as `none`,
+ * `bingbot: noindex` read as de-indexed. Prose cannot fail when someone reinstates
+ * one of those; an assertion can, so each of those cases is now pinned by name.
+ *
+ * Safe to export only because of the `require.main` guard above: without it,
+ * `require`ing this file to reach them fired a full live-network run.
+ */
+module.exports = {
+  attr,
+  headOf,
+  canonicalOf,
+  isNoindex,
+  hasNoindexIn,
+  hasNoindexHeader,
+  samePage,
+};
