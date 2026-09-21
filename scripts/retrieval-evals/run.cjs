@@ -207,6 +207,53 @@ function search(index, query, k) {
   return out;
 }
 
+// Freshness coverage of the index.
+//
+// docs-retrieval-evals.yml checks out full history for exactly one reason: the
+// extractor dates each page from that file's last commit, and under a shallow
+// clone it emits "" rather than a constant that looks like data. Nothing read
+// the result, which is what made the cost look unjustified - docs-preview.yml
+// calls it "a freshness signal nobody computes". This computes it.
+//
+// A REPORT, not a ranking input, and that distinction is the whole point.
+// last_verified is a date and this scorer tokenises on [a-z0-9]{2,}, so
+// "2026-09-18" would enter the term stream as "2026", "09" and "18" - a query
+// mentioning any of those numbers would then match every page verified that
+// day. Recency is not relevance, and feeding one into the other would quietly
+// degrade the metric the rest of this file exists to measure.
+function reportFreshness(index) {
+  const dated = [];
+  let blank = 0;
+  for (const m of index) {
+    const d = String(m.last_verified || "");
+    if (/^\d{4}-\d{2}-\d{2}$/.test(d)) dated.push(d);
+    else blank++;
+  }
+  console.log(`\nFreshness: ${dated.length}/${index.length} modules carry a last_verified date.`);
+  if (dated.length) {
+    dated.sort();
+    const cutoff = new Date(Date.now() - 180 * 864e5).toISOString().slice(0, 10);
+    const stale = dated.filter((d) => d < cutoff).length;
+    console.log(
+      `  oldest ${dated[0]}, newest ${dated[dated.length - 1]}, ` +
+        `${stale} older than 180 days (before ${cutoff}).`,
+    );
+  }
+  if (blank === index.length) {
+    console.error(
+      "\nretrieval-evals: NOT ONE module carries a date. The extractor emits \"\"\n" +
+        "under a shallow clone, so the checkout step has lost its `fetch-depth: 0`\n" +
+        "(.github/workflows/docs-retrieval-evals.yml) and the index ships with no\n" +
+        "freshness signal at all.\n",
+    );
+    // Locally a shallow clone is a legitimate state to be in and not worth
+    // blocking on. In CI the workflow sets the depth explicitly, so losing it
+    // is a regression in the workflow rather than a property of the checkout -
+    // and it is silent, which is the only reason this check exists.
+    if (process.env.CI) process.exit(1);
+  }
+}
+
 function relevant(hit, expect) {
   const u = hit.url.toLowerCase();
   return expect.some((e) => u.includes(e.toLowerCase()));
@@ -223,6 +270,7 @@ function main() {
     console.error("retrieval-evals: empty or invalid index.");
     process.exit(1);
   }
+  reportFreshness(index);
   if (AUTO) {
     // Corpus-wide, PAGE-LEVEL self-retrieval over every doc: for each page,
     // query with a chunk's own title+summary and check that a chunk from the

@@ -58,12 +58,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # Full history: the knowledge-extractor takes each page's
-          # `last_verified` from its last commit date. The default shallow
-          # clone (depth 1) makes every file resolve to the same single
-          # commit, so the plugin deliberately emits "" rather than a
-          # constant that looks like data - which would leave the artifact
-          # this workflow evaluates with no freshness signal at all.
+          # Full history, and unlike build-docs.yml this job USES it.
+          #
+          # The knowledge-extractor takes each page's `last_verified` from its
+          # last commit date. Under the default depth-1 clone every file
+          # resolves to the same single commit, so the plugin deliberately
+          # emits "" rather than a constant that looks like data.
+          #
+          # run.cjs reports freshness coverage from that field - how many
+          # modules carry a date, the oldest and newest, and how many are over
+          # 180 days old - and fails in CI if NOT ONE module has one, which is
+          # what losing this line would look like. So the cost buys a signal
+          # that is actually read, and the check guards the setting that
+          # produces it. Do not drop to depth 1 here without deleting that
+          # report first.
+          #
+          # Deliberately NOT a ranking input: last_verified is a date, and the
+          # scorer tokenises on [a-z0-9]{2,}, so it would enter the term stream
+          # as "2026"/"09"/"18" and match any query mentioning those numbers.
           fetch-depth: 0
 
       - name: Setup Node.js
