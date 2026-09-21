@@ -335,15 +335,27 @@ function main() {
       // than the tolerance whenever an edit perturbs tokenisation enough to flip
       // a batch of ties - a red gate with no regression behind it - and hides a
       // real regression that only converts strictly-better competitors into ties.
-      let better = 0;
+      // Distinct competing PAGES, not competing chunks.
+      //
+      // search() spends one slot per page, so a rank there counts pages. This
+      // counted every outranking CHUNK, so three chunks of one rival page
+      // consumed all three slots and the page was scored a miss that the
+      // gold-set path scores a hit. The two halves of this script have to agree
+      // about what a rank means, and this is the half the baseline and the CI
+      // gate are computed from - so the gated number was the wrong one.
+      //
+      // It also made the metric move with CHUNK COUNTS: re-chunking a rival
+      // page, with no change in retrieval quality at all, changed this score.
+      const betterPages = new Set();
       for (const d of docs) {
         if (d.url === r.url) continue;
         const s = fastScore(qt, d.tokens);
         if (s > bestSame || (s === bestSame && d.id.localeCompare(bestSameId) < 0)) {
-          better++;
-          if (better >= K) break;
+          betterPages.add(d.url);
+          if (betterPages.size >= K) break;
         }
       }
+      const better = betterPages.size;
       if (better < K) {
         ok++;
         rrSum += 1 / (better + 1);

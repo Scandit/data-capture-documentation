@@ -2038,11 +2038,25 @@ export default function knowledgeExtractor(context: any, _options: any) {
       const modules: KModule[] = [];
       let pagesProcessed = 0;
       let pageErrors = 0;
+      // Counted so they can leave the drift guard's denominator. See the throw
+      // below: these files exist or not depending on a postBuild race, and with
+      // them in the denominator the guard's verdict depends on who won it.
+      let redirectStubs = 0;
 
       for (const file of files) {
         // Per-page failures are non-fatal — skip the one bad page, keep going.
         try {
           const html = fs.readFileSync(file, "utf8");
+          // A client-redirect stub, not a page. Detected on the meta refresh
+          // rather than on the doc selectors deliberately: the guard below
+          // exists to catch those selectors drifting, so excluding files BY
+          // those selectors would let the guard neutralise itself - everything
+          // would look like "not a doc page" and the denominator would empty.
+          // The meta refresh is independent of them.
+          if (/<meta[^>]+http-equiv=["']?refresh/i.test(html)) {
+            redirectStubs += 1;
+            continue;
+          }
           const $ = cheerio.load(html);
           const root = $("article .markdown").first().length
             ? $("article .markdown").first()
@@ -2054,7 +2068,14 @@ export default function knowledgeExtractor(context: any, _options: any) {
           const relDir = path.relative(outDir, path.dirname(file)).split(path.sep).join("/");
           const pathname = relDir ? `/${relDir}/` : "/";
           const url = `${siteBase}${pathname}`;
-          const title = ($("h1").first().text() || $("title").text() || "").replace(/​/g, "").trim();
+          // The SAME strip set serializeInline uses. Stripping only U+200B here
+          // let a permalink glyph from the private-use range survive into the
+          // published title - and a title that differs from the serialized one
+          // defeats both the heading-only-page guard (bodyText === titleText)
+          // and isAvailabilityStub's title skip.
+          const title = ($("h1").first().text() || $("title").text() || "")
+            .replace(/[​‌‍﻿-]/g, "")
+            .trim();
           const description = ($('meta[name="description"]').attr("content") || "").trim();
           const bodyMd = extractMarkdownish($, root);
           // Not just empty: a body that reduces to the page heading alone is not
@@ -2146,10 +2167,22 @@ export default function knowledgeExtractor(context: any, _options: any) {
       // are legitimately skipped (redirect stubs and the homepage), so today's
       // ratio is ~0.87 and 0.5 leaves wide headroom - this has to fire on drift
       // and never on a normal day.
-      if (files.length > 0 && pagesProcessed / files.length < 0.5) {
+      // Redirect stubs are OUT of this ratio, in both terms.
+      //
+      // @docusaurus/plugin-client-redirects writes <path>/index.html files into
+      // outDir from its own postBuild, and those are exactly what walkHtml
+      // enumerates. Since postBuild hooks run through Promise.all, whether they
+      // exist when this one walks the tree is a race. Measured on this build:
+      // 617 real pages and 712 stubs in scope, so the ratio is 0.843 without
+      // them and 0.391 with them - the second trips this guard and fails the
+      // build with a message about selector drift that has nothing to do with
+      // what happened. It passes today only because this plugin wins the race.
+      const candidates = files.length - redirectStubs;
+      if (candidates > 0 && pagesProcessed / candidates < 0.5) {
         throw new Error(
-          `[knowledge-extractor] only ${pagesProcessed} of ${files.length} HTML file(s) ` +
-            `produced content (${pageErrors} page error(s)). Page selectors likely drifted — ` +
+          `[knowledge-extractor] only ${pagesProcessed} of ${candidates} candidate HTML ` +
+            `file(s) produced content (${pageErrors} page error(s), ${redirectStubs} ` +
+            `redirect stub(s) excluded). Page selectors likely drifted — ` +
             `refusing to overwrite the AI-layer artifacts with a partial corpus.`,
         );
       }

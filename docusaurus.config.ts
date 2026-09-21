@@ -830,11 +830,20 @@ const config: Config = {
   // array position implies nothing about execution order and this hook races
   // any other postBuild.
   //
-  // That is safe today only because the one other postBuild,
-  // stripPreviewMediaPlugin, deletes files under build/img, which walkHtml
-  // skips via `excluded` - so whichever wins, this plugin reads the same HTML.
-  // A future postBuild that REWRITES html would race non-deterministically and
-  // must instead be sequenced explicitly, not moved above this line.
+  // There are THREE other postBuild hooks, not one: stripPreviewMediaPlugin,
+  // @docusaurus/plugin-client-redirects and docusaurus-plugin-llms.
+  //
+  // stripPreviewMediaPlugin deletes under build/img, which walkHtml skips, and
+  // docusaurus-plugin-llms only writes its own .txt files at the root. But
+  // plugin-client-redirects WRITES <path>/index.html stubs into outDir - the
+  // very files walkHtml enumerates - so this plugin sees a different file count
+  // depending on who wins. The extractor now identifies those stubs by their
+  // meta refresh and excludes them from both terms of its drift ratio, so the
+  // outcome no longer depends on the race.
+  //
+  // A future postBuild that REWRITES page html would still race
+  // non-deterministically and must be sequenced explicitly, not moved above
+  // this line.
   knowledgeExtractor,
 ],
 
