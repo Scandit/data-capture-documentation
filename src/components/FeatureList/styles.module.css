@@ -87,8 +87,18 @@
 }
 
 
+/* The chips carry padding and a border but no margin, and React renders the
+   .map() output with no whitespace between siblings, so without a container
+   layout they sit flush against one another. This rule was `display: none`
+   from the file's first commit - the column has never rendered, because all 50
+   FeatureList usages pass displayMode="compact", which takes a different path.
+   Hiding the content while the component still emits its
+   <th>Available Frameworks</th> header was incoherent; this is the smallest
+   layout that makes the column legible if that view is ever used. */
 .frameworkList {
-  display: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
 }
 
 .frameworkItem {
