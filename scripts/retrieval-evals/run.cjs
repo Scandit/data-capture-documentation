@@ -113,18 +113,72 @@ function docText(d) {
   ].join(" ");
 }
 
-function score(queryTokens, doc) {
-  const dt = tokenize(docText(doc));
-  if (!queryTokens.size || !dt.size) return 0;
-  let overlap = 0;
-  for (const t of queryTokens) if (dt.has(t)) overlap++;
-  return overlap / Math.sqrt(queryTokens.size * dt.size);
+// BM25 over a binary term representation, replacing `overlap / sqrt(|q|*|d|)`.
+//
+// |q| is constant across the documents of one query, so that formula ranked on
+// overlap / sqrt(|d|) - which rewards a document for being SHORT. A 10-token
+// stub matching one query term scored 1/sqrt(10) = 0.316, beating a 100-token
+// page matching two at 2/sqrt(100) = 0.200. The proxy retriever this gate reads
+// its numbers from was therefore measuring page brevity as much as relevance,
+// and precision looked stronger than it was.
+//
+// Two changes fix that. IDF weights a rare term above a common one, so matching
+// "sparkscan" is no longer worth the same as matching "the". And the length term
+// normalises against the corpus AVERAGE with the standard b=0.75, which damps
+// long documents without handing short ones the ranking.
+//
+// Term frequency is binary because docText() is read as a Set. That is
+// deliberate rather than a shortcut: the fields concatenated there already
+// repeat the title and slug, so a raw count would measure field layout. With
+// tf=1 the length factor is constant per document and BM25 reduces to
+// IDF-weighted overlap under pivoted length normalisation - which is exactly
+// the property that was missing.
+const K1 = 1.2;
+const B = 0.75;
+
+function makeScorer(tokenSets) {
+  const df = new Map();
+  let total = 0;
+  for (const dt of tokenSets) {
+    total += dt.size;
+    for (const t of dt) df.set(t, (df.get(t) || 0) + 1);
+  }
+  const N = tokenSets.length || 1;
+  const avgdl = total / N || 1;
+  // Precomputed, not called per (query token, document) pair: --auto scores
+  // every page against every module, so Math.log in the inner loop is tens of
+  // millions of calls. Floored at 0 so a term in nearly every document
+  // contributes nothing rather than scoring negative.
+  const idf = new Map();
+  for (const [t, n] of df) idf.set(t, Math.max(0, Math.log(1 + (N - n + 0.5) / (n + 0.5))));
+  return function score(qt, dt) {
+    if (!qt.size || !dt.size) return 0;
+    let sum = 0;
+    for (const t of qt) if (dt.has(t)) sum += idf.get(t) || 0;
+    if (sum === 0) return 0;
+    return (sum * (K1 + 1)) / (1 + K1 * (1 - B + (B * dt.size) / avgdl));
+  };
+}
+
+// Memoised per index array. Both halves of this script build their scorer from
+// the same corpus through the same function, so "rank" cannot come to mean two
+// different things in the two paths - the tie-break notes below depend on that.
+const SCORERS = new WeakMap();
+function scorerFor(index) {
+  let entry = SCORERS.get(index);
+  if (!entry) {
+    const tokens = index.map((d) => tokenize(docText(d)));
+    entry = { tokens, score: makeScorer(tokens) };
+    SCORERS.set(index, entry);
+  }
+  return entry;
 }
 
 function search(index, query, k) {
   const qt = tokenize(query);
+  const { tokens, score } = scorerFor(index);
   const ranked = index
-    .map((d) => ({ id: d.id, url: String(d.url || d.source_site || ""), s: score(qt, d) }))
+    .map((d, i) => ({ id: d.id, url: String(d.url || d.source_site || ""), s: score(qt, tokens[i]) }))
     .sort((a, b) => b.s - a.s || a.id.localeCompare(b.id));
   // One slot per PAGE, not per chunk. The index holds many chunks per page
   // (4,364 modules over 532 pages) and this used to slice raw modules, so a
@@ -187,12 +241,11 @@ function main() {
     const seen = new Set();
     let rows = docs.filter((d) => d.url && !seen.has(d.url) && seen.add(d.url));
     if (AUTO_LIMIT > 0) rows = rows.slice(0, AUTO_LIMIT);
-    const fastScore = (qt, dt) => {
-      if (!qt.size || !dt.size) return 0;
-      let o = 0;
-      for (const t of qt) if (dt.has(t)) o++;
-      return o / Math.sqrt(qt.size * dt.size);
-    };
+    // The SAME scorer the gold-set path uses, built over this corpus. It was a
+    // second copy of the old formula here, so a change to one ranking function
+    // silently left the other behind - and this is the half the baseline and
+    // the gate are computed from.
+    const fastScore = makeScorer(docs.map((d) => d.tokens));
     let ok = 0,
       rrSum = 0;
     const misses = [];

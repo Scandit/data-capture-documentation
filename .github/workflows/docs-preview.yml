@@ -28,9 +28,9 @@ jobs:
           # same commit - but the extractor now returns before any git call on a
           # preview build, because it must not emit its ~22 MB of JSON into the
           # gh-pages branch that pr-preview-action commits. A full clone would
-          # buy a freshness signal nobody computes. build-docs.yml, which does
-          # publish the artifact, still fetches full history - do not copy this
-          # value there.
+          # buy a freshness signal nobody computes. build-docs.yml makes the
+          # same call for the same reason and is also shallow on pull_request;
+          # it takes full history only on push, schedule and workflow_dispatch.
           fetch-depth: 1
 
       - name: Setup Node.js
