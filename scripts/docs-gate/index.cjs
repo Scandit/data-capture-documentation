@@ -10,8 +10,6 @@ const { loadSchema, validateFile } = require("./frontmatter.cjs");
 const { checkLinks } = require("./links.cjs");
 
 const ROOT = process.cwd();
-// The ratchet base changedDocs() resolved, reused by frontmatterOnly().
-let lastRatchetBase = "";
 
 function sh(cmd) {
   // Surface git's stderr (do not swallow it) so a failed ratchet lookup is
@@ -53,12 +51,6 @@ function changedDocs() {
       base = "";
     }
   }
-  // Still recorded for the module-scope reader, but main() now takes it from
-  // the RETURN value. As hidden state it was an ordering trap: reorder the two
-  // statements in main() and `base` is "", frontmatterOnly() returns an empty
-  // set, and the whole Vale cap stops applying - fail-safe, since everything is
-  // then linted in full, but completely invisible.
-  lastRatchetBase = base;
   let out = "";
   try { out = sh(`git diff --name-only --diff-filter=ACMR ${base} HEAD -- docs`); } catch {}
   // include staged, unstaged, and untracked changes so a local run before push also checks
@@ -167,7 +159,16 @@ function frontmatterOnly(files, base) {
     try {
       // shQuiet: a file the PR ADDS has no base blob, and that failure is
       // both expected and meaningless here - see the note on shQuiet.
-      before = shQuiet(`git show ${base}:${f}`);
+      // execFileSync with an argv, not a shell string: `f` is a path from git
+      // output, and interpolating it into a command line is a class of bug
+      // rather than a present one. No doc path in the repo carries a shell
+      // metacharacter today, and a failure here falls back to "treat as
+      // body-changed", which is the safe direction - so this removes the class
+      // rather than fixing a symptom.
+      before = execFileSync("git", ["show", `${base}:${f}`], {
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "ignore"],
+      }).trim();
     } catch {
       continue; // new file - it is all new, check everything
     }

@@ -102,7 +102,7 @@ const DECLARED = [
   // --- shapes that must be READ, not silently skipped ----------------------
   // Each of these read as "declares nothing" at some point in this change's
   // history, which is a silent pass on whatever the page actually declared.
-  ["BOM then fence", "﻿---\nframework: ios\n---\n\nBody\n", ["ios"]],
+  ["BOM then fence", "\uFEFF---\nframework: ios\n---\n\nBody\n", ["ios"]],
   ["trailing space on opening fence", "--- \nframework: ios\n---\n\nBody\n", ["ios"]],
   ["tab on opening fence", "---\t\nframework: ios\n---\n\nBody\n", ["ios"]],
   ["`----` closing fence", "---\nframework: ios\n----\n\nBody\n", ["ios"]],
@@ -151,7 +151,7 @@ const FENCES = [
   ["trailing space on closing fence", "---\ntitle: T\n--- \n\nBody\n", 3, true],
   ["trailing space on opening fence", "--- \ntitle: T\n---\n\nBody\n", 3, true],
   ["tab on opening fence", "---\t\ntitle: T\n---\n\nBody\n", 3, true],
-  ["BOM then fence", "﻿---\ntitle: T\n---\n\nBody\n", 3, true],
+  ["BOM then fence", "\uFEFF---\ntitle: T\n---\n\nBody\n", 3, true],
   ["CRLF", "---\r\ntitle: T\r\n---\r\n\r\nBody\r\n", 3, true],
   ["block scalar containing `---`", "---\ntitle: |\n  a\n---\n\nBody\n", 4, true],
   ["no frontmatter", "Just body.\n", 0, false],
@@ -173,7 +173,7 @@ check("frontmatterEndLine agrees with bodyOf about where the frontmatter ends", 
       // itself (indexOf("\n---") cuts three characters into four) - harmless,
       // since base and head carry the same remainder, but it means the body
       // does not always begin on a line boundary.
-      const norm = text.replace(/\r\n/g, "\n").replace(/^﻿/, "");
+      const norm = text.replace(/\r\n/g, "\n").replace(/^\uFEFF/, "");
       const capLineStart = norm.split("\n").slice(0, end - 1).join("\n").length;
       const body = gate.bodyOf(text);
       assert.ok(
@@ -528,7 +528,7 @@ check("registryValues reads both quote styles and matches the quote", () => {
 
 check("bodyOf strips frontmatter identically across fence shapes", () => {
   assert.strictEqual(gate.bodyOf("---\ntitle: T\n---\n\nreal body\n").trim(), "real body");
-  assert.strictEqual(gate.bodyOf("﻿---\ntitle: T\n---\n\nreal body\n").trim(), "real body");
+  assert.strictEqual(gate.bodyOf("\uFEFF---\ntitle: T\n---\n\nreal body\n").trim(), "real body");
   assert.strictEqual(gate.bodyOf("---\r\ntitle: T\r\n---\r\n\r\nreal body\r\n").trim(), "real body");
   assert.strictEqual(gate.bodyOf("no frontmatter here\n").trim(), "no frontmatter here");
 });
