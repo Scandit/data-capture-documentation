@@ -53,9 +53,11 @@ function changedDocs() {
       base = "";
     }
   }
-  // Recorded here rather than beside the filter below: frontmatterOnly()
-  // needs the resolved base, and keeping this next to the resolution it
-  // comes from also keeps it clear of the file-list predicate.
+  // Still recorded for the module-scope reader, but main() now takes it from
+  // the RETURN value. As hidden state it was an ordering trap: reorder the two
+  // statements in main() and `base` is "", frontmatterOnly() returns an empty
+  // set, and the whole Vale cap stops applying - fail-safe, since everything is
+  // then linted in full, but completely invisible.
   lastRatchetBase = base;
   let out = "";
   try { out = sh(`git diff --name-only --diff-filter=ACMR ${base} HEAD -- docs`); } catch {}
@@ -83,9 +85,14 @@ function changedDocs() {
   // expensive than on an ordinary page. _barcode-scanning.mdx is 288 lines
   // that nothing imports today and is kept deliberately, so it is
   // gate-blocking like any other partial.
-  return files.filter(
-    (f) => /\.(md|mdx)$/i.test(f) && fs.existsSync(path.join(ROOT, f))
-  );
+  // Returned WITH the resolved base, so main() takes the ratchet base from the
+  // call rather than from module state written as a side effect of it.
+  return {
+    files: files.filter(
+      (f) => /\.(md|mdx)$/i.test(f) && fs.existsSync(path.join(ROOT, f))
+    ),
+    base,
+  };
 }
 
 // Partials are kept out of the schema check (they carry no frontmatter) and
@@ -366,7 +373,7 @@ function partitionForVale(files, bodyChanged) {
 }
 
 function main() {
-  const files = changedDocs();
+  const { files, base: ratchetBase } = changedDocs();
   if (files.length === 0) { console.log("docs-gate: no changed docs — nothing to check."); process.exit(0); }
   console.log(`docs-gate: checking ${files.length} changed doc(s)…\n`);
 
@@ -376,7 +383,7 @@ function main() {
   // no frontmatter exclusion. A PR that only rewrote
   // `description: "Add the SDK to your Reakt Native projekt"` had its spelling
   // check skipped entirely and would have shipped the typo.
-  const metaOnly = frontmatterOnly(files, lastRatchetBase);
+  const metaOnly = frontmatterOnly(files, ratchetBase);
   const bodyChanged = files.filter((f) => !metaOnly.has(f));
   if (metaOnly.size) {
     console.log(
@@ -401,7 +408,12 @@ function main() {
     // rewritten `description` is still checked while untouched body prose is
     // not - skipping those files entirely disabled a blocking check.
     if (files.length) {
-      const { valeFiles, frontmatterOnly, skippedUnreadable, uncappable } = partitionForVale(
+      // `capMap`, not `frontmatterOnly`: that name belongs to the module-scope
+      // FUNCTION called above, and binding it here shadowed it inside this
+      // block. Correct only by the accident of the call sitting outside the
+      // block - move or duplicate it inwards and the gate dies with a TDZ
+      // ReferenceError instead of reporting a finding.
+      const { valeFiles, frontmatterOnly: capMap, skippedUnreadable, uncappable } = partitionForVale(
         files,
         bodyChanged,
       );
@@ -440,7 +452,7 @@ function main() {
             `file-scoped ratchet, not a bug.\n`,
         );
       }
-      if (valeFiles.length) findings.push(...runVale(valeFiles, vale, frontmatterOnly));
+      if (valeFiles.length) findings.push(...runVale(valeFiles, vale, capMap));
     }
   } else if (process.env.CI) {
     // In CI, a missing Vale must fail — otherwise the headline prose-style check
