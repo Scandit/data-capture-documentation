@@ -1884,10 +1884,13 @@ export default function knowledgeExtractor(context: any, _options: any) {
         // what an assistant is fed, and neither the empty-output guard nor the
         // drift ratio catches it because the page count goes UP.
         throw new Error(
-          "[knowledge-extractor] customFields.assistantIgnoreFiles is missing. It " +
-            "carries the repo's decision about what an assistant may see, and " +
-            "indexing everything is not a safe fallback. Export it from " +
-            "docusaurus.config.ts.",
+          "[knowledge-extractor] customFields.knowledgeIndexIgnoreFiles is " +
+            "missing. It carries the repo's decision about what an assistant " +
+            "may see, and indexing everything is not a safe fallback. Export " +
+            "it from docusaurus.config.ts. (It is assembled there from " +
+            "assistantIgnoreFiles plus this export's own corpus-shape " +
+            "exclusions - assistantIgnoreFiles alone is a different list and " +
+            "setting it will not satisfy this check.)",
         );
       }
       const ignorePatterns = ignoreGlobs.map((g) => ignoreGlobToRegExp(String(g)));

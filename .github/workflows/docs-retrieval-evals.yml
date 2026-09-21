@@ -92,7 +92,11 @@ jobs:
         run: yarn build
 
       - name: Run retrieval evals
-        run: node scripts/retrieval-evals/run.cjs --report reports/retrieval-evals.json
+        # --require-freshness: this job is the one that checks out full history
+        # on purpose, so a dateless index here means the checkout lost its
+        # fetch-depth. Other callers (build-docs.yml is shallow on PRs) get the
+        # report without the failure.
+        run: node scripts/retrieval-evals/run.cjs --report reports/retrieval-evals.json --require-freshness
 
       # The gold-set run above measures 20 curated queries. This one asks every
       # module to retrieve itself, which is the only check that covers pages

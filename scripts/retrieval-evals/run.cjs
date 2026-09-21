@@ -98,6 +98,9 @@ function readBaseline() {
 }
 const MIN_AUTO_SUCCESS = parseFloat(arg("min-auto-success", "0"));
 const REPORT = arg("report", "");
+// Set by the workflow that checks out full history on purpose. See
+// reportFreshness: without it, an index with no dates is reported and allowed.
+const REQUIRE_FRESHNESS = process.argv.includes("--require-freshness");
 
 const TOKEN = /[a-z0-9]{2,}/gi;
 const tokenize = (s) => new Set((String(s || "").toLowerCase().match(TOKEN) || []));
@@ -241,16 +244,25 @@ function reportFreshness(index) {
   }
   if (blank === index.length) {
     console.error(
-      "\nretrieval-evals: NOT ONE module carries a date. The extractor emits \"\"\n" +
-        "under a shallow clone, so the checkout step has lost its `fetch-depth: 0`\n" +
-        "(.github/workflows/docs-retrieval-evals.yml) and the index ships with no\n" +
-        "freshness signal at all.\n",
+      "\nretrieval-evals: NOT ONE module carries a date, so this index was built\n" +
+        "from a shallow clone - the extractor emits \"\" rather than a constant\n" +
+        "that looks like data.\n",
     );
-    // Locally a shallow clone is a legitimate state to be in and not worth
-    // blocking on. In CI the workflow sets the depth explicitly, so losing it
-    // is a regression in the workflow rather than a property of the checkout -
-    // and it is silent, which is the only reason this check exists.
-    if (process.env.CI) process.exit(1);
+    // Opt-in, NOT `process.env.CI`.
+    //
+    // A shallow clone is a legitimate state: it is what build-docs.yml now uses
+    // on pull_request, because that job never publishes the index. Keying this
+    // off CI alone would fail any other CI job that ran the evals, and blame a
+    // workflow it had never touched. Only a caller that asked for full history
+    // can say that dateless output is a regression rather than a choice, so
+    // only that caller passes the flag.
+    if (REQUIRE_FRESHNESS) {
+      console.error(
+        "--require-freshness was passed, so the caller expects dated modules:\n" +
+          "the checkout step has lost its `fetch-depth: 0`.\n",
+      );
+      process.exit(1);
+    }
   }
 }
 
