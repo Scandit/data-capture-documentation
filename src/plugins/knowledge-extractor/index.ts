@@ -453,7 +453,18 @@ function pickIntents(contentType: string, title: string, body: string): string[]
   const text = `${title} ${body}`.toLowerCase();
   const intents: string[] = [];
   if (contentType === "tutorial" || contentType === "how-to" || text.includes("configure")) intents.push("configure");
-  if (contentType === "troubleshooting" || text.includes("error") || text.includes("fix")) intents.push("troubleshoot");
+  // `fix` is word-bounded for the same reason `auth` is, two lines down: as a
+  // bare substring it matched "prefix", "suffix" and "fixtures", and those
+  // words appear in ordinary reference prose, so pages with nothing wrong were
+  // filed under the troubleshooting intent - for many of them the ONLY intent
+  // they carried. The inflected forms are kept because they are the real
+  // signal; the trailing boundary is what excludes "fixtures".
+  if (
+    contentType === "troubleshooting" ||
+    text.includes("error") ||
+    /\bfix(?:e[sd]|ing)?\b/.test(text)
+  )
+    intents.push("troubleshoot");
   if (contentType === "reference" || contentType === "concept" || text.includes("integrat")) intents.push("integrate");
   // Word-boundary, not a substring. Counted across the built HTML, `" auth"`
   // matched "authenticity" 12 times, "authentic" 10 and "authority" 5 - every
@@ -955,11 +966,43 @@ function detectProduct(pathname: string, siteDir: string): string {
     // built on them described a product no consumer can look up.
     const raw = slug(rest[0]);
     const first = productAliases(siteDir).get(raw) ?? raw;
-    // A product directory, or a single page whose name IS a known product.
-    if (rest.length >= 2 || productKeys(siteDir).has(first)) return first;
-    return "core";
+    // The REGISTRY decides, not the path shape.
+    //
+    // `rest.length >= 2` meant "a directory, therefore a product". That is true
+    // of every /sdks/<framework>/<dir>/ tree in the repo today, so this changes
+    // nothing now - verified against a full build, the published product values
+    // are identical either side of it. It removes a CLASS: a topic folder added
+    // under /sdks/ later would otherwise publish a urn:product: node for a key
+    // products.json has never held, and aliasing cannot catch that because
+    // there is nothing to alias it to.
+    //
+    // Unknown segments fall to "core", which is in SYNTHETIC_PRODUCTS and so is
+    // kept out of availability edges. A genuinely new product added to docs/
+    // before products.json lands therefore reads as core until the registry
+    // names it - the safe direction, since under-claiming costs a facet while
+    // over-claiming puts a key in the graph no consumer can resolve.
+    //
+    // This does NOT touch the availability-stub rename below. That block fires
+    // precisely when the product IS synthetic, so a page whose job is to say
+    // "X is not available here" still gets named after X - reaching it through
+    // "core" rather than by skipping this check is the same outcome by a
+    // stricter route.
+    return productKeys(siteDir).has(first) ? first : "core";
   }
-  return p[0] ? slug(p[0]) : "general";
+  // Outside /sdks/, the first segment is a SECTION - hosted, id-documents,
+  // barcode-scanning - not a product. Returning it raw published
+  // urn:product:hosted and urn:product:id-documents into the graph, with
+  // BelongsToProduct edges pointing at keys products.json has never contained:
+  // the same defect just fixed on the /sdks/ branch, in the other half of the
+  // function.
+  //
+  // `general` rather than the segment, because it is already in
+  // SYNTHETIC_PRODUCTS and so is excluded from availability edges - which is
+  // exactly the treatment a non-product deserves. Nothing is lost: the section
+  // is still in the url, the framework and the tags.
+  const top = p[0] ? slug(p[0]) : "";
+  if (!top) return "general";
+  return productKeys(siteDir).has(top) ? top : "general";
 }
 
 function detectContentType(pathname: string, title: string): string {

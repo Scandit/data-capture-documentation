@@ -31,16 +31,37 @@ function arg(name, def) {
 
 const INDEX = arg("index", "build/assets/knowledge-retrieval-index.json");
 const GOLD = arg("gold", path.join(__dirname, "gold-set.json"));
-const K = parseInt(arg("k", "3"), 10);
-const MIN_SUCCESS = parseFloat(arg("min-success", "0.8"));
-const MIN_PRECISION = parseFloat(arg("min-precision", "0.6"));
-const MIN_MRR = parseFloat(arg("min-mrr", "0.6"));
+// Parsed through a checked reader, NOT bare parseFloat.
+//
+// `--min-success x` or `--auto-tolerance abc` yields NaN, every `metric < NaN`
+// comparison is false, and the gate exits 0 reporting "ok" - a threshold
+// typo silently disables the check it was meant to tighten. readBaseline()
+// already refuses to run ungated for exactly this hazard on the baseline file;
+// the flags deserve the same treatment.
+function num(name, fallback, parse) {
+  const raw = arg(name, fallback);
+  const v = parse(raw, 10);
+  if (!Number.isFinite(v)) {
+    console.error(
+      `retrieval-evals: --${name} is "${raw}", which is not a number.\n` +
+        "Refusing to run: every comparison against NaN is false, so the gate " +
+        "would pass whatever the metrics were.",
+    );
+    process.exit(1);
+  }
+  return v;
+}
+
+const K = num("k", "3", parseInt);
+const MIN_SUCCESS = num("min-success", "0.8", parseFloat);
+const MIN_PRECISION = num("min-precision", "0.6", parseFloat);
+const MIN_MRR = num("min-mrr", "0.6", parseFloat);
 // --auto: corpus-wide self-retrieval over EVERY module (not just the 20-query
 // gold set) — each module becomes a query built from its own title+summary and
 // must retrieve itself in the top k. Measures coverage across all docs we
 // create/edit. --auto-limit caps it; --min-auto-success gates it.
 const AUTO = process.argv.includes("--auto");
-const AUTO_LIMIT = parseInt(arg("auto-limit", "0"), 10);
+const AUTO_LIMIT = num("auto-limit", "0", parseInt);
 // Gated as a REGRESSION against a recorded baseline, not against an absolute
 // floor.
 //
@@ -58,7 +79,7 @@ const AUTO_LIMIT = parseInt(arg("auto-limit", "0"), 10);
 // the baseline itself is wrong. Re-record with --update-baseline after a change
 // that legitimately alters what is indexed, and say so in the commit.
 const BASELINE_PATH = path.join(__dirname, "baseline.json");
-const AUTO_TOLERANCE = parseFloat(arg("auto-tolerance", "0.03"));
+const AUTO_TOLERANCE = num("auto-tolerance", "0.03", parseFloat);
 const AUTO_FLOOR = parseFloat(arg("auto-floor", "0.60"));
 const AUTO_MRR_FLOOR = parseFloat(arg("auto-mrr-floor", "0.40"));
 const MIN_AUTO_MRR = parseFloat(arg("min-auto-mrr", "0"));
@@ -96,7 +117,7 @@ function readBaseline() {
   }
   return parsed;
 }
-const MIN_AUTO_SUCCESS = parseFloat(arg("min-auto-success", "0"));
+const MIN_AUTO_SUCCESS = num("min-auto-success", "0", parseFloat);
 const REPORT = arg("report", "");
 // Set by the workflow that checks out full history on purpose. See
 // reportFreshness: without it, an index with no dates is reported and allowed.

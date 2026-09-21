@@ -36,25 +36,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          # Shallow on pull_request, full history on every other trigger.
+          # Shallow on EVERY trigger, because this job never publishes what the
+          # full clone would improve.
           #
           # The knowledge-extractor sets each page's `last_verified` from that
-          # file's last commit date. Under a depth-1 clone every file resolves
-          # to the same single commit, so the plugin deliberately emits ""
-          # rather than a constant that looks like data. It warns and carries
-          # on - nothing in this job asserts on last_verified, so a shallow
-          # clone cannot turn it red, it only drops the freshness signal.
+          # file's last commit date, and under a depth-1 clone every file
+          # resolves to the same commit, so the plugin emits "" rather than a
+          # constant that looks like data. It warns and carries on; nothing here
+          # asserts on last_verified, so this cannot turn the job red.
           #
-          # Which is the point: this job does not PUBLISH the index. It builds
-          # and verifies, and has no deploy step. On a pull_request the signal
-          # is computed, paid for and discarded - and this job carries no path
-          # filter, so that is every PR to the repo. docs-preview.yml stays
-          # shallow on the same reasoning.
+          # An earlier version of this kept full history on push/schedule, on
+          # the theory that those runs produce the artifact a deploy reads. They
+          # do not: this job has no deploy step and no upload-artifact step, so
+          # the index it builds is discarded with the runner on every trigger,
+          # push included. No workflow in this repo publishes it.
           #
-          # Full history is kept on push, schedule and workflow_dispatch, where
-          # the built artifact is what a deploy or a hand-run inspection reads,
-          # and where the cost is paid once rather than per PR.
-          fetch-depth: ${{ github.event_name == 'pull_request' && 1 || 0 }}
+          # docs-retrieval-evals.yml is the one that does use the dates - it
+          # reports freshness coverage and fails on --require-freshness - and it
+          # keeps fetch-depth: 0 for that reason.
+          fetch-depth: 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
