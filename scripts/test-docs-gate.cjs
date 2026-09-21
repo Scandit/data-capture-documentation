@@ -1174,6 +1174,21 @@ check("docs-gate catches each break in a fixture repository", () => {
   );
   const { build } = require("./fixtures/docs-gate-fixture.cjs");
   const script = path.join(ROOT, "scripts", "docs-gate", "index.cjs");
+  // Scoped, not inherited. The gate resolves its ratchet base from
+  // GITHUB_BASE_REF, and the fixture creates exactly one remote-tracking ref:
+  // refs/remotes/origin/main. On a PR into release/**, which build-docs.yml and
+  // docs-gate.yml both trigger on, GitHub sets GITHUB_BASE_REF=release/8.6, the
+  // gate looks for origin/release/8.6, finds nothing, and exits 2 - so the
+  // (clean) row fails on a tree that is clean. Inheriting the ambient value made
+  // every row depend on which branch the PR happened to target.
+  //
+  // CI is pinned rather than cleared so the gate takes the same path here as it
+  // does in the job: an unresolvable base exits 2 instead of silently falling
+  // back to a working-tree diff, which in a clean checkout is empty and reads as
+  // a pass. If the fixture ever stops creating origin/main, that must be loud -
+  // a vacuous pass is the one failure this suite cannot afford.
+  const gateEnv = { ...process.env, CI: "1" };
+  delete gateEnv.GITHUB_BASE_REF;
   withTempDir((dir) => {
     const repo = path.join(dir, "repo");
     for (const [mutation, expected] of DOCS_GATE_CASES) {
@@ -1183,6 +1198,7 @@ check("docs-gate catches each break in a fixture repository", () => {
       try {
         out = execFileSync(process.execPath, [script], {
           cwd: repo,
+          env: gateEnv,
           encoding: "utf8",
           stdio: ["ignore", "pipe", "pipe"],
         });

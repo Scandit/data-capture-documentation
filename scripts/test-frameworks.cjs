@@ -163,6 +163,15 @@ const PARSE_SDKS_ROUTE_BASELINE = [
     "/data-capture-documentation/pr-preview/pr-430/next/sdks/net/ios/x/y",
     { framework: ".NET iOS", product: "x", lastSegment: "y" },
   ],
+  // An UNREGISTERED framework segment keeps its product. Nothing in the repo
+  // routes /sdks/newsdk/ today - that is the point: this is the shape a new SDK
+  // tree has for as long as it exists before its registry entry lands. Dropping
+  // the product here flips DocItem's isKnownProductPage to false and serves the
+  // shared Agent Skills callout, which defaults to iOS, on every page of it.
+  ["/sdks/newsdk/barcode-capture/intro", { product: "barcode-capture", lastSegment: "intro" }],
+  ["/sdks/newsdk/barcode-capture", { product: "barcode-capture" }],
+  // ...and the product segment stays mandatory for unregistered frameworks too.
+  ["/sdks/newsdk/", {}],
 ];
 
 check("parseSdksRoute is unchanged by sharing the registry matcher", () => {

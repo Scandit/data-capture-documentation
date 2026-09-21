@@ -65,23 +65,36 @@ export function parseSdksRoute(pathname: string): SdksRouteInfo {
   // hardcode as `(?:net\/)?` and then undo with `.replace('/', '-')`. That copy
   // is why FeatureList's own regex could disagree with this one.
   const def = frameworkFromRouteTail(match[1]);
-  // The null check is unreachable today - frameworkFromRouteTail searches only
-  // the routed frameworks, so `hosted` cannot come back from it. Kept because
-  // the next line dereferences routeSegment: if the routed set ever widens,
-  // the alternative to this branch is a runtime throw, not a type error.
-  if (!def || def.routeSegment === null) return {};
-
-  const rest = match[1].slice(def.routeSegment.length).replace(/^\//, '');
+  // An UNREGISTERED framework segment still has to yield `product`.
+  //
+  // Returning {} here drops it, and that flips DocItem's `isKnownProductPage`
+  // to false, falling the page through to <SkillsCallout variant="shared" /> -
+  // which defaults to iOS. So adding docs/sdks/<new>/<known-product>/ before its
+  // registry entry lands would put an iOS-pointing Agent Skills banner on every
+  // page of the new tree, with nothing red anywhere to say so. Resolving the
+  // framework to undefined while keeping the product is what the regex this
+  // replaced did: the product callout then renders nothing, because it bails on
+  // a missing framework. No banner is the right answer for a tree the registry
+  // has never heard of; the wrong framework's banner is not.
+  //
+  // One segment is the right assumption in the fallback: every multi-segment
+  // routeSegment (net/ios, net/android) is a registry entry by construction, so
+  // a tail that matched none of them cannot be one.
+  const routeSegment = def?.routeSegment ?? null;
+  const rest =
+    routeSegment !== null
+      ? match[1].slice(routeSegment.length).replace(/^\//, '')
+      : match[1].split('/').slice(1).join('/');
   const [rawProduct, last] = rest.split('/');
   // A product segment is required: /sdks/ios/ on its own is not a product page.
   if (!rawProduct) return {};
 
   const product = URL_PRODUCT_MAPPING[rawProduct] || rawProduct;
-  // `lastSegment` is omitted rather than set to undefined, so the returned shape
-  // matches what the previous regex produced for a two-segment route.
-  return last
-    ? { framework: def.display, product, lastSegment: last }
-    : { framework: def.display, product };
+  // `framework` and `lastSegment` are omitted rather than set to undefined, so
+  // the returned shape matches what the previous regex produced.
+  const base =
+    def && routeSegment !== null ? { framework: def.display, product } : { product };
+  return last ? { ...base, lastSegment: last } : base;
 }
 
 // Maps the ?framework= query slug used on the homepage to an agent-skills URL path.
