@@ -1787,13 +1787,24 @@ function buildGraph(modules: KModule[], site: string) {
 // ---------------------------------------------------------------------------
 // filesystem walk
 // ---------------------------------------------------------------------------
-function walkHtml(dir: string, skipDir: (name: string) => boolean): string[] {
+// `skipDir` receives the ROOT-relative path as well as the bare name, so a
+// caller can anchor an exclusion to the top level. Excluding by name alone
+// matched at any depth: the set holds `search`, `assets`, `img` and the frozen
+// version numbers, so a future guide at /hosted/express/search/ would have
+// disappeared from the index - and invisibly, because a page dropped here never
+// reaches `files` and so cannot lower the drift ratio that guards this.
+function walkHtml(
+  dir: string,
+  skipDir: (relPath: string, name: string) => boolean,
+  root: string = dir,
+): string[] {
   const out: string[] = [];
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (skipDir(entry.name)) continue;
-      out.push(...walkHtml(full, skipDir));
+      const rel = path.relative(root, full).split(path.sep).join("/");
+      if (skipDir(rel, entry.name)) continue;
+      out.push(...walkHtml(full, skipDir, root));
     } else if (entry.isFile() && entry.name === "index.html") {
       out.push(full);
     }
@@ -1907,13 +1918,21 @@ export default function knowledgeExtractor(context: any, _options: any) {
         // label this artifact does not describe.
         ...(servesCurrent ? [] : ["next"]),
       ]);
-      const skipDir = (name: string) => excluded.has(name) || name.endsWith(".html");
+      // `excluded` is anchored to the BUILD ROOT - every member of it is a
+      // top-level directory (build/assets, build/img, build/search,
+      // build/data-capture-sdk, build/<frozen version>). Matching the bare name
+      // at any depth would also swallow a same-named directory deeper in the
+      // tree, which is a real page rather than a build artifact. The `.html`
+      // suffix test stays depth-agnostic: that is a shape, not a location.
+      const skipDir = (rel: string, name: string) =>
+        (!rel.includes("/") && excluded.has(name)) || name.endsWith(".html");
 
       // Filtered on the list, not inside the loop, so an ignored page is never
       // read or parsed. Matched on the DOCS-relative source path rather than the
       // route, because that is what the globs describe - and on every candidate
       // spelling of it, since a route maps to `docs/x.md`, `docs/x/index.md` and
       // the folder/folder.md convention alike.
+      const unresolvedRoutes: string[] = [];
       const files = walkHtml(outDir, skipDir).filter((f) => {
         const rel = path.relative(outDir, path.dirname(f)).split(path.sep).join("/");
         const pathname = rel ? `/${rel}/` : "/";
@@ -1928,10 +1947,37 @@ export default function knowledgeExtractor(context: any, _options: any) {
         // versioned_docs/version-X/ - left unnormalised, nothing would match
         // there and the entire curation list would fail open.
         const resolved = resolveSource(siteDir, pathname, servedVersion);
-        if (!resolved) return true; // no source found: not this filter's call
+        if (!resolved) {
+          // No source file maps to this route. Failing open here indexes the
+          // page, and for a route in an IGNORED tree that silently undoes a
+          // curation decision - the one failure neither the empty-output guard
+          // nor the drift ratio can see, because the page count goes UP.
+          //
+          // So fall back to the route itself. The globs are written against
+          // docs-relative paths and a route normally mirrors one, so a synthetic
+          // `docs/<route>` still matches `docs/sdks/titanium/**` even when
+          // source resolution missed. That covers the realistic trigger: a page
+          // gaining `slug:` frontmatter, which moves the route off the file path
+          // without moving it out of the ignored tree.
+          //
+          // Recorded either way, because an unresolved route means the path
+          // mapping this filter depends on has drifted, and that is worth
+          // seeing in a build log rather than inferring from a page count.
+          unresolvedRoutes.push(pathname);
+          const asRoute = `docs${pathname.replace(/\/$/, "")}`;
+          return !hiddenFromAssistants(asRoute, ignorePatterns);
+        }
         const asDocs = resolved.replace(/^versioned_docs\/version-[^/]+\//, "docs/");
         return !hiddenFromAssistants(asDocs, ignorePatterns);
       });
+      if (unresolvedRoutes.length) {
+        console.warn(
+          `[knowledge-extractor] ${unresolvedRoutes.length} route(s) resolved to ` +
+            `no source file; the curation list was matched against the route ` +
+            `instead: ${unresolvedRoutes.slice(0, 10).join(", ")}` +
+            `${unresolvedRoutes.length > 10 ? ", ..." : ""}`,
+        );
+      }
       const modules: KModule[] = [];
       let pagesProcessed = 0;
       let pageErrors = 0;

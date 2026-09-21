@@ -14,6 +14,11 @@ on:
       - main
     paths:
       - 'docs/**'
+      # And the frozen snapshots. While docusaurus.config.ts pins lastVersion to
+      # one of them - a beta cycle - that snapshot IS the corpus this indexes,
+      # so a PR editing it changes exactly what is measured here and would
+      # otherwise run neither eval until after it merged.
+      - 'versioned_docs/**'
       - 'src/plugins/knowledge-extractor/**'
       - 'scripts/retrieval-evals/**'
       - '.github/workflows/docs-retrieval-evals.yml'
