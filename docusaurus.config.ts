@@ -450,7 +450,41 @@ const versionTagByMajor = buildVersionTagByMajor(
  */
 function crawlableApiLines(): string[] {
   const lines = new Set<string>();
-  for (const [name, cfg] of Object.entries(docsVersions)) {
+  // versions.json, not docsVersions.
+  //
+  // docsVersions is the docs plugin's per-version OVERRIDE map: a frozen
+  // version that needs no overrides can be absent from it and still build from
+  // versioned_docs/. Iterating it therefore asks "which versions did someone
+  // configure?" when the question is "which versions does this build contain?".
+  // Freeze a major, add it to versions.json and versioned_docs/, and forget the
+  // override entry, and this emits no Allow line while the catch-all
+  // `Disallow: /*/data-capture-sdk/` blocks that major's API tree - the exact
+  // failure this function exists to prevent.
+  //
+  // It also puts this generator on the same source of truth as the test that
+  // checks it: linesThatLinkThemselves() in scripts/test-robots.cjs enumerates
+  // versions.json, so the two disagreed, and the generator was on the wrong
+  // side. The build would have gone red rather than shipping silently, but red
+  // on a correct tree is its own cost.
+  //
+  // `current` is not in versions.json by construction - it is the unfrozen
+  // tree - so it is added explicitly, and it is the one entry whose version
+  // NUMBER only docsVersions knows (its label).
+  let frozen: string[] = [];
+  try {
+    frozen = JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), "versions.json"), "utf8"),
+    ) as string[];
+  } catch {
+    // Unreadable versions.json: fall back to the override map rather than
+    // emitting nothing, since emitting nothing is the failure this prevents.
+    frozen = Object.keys(docsVersions).filter((v) => v !== "current");
+  }
+  const entries: Array<[string, { label?: string }]> = [
+    ["current", docsVersions.current ?? {}],
+    ...frozen.map((v) => [v, docsVersions[v] ?? {}] as [string, { label?: string }]),
+  ];
+  for (const [name, cfg] of entries) {
     // No skip for the served version. It used to be dropped on the grounds
     // that it is "served unversioned", but whether a version's pages link the
     // unversioned tree is precisely what linksToOwnApiLine already reads out of
@@ -470,7 +504,12 @@ function crawlableApiLines(): string[] {
     if (!linksToOwnApiLine(name, number)) continue;
     lines.add(apiReferenceLine(number));
   }
-  return [...lines].sort((a, b) => {
+  // Array.from, not [...lines]: the repo's tsconfig extends @docusaurus/tsconfig,
+  // whose target does not allow spreading a Set, so the spread makes `yarn
+  // typecheck` fail. Nothing in CI runs typecheck - tsconfig.json says it exists
+  // "just for a nice editor experience" - so this would have surfaced only as a
+  // red squiggle for whoever next opened this file.
+  return Array.from(lines).sort((a, b) => {
     const [aMaj, aMin] = a.split(".").map(Number);
     const [bMaj, bMin] = b.split(".").map(Number);
     return bMaj - aMaj || bMin - aMin; // newest first
