@@ -513,8 +513,13 @@ function crawlableApiLines(): string[] {
  * below is future-proofing by comparison, since nothing links those trees today.
  * robots.txt is the wrong lever for it - blocking crawl on an indexed URL
  * strands it, unable to read the very noindex that would resolve it - so the fix
- * is a deploy that 410s them. That needs a ticket against the deploy pipeline,
- * not a line in this file.
+ * is a deploy that 410s them.
+ *
+ * Owned on the publishing side, not here: as of 2026-09-21 that cleanup is in
+ * progress there (PR #436 review thread). This note stays because it explains
+ * why this file does NOT enumerate those trees - if the cleanup lands, the
+ * enumeration was never needed, and if it stalls, adding it here would still be
+ * the wrong fix.
  */
 function robotsTxtPlugin() {
   return {
