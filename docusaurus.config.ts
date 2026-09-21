@@ -520,17 +520,16 @@ const config: Config = {
     // the two disagreeing about 39 modules; exporting the WHOLE llms list
     // over-corrected, because it also carries a corpus-shape decision (see
     // llmsDedupedToWeb) that a routing index must not inherit.
-    // NOT assistantIgnoreFiles. It is the shared curation decision, but nothing
-    // reads it at runtime - both consumers take a superset of it - and
-    // customFields is serialised into the client bundle on every page, so
-    // exporting it shipped a build-time list to every reader and gave the
-    // extractor a second name to drift from. It stays a local const above,
-    // feeding the two lists that ARE read.
+    // Neither assistantIgnoreFiles nor knowledgeIndexIgnoreFiles is exported
+    // here. Each consumer takes its own list as a plugin option instead, so
+    // there is one name per consumer rather than a customFields key that has to
+    // be kept in step with it.
     //
-    // The curation list plus the index's own corpus-shape exclusions; see
-    // knowledgeIndexDeduped. Read by the knowledge-extractor, exactly as the
-    // llms plugin reads llmsIgnoreFiles.
-    knowledgeIndexIgnoreFiles,
+    // This does NOT keep them out of the client bundle, and it is worth being
+    // exact about that: Docusaurus serialises the resolved config, plugin
+    // options included, so the globs ship either way - the built main.js
+    // carries two `ignoreFiles:` arrays. Moving them was a naming fix, not a
+    // size one.
     // Which version THIS build serves at the root. Read by the
     // knowledge-extractor plugin, which cannot otherwise tell a frozen version
     // served at the root from `current` - and the two need opposite handling.
@@ -844,7 +843,12 @@ const config: Config = {
   // A future postBuild that REWRITES page html would still race
   // non-deterministically and must be sequenced explicitly, not moved above
   // this line.
-  knowledgeExtractor,
+  // The curation list plus this index's own corpus-shape exclusions (see
+  // knowledgeIndexDeduped), passed as a plugin option so this consumer reads it
+  // under one name - the same shape docusaurus-plugin-llms uses above. The
+  // plugin throws if it is missing rather than defaulting to "index
+  // everything", which is the property that matters here.
+  [knowledgeExtractor, { ignoreFiles: knowledgeIndexIgnoreFiles }],
 ],
 
   presets: [

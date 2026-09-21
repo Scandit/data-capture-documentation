@@ -1861,7 +1861,16 @@ function walkHtml(
 // ---------------------------------------------------------------------------
 // plugin
 // ---------------------------------------------------------------------------
-export default function knowledgeExtractor(context: any, _options: any) {
+// `options.ignoreFiles` rather than `customFields`, for ONE name per consumer
+// and to match how docusaurus-plugin-llms takes its own list.
+//
+// NOT for bundle size, and this was measured rather than assumed: Docusaurus
+// serialises the whole resolved config - plugin options included - into
+// main.js, so the globs ship to every reader either way. The built bundle
+// carries two `ignoreFiles:` arrays, this one and the llms plugin's.
+// Keeping them out of the client would mean the plugin reading the list off
+// disk itself, which the llms plugin could not do anyway.
+export default function knowledgeExtractor(context: any, options: any) {
   const siteDir: string = context?.siteDir || process.cwd();
   return {
     name: "knowledge-extractor",
@@ -1943,22 +1952,21 @@ export default function knowledgeExtractor(context: any, _options: any) {
       // knowledgeIndexIgnoreFiles, not assistantIgnoreFiles: the shared curation
       // list PLUS this export's own corpus-shape exclusions, the same way the
       // llms plugin reads llmsIgnoreFiles rather than the bare curation list.
-      const ignoreGlobs = siteConfig?.customFields?.knowledgeIndexIgnoreFiles as
-        | readonly string[]
-        | undefined;
+      const ignoreGlobs = options?.ignoreFiles as readonly string[] | undefined;
       if (!Array.isArray(ignoreGlobs)) {
         // Absent means "index everything", which is the wrong default for a
-        // curation list: renaming this customFields key would silently widen
-        // what an assistant is fed, and neither the empty-output guard nor the
-        // drift ratio catches it because the page count goes UP.
+        // curation list: dropping this option would silently widen what an
+        // assistant is fed, and neither the empty-output guard nor the drift
+        // ratio catches it because the page count goes UP.
         throw new Error(
-          "[knowledge-extractor] customFields.knowledgeIndexIgnoreFiles is " +
-            "missing. It carries the repo's decision about what an assistant " +
-            "may see, and indexing everything is not a safe fallback. Export " +
-            "it from docusaurus.config.ts. (It is assembled there from " +
-            "assistantIgnoreFiles plus this export's own corpus-shape " +
-            "exclusions - assistantIgnoreFiles alone is a different list and " +
-            "setting it will not satisfy this check.)",
+          "[knowledge-extractor] the `ignoreFiles` option is missing. It " +
+            "carries the repo's decision about what an assistant may see, and " +
+            "indexing everything is not a safe fallback. Pass it where this " +
+            "plugin is registered in docusaurus.config.ts: " +
+            "[knowledgeExtractor, { ignoreFiles: knowledgeIndexIgnoreFiles }]. " +
+            "That list is assembled there from assistantIgnoreFiles plus this " +
+            "export's own corpus-shape exclusions - assistantIgnoreFiles alone " +
+            "is a different list and will not do.",
         );
       }
       const ignorePatterns = ignoreGlobs.map((g) => ignoreGlobToRegExp(String(g)));
