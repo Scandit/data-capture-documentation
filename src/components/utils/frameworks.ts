@@ -90,8 +90,14 @@ export function parseSdksRoute(pathname: string): SdksRouteInfo {
   if (!rawProduct) return {};
 
   const product = URL_PRODUCT_MAPPING[rawProduct] || rawProduct;
-  // `framework` and `lastSegment` are omitted rather than set to undefined, so
-  // the returned shape matches what the previous regex produced.
+  // `framework` and `lastSegment` are OMITTED rather than set to undefined.
+  //
+  // Not what the pre-registry regex did - it always returned all three keys,
+  // with undefined values where nothing resolved - so this is a deliberate
+  // shape change, not a preservation. It matters because assert.deepStrictEqual
+  // distinguishes an absent key from one holding undefined, which is what
+  // PARSE_SDKS_ROUTE_BASELINE pins. Every consumer reads the fields rather than
+  // enumerating keys, so both shapes behave identically at runtime.
   const base =
     def && routeSegment !== null ? { framework: def.display, product } : { product };
   return last ? { ...base, lastSegment: last } : base;

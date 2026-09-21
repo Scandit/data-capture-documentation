@@ -128,12 +128,22 @@ check("frameworkFromPath resolves nothing outside /sdks/", () => {
   assert.strictEqual(frameworkFromPath("/sdks/net/"), undefined);
 });
 
-// Captured from parseSdksRoute BEFORE it moved onto the shared registry
-// matcher. Collapsing two parsers into one is only safe if the survivor answers
-// identically, so this pins every branch: two-segment routes, version prefixes,
-// URL_PRODUCT_MAPPING rewrites, the mandatory product segment, the anchor that
-// rejects /foo/sdks/..., and `lastSegment` being absent rather than undefined
-// when there is no third segment.
+// What parseSdksRoute answers, pinned branch by branch: two-segment .NET
+// routes, version prefixes, URL_PRODUCT_MAPPING rewrites, the mandatory product
+// segment, an unregistered framework keeping its product, and `framework` /
+// `lastSegment` being ABSENT rather than undefined when they do not resolve.
+//
+// Two honest caveats about what this table is and is not.
+//
+// It is written against the CURRENT shape, not captured from the pre-registry
+// regex: that regex always returned all three keys, so a row copied from it
+// would fail deepStrictEqual on key presence alone. The rows therefore prove
+// the two parsers agree TODAY; they cannot prove the shape never changed.
+//
+// And `/foo/sdks/ios/x/y` is now ACCEPTED, not rejected. Anchoring was dropped
+// deliberately - the site base url is a prefix, so PR previews serve from
+// /data-capture-documentation/pr-preview/pr-N/ and useLocation().pathname
+// includes it. The rows below assert the acceptance.
 const PARSE_SDKS_ROUTE_BASELINE = [
   ["/sdks/ios/barcode-capture/get-started", { framework: "iOS", product: "barcode-capture", lastSegment: "get-started" }],
   ["/sdks/net/ios/sparkscan/intro", { framework: ".NET iOS", product: "sparkscan", lastSegment: "intro" }],

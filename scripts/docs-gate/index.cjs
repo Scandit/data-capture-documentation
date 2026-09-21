@@ -335,6 +335,7 @@ function partitionForVale(files, bodyChanged) {
   const frontmatterOnly = new Map();
   const valeFiles = [];
   const skippedUnreadable = [];
+  const uncappable = [];
   for (const f of files) {
     if (bodySet.has(f)) {
       valeFiles.push(f);
@@ -342,16 +343,26 @@ function partitionForVale(files, bodyChanged) {
     }
     const end = frontmatterEndLine(f);
     // -1: the frontmatter has no readable extent, so neither charging the body
-    // nor capping is honest. Left out of Vale; the schema check already reports
-    // the malformed frontmatter itself.
+    // nor capping is honest. Left out of Vale.
     if (end === -1) {
       skippedUnreadable.push(f);
       continue;
     }
     valeFiles.push(f);
+    // 0 means NO opening fence, so the file has no frontmatter to cap at -
+    // docs/partials/_*.mdx are the realistic case. Such a file reaches Vale
+    // UNCAPPED, deliberately: the ratchet is file-scoped, so touching a file at
+    // all means the whole file must pass, and the frontmatter cap is the one
+    // narrow exception to that. A file with no frontmatter cannot qualify for
+    // an exception defined by its frontmatter.
+    //
+    // Skipping it instead would drop a changed file out of Vale entirely, which
+    // is the bug that motivated this function - see the partitionForVale test.
+    // Counted separately only so the log can stop claiming it was capped.
     if (end) frontmatterOnly.set(f, end);
+    else uncappable.push(f);
   }
-  return { valeFiles, frontmatterOnly, skippedUnreadable };
+  return { valeFiles, frontmatterOnly, skippedUnreadable, uncappable };
 }
 
 function main() {
@@ -390,15 +401,43 @@ function main() {
     // rewritten `description` is still checked while untouched body prose is
     // not - skipping those files entirely disabled a blocking check.
     if (files.length) {
-      const { valeFiles, frontmatterOnly, skippedUnreadable } = partitionForVale(
+      const { valeFiles, frontmatterOnly, skippedUnreadable, uncappable } = partitionForVale(
         files,
         bodyChanged,
       );
       if (skippedUnreadable.length) {
+        // Deliberately split by file class. The schema check only sees PAGES -
+        // pagesOnly() strips `_`-prefixed files - so for a partial nothing else
+        // reports the malformed frontmatter and the file leaves the gate
+        // entirely unchecked for prose. Saying so is the difference between an
+        // informational line and a misleading one.
+        const parts = skippedUnreadable.filter((f) => path.basename(f).startsWith("_"));
+        const pages = skippedUnreadable.filter((f) => !path.basename(f).startsWith("_"));
+        if (pages.length) {
+          console.log(
+            `docs-gate: frontmatter extent unreadable, so Vale was NOT run on ` +
+              `${pages.join(", ")} - the schema check reports the frontmatter ` +
+              `itself.\n`,
+          );
+        }
+        if (parts.length) {
+          console.log(
+            `docs-gate: frontmatter extent unreadable on partial(s) ` +
+              `${parts.join(", ")}, so Vale was NOT run on them - and the ` +
+              `schema check skips partials, so NOTHING checked these files. ` +
+              `Fix the frontmatter fences to get them back under the gate.\n`,
+          );
+        }
+      }
+      if (uncappable.length) {
+        // The headline message above says metadata-only files are "capped at
+        // the frontmatter". For these there is no frontmatter to cap at, so
+        // they are linted in full and that sentence does not describe them.
         console.log(
-          `docs-gate: frontmatter extent unreadable, so Vale was NOT run on ` +
-            `${skippedUnreadable.join(", ")} - the schema check reports the ` +
-            `frontmatter itself.\n`,
+          `docs-gate: ${uncappable.join(", ")} changed but has no frontmatter, ` +
+            `so there is nothing to cap Vale at - it is linted in FULL, ` +
+            `including prose this change did not touch. That is the ` +
+            `file-scoped ratchet, not a bug.\n`,
         );
       }
       if (valeFiles.length) findings.push(...runVale(valeFiles, vale, frontmatterOnly));

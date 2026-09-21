@@ -115,14 +115,6 @@ export const FRAMEWORKS: FrameworkDef[] = [
 /** Canonical slugs, in registry order. */
 export const FRAMEWORK_SLUGS: string[] = FRAMEWORKS.map((f) => f.slug);
 
-export const FRAMEWORK_BY_SLUG: Record<string, FrameworkDef> = Object.fromEntries(
-  FRAMEWORKS.map((f) => [f.slug, f]),
-);
-
-export const FRAMEWORK_BY_DISPLAY: Record<string, FrameworkDef> = Object.fromEntries(
-  FRAMEWORKS.map((f) => [f.display, f]),
-);
-
 /** Frameworks that are an /sdks/ route (everything except `hosted` today). */
 export const ROUTED_FRAMEWORKS: FrameworkDef[] = FRAMEWORKS.filter(
   (f) => f.routeSegment !== null,
