@@ -520,10 +520,16 @@ const config: Config = {
     // the two disagreeing about 39 modules; exporting the WHOLE llms list
     // over-corrected, because it also carries a corpus-shape decision (see
     // llmsDedupedToWeb) that a routing index must not inherit.
-    assistantIgnoreFiles,
-    // The same curation list plus the index's own corpus-shape exclusions; see
-    // knowledgeIndexDeduped. Read by the knowledge-extractor in place of
-    // assistantIgnoreFiles, exactly as the llms plugin reads llmsIgnoreFiles.
+    // NOT assistantIgnoreFiles. It is the shared curation decision, but nothing
+    // reads it at runtime - both consumers take a superset of it - and
+    // customFields is serialised into the client bundle on every page, so
+    // exporting it shipped a build-time list to every reader and gave the
+    // extractor a second name to drift from. It stays a local const above,
+    // feeding the two lists that ARE read.
+    //
+    // The curation list plus the index's own corpus-shape exclusions; see
+    // knowledgeIndexDeduped. Read by the knowledge-extractor, exactly as the
+    // llms plugin reads llmsIgnoreFiles.
     knowledgeIndexIgnoreFiles,
     // Which version THIS build serves at the root. Read by the
     // knowledge-extractor plugin, which cannot otherwise tell a frozen version

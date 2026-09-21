@@ -879,11 +879,22 @@ const SYNTHETIC_PRODUCTS = new Set(["core", "general"]);
  * on web, .NET and Titanium - never reached it at all.
  */
 let PRODUCT_KEYS: Set<string> | null = null;
-function productKeys(siteDir: string): Set<string> {
-  if (PRODUCT_KEYS) return PRODUCT_KEYS;
+// URL segment -> products.json key, for the products whose route does not spell
+// their key. DERIVED from the registry's own `frameworks[].apiUrl`, not listed:
+// every product already records a real route there, so the alias is a fact the
+// file states rather than a second copy to keep in step. Today it yields
+// matrixscan -> matrixscan-batch and label-capture -> smart-label-capture, and
+// identity for the other eleven.
+let PRODUCT_ALIASES: Map<string, string> | null = null;
+
+function loadProducts(siteDir: string): void {
+  if (PRODUCT_KEYS && PRODUCT_ALIASES) return;
   try {
     const raw = fs.readFileSync(path.join(siteDir, "src", "data", "products.json"), "utf8");
-    const parsed = JSON.parse(raw) as Array<{ key?: unknown }>;
+    const parsed = JSON.parse(raw) as Array<{
+      key?: unknown;
+      frameworks?: Record<string, { apiUrl?: unknown }>;
+    }>;
     // Filter on the RAW key: slug("") returns "module", so filtering after
     // slugging can never drop anything, and an entry with a missing key would
     // register "module" as a real product - after which a page at
@@ -895,12 +906,37 @@ function productKeys(siteDir: string): Set<string> {
         .filter(Boolean)
         .map(slug),
     );
+    const aliases = new Map<string, string>();
+    for (const entry of parsed) {
+      const key = slug(String(entry?.key ?? "").trim());
+      if (!key || !PRODUCT_KEYS.has(key)) continue;
+      for (const fw of Object.values(entry?.frameworks ?? {})) {
+        // `/sdks/<framework>/<product>/...`, with the two-segment .NET routes
+        // spelled `/sdks/net/<platform>/<product>/...`.
+        const m = /^\/sdks\/(?:net\/)?[^/]+\/([^/]+)\//.exec(String(fw?.apiUrl ?? ""));
+        if (!m) continue;
+        const seg = slug(m[1]);
+        // Never let one product's route claim another product's key.
+        if (seg && seg !== key && !PRODUCT_KEYS.has(seg)) aliases.set(seg, key);
+      }
+    }
+    PRODUCT_ALIASES = aliases;
   } catch {
     // No registry (or unreadable): fall back to path shape only. Never fatal -
     // this plugin must not be able to break a deploy.
     PRODUCT_KEYS = new Set();
+    PRODUCT_ALIASES = new Map();
   }
-  return PRODUCT_KEYS;
+}
+
+function productKeys(siteDir: string): Set<string> {
+  loadProducts(siteDir);
+  return PRODUCT_KEYS as Set<string>;
+}
+
+function productAliases(siteDir: string): Map<string, string> {
+  loadProducts(siteDir);
+  return PRODUCT_ALIASES as Map<string, string>;
 }
 
 /** Product a page belongs to (sparkscan, matrixscan, id-capture, ...) or "core". */
@@ -910,7 +946,15 @@ function detectProduct(pathname: string, siteDir: string): string {
     const i = p[1] === "net" ? 3 : 2; // first segment after the framework
     const rest = p.slice(i);
     if (!rest.length) return "core";
-    const first = slug(rest[0]);
+    // Canonicalised through the registry BEFORE anything is decided, because a
+    // route does not always spell its product's key: /sdks/ios/label-capture/
+    // belongs to `smart-label-capture` and /sdks/ios/matrixscan/ to
+    // `matrixscan-batch`. Returning the raw segment filed 609 modules under two
+    // products that do not exist in products.json, and left the two real ones
+    // with no pages at all - so every BelongsToProduct and AvailableOn edge
+    // built on them described a product no consumer can look up.
+    const raw = slug(rest[0]);
+    const first = productAliases(siteDir).get(raw) ?? raw;
     // A product directory, or a single page whose name IS a known product.
     if (rest.length >= 2 || productKeys(siteDir).has(first)) return first;
     return "core";
@@ -1662,7 +1706,9 @@ function toIndexRecord(m: KModule) {
 }
 
 /** Enriched JSON-LD graph: facets + mined product / api / see-also / availability edges. */
-function buildGraph(modules: KModule[], site: string) {
+// `siteBase` is origin + baseUrl, not the bare origin: the doc urls emitted
+// here have to match the ones on the modules, which carry the prefix.
+function buildGraph(modules: KModule[], siteBase: string) {
   const indexedPaths = new Set(modules.map((m) => m.metadata.source_path));
   const uniq = (vals: string[]) => Array.from(new Set(vals.filter((v) => v && v.trim()))).sort();
 
@@ -1705,7 +1751,7 @@ function buildGraph(modules: KModule[], site: string) {
     ...frameworks.map((v) => ({ "@id": `urn:framework:${v}`, "@type": "Framework", name: v })),
     ...products.map((v) => ({ "@id": `urn:product:${v}`, "@type": "Product", name: v })),
     ...apiRefs.map((v) => ({ "@id": `urn:api:${v}`, "@type": "ApiReference", url: v })),
-    ...docPaths.map((v) => ({ "@id": `urn:doc:${v}`, "@type": "Doc", url: `${site}${v}` })),
+    ...docPaths.map((v) => ({ "@id": `urn:doc:${v}`, "@type": "Doc", url: `${siteBase}${v}` })),
   ];
 
   const edges: any[] = [];
@@ -1821,6 +1867,17 @@ export default function knowledgeExtractor(context: any, _options: any) {
     name: "knowledge-extractor",
     async postBuild({ siteConfig, outDir }: { siteConfig: any; outDir: string }) {
       const site = String(siteConfig?.url || "").replace(/\/+$/, "");
+      // Docusaurus writes routes into outDir WITHOUT the baseUrl prefix, so
+      // `site + pathname` silently drops it and every published url is wrong on
+      // a sub-path deploy. Production sets baseUrl '' so the two agree, which is
+      // why this has never shown: the preview build is the only sub-path deploy
+      // today and postBuild returns before here.
+      //
+      // Kept separate from `site` rather than folded into it: classifyLinks
+      // strips `site` as a bare ORIGIN prefix and takes baseUrl as its own
+      // argument, so a combined value would stop it recognising internal links.
+      const basePrefix = String(siteConfig?.baseUrl || "/").replace(/\/+$/, "");
+      const siteBase = `${site}${basePrefix}`;
       // Rendered hrefs are baseUrl-prefixed; pathname is not. classifyLinks
       // strips it so the two can be compared (see F2 note there).
       const baseUrl = String(siteConfig?.baseUrl || "/");
@@ -1996,7 +2053,7 @@ export default function knowledgeExtractor(context: any, _options: any) {
 
           const relDir = path.relative(outDir, path.dirname(file)).split(path.sep).join("/");
           const pathname = relDir ? `/${relDir}/` : "/";
-          const url = `${site}${pathname}`;
+          const url = `${siteBase}${pathname}`;
           const title = ($("h1").first().text() || $("title").text() || "").replace(/​/g, "").trim();
           const description = ($('meta[name="description"]').attr("content") || "").trim();
           const bodyMd = extractMarkdownish($, root);
@@ -2062,7 +2119,7 @@ export default function knowledgeExtractor(context: any, _options: any) {
 
       const active = modules.filter((m) => m.status === "active");
       const index = active.map(toIndexRecord);
-      const graph = buildGraph(active, site);
+      const graph = buildGraph(active, siteBase);
 
       // Fail LOUD on empty extraction — matches the config's onBrokenLinks:"throw"
       // convention. "Non-fatal" covers one bad page, not "extracted nothing at
