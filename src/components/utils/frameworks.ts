@@ -97,19 +97,16 @@ export function parseSdksRoute(pathname: string): SdksRouteInfo {
   return last ? { ...base, lastSegment: last } : base;
 }
 
-// Maps the ?framework= query slug used on the homepage to an agent-skills URL path.
 // Maps a framework slug to its agent-skills URL path. Only frameworks that
 // actually have an Agent Skills page appear here - derived from the registry.
 export const QUERY_FRAMEWORK_TO_PATH: Record<string, string> = Object.fromEntries(
   AGENT_SKILL_FRAMEWORKS.map((f) => [f.slug, f.routeSegment as string]),
 );
 
-// The homepage framework selector uses its own identifiers (see frameworkCardsArr)
-// that differ from the QUERY_FRAMEWORK_TO_PATH keys. Map them so
-// ?framework=react / netIos / netAndroid resolve correctly.
 // The homepage framework selector uses its own identifiers (see
-// frameworkCardsArr) that differ from the canonical slugs. Declared as
-// `aliases` on each registry entry so a new spelling is added in one place.
+// frameworkCardsArr) that differ from the canonical slugs - ?framework=react,
+// netIos and netAndroid are the ones that exist today. Declared as `aliases` on
+// each registry entry so a new spelling is added in one place.
 const HOMEPAGE_FRAMEWORK_ALIASES: Record<string, string> = Object.fromEntries(
   FRAMEWORKS.flatMap((f) => (f.aliases || []).map((a) => [a, f.slug])),
 );
