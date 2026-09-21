@@ -3,12 +3,11 @@
 /**
  * Asserts what this build's robots.txt and llms indexes actually say.
  *
- * robots.txt used to be a file in static/, copied verbatim, and every fact in
- * it was a hand-typed measurement. Review's objection was not that the numbers
- * were wrong - they were right when written - but that they would go wrong at
- * the next release with nothing to catch them. Generating the file removed the
- * measurements; this removes the rest of the assumption, by checking the
- * generated output against the versions the build actually contains.
+ * A hand-maintained robots.txt goes stale silently. Its facts are right when
+ * typed and wrong at the next release, and nothing reads the file closely
+ * enough to notice. Generating it removes the measurements; this removes the
+ * rest of the assumption, by checking the generated output against the
+ * versions the build actually contains.
  *
  * It asserts against build/, not against the config, for the same reason
  * test-search-facets.cjs does: re-deriving the expectation from the source that
@@ -139,8 +138,9 @@ function linesThatLinkThemselves() {
 
 check("exactly the frozen lines that link themselves are allowed", () => {
   // Retire a major and the Allow must go with it; freeze one whose pages point
-  // at their own line and the Allow must appear. Both used to be a hand edit
-  // the file itself described as "a deliberate decision made once".
+  // at their own line and the Allow must appear. Both are derived from the
+  // build so that neither can survive as a decision made once and never
+  // revisited - which is the only state a hand-edited Allow list has.
   const allowed = new Set(
     directives
       .filter((l) => /^Allow: \/\d+\.\d+\/data-capture-sdk\/$/.test(l))
@@ -205,29 +205,28 @@ check("everyone else is unrestricted", () => {
 });
 
 check("no internal narrative is published", () => {
-  // Review's objection: robots.txt is one of the most-fetched URLs on a host,
-  // and an earlier draft printed the addresses of 21 retired guide trees that
-  // nothing links and no sitemap carries - a discovery list, in the file that
-  // argues against duplicates. The deploy postmortem and the search-index
-  // history went with it. This keeps them out.
+  // robots.txt is one of the most-fetched URLs on any host, which decides what
+  // may go in it. The address of a retired guide tree - one nothing links and
+  // no sitemap carries - is a discovery list, published in the file that argues
+  // against duplicates. An internal postmortem, a search-index history and a
+  // dated measurement are not crawler directives at all. This keeps them out.
   const banned = [
-    // Any patch-level tree path, derived rather than listed. This named
-    // /7.6.x/ and /6.28.x/ explicitly - which are precisely the lines that stop
-    // being the retired ones. After the next major transition, a discovery list
-    // for the then-frozen major (/8.6.1/ ... /8.6.9/) would have passed every
-    // pattern here and shipped, which is the one thing this check exists to
-    // stop. Three-part versions only: the file legitimately writes two-part
-    // lines like /8.7/ when explaining the rule.
+    // Any patch-level tree path, derived rather than listed by version.
+    // Naming the retired majors pins the ones retired TODAY, and those are
+    // exactly the lines that stop being the retired ones: after the next major
+    // transition, a discovery list for the then-frozen major matches nothing a
+    // named list holds and ships unnoticed - the one thing this check exists to
+    // stop. Three-part versions only, because the file legitimately writes
+    // two-part lines like /8.7/ when explaining the rule.
     /\/\d+\.\d+\.\d+\//,
     /deploy never/i,
     /postmortem/i,
     /search index/i,
     /\d{4}-\d{2}-\d{2}/, // a dated measurement
-    // Any comma-grouped number. This was /\b\d{2},\d{3}\b/, which caught the
-    // byte counts (38,575) and none of the other measurements the comment above
-    // names: the sitemap census was 1,508 / 618 / 498 and the stale-tree figure
-    // ~9,500. Someone re-adding "the sitemap carries 1,508 guide URLs" at a
-    // release would have passed this and shipped the number.
+    // Any comma-grouped number, at any width. Pinning one width only catches
+    // the measurement that happens to have it; a sitemap census, a page count
+    // and a byte count are the same kind of fact in different shapes, and the
+    // published file has no legitimate use for any of them.
     /\b\d{1,3}(?:,\d{3})+\b/,
     // ...and a bare count with a unit, which is the other way these get
     // written. Deliberately not "any long number": RFC 9309 is cited in the
@@ -262,12 +261,13 @@ check("the Agent Skills index lists exactly the pages llms.txt does", () => {
 
   // Compared against llms.txt rather than against the source tree.
   //
-  // Counting agent-skills.mdx files on disk was wrong twice over. It ignored
-  // the plugin's ignore lists, so a page under an ignored SDK failed the build
-  // claiming the index was wrong when it was right. The fix for that - reading
-  // the ignore globs out of docusaurus.config.ts - only ever read two of the
-  // four lists, because llmsIgnoreFiles assembles the other two by spreading
-  // identifiers rather than literals, and its own comment claimed otherwise.
+  // Counting agent-skills.mdx files on disk compares against the wrong thing:
+  // the source tree knows nothing about the plugin's ignore lists, so a page
+  // under an ignored SDK reads as missing from an index that is correct.
+  // Reading those lists out of docusaurus.config.ts instead is no better -
+  // llmsIgnoreFiles assembles two of the four by spreading identifiers rather
+  // than literals, so a reader that walks the config sees part of the set and
+  // cannot tell that it has.
   //
   // llms.txt is produced by the SAME plugin from the SAME ignore set, so any
   // agent-skills page it lists is one that was not ignored. Comparing the two

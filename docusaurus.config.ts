@@ -1002,29 +1002,15 @@ const config: Config = {
     "docusaurus-plugin-llms",
     {
       ignoreFiles: llmsIgnoreFiles,
-      // Strip the "docs" segment from the URLs the plugin emits.
-      //
-      // Wider than it sounds, so it is stated rather than assumed: the plugin
-      // applies this to the whole doc-relative path with a global regex, not
-      // just to the prefix it prepends. A page whose route genuinely contained
-      // a segment named "docs" - docs/sdks/web/docs/foo.mdx - would lose that
-      // segment too and emit a broken link. No such path exists today; if one
-      // is ever added, this option is where it breaks.
-      //
-      // docusaurus-plugin-llms builds links as <siteUrl>/docs/<path> - see
-      // pathPrefix in its processor - but this site sets routeBasePath: "/" on
-      // the docs plugin, so pages are served at /sdks/..., not /docs/sdks/... .
-      // Verified live: /docs/sdks/android/agent-skills is 404 and
-      // /sdks/android/agent-skills is 200.
-      //
-      // Every entry in llms.txt and llms-full.txt has carried the wrong prefix
-      // since those files were first generated - about 400 dead links each.
-      // That was survivable while nothing pointed at them; it stops being
-      // survivable here, because llms-agent-skills.txt below is a file whose
-      // ENTIRE payload is ten of these links, announced in the blockquote and
-      // allowed by name in robots.txt. An agent following the new pointer would
-      // have found ten 404s. One option fixes all three files.
-      pathTransformation: { ignorePaths: ["docs"] },
+      // NOTE: llms-agent-skills.txt below is a file whose ENTIRE payload is ten
+      // links emitted by this plugin, announced in the blockquote and allowed
+      // by name in robots.txt. Those links are only correct because
+      // `pathTransformation: { ignorePaths: ["docs"] }` strips the "docs"
+      // segment the plugin would otherwise prepend - the site serves pages at
+      // /sdks/..., not /docs/sdks/... . That option ships separately, ahead of
+      // this branch, because it also repairs ~400 dead links in llms.txt and
+      // llms-full.txt that have nothing to do with robots.txt. If this lands
+      // without it, the new index ships ten 404s.
       // The blockquote at the top of llms.txt and llms-full.txt, which is the
       // one place in the llmstxt.org layout that an agent reads before the
       // table of contents.
