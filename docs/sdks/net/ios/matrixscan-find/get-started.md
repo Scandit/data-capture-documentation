@@ -1,7 +1,7 @@
 ---
 description: "Add MatrixScan Find to your .NET iOS app to search for and highlight specific items with the camera."
 sidebar_position: 2
-framework: netIos
+framework: net-ios
 keywords:
   - netIos
 ---

@@ -3,7 +3,7 @@ description: "Use the Scandit parser in your .NET iOS app to turn barcode data s
 sidebar_position: 2
 pagination_prev: null
 pagination_next: null
-framework: netIos
+framework: net-ios
 keywords:
   - netIos
 ---

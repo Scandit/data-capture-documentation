@@ -2,7 +2,7 @@
 description: "Advanced MatrixScan Pick settings for .NET Android: customize picking logic, overlays, and workflows."
 sidebar_position: 3
 pagination_next: null
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 ---

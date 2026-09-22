@@ -2,7 +2,7 @@
 description: "Barcode Selection lets users tap or aim to pick one barcode among many in your .NET iOS app."
 sidebar_position: 1
 pagination_prev: null
-framework: netIos
+framework: net-ios
 keywords:
   - netIos
 ---
