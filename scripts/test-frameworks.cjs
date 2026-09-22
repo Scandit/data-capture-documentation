@@ -252,4 +252,25 @@ check("every registry slug is unique", () => {
   assert.strictEqual(new Set(slugs).size, slugs.length);
 });
 
+// `display` is load-bearing in the same way `slug` is, and was pinned in
+// neither place. FRAMEWORK_URL_PATH and FRAMEWORK_SLUG (SkillsCallout),
+// FRAMEWORK_DISPLAY_TO_SLUG (utils/frameworks.ts) and the
+// features/products/skills cross-check in verify-frameworks.cjs all key off it.
+//
+// A duplicate is easy to introduce - a copy-pasted entry whose display was not
+// updated - and Object.fromEntries silently keeps only the last, so SkillsCallout
+// would build the OTHER framework's agent-skills link and report the wrong
+// framework to analytics. verify-frameworks stays green through all of it,
+// because it only ever asks whether a display is IN the registry, never whether
+// it appears once.
+check("every registry display name is unique", () => {
+  const displays = registry.FRAMEWORKS.map((f) => f.display);
+  const dupes = displays.filter((d, i) => displays.indexOf(d) !== i);
+  assert.deepStrictEqual(
+    dupes,
+    [],
+    `display names must be unique - they are map keys. Duplicated: ${dupes.join(", ")}`,
+  );
+});
+
 console.log(`\n${passed} passed\n`);

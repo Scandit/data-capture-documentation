@@ -17,18 +17,6 @@ function sh(cmd) {
   return execSync(cmd, { encoding: "utf8", stdio: ["ignore", "pipe", "inherit"] }).trim();
 }
 
-/**
- * Like sh(), but for a lookup whose failure is EXPECTED and meaningless.
- *
- * `git show <base>:<path>` cannot succeed for a file the PR adds, and sh()
- * inherits git's stderr on purpose, so a PR adding forty pages printed forty
- * `fatal: path ... exists on disk, but not in ...` lines before the gate said
- * anything - which reads as a crashed gate rather than as forty new files.
- */
-function shQuiet(cmd) {
-  return execSync(cmd, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
-}
-
 function changedDocs() {
   // Ratchet against the PR's target branch, not a hardcoded main — so a PR into
   // release/** diffs against that release branch, not main's fork point.
@@ -157,14 +145,20 @@ function frontmatterOnly(files, base) {
   for (const f of files) {
     let before;
     try {
-      // shQuiet: a file the PR ADDS has no base blob, and that failure is
-      // both expected and meaningless here - see the note on shQuiet.
       // execFileSync with an argv, not a shell string: `f` is a path from git
       // output, and interpolating it into a command line is a class of bug
       // rather than a present one. No doc path in the repo carries a shell
       // metacharacter today, and a failure here falls back to "treat as
       // body-changed", which is the safe direction - so this removes the class
       // rather than fixing a symptom.
+      //
+      // The `"ignore"` on stderr is what keeps the output readable: a file the
+      // PR ADDS has no base blob, so git prints `fatal: path ... exists on
+      // disk, but not in ...` for every one of them. That failure is expected
+      // and meaningless here - the catch below treats the file as body-changed,
+      // which is correct for a new file - but forty of those lines ahead of the
+      // gate's own output reads as a crashed gate rather than as forty new
+      // pages.
       before = execFileSync("git", ["show", `${base}:${f}`], {
         encoding: "utf8",
         stdio: ["ignore", "pipe", "ignore"],
