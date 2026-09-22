@@ -340,10 +340,12 @@ const DOTTED = [
   // Three or more segments: an expression pasted from the reader's own source.
   // The meaning is in the last segment.
   ["pasted expression", "this.state.settings.codeDuplicateFilter", "codeDuplicateFilter"],
-  // Was a positive while a bare lowercase tail of eight or more characters
-  // counted as a symbol. It no longer does: `symbologies` (271 hits) and
-  // `selection` (245) are indistinguishable by shape, so the conservative
-  // reading applies and this loses its retry.
+  // A bare lowercase tail DOES get a retry. `symbologies` (271 hits) and
+  // `selection` (245) are indistinguishable by shape, and three rounds of
+  // trying to separate them lexically each excluded a documented term - so the
+  // shape test was abandoned and the decision moved to adoptRetry, which reads
+  // the hit COUNT. This row is what stops someone reinstating a lexical rule
+  // and quietly losing `symbologies`.
   ["a lower-case namespace path", "this.barcodecapture.settings.symbologies", "symbologies"],
   ["a deep namespace path", "sdc.core.ui.viewfinder.rectangular", "rectangular"],
   // Exactly three segments. Without a positive row here, raising the threshold
@@ -354,22 +356,28 @@ const DOTTED = [
     "settings.barcodeCaptureSettings.codeDuplicateFilter",
     "codeDuplicateFilter",
   ],
-  // The tail has to look like a symbol rather than a word. A case boundary
-  // carries it at any length; without one it has to be long.
+  // Four characters and at least one letter is the WHOLE tail test. A case
+  // boundary is not required and is not checked - `arMode` would retry without
+  // one. This row pins the four-character floor from above.
   ["a short tail with a case boundary", "barcode.data.arMode", "arMode"],
-  // The underscore clause is what carries this one: `max_codes` has no case
-  // boundary at all, so without `_[A-Za-z0-9]` it would be declined. It only
-  // pins that clause now that the "eight characters or more" branch is gone -
-  // before, it passed on length alone.
+  // The underscore is in the identifier character class, so `max_codes` is a
+  // tail like any other. There is no separate underscore clause to pin; this
+  // row exists to stop `_` being dropped from `[A-Za-z0-9_]`, which would
+  // decline every snake_case member.
   ["an underscore and no case boundary", "express.config.max_codes", "max_codes"],
-  // ...and the six-character floor applies to the underscore clause too.
+  // Five characters, and it retries: the floor is FOUR. Reverting the
+  // quantifier to {6,} fails this row, which is the point of keeping it.
   ["a partly typed underscore name", "express.config.max_c", "max_c"],
-  // Six is the floor, and five is below it: `codeD` is one keystroke past the
-  // example above and returned 355 hits, `codeDu` 59.
+  // Both retry. `codeD` returned 355 hits and `codeDu` 59, and no lexical rule
+  // separates them - a six-character floor would have declined `codeD` while
+  // admitting `codeDu`, one keystroke apart, which is why the floor is four and
+  // RETRY_HIT_CEILING decides whether the answer is worth showing.
   ["six characters with a case boundary", "this.state.settings.codeDu", "codeDu"],
   ["a partly typed member", "this.state.settings.codeD", "codeD"],
-  // A bare lowercase tail gets no retry at any length: nothing in the string
-  // separates `symbologies` (271) from `selection` (245).
+  // Declines below are about SHAPE - no letter, too short, no dot, whitespace,
+  // a numeric base. None of them is about whether the tail reads like prose:
+  // nothing in the string separates `symbologies` (271) from `selection` (245),
+  // so that judgement belongs to adoptRetry and the hit ceiling, not here.
   ["an ordinary word as the tail", "this.state.settings.available", "available"],
   // Capitalisation is not a symbol signal, because Algolia matches
   // case-insensitively: these came back as words with a capital letter.

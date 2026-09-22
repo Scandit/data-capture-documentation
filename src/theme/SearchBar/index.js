@@ -393,7 +393,14 @@ async function runDottedRetry(input) {
   const typed = typedQuery || "";
   const primaryQuery = strippedQuery != null ? strippedQuery : typed;
   const first = await search(buildRequests(strippedQuery));
-  const unchanged = { response: first, effectiveQuery: primaryQuery, adopted: null };
+  // `hitsBefore` travels with the result so the PostHog capture can record the
+  // count the reader WOULD have seen, alongside the one they did.
+  const unchanged = {
+    response: first,
+    effectiveQuery: primaryQuery,
+    adopted: null,
+    hitsBefore: nbHitsOf(first),
+  };
   if (nbHitsOf(first) !== 0) return unchanged;
   // The TYPED query, not the stripped one. `settings.viewfinder.web` strips to
   // `settings.viewfinder.` - three segments become two, the branch changes, and
@@ -401,12 +408,27 @@ async function runDottedRetry(input) {
   // relevance; it must not decide which rewrite a dotted query gets.
   const candidate = dottedFallback(typed);
   if (!candidate || candidate === typed) return unchanged;
-  const retry = await search(buildRequests(candidate, { dottedRetry: true }));
+  // Guarded, because by this point the reader already HAS a correct answer.
+  //
+  // The primary search succeeded and returned zero hits, so the honest screen
+  // is "No results for <query>". An unguarded await hands a rejected retry -
+  // a 429 from the doubled request volume, a dropped connection, an aborted
+  // request - straight out through the promise DocSearch awaits, and it
+  // renders its fetch-failure screen instead. The retry is an OPTIONAL
+  // improvement on a result we already have; it must never be able to take
+  // that result away.
+  let retry;
+  try {
+    retry = await search(buildRequests(candidate, { dottedRetry: true }));
+  } catch {
+    return unchanged;
+  }
   if (!adoptRetry(nbHitsOf(first), nbHitsOf(retry))) return unchanged;
   return {
     response: retry,
     effectiveQuery: candidate,
     adopted: { typed, used: candidate },
+    hitsBefore: nbHitsOf(first),
   };
 }
 
@@ -823,13 +845,33 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   // Debounce for the single Algolia analytics count per completed query (see
   // transformSearchClient) - separate from the PostHog capture debounce below.
   const analyticsCountRef = useRef(null);
-  const captureSearchDebounced = useCallback((query, nbHits) => {
+  // `nbHits` is the count the READER saw, so after an adopted retry it is the
+  // retry's. That alone would erase the signal this whole feature exists to
+  // act on: `this.state.settings.codeDuplicateFilter` would be recorded as a
+  // 107-hit search and never again appear as a zero-result one, so the
+  // phenomenon becomes unmeasurable the moment it ships.
+  //
+  // `dotted_fallback` and `nb_hits_before_fallback` keep both halves: what the
+  // reader got, and what they would have got. The `dotted-fallback` entry in
+  // analyticsTags does NOT cover this - that tag reaches Algolia only, and
+  // these are two different dashboards.
+  const captureSearchDebounced = useCallback((query, nbHits, fallback) => {
     if (searchPerformedDebounceRef.current) {
       clearTimeout(searchPerformedDebounceRef.current);
     }
     if (!query) return;
     searchPerformedDebounceRef.current = setTimeout(() => {
-      capturePostHogEvent("docs_search_performed", { query, nbHits });
+      capturePostHogEvent("docs_search_performed", {
+        query,
+        nbHits,
+        dotted_fallback: Boolean(fallback && fallback.adopted),
+        ...(fallback && fallback.adopted
+          ? {
+              nb_hits_before_fallback: fallback.hitsBefore,
+              fallback_query: fallback.used,
+            }
+          : {}),
+      });
     }, 600);
   }, []);
   const transformSearchClient = useCallback(
@@ -954,8 +996,12 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         const primaryQuery = strippedQuery != null ? strippedQuery : query || "";
         if (query) {
           resultPromise
-            .then(({ response }) =>
-              captureSearchDebounced(query, nbHitsOf(response))
+            .then(({ response, adopted, hitsBefore }) =>
+              captureSearchDebounced(query, nbHitsOf(response), {
+                adopted,
+                hitsBefore,
+                used: adopted ? adopted.used : null,
+              })
             )
             .catch(() => {});
         }
