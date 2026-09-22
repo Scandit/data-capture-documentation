@@ -147,7 +147,7 @@ When no OCR regular expression is configured for Code128 or Code39, results retu
 
 ## Calculating Symbol Counts for Variable-Length Symbologies
 
-The length of data encoded in variable-length symbologies such as Code 128, Codabar, Code 39 etc. is measured as the number of symbols. Depending on the symbology, the symbol count includes the start and end symbol, and/or checksum characters. The following list shows how to calculate the number of symbols for each variable-length symbology. These counts can be used as the input to [`sc_symbology_settings_set_active_symbol_counts`](https://docs.scandit.com/stable/c_api/struct_sc_symbology_settings.html#a0f06eab88bee48cb45ed96af0f170d16).
+The length of data encoded in variable-length symbologies such as Code 128, Codabar, Code 39 etc. is measured as the number of symbols. Depending on the symbology, the symbol count includes the start and end symbol, and/or checksum characters. The following list shows how to calculate the number of symbols for each variable-length symbology. These counts can be used as the input to [`sc_symbology_settings_set_active_symbol_counts`](https://docs.scandit.com/7.6/c_api/struct_sc_symbology_settings.html#a0f06eab88bee48cb45ed96af0f170d16).
 
 ### Interleaved-Two-of-Five
 

@@ -8,7 +8,7 @@ keywords:
 
 # Configure with JSON
 
-This document describes the JSON format understood by the [`sc_barcode_scanner_settings_new_from_json()`](https://docs.scandit.com/stable/c_api/struct_sc_barcode_scanner_settings.html#a12865e80efbcf01cac8bc8c749032663) function.
+This document describes the JSON format understood by the [`sc_barcode_scanner_settings_new_from_json()`](https://docs.scandit.com/7.6/c_api/struct_sc_barcode_scanner_settings.html#a12865e80efbcf01cac8bc8c749032663) function.
 
 ## JSON Format
 
@@ -89,7 +89,7 @@ The following options are currently supported:
 
 * `enabled`: boolean indicating whether the symbology should be enabled. When using the dictionary form, `enabled` is automatically set to true.
 * `colorInvertedEnabled`: boolean indicating whether color-inverted codes of that symbology should be decoded. Default is false.
-* `activeSymbolCounts`: array of integers specifying the active symbol counts for the symbology. See [`sc_symbology_settings_set_active_symbol_counts`](https://docs.scandit.com/stable/c_api/struct_sc_symbology_settings.html#a0f06eab88bee48cb45ed96af0f170d16) for details.
+* `activeSymbolCounts`: array of integers specifying the active symbol counts for the symbology. See [`sc_symbology_settings_set_active_symbol_counts`](https://docs.scandit.com/7.6/c_api/struct_sc_symbology_settings.html#a0f06eab88bee48cb45ed96af0f170d16) for details.
 * `extensions`: Extensions to be enabled for the symbology.
 * `checksums`: List of optional checksums to use for the symbology.
 
@@ -140,6 +140,6 @@ The code direction hint must either be `"left-to-right"`, `"right-to-left"`, `"b
 
 ## Additional Properties
 
-`maxNumberOfCodesPerFrame` sets the maximum number of codes per frame, see [`sc_barcode_scanner_settings_set_max_number_of_codes_per_frame()`](https://docs.scandit.com/stable/c_api/struct_sc_barcode_scanner_settings.html#a941eb7ee16744e83ef86ad14c66391cf).
-`codeDuplicateFilter` sets the code duplicate filter, see [`sc_barcode_scanner_settings_set_code_duplicate_filter()`](https://docs.scandit.com/stable/c_api/struct_sc_barcode_scanner_settings.html#a3b6890b17a508e4931767c1e4bbc6483).
-`arucoDictionaryPreset` sets the ArUco dictionary preset, see [`sc_aruco_dictionary_from_preset()`](https://docs.scandit.com/stable/c_api/struct_sc_aruco_dictionary.html#a32620469440760f6a07e09ebb9a9bb1e).
+`maxNumberOfCodesPerFrame` sets the maximum number of codes per frame, see [`sc_barcode_scanner_settings_set_max_number_of_codes_per_frame()`](https://docs.scandit.com/7.6/c_api/struct_sc_barcode_scanner_settings.html#a941eb7ee16744e83ef86ad14c66391cf).
+`codeDuplicateFilter` sets the code duplicate filter, see [`sc_barcode_scanner_settings_set_code_duplicate_filter()`](https://docs.scandit.com/7.6/c_api/struct_sc_barcode_scanner_settings.html#a3b6890b17a508e4931767c1e4bbc6483).
+`arucoDictionaryPreset` sets the ArUco dictionary preset, see [`sc_aruco_dictionary_from_preset()`](https://docs.scandit.com/7.6/c_api/struct_sc_aruco_dictionary.html#a32620469440760f6a07e09ebb9a9bb1e).
