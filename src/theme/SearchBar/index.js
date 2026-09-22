@@ -393,13 +393,10 @@ async function runDottedRetry(input) {
   const typed = typedQuery || "";
   const primaryQuery = strippedQuery != null ? strippedQuery : typed;
   const first = await search(buildRequests(strippedQuery));
-  // `hitsBefore` travels with the result so the PostHog capture can record the
-  // count the reader WOULD have seen, alongside the one they did.
   const unchanged = {
     response: first,
     effectiveQuery: primaryQuery,
     adopted: null,
-    hitsBefore: nbHitsOf(first),
   };
   if (nbHitsOf(first) !== 0) return unchanged;
   // The TYPED query, not the stripped one. `settings.viewfinder.web` strips to
@@ -428,7 +425,6 @@ async function runDottedRetry(input) {
     response: retry,
     effectiveQuery: candidate,
     adopted: { typed, used: candidate },
-    hitsBefore: nbHitsOf(first),
   };
 }
 
@@ -508,8 +504,16 @@ function ResultsFooter({
   // query than the one it was recorded for - the ref is written from a promise,
   // and a superseded retry could otherwise still be sitting in it.
   const recorded = adoptedRetryRef && adoptedRetryRef.current;
-  const adopted =
-    recorded && recorded.typed && recorded.typed === state.query ? recorded : null;
+  const forThisQuery =
+    recorded && recorded.typed !== undefined && recorded.typed === state.query
+      ? recorded
+      : null;
+  // The NOTE needs an adoption (`used`); the LINK only needs the query the
+  // count came from. Separating them is what stops the strip path showing a
+  // count for one query beside a link to another.
+  const adopted = forThisQuery && forThisQuery.used ? forThisQuery : null;
+  const countQuery =
+    (forThisQuery && forThisQuery.effective) || state.query;
   // API results are now shown for whichever single framework each symbol
   // resolved to (web when available, else the next in the fallback order), so
   // the note names the framework(s) actually shown rather than a hardcoded
@@ -568,7 +572,7 @@ function ResultsFooter({
       )}
       {hasSearchPage && (
         <Link
-          to={createSearchLink(adopted ? adopted.used : state.query)}
+          to={createSearchLink(countQuery)}
           onClick={onClose}
         >
           <Translate
@@ -851,10 +855,14 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
   // 107-hit search and never again appear as a zero-result one, so the
   // phenomenon becomes unmeasurable the moment it ships.
   //
-  // `dotted_fallback` and `nb_hits_before_fallback` keep both halves: what the
-  // reader got, and what they would have got. The `dotted-fallback` entry in
-  // analyticsTags does NOT cover this - that tag reaches Algolia only, and
-  // these are two different dashboards.
+  // `dotted_fallback` restores it: a true value means the typed query returned
+  // ZERO and the count beside it belongs to the rewrite, so zero-result pastes
+  // stay countable. There is deliberately no "hits before" property - adoption
+  // requires firstHits === 0 (see adoptRetry), so such a field could only ever
+  // be 0 and would read as data while carrying none.
+  //
+  // The `dotted-fallback` entry in analyticsTags does NOT cover this: that tag
+  // reaches Algolia, and these are two different dashboards.
   const captureSearchDebounced = useCallback((query, nbHits, fallback) => {
     if (searchPerformedDebounceRef.current) {
       clearTimeout(searchPerformedDebounceRef.current);
@@ -865,12 +873,7 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
         query,
         nbHits,
         dotted_fallback: Boolean(fallback && fallback.adopted),
-        ...(fallback && fallback.adopted
-          ? {
-              nb_hits_before_fallback: fallback.hitsBefore,
-              fallback_query: fallback.used,
-            }
-          : {}),
+        ...(fallback && fallback.adopted ? { fallback_query: fallback.used } : {}),
       });
     }, 600);
   }, []);
@@ -988,18 +991,27 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
           // from an abandoned query used to land after a later query had
           // rendered, leaving the footer showing the old retry against the new
           // count.
-          if (outcome.adopted && latestQueryRef.current === (query || "")) {
-            adoptedRetryRef.current = outcome.adopted;
+          if (latestQueryRef.current === (query || "")) {
+            // `effective` is recorded even when nothing was adopted, because
+            // the STRIP also moves the query the count belongs to. Without it
+            // the footer said "See all N results" with N from
+            // `barcode capture` while linking to `barcode capture ios` - the
+            // same count/link divergence this PR fixes for the retry, on the
+            // path that was inert until applyQueryOverride started working.
+            adoptedRetryRef.current = {
+              typed: query || "",
+              effective: outcome.effectiveQuery,
+              ...(outcome.adopted || {}),
+            };
           }
           return outcome;
         })();
         const primaryQuery = strippedQuery != null ? strippedQuery : query || "";
         if (query) {
           resultPromise
-            .then(({ response, adopted, hitsBefore }) =>
+            .then(({ response, adopted }) =>
               captureSearchDebounced(query, nbHitsOf(response), {
                 adopted,
-                hitsBefore,
                 used: adopted ? adopted.used : null,
               })
             )
