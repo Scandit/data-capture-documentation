@@ -194,24 +194,47 @@ function Inner({ url, title }: PageFeedbackProps) {
     if (!text) return;
     // Flush the held vote first, so the pair arrives in the right order.
     //
-    // Keep this UNCONDITIONAL and keep it here. It is what stops a comment
-    // arriving with no vote behind it: the poll above gives up after
-    // RETRY_LIMIT * RETRY_MS and both pagehide and unmount can be missed, so a
-    // reader who idles past that and only then writes can otherwise lose the
-    // vote while the comment lands. Reporting takes vote counts from
-    // `docs_page_feedback` alone, so that reader would leave a comment and no
-    // countable vote, with nothing failing visibly. Gating this on the comment
-    // succeeding, or dropping it because the poll "already covers it", is the
-    // edit that reopens the gap.
+    // Keep this UNCONDITIONAL and keep it here.
     //
-    // The ORDER of these two is not what protects that - it only keeps the
-    // pair in sequence. Both go through the same helper, and three of its four
-    // exits - no window, no capture function, opted out - are shared state read
-    // synchronously one line apart, so swapping them cannot change whether the
-    // VOTE is accepted. The fourth is a throw, which drops both when its cause
-    // is the call itself; it cannot drop the vote ALONE, because the vote's
-    // properties are a subset of the comment's. Accepted, not received:
-    // capturePostHogEvent returns true once PostHog takes the event.
+    // What it actually covers, stated narrowly because the wider claim is not
+    // true: the poll above stops retrying after RETRY_LIMIT * RETRY_MS, but
+    // clearing the interval does NOT unregister the `pagehide` listener or the
+    // unmount `lastChance()` - the effect does not re-run, so both stay armed.
+    // After poll expiry a held vote is therefore still flushed on an in-site
+    // route change or on unload. This line is decisive in the narrower case
+    // where neither fires: the tab is discarded or the process killed after the
+    // comment lands. Rare, and silent when it happens.
+    //
+    // Two edits remove that cover, for different reasons:
+    //
+    //  - DELETING it as "already covered by the poll" is wrong for the case
+    //    above.
+    //  - GATING it on the comment succeeding - `if (delivered && ...)` - is
+    //    wrong for one specific exit rather than for the idle case. Three of
+    //    capturePostHogEvent's four false-exits are shared state read
+    //    synchronously one line apart, so where `delivered` is false for those,
+    //    the vote would not have been accepted either and the gate changes
+    //    nothing. The fourth is a THROW: if `ph.capture` throws on the comment
+    //    payload but would not have on the smaller vote payload - the vote's
+    //    properties are a subset of the comment's, so this is the direction
+    //    that can happen - the gate drops a vote that would have gone through.
+    //    That is the case the gate reopens, and it is not the idle one.
+    //
+    // The ORDER of these two protects nothing on its own; it only keeps the
+    // pair in sequence. For the three shared-state exits, swapping them cannot
+    // change whether the VOTE is accepted.
+    //
+    // Accepted, not received: capturePostHogEvent returns true once PostHog
+    // takes the event, not once the server has it.
+    //
+    // Why a lost vote matters at all rests on something NOT checkable from this
+    // repo: vote counts are read from `docs_page_feedback`, and
+    // `docs_page_feedback_comment` is not counted alongside it, so such a
+    // reader leaves a comment behind no countable vote. That event name appears
+    // nowhere else in the tree - no dashboard, query or digest config - so if
+    // the reporting ever changes to count both, this rationale quietly stops
+    // applying while the comment goes on asserting it. Check the PostHog
+    // insight before relying on it.
     if (heldVote.current !== null) sendVote(heldVote.current);
     const delivered = capturePostHogEvent('docs_page_feedback_comment', {
       ...base(),
