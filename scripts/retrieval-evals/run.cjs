@@ -96,13 +96,27 @@ function readBaseline() {
   // backstop, so a 24-point regression would have gone green; and a parsed
   // object missing the key made the floor NaN, which every comparison is false
   // against - the gate then passed unconditionally and still reported "ok".
+  // --update-baseline is the ONE caller allowed past a bad baseline, because it
+  // is the thing that repairs one. Without this, both checks below exited 1
+  // before the write at the end of main() could run - so the message "Re-record
+  // it with --update-baseline" named a command that could never succeed, and
+  // the only way out was to delete the file by hand. A guard whose own
+  // remediation it blocks is worse than no guard.
+  const refuse = (msg) => {
+    console.error(`retrieval-evals: ${msg}`);
+    if (UPDATE_BASELINE) {
+      console.error("--update-baseline was passed, so this run will overwrite it.");
+      return null;
+    }
+    console.error("Refusing to run an ungated check.");
+    process.exit(1);
+  };
+
   let parsed;
   try {
     parsed = JSON.parse(raw);
   } catch (err) {
-    console.error(`retrieval-evals: ${BASELINE_PATH} is not valid JSON (${err.message}).`);
-    console.error("Fix it or delete it - refusing to run an ungated check.");
-    process.exit(1);
+    return refuse(`${BASELINE_PATH} is not valid JSON (${err.message}).`);
   }
   for (const key of ["page_success_at_k", "page_mrr"]) {
     // Both, not just the first. page_mrr went unchecked, so a baseline that
@@ -110,9 +124,7 @@ function readBaseline() {
     // this script - set mrrFloor to 0, and nothing is ever below 0: the MRR
     // gate disabled itself while the report still said "ok".
     if (!parsed || !Number.isFinite(parsed[key])) {
-      console.error(`retrieval-evals: ${BASELINE_PATH} has no finite ${key}.`);
-      console.error("Re-record it with --update-baseline - refusing to run an ungated check.");
-      process.exit(1);
+      return refuse(`${BASELINE_PATH} has no finite ${key}.`);
     }
   }
   return parsed;

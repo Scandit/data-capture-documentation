@@ -29,8 +29,13 @@ jobs:
           # preview build, because it must not emit its ~22 MB of JSON into the
           # gh-pages branch that pr-preview-action commits. A full clone would
           # buy a freshness signal nobody computes. build-docs.yml makes the
-          # same call for the same reason and is also shallow on pull_request;
-          # it takes full history only on push, schedule and workflow_dispatch.
+          # same call for the same reason and is shallow on EVERY trigger: it
+          # builds and verifies but never publishes the index, so the dates
+          # would be computed and discarded there too.
+          #
+          # docs-retrieval-evals.yml is the one workflow that keeps
+          # fetch-depth: 0, because it is the one that reads the dates - it
+          # reports freshness coverage and fails on --require-freshness.
           fetch-depth: 1
 
       - name: Setup Node.js

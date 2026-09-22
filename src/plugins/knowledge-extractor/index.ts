@@ -160,6 +160,26 @@ function demoteLine(line: string): string {
   return out;
 }
 
+/**
+ * Close a code fence the clip left open.
+ *
+ * Both of clipMarkdown's early returns need this, and for different reasons:
+ * the short path can be handed text that was already unbalanced, and the
+ * demote path can MANUFACTURE an opener by stripping the markers in front of
+ * one. Shared so the two cannot drift - they did, and the demote path shipped
+ * the shape the published-artifact assertion throws on.
+ *
+ * The closer copies the opener's quote prefix. A bare closer after "> ```" is
+ * not balanced: CommonMark ends the blockquote at the unquoted line, implicitly
+ * closing the quoted fence, then opens a new top-level one that never closes.
+ */
+function balanceFences(text: string): string {
+  const fences = text.match(/^\s*(?:>\s*)*```/gm) || [];
+  if (fences.length % 2 === 0) return text;
+  const openerPrefix = (fences[fences.length - 1] || "").match(/^\s*(?:>\s*)*/);
+  return `${text}\n${openerPrefix ? openerPrefix[0] : ""}\u0060\u0060\u0060`;
+}
+
 function clipMarkdown(text: string, limit: number): string {
   // The early return used to hand back the raw text, so for any chunk shorter
   // than the limit the drop never ran at all - the "no excerpt ends on an
@@ -173,10 +193,7 @@ function clipMarkdown(text: string, limit: number): string {
     // for main and for every PR preview. That contradicts the rule the rest
     // of this plugin follows, that extraction must never break a deploy, and
     // the fix would have to be a code change on a docs-only PR with main red.
-    const fences = short.match(/^\s*(?:>\s*)*```/gm) || [];
-    if (fences.length % 2 === 0) return short;
-    const openerPrefix = (fences[fences.length - 1] || "").match(/^\s*(?:>\s*)*/);
-    return `${short}\n${openerPrefix ? openerPrefix[0] : ""}\u0060\u0060\u0060`;
+    return balanceFences(short);
   }
   const cut = text.slice(0, limit);
   const lines = cut.split("\n");
@@ -195,7 +212,15 @@ function clipMarkdown(text: string, limit: number): string {
   if (!open) {
     const plain = dropTrailingIntroducers(lines).join("\n").trimEnd();
     // Never nothing, and never the forbidden shape: demote instead of echoing.
-    return plain || demoteIntroducers(cut).trimEnd();
+    //
+    // balanceFences on BOTH, because demotion can CREATE a fence where the
+    // counter saw none. `open` is computed over `cut` before demotion, and the
+    // fence test is line-anchored, so "### # ``` weird" holds no fence at all -
+    // then demoteLine strips the markers, the backticks land at column 0, and
+    // the result carries an opener with no closer. Measured: limit 12 on that
+    // input returned "``` we", which assertArtifactInvariants throws on, which
+    // fails `docusaurus build` on content no docs author could clear.
+    return balanceFences(plain || demoteIntroducers(cut).trimEnd());
   }
   // Dropping the half-included block is better than shipping it broken, unless
   // that would throw away almost everything.
@@ -900,12 +925,35 @@ let PRODUCT_ALIASES: Map<string, string> | null = null;
 
 function loadProducts(siteDir: string): void {
   if (PRODUCT_KEYS && PRODUCT_ALIASES) return;
+  // READING the registry is the only thing inside the try.
+  //
+  // A bare try around the whole function swallowed the collision throw below
+  // and left PRODUCT_KEYS empty - after which detectProduct answers "core" for
+  // every /sdks/ page and "general" for everything else, every
+  // BelongsToProduct edge collapses onto two synthetic buckets, and every
+  // availability edge disappears. On a green build. That is far worse than the
+  // last-write-wins it was meant to replace, and it is the same shape of bug:
+  // a silent fallback standing in for a decision nobody can make correctly.
+  //
+  // So the two cases are separated. "The file is missing or unparseable" is
+  // tolerated, because this plugin must not be able to break a deploy over a
+  // file it only reads. "The file is present and says two contradictory
+  // things" is not tolerable, and must reach the surface.
+  let parsed: Array<{
+    key?: unknown;
+    frameworks?: Record<string, { apiUrl?: unknown }>;
+  }>;
   try {
     const raw = fs.readFileSync(path.join(siteDir, "src", "data", "products.json"), "utf8");
-    const parsed = JSON.parse(raw) as Array<{
-      key?: unknown;
-      frameworks?: Record<string, { apiUrl?: unknown }>;
-    }>;
+    parsed = JSON.parse(raw) as typeof parsed;
+    if (!Array.isArray(parsed)) throw new Error("not an array");
+  } catch {
+    // No registry (or unreadable): fall back to path shape only. Never fatal.
+    PRODUCT_KEYS = new Set();
+    PRODUCT_ALIASES = new Map();
+    return;
+  }
+  {
     // Filter on the RAW key: slug("") returns "module", so filtering after
     // slugging can never drop anything, and an entry with a missing key would
     // register "module" as a real product - after which a page at
@@ -958,11 +1006,6 @@ function loadProducts(siteDir: string): void {
       }
     }
     PRODUCT_ALIASES = aliases;
-  } catch {
-    // No registry (or unreadable): fall back to path shape only. Never fatal -
-    // this plugin must not be able to break a deploy.
-    PRODUCT_KEYS = new Set();
-    PRODUCT_ALIASES = new Map();
   }
 }
 
@@ -1993,12 +2036,39 @@ export default function knowledgeExtractor(context: any, options: any) {
       // (versions.json) are archived duplicates; `next` is the unreleased tree
       // when it exists; the external API reference (data-capture-sdk) is a
       // separate tool; *.html dirs are client-redirect stubs.
+      // ABSENT and BROKEN are different things, and the old catch treated them
+      // the same. A malformed versions.json left frozenVersions empty, so
+      // /7.6.14/ and /6.28.11/ stopped being excluded and were indexed as
+      // duplicates of the root tree - every one of them labelled
+      // version: "current", which is false. Neither guard can see it: the
+      // empty-output check passes and the drift ratio IMPROVES, because the
+      // page count goes up.
+      //
+      // A site with no versions.json is legitimate and stays tolerated. A
+      // versions.json that is present and unreadable is a build input this
+      // plugin cannot interpret, and guessing "none" is the one answer
+      // guaranteed to be wrong.
       let frozenVersions: string[] = [];
-      try {
-        const parsed = JSON.parse(fs.readFileSync(path.join(siteDir, "versions.json"), "utf8"));
-        if (Array.isArray(parsed)) frozenVersions = parsed.map(String);
-      } catch {
-        /* no versions.json */
+      const versionsPath = path.join(siteDir, "versions.json");
+      if (fs.existsSync(versionsPath)) {
+        let parsed: unknown;
+        try {
+          parsed = JSON.parse(fs.readFileSync(versionsPath, "utf8"));
+        } catch (err) {
+          throw new Error(
+            `[knowledge-extractor] versions.json is present but not valid JSON ` +
+              `(${(err as Error).message}). Refusing to guess that there are no ` +
+              `frozen versions - that would index every frozen tree as a ` +
+              `duplicate of the root, labelled with the served version.`,
+          );
+        }
+        if (!Array.isArray(parsed)) {
+          throw new Error(
+            `[knowledge-extractor] versions.json is present but is not an array. ` +
+              `Refusing to guess that there are no frozen versions.`,
+          );
+        }
+        frozenVersions = parsed.map(String);
       }
       // The curation decision, applied rather than paraphrased: the same globs
       // docusaurus-plugin-llms is given for what an assistant may not see,
@@ -2066,6 +2136,13 @@ export default function knowledgeExtractor(context: any, options: any) {
       // route, because that is what the globs describe - and on every candidate
       // spelling of it, since a route maps to `docs/x.md`, `docs/x/index.md` and
       // the folder/folder.md convention alike.
+      // Eagerly, before the page loop. detectProduct() calls loadProducts()
+      // lazily, and that call would land inside the per-page try/catch below -
+      // so a genuine registry error would arrive as ~620 "skipped page"
+      // warnings followed by the drift guard's "page selectors likely drifted",
+      // which is the wrong diagnosis for a products.json that contradicts
+      // itself. Raised here it is one error naming the real cause.
+      loadProducts(siteDir);
       const unresolvedRoutes: string[] = [];
       const files = walkHtml(outDir, skipDir).filter((f) => {
         const rel = path.relative(outDir, path.dirname(f)).split(path.sep).join("/");
