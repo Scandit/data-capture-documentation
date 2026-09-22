@@ -237,6 +237,21 @@ function rewriteVersionTag(facetFilters, targetTag, apiMap) {
 // this only stops the platform word from skewing textual relevance (e.g. lifting
 // framework-listing pages above the product's get-started guide).
 function stripRoutedTokens(query, stripVersion) {
+  // DOTTED QUERIES ARE LEFT ALONE.
+  //
+  // This function was inert in production until applyQueryOverride was fixed,
+  // so its behaviour had never actually been exercised - and on a dotted
+  // expression it is destructive. `ios` is a routed token, so
+  // `scandit.datacapture.core.ios.Anchor` became
+  // `scandit.datacapture.core. .Anchor`: a space injected into the middle of an
+  // identifier path, which matches nothing and which dottedFallback then cannot
+  // rescue because the shape is gone.
+  //
+  // A pasted expression is precisely what this file's retry exists to serve, so
+  // the strip must not run on one. The framework name inside a namespace is
+  // part of the symbol, not a routing hint the reader added.
+  if (/\S\.\S/.test(query || "")) return (query || "").trim();
+
   let q = ` ${query || ""} `;
   for (const { re } of QUERY_FRAMEWORK_TOKENS) {
     q = q.replace(new RegExp(re.source, "gi"), " ");
@@ -244,7 +259,18 @@ function stripRoutedTokens(query, stripVersion) {
   if (stripVersion) {
     q = q.replace(/\b(?:version|ver|v|sdk)\s*\.?\s*\d+\b/gi, " ");
   }
-  return q.replace(/\s+/g, " ").trim();
+  const stripped = q.replace(/\s+/g, " ").trim();
+  // Never strip a query down to nothing OR down to a single leftover word.
+  //
+  // The only previous guard was "must not be empty", which let `ios sdk` become
+  // `sdk` and `android studio` become `studio` - the reader loses the term that
+  // carried their intent, silently, and the results are for a query they did
+  // not type. A one-word remainder is not a refined query, it is a different
+  // one. `barcode capture ios` -> `barcode capture` keeps two words and is the
+  // case this strip was written for.
+  if (!stripped || stripped === query) return stripped || (query || "").trim();
+  if (stripped.split(/\s+/).length < 2) return (query || "").trim();
+  return stripped;
 }
 /**
  * The one retry for a dotted query that found nothing, chosen by SHAPE.
@@ -505,9 +531,7 @@ function ResultsFooter({
   // and a superseded retry could otherwise still be sitting in it.
   const recorded = adoptedRetryRef && adoptedRetryRef.current;
   const forThisQuery =
-    recorded && recorded.typed !== undefined && recorded.typed === state.query
-      ? recorded
-      : null;
+    recorded && recorded.typed && recorded.typed === state.query ? recorded : null;
   const adopted = forThisQuery && forThisQuery.used ? forThisQuery : null;
   // The link follows the ADOPTION, not the count.
   //
@@ -1004,18 +1028,8 @@ function DocSearch({ contextualSearch, externalUrlRegex, ...props }) {
           // from an abandoned query used to land after a later query had
           // rendered, leaving the footer showing the old retry against the new
           // count.
-          if (latestQueryRef.current === (query || "")) {
-            // `effective` is recorded even when nothing was adopted, because
-            // the STRIP also moves the query the count belongs to. Without it
-            // the footer said "See all N results" with N from
-            // `barcode capture` while linking to `barcode capture ios` - the
-            // same count/link divergence this PR fixes for the retry, on the
-            // path that was inert until applyQueryOverride started working.
-            adoptedRetryRef.current = {
-              typed: query || "",
-              effective: outcome.effectiveQuery,
-              ...(outcome.adopted || {}),
-            };
+          if (outcome.adopted && latestQueryRef.current === (query || "")) {
+            adoptedRetryRef.current = outcome.adopted;
           }
           return outcome;
         })();

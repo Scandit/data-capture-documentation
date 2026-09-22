@@ -34,7 +34,9 @@ const src = fs.readFileSync(SRC, "utf8");
 function extract(name) {
   let start = src.indexOf(`function ${name}(`);
   // Keep a leading `async`, or the extracted body's `await` is a syntax error.
-  if (start > 6 && src.slice(start - 6, start) === "async ") start -= 6;
+  // >= 6, not > 6: at exactly offset 6 the slice is still a valid "async "
+  // and skipping it would extract a body whose `await` is a syntax error.
+  if (start >= 6 && src.slice(start - 6, start) === "async ") start -= 6;
   assert.notStrictEqual(start, -1, `${name} not found in SearchBar - test is stale`);
   let depth = 0;
   let started = false;
