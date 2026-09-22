@@ -196,45 +196,46 @@ function Inner({ url, title }: PageFeedbackProps) {
     //
     // Keep this UNCONDITIONAL and keep it here.
     //
-    // What it actually covers, stated narrowly because the wider claim is not
-    // true: the poll above stops retrying after RETRY_LIMIT * RETRY_MS, but
-    // clearing the interval does NOT unregister the `pagehide` listener or the
-    // unmount `lastChance()` - the effect does not re-run, so both stay armed.
-    // After poll expiry a held vote is therefore still flushed on an in-site
-    // route change or on unload. This line is decisive in the narrower case
-    // where neither fires: the tab is discarded or the process killed after the
-    // comment lands. Rare, and silent when it happens.
+    // What else could flush a held vote, and why none of it is cover.
     //
-    // Two edits remove that cover, for different reasons:
+    // The poll stops retrying after RETRY_LIMIT * RETRY_MS, but clearing the
+    // interval does NOT unregister the `pagehide` listener or the unmount
+    // `lastChance()` - the effect does not re-run - so both stay armed. That is
+    // worth knowing, and it is NOT the same as the vote being safe: both call
+    // this same helper, which returns true on ACCEPTED rather than received,
+    // and both fire at the least reliable moment there is for getting a request
+    // out of a browser. Unload is where in-flight beacons die.
     //
-    //  - DELETING it as "already covered by the poll" is wrong for the case
-    //    above.
-    //  - GATING it on the comment succeeding - `if (delivered && ...)` - is
-    //    wrong for one specific exit rather than for the idle case. Three of
-    //    capturePostHogEvent's four false-exits are shared state read
-    //    synchronously one line apart, so where `delivered` is false for those,
-    //    the vote would not have been accepted either and the gate changes
-    //    nothing. The fourth is a THROW: if `ph.capture` throws on the comment
-    //    payload but would not have on the smaller vote payload - the vote's
-    //    properties are a subset of the comment's, so this is the direction
-    //    that can happen - the gate drops a vote that would have gone through.
-    //    That is the case the gate reopens, and it is not the idle one.
+    // So those paths are a fallback, not a guarantee, and this line is the only
+    // flush that happens while the page is alive and the reader is still
+    // sitting there. Do not reason from "pagehide will get it".
     //
-    // The ORDER of these two protects nothing on its own; it only keeps the
+    // Two edits remove it:
+    //
+    //  - DELETING it as "the poll already covers it". The poll has stopped by
+    //    then; that is the whole scenario.
+    //  - GATING it on the comment succeeding, `if (delivered && ...)`. The
+    //    argument against this needs no scenario at all: the gate can only ever
+    //    LOSE a vote and can never gain one. Where `delivered` is true the
+    //    vote goes either way, so the gate buys nothing; where it is false the
+    //    vote may still have been accepted - three of capturePostHogEvent's
+    //    four false-exits are shared state read one line apart, but the fourth
+    //    is a throw, and the vote's properties are a subset of the comment's,
+    //    so a payload that throws on the comment need not have thrown on the
+    //    vote. There is no case in which adding the gate helps.
+    //
+    // The ORDER of the two calls protects nothing on its own; it only keeps the
     // pair in sequence. For the three shared-state exits, swapping them cannot
     // change whether the VOTE is accepted.
     //
-    // Accepted, not received: capturePostHogEvent returns true once PostHog
-    // takes the event, not once the server has it.
-    //
-    // Why a lost vote matters at all rests on something NOT checkable from this
-    // repo: vote counts are read from `docs_page_feedback`, and
-    // `docs_page_feedback_comment` is not counted alongside it, so such a
-    // reader leaves a comment behind no countable vote. That event name appears
-    // nowhere else in the tree - no dashboard, query or digest config - so if
-    // the reporting ever changes to count both, this rationale quietly stops
-    // applying while the comment goes on asserting it. Check the PostHog
-    // insight before relying on it.
+    // Why a lost vote matters rests on something NOT checkable from this repo:
+    // vote counts are read from `docs_page_feedback`. Note that this is a
+    // strict PREFIX of `docs_page_feedback_comment`, so an insight that matches
+    // by "contains" or by regex rather than exact equality already counts both
+    // - in which case this rationale is wrong today, not merely at risk of
+    // going wrong. Neither event name appears anywhere else in this repo, so
+    // confirm the insight uses an exact-match filter before relying on any of
+    // this.
     if (heldVote.current !== null) sendVote(heldVote.current);
     const delivered = capturePostHogEvent('docs_page_feedback_comment', {
       ...base(),
