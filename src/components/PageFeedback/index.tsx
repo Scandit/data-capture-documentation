@@ -200,15 +200,24 @@ function Inner({ url, title }: PageFeedbackProps) {
     //
     // The poll stops retrying after RETRY_LIMIT * RETRY_MS, but clearing the
     // interval does NOT unregister the `pagehide` listener or the unmount
-    // `lastChance()` - the effect does not re-run - so both stay armed. That is
-    // worth knowing, and it is NOT the same as the vote being safe: both call
-    // this same helper, which returns true on ACCEPTED rather than received,
-    // and both fire at the least reliable moment there is for getting a request
-    // out of a browser. Unload is where in-flight beacons die.
+    // `lastChance()` - the effect does not re-run - so both stay armed. They
+    // are not equivalent to each other, and the difference matters:
     //
-    // So those paths are a fallback, not a guarantee, and this line is the only
-    // flush that happens while the page is alive and the reader is still
-    // sitting there. Do not reason from "pagehide will get it".
+    //  - UNMOUNT is reliable. On this SPA the widget unmounts on a client-side
+    //    route change, which is how most readers leave a docs page, and the
+    //    page is fully alive when it runs (see the note on the cleanup above).
+    //    It is a better bet than the flush below, not a worse one - do not
+    //    remove it on the strength of the next bullet.
+    //  - PAGEHIDE is the unreliable one: a real unload, where an in-flight
+    //    request may never leave the browser, and where an accepted event is
+    //    not a delivered one.
+    //
+    // So what this line uniquely covers, ONCE THE POLL HAS EXHAUSTED, is the
+    // reader who neither navigates in-site nor unloads cleanly - the tab
+    // discarded, the process killed - having written a comment. Before the poll
+    // exhausts it flushes on a live page anyway, and this line is then a
+    // no-op, which is fine: it costs nothing and it is the only thing standing
+    // there once the poll is done.
     //
     // Two edits remove it:
     //
