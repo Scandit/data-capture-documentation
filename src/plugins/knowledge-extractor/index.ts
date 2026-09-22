@@ -927,8 +927,34 @@ function loadProducts(siteDir: string): void {
         const m = /^\/sdks\/(?:net\/)?[^/]+\/([^/]+)\//.exec(String(fw?.apiUrl ?? ""));
         if (!m) continue;
         const seg = slug(m[1]);
-        // Never let one product's route claim another product's key.
-        if (seg && seg !== key && !PRODUCT_KEYS.has(seg)) aliases.set(seg, key);
+        if (!seg || seg === key || PRODUCT_KEYS.has(seg)) continue;
+        // Never let one product's route claim another product's key (the
+        // PRODUCT_KEYS check above), and never let two products claim the SAME
+        // route segment silently.
+        //
+        // A bare aliases.set() is last-write-wins: whichever product sits later
+        // in products.json takes the segment, every page under it is
+        // reattributed to that product, and nothing anywhere says so. A
+        // misattributed product is exactly the failure this alias map was added
+        // to fix, so resolving it by array order would reintroduce it in a form
+        // that is harder to see.
+        //
+        // Not reachable with the current registry - the only two aliases,
+        // matrixscan and label-capture, are on disjoint segments - so this
+        // throws rather than warns, matching how every other curation-integrity
+        // check in this file behaves. Reaching it means products.json is
+        // ambiguous about which product owns a route, and no fallback this
+        // plugin picks can be the right answer to that.
+        const prior = aliases.get(seg);
+        if (prior && prior !== key) {
+          throw new Error(
+            `[knowledge-extractor] products.json: the route segment "${seg}" is ` +
+              `claimed by both "${prior}" and "${key}" through their ` +
+              `frameworks[].apiUrl. One product must own a segment - pages under ` +
+              `/sdks/<framework>/${seg}/ cannot belong to both.`,
+          );
+        }
+        aliases.set(seg, key);
       }
     }
     PRODUCT_ALIASES = aliases;

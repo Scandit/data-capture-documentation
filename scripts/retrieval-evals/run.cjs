@@ -80,9 +80,9 @@ const AUTO_LIMIT = num("auto-limit", "0", parseInt);
 // that legitimately alters what is indexed, and say so in the commit.
 const BASELINE_PATH = path.join(__dirname, "baseline.json");
 const AUTO_TOLERANCE = num("auto-tolerance", "0.03", parseFloat);
-const AUTO_FLOOR = parseFloat(arg("auto-floor", "0.60"));
-const AUTO_MRR_FLOOR = parseFloat(arg("auto-mrr-floor", "0.40"));
-const MIN_AUTO_MRR = parseFloat(arg("min-auto-mrr", "0"));
+const AUTO_FLOOR = num("auto-floor", "0.60", parseFloat);
+const AUTO_MRR_FLOOR = num("auto-mrr-floor", "0.40", parseFloat);
+const MIN_AUTO_MRR = num("min-auto-mrr", "0", parseFloat);
 const UPDATE_BASELINE = process.argv.includes("--update-baseline");
 function readBaseline() {
   let raw;
