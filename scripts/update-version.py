@@ -20,13 +20,10 @@ therefore flow into search automatically - no separate update is needed here.
 """
 
 import json
-import os
 import re
 import shutil
 import subprocess
 import sys
-import urllib.error
-import urllib.request
 from pathlib import Path
 from typing import Optional
 
@@ -314,47 +311,6 @@ def api_reference_line(version: str) -> str:
     return match.group(1)
 
 
-def sample_api_links(files: list, source: str, limit: int = 3) -> list:
-    """Distinct real link targets in `files` that use `source`.
-
-    The rewritten links are what gets verified, not the constructed prefix:
-    https://docs.scandit.com/8.6/data-capture-sdk/ is a 404 because there is no
-    index at that level, while .../8.6/data-capture-sdk/ios/... resolves. A
-    prefix check would block every bump.
-
-    Links carrying a `${...}` template expression are skipped - the framework
-    segment is filled in at render time, so there is no single URL to probe.
-    """
-    pattern = re.compile(r"https://" + re.escape(source) + r"[^)\"'>` \n]*")
-    found: list[str] = []
-    for file_path in files:
-        for match in pattern.findall(file_path.read_text()):
-            url = match.split("#", 1)[0]
-            if "${" in url or url in found:
-                continue
-            found.append(url)
-            if len(found) >= limit:
-                return found
-    return found
-
-
-def api_target_published(url: str) -> bool:
-    """Whether `url` serves anything.
-
-    A network failure raises rather than returning False: "we could not check"
-    must not be read as "it is missing", which would abort a bump for the wrong
-    reason. Set SKIP_API_TARGET_CHECK=1 to bypass entirely when offline.
-    """
-    request = urllib.request.Request(url, method="HEAD")
-    try:
-        with urllib.request.urlopen(request, timeout=20) as response:
-            return 200 <= response.status < 400
-    except urllib.error.HTTPError as error:
-        return 200 <= error.code < 400
-    except urllib.error.URLError as error:
-        raise RuntimeError(f"could not reach {url}: {error}") from error
-
-
 def rewrite_api_reference_links(version: str) -> None:
     """Point a freshly frozen version's API-reference links at its own line.
 
@@ -371,53 +327,42 @@ def rewrite_api_reference_links(version: str) -> None:
     it as "210 files link docs.scandit.com/data-capture-sdk, 0 versioned" -
     while 7.6.14 and 6.28.11 link their own lines because someone corrected
     them by hand afterwards.
+
+    NO CHECK THAT THE TARGET RESOLVES, deliberately. The bump runs well BEFORE
+    the release, so that people can review the snapshot and the release notes
+    while there is still time to change them. publish_platform() in
+    data-capture-sdk writes <major.minor>/data-capture-sdk/ and
+    <major.minor>/c_api/ from the release pipeline, which has not run yet, so
+    the links this writes are correct by construction and unresolvable by
+    definition at the moment they are written. Verifying them belongs after the
+    release publishes, not here.
     """
     line = api_reference_line(version)
     docs_dir = Path(f"versioned_docs/version-{version}")
     if not docs_dir.exists():
         raise FileNotFoundError(f"{docs_dir} does not exist")
 
-    files = sorted(
-        set(docs_dir.rglob("*.md")) | set(docs_dir.rglob("*.mdx"))
-    )
-
-    # Only the links this snapshot actually uses have to resolve. A version that
-    # never mentions the linux C API must not be blocked by /X.Y/c_api/.
-    needed = [
+    rewrites = [
         (source, target.format(line=line))
         for source, target in API_REFERENCE_LINK_REWRITES
-        if any(source in f.read_text() for f in files)
     ]
-    if not needed:
-        print("  No API-reference links to rewrite")
-        return
-
-    if os.environ.get("SKIP_API_TARGET_CHECK") != "1":
-        for source, target in needed:
-            for url in sample_api_links(files, source):
-                rewritten = url.replace(f"https://{source}", f"https://{target}")
-                if not api_target_published(rewritten):
-                    raise RuntimeError(
-                        f"{version} links the API reference, but {rewritten} does "
-                        f"not resolve. Rewriting would freeze links to a 404. "
-                        f"Publish that line first, or copy it from the newest "
-                        f"patch folder as /7.6/c_api/ was. "
-                        f"SKIP_API_TARGET_CHECK=1 bypasses this check."
-                    )
 
     total = 0
     touched = 0
-    for file_path in files:
+    for file_path in sorted(set(docs_dir.rglob("*.md")) | set(docs_dir.rglob("*.mdx"))):
         content = file_path.read_text()
         original = content
-        for source, target in needed:
+        for source, target in rewrites:
             total += content.count(source)
             content = content.replace(source, target)
         if content != original:
             file_path.write_text(content)
             touched += 1
 
-    for _source, target in needed:
+    if total == 0:
+        print("  No API-reference links to rewrite")
+        return
+    for _source, target in rewrites:
         print(f"  -> {target}")
     print(f"  Rewrote {total} API-reference links in {touched} files")
 
