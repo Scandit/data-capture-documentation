@@ -259,18 +259,16 @@ function stripRoutedTokens(query, stripVersion) {
   if (stripVersion) {
     q = q.replace(/\b(?:version|ver|v|sdk)\s*\.?\s*\d+\b/gi, " ");
   }
-  const stripped = q.replace(/\s+/g, " ").trim();
-  // Never strip a query down to nothing OR down to a single leftover word.
+  // Empty only. A "leave at least two words" rule was tried here and reverted:
+  // it fixed `ios sdk` -> `sdk` at the cost of `sparkscan web`,
+  // `matrixscan ios` and every other two-word query, which is the shape this
+  // strip exists for and by far the commonest one. Losing the primary case to
+  // guard a marginal one is the wrong trade.
   //
-  // The only previous guard was "must not be empty", which let `ios sdk` become
-  // `sdk` and `android studio` become `studio` - the reader loses the term that
-  // carried their intent, silently, and the results are for a query they did
-  // not type. A one-word remainder is not a refined query, it is a different
-  // one. `barcode capture ios` -> `barcode capture` keeps two words and is the
-  // case this strip was written for.
-  if (!stripped || stripped === query) return stripped || (query || "").trim();
-  if (stripped.split(/\s+/).length < 2) return (query || "").trim();
-  return stripped;
+  // So `ios sdk` -> `sdk` stands. It is a poor query either way, and the
+  // routed-token list is where to fix it if it matters - not a word count that
+  // cannot tell a platform qualifier from the term carrying the intent.
+  return q.replace(/\s+/g, " ").trim() || (query || "").trim();
 }
 /**
  * The one retry for a dotted query that found nothing, chosen by SHAPE.
