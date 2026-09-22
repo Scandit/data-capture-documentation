@@ -32,3 +32,7 @@ validation/cache/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# scripts/test-docs-gate.cjs scratch dirs (pid-suffixed; removed in a finally,
+# so these only appear after a hard kill)
+scripts/.test-docs-gate-tmp-*

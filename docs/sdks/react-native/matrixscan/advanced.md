@@ -3,7 +3,7 @@ description: "Advanced MatrixScan settings for React Native: tune tracking, over
 
 sidebar_position: 3
 pagination_next: null
-framework: react
+framework: react-native
 keywords:
   - react
 

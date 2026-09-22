@@ -71,10 +71,12 @@ jobs:
 
       - name: Install Vale (pinned)
         run: |
-          # The version the rules in styles/Scandit/ were measured against -
-          # both of them encode behaviour that is version-specific, down to
-          # which regex constructs the token engine honours, and a local pass
-          # on one version proves nothing about another.
+          # The version the rules in styles/Scandit/ and the frontmatter cap in
+          # scripts/docs-gate were both measured against. Both encode behaviour
+          # that is version-specific, down to which regex constructs the token
+          # engine honours, and the cap additionally rests on Vale attributing a
+          # `description` alert to its true file line. A local pass on one
+          # version proves nothing about another.
           #
           # CI only. scripts/setup-vale.cjs does not install Vale at all - it
           # checks for it, prints winget/brew guidance if it is missing, and
@@ -96,6 +98,23 @@ jobs:
 
       - name: Sync Vale styles
         run: yarn docs:gate:setup
+
+      # The gate scripts' own readers and, through a fixture tree, the whole of
+      # verify-frameworks. Each defect these rows pin made a gate print OK while
+      # a check went unperformed, which no amount of green output would show.
+      #
+      # Here rather than in build-docs.yml because the prose rows need the Vale
+      # BINARY on PATH - without it the gate prints "Vale not installed", skips
+      # the prose checks, and the rows would pass vacuously, so the suite asserts
+      # its presence and goes red instead. This job is the one that installs it.
+      # It needs the binary ONLY: the fixture writes its own .vale.ini with no
+      # Packages line, so it runs before or after `vale sync` indifferently and
+      # never touches the network.
+      #
+      # Before the real gate deliberately: if the gate's own readers are broken,
+      # that is worth knowing before reading anything the gate reports.
+      - name: Test docs-gate readers
+        run: yarn test:docs-gate
 
       - name: Run docs quality gate
         # GITHUB_BASE_REF makes the gate ratchet against the PR's target branch.

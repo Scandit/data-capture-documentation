@@ -2,7 +2,7 @@
 description: "MatrixScan Pick guides order picking in your .NET iOS app with on-screen AR cues for the items to pick."
 sidebar_position: 1
 pagination_prev: null
-framework: netIos
+framework: net-ios
 keywords:
   - netIos
 ---

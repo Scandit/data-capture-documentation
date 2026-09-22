@@ -2,7 +2,7 @@
 description: "Advanced ID Capture settings for .NET iOS: configure document types, extracted fields, and verification."
 sidebar_position: 4
 pagination_next: null
-framework: netIos
+framework: net-ios
 keywords:
   - netIos
 ---

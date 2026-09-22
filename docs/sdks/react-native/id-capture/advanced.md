@@ -3,7 +3,7 @@ description: "Advanced ID Capture settings for React Native: configure document 
 
 sidebar_position: 4
 pagination_next: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---
