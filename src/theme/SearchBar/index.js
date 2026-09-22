@@ -508,12 +508,25 @@ function ResultsFooter({
     recorded && recorded.typed !== undefined && recorded.typed === state.query
       ? recorded
       : null;
-  // The NOTE needs an adoption (`used`); the LINK only needs the query the
-  // count came from. Separating them is what stops the strip path showing a
-  // count for one query beside a link to another.
   const adopted = forThisQuery && forThisQuery.used ? forThisQuery : null;
-  const countQuery =
-    (forThisQuery && forThisQuery.effective) || state.query;
+  // The link follows the ADOPTION, not the count.
+  //
+  // An earlier version of this pointed the link at whatever query the count
+  // came from, to stop the two disagreeing on the strip path. That is the wrong
+  // side of the trade: the strip removes routed tokens for relevance, so
+  // following it sends `ios sdk` to /search?q=sdk and drops the platform the
+  // reader typed - silently, with no note, which is exactly what the comment on
+  // the ref below forbids ("the relevance strip is not a fallback, and must
+  // never be surfaced").
+  //
+  // So on the strip path the count and the link genuinely describe different
+  // queries, and that is deliberate: the count is what THIS search returned,
+  // the link is what the reader asked for. A count that is slightly off is a
+  // number nobody acts on; a link that quietly drops their framework is a
+  // wrong answer they do act on.
+  //
+  // An adopted retry is different - it is announced in the note directly above,
+  // so following it surprises nobody.
   // API results are now shown for whichever single framework each symbol
   // resolved to (web when available, else the next in the fallback order), so
   // the note names the framework(s) actually shown rather than a hardcoded
@@ -572,7 +585,7 @@ function ResultsFooter({
       )}
       {hasSearchPage && (
         <Link
-          to={createSearchLink(countQuery)}
+          to={createSearchLink(adopted ? adopted.used : state.query)}
           onClick={onClose}
         >
           <Translate

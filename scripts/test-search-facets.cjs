@@ -384,10 +384,11 @@ const DOTTED = [
   ["a capitalised word", "barcode.data.Text", "Text"],
   ["another capitalised word", "this.viewfinder.style.Color", "Color"],
   ["an all-caps enum member", "settings.mode.LEGACY", "LEGACY"],
-  // The letter guard, which the symbol-shape rule no longer covers.
-  // Six characters of digits and underscores passes the shape rule, so the
-  // letter guard is what declines it. The five-character version is declined by
-  // the floor instead, which is why it pinned nothing.
+  // The LETTER guard, and only that. `_12345` is six identifier characters so
+  // it clears the four-character floor; nothing but the letter test declines
+  // it. (A five-character `_1234` would also clear the floor and also be
+  // declined by the letter test, so it would pin the same thing twice - which
+  // is why there is one row here and not two.)
   ["an underscore and digits is not a name", "foo.bar._12345", null],
   ["the same below the floor", "foo.bar._1234", null],
   // What follows is NOT a judgement about whether the retry is believed -
