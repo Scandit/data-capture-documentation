@@ -3,7 +3,7 @@ description: "Scan a single barcode at a time in your React Native app with the 
 
 toc_max_heading_level: 4
 pagination_prev: null
-framework: react
+framework: react-native
 keywords:
   - react
 ---

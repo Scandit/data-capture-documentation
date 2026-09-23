@@ -35,7 +35,7 @@ To claim ownership of an object use one of the `sc_*_retain` functions, and use 
 Some objects returned by functions are automatically owned by the caller and must be released after use, while others must be retained manually, if required. The following rules apply:
 
 * Objects created by you (using any of the `*_new` functions) must be released after use by you.
-* Objects returned by functions that explicitly state they transfer ownership to you, must be released after use. An examples of such a function is [`sc_barcode_scanner_session_get_newly_recognized_codes()`](https://docs.scandit.com/stable/c_api/struct_sc_barcode_scanner_session.html#a090af0487a5928ca5893baa66d94f946).
+* Objects returned by functions that explicitly state they transfer ownership to you, must be released after use. An examples of such a function is [`sc_barcode_scanner_session_get_newly_recognized_codes()`](https://docs.scandit.com/7.6/c_api/struct_sc_barcode_scanner_session.html#a090af0487a5928ca5893baa66d94f946).
 * You must release objects on which you called `sc_*_retain`
 
 ### Image Coordinate System

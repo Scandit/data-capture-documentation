@@ -800,6 +800,26 @@ const config: Config = {
     "docusaurus-plugin-llms",
     {
       ignoreFiles: llmsIgnoreFiles,
+      // Strip the "docs" segment from the URLs the plugin emits.
+      //
+      // docusaurus-plugin-llms builds links as <siteUrl>/docs/<path> - see
+      // pathPrefix in its processor - but this site sets routeBasePath: "/" on
+      // the docs plugin, so pages are served at /sdks/..., not /docs/sdks/... .
+      // Verified against production: /docs/sdks/android/agent-skills returns
+      // 404, /sdks/android/agent-skills returns 200.
+      //
+      // So every entry in llms.txt and llms-full.txt has carried the wrong
+      // prefix since those files were first generated - roughly 400 dead links
+      // in each, in two files whose only consumers are external agents that
+      // cannot report a broken link back to us.
+      //
+      // Wider than it sounds, so it is stated rather than assumed: the plugin
+      // applies this to the whole doc-relative path with a global regex, not
+      // just to the prefix it prepends. A page whose route genuinely contained
+      // a segment named "docs" - docs/sdks/web/docs/foo.mdx - would lose that
+      // segment too and emit a broken link. No such path exists today; if one
+      // is ever added, this option is where it breaks.
+      pathTransformation: { ignorePaths: ["docs"] },
     },
   ],
   ...(isPreviewBuild ? [stripPreviewMediaPlugin] : []),

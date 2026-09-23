@@ -2,7 +2,7 @@
 description: "Advanced MatrixScan settings for .NET Android: tune tracking, overlays, and scanning performance."
 sidebar_position: 3
 pagination_next: null
-framework: netAndroid
+framework: net-android
 keywords:
   - netAndroid
 

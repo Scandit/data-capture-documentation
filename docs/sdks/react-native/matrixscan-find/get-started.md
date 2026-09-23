@@ -2,7 +2,7 @@
 description: "Add MatrixScan Find to your React Native app to search for and highlight specific items with the camera."
 
 sidebar_position: 2
-framework: react
+framework: react-native
 keywords:
   - react
 ---

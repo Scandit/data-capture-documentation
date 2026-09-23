@@ -1132,7 +1132,26 @@ function isAvailabilityStub(title: string, body: string): boolean {
 function classifyLinks(chunkMarkdown: string, site: string, baseUrl: string): { internal: string[]; api: string[] } {
   const internal = new Set<string>();
   const api = new Set<string>();
-  const re = /\[[^\]]*\]\(([^)]+)\)/g;
+  // One level of BALANCED parens inside the href, not "up to the first `)`".
+  //
+  // `[^)]+` stops at the first literal `)`, which is inside the URL rather than
+  // closing the link whenever a target contains one. Both shapes occur here:
+  //
+  //   [Data Matrix](https://en.wikipedia.org/wiki/Data_Matrix_(symbology))
+  //     -> https://en.wikipedia.org/wiki/Data_Matrix_(symbology
+  //   [init](https://docs.scandit.com/.../ns-scan.html#init(context:))
+  //     -> https://docs.scandit.com/.../ns-scan.html#init(context:
+  //
+  // The first is usually harmless - a truncated external URL fails the `site`
+  // prefix tests below and is dropped. The second is not: it is an
+  // API-reference fragment, so it passes those tests and lands in `api` with
+  // the fragment cut mid-signature, and Swift/ObjC selectors in that form are
+  // exactly what the API reference anchors on.
+  //
+  // `(?:[^()]|\([^()]*\))+` admits one nested pair, which covers every case in
+  // this corpus. Full nesting needs a parser, and CommonMark itself only
+  // guarantees balanced parens to one level without escaping.
+  const re = /\[[^\]]*\]\(((?:[^()]|\([^()]*\))+)\)/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(chunkMarkdown))) {
     let href = m[1].trim();

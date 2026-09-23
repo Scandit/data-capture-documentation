@@ -65,9 +65,14 @@ function changedDocs() {
   // expensive than on an ordinary page. _barcode-scanning.mdx is 288 lines
   // that nothing imports today and is kept deliberately, so it is
   // gate-blocking like any other partial.
-  return files.filter(
-    (f) => /\.(md|mdx)$/i.test(f) && fs.existsSync(path.join(ROOT, f))
-  );
+  // Returned WITH the resolved base, so main() takes the ratchet base from the
+  // call rather than from module state written as a side effect of it.
+  return {
+    files: files.filter(
+      (f) => /\.(md|mdx)$/i.test(f) && fs.existsSync(path.join(ROOT, f))
+    ),
+    base,
+  };
 }
 
 // Partials are kept out of the schema check (they carry no frontmatter) and
@@ -92,6 +97,86 @@ function findVale() {
   try { execFileSync(cand, ["-v"], { stdio: "ignore" }); return cand; } catch { return null; }
 }
 
+/** Everything after the frontmatter block, or the whole file if there is none. */
+function bodyOf(text) {
+  // git show hands back the repo blob with LF while the Windows working copy
+  // has CRLF; without this every file compares as changed and the skip never fires.
+  text = text.replace(/\r\n/g, "\n").replace(/^\uFEFF/, "");
+  // BOM stripped, like frontmatterEndLine and declaredFrameworks: without it
+  // `startsWith("---")` is false, the whole file counts as body, and a
+  // frontmatter-only edit to a BOM'd page never qualified for the skip.
+  if (!text.startsWith("---")) return text;
+  const end = text.indexOf("\n---", 3);
+  return end === -1 ? text : text.slice(end + 4);
+}
+
+/**
+ * Whether two versions of a file have the same body.
+ *
+ * The TRAILING edge is trimmed, not both. `.trim()` on both admitted any change
+ * that is purely leading whitespace, and indentation is not cosmetic in
+ * Markdown: de-indenting the first body line turns an indented code block,
+ * which Vale skips, into a paragraph, which it lints. Such a file was then
+ * classified metadata-only, capped at the frontmatter, and the new alert
+ * dropped - the gate printing OK on prose the change had made lintable.
+ * Reproduced end to end by the `body-indentation-only` row.
+ *
+ * The trailing trim stays: a missing or added final newline is not a body
+ * change anyone needs to review.
+ */
+function sameBody(before, after) {
+  return bodyOf(before).replace(/\s+$/, "") === bodyOf(after).replace(/\s+$/, "");
+}
+
+/**
+ * Files whose diff against the ratchet base touches frontmatter only.
+ *
+ * The ratchet checks a whole file as soon as a PR touches one line of it, which
+ * is right for prose someone is actually editing and wrong for a mechanical
+ * metadata pass: normalizing a `framework:` value across 117 pages dragged in
+ * 233 pre-existing Vale findings that the change neither caused nor altered.
+ * Nobody writes prose in frontmatter, so when the body is byte-identical to the
+ * base there is no prose to review, and the prose checks are skipped for that
+ * file. Schema and link checks still run on every changed file.
+ */
+function frontmatterOnly(files, base) {
+  const out = new Set();
+  if (!base) return out;
+  for (const f of files) {
+    let before;
+    try {
+      // execFileSync with an argv, not a shell string: `f` is a path from git
+      // output, and interpolating it into a command line is a class of bug
+      // rather than a present one. No doc path in the repo carries a shell
+      // metacharacter today, and a failure here falls back to "treat as
+      // body-changed", which is the safe direction - so this removes the class
+      // rather than fixing a symptom.
+      //
+      // The `"ignore"` on stderr is what keeps the output readable: a file the
+      // PR ADDS has no base blob, so git prints `fatal: path ... exists on
+      // disk, but not in ...` for every one of them. That failure is expected
+      // and meaningless here - the catch below treats the file as body-changed,
+      // which is correct for a new file - but forty of those lines ahead of the
+      // gate's own output reads as a crashed gate rather than as forty new
+      // pages.
+      before = execFileSync("git", ["show", `${base}:${f}`], {
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "ignore"],
+      }).trim();
+    } catch {
+      continue; // new file - it is all new, check everything
+    }
+    let after;
+    try {
+      after = fs.readFileSync(path.join(ROOT, f), "utf8");
+    } catch {
+      continue;
+    }
+    if (sameBody(before, after)) out.add(f);
+  }
+  return out;
+}
+
 function runCspell(files) {
   let bin = path.join(ROOT, "node_modules", "cspell", "bin.mjs");
   if (!fs.existsSync(bin)) bin = path.join(ROOT, "node_modules", "cspell", "bin.cjs");
@@ -113,7 +198,83 @@ function runCspell(files) {
   }
 }
 
-function runVale(files, bin) {
+/**
+ * Line of the frontmatter's closing `---`, or 0 if the file has none.
+ *
+ * Used to keep a metadata-only change answerable for the prose it DID change.
+ * Vale lints frontmatter: a banned word in `description` is a Severity: error
+ * alert on line 3, and .vale.ini sets MinAlertLevel = error. Skipping such a
+ * file wholesale therefore turned off a blocking check for exactly the workflow
+ * the skip was built for - a PR that rewrites descriptions and nothing else.
+ * Measured before the fix: a description reading "scans identity documents
+ * effortlessly and obviously" gave `0 error(s)`, where the same words in the
+ * body fail the build. Neither word is in frontmatter.cjs's FLUFF_WORDS, and
+ * cspell only catches misspellings, so nothing else covered it.
+ */
+function frontmatterEndLine(file) {
+  let lines;
+  try {
+    lines = fs.readFileSync(path.join(ROOT, file), "utf8").split(/\r?\n/);
+  } catch {
+    return 0;
+  }
+  // `startsWith`, not equality, on BOTH fences - but for different reasons,
+  // and the distinction matters because an earlier version of this comment got
+  // it wrong:
+  //
+  //   - Closing fence: bodyOf (`indexOf("\\n---")`), frontmatter.cjs
+  //     (`/\\r?\\n---/`) and gray-matter all end the frontmatter at any line
+  //     BEGINNING with `---`, so a `----` fence closes it everywhere else.
+  //     Exact equality here returned -1 and dropped such a page out of Vale
+  //     completely - a banned word in its description exited 0, where before
+  //     this branch it was caught.
+  //   - Opening fence: gray-matter and frontmatter.cjs require `---` plus
+  //     optional trailing whitespace, NOT any `---`-prefixed line, so `----`
+  //     at the top opens nothing for them. `startsWith` is deliberately looser
+  //     here only because bodyOf makes the identical call - the cap and the
+  //     metadata-only decision therefore agree on every input, which is the
+  //     property the cap actually rests on - and because such a page is
+  //     blocked by the schema check regardless.
+  if (!lines[0].replace(/^\uFEFF/, "").startsWith("---")) return 0;
+  for (let i = 1; i < lines.length; i += 1) {
+    if (lines[i].startsWith("---")) return i + 1;
+  }
+  // Opening fence, no closing one: the extent is unknown, so there is no honest
+  // cap. Returning 0 would charge the whole file; -1 tells the caller to leave
+  // the file out of Vale entirely rather than guess.
+  //
+  // Reaching this needs the BASE blob to be unterminated too. Deleting a
+  // closing fence moves the frontmatter text into bodyOf's output, so the file
+  // is body-changed and never gets here - measured: the count drops to 116
+  // metadata-only files and Vale runs uncapped on it. The branch exists for a
+  // page that was already unterminated on the base branch.
+  return -1;
+}
+
+/**
+ * @param frontmatterOnly Map of file -> last line Vale alerts are kept for.
+ *   A file in it had only its frontmatter changed, so alerts BELOW the
+ *   frontmatter belong to prose this PR did not touch and are dropped; alerts
+ *   inside it are this PR's.
+ *
+ *   What the cap preserves is bounded by what Vale itself reports. Measured on
+ *   3.15.1: a banned word is flagged in a single-line `description` (quoted,
+ *   plain or single-quoted) and in `title`, and in a literal block scalar, but
+ *   NOT inside a folded `>-` scalar spanning two lines, nor in a `keywords:`
+ *   list item. The cap never dropped an alert Vale emitted; it just cannot
+ *   restore one Vale never made. Single-line descriptions are what
+ *   docs-schema.yml's maxLength keeps true today.
+ *
+ *   The cap is the WHOLE frontmatter, not the frontmatter lines the diff
+ *   touched. A mechanical `framework:` pass is therefore answerable for a
+ *   pre-existing Vale error elsewhere in the same frontmatter. That is a
+ *   deliberate trade: line-level attribution needs the diff hunks, and the
+ *   alternative - skipping the file - is what disabled the check in the first
+ *   place. Corpus-wide there is exactly one such page today
+ *   (docs/sdks/android/unit-testing.mdx:4), and it is already blocked by a
+ *   schema error.
+ */
+function runVale(files, bin, frontmatterOnly = new Map()) {
   const out = [];
   let json;
   try {
@@ -132,8 +293,29 @@ function runVale(files, bin) {
       return [{ file: ".vale.ini", level: "error", check: "vale", msg: `Vale failed to run (not an alert): ${stderr}` }];
     }
   }
+  out.push(...capAlerts(json, frontmatterOnly, ROOT));
+  return out;
+}
+
+/**
+ * Vale's alerts, with body alerts dropped on the files that changed
+ * frontmatter only.
+ *
+ * Pure and exported because nothing drove it: the cap could be made to drop
+ * everything, and every test stayed green. That is the regression 0d05551ca and
+ * c28f18e77 were written to fix - a frontmatter-only skip that disabled a
+ * blocking check, and a cap that failed open.
+ */
+function capAlerts(json, frontmatterOnly, root) {
+  const out = [];
+  const rootSlashes = String(root).replace(/\\/g, "/");
   for (const [file, alerts] of Object.entries(json || {})) {
-    for (const a of alerts) {
+    const rel = file.replace(/\\/g, "/").replace(`${rootSlashes}/`, "");
+    const ceiling = frontmatterOnly.get(rel);
+    for (const a of alerts || []) {
+      // Body alerts on a metadata-only change are pre-existing prose, which the
+      // ratchet is not asking this PR to fix. Frontmatter alerts are not.
+      if (ceiling !== undefined && a.Line > ceiling) continue;
       const level = a.Severity === "error" ? "error" : "warn";
       out.push({ file: file.replace(/\\/g, "/"), level, check: `vale:${a.Check}`, msg: `${a.Message} (line ${a.Line})` });
     }
@@ -141,10 +323,70 @@ function runVale(files, bin) {
   return out;
 }
 
+/**
+ * Which changed files Vale sees, and with what ceiling.
+ *
+ * Extracted and exported for the same reason as capAlerts - deleting the line
+ * that puts a metadata-only file into the Vale list left every test green, and
+ * that is exactly the "skipping the file disabled the check" bug. Not pure,
+ * unlike capAlerts: it reads each file through frontmatterEndLine, which is why
+ * its test writes real files.
+ */
+function partitionForVale(files, bodyChanged) {
+  const bodySet = new Set(bodyChanged);
+  const frontmatterOnly = new Map();
+  const valeFiles = [];
+  const skippedUnreadable = [];
+  const uncappable = [];
+  for (const f of files) {
+    if (bodySet.has(f)) {
+      valeFiles.push(f);
+      continue;
+    }
+    const end = frontmatterEndLine(f);
+    // -1: the frontmatter has no readable extent, so neither charging the body
+    // nor capping is honest. Left out of Vale.
+    if (end === -1) {
+      skippedUnreadable.push(f);
+      continue;
+    }
+    valeFiles.push(f);
+    // 0 means NO opening fence, so the file has no frontmatter to cap at -
+    // docs/partials/_*.mdx are the realistic case. Such a file reaches Vale
+    // UNCAPPED, deliberately: the ratchet is file-scoped, so touching a file at
+    // all means the whole file must pass, and the frontmatter cap is the one
+    // narrow exception to that. A file with no frontmatter cannot qualify for
+    // an exception defined by its frontmatter.
+    //
+    // Skipping it instead would drop a changed file out of Vale entirely, which
+    // is the bug that motivated this function - see the partitionForVale test.
+    // Counted separately only so the log can stop claiming it was capped.
+    if (end) frontmatterOnly.set(f, end);
+    else uncappable.push(f);
+  }
+  return { valeFiles, frontmatterOnly, skippedUnreadable, uncappable };
+}
+
 function main() {
-  const files = changedDocs();
+  const { files, base: ratchetBase } = changedDocs();
   if (files.length === 0) { console.log("docs-gate: no changed docs — nothing to check."); process.exit(0); }
   console.log(`docs-gate: checking ${files.length} changed doc(s)…\n`);
+
+  // VALE only looks at files whose body actually changed. cspell still sees all
+  // of them, because `description` and `title` ARE prose: this gate's own
+  // frontmatter.cjs runs anti-fluff checks on `description`, and cspell.json has
+  // no frontmatter exclusion. A PR that only rewrote
+  // `description: "Add the SDK to your Reakt Native projekt"` had its spelling
+  // check skipped entirely and would have shipped the typo.
+  const metaOnly = frontmatterOnly(files, ratchetBase);
+  const bodyChanged = files.filter((f) => !metaOnly.has(f));
+  if (metaOnly.size) {
+    console.log(
+      `docs-gate: ${metaOnly.size} file(s) changed frontmatter only - ` +
+        `Vale runs on them capped at the frontmatter (their body is identical to `
+          + `base, so its prose is not this change's); cspell runs on everything.`,
+    );
+  }
 
   const schema = loadSchema(path.join(ROOT, "docs-schema.yml"));
   let findings = [];
@@ -152,11 +394,61 @@ function main() {
     findings.push(...validateFile(path.join(ROOT, f), schema).map((x) => ({ ...x, file: f })));
     findings.push(...checkLinks(path.join(ROOT, f)).map((x) => ({ ...x, file: f })));
   }
-  findings.push(...runCspell(files));
+  if (files.length) findings.push(...runCspell(files));
 
   const vale = findVale();
   if (vale) {
-    findings.push(...runVale(files, vale));
+    // Every changed file goes to Vale, not just the ones whose body changed.
+    // For the metadata-only ones the alerts are capped at the frontmatter, so a
+    // rewritten `description` is still checked while untouched body prose is
+    // not - skipping those files entirely disabled a blocking check.
+    if (files.length) {
+      // `capMap`, not `frontmatterOnly`: that name belongs to the module-scope
+      // FUNCTION called above, and binding it here shadowed it inside this
+      // block. Correct only by the accident of the call sitting outside the
+      // block - move or duplicate it inwards and the gate dies with a TDZ
+      // ReferenceError instead of reporting a finding.
+      const { valeFiles, frontmatterOnly: capMap, skippedUnreadable, uncappable } = partitionForVale(
+        files,
+        bodyChanged,
+      );
+      if (skippedUnreadable.length) {
+        // Deliberately split by file class. The schema check only sees PAGES -
+        // pagesOnly() strips `_`-prefixed files - so for a partial nothing else
+        // reports the malformed frontmatter and the file leaves the gate
+        // entirely unchecked for prose. Saying so is the difference between an
+        // informational line and a misleading one.
+        const parts = skippedUnreadable.filter((f) => path.basename(f).startsWith("_"));
+        const pages = skippedUnreadable.filter((f) => !path.basename(f).startsWith("_"));
+        if (pages.length) {
+          console.log(
+            `docs-gate: frontmatter extent unreadable, so Vale was NOT run on ` +
+              `${pages.join(", ")} - the schema check reports the frontmatter ` +
+              `itself.\n`,
+          );
+        }
+        if (parts.length) {
+          console.log(
+            `docs-gate: frontmatter extent unreadable on partial(s) ` +
+              `${parts.join(", ")}, so Vale was NOT run on them - and the ` +
+              `schema check skips partials, so NOTHING checked these files. ` +
+              `Fix the frontmatter fences to get them back under the gate.\n`,
+          );
+        }
+      }
+      if (uncappable.length) {
+        // The headline message above says metadata-only files are "capped at
+        // the frontmatter". For these there is no frontmatter to cap at, so
+        // they are linted in full and that sentence does not describe them.
+        console.log(
+          `docs-gate: ${uncappable.join(", ")} changed but has no frontmatter, ` +
+            `so there is nothing to cap Vale at - it is linted in FULL, ` +
+            `including prose this change did not touch. That is the ` +
+            `file-scoped ratchet, not a bug.\n`,
+        );
+      }
+      if (valeFiles.length) findings.push(...runVale(valeFiles, vale, capMap));
+    }
   } else if (process.env.CI) {
     // In CI, a missing Vale must fail — otherwise the headline prose-style check
     // silently no-ops while the job stays green. Locally it's still advisory.
@@ -191,4 +483,6 @@ function main() {
   process.exit(0);
 }
 
-main();
+if (require.main === module) main();
+
+module.exports = { frontmatterEndLine, bodyOf, sameBody, capAlerts, partitionForVale };

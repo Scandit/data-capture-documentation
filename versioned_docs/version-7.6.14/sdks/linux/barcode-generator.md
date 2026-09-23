@@ -5,7 +5,7 @@ sidebar_label: JSON Settings
 
 # Barcode Generator
 
-The Barcode Generator is a simple API to generate barcodes directly from the Scandit SDK. This document describes the JSON format understood by the [`sc_barcode_generator_set_options()`](https://docs.scandit.com/stable/c_api/struct_sc_barcode_generator.html#a045a2b9474895067e8eb1610ae6c5fef) function.
+The Barcode Generator is a simple API to generate barcodes directly from the Scandit SDK. This document describes the JSON format understood by the [`sc_barcode_generator_set_options()`](https://docs.scandit.com/7.6/c_api/struct_sc_barcode_generator.html#a045a2b9474895067e8eb1610ae6c5fef) function.
 
 ## General Options
 
