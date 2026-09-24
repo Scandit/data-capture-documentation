@@ -7,7 +7,8 @@ import { FeatureListProps, Feature, Product, FilteredFeature } from './types';
 import productsData from '@site/src/data/products.json';
 import featuresData from '@site/src/data/features.json';
 import { frameworkFromPath } from '@site/src/constants/frameworks';
-import { withCurrentDocsPath } from '@site/src/constants/docsPaths';
+import { apiReferenceUrl } from '@site/src/constants/docsPaths';
+import { useActiveDocContext } from '@docusaurus/plugin-content-docs/client';
 
 // Function to render description with inline code formatting
 const renderDescription = (description: string) => {
@@ -31,6 +32,9 @@ const FeatureList: React.FC<FeatureListProps> = ({
   className = ''
 }) => {
   const { siteConfig } = useDocusaurusContext();
+  // Which docs version the reader is on, so API links point at that version's
+  // API-reference line rather than at whatever released most recently.
+  const activeVersionName = useActiveDocContext(undefined)?.activeVersion?.name;
   const [filteredFeatures, setFilteredFeatures] = useState<FilteredFeature[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -127,10 +131,12 @@ const FeatureList: React.FC<FeatureListProps> = ({
     
     if (currentFramework && feature.frameworks[currentFramework]) {
       const frameworkInfo = feature.frameworks[currentFramework];
-      // products.json stores version-agnostic /sdks/<framework>/... paths;
-      // frameworks that only exist in the unreleased docs need the current
-      // version prefix or they resolve into the released tree and 404.
-      return frameworkInfo.apiUrl ? withCurrentDocsPath(frameworkInfo.apiUrl) : null;
+      // features.json stores the path WITHIN the API reference; the version is
+      // applied here, because one shared data file serves every docs version
+      // and there is no single correct prefix to bake into it.
+      return frameworkInfo.apiUrl
+        ? apiReferenceUrl(frameworkInfo.apiUrl, activeVersionName)
+        : null;
     }
     return null;
   };
@@ -202,7 +208,7 @@ const FeatureList: React.FC<FeatureListProps> = ({
                       .map(([frameworkName, frameworkInfo]) => (
                         <a
                           key={frameworkName}
-                          href={withCurrentDocsPath(frameworkInfo.apiUrl)}
+                          href={apiReferenceUrl(frameworkInfo.apiUrl, activeVersionName)}
                           className={styles.frameworkItem}
                           target="_blank"
                           rel="noopener noreferrer"
