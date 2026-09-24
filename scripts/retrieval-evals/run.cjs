@@ -396,6 +396,19 @@ function main() {
         misses.push(r.url.replace(/^https?:\/\/[^/]+/, ""));
       }
     }
+    // No rows means no metric, and a metric that is NaN passes every gate:
+    // `NaN < floor` is false, so `breached` stays false and this prints "ok"
+    // and exits 0 on an index it never measured. That is the same hazard num()
+    // and readBaseline() were written to close, one level up - an index whose
+    // records carry no `url` produces rows.length === 0 and would sail through.
+    if (rows.length === 0) {
+      console.error(
+        "\nretrieval-evals: no page rows - every record is missing a `url`, " +
+          "so there is nothing to measure.\nRefusing to report a gate result " +
+          "on an index this run could not evaluate.\n",
+      );
+      process.exit(1);
+    }
     const metrics = {
       mode: "auto-page-self-retrieval",
       pages: rows.length,

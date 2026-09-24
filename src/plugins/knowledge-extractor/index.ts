@@ -1159,11 +1159,16 @@ function classifyLinks(chunkMarkdown: string, site: string, baseUrl: string): { 
   //   [init](https://docs.scandit.com/.../ns-scan.html#init(context:))
   //     -> https://docs.scandit.com/.../ns-scan.html#init(context:
   //
-  // The first is usually harmless - a truncated external URL fails the `site`
-  // prefix tests below and is dropped. The second is not: it is an
-  // API-reference fragment, so it passes those tests and lands in `api` with
-  // the fragment cut mid-signature, and Swift/ObjC selectors in that form are
-  // exactly what the API reference anchors on.
+  // Neither is harmful TODAY, and that is worth stating plainly rather than
+  // overselling the fix. A truncated external URL fails the `site` prefix
+  // tests below and is dropped; a truncated API href loses only its fragment,
+  // which `api.add(href.split("#")[0])` discards anyway. And no link in docs/
+  // currently has a paren in its href - checked, zero matches.
+  //
+  // It is a correctness fix for the parser, not a repair of live damage: the
+  // shape it mishandles is one CommonMark allows, and the failure is silent -
+  // a truncated INTERNAL path would enter `internal` as a doc URL that
+  // resolves to nothing, with no error anywhere. Cheap to get right once.
   //
   // `(?:[^()]|\([^()]*\))+` admits one nested pair, which covers every case in
   // this corpus. Full nesting needs a parser, and CommonMark itself only
