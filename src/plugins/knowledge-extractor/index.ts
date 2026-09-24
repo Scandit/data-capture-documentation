@@ -31,9 +31,13 @@
  * Exact figures are deliberately NOT pinned here. They have been wrong three
  * times: the module count, both artifact sizes and both excerpt averages all
  * drifted as chunking and scoring changed, while this comment went on asserting
- * them, and nothing checks a number in a comment. For the current values read
- * `scripts/retrieval-evals/baseline.json` (pages and modules) or measure the
- * built artifacts; the extractor prints its own counts at the end of postBuild.
+ * them, and nothing checks a number in a comment.
+ *
+ * So the current values are REPORTED rather than written down. The success line
+ * at the end of postBuild prints modules, pages, both artifact sizes, node and
+ * edge counts, every one of them derived from the artifact it just wrote -
+ * `yarn build` and read the last [knowledge-extractor] line. Pages and modules
+ * are also in scripts/retrieval-evals/baseline.json, recorded by the evals.
  *
  * The argument rests on those magnitudes and on the `url`, NOT on a claim that
  * each module's prose also ships in llms-full.txt: the two artifacts cut the
@@ -2428,9 +2432,19 @@ export default function knowledgeExtractor(context: any, options: any) {
       const edgeSummary = Object.entries(edgeTypes)
         .map(([k, v]) => `${k}=${v}`)
         .join(" ");
+      // Sizes on the SUCCESS line, not only in the cap-exceeded error.
+      //
+      // idxMb and graphMb are already computed above for the soft-cap check,
+      // and until now they were only ever printed when that check FAILED - so
+      // the one number a reader most often wants was visible only when the
+      // build was about to break. The header above points here for current
+      // figures rather than pinning them in a comment that goes stale; that
+      // pointer is only honest if the figures are actually here.
       console.log(
         `[knowledge-extractor] ${index.length} modules from ${pagesProcessed} pages ` +
-          `(${pageErrors} page error(s)) | graph: ${graph["@graph"].length} nodes | edges: ${edgeSummary} -> /assets/`,
+          `(${pageErrors} page error(s)) | index ${idxMb.toFixed(2)} MiB, graph ` +
+          `${graphMb.toFixed(2)} MiB | graph: ${graph["@graph"].length} nodes | ` +
+          `edges: ${edgeSummary} -> /assets/`,
       );
     },
   };
