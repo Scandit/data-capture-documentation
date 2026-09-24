@@ -315,6 +315,6 @@ private LabelCaptureSettings BuildLabelCaptureSettings()
 }
 ```
 
-See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
 
 <ReceiptScanning/>
