@@ -10,6 +10,16 @@ keywords:
   - titanium
 ---
 
+## 7.6.15
+
+**Released**: September 24, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+
 ## 7.6.14
 
 **Released**: May 8, 2026

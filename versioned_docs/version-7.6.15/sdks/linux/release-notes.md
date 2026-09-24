@@ -9,6 +9,16 @@ keywords:
   - linux
 ---
 
+## 7.6.15
+
+**Released**: September 24, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed `sc_camera_get_frame` hanging indefinitely when the camera is disconnected while streaming. It now returns promptly instead of blocking.
+
 ## 7.6.14
 
 **Released**: May 8, 2026

@@ -9,6 +9,16 @@ keywords:
   - netAndroid
 ---
 
+## 7.6.15
+
+**Released**: September 24, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a memory leak in SparkScan when using the item-based API.
+
 ## 7.6.14
 
 **Released**: May 8, 2026
