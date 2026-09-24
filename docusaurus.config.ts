@@ -95,6 +95,37 @@ const llmsRootRedirectOnlyDocs: string[] = [
   "docs/system-requirements.mdx",
 ];
 
+/**
+ * A dedicated index of the Agent Skills pages, published at
+ * /llms-agent-skills.txt.
+ *
+ * Why a separate file rather than only a line in the main index: an agent that
+ * wants to know whether Scandit ships skills for its host should not have to
+ * pull llms.txt (80 KB) or llms-full.txt (1.9 MB) and pick ten entries out of
+ * four hundred. This is the whole answer in a few hundred bytes, at a
+ * predictable path, and it is generated from the same pages - so a new SDK's
+ * skills page appears here by existing, not by anyone remembering.
+ *
+ * Links only, not full content: these pages are install instructions whose real
+ * payload is the skill itself, hosted elsewhere.
+ */
+const llmsAgentSkillsFile = {
+  filename: "llms-agent-skills.txt",
+  // Both extensions. All ten pages are .mdx today, but the plugin indexes .md
+  // and .mdx alike and .md is the dominant convention in this tree - 448 files
+  // against 123. So an SDK adding docs/sdks/<new>/agent-skills.md would land in
+  // llms.txt and NOT in this index: the advertised file would quietly omit that
+  // SDK, and the gate would fail the build on an otherwise valid docs change
+  // while blaming the index.
+  includePatterns: ["docs/sdks/**/agent-skills.{md,mdx}"],
+  fullContent: false,
+  title: "Scandit Agent Skills",
+  description:
+    "Agent Skills published by Scandit, one per SDK. Install them so a coding " +
+    "agent (Claude Code, Codex, Cursor) can integrate, debug and customize the " +
+    "Data Capture SDK directly. Each entry links to that SDK's install page.",
+};
+
 // Paths are matched by docusaurus-plugin-llms relative to siteDir (e.g. docs/...).
 const llmsIgnoreFiles: string[] = [
   "docs/connector-guides/**",
@@ -401,6 +432,294 @@ const versionTagByMajor = buildVersionTagByMajor(
   // returns nothing. Accepted: previews are for reviewing the current tree.
   effectiveLastVersion,
 );
+
+/**
+ * The API-reference trees that must stay crawlable for an older major.
+ *
+ * Derived, because this was the one part of robots.txt that could go stale
+ * without anyone noticing. It was two hand-written Allow lines, and the file's
+ * own note said a major release "needs one line - a deliberate decision made
+ * once". A decision made once is a decision forgotten once: retire 6.28 and the
+ * Allow outlives the tree, ship a new frozen major and its readers lose their
+ * API reference to the catch-all Disallow, and nothing anywhere fails.
+ *
+ * `linksToOwnApiLine` rather than every non-served version, because a snapshot
+ * keeps linking the UNVERSIONED tree until the freeze rewrites its links. A
+ * version in that state sends its readers somewhere already open, so naming its
+ * own line would allow a tree nothing points at.
+ */
+function crawlableApiLines(): string[] {
+  const lines = new Set<string>();
+  // versions.json, not docsVersions.
+  //
+  // docsVersions is the docs plugin's per-version OVERRIDE map: a frozen
+  // version that needs no overrides can be absent from it and still build from
+  // versioned_docs/. Iterating it therefore asks "which versions did someone
+  // configure?" when the question is "which versions does this build contain?".
+  // Freeze a major, add it to versions.json and versioned_docs/, and forget the
+  // override entry, and this emits no Allow line while the catch-all
+  // `Disallow: /*/data-capture-sdk/` blocks that major's API tree - the exact
+  // failure this function exists to prevent.
+  //
+  // It also puts this generator on the same source of truth as the test that
+  // checks it: linesThatLinkThemselves() in scripts/test-robots.cjs enumerates
+  // versions.json, so the two disagreed, and the generator was on the wrong
+  // side. The build would have gone red rather than shipping silently, but red
+  // on a correct tree is its own cost.
+  //
+  // `current` is not in versions.json by construction - it is the unfrozen
+  // tree - so it is added explicitly, and it is the one entry whose version
+  // NUMBER only docsVersions knows (its label).
+  let frozen: string[] = [];
+  try {
+    frozen = JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), "versions.json"), "utf8"),
+    ) as string[];
+  } catch {
+    // Unreadable versions.json: fall back to the override map rather than
+    // emitting nothing, since emitting nothing is the failure this prevents.
+    frozen = Object.keys(docsVersions).filter((v) => v !== "current");
+  }
+  const entries: Array<[string, { label?: string }]> = [
+    ["current", docsVersions.current ?? {}],
+    ...frozen.map((v) => [v, docsVersions[v] ?? {}] as [string, { label?: string }]),
+  ];
+  for (const [name, cfg] of entries) {
+    // No skip for the served version. It used to be dropped on the grounds
+    // that it is "served unversioned", but whether a version's pages link the
+    // unversioned tree is precisely what linksToOwnApiLine already reads out of
+    // its content - so the guard was redundant where it agreed and wrong where
+    // it did not.
+    //
+    // Where it did not: scripts/update-version.py rewrites DOCS_LAST_VERSION
+    // from "current" to a numbered version during a beta window, so the served
+    // version becomes a real entry here AND a directory in versioned_docs/. If
+    // the freeze has rewritten that snapshot's links to its own line - which
+    // this config elsewhere says it expects to pick up on the next build - then
+    // the root-served guides link /8.5/data-capture-sdk/ while the catch-all
+    // Disallow blocks it and the Allow covers a tree nothing points at. Exactly
+    // backwards, and silent.
+    const number = name === "current" ? cfg.label || "" : name;
+    if (!number) continue;
+    if (!linksToOwnApiLine(name, number)) continue;
+    lines.add(apiReferenceLine(number));
+  }
+  // Array.from, not [...lines]: the repo's tsconfig extends @docusaurus/tsconfig,
+  // whose target does not allow spreading a Set, so the spread makes `yarn
+  // typecheck` fail. Nothing in CI runs typecheck - tsconfig.json says it exists
+  // "just for a nice editor experience" - so this would have surfaced only as a
+  // red squiggle for whoever next opened this file.
+  return Array.from(lines).sort((a, b) => {
+    const [aMaj, aMin] = a.split(".").map(Number);
+    const [bMaj, bMin] = b.split(".").map(Number);
+    return bMaj - aMaj || bMin - aMin; // newest first
+  });
+}
+
+/**
+ * Writes build/robots.txt.
+ *
+ * WHY GENERATED, not a file in static/ copied verbatim:
+ *
+ *   - The per-major Allow lines track the versions this build contains. See
+ *     `crawlableApiLines`.
+ *   - A preview build can exclude itself. Insurance rather than a fix: under the
+ *     current layout docs-preview.yml sets base_url to a subpath, so a preview's
+ *     robots.txt is served there and a crawler only reads /robots.txt at the
+ *     HOST root - it is inert today. Four lines to cover a preview that is ever
+ *     served at a host root, a failure that would otherwise be silent.
+ *
+ * WHAT IS DELIBERATELY *NOT* IN THE PUBLISHED FILE, and why it is here instead.
+ * robots.txt is one of the most-fetched URLs on any host, and an earlier draft
+ * of it carried:
+ *
+ *   - an enumeration of 21 retired guide trees (/7.6.3/ ... /7.6.13/,
+ *     /6.28.1/ ... /6.28.10/). That is a discovery list. Nothing links those
+ *     trees and no sitemap carries them, so publishing their addresses in the
+ *     most-crawled file on the host is the exact opposite of the de-duplication
+ *     the rest of the file argues for.
+ *   - an internal deploy postmortem ("the deploy never deleted what the build
+ *     stopped producing") and a search-index tag-rename history. Neither is a
+ *     crawler directive and neither belongs on a public URL.
+ *   - dated measurements - byte counts, a sitemap census, a build date. All
+ *     correct when written and all wrong at the next release, with nothing to
+ *     catch them.
+ *
+ * THE REAL GAP, recorded here because this file cannot close it. Those 21 trees
+ * are still served, still return 200, and still carry a rel=canonical pointing
+ * at themselves - roughly 9,500 stale guide pages, fully open to Googlebot.
+ * That is where duplicate content actually costs something; the /8.x/ API rule
+ * below is future-proofing by comparison, since nothing links those trees today.
+ * robots.txt is the wrong lever for it - blocking crawl on an indexed URL
+ * strands it, unable to read the very noindex that would resolve it - so the fix
+ * is a deploy that 410s them.
+ *
+ * Owned on the publishing side, not here: as of 2026-09-21 that cleanup is in
+ * progress there (PR #436 review thread). This note stays because it explains
+ * why this file does NOT enumerate those trees - if the cleanup lands, the
+ * enumeration was never needed, and if it stalls, adding it here would still be
+ * the wrong fix.
+ */
+function robotsTxtPlugin() {
+  return {
+    name: "robots-txt",
+    async postBuild({ outDir }: { outDir: string }) {
+      const { writeFile } = await import("fs/promises");
+      const { join } = await import("path");
+
+      const origin = productionUrl.replace(/\/+$/, "");
+
+      if (isPreviewBuild) {
+        await writeFile(
+          join(outDir, "robots.txt"),
+          [
+            "# Preview build - not the production site.",
+            "#",
+            "# A preview deploy is a complete copy of the documentation. Indexed,",
+            "# it competes with docs.scandit.com for that content.",
+            "",
+            "User-agent: *",
+            "Disallow: /",
+            "",
+          ].join("\n"),
+          "utf8",
+        );
+        return;
+      }
+
+      const allowLines = crawlableApiLines();
+      const allows = allowLines.length
+        ? allowLines.map((l) => `Allow: /${l}/data-capture-sdk/`).join("\n")
+        : "# No older major is frozen in this build, so no tree is named.";
+
+      const body = `# robots.txt for ${new URL(productionUrl).host}
+#
+# GENERATED by robotsTxtPlugin in docusaurus.config.ts. Edit it there, not here
+# and not in static/ - the Allow lines below are derived from the docs versions
+# this build contains, and a hand-kept copy stopped matching them silently.
+#
+# Written because /robots.txt returned 404, and a missing robots.txt is not
+# neutral: crawlers read it as "everything permitted". The policy below was
+# already in force by omission; this states it.
+#
+# GUIDES: open to every crawler, search engines included. People still run 6.x
+# and 7.x and must find their documentation - in search, and through an
+# assistant they ask. This build publishes one CURRENT tree per major, and none
+# of them is restricted.
+#
+# API REFERENCE: a SEPARATE SITE on the same host - Sphinx, not Docusaurus,
+# built and deployed by a different pipeline. robots.txt is per-host, so this
+# one file governs both. Unlike the guides it ships a tree per MINOR version,
+# and the current version always lives at the UNVERSIONED path - so the
+# versioned tree of the served release duplicates it, and the older trees of the
+# current major are superseded near-duplicates.
+#
+# THE RULE BELOW IS DEFAULT-DENY AND SELF-MAINTAINING. Bulk crawlers get the
+# unversioned tree, plus one named tree per older major. Any other versioned
+# tree is excluded without an edit:
+#
+#   8.7 ships  -> /8.7/data-capture-sdk/ is excluded automatically; its content
+#                 is already covered by the unversioned tree.
+#   9.0 ships  -> excluded automatically, and every 9.x minor after it. There is
+#                 no "/9.x/" path to write: the Disallow's \`*\` matches whatever
+#                 the first path segment happens to be, so it catches /9.0/,
+#                 /9.1/, /9.2/ ... individually as each appears.
+#
+# The Allow lines are not part of that manual step either: they are derived from
+# the frozen docs versions in the build, so freezing or retiring a major updates
+# them on the next one.
+#
+# ASYMMETRY - read this before editing. The VERSION rule self-maintains; the
+# AGENT LIST does not. New bulk crawlers appear continuously and are governed by
+# nothing here until a human adds them. Absent today, among others:
+# Google-Extended, OAI-SearchBot, PerplexityBot, Applebot-Extended, AI2Bot,
+# Diffbot, cohere-training-data-crawler.
+#
+# NOT APPLIED TO SEARCH ENGINES, deliberately - but not for the usual reason.
+# Blocking crawl on an already-indexed URL can strand it: the crawler can no
+# longer read a canonical or noindex tag that would resolve the duplicate. The
+# normal advice is therefore "use canonical/noindex instead". That advice does
+# not apply cleanly here, because the API reference is NOT this site: it is a
+# separate Sphinx build deployed to this host by another pipeline, and its pages
+# carry no <meta name="robots"> and no canonical link at all. Adding those means
+# changing the Sphinx build, not this repository.
+#
+# So robots.txt is the only lever reachable from here, and it is applied to bulk
+# crawlers only - where stranding does not matter, because nothing is trying to
+# rank them. Search-engine de-duplication belongs in canonical/noindex on the
+# Sphinx side, and is left alone here rather than half-done.
+
+Sitemap: ${origin}/sitemap.xml
+
+# Also published for assistants and agents, by the same build:
+#
+#   ${origin}/llms.txt        curated index of the guides
+#   ${origin}/llms-full.txt   the same guides as full text
+#   ${origin}/llms-agent-skills.txt   the Agent Skills, one per SDK
+#
+# Comments, not directives - robots.txt has no registered field for these, and
+# nothing discovers them from here. An agent finds /llms.txt the same way it
+# finds /robots.txt: by convention, at the well-known path. They are named here
+# because this file is where people look for what a host publishes, and they are
+# allowed explicitly below so a future blanket Disallow cannot remove them by
+# accident.
+
+# --- Bulk and training crawlers ------------------------------------------
+#
+# PRECEDENCE - the Allow lines come FIRST deliberately; do not reorder them
+# below the Disallow. Under the longest-match precedence of RFC 9309 the order
+# is irrelevant, because the longer Allow beats the shorter Disallow either way.
+# But this group deliberately excludes Googlebot and Bingbot, and none of the
+# agents named below publishes a conformance statement - so nothing here is
+# guaranteed to be read by an RFC 9309 parser. A first-match-wins parser
+# (historical Nutch / crawler-commons behaviour, which is CCBot's lineage) reads
+# a leading Disallow and denies the older majors outright, silently breaking the
+# requirement that every major stays reachable. Allow-first is identical under
+# longest-match and correct under first-match-wins. Keep the Allow paths exact.
+#
+# THE CURRENT TREE IS ALLOWED EXPLICITLY, and it is the point of the whole
+# rule: /data-capture-sdk/ is where the current API reference lives, and it is
+# the destination every versioned duplicate should be losing to.
+#
+# Under correct semantics it needs no line. \`Disallow: /*/data-capture-sdk/\`
+# cannot match it: the pattern is \`/\` + \`*\` + \`/data-capture-sdk/\`, so it needs
+# a path segment BEFORE the literal one, and the unversioned tree has none. It
+# is named anyway for the same reason the Allow lines come first - this group
+# targets parsers that publish no conformance statement, and the one thing
+# that must not happen is a sloppy \`*\` expansion taking out the canonical
+# tree while leaving the frozen ones reachable. Cheap, and it fails safe.
+#
+# Bytespider reportedly ignores robots.txt wholesale. Its line here is
+# declarative only: do not assume the Disallow actually constrains it.
+
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: CCBot
+User-agent: Bytespider
+User-agent: Amazonbot
+User-agent: meta-externalagent
+Allow: /data-capture-sdk/
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /llms-agent-skills.txt
+${allows}
+Disallow: /*/data-capture-sdk/
+
+# --- Everyone else --------------------------------------------------------
+# Search engines and any agent not named above: the whole site, every version.
+#
+# NOTE FOR FUTURE EDITS: the agents above have their own group and do NOT
+# inherit anything added here. robots.txt group selection is winner-take-all,
+# so a rule meant for them must be repeated in their group.
+
+User-agent: *
+Disallow:
+`;
+
+      await writeFile(join(outDir, "robots.txt"), body, "utf8");
+    },
+  };
+}
 
 /**
  * Writes build/search-tags.json: the docusaurus_tag values this build actually
@@ -747,6 +1066,22 @@ const config: Config = {
       // segment too and emit a broken link. No such path exists today; if one
       // is ever added, this option is where it breaks.
       pathTransformation: { ignorePaths: ["docs"] },
+      // The blockquote at the top of llms.txt and llms-full.txt, which is the
+      // one place in the llmstxt.org layout that an agent reads before the
+      // table of contents.
+      //
+      // Agent Skills were already in llms.txt - ten entries, one per SDK - but
+      // only nested inside each SDK's section, so nothing said "this site
+      // publishes Agent Skills" until you had read ten repetitions of the same
+      // line. An agent skimming for what Scandit offers had no top-level signal
+      // and no single URL to fetch. This is that signal; llmsAgentSkillsFile
+      // below is that URL.
+      description:
+        "Developer Guides, API References, and Code Samples for building with " +
+        "Scandit Smart Data Capture. Scandit also publishes Agent Skills for " +
+        "coding agents (Claude Code, Codex, Cursor) - one per SDK, indexed at " +
+        "/llms-agent-skills.txt.",
+      customLLMFiles: [llmsAgentSkillsFile],
     },
   ],
   ...(isPreviewBuild ? [stripPreviewMediaPlugin] : []),
@@ -754,6 +1089,9 @@ const config: Config = {
   // gate can check a real build artifact instead of re-deriving the same
   // assumption from this file and agreeing with itself.
   searchTagsManifestPlugin,
+  // Emitted rather than copied from static/, so the per-major Allow lines track
+  // the versions this build contains and a preview deploy can exclude itself.
+  robotsTxtPlugin,
 ],
 
   presets: [

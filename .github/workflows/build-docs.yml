@@ -66,6 +66,13 @@ jobs:
       - name: Test search facet filters
         run: yarn test:search-facets
 
+      # robots.txt and the llms indexes are generated from the docs versions in
+      # this build, so what they say is a build output and can be asserted like
+      # one. Catches a frozen major losing its API reference to the catch-all
+      # Disallow, and internal narrative leaking back into a public file.
+      - name: Test robots.txt and llms indexes
+        run: yarn test:robots
+
       # The parsers the API-reference SEO gate judges pages with, run offline.
       # Every bug they have had was a false PASS - a page Google indexes reported
       # as sound - which is the one failure the gate cannot reveal by running.

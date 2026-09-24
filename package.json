@@ -19,6 +19,7 @@
     "docs:gate:setup": "node scripts/setup-vale.cjs",
     "verify:search-tags": "node scripts/verify-search-tags.cjs",
     "test:search-facets": "node scripts/test-search-facets.cjs",
+    "test:robots": "node scripts/test-robots.cjs",
     "verify:frameworks": "node scripts/verify-frameworks.cjs",
     "test:frameworks": "node scripts/test-frameworks.cjs",
     "test:docs-gate": "node scripts/test-docs-gate.cjs",
