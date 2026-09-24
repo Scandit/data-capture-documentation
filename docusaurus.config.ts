@@ -157,7 +157,7 @@ const docsVersions: Record<
     banner: "none",
     badge: false,
   },
-  "7.6.14": {
+  "7.6.15": {
     banner: "none",
     badge: false,
   },

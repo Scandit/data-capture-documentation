@@ -10,7 +10,7 @@ import styles from "./styles.module.css";
  * Android only because the design library is published for Android only: there
  * is no iOS/web equivalent, and the .NET Android NuGet already bundles the
  * .aar. The paths below are exact, so the versioned copies of the same pages
- * (/7.6.14/sdks/android/add-sdk, ...) don't match either — the notice belongs
+ * (/7.6.15/sdks/android/add-sdk, ...) don't match either — the notice belongs
  * on the current docs, where 8.6 is the next release.
  *
  * Remove this component (and its render site in theme/DocItem/Layout) once 8.6
