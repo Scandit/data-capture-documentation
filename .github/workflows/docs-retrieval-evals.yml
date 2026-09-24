@@ -1,0 +1,126 @@
+name: Docs Retrieval Evals
+
+# Measures retrieval quality of the build-generated knowledge index against a
+# gold set of real queries (success@k / precision@k / MRR). Runs on PRs that
+# touch docs, the extractor, or the gold set — a regression in descriptions or
+# partials that hurts retrieval fails here. Also runs on push to main, so the
+# deploy branch is checked too (an empty index from a cause outside the PR
+# paths — e.g. a Docusaurus upgrade renaming article selectors — is caught here
+# as well as by the plugin's own fail-loud floor check during the build).
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docs/**'
+      # And the frozen snapshots. While docusaurus.config.ts pins lastVersion to
+      # one of them - a beta cycle - that snapshot IS the corpus this indexes,
+      # so a PR editing it changes exactly what is measured here and would
+      # otherwise run neither eval until after it merged.
+      - 'versioned_docs/**'
+      - 'src/plugins/knowledge-extractor/**'
+      - 'scripts/retrieval-evals/**'
+      - '.github/workflows/docs-retrieval-evals.yml'
+      # The extractor reads RENDERED html, so a component decides what the
+      # indexed text IS - it already carries a special case for FeatureList's
+      # "Loading features..." SSR placeholder, and productKeys() reads
+      # src/data. Without these, a PR that changes what a component renders
+      # (this one changes FeatureList) never runs the evals, and the first
+      # signal is the push-to-main trigger after it has merged.
+      - 'src/components/**'
+      - 'src/data/**'
+      # And src/theme, which decides the MARKUP: MDXComponents.js maps Tabs /
+      # TabItem and every custom component rendered inside article .markdown -
+      # tabsToMd is built entirely around that markup - and DocItem is swizzled.
+      # Swapping the Tabs implementation, or wrapping a component in one more
+      # element, changes the indexed text on hundreds of pages.
+      - 'src/theme/**'
+      # These decide WHAT gets indexed at all: assistantIgnoreFiles and
+      # lastVersion live in the config, and versions.json decides which
+      # trees are frozen. Without them a PR that widens or narrows the
+      # curation list changes the corpus and skips both evals.
+      - 'docusaurus.config.ts'
+      - 'versions.json'
+  push:
+    branches:
+      - main
+
+# Same pattern as docs-preview.yml, for the same reason: every run here is a
+# full yarn build plus two eval passes, and this workflow watches paths a docs
+# PR touches on nearly every push. Without a group they queue and all run; with
+# it, a new push supersedes the one still running. Keyed on the PR number so
+# runs on main are never cancelled by a PR.
+concurrency:
+  group: docs-retrieval-evals-${{ github.event.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  retrieval-evals:
+    name: Docs Retrieval Evals
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Full history, and unlike build-docs.yml this job USES it.
+          #
+          # The knowledge-extractor takes each page's `last_verified` from its
+          # last commit date. Under the default depth-1 clone every file
+          # resolves to the same single commit, so the plugin deliberately
+          # emits "" rather than a constant that looks like data.
+          #
+          # run.cjs reports freshness coverage from that field - how many
+          # modules carry a date, the oldest and newest, and how many are over
+          # 180 days old - and fails in CI if NOT ONE module has one, which is
+          # what losing this line would look like. So the cost buys a signal
+          # that is actually read, and the check guards the setting that
+          # produces it. Do not drop to depth 1 here without deleting that
+          # report first.
+          #
+          # Deliberately NOT a ranking input: last_verified is a date, and the
+          # scorer tokenises on [a-z0-9]{2,}, so it would enter the term stream
+          # as "2026"/"09"/"18" and match any query mentioning those numbers.
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build docs (generates the knowledge retrieval index)
+        id: build
+        run: yarn build
+
+      - name: Run retrieval evals
+        # --require-freshness: this job is the one that checks out full history
+        # on purpose, so a dateless index here means the checkout lost its
+        # fetch-depth. Other callers (build-docs.yml is shallow on PRs) get the
+        # report without the failure.
+        run: node scripts/retrieval-evals/run.cjs --report reports/retrieval-evals.json --require-freshness
+
+      # The gold-set run above measures 20 curated queries. This one asks every
+      # module to retrieve itself, which is the only check that covers pages
+      # nobody wrote a query for - and until now MIN_AUTO_SUCCESS gated nothing
+      # because no workflow passed --auto. Reported separately so a corpus-wide
+      # regression is attributable.
+      - name: Run corpus-wide self-retrieval
+        # Not always(): a gold-set breach above must not hide the corpus-wide
+        # number, but a FAILED BUILD must not add a second red step blaming a
+        # missing index instead - and always() fires on cancellation too.
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: node scripts/retrieval-evals/run.cjs --auto --report reports/retrieval-evals-auto.json
+
+      - name: Upload eval report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: retrieval-evals-report
+          path: |
+            reports/retrieval-evals.json
+            reports/retrieval-evals-auto.json
+          if-no-files-found: ignore

@@ -21,6 +21,22 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          # Shallow is enough HERE, and only here. last_verified is the one
+          # thing that needs full history - the extractor reads each file's last
+          # commit date, and under a depth-1 clone every file resolves to the
+          # same commit - but the extractor now returns before any git call on a
+          # preview build, because it must not emit its ~22 MB of JSON into the
+          # gh-pages branch that pr-preview-action commits. A full clone would
+          # buy a freshness signal nobody computes. build-docs.yml makes the
+          # same call for the same reason and is shallow on EVERY trigger: it
+          # builds and verifies but never publishes the index, so the dates
+          # would be computed and discarded there too.
+          #
+          # docs-retrieval-evals.yml is the one workflow that keeps
+          # fetch-depth: 0, because it is the one that reads the dates - it
+          # reports freshness coverage and fails on --require-freshness.
+          fetch-depth: 1
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
