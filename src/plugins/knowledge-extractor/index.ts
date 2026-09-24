@@ -16,22 +16,30 @@
  *   - <outDir>/assets/knowledge-graph.jsonld          (enriched concept graph)
  *
  * A POINTER INDEX, NOT A TEXT STORE - and deliberately so. `toIndexRecord`
- * publishes `docs_excerpt` (averaging 376.5 chars, max 404 - `clipMarkdown`
- * appends the fence closer AFTER slicing to 400, so 400 is the slice budget and
- * not an enforced bound) and `assistant_excerpt` (averaging 521.2, max 623),
- * and does NOT publish `content.docs_markdown`; the consumer follows `url` for
- * the full text - which is the page itself, so it is always reachable.
+ * publishes `docs_excerpt` and `assistant_excerpt` - each a clipped preview,
+ * budgeted at 400 and 300 chars respectively, though `clipMarkdown` appends the
+ * fence closer AFTER slicing, so those are slice budgets and not enforced
+ * bounds - and does NOT publish `content.docs_markdown`. The consumer follows
+ * `url` for the full text, which is the page itself, so it is always reachable.
  *
- * The cost of the alternative is measurable: the index is already 10.41 MiB and
- * the graph 11.62 MiB, and adding ~1,400 chars per module would put roughly
- * 6 MiB more onto it. For scale, `llms-full.txt` carries the site's prose in
- * 2.28 MiB, so per-module text is an expensive way to store text. The argument
- * rests on that and on the `url`, NOT on a claim that each module's prose also
- * ships in llms-full.txt: the two artifacts cut the corpus differently - 423
- * sections there and 410 links in llms.txt, against 4,386 modules here - so
- * there is no per-module
- * correspondence to appeal to. Units are MiB throughout, to match `mb()` and
- * MAX_INDEX_MB below.
+ * The cost of the alternative is a MAGNITUDE argument, and it is stated in
+ * magnitudes on purpose. The index is around 10 MiB and the graph around 11;
+ * carrying the full chunk would add roughly 6 MiB more, against `llms-full.txt`
+ * holding the site's entire prose corpus in about 2.3. Per-module text is an
+ * expensive way to store text, and that holds at any of these sizes.
+ *
+ * Exact figures are deliberately NOT pinned here. They have been wrong three
+ * times: the module count, both artifact sizes and both excerpt averages all
+ * drifted as chunking and scoring changed, while this comment went on asserting
+ * them, and nothing checks a number in a comment. For the current values read
+ * `scripts/retrieval-evals/baseline.json` (pages and modules) or measure the
+ * built artifacts; the extractor prints its own counts at the end of postBuild.
+ *
+ * The argument rests on those magnitudes and on the `url`, NOT on a claim that
+ * each module's prose also ships in llms-full.txt: the two artifacts cut the
+ * corpus differently - llms.txt indexes whole PAGES while this indexes CHUNKS,
+ * several per page - so there is no per-module correspondence to appeal to.
+ * Units are MiB throughout, to match `mb()` and MAX_INDEX_MB below.
  *
  * So CHUNK_TARGET_CHARS is a GRANULARITY knob, not a payload size: it decides
  * how finely a page is split into retrievable units, and the excerpt is a
@@ -44,8 +52,13 @@
  * index, `llms-full.txt` as the text). This one emits TYPED METADATA AND EDGES
  * for deciding which page or chunk to read - intents, audiences, channels,
  * frameworks, products, cites-API, see-also, availability - which a flat text
- * dump cannot express. They share a source of truth for what an assistant may
- * see (`customFields.assistantIgnoreFiles`) so a curation decision is made once.
+ * dump cannot express. They share the curation decision about what an assistant
+ * may see - `assistantIgnoreFiles` in docusaurus.config.ts - but each takes its
+ * own list as a PLUGIN OPTION (`options.ignoreFiles` here, `ignoreFiles` on the
+ * llms plugin) rather than through `customFields`. That is deliberate: a
+ * customFields key is a second name that has to be kept in step with the list
+ * it mirrors, and it had already drifted once. Each consumer's list is a
+ * superset of the shared one, so the decision is still made in a single place.
  *
  * Known limit: 10 MiB is large for a browser consumer to fetch whole. Nothing
  * in the repo consumes it that way yet; if something does, it needs a served
