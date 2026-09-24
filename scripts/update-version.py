@@ -347,21 +347,39 @@ def rewrite_api_reference_links(version: str) -> None:
         for source, target in API_REFERENCE_LINK_REWRITES
     ]
 
+    # encoding is explicit on both sides. read_text() with no encoding uses the
+    # locale default, and 57 of the ~676 files under docs/ are not decodable as
+    # cp1252 - so on a Windows checkout this raised mid-walk, AFTER
+    # `docs:version` had already written versioned_docs/, versioned_sidebars/
+    # and versions.json, and with files earlier in sorted() order already
+    # rewritten. The catch-all in main() printed "Unexpected error" and left a
+    # half-frozen repo that cannot simply be re-run.
     total = 0
     touched = 0
     for file_path in sorted(set(docs_dir.rglob("*.md")) | set(docs_dir.rglob("*.mdx"))):
-        content = file_path.read_text()
+        content = file_path.read_text(encoding="utf-8")
         original = content
         for source, target in rewrites:
             total += content.count(source)
             content = content.replace(source, target)
         if content != original:
-            file_path.write_text(content)
+            file_path.write_text(content, encoding="utf-8")
             touched += 1
 
     if total == 0:
-        print("  No API-reference links to rewrite")
-        return
+        # Stop rather than log and carry on. Every version so far carries
+        # hundreds of these links, so zero means the convention moved and these
+        # patterns no longer match - in which case the snapshot silently keeps
+        # linking the unversioned tree, which is exactly the 8.5.3 bug this
+        # exists to prevent. A version that genuinely has none needs this guard
+        # revisited, not bypassed.
+        raise RuntimeError(
+            f"{docs_dir} contains no API-reference links matching "
+            f"{[source for source, _ in rewrites]}. Either the snapshot is not "
+            f"what it should be, or the link convention changed and "
+            f"API_REFERENCE_LINK_REWRITES needs updating."
+        )
+
     for _source, target in rewrites:
         print(f"  -> {target}")
     print(f"  Rewrote {total} API-reference links in {touched} files")
