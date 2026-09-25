@@ -6,7 +6,7 @@ import {
   isUnreleasedFramework,
 } from "@site/src/constants/docsPaths";
 
-const POSSIBLE_VERSIONS = ["/next", "/6.28.11", "/7.6.14"];
+const POSSIBLE_VERSIONS = ["/next", "/6.28.11", "/7.6.15"];
 
 const FRAMEWORKS = [
   { label: "iOS", sidebarId: "iosSidebar", slug: "ios", activeBasePath: "sdks/ios/" },
@@ -74,9 +74,9 @@ export function useFrameworkItems() {
   );
 
   const xamarinVersion = useMemo(() => {
-    if (!currentPath) return "/7.6.14";
+    if (!currentPath) return "/7.6.15";
     if (currentPath.includes("/6.28.")) return "/6.28.11";
-    return "/7.6.14"; // Default to 7.6.14 for Xamarin
+    return "/7.6.15"; // Default to 7.6.15 for Xamarin
   }, [currentPath]);
 
   // Deliberately computed client-side (after hydration) and not during SSR:

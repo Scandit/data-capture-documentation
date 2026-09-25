@@ -32,7 +32,7 @@ export default function DocsVersionDropdownNavbarItem({
   const {savePreferredVersionName} = useDocsPreferredVersion(docsPluginId);
 
   // Only offer versions that actually document the framework being viewed:
-  // Xamarin exists only in 7.6.14/6.28.11, Kotlin Multiplatform only in the
+  // Xamarin exists only in 7.6.15/6.28.11, Kotlin Multiplatform only in the
   // current version. See src/utils/versionFilters.ts.
   const filteredVersions = filterVersionsForPath(versions, pathname);
 

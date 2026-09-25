@@ -36,7 +36,7 @@ keywords:
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -811,4 +811,4 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/react-native/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/react-native/release-notes)

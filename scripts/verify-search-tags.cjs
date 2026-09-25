@@ -496,6 +496,53 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
       ].filter(Boolean),
     ),
   ];
+  // The same event one version down: a patch release renames a FROZEN snapshot
+  // (docs-default-7.6.14 -> docs-default-7.6.15). releasePending cannot see it,
+  // because the served tag is untouched and healthy - so the incoming tag read
+  // as "the widget filters on nothing" and the outgoing one as "indexed content
+  // nothing can reach", and the release PR went red with no path to green: the
+  // crawler only re-indexes after main deploys. Every 7.6.x and 6.28.x patch
+  // release does this rename, so it is a cycle event, not an anomaly.
+  //
+  // Detected, not declared, and paired as narrowly as the served case: an
+  // incoming CONFIGURED tag that holds nothing, matched to an outgoing tag the
+  // index still holds that no longer has a config entry and belongs to the same
+  // version line. The outgoing candidate is taken from `unreachable` itself, so
+  // it has already cleared the orphan threshold and the reachable/routable/
+  // contextual paths.
+  //
+  // What this deliberately does NOT excuse: a version DELETED rather than
+  // renamed has no incoming partner and still fails; a second line going dark at
+  // the same time fails on its own pair; and an index-wide outage fails the
+  // otherDocsTagsHealthy corroboration, the same guard releasePending uses.
+  const versionLine = (tag) =>
+    tag.replace(/^docs-default-/, "").split(".").slice(0, 2).join(".");
+  const renamedFrozen = new Map(); // incoming configured tag -> outgoing indexed tag
+  if (otherDocsTagsHealthy) {
+    for (const tag of routableDocsTags) {
+      // The served version's rename is releasePending's job, not this one's.
+      if (tag === manifest.lastVersionTag) continue;
+      if (counts[tag] !== undefined) continue;
+      const outgoing = unreachable.find(
+        ([indexed]) => indexed !== tag && versionLine(indexed) === versionLine(tag),
+      );
+      if (outgoing) renamedFrozen.set(tag, outgoing[0]);
+    }
+  }
+  const renamedOutgoing = new Set(renamedFrozen.values());
+  if (renamedFrozen.size) {
+    console.error(
+      `\nNOTE: treating ${[...renamedFrozen]
+        .map(([incoming, outgoing]) => `"${outgoing}" -> "${incoming}"`)
+        .join(", ")} as a frozen version renamed by this build,` + NL +
+        `  whose crawl has not run yet. The outgoing tag keeps its pages until the` + NL +
+        `  deploy is crawled, and the incoming one holds nothing until then. Like` + NL +
+        `  the served-version case, --strict does NOT turn this into a failure:` + NL +
+        `  the state is real. If it persists across consecutive daily runs, the` + NL +
+        `  crawl has stalled rather than lagged.` + NL,
+    );
+  }
+
   const thin = routableDocsTags
     // The served tag being thin IS the pending-release state, not a finding.
     .filter((tag) => !(releasePending && tag === manifest.lastVersionTag))
@@ -524,7 +571,8 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
 
   let failed = process.exitCode === 1;
 
-  if (unreachable.length) {
+  const unreachableNow = unreachable.filter(([tag]) => !renamedOutgoing.has(tag));
+  if (unreachableNow.length) {
     // While a release is pending, the outgoing version's tag is unreachable by
     // construction: this build renamed it and the index has not caught up.
     // releasePending is a fact about the index, not a severity preference, so
@@ -535,7 +583,7 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
     console.error(
       `\n${hard ? "FAIL" : "WARN"}: indexed content the search widget cannot reach.`,
     );
-    for (const [tag, n] of unreachable) {
+    for (const [tag, n] of unreachableNow) {
       console.error(`  ${n} pages tagged "${tag}" are in the index but filtered out of every query.`);
     }
     console.error(
@@ -632,15 +680,23 @@ FAIL: typing "v${servedMajor}" routes to "${routedForServedMajor}", but the site
     const onlyTheNewServedTag =
       releasePending &&
       missing.every((tag) => tag === manifest.lastVersionTag);
-    const hard = !onlyTheNewServedTag;
+    // Same reasoning one version down, and the two can coexist: a release that
+    // promotes the served version while a patch renames a frozen one leaves
+    // both kinds of tag briefly empty.
+    const onlyRenames = missing.every(
+      (tag) =>
+        (releasePending && tag === manifest.lastVersionTag) ||
+        renamedFrozen.has(tag),
+    );
+    const hard = !onlyRenames;
     if (hard) failed = true;
     console.error(
       `\n${hard ? "FAIL" : "WARN"}: the widget filters on tags that hold nothing at all.`,
     );
     for (const tag of missing) console.error(`  "${tag}" -> 0 records`);
     console.error(
-      onlyTheNewServedTag
-        ? `  Expected: this build introduces "${manifest.lastVersionTag}". The crawler\n` +
+      onlyRenames
+        ? `  Expected: this build introduces ${missing.map((t2) => `"${t2}"`).join(", ")}. The crawler\n` +
             `  populates it after deploy. Re-run after the crawl; --strict does NOT\n` +
             `  turn this into a failure, because the state is real.`
         : `  A tag that matches nothing means those queries return nothing.`,

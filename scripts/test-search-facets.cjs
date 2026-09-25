@@ -177,7 +177,11 @@ check("an unknown version tag adds nothing rather than guessing", () => {
 
 check("typing a version moves the guides AND the API reference together", () => {
   const filters = ["language:en", [DEFAULT, SERVED, APILATEST]];
-  const out = rewriteVersionTag(filters, "docs-default-7.6.14", MAP);
+  // frozen[0], not a literal: every other constant here follows a release that
+  // renames a version, and a typed-in tag silently stops matching the moment it
+  // does - rewriteVersionTag() then swaps nothing and this check fails for a
+  // reason that has nothing to do with search.
+  const out = rewriteVersionTag(filters, frozen[0], MAP);
   const tags = tagsOf(out);
   assert.ok(tags.includes(LEGACY), "page tag must be swapped");
   assert.ok(tags.includes(API76), "API reference must follow to 7.6");
