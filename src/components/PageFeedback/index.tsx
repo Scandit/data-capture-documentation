@@ -193,6 +193,58 @@ function Inner({ url, title }: PageFeedbackProps) {
     const text = comment.trim();
     if (!text) return;
     // Flush the held vote first, so the pair arrives in the right order.
+    //
+    // Keep this UNCONDITIONAL and keep it here.
+    //
+    // What else could flush a held vote, and why none of it is cover.
+    //
+    // The poll stops retrying after RETRY_LIMIT * RETRY_MS, but clearing the
+    // interval does NOT unregister the `pagehide` listener or the unmount
+    // `lastChance()` - the effect does not re-run - so both stay armed. They
+    // are not equivalent to each other, and the difference matters:
+    //
+    //  - UNMOUNT is reliable. On this SPA the widget unmounts on a client-side
+    //    route change, which is how most readers leave a docs page, and the
+    //    page is fully alive when it runs (see the note on the cleanup above).
+    //    It is a better bet than the flush below, not a worse one - do not
+    //    remove it on the strength of the next bullet.
+    //  - PAGEHIDE is the unreliable one: a real unload, where an in-flight
+    //    request may never leave the browser, and where an accepted event is
+    //    not a delivered one.
+    //
+    // So what this line uniquely covers, ONCE THE POLL HAS EXHAUSTED, is the
+    // reader who neither navigates in-site nor unloads cleanly - the tab
+    // discarded, the process killed - having written a comment. Before the poll
+    // exhausts it flushes on a live page anyway, and this line is then a
+    // no-op, which is fine: it costs nothing and it is the only thing standing
+    // there once the poll is done.
+    //
+    // Two edits remove it:
+    //
+    //  - DELETING it as "the poll already covers it". The poll has stopped by
+    //    then; that is the whole scenario.
+    //  - GATING it on the comment succeeding, `if (delivered && ...)`. The
+    //    argument against this needs no scenario at all: the gate can only ever
+    //    LOSE a vote and can never gain one. Where `delivered` is true the
+    //    vote goes either way, so the gate buys nothing; where it is false the
+    //    vote may still have been accepted - three of capturePostHogEvent's
+    //    four false-exits are shared state read one line apart, but the fourth
+    //    is a throw, and the vote's properties are a subset of the comment's,
+    //    so a payload that throws on the comment need not have thrown on the
+    //    vote. There is no case in which adding the gate helps.
+    //
+    // The ORDER of the two calls protects nothing on its own; it only keeps the
+    // pair in sequence. For the three shared-state exits, swapping them cannot
+    // change whether the VOTE is accepted.
+    //
+    // Why a lost vote matters rests on something NOT checkable from this repo:
+    // vote counts are read from `docs_page_feedback`. Note that this is a
+    // strict PREFIX of `docs_page_feedback_comment`, so an insight that matches
+    // by "contains" or by regex rather than exact equality already counts both
+    // - in which case this rationale is wrong today, not merely at risk of
+    // going wrong. Neither event name appears anywhere else in this repo, so
+    // confirm the insight uses an exact-match filter before relying on any of
+    // this.
     if (heldVote.current !== null) sendVote(heldVote.current);
     const delivered = capturePostHogEvent('docs_page_feedback_comment', {
       ...base(),
