@@ -263,7 +263,7 @@ keywords:
 
 ## 8.4.2
 
-**Released**: September 25, 2026
+**Released**: September 28, 2026
 
 ### Bug Fixes
 
