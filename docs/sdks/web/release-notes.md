@@ -231,6 +231,22 @@ keywords:
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 
+## 8.4.2
+
+**Released**: September 25, 2026
+
+### Performance Improvements
+
+#### Core
+
+* Re-enabled SIMD support in WebAssembly for iOS 26, restoring performance in all capture modes, most noticeably Label Capture.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+
 ## 8.4.1
 
 **Released**: June 23, 2026

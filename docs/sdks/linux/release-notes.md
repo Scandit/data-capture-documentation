@@ -119,6 +119,16 @@ No updates for this framework in this release.
 
 * Fixed camera initialization failure on devices where buffer allocation fails for the multi-planar capture interface; the camera now enumerates supported capture modes via VIDIOC_QUERYCAP and falls back to single-plane capture if multi-planar buffer allocation fails.
 
+## 8.4.2
+
+**Released**: September 25, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+
 ## 8.4.1
 
 **Released**: June 23, 2026

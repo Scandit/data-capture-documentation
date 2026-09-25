@@ -259,6 +259,26 @@ keywords:
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 
+## 8.4.2
+
+**Released**: September 25, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
+#### Smart Label Capture
+
+* Fixed predefined Smart Label Capture barcode fields (IMEI1, IMEI2, serial number) not scanning without an explicit symbology list.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+
 ## 8.4.1
 
 **Released**: June 23, 2026
