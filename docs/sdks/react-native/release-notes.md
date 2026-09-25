@@ -261,6 +261,25 @@ keywords:
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+* Fixed an iOS build failure on React Native versions below 0.78.
+* Fixed DataCaptureView and other scanning views not rendering on Android release builds with React Native 0.78 New Architecture.
+* Fixed the Android build failing with "Unknown CMake command target_compile_reactnative_options" on projects using RN < 0.81 with the New Architecture enabled; the generated CMake now falls back to the equivalent compile flags on older React Native versions.
+
 ## 8.4.1
 
 **Released**: June 23, 2026

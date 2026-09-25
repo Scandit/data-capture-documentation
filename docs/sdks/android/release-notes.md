@@ -277,6 +277,18 @@ keywords:
 * Deprecated the `BarcodeCountView.newInstance()` overloads that accept a `DataCaptureView` on Android (will be removed in 9.0); pass a `DataCaptureContext` instead.
 * Added `ScanditIcon` support for `BarcodeCount` status mode highlights, and deprecated the `SDCBarcodeCountStatus`-based highlight API.
 
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
 ## 8.4.1
 
 **Released**: June 23, 2026
