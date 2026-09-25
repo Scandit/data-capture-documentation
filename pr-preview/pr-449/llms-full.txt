@@ -7271,7 +7271,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## 8.4.2
 
-**Released**: September 25, 2026
+**Released**: September 28, 2026
 
 ### Bug Fixes
 
@@ -11631,7 +11631,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## 8.4.2
 
-**Released**: September 25, 2026
+**Released**: September 28, 2026
 
 ### Bug Fixes
 
@@ -15249,7 +15249,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## 8.4.2
 
-**Released**: September 25, 2026
+**Released**: September 28, 2026
 
 ### Bug Fixes
 
@@ -18888,7 +18888,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## 8.4.2
 
-**Released**: September 25, 2026
+**Released**: September 28, 2026
 
 ### Bug Fixes
 
@@ -24738,7 +24738,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## 8.4.2
 
-**Released**: September 25, 2026
+**Released**: September 28, 2026
 
 ### Bug Fixes
 
@@ -31732,7 +31732,7 @@ No updates for this framework in this release.
 
 ## 8.4.2
 
-**Released**: September 25, 2026
+**Released**: September 28, 2026
 
 ### Bug Fixes
 
@@ -35101,7 +35101,7 @@ More data formats will be added in future releases. Please contact us if the dat
 
 ## 8.4.2
 
-**Released**: September 25, 2026
+**Released**: September 28, 2026
 
 ### Bug Fixes
 
@@ -38885,7 +38885,7 @@ More data formats will be added in future releases. Please contact us if the dat
 
 ## 8.4.2
 
-**Released**: September 25, 2026
+**Released**: September 28, 2026
 
 ### Bug Fixes
 
@@ -42766,7 +42766,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## 8.4.2
 
-**Released**: September 25, 2026
+**Released**: September 28, 2026
 
 ### Bug Fixes
 
@@ -47281,7 +47281,7 @@ For important information about CDN risks and recommendations for production env
 
 ## 8.4.2
 
-**Released**: September 25, 2026
+**Released**: September 28, 2026
 
 ### Performance Improvements
 
