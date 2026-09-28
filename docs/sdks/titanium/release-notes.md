@@ -138,6 +138,20 @@ No updates for this framework in this release.
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+
 ## 8.4.1
 
 **Released**: June 23, 2026
