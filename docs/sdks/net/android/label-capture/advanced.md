@@ -22,7 +22,7 @@ import ValidationFlowCustomField from '../../../../partials/advanced/_validation
 
 ### Basic Overlay
 
-To customize the appearance of an overlay you can implement a [ILabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener) and/or [ILabelCaptureAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-advanced-overlay-listener.html) interface, depending on the overlay(s) you are using.
+To customize the appearance of an overlay you can implement a [ILabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener) and/or [ILabelCaptureAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-advanced-overlay-listener.html) interface, depending on the overlays you are using.
 
 The method [BrushForLabel()](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [BrushForField()](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
@@ -338,6 +338,6 @@ private LabelCaptureSettings BuildLabelCaptureSettings()
 }
 ```
 
-See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
 
 <ReceiptScanning/>
