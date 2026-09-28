@@ -74,7 +74,10 @@ const EXPRESSION_ROOTS = extractConst("EXPRESSION_ROOTS");
 const dottedFallback = eval(`(${extract("dottedFallback")})`);
 const applyQueryOverride = eval(`(${extract("applyQueryOverride")})`);
 const RETRY_HIT_CEILING = extractConst("RETRY_HIT_CEILING");
+const QUERY_FRAMEWORK_TOKENS = extractConst("QUERY_FRAMEWORK_TOKENS");
+const stripRoutedTokens = eval(`(${extract("stripRoutedTokens")})`);
 const adoptRetry = eval(`(${extract("adoptRetry")})`);
+const retryCeilingFor = eval(`(${extract("retryCeilingFor")})`);
 const nbHitsOf = eval(`(${extract("nbHitsOf")})`);
 const runDottedRetry = eval(`(${extract("runDottedRetry")})`);
 // Named guard for the brace-counting limitation in extract(): if any of the
@@ -91,7 +94,9 @@ for (const [name, fn] of Object.entries({
   rewriteVersionTag,
   dottedFallback,
   applyQueryOverride,
+  stripRoutedTokens,
   adoptRetry,
+  retryCeilingFor,
   nbHitsOf,
   runDottedRetry,
 })) {
@@ -557,23 +562,23 @@ check("applyQueryOverride replaces the query DocSearch actually sends", () => {
 check("adoptRetry believes a retry only when it is specific enough", () => {
   // The gate: nothing is retried, let alone adopted, unless the primary
   // returned exactly zero.
-  assert.strictEqual(adoptRetry(1, 5), false, "a primary with hits is never rewritten");
-  assert.strictEqual(adoptRetry(107, 5), false);
-  assert.strictEqual(adoptRetry(undefined, 5), false, "a malformed response is not a zero");
+  assert.strictEqual(adoptRetry(1, 5, RETRY_HIT_CEILING), false, "a primary with hits is never rewritten");
+  assert.strictEqual(adoptRetry(107, 5, RETRY_HIT_CEILING), false);
+  assert.strictEqual(adoptRetry(undefined, 5, RETRY_HIT_CEILING), false, "a malformed response is not a zero");
 
   // The ceiling, on both sides of it and exactly on it.
-  assert.strictEqual(adoptRetry(0, 0), false, "a retry that finds nothing is not adopted");
-  assert.strictEqual(adoptRetry(0, 1), true);
-  assert.strictEqual(adoptRetry(0, RETRY_HIT_CEILING), true, "the ceiling is inclusive");
-  assert.strictEqual(adoptRetry(0, RETRY_HIT_CEILING + 1), false);
+  assert.strictEqual(adoptRetry(0, 0, RETRY_HIT_CEILING), false, "a retry that finds nothing is not adopted");
+  assert.strictEqual(adoptRetry(0, 1, RETRY_HIT_CEILING), true);
+  assert.strictEqual(adoptRetry(0, RETRY_HIT_CEILING, RETRY_HIT_CEILING), true, "the ceiling is inclusive");
+  assert.strictEqual(adoptRetry(0, RETRY_HIT_CEILING + 1, RETRY_HIT_CEILING), false);
 
   // The measured pairs, as data rather than as prose: every accepted count
   // below the gap and every declined one above it. A number that drifts here
   // is a failing assertion, not a stale comment.
   const accepted = [2, 12, 37, 106, 107, 170, 183, 203, 212];
   const declined = [340, 842, 883, 1259, 1264, 1505, 1678, 2633, 2848, 3488];
-  for (const n of accepted) assert.strictEqual(adoptRetry(0, n), true, `accepted: ${n}`);
-  for (const n of declined) assert.strictEqual(adoptRetry(0, n), false, `declined: ${n}`);
+  for (const n of accepted) assert.strictEqual(adoptRetry(0, n, RETRY_HIT_CEILING), true, `accepted: ${n}`);
+  for (const n of declined) assert.strictEqual(adoptRetry(0, n, RETRY_HIT_CEILING), false, `declined: ${n}`);
   assert.ok(
     Math.max(...accepted) < RETRY_HIT_CEILING && RETRY_HIT_CEILING < Math.min(...declined),
     `the ceiling ${RETRY_HIT_CEILING} must sit in the gap ${Math.max(...accepted)}..${Math.min(...declined)}`,
@@ -662,6 +667,58 @@ check("runDottedRetry issues the retry it should, with the query it should", asy
   });
   assert.strictEqual(sent.length, 1, "an unreadable response is not retried");
   assert.strictEqual(outcome.adopted, null);
+});
+
+/**
+ * The strip protects dotted WORDS, not dotted QUERIES.
+ *
+ * Skipping the whole query on any dot left `sparkscan ios v8.6` unstripped
+ * while `sparkscan ios v8` was stripped. Skipping only whitespace-free queries
+ * fixes that but mangles a dotted word beside another one, and the version
+ * regex stopping at the first dot left `.6` behind. Each row is one of those.
+ */
+check("stripRoutedTokens strips routed words but never the inside of a dotted one", () => {
+  const rows = [
+    // [typed, version routes?, expected]
+    ["sparkscan ios v8.6", true, "sparkscan"],
+    ["sparkscan ios v8", true, "sparkscan"],
+    ["ios sdk v7.6.14", true, "sdk"],
+    ["barcode capture android 7.6", false, "barcode capture 7.6"],
+    ["capacitor.config.ts ios", false, "capacitor.config.ts"],
+    ["BarcodeCapture.feedback ios", false, "BarcodeCapture.feedback"],
+    ["scandit.datacapture.core.ios.Anchor", false, "scandit.datacapture.core.ios.Anchor"],
+    ["ios scandit.datacapture.core.ios.Anchor", false, "scandit.datacapture.core.ios.Anchor"],
+    ["net.ios sparkscan", false, "sparkscan"],
+    ["sparkscan web", false, "sparkscan"],
+    ["ios", false, "ios"],
+  ];
+  for (const [typed, stripVersion, expected] of rows) {
+    assert.strictEqual(stripRoutedTokens(typed, stripVersion), expected, typed);
+  }
+});
+
+check("the hit ceiling applies to the path-tail retry only", () => {
+  assert.strictEqual(retryCeilingFor("this.overlay.viewfinder.width"), RETRY_HIT_CEILING);
+  assert.strictEqual(retryCeilingFor("RectangularViewfinderStyle.LEGACY.x."), RETRY_HIT_CEILING);
+  assert.strictEqual(retryCeilingFor("DataCaptureContext.forLicenseKey"), Infinity);
+  // A trailing dot does not add a segment, same as dottedFallback.
+  assert.strictEqual(retryCeilingFor("BarcodeCapture.feedback."), Infinity);
+});
+
+check("a two-part retry finds a widely documented parent class", async () => {
+  const sent = [];
+  const outcome = await runDottedRetry({
+    typedQuery: "BarcodeCapture.feedback",
+    strippedQuery: "BarcodeCapture.feedback",
+    search: async (req) => {
+      sent.push(req);
+      return { results: [{ nbHits: sent.length === 1 ? 0 : 2633 }] };
+    },
+    buildRequests: (q) => ({ q }),
+  });
+  assert.deepStrictEqual(sent.map((s) => s.q), ["BarcodeCapture.feedback", "BarcodeCapture"]);
+  assert.deepStrictEqual(outcome.adopted, { typed: "BarcodeCapture.feedback", used: "BarcodeCapture" },
+    "2633 is above RETRY_HIT_CEILING, which must not apply to this branch");
 });
 
 check("nbHitsOf reads the count or nothing", () => {

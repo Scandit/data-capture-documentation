@@ -237,28 +237,48 @@ function rewriteVersionTag(facetFilters, targetTag, apiMap) {
 // this only stops the platform word from skewing textual relevance (e.g. lifting
 // framework-listing pages above the product's get-started guide).
 function stripRoutedTokens(query, stripVersion) {
-  // DOTTED QUERIES ARE LEFT ALONE.
-  //
-  // This function was inert in production until applyQueryOverride was fixed,
-  // so its behaviour had never actually been exercised - and on a dotted
-  // expression it is destructive. `ios` is a routed token, so
-  // `scandit.datacapture.core.ios.Anchor` became
-  // `scandit.datacapture.core. .Anchor`: a space injected into the middle of an
-  // identifier path, which matches nothing and which dottedFallback then cannot
-  // rescue because the shape is gone.
-  //
-  // A pasted expression is precisely what this file's retry exists to serve, so
-  // the strip must not run on one. The framework name inside a namespace is
-  // part of the symbol, not a routing hint the reader added.
-  if (/\S\.\S/.test(query || "")) return (query || "").trim();
+  // The version marker INCLUDING its minor and patch. `\d+\b` alone stops at
+  // the first dot, so `v8.6` left `.6` behind in the query.
+  const versionRe = /\b(?:version|ver|v|sdk)\s*\.?\s*\d+(?:\.(?:\d+|x))*\b/gi;
+  const isRouted = (word) =>
+    QUERY_FRAMEWORK_TOKENS.some(
+      ({ re }) => !` ${word} `.replace(new RegExp(re.source, "gi"), " ").trim(),
+    ) || (stripVersion && !word.replace(versionRe, " ").trim());
 
-  let q = ` ${query || ""} `;
+  // DOTTED WORDS ARE LEFT ALONE - each one, not the whole query.
+  //
+  // `ios` is a routed token and `\b` matches at a dot, so an unguarded strip
+  // turns `scandit.datacapture.core.ios.Anchor` into
+  // `scandit.datacapture.core. .Anchor` - a space injected into an identifier
+  // path, which matches nothing and which dottedFallback cannot rescue - and
+  // `capacitor.config.ts` into `.config.ts`. The framework name inside a
+  // namespace or a filename is part of that token, not a routing hint.
+  //
+  // Per word, not per query. The guard this replaces skipped the strip for any
+  // query containing a dot, so `sparkscan ios v8.6` and
+  // `barcode capture android 7.6` kept the routed tokens they exist to lose,
+  // while `sparkscan ios v8` was stripped. "Only when the query has no
+  // whitespace" fixes those but re-exposes a dotted word that sits beside
+  // another one (`ios scandit.datacapture.core.ios.Anchor`).
+  //
+  // A dotted word that is ENTIRELY a routed token (`v8.6`, `dotnet.ios`) is not
+  // protected: it is the routing hint itself.
+  const kept = [];
+  let q = ` ${(query || "")
+    .split(/(\s+)/)
+    .map((word) => {
+      if (!/\S\.\S/.test(word) || isRouted(word)) return word;
+      kept.push(word);
+      return `\u0001${kept.length - 1}\u0001`;
+    })
+    .join("")} `;
   for (const { re } of QUERY_FRAMEWORK_TOKENS) {
     q = q.replace(new RegExp(re.source, "gi"), " ");
   }
   if (stripVersion) {
-    q = q.replace(/\b(?:version|ver|v|sdk)\s*\.?\s*\d+\b/gi, " ");
+    q = q.replace(versionRe, " ");
   }
+  q = q.replace(/\u0001(\d+)\u0001/g, (_, i) => kept[Number(i)]);
   // Empty only. A "leave at least two words" rule was tried here and reverted:
   // it fixed `ios sdk` -> `sdk` at the cost of `sparkscan web`,
   // `matrixscan ios` and every other two-word query, which is the shape this
@@ -444,7 +464,9 @@ async function runDottedRetry(input) {
   } catch {
     return unchanged;
   }
-  if (!adoptRetry(nbHitsOf(first), nbHitsOf(retry))) return unchanged;
+  if (!adoptRetry(nbHitsOf(first), nbHitsOf(retry), retryCeilingFor(typed))) {
+    return unchanged;
+  }
   return {
     response: retry,
     effectiveQuery: candidate,
@@ -452,9 +474,31 @@ async function runDottedRetry(input) {
   };
 }
 
-function adoptRetry(firstHits, retryHits) {
+function adoptRetry(firstHits, retryHits, ceiling) {
   if (firstHits !== 0) return false;
-  return retryHits > 0 && retryHits <= RETRY_HIT_CEILING;
+  return retryHits > 0 && retryHits <= ceiling;
+}
+
+/**
+ * The ceiling for the retry dottedFallback picks for `query`.
+ *
+ * RETRY_HIT_CEILING belongs to the THREE-OR-MORE-part branch only. That retry
+ * is the last segment of a path, lifted out on its own - `settings`, `width` -
+ * and the ceiling is what stops an ordinary word from being adopted.
+ *
+ * The TWO-part retry is different in kind: it is the class the reader typed as
+ * the receiver (`DataCaptureContext.forLicenseKey` -> `DataCaptureContext`),
+ * and receivers that are not classes are already refused by EXPRESSION_ROOTS.
+ * A widely documented class goes well past 250 - `barcodecapture` is 2633 - so
+ * the shared ceiling discarded exactly the parent-class page this branch was
+ * added to find, and the reader got "No results". Any retry that finds
+ * something is adopted here.
+ *
+ * Same segment count as dottedFallback: trimmed, trailing dots dropped.
+ */
+function retryCeilingFor(query) {
+  const parts = (query || "").trim().replace(/\.+$/, "").split(".");
+  return parts.length >= 3 ? RETRY_HIT_CEILING : Infinity;
 }
 
 function dottedFallback(query) {
