@@ -212,17 +212,27 @@ function Inner({ url, title }: PageFeedbackProps) {
     //    request may never leave the browser, and where an accepted event is
     //    not a delivered one.
     //
-    // So what this line uniquely covers, ONCE THE POLL HAS EXHAUSTED, is the
-    // reader who neither navigates in-site nor unloads cleanly - the tab
-    // discarded, the process killed - having written a comment. Before the poll
-    // exhausts it flushes on a live page anyway, and this line is then a
-    // no-op, which is fine: it costs nothing and it is the only thing standing
-    // there once the poll is done.
+    // So this line has two jobs, depending on whether the poll is still running:
+    //
+    //  - WHILE THE POLL RUNS, it keeps the vote AHEAD of the comment. The poll
+    //    only fires every RETRY_MS, so if PostHog becomes ready between ticks -
+    //    the reader accepts cookies, then presses Send a second later - the
+    //    vote is still held here, and without this line the comment would go
+    //    first and the vote would follow on the next tick or at unmount, out of
+    //    order. It is not a no-op then, and not a no-op when PostHog is still
+    //    missing either: the send fails and the vote is re-held for the poll.
+    //  - ONCE THE POLL HAS EXHAUSTED, it is the only flush for the reader who
+    //    neither navigates in-site nor unloads cleanly - the tab discarded, the
+    //    process killed - having written a comment.
+    //
+    // Neither job depends on the other, so do not gate this line on the poll's
+    // state in either direction.
     //
     // Two edits remove it:
     //
-    //  - DELETING it as "the poll already covers it". The poll has stopped by
-    //    then; that is the whole scenario.
+    //  - DELETING it as "the poll already covers it". Once exhausted the poll
+    //    has stopped; before that it only fires on a tick, which cannot keep
+    //    the vote ahead of a comment sent between ticks.
     //  - GATING it on the comment succeeding, `if (delivered && ...)`. The
     //    argument against this needs no scenario at all: the gate can only ever
     //    LOSE a vote and can never gain one. Where `delivered` is true the
