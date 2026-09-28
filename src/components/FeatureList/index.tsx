@@ -8,6 +8,7 @@ import productsData from '@site/src/data/products.json';
 import featuresData from '@site/src/data/features.json';
 import { frameworkFromPath } from '@site/src/constants/frameworks';
 import { apiReferenceUrl } from '@site/src/constants/docsPaths';
+import { featureExistsIn } from './availability';
 import { useActiveDocContext } from '@docusaurus/plugin-content-docs/client';
 
 // Function to render description with inline code formatting
@@ -69,19 +70,25 @@ const FeatureList: React.FC<FeatureListProps> = ({
         // Filter by tag
         if (tag && feature.tag !== tag) return false;
         
-        // Filter by framework availability if framework is specified
+        // Filter by framework availability if framework is specified.
+        // Availability is version-aware: a feature added in 8.2 does not exist
+        // on a 7.6 page, and now that its API link resolves against 7.6 rather
+        // than the unversioned reference, showing it would give a 404.
         if (currentFramework) {
           const frameworkInfo = feature.frameworks[currentFramework];
-          if (!frameworkInfo || frameworkInfo.version === 'n/a') {
-            return false; // Don't show features not available for this framework
+          if (!featureExistsIn(frameworkInfo?.version, activeVersionName)) {
+            return false;
           }
         }
         
         return true;
       })
       .map((feature: Feature) => {
-        const isAvailable = currentFramework 
-          ? feature.frameworks[currentFramework] && feature.frameworks[currentFramework].version !== 'n/a'
+        const isAvailable = currentFramework
+          ? featureExistsIn(
+              feature.frameworks[currentFramework]?.version,
+              activeVersionName,
+            )
           : true;
         
         return {
@@ -204,7 +211,9 @@ const FeatureList: React.FC<FeatureListProps> = ({
                 <td>
                   <div className={styles.frameworkList}>
                     {Object.entries(feature.frameworks)
-                      .filter(([, info]) => info.version !== 'n/a')
+                      .filter(([, info]) =>
+                        featureExistsIn(info.version, activeVersionName),
+                      )
                       .map(([frameworkName, frameworkInfo]) => (
                         <a
                           key={frameworkName}
