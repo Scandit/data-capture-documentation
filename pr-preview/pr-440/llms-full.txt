@@ -1,6 +1,6 @@
 # Scandit Developer Documentation
 
-> Developer Guides, API References, and Code Samples for building with Scandit Smart Data Capture
+> Developer Guides, API References, and Code Samples for building with Scandit Smart Data Capture. Scandit also publishes Agent Skills for coding agents (Claude Code, Codex, Cursor) - one per SDK, indexed at /llms-agent-skills.txt.
 
 This file contains all documentation content in a single document following the llmstxt.org standard.
 
@@ -587,6 +587,16 @@ Sets the behavior for how barcodes are listed.
 Only used in `SingleListBuilding` and `ContinuousListBuilding` modes.
 :::
 
+#### `setDisconnectionTimeout(disconnectionTimeout: number): BarcodeLink`
+
+```ts
+barcodeLink.setDisconnectionTimeout(30 * 60 * 1000);
+```
+
+Sets how long Barcode Link keeps trying to reconnect after the desktop and the smartphone lose their connection to each other. If the connection is not restored within this window, the session is aborted on both devices.
+
+The value is in milliseconds. It defaults to 15 minutes (`900000`) and is clamped between 1 minute (`60000`) and 60 minutes (`3600000`).
+
 #### `setPlatform(platform: BarcodeLinkPlatform): BarcodeLink`
 
 ```ts
@@ -686,7 +696,7 @@ barcodeLink.addListener({
 });
 ```
 
-Tracks connection state changes. Only available in `BarcodeLinkUilessFlow`.
+Tracks connection state changes. Only available in `BarcodeLinkHeadlessFlow`.
 
 **Available connection states:**
 
@@ -723,7 +733,7 @@ Initializes Barcode Link using a specific flow.
 - Initializes with a pre-built UI.
 - Shows a QR code for smartphone connection.
 
-##### `BarcodeLinkUilessFlow`
+##### `BarcodeLinkHeadlessFlow`
 
 - Initializes a headless session.
 - Requires custom UI.
@@ -732,7 +742,7 @@ Initializes Barcode Link using a specific flow.
 Example:
 
 ```ts
-const qrcode = await barcodeLink.initialize(new BarcodeLinkUilessFlow());
+const qrcode = await barcodeLink.initialize(new BarcodeLinkHeadlessFlow());
 
 const img = document.createElement("img");
 img.src = qrcode.src;
@@ -7829,7 +7839,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/android/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/android/release-notes)
 
 ---
 
@@ -11392,7 +11402,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -12115,7 +12125,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/capacitor/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/capacitor/release-notes)
 
 ---
 
@@ -14993,7 +15003,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -15700,7 +15710,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/cordova/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/cordova/release-notes)
 
 ---
 
@@ -19352,7 +19362,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/flutter/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/flutter/release-notes)
 
 ---
 
@@ -25193,7 +25203,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/ios/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/ios/release-notes)
 
 ---
 
@@ -31857,7 +31867,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.5
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/linux/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/linux/release-notes)
 
 ---
 
@@ -34776,7 +34786,7 @@ More data formats will be added in future releases. Please contact us if the dat
 * Unified the .NET BarcodeCount API with native Android/iOS: added BarcodeCountStatus.ExpiringSoon, BarcodeCountView.ShouldShowStatusIconsOnScan/LogoStyle/LogoAnchor, and a public BarcodeCountNotInListActionSettings() constructor.
 * Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus IBarcodeFindListener.OnSessionUpdated, the BarcodeFind.SessionUpdated event, BarcodeFindView.LogoAnchor/LogoStyle, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
 * Added missing BarcodeSelection .NET APIs: BarcodeSelectionSession.SelectUnselectedBarcodes(), BarcodeSelectionSettings.TapGestureForSelectionEnabled and SwipeGesturesEnabled, and the BarcodeSelectionSettings.Create(CapturePreset) factory.
-* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously-missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
+* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
 * Added BarcodeSequence support to .NET, with MAUI consumption.
 * Added BarcodeGenerator for .NET to generate barcode/2D-code images from text or byte[] at a configurable width, with foreground/background color customization. Supports Code 39, Code 128, EAN-13, UPC-A, Interleaved 2 of 5, QR Code, Data Matrix, Aztec, and PDF417.
 * Added various Barcode AR APIs:
@@ -35462,7 +35472,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/net/android/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/net/android/release-notes)
 
 ---
 
@@ -38561,7 +38571,7 @@ More data formats will be added in future releases. Please contact us if the dat
 * Unified the .NET BarcodeCount API with native Android/iOS: added BarcodeCountStatus.ExpiringSoon, BarcodeCountView.ShouldShowStatusIconsOnScan/LogoStyle/LogoAnchor, and a public BarcodeCountNotInListActionSettings() constructor.
 * Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus IBarcodeFindListener.OnSessionUpdated, the BarcodeFind.SessionUpdated event, BarcodeFindView.LogoAnchor/LogoStyle, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
 * Added missing BarcodeSelection .NET APIs: BarcodeSelectionSession.SelectUnselectedBarcodes(), BarcodeSelectionSettings.TapGestureForSelectionEnabled and SwipeGesturesEnabled, and the BarcodeSelectionSettings.Create(CapturePreset) factory.
-* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously-missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
+* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
 * Added BarcodeSequence support to .NET, with MAUI consumption.
 * Added BarcodeGenerator for .NET to generate barcode/2D-code images from text or byte[] at a configurable width, with foreground/background color customization. Supports Code 39, Code 128, EAN-13, UPC-A, Interleaved 2 of 5, QR Code, Data Matrix, Aztec, and PDF417.
 * Added various Barcode AR APIs:
@@ -39206,7 +39216,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/net/ios/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/net/ios/release-notes)
 
 ---
 
@@ -42413,7 +42423,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -43187,7 +43197,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/react-native/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/react-native/release-notes)
 
 ---
 
@@ -47656,7 +47666,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/web/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/web/release-notes)
 
 ---
 
