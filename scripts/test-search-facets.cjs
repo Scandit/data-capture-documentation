@@ -77,7 +77,6 @@ const RETRY_HIT_CEILING = extractConst("RETRY_HIT_CEILING");
 const QUERY_FRAMEWORK_TOKENS = extractConst("QUERY_FRAMEWORK_TOKENS");
 const stripRoutedTokens = eval(`(${extract("stripRoutedTokens")})`);
 const adoptRetry = eval(`(${extract("adoptRetry")})`);
-const retryCeilingFor = eval(`(${extract("retryCeilingFor")})`);
 const nbHitsOf = eval(`(${extract("nbHitsOf")})`);
 const runDottedRetry = eval(`(${extract("runDottedRetry")})`);
 // Named guard for the brace-counting limitation in extract(): if any of the
@@ -96,7 +95,6 @@ for (const [name, fn] of Object.entries({
   applyQueryOverride,
   stripRoutedTokens,
   adoptRetry,
-  retryCeilingFor,
   nbHitsOf,
   runDottedRetry,
 })) {
@@ -562,23 +560,23 @@ check("applyQueryOverride replaces the query DocSearch actually sends", () => {
 check("adoptRetry believes a retry only when it is specific enough", () => {
   // The gate: nothing is retried, let alone adopted, unless the primary
   // returned exactly zero.
-  assert.strictEqual(adoptRetry(1, 5, RETRY_HIT_CEILING), false, "a primary with hits is never rewritten");
-  assert.strictEqual(adoptRetry(107, 5, RETRY_HIT_CEILING), false);
-  assert.strictEqual(adoptRetry(undefined, 5, RETRY_HIT_CEILING), false, "a malformed response is not a zero");
+  assert.strictEqual(adoptRetry(1, 5), false, "a primary with hits is never rewritten");
+  assert.strictEqual(adoptRetry(107, 5), false);
+  assert.strictEqual(adoptRetry(undefined, 5), false, "a malformed response is not a zero");
 
   // The ceiling, on both sides of it and exactly on it.
-  assert.strictEqual(adoptRetry(0, 0, RETRY_HIT_CEILING), false, "a retry that finds nothing is not adopted");
-  assert.strictEqual(adoptRetry(0, 1, RETRY_HIT_CEILING), true);
-  assert.strictEqual(adoptRetry(0, RETRY_HIT_CEILING, RETRY_HIT_CEILING), true, "the ceiling is inclusive");
-  assert.strictEqual(adoptRetry(0, RETRY_HIT_CEILING + 1, RETRY_HIT_CEILING), false);
+  assert.strictEqual(adoptRetry(0, 0), false, "a retry that finds nothing is not adopted");
+  assert.strictEqual(adoptRetry(0, 1), true);
+  assert.strictEqual(adoptRetry(0, RETRY_HIT_CEILING), true, "the ceiling is inclusive");
+  assert.strictEqual(adoptRetry(0, RETRY_HIT_CEILING + 1), false);
 
   // The measured pairs, as data rather than as prose: every accepted count
   // below the gap and every declined one above it. A number that drifts here
   // is a failing assertion, not a stale comment.
   const accepted = [2, 12, 37, 106, 107, 170, 183, 203, 212];
   const declined = [340, 842, 883, 1259, 1264, 1505, 1678, 2633, 2848, 3488];
-  for (const n of accepted) assert.strictEqual(adoptRetry(0, n, RETRY_HIT_CEILING), true, `accepted: ${n}`);
-  for (const n of declined) assert.strictEqual(adoptRetry(0, n, RETRY_HIT_CEILING), false, `declined: ${n}`);
+  for (const n of accepted) assert.strictEqual(adoptRetry(0, n), true, `accepted: ${n}`);
+  for (const n of declined) assert.strictEqual(adoptRetry(0, n), false, `declined: ${n}`);
   assert.ok(
     Math.max(...accepted) < RETRY_HIT_CEILING && RETRY_HIT_CEILING < Math.min(...declined),
     `the ceiling ${RETRY_HIT_CEILING} must sit in the gap ${Math.max(...accepted)}..${Math.min(...declined)}`,
@@ -691,34 +689,60 @@ check("stripRoutedTokens strips routed words but never the inside of a dotted on
     ["net.ios sparkscan", false, "sparkscan"],
     ["sparkscan web", false, "sparkscan"],
     ["ios", false, "ios"],
+    // The marker as a separate word: the number is not protected as a dotted
+    // word, so versionRe removes marker and number together.
+    ["sparkscan ios sdk 8.6", true, "sparkscan"],
+    ["barcode capture version 7.6", true, "barcode capture"],
+    ["sparkscan v 8.6", true, "sparkscan"],
+    ["sparkscan v8.x", true, "sparkscan"],
   ];
   for (const [typed, stripVersion, expected] of rows) {
     assert.strictEqual(stripRoutedTokens(typed, stripVersion), expected, typed);
   }
 });
 
-check("the hit ceiling applies to the path-tail retry only", () => {
-  assert.strictEqual(retryCeilingFor("this.overlay.viewfinder.width"), RETRY_HIT_CEILING);
-  assert.strictEqual(retryCeilingFor("RectangularViewfinderStyle.LEGACY.x."), RETRY_HIT_CEILING);
-  assert.strictEqual(retryCeilingFor("DataCaptureContext.forLicenseKey"), Infinity);
-  // A trailing dot does not add a segment, same as dottedFallback.
-  assert.strictEqual(retryCeilingFor("BarcodeCapture.feedback."), Infinity);
-});
+/**
+ * The ceiling covers the two-part branch too.
+ *
+ * Exempting it was tried and reverted: the receiver of a two-part paste is as
+ * often a variable as a class, and those receivers were adopted over thousands
+ * of generic pages. The rows are the review's reproductions, with the counts
+ * recorded beside RETRY_HIT_CEILING and adoptRetry. `BarcodeCapture.feedback`
+ * is the accepted cost - declined along with them, because no signal on hand
+ * separates a documented class from a common word.
+ */
+check("a two-part retry obeys the hit ceiling, whatever the receiver", async () => {
+  const drive = async (typed, retryHits) => {
+    const sent = [];
+    const outcome = await runDottedRetry({
+      typedQuery: typed,
+      strippedQuery: typed,
+      search: async (req) => {
+        sent.push(req);
+        return { results: [{ nbHits: sent.length === 1 ? 0 : retryHits }] };
+      },
+      buildRequests: (q) => ({ q }),
+    });
+    return { sent: sent.map((s) => s.q), adopted: outcome.adopted };
+  };
 
-check("a two-part retry finds a widely documented parent class", async () => {
-  const sent = [];
-  const outcome = await runDottedRetry({
-    typedQuery: "BarcodeCapture.feedback",
-    strippedQuery: "BarcodeCapture.feedback",
-    search: async (req) => {
-      sent.push(req);
-      return { results: [{ nbHits: sent.length === 1 ? 0 : 2633 }] };
-    },
-    buildRequests: (q) => ({ q }),
+  for (const [typed, receiver, hits] of [
+    ["settings.codeDuplicateFilter", "settings", 1678],
+    ["config.enabled", "config", 1259],
+    ["options.timeout", "options", 883],
+    ["BarcodeCapture.feedback", "BarcodeCapture", 2633],
+  ]) {
+    const r = await drive(typed, hits);
+    assert.deepStrictEqual(r.sent, [typed, receiver], `${typed}: the receiver is retried`);
+    assert.strictEqual(r.adopted, null, `${typed}: ${hits} is over the ceiling and must be declined`);
+  }
+
+  // Under the ceiling, a two-part class is still found.
+  const r = await drive("rectangularviewfinderstyle.legacy", 203);
+  assert.deepStrictEqual(r.adopted, {
+    typed: "rectangularviewfinderstyle.legacy",
+    used: "rectangularviewfinderstyle",
   });
-  assert.deepStrictEqual(sent.map((s) => s.q), ["BarcodeCapture.feedback", "BarcodeCapture"]);
-  assert.deepStrictEqual(outcome.adopted, { typed: "BarcodeCapture.feedback", used: "BarcodeCapture" },
-    "2633 is above RETRY_HIT_CEILING, which must not apply to this branch");
 });
 
 check("nbHitsOf reads the count or nothing", () => {

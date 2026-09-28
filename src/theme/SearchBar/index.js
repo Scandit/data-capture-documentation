@@ -262,12 +262,18 @@ function stripRoutedTokens(query, stripVersion) {
   // another one (`ios scandit.datacapture.core.ios.Anchor`).
   //
   // A dotted word that is ENTIRELY a routed token (`v8.6`, `dotnet.ios`) is not
-  // protected: it is the routing hint itself.
+  // protected: it is the routing hint itself. Nor is a bare number (`8.6`,
+  // `7.6.14`, `8.x`): it is never an identifier, and protecting it hid the
+  // number from versionRe when the marker is a separate word - `sdk 8.6`,
+  // `version 7.6`, `v 8.6` - so the version facet switched while the number
+  // stayed in the text. With no marker it still survives, because nothing
+  // here matches a bare number: `barcode capture android 7.6` keeps `7.6`.
+  const isNumber = (word) => /^\d+(?:\.(?:\d+|x))+$/i.test(word);
   const kept = [];
   let q = ` ${(query || "")
     .split(/(\s+)/)
     .map((word) => {
-      if (!/\S\.\S/.test(word) || isRouted(word)) return word;
+      if (!/\S\.\S/.test(word) || isNumber(word) || isRouted(word)) return word;
       kept.push(word);
       return `\u0001${kept.length - 1}\u0001`;
     })
@@ -464,9 +470,7 @@ async function runDottedRetry(input) {
   } catch {
     return unchanged;
   }
-  if (!adoptRetry(nbHitsOf(first), nbHitsOf(retry), retryCeilingFor(typed))) {
-    return unchanged;
-  }
+  if (!adoptRetry(nbHitsOf(first), nbHitsOf(retry))) return unchanged;
   return {
     response: retry,
     effectiveQuery: candidate,
@@ -474,31 +478,27 @@ async function runDottedRetry(input) {
   };
 }
 
-function adoptRetry(firstHits, retryHits, ceiling) {
+// The ceiling applies to BOTH branches, the two-part Class.Member retry
+// included, and it costs something there that is worth stating.
+//
+// A widely documented class returns thousands: `BarcodeCapture.feedback`
+// retries `barcodecapture` (2633) and is declined, so the reader sees
+// "No results" rather than the parent class. Exempting the two-part branch
+// was tried and reverted, because the receiver of a two-part paste is as
+// often a variable as a class - `settings.codeDuplicateFilter`,
+// `config.enabled`, `viewfinder.style` - and EXPRESSION_ROOTS only knows
+// seventeen names. Without the ceiling those were adopted as "Showing results
+// for settings" over 1678 generic pages, which is the harm this ceiling was
+// introduced to stop.
+//
+// Nothing else on hand separates the two either: the counts overlap
+// (`barcodecapture` 2633 against `settings` 1678), and measured unfiltered, the
+// top hits for `BarcodeCapture` are guides rather than its class page while
+// the top hit for the variable `viewfinder` IS a class page. An honest
+// "No results" is the better failure than confidently wrong results.
+function adoptRetry(firstHits, retryHits) {
   if (firstHits !== 0) return false;
-  return retryHits > 0 && retryHits <= ceiling;
-}
-
-/**
- * The ceiling for the retry dottedFallback picks for `query`.
- *
- * RETRY_HIT_CEILING belongs to the THREE-OR-MORE-part branch only. That retry
- * is the last segment of a path, lifted out on its own - `settings`, `width` -
- * and the ceiling is what stops an ordinary word from being adopted.
- *
- * The TWO-part retry is different in kind: it is the class the reader typed as
- * the receiver (`DataCaptureContext.forLicenseKey` -> `DataCaptureContext`),
- * and receivers that are not classes are already refused by EXPRESSION_ROOTS.
- * A widely documented class goes well past 250 - `barcodecapture` is 2633 - so
- * the shared ceiling discarded exactly the parent-class page this branch was
- * added to find, and the reader got "No results". Any retry that finds
- * something is adopted here.
- *
- * Same segment count as dottedFallback: trimmed, trailing dots dropped.
- */
-function retryCeilingFor(query) {
-  const parts = (query || "").trim().replace(/\.+$/, "").split(".");
-  return parts.length >= 3 ? RETRY_HIT_CEILING : Infinity;
+  return retryHits > 0 && retryHits <= RETRY_HIT_CEILING;
 }
 
 function dottedFallback(query) {
