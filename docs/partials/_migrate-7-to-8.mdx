@@ -37,7 +37,13 @@ The properties of the `LabelFieldDefinition` API have been renamed to better ref
 
 In version 7.0, we are introducing the second generation of our ready-to-use barcode scanning UI, SparkScan. This new UI is more intuitive and provides a more modern look and feel, as well as bringing more customization options.
 
-As part of these changes, there have been various deprecations, modifications, and additions to the SparkScan APIs, as detailed below.
+Version 8.0 removes the SparkScan APIs that version 7 deprecated:
+
+* The `SparkScanViewHandMode` enum and `SparkScanViewSettings.defaultHandMode`.
+* The `SparkScanView` properties `torchButtonVisible`, `handModeButtonVisible`, `stopCapturingText`, `startCapturingText`, `resumeCapturingText`, `scanningCapturingText`, `captureButtonBackgroundColor`, `captureButtonActiveBackgroundColor` and `captureButtonTintColor`.
+* The matching `SparkScanViewDefaults` properties: `DefaultHandModeButtonVisible`, `DefaultTorchButtonVisible`, `DefaultStopCapturingText`, `DefaultStartCapturingText`, `DefaultResumeCapturingText`, `DefaultScanningCapturingText`, `DefaultCaptureButtonActiveBackgroundColor`, `DefaultCaptureButtonBackgroundColor` and `DefaultCaptureButtonTintColor`.
+
+Version 8.0 also changes the default highlight brush in SparkScan.
 
 Building on the second generation of SparkScan, version 8.0 expands SparkScan beyond barcode scanning to include support for scanning any combination of barcodes and text present on a target. The feature is available in beta at the moment, please contact [Scandit Support](mailto:support@scandit.com) if you are interested in trying it out.
 

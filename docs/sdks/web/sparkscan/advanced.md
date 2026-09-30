@@ -90,19 +90,20 @@ import Customization from '../../../partials/advanced/_sparkscan-customization.m
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode ([`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode)). This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.scanningBehavior`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.ScanningBehavior) and [`SparkScanViewSettings.previewBehavior`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.PreviewBehavior). This combination allows for flexible configurations to suit different scanning needs.
 
-### Scanning Mode
+### Selection Mode
 
-The scanning mode determines the programmatic presence of an aimer in the preview to help with precision scanning.
+The selection mode determines whether an aimer is shown in the preview to help with precision scanning.
 
 | Mode  | Description   |
 | ----------- | --------------------------------------------------- |
-| **Default** | Generally recommended. This mode will display a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. User can aim easily at the intended barcode.       |
-| **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
+| **Auto** | The SDK decides: it shows an aimer only when several barcodes are in view and the user shows no clear intention to scan one of them. |
+| **Off** | This is the default. No aimer. This mode displays a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. The user can aim easily at the intended barcode. |
+| **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
+*Auto* requires [`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -125,4 +126,4 @@ The preview behavior determines how the camera preview behaves when the scanner 
 | Behavior  | Description    |
 | -------------- | -------------------------- |
 | **Default**    | Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.                 |
-| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode. |
+| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the selection mode *On*. |
