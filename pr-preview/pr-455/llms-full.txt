@@ -3854,8 +3854,6 @@ import OSSLicense from '../../partials/_third-party-licenses.mdx';
 
 import McpInstallationGuide from '../../../partials/_mcp-installation-guide.mdx';
 
-# Model Context Protocol (MCP)
-
 ---
 
 ## Agent Skills
@@ -8825,8 +8823,6 @@ import OSSLicense from '../../partials/_third-party-licenses-js.mdx';
 
 import McpInstallationGuide from '../../../partials/_mcp-installation-guide.mdx';
 
-# Model Context Protocol (MCP)
-
 ---
 
 ## Agent Skills
@@ -12582,8 +12578,6 @@ import OSSLicense from '../../partials/_third-party-licenses-js.mdx';
 
 import McpInstallationGuide from '../../../partials/_mcp-installation-guide.mdx';
 
-# Model Context Protocol (MCP)
-
 ---
 
 ## Agent Skills
@@ -16162,8 +16156,6 @@ import OSSLicense from '../../partials/_third-party-licenses-js.mdx';
 ## Scandit MCP Installation Guide
 
 import McpInstallationGuide from '../../../partials/_mcp-installation-guide.mdx';
-
-# Model Context Protocol (MCP)
 
 ---
 
@@ -19808,8 +19800,6 @@ import OSSLicense from '../../partials/_third-party-licenses.mdx';
 ## Scandit MCP Installation Guide
 
 import McpInstallationGuide from '../../../partials/_mcp-installation-guide.mdx';
-
-# Model Context Protocol (MCP)
 
 ---
 
@@ -26624,8 +26614,6 @@ Remember that, if you want to use the camera as the frame source, you need to se
 
 import McpInstallationGuide from '../../../partials/_mcp-installation-guide.mdx';
 
-# Model Context Protocol (MCP)
-
 ---
 
 ## Agent Skills
@@ -32159,8 +32147,6 @@ import OSSLicense from '../../../partials/_third-party-licenses-csharp.mdx';
 
 import McpInstallationGuide from '../../../../partials/_mcp-installation-guide.mdx';
 
-# Model Context Protocol (MCP)
-
 ---
 
 ## Agent Skills
@@ -35977,8 +35963,6 @@ import OSSLicense from '../../../partials/_third-party-licenses-csharp.mdx';
 ## Scandit MCP Installation Guide
 
 import McpInstallationGuide from '../../../../partials/_mcp-installation-guide.mdx';
-
-# Model Context Protocol (MCP)
 
 ---
 
@@ -39918,8 +39902,6 @@ import OSSLicense from '../../partials/_third-party-licenses-js.mdx';
 ## Scandit MCP Installation Guide
 
 import McpInstallationGuide from '../../../partials/_mcp-installation-guide.mdx';
-
-# Model Context Protocol (MCP)
 
 ---
 
@@ -44295,8 +44277,6 @@ import OSSLicense from '../../partials/\_third-party-licenses-js.mdx';
 ## Scandit MCP Installation Guide
 
 import McpInstallationGuide from '../../../partials/_mcp-installation-guide.mdx';
-
-# Model Context Protocol (MCP)
 
 ---
 
