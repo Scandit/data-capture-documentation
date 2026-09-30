@@ -244,10 +244,12 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
 
       <h2 id="scandit-mcp-installation">Scandit MCP installation</h2>
       <p>
-        The full Scandit plugin also installs the Scandit MCP server
-        automatically. The server provisions a trial license key and writes it
-        into your project. To install the MCP server on its own, without the
-        skills, follow the{' '}
+        Installing the plugin with <code>npx plugins add</code>, or from the
+        Claude Code, Cursor, Codex CLI, or Copilot CLI marketplace, also
+        installs the Scandit MCP server automatically. The server provisions a
+        trial license key and writes it into your project. The ChatGPT and
+        Codex plugin directory ships the skills only. To install the MCP server
+        on its own, without the skills, follow the{' '}
         <Link to={mcpGuideUrl}>MCP Installation Guide</Link>.
       </p>
 

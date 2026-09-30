@@ -14,6 +14,10 @@ The URL must be configured exactly as shown, ending in `/mcp`.
 
 ## Install
 
+:::tip[Installed the Scandit plugin?]
+The Scandit plugin already includes this server when you install it with `npx plugins add scandit/skills` or from the Claude Code, Cursor, Codex CLI, or Copilot CLI marketplace. Skip this section and go to [Authentication](#authentication). Adding the server here as well gives you two Scandit servers, and each one needs its own sign-in.
+:::
+
 ### Claude Code
 
 ```bash
@@ -57,7 +61,7 @@ Point your client at `https://ssl.scandit.com/mcp` over streamable HTTP (for exa
 
 Authentication is browser-based (OAuth 2.1 with PKCE), and you start it yourself. If a Scandit tool is called before you have authenticated, the agent asks you to authenticate rather than opening a browser.
 
-- **Claude Code:** run `/mcp`, select `scandit`, and authenticate.
+- **Claude Code:** run `/mcp`, select `scandit` (`plugin:scandit-sdk:scandit` if the server came with the plugin), and authenticate.
 - **Cursor:** go to Settings → Tools & MCP → **scandit** → Connect / Authenticate.
 - **Other clients:** use the client’s own connect or authenticate control for the server.
 
@@ -71,7 +75,7 @@ Signing in does not create a subscription or a license key. The agent still has 
 
 Remove or disconnect the Scandit server in the client you used to connect. That drops the tokens the agent stored, so it can no longer call Scandit tools.
 
-- **Claude Code:** run `/mcp` and remove `scandit`, or run `claude mcp remove scandit`.
+- **Claude Code:** run `/mcp` and remove `scandit`, or run `claude mcp remove scandit`. If the server came with the plugin, disable or uninstall the `scandit-sdk` plugin in `/plugin` instead. This also removes the skills.
 - **Cursor:** disconnect or remove **scandit** in Settings → Tools & MCP.
 - **VS Code:** remove the `scandit` entry from your MCP user configuration.
 
@@ -88,11 +92,13 @@ Install the server and connect it, then in an empty project directory prompt you
 3. It writes the key into your project’s `.env` file. For native project configuration that a `.env` file cannot hold, it retrieves the key with `get_license_key`.
 4. It follows the matching [Agent Skill](../) to scaffold and run the app.
 
-The MCP server handles the account and license key; the Agent Skills handle the SDK integration itself. Install both for the best result:
+The MCP server handles the account and license key; the Agent Skills handle the SDK integration itself. For the best result, install the Scandit plugin, which includes both the skills and this server:
 
 ```bash
 npx plugins add scandit/skills
 ```
+
+If you already added the server with the [Install](#install) steps, remove that copy first (in Claude Code, `claude mcp remove scandit`) so you do not end up with two Scandit servers.
 
 ## What you can do
 
@@ -102,7 +108,7 @@ npx plugins add scandit/skills
 - Add another key to an existing trial for a second app identifier, another platform, or an extra web domain.
 - Retrieve a key to paste into native project configuration.
 
-Keys created this way appear in the [Scandit dashboard](https://ssl.scandit.com/dashboard) under **License Keys**, labelled *Created via MCP*, alongside keys you create yourself.
+Keys created this way appear in the [Scandit dashboard](https://ssl.scandit.com/dashboard) under **License Keys**, labeled *Created via MCP*, alongside keys you create yourself.
 
 ## Tools reference
 
@@ -115,7 +121,7 @@ Keys created this way appear in the [Scandit dashboard](https://ssl.scandit.com/
 | `get_license_env_command` | Returns a one-line command that writes a key into a `.env` file without exposing it in the chat. |
 | `whoami` | Returns the signed-in account’s email, account ID, and default subscription. |
 
-Claude Code users can also run `/mcp__scandit__get-started` for an orientation prompt.
+Claude Code users can also run `/mcp__scandit__get-started` for an orientation prompt, or `/mcp__plugin_scandit-sdk_scandit__get-started` if the server came with the plugin.
 
 ## Products and platforms
 
@@ -170,7 +176,7 @@ In the [dashboard](https://ssl.scandit.com/dashboard) under **License Keys**, wi
 
 ### My agent does not seem to know about Scandit.
 
-In Claude Code, run `/mcp__scandit__get-started`. Also install the Agent Skills bundle with `npx plugins add scandit/skills`.
+In Claude Code, run `/mcp__scandit__get-started`, or `/mcp__plugin_scandit-sdk_scandit__get-started` if the server came with the plugin. If you have not installed the Agent Skills yet, install the Scandit plugin with `npx plugins add scandit/skills`.
 
 ### No browser tab opened when the agent tried to use a tool.
 
@@ -182,7 +188,7 @@ That is expected. After you approve, the authorization code is sent to a loopbac
 
 ### How do I disconnect?
 
-Remove the Scandit server in the client: in Claude Code, use `/mcp` or run `claude mcp remove scandit`; in Cursor, go to Settings → Tools & MCP; in VS Code, remove it from your MCP configuration. Keys stay in the dashboard until you delete them.
+Remove the Scandit server in the client: in Claude Code, use `/mcp` or run `claude mcp remove scandit` (if the server came with the plugin, disable or uninstall the `scandit-sdk` plugin in `/plugin`); in Cursor, go to Settings → Tools & MCP; in VS Code, remove it from your MCP configuration. Keys stay in the dashboard until you delete them.
 
 ## Learn more
 
