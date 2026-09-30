@@ -1,5 +1,5 @@
 ---
-description: "import AIPoweredBarcodeScanning from '../../partials/_ai-powered-barcode-scanning.mdx';"
+description: "AI-powered scanning in SparkScan and Barcode Capture for Flutter: scan intention, selection mode, and Smart Duplicate Filter defaults."
 toc_max_heading_level: 4
 framework: flutter
 keywords:
@@ -10,4 +10,4 @@ keywords:
 
 import AIPoweredBarcodeScanning from '../../partials/_ai-powered-barcode-scanning.mdx';
 
-<AIPoweredBarcodeScanning/>
+<AIPoweredBarcodeScanning framework="flutter"/>
