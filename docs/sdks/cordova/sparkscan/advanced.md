@@ -86,10 +86,10 @@ import Customization from '../../../partials/advanced/_sparkscan-customization.m
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.scanningBehavior`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.ScanningBehavior) and [`SparkScanViewSettings.previewBehavior`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.PreviewBehavior). This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
 :::note
-`SparkScanViewSettings.scanningBehavior` and `SparkScanViewSettings.previewBehavior` require SDK version 8.7 or later.
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `defaultScanningMode`.
 :::
 
 ### Selection Mode
@@ -137,7 +137,9 @@ const settings = new Scandit.SparkScanSettings();
 settings.selectionMode = Scandit.SelectionMode.Off; // or .On to always show the aimer
 
 const viewSettings = new Scandit.SparkScanViewSettings();
-viewSettings.scanningBehavior = Scandit.SparkScanScanningBehavior.Continuous; // or .Single
-viewSettings.previewBehavior = Scandit.SparkScanPreviewBehavior.Persistent; // or .Default
+viewSettings.defaultScanningMode = new Scandit.SparkScanScanningModeDefault(
+  Scandit.SparkScanScanningBehavior.Continuous, // or .Single
+  Scandit.SparkScanPreviewBehavior.Persistent, // or .Default
+);
 ```
 
