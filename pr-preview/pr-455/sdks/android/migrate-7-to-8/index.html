@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-455/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-455/assets/css/styles.e45a1498.css">
-<script src="/data-capture-documentation/pr-preview/pr-455/assets/js/runtime~main.b6627827.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-455/assets/js/runtime~main.93e38648.js" defer="defer"></script>
 <script src="/data-capture-documentation/pr-preview/pr-455/assets/js/main.c3b9a41c.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -34,7 +34,13 @@
 <table><thead><tr><th>Old Property Name</th><th>New Property Name</th></tr></thead><tbody><tr><td><code>pattern</code></td><td><code>valueRegex</code></td></tr><tr><td><code>patterns</code></td><td><code>valueRegexes</code></td></tr><tr><td><code>dataTypePattern</code></td><td><code>anchorRegex</code></td></tr><tr><td><code>dataTypePatterns</code></td><td><code>anchorRegexes</code></td></tr></tbody></table>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="sparkscan">SparkScan<a class="hash-link" aria-label="Direct link to SparkScan" title="Direct link to SparkScan" href="/data-capture-documentation/pr-preview/pr-455/sdks/android/migrate-7-to-8/#sparkscan">​</a></h3>
 <p>In version 7.0, we are introducing the second generation of our ready-to-use barcode scanning UI, SparkScan. This new UI is more intuitive and provides a more modern look and feel, as well as bringing more customization options.</p>
-<p>As part of these changes, there have been various deprecations, modifications, and additions to the SparkScan APIs, as detailed below.</p>
+<p>Version 8.0 removes the SparkScan APIs that version 7 deprecated:</p>
+<ul>
+<li>The <code>SparkScanViewHandMode</code> enum and <code>SparkScanViewSettings.defaultHandMode</code>.</li>
+<li>The <code>SparkScanView</code> properties <code>torchButtonVisible</code>, <code>handModeButtonVisible</code>, <code>stopCapturingText</code>, <code>startCapturingText</code>, <code>resumeCapturingText</code>, <code>scanningCapturingText</code>, <code>captureButtonBackgroundColor</code>, <code>captureButtonActiveBackgroundColor</code> and <code>captureButtonTintColor</code>.</li>
+<li>The matching <code>SparkScanViewDefaults</code> properties: <code>DefaultHandModeButtonVisible</code>, <code>DefaultTorchButtonVisible</code>, <code>DefaultStopCapturingText</code>, <code>DefaultStartCapturingText</code>, <code>DefaultResumeCapturingText</code>, <code>DefaultScanningCapturingText</code>, <code>DefaultCaptureButtonActiveBackgroundColor</code>, <code>DefaultCaptureButtonBackgroundColor</code> and <code>DefaultCaptureButtonTintColor</code>.</li>
+</ul>
+<p>Version 8.0 also changes the default highlight brush in SparkScan.</p>
 <p>Building on the second generation of SparkScan, version 8.0 expands SparkScan beyond barcode scanning to include support for scanning any combination of barcodes and text present on a target. The feature is available in beta at the moment, please contact <a href="mailto:support@scandit.com" target="_blank" rel="noopener noreferrer">Scandit Support</a> if you are interested in trying it out.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="cross-platform-frameworks-capacitor-cordova-react-native-flutter">Cross-Platform Frameworks (Capacitor, Cordova, React Native, Flutter)<a class="hash-link" aria-label="Direct link to Cross-Platform Frameworks (Capacitor, Cordova, React Native, Flutter)" title="Direct link to Cross-Platform Frameworks (Capacitor, Cordova, React Native, Flutter)" href="/data-capture-documentation/pr-preview/pr-455/sdks/android/migrate-7-to-8/#cross-platform-frameworks-capacitor-cordova-react-native-flutter">​</a></h3>
 <p>In version 8.0, the <code>forContext</code> factory method has been deprecated in favor of using constructor initialization for all capture modes. This change affects Capacitor, Cordova, React Native, and Flutter frameworks.</p>

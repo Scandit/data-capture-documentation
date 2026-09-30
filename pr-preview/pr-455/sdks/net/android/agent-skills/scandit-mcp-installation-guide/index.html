@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-455/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-455/assets/css/styles.e45a1498.css">
-<script src="/data-capture-documentation/pr-preview/pr-455/assets/js/runtime~main.b6627827.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-455/assets/js/runtime~main.93e38648.js" defer="defer"></script>
 <script src="/data-capture-documentation/pr-preview/pr-455/assets/js/main.c3b9a41c.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -55,12 +55,12 @@
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="get-started">Get started<a class="hash-link" aria-label="Direct link to Get started" title="Direct link to Get started" href="/data-capture-documentation/pr-preview/pr-455/sdks/net/android/agent-skills/scandit-mcp-installation-guide/#get-started">​</a></h2>
 <p>Install the server and connect it, then in an empty project directory prompt your agent:</p>
 <blockquote>
-<p>Build me a barcode scanner web app with Scandit.</p>
+<p>Build me a barcode scanner <!-- -->.NET Android<!-- --> app with Scandit.</p>
 </blockquote>
 <ol>
 <li>The agent works out which Scandit product fits your use case and which framework you are building with, asking you if either is unclear.</li>
 <li>It calls <code>ensure_scanner_setup</code>, which creates or reuses a matching trial subscription, project, and license key for your platform.</li>
-<li>It writes the key into your project’s <code>.env</code> file.</li>
+<li>It writes the key into your project’s <code>.env</code> file. For native project configuration that a <code>.env</code> file cannot hold, it retrieves the key with <code>get_license_key</code>.</li>
 <li>It follows the matching <a href="/data-capture-documentation/pr-preview/pr-455/sdks/net/android/agent-skills/">Agent Skill</a> to scaffold and run the app.</li>
 </ol>
 <p>The MCP server handles the account and license key; the Agent Skills handle the SDK integration itself. Install both for the best result:</p>
@@ -79,7 +79,7 @@
 <p>Claude Code users can also run <code>/mcp__scandit__get-started</code> for an orientation prompt.</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="products-and-platforms">Products and platforms<a class="hash-link" aria-label="Direct link to Products and platforms" title="Direct link to Products and platforms" href="/data-capture-documentation/pr-preview/pr-455/sdks/net/android/agent-skills/scandit-mcp-installation-guide/#products-and-platforms">​</a></h2>
 <p><code>ensure_scanner_setup</code> takes the product your agent selected (<code>sdk</code>, <code>native</code>, <code>express</code>, <code>id-bolt</code>, <code>enterprise-browser</code>, or <code>wedge</code>) plus the license platforms for your framework.</p>
-<table><thead><tr><th>Framework</th><th>License platforms</th></tr></thead><tbody><tr><td>Web</td><td><code>webassembly</code></td></tr><tr><td>iOS</td><td><code>ios</code></td></tr><tr><td>Android</td><td><code>android</code></td></tr><tr><td>React Native, Flutter, Capacitor, Cordova, .NET MAUI</td><td><code>ios</code>, <code>android</code></td></tr></tbody></table>
+<table><thead><tr><th>Framework</th><th>License platforms</th></tr></thead><tbody><tr><td>Web</td><td><code>webassembly</code></td></tr><tr><td>iOS</td><td><code>ios</code></td></tr><tr><td>Android</td><td><code>android</code></td></tr><tr><td>.NET iOS</td><td><code>ios</code></td></tr><tr><td>.NET Android</td><td><code>android</code></td></tr><tr><td>Kotlin Multiplatform</td><td><code>ios</code>, <code>android</code></td></tr><tr><td>React Native, Flutter, Capacitor, Cordova, .NET MAUI</td><td><code>ios</code>, <code>android</code></td></tr></tbody></table>
 <p>If you already have an active trial, it is reused rather than replaced. You will not end up with duplicate trials for <code>sdk</code>, <code>native</code>, <code>express</code>, or <code>id-bolt</code>.</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="web-domains">Web domains<a class="hash-link" aria-label="Direct link to Web domains" title="Direct link to Web domains" href="/data-capture-documentation/pr-preview/pr-455/sdks/net/android/agent-skills/scandit-mcp-installation-guide/#web-domains">​</a></h2>
 <p>For web keys, pass your production domain (for example, <code>example.com</code>). WebSDK trial keys already work on <code>localhost</code>, so there is no need to list it. One key can cover several domains. Where applicable, <code>www.&lt;domain&gt;</code> is added automatically.</p>
