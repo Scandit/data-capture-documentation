@@ -81,11 +81,11 @@ Signing out of the dashboard does not disconnect the agent. License keys and the
 
 Install the server and connect it, then in an empty project directory prompt your agent:
 
-> Build me a barcode scanner web app with Scandit.
+> Build me a barcode scanner {props.framework} app with Scandit.
 
 1. The agent works out which Scandit product fits your use case and which framework you are building with, asking you if either is unclear.
 2. It calls `ensure_scanner_setup`, which creates or reuses a matching trial subscription, project, and license key for your platform.
-3. It writes the key into your project’s `.env` file.
+3. It writes the key into your project’s `.env` file. For native project configuration that a `.env` file cannot hold, it retrieves the key with `get_license_key`.
 4. It follows the matching [Agent Skill](../) to scaffold and run the app.
 
 The MCP server handles the account and license key; the Agent Skills handle the SDK integration itself. Install both for the best result:
@@ -126,6 +126,9 @@ Claude Code users can also run `/mcp__scandit__get-started` for an orientation p
 | Web | `webassembly` |
 | iOS | `ios` |
 | Android | `android` |
+| .NET iOS | `ios` |
+| .NET Android | `android` |
+| Kotlin Multiplatform | `ios`, `android` |
 | React Native, Flutter, Capacitor, Cordova, .NET MAUI | `ios`, `android` |
 
 If you already have an active trial, it is reused rather than replaced. You will not end up with duplicate trials for `sdk`, `native`, `express`, or `id-bolt`.
