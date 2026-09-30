@@ -44,6 +44,7 @@ keywords:
 
 #### Smart Label Capture
 
+* Added shipping-label support (`AdaptiveRecognitionResultType.ShippingLabel`, `Carrier`, `ShippingLabelScanningResult`) to adaptive recognition.
 * Added a new sample to quickly test and integrate Smart Label Capture to read and validate price shelf labels against a database - showing live AR overlays based on the match and mismatch of the content.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
