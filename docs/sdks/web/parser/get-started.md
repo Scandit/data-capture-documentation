@@ -19,6 +19,7 @@ The Parser parses data strings (as found in barcodes) into a set of key-value ma
 - [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/web/parser/vin.html)
 - [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/web/parser/iata-bcbp.html)
 - [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/web/parser/epc.html)
+- [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/web/parser/french2ddoc.html)
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 

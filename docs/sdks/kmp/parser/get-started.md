@@ -11,7 +11,7 @@ keywords:
 
 # Get Started
 
-The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: Health Industry Bar Code (HIBC), GS1 Application Identifier (AI) system, GS1 Digital Link, Swiss QR Codes, VIN Vehicle Identification Number, IATA Bar Coded Boarding Pass (BCBP), and Electronic Product Code (EPC).
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: Health Industry Bar Code (HIBC), GS1 Application Identifier (AI) system, GS1 Digital Link, Swiss QR Codes, VIN Vehicle Identification Number, IATA Bar Coded Boarding Pass (BCBP), Electronic Product Code (EPC), and French 2D-Doc (ANTS).
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -49,6 +49,7 @@ If your app already initialized a context (for example for a scanning mode), reu
 - `IATA_BCBP`
 - `GS1_DIGITAL_LINK`
 - `EPC`
+- `FRENCH_2D_DOC`
 
 ## Parse a String
 
