@@ -1,0 +1,64 @@
+import Link from '@docusaurus/Link';
+
+export const apiTokens = {
+  'ios': 'ios',
+  'android': 'android',
+};
+
+export const symbolTokens = {
+  'ios': {
+    unset: 'nil',
+    vicinity: 'AutomaticClusteringMethod.vicinity',
+    label: 'AutomaticClusteringMethod.label',
+    outline: 'AutomaticClusteringMethod.outline',
+    disabled: 'ClusteringMode.disabled',
+    manual: 'ClusteringMode.manual',
+    auto: 'ClusteringMode.auto',
+    autoWithManualCorrection: 'ClusteringMode.autoWithManualCorrection',
+  },
+  'android': {
+    unset: 'null',
+    vicinity: 'AutomaticClusteringMethod.VICINITY',
+    label: 'AutomaticClusteringMethod.LABEL',
+    outline: 'AutomaticClusteringMethod.OUTLINE',
+    disabled: 'ClusteringMode.DISABLED',
+    manual: 'ClusteringMode.MANUAL',
+    auto: 'ClusteringMode.AUTO',
+    autoWithManualCorrection: 'ClusteringMode.AUTO_WITH_MANUAL_CORRECTION',
+  },
+};
+
+export const Only = ({when, children}) => (when ? <>{children}</> : null);
+
+export const ApiLink = ({framework, page, anchor, children}) => (
+  <Link to={`https://docs.scandit.com/data-capture-sdk/${apiTokens[framework]}/${page}#${anchor}`}><code>{children}</code></Link>
+);
+
+export const settingsPage = 'barcode-capture/api/barcode-count-settings.html';
+export const settingsProperty = 'property-scandit.datacapture.barcode.count.BarcodeCountSettings.';
+export const methodPage = 'core/api/automatic-clustering-method.html';
+export const methodValue = 'value-scandit.datacapture.core.AutomaticClusteringMethod.';
+export const modePage = 'core/api/clustering-mode.html';
+export const modeValue = 'value-scandit.datacapture.core.ClusteringMode.';
+
+The <ApiLink framework={props.framework} page={settingsPage} anchor={`${settingsProperty}AutomaticClusteringMethod`}>BarcodeCountSettings.automaticClusteringMethod</ApiLink> property sets how MatrixScan Count forms clusters when it groups barcodes automatically. It takes an <ApiLink framework={props.framework} page={methodPage} anchor="enum-scandit.datacapture.core.AutomaticClusteringMethod">AutomaticClusteringMethod</ApiLink> value.
+
+:::warning Beta
+Automatic clustering methods are still in beta and may change in future versions of Scandit Data Capture SDK.
+:::
+
+The property applies only when the clustering mode is <ApiLink framework={props.framework} page={modePage} anchor={`${modeValue}Auto`}>{symbolTokens[props.framework].auto}</ApiLink> or <ApiLink framework={props.framework} page={modePage} anchor={`${modeValue}AutoWithManualCorrection`}>{symbolTokens[props.framework].autoWithManualCorrection}</ApiLink>. While the clustering mode is <ApiLink framework={props.framework} page={modePage} anchor={`${modeValue}Disabled`}>{symbolTokens[props.framework].disabled}</ApiLink> or <ApiLink framework={props.framework} page={modePage} anchor={`${modeValue}Manual`}>{symbolTokens[props.framework].manual}</ApiLink>, MatrixScan Count keeps the configured value, but the value has no effect.
+
+The following table lists the available methods.
+
+| Value | Behavior |
+|---|---|
+| <ApiLink framework={props.framework} page={methodPage} anchor={`${methodValue}Vicinity`}>{symbolTokens[props.framework].vicinity}</ApiLink> | Groups nearby barcodes into clusters. When the property is <code>{symbolTokens[props.framework].unset}</code>, which is the default, MatrixScan Count uses vicinity-based clustering. |
+| <ApiLink framework={props.framework} page={methodPage} anchor={`${methodValue}Label`}>{symbolTokens[props.framework].label}</ApiLink> | Uses detected physical label boundaries as a visual cue for grouping barcodes. The labels aren't returned as Label Capture items. |
+| <ApiLink framework={props.framework} page={methodPage} anchor={`${methodValue}Outline`}>{symbolTokens[props.framework].outline}</ApiLink> | Uses detected enclosing outlines as a visual cue for grouping barcodes. |
+
+<Only when={props.framework === 'ios'}>
+
+When <ApiLink framework={props.framework} page={settingsPage} anchor={`${settingsProperty}ScanPreviewEnabled`}>scanPreviewEnabled</ApiLink> is `true`, MatrixScan Count always forms clusters using <code>{symbolTokens[props.framework].label}</code>, regardless of the configured value.
+
+</Only>

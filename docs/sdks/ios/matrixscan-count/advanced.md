@@ -40,6 +40,23 @@ import Clustering from '../../../partials/count/_clustering.mdx'
 
 <Clustering />
 
+### Automatic clustering method
+
+import ClusteringAutomaticMethod from '../../../partials/count/_clustering-automatic-method.mdx'
+
+<ClusteringAutomaticMethod framework="ios" />
+
+The following example enables automatic clustering and groups barcodes by label:
+
+```swift
+import ScanditBarcodeCapture
+import ScanditCaptureCore
+
+let barcodeCountSettings = BarcodeCountSettings()
+barcodeCountSettings.clusteringMode = .auto
+barcodeCountSettings.automaticClusteringMethod = .label
+```
+
 ## Tote Mapping
 
 import Totes from '../../../partials/count/_tote-mapping.mdx'
