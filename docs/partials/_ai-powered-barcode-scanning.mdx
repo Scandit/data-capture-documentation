@@ -79,10 +79,61 @@ export const sparkScanSettings = 'barcode-capture/api/spark-scan-settings.html';
 export const barcodeCaptureSettings = 'barcode-capture/api/barcode-capture-settings.html';
 export const sparkScanProperty = 'property-scandit.datacapture.barcode.spark.SparkScanSettings.';
 export const barcodeCaptureProperty = 'property-scandit.datacapture.barcode.BarcodeCaptureSettings.';
+export const sparkScanViewSettings = 'barcode-capture/api/ui/spark-scan-view-settings.html';
+export const holdToScanAnchor = 'property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled';
+export const codeDuplicate = 'barcode-capture/api/code-duplicate.html';
+export const defaultDuplicateFilterAnchor = 'property-scandit.datacapture.barcode.CodeDuplicate.DefaultDuplicateFilter';
+
+export const javaScriptTokens = {
+  smart: () => (<code>-2</code>),
+  none: () => (<code>0</code>),
+  fixed: () => (<>a number of milliseconds greater than <code>0</code></>),
+  holdToScan: 'holdToScanEnabled',
+};
+
+export const dotnetTokens = {
+  smart: (framework) => (<ApiLink framework={framework} page={codeDuplicate} anchor={defaultDuplicateFilterAnchor}>CodeDuplicate.DefaultDuplicateFilter</ApiLink>),
+  none: () => (<code>TimeSpan.Zero</code>),
+  fixed: () => (<>a <code>TimeSpan</code> greater than zero, such as <code>TimeSpan.FromMilliseconds(500)</code></>),
+  holdToScan: 'HoldToScanEnabled',
+};
+
+export const frameworkTokens = {
+  'ios': {
+    smart: () => (<code>-2</code>),
+    none: () => (<code>0</code>),
+    fixed: () => (<>a <code>TimeInterval</code> in seconds greater than <code>0</code></>),
+    holdToScan: 'isHoldToScanEnabled',
+  },
+  'android': {
+    smart: () => (<ApiLink framework="android" page={codeDuplicate} anchor={defaultDuplicateFilterAnchor}>CodeDuplicate.defaultDuplicateFilter</ApiLink>),
+    none: () => (<code>TimeInterval.millis(0)</code>),
+    fixed: () => (<>a <code>TimeInterval</code> greater than zero, such as <code>TimeInterval.millis(500)</code></>),
+    holdToScan: 'holdToScanEnabled',
+  },
+  'web': javaScriptTokens,
+  'react-native': javaScriptTokens,
+  'flutter': {
+    smart: () => (<code>Duration(milliseconds: -2)</code>),
+    none: () => (<code>Duration.zero</code>),
+    fixed: () => (<>a <code>Duration</code> greater than zero</>),
+    holdToScan: 'holdToScanEnabled',
+  },
+  'capacitor': javaScriptTokens,
+  'cordova': javaScriptTokens,
+  'kmp': {
+    smart: () => (<ApiLink framework="kmp" page={codeDuplicate} anchor={defaultDuplicateFilterAnchor}>CodeDuplicate.defaultDuplicateFilter</ApiLink>),
+    none: () => (<code>0</code>),
+    fixed: () => (<>a number of milliseconds greater than <code>0</code></>),
+    holdToScan: 'holdToScanEnabled',
+  },
+  'net-ios': dotnetTokens,
+  'net-android': dotnetTokens,
+};
 
 Barcode scanning workflows commonly face operational challenges such as scanning from awkward angles or long distances, selecting the correct barcode in dense environments, handling damaged labels, and preventing unintended duplicate scans. Traditional scanners handle these scenarios with rigid time-based logic and manual user intervention, which slows down workflows and increases errors.
 
-Scandit's AI-powered scanning capabilities, built into the **Scandit AI Engine** and available in both **SparkScan** and **Barcode Capture**, solve these problems by analyzing context and user intent in real-time. The scanner adapts dynamically to environmental conditions and user behavior, eliminating the need for manual settings adjustments or workarounds.
+Scandit's AI-powered scanning capabilities, built into the **Scandit AI Engine** and available in both **SparkScan** and **Barcode Capture**, solve these problems by analyzing context and user intent in real-time. The scanner adapts dynamically to environmental conditions and user behavior. On most frameworks, most of these features work with the default settings. For details, see [Default settings](#default-settings).
 
 ## Overview
 
@@ -113,7 +164,13 @@ With these defaults:
 - On every framework except Web, Barcode Capture anticipates user intent. Dense-environment selection is off until you set the selection mode to Auto.
 - On Web, both capture modes use manual scan intention and no selection assistance until you enable them.
 
-Smart scan intention and Auto selection mode take effect on supported devices only. Auto selection mode requires Smart scan intention. With Manual scan intention, Auto behaves like Off.
+Smart scan intention and Auto selection mode take effect on supported devices only. Auto selection mode requires Smart scan intention. If you set the scan intention to Manual, Auto behaves like Off.
+
+<Only when={props.framework === 'web'}>
+
+On Web, SparkScan behaves differently if you never set the scan intention. For details, see [Selecting barcodes in dense environments](#selecting-barcodes-in-dense-environments).
+
+</Only>
 
 ## Avoiding unintentional scans
 
@@ -139,7 +196,7 @@ This allows users to scan from comfortable distances without the precision requi
 
 ### Configuration
 
-The scan intention property controls intent anticipation: <ApiLink framework={props.framework} page={sparkScanSettings} anchor={`${sparkScanProperty}ScanIntention`}>{`SparkScanSettings.${symbolTokens[props.framework].scanIntention}`}</ApiLink> for SparkScan and <ApiLink framework={props.framework} page={barcodeCaptureSettings} anchor={`${barcodeCaptureProperty}ScanIntention`}>{`BarcodeCaptureSettings.${symbolTokens[props.framework].scanIntention}`}</ApiLink> for Barcode Capture. Set it to <ApiLink framework={props.framework} page="core/api/scan-intention.html" anchor="enum-scandit.datacapture.core.ScanIntention">{symbolTokens[props.framework].smart}</ApiLink> to enable intent anticipation, or to <code>{symbolTokens[props.framework].manual}</code> to turn it off.
+The scan intention property controls intent anticipation: <ApiLink framework={props.framework} page={sparkScanSettings} anchor={`${sparkScanProperty}ScanIntention`}>{`SparkScanSettings.${symbolTokens[props.framework].scanIntention}`}</ApiLink> for SparkScan and <ApiLink framework={props.framework} page={barcodeCaptureSettings} anchor={`${barcodeCaptureProperty}ScanIntention`}>{`BarcodeCaptureSettings.${symbolTokens[props.framework].scanIntention}`}</ApiLink> for Barcode Capture. Set it to <ApiLink framework={props.framework} page="core/api/scan-intention.html" anchor="value-scandit.datacapture.core.ScanIntention.Smart">{symbolTokens[props.framework].smart}</ApiLink> to enable intent anticipation, or to <code>{symbolTokens[props.framework].manual}</code> to turn it off.
 
 <Only when={props.framework !== 'web'}>
 
@@ -189,9 +246,9 @@ The selection mode property controls dense-environment detection and barcode sel
 
 * <code>{symbolTokens[props.framework].auto}</code>: The SDK decides dynamically whether selection is active, based on device capabilities and scene conditions.
 * <code>{symbolTokens[props.framework].off}</code>: Selection is never active. The SDK scans a barcode as the user aims at it.
-* <code>{symbolTokens[props.framework].on}</code>: Selection is always active. The user confirms each scan by tapping the trigger button in SparkScan, or the preview in Barcode Capture. While the selection mode is <code>{symbolTokens[props.framework].on}</code>, the SDK stores the scan intention you set but doesn't apply it, and uses smart selection internally so that the aimer appears. The SDK applies your scan intention when the selection mode changes to <code>{symbolTokens[props.framework].auto}</code> or <code>{symbolTokens[props.framework].off}</code>.
+* <code>{symbolTokens[props.framework].on}</code>: Selection is always active. The user confirms each scan by tapping the trigger button in SparkScan, or the preview in Barcode Capture. While the selection mode is <code>{symbolTokens[props.framework].on}</code>, the SDK stores the scan intention you set but doesn't apply it, and uses smart selection internally so that the aimer appears. The SDK applies your scan intention when the selection mode changes to <code>{symbolTokens[props.framework].auto}</code> or <code>{symbolTokens[props.framework].off}</code>. In SparkScan, <code>{symbolTokens[props.framework].on}</code> also turns off hold-to-scan on the trigger button, and the SDK ignores <ApiLink framework={props.framework} page={sparkScanViewSettings} anchor={holdToScanAnchor}>{`SparkScanViewSettings.${frameworkTokens[props.framework].holdToScan}`}</ApiLink>.
 
-<code>{symbolTokens[props.framework].auto}</code> requires the scan intention to be <code>{symbolTokens[props.framework].smart}</code>. With <code>{symbolTokens[props.framework].manual}</code>, it behaves like <code>{symbolTokens[props.framework].off}</code>.
+<code>{symbolTokens[props.framework].auto}</code> requires the scan intention to be <code>{symbolTokens[props.framework].smart}</code>. If you set the scan intention to <code>{symbolTokens[props.framework].manual}</code>, <code>{symbolTokens[props.framework].auto}</code> behaves like <code>{symbolTokens[props.framework].off}</code>.<Only when={props.framework === 'web'}> In SparkScan, this is different if you never set the scan intention, as described later in this section.</Only>
 
 <Only when={props.framework !== 'web'}>
 
@@ -207,7 +264,7 @@ In SparkScan on Web, if you don't set the scan intention yourself, setting the s
 
 </Only>
 
-SDK 8.5 deprecated <code>{symbolTokens[props.framework].smartSelection}</code>. Use <code>{symbolTokens[props.framework].smart}</code> together with the selection mode <code>{symbolTokens[props.framework].auto}</code> instead.
+<Only when={props.framework !== 'kmp'}>SDK 8.5 deprecated <code>{symbolTokens[props.framework].smartSelection}</code>.</Only><Only when={props.framework === 'kmp'}><code>{symbolTokens[props.framework].smartSelection}</code> is deprecated.</Only> Use <code>{symbolTokens[props.framework].smart}</code> together with the selection mode <code>{symbolTokens[props.framework].auto}</code> instead.
 
 > **Note:** SparkScan is recommended for single scanning workflows as its UI is optimized to provide visual feedback and adapt dynamically to AI inputs.
 
@@ -279,12 +336,12 @@ When the filter detects intentional scanning of a duplicate code, it reports the
 
 The Smart Duplicate Filter is active when both of the following are true:
 
-* The scan intention is <code>{symbolTokens[props.framework].smart}</code>.
-* The duplicate filter property, <ApiLink framework={props.framework} page={sparkScanSettings} anchor={`${sparkScanProperty}CodeDuplicateFilter`}>{`SparkScanSettings.${symbolTokens[props.framework].codeDuplicateFilter}`}</ApiLink> or <ApiLink framework={props.framework} page={barcodeCaptureSettings} anchor={`${barcodeCaptureProperty}CodeDuplicateFilter`}>{`BarcodeCaptureSettings.${symbolTokens[props.framework].codeDuplicateFilter}`}</ApiLink>, is set to its smart default, the special value `-2`. This is the default since SDK 7.1.
+* The scan intention is <code>{symbolTokens[props.framework].smart}</code>, or the deprecated <code>{symbolTokens[props.framework].smartSelection}</code>.
+* The duplicate filter property, <ApiLink framework={props.framework} page={sparkScanSettings} anchor={`${sparkScanProperty}CodeDuplicateFilter`}>{`SparkScanSettings.${symbolTokens[props.framework].codeDuplicateFilter}`}</ApiLink> or <ApiLink framework={props.framework} page={barcodeCaptureSettings} anchor={`${barcodeCaptureProperty}CodeDuplicateFilter`}>{`BarcodeCaptureSettings.${symbolTokens[props.framework].codeDuplicateFilter}`}</ApiLink>, is set to its smart default, {frameworkTokens[props.framework].smart(props.framework)}. This is the default<Only when={props.framework !== 'kmp'}> since SDK 7.1</Only>.
 
-With <code>{symbolTokens[props.framework].manual}</code> scan intention, the `-2` default acts as a fixed 1.5-second duplicate filter.
+If the scan intention is <code>{symbolTokens[props.framework].manual}</code>, the smart default acts as a fixed 1.5-second duplicate filter.
 
-Since SDK 8.5, there is one exception. If the selection mode is <code>{symbolTokens[props.framework].on}</code> and you don't set the duplicate filter, the SDK treats the filter as `0` and doesn't filter duplicates. This lets the user select the same barcode again. If you set the duplicate filter to any value, including `-2`, the SDK uses that value instead.
+<Only when={props.framework !== 'kmp'}>Since SDK 8.5, there</Only><Only when={props.framework === 'kmp'}>There</Only> is one exception. If the selection mode is <code>{symbolTokens[props.framework].on}</code> and you don't set the duplicate filter, the SDK doesn't filter duplicates. This lets the user select the same barcode again. If you set the duplicate filter to any value, including {frameworkTokens[props.framework].smart(props.framework)}, the SDK uses that value instead.
 
 <Only when={props.framework !== 'web'}>
 
@@ -298,6 +355,6 @@ On Web, the scan intention defaults to <code>{symbolTokens[props.framework].manu
 
 </Only>
 
-To revert to manual, time-based duplicate filtering, set the duplicate filter to any value greater than `0`. This disables Smart Duplicate Filter and restores fixed timeout-based duplicate suppression.
+To revert to manual, time-based duplicate filtering, set the duplicate filter to {frameworkTokens[props.framework].fixed()}. This disables Smart Duplicate Filter and restores fixed timeout-based duplicate suppression. To report the same code every time the SDK finds it, set the duplicate filter to {frameworkTokens[props.framework].none()}.
 
 <ReactPlayer controls width='1200' url="/img/ai-powered-scanning/duplicate-filter.mp4" />
