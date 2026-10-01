@@ -10,6 +10,7 @@ export const symbolTokens = {
     unset: 'nil',
     vicinity: 'AutomaticClusteringMethod.vicinity',
     label: 'AutomaticClusteringMethod.label',
+    outline: 'AutomaticClusteringMethod.outline',
     disabled: 'ClusteringMode.disabled',
     manual: 'ClusteringMode.manual',
     auto: 'ClusteringMode.auto',
@@ -19,6 +20,7 @@ export const symbolTokens = {
     unset: 'null',
     vicinity: 'AutomaticClusteringMethod.VICINITY',
     label: 'AutomaticClusteringMethod.LABEL',
+    outline: 'AutomaticClusteringMethod.OUTLINE',
     disabled: 'ClusteringMode.DISABLED',
     manual: 'ClusteringMode.MANUAL',
     auto: 'ClusteringMode.AUTO',
@@ -45,7 +47,7 @@ The <ApiLink framework={props.framework} page={settingsPage} anchor={`${settings
 Automatic clustering methods are still in beta and may change in future versions of Scandit Data Capture SDK.
 :::
 
-The property applies only when the clustering mode is <ApiLink framework={props.framework} page={modePage} anchor={`${modeValue}Auto`}>{symbolTokens[props.framework].auto}</ApiLink> or <ApiLink framework={props.framework} page={modePage} anchor={`${modeValue}AutoWithManualCorrection`}>{symbolTokens[props.framework].autoWithManualCorrection}</ApiLink>. While the clustering mode is <code>{symbolTokens[props.framework].disabled}</code> or <code>{symbolTokens[props.framework].manual}</code>, MatrixScan Count keeps the configured value, but the value has no effect.
+The property applies only when the clustering mode is <ApiLink framework={props.framework} page={modePage} anchor={`${modeValue}Auto`}>{symbolTokens[props.framework].auto}</ApiLink> or <ApiLink framework={props.framework} page={modePage} anchor={`${modeValue}AutoWithManualCorrection`}>{symbolTokens[props.framework].autoWithManualCorrection}</ApiLink>. While the clustering mode is <ApiLink framework={props.framework} page={modePage} anchor={`${modeValue}Disabled`}>{symbolTokens[props.framework].disabled}</ApiLink> or <ApiLink framework={props.framework} page={modePage} anchor={`${modeValue}Manual`}>{symbolTokens[props.framework].manual}</ApiLink>, MatrixScan Count keeps the configured value, but the value has no effect.
 
 The following table lists the available methods.
 
@@ -53,6 +55,8 @@ The following table lists the available methods.
 |---|---|
 | <ApiLink framework={props.framework} page={methodPage} anchor={`${methodValue}Vicinity`}>{symbolTokens[props.framework].vicinity}</ApiLink> | Groups nearby barcodes into clusters. When the property is <code>{symbolTokens[props.framework].unset}</code>, which is the default, MatrixScan Count uses vicinity-based clustering. |
 | <ApiLink framework={props.framework} page={methodPage} anchor={`${methodValue}Label`}>{symbolTokens[props.framework].label}</ApiLink> | Uses detected physical label boundaries as a visual cue for grouping barcodes. The labels aren't returned as Label Capture items. |
+
+Other values, such as <code>{symbolTokens[props.framework].outline}</code>, are listed in the <ApiLink framework={props.framework} page={methodPage} anchor="enum-scandit.datacapture.core.AutomaticClusteringMethod">AutomaticClusteringMethod</ApiLink> API reference.
 
 <Only when={props.framework === 'ios'}>
 

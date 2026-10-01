@@ -51,6 +51,11 @@ import ClusteringAutomaticMethod from '../../../partials/count/_clustering-autom
 The following example enables automatic clustering and groups barcodes by label:
 
 ```kotlin
+import com.scandit.datacapture.barcode.count.capture.BarcodeCountSettings
+import com.scandit.datacapture.core.data.AutomaticClusteringMethod
+import com.scandit.datacapture.core.data.ClusteringMode
+
+val settings = BarcodeCountSettings()
 settings.clusteringMode = ClusteringMode.AUTO
 settings.automaticClusteringMethod = AutomaticClusteringMethod.LABEL
 ```
