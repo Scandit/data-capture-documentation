@@ -151,6 +151,8 @@ The scan intention property controls intent anticipation: <ApiLink framework={pr
 
 On Web, the default is <code>{symbolTokens[props.framework].manual}</code> for both SparkScan and Barcode Capture. To enable intent anticipation, set the scan intention to <code>{symbolTokens[props.framework].smart}</code>.
 
+In SparkScan on Web, if you don't set the scan intention yourself, setting the selection mode to <code>{symbolTokens[props.framework].auto}</code> also changes the scan intention to <code>{symbolTokens[props.framework].smart}</code>. Barcode Capture doesn't do this. Set both the scan intention and the selection mode explicitly to get predictable behavior.
+
 </Only>
 
 <ReactPlayer controls width='1200' url="/img/ai-powered-scanning/intention.mp4" />
@@ -189,7 +191,7 @@ The selection mode property controls dense-environment detection and barcode sel
 
 * <code>{symbolTokens[props.framework].auto}</code>: The SDK decides dynamically whether selection is active, based on device capabilities and scene conditions.
 * <code>{symbolTokens[props.framework].off}</code>: Selection is never active. The SDK scans a barcode as the user aims at it.
-* <code>{symbolTokens[props.framework].on}</code>: Selection is always active. The user confirms each scan by tapping the trigger button in SparkScan, or the preview in Barcode Capture.
+* <code>{symbolTokens[props.framework].on}</code>: Selection is always active. The user confirms each scan by tapping the trigger button in SparkScan, or the preview in Barcode Capture. While the selection mode is <code>{symbolTokens[props.framework].on}</code>, the SDK stores the scan intention you set but doesn't apply it, and uses smart selection internally so that the aimer appears. The SDK applies your scan intention when the selection mode changes to <code>{symbolTokens[props.framework].auto}</code> or <code>{symbolTokens[props.framework].off}</code>.
 
 <code>{symbolTokens[props.framework].auto}</code> requires the scan intention to be <code>{symbolTokens[props.framework].smart}</code>. With <code>{symbolTokens[props.framework].manual}</code>, it behaves like <code>{symbolTokens[props.framework].off}</code>.
 
@@ -202,6 +204,8 @@ In SparkScan, <code>{symbolTokens[props.framework].auto}</code> is the default, 
 <Only when={props.framework === 'web'}>
 
 On Web, the default is <code>{symbolTokens[props.framework].off}</code> for both SparkScan and Barcode Capture. To enable dense-environment selection, set the scan intention to <code>{symbolTokens[props.framework].smart}</code> and the selection mode to <code>{symbolTokens[props.framework].auto}</code>.
+
+In SparkScan on Web, if you don't set the scan intention yourself, setting the selection mode to <code>{symbolTokens[props.framework].auto}</code> also changes the scan intention to <code>{symbolTokens[props.framework].smart}</code>. Barcode Capture doesn't do this. Set both the scan intention and the selection mode explicitly to get predictable behavior.
 
 </Only>
 
@@ -281,6 +285,8 @@ The Smart Duplicate Filter is active when both of the following are true:
 * The duplicate filter property, <ApiLink framework={props.framework} page={sparkScanSettings} anchor={`${sparkScanProperty}CodeDuplicateFilter`}>{`SparkScanSettings.${symbolTokens[props.framework].codeDuplicateFilter}`}</ApiLink> or <ApiLink framework={props.framework} page={barcodeCaptureSettings} anchor={`${barcodeCaptureProperty}CodeDuplicateFilter`}>{`BarcodeCaptureSettings.${symbolTokens[props.framework].codeDuplicateFilter}`}</ApiLink>, is set to its smart default, the special value `-2`. This is the default since SDK 7.1.
 
 With <code>{symbolTokens[props.framework].manual}</code> scan intention, the `-2` default acts as a fixed 1.5-second duplicate filter.
+
+Since SDK 8.5, there is one exception. If the selection mode is <code>{symbolTokens[props.framework].on}</code> and you don't set the duplicate filter, the SDK treats the filter as `0` and doesn't filter duplicates. This lets the user select the same barcode again. If you set the duplicate filter to any value, including `-2`, the SDK uses that value instead.
 
 <Only when={props.framework !== 'web'}>
 
