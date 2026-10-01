@@ -48,8 +48,14 @@ Both properties are available from SDK version {symbolTokens[props.framework].si
 <Only when={props.framework === 'android'}>
 
 ```kotlin
+# import com.scandit.datacapture.id.capture.IdCapture
+# import com.scandit.datacapture.id.capture.IdCaptureListener
+# import com.scandit.datacapture.id.capture.IdCaptureSettings
+# import com.scandit.datacapture.id.data.CapturedId
+# val settings = IdCaptureSettings()
 settings.notifyOnSideCapture = true
 
+# object : IdCaptureListener {
 override fun onIdCaptured(idCapture: IdCapture, capturedId: CapturedId) {
     if (capturedId.isCapturingComplete) {
         // All sides are captured, or the document has a single side.
@@ -57,6 +63,7 @@ override fun onIdCaptured(idCapture: IdCapture, capturedId: CapturedId) {
         // Partial result, for example, the front side of a two-sided document.
     }
 }
+# }
 ```
 
 </Only>

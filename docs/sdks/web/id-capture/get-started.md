@@ -183,7 +183,7 @@ Note that the camera is still running, you may want to switch it off at this poi
 
 Captured results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-Note that if you scan boths sides of a document using the [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-scanner.html#full-document-scanner), this callback will only be executed once both sides have been successfully captured. If the document is known to have only one side, the callback will execute immediately after a successful scan of the first side. This behaviour can be modified with the setting [notifyOnSideCapture](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture).
+Note that if you scan boths sides of a document using the [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/physical-document-scanner.html#class-scandit.datacapture.id.FullDocumentScanner), this callback will only be executed once both sides have been successfully captured. If the document is known to have only one side, the callback will execute immediately after a successful scan of the first side. This behaviour can be modified with the setting [notifyOnSideCapture](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture).
 
 On a successful scan you may read the extracted data from `capturedId`:
 

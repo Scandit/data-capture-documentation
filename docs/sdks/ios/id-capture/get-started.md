@@ -277,7 +277,7 @@ Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-ca
 
 For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
-If you scan both sides of a document with the [`FullDocumentScanner`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-scanner.html#full-document-scanner), ID Capture calls this callback only after it captures both sides, unless you set [`notifyOnSideCapture`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture) to `true` (see [Receive a result after each side](/sdks/ios/id-capture/advanced.md#receive-a-result-after-each-side)).
+If you scan both sides of a document with the [`FullDocumentScanner`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/physical-document-scanner.html#class-scandit.datacapture.id.FullDocumentScanner), ID Capture calls this callback only after it captures both sides, unless you set [`notifyOnSideCapture`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture) to `true` (see [Receive a result after each side](/sdks/ios/id-capture/advanced.md#receive-a-result-after-each-side)).
 
 On a successful scan you may read the extracted data from `CapturedId`:
 

@@ -78,6 +78,10 @@ For visa data read from the VIZ, use <ApiLink framework={props.framework} page={
 <Only when={props.framework === 'android'}>
 
 ```kotlin
+# import com.scandit.datacapture.id.capture.IdCapture
+# import com.scandit.datacapture.id.capture.IdCaptureListener
+# import com.scandit.datacapture.id.data.CapturedId
+# object : IdCaptureListener {
 override fun onIdCaptured(idCapture: IdCapture, capturedId: CapturedId) {
     // Resolved across the captured zones, MRZ preferred over VIZ:
     val visaNumber = capturedId.visaNumber
@@ -90,6 +94,7 @@ override fun onIdCaptured(idCapture: IdCapture, capturedId: CapturedId) {
         val durationInDays = mrz.visaDurationInDays
     }
 }
+# }
 ```
 
 </Only>
