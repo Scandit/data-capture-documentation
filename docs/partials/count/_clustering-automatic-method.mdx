@@ -55,8 +55,7 @@ The following table lists the available methods.
 |---|---|
 | <ApiLink framework={props.framework} page={methodPage} anchor={`${methodValue}Vicinity`}>{symbolTokens[props.framework].vicinity}</ApiLink> | Groups nearby barcodes into clusters. When the property is <code>{symbolTokens[props.framework].unset}</code>, which is the default, MatrixScan Count uses vicinity-based clustering. |
 | <ApiLink framework={props.framework} page={methodPage} anchor={`${methodValue}Label`}>{symbolTokens[props.framework].label}</ApiLink> | Uses detected physical label boundaries as a visual cue for grouping barcodes. The labels aren't returned as Label Capture items. |
-
-Other values, such as <code>{symbolTokens[props.framework].outline}</code>, are listed in the <ApiLink framework={props.framework} page={methodPage} anchor="enum-scandit.datacapture.core.AutomaticClusteringMethod">AutomaticClusteringMethod</ApiLink> API reference.
+| <ApiLink framework={props.framework} page={methodPage} anchor={`${methodValue}Outline`}>{symbolTokens[props.framework].outline}</ApiLink> | Uses detected enclosing outlines as a visual cue for grouping barcodes. |
 
 <Only when={props.framework === 'ios'}>
 
