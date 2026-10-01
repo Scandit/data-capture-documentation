@@ -460,7 +460,6 @@ onRecognized: async (result: AdaptiveRecognitionResult) => {
 | <Field framework={props.framework} name="receiverPostalCode" anchor="ReceiverPostalCode"/> | <code>{symbolTokens[props.framework].stringType}</code> | The postal code of the receiver's address. |
 | <Field framework={props.framework} name="receiverCountry" anchor="ReceiverCountry"/> | <code>{symbolTokens[props.framework].optionalStringType}</code> | The country of the receiver's address. <code>{symbolTokens[props.framework].unset}</code> if the label doesn't show one. |
 | <Field framework={props.framework} name="carrier" anchor="Carrier"/> | <ApiLink framework={props.framework} page={carrierPage} anchor="enum-scandit.datacapture.label.Carrier">Carrier</ApiLink> | The postal provider of the label. See [Carriers](#carriers). |
-| <Field framework={props.framework} name="barcodes" anchor="Barcodes"/> | <code>{symbolTokens[props.framework].barcodesType}</code> | The tracking barcode or barcodes that the SDK decoded on the label. `trackingId` is read from the tracking barcode. |
 
 <Only when={props.framework === 'ios'}>
 
@@ -477,11 +476,11 @@ onRecognized: async (result: AdaptiveRecognitionResult) => {
 ### Handle missing values
 
 - <Field framework={props.framework} name="receiverCompany" anchor="ReceiverCompany"/>, <Field framework={props.framework} name="receiverState" anchor="ReceiverState"/>, and <Field framework={props.framework} name="receiverCountry" anchor="ReceiverCountry"/> are <code>{symbolTokens[props.framework].unset}</code> when the label doesn't show them. Check for <code>{symbolTokens[props.framework].unset}</code> before you use them.
-- <Field framework={props.framework} name="carrier" anchor="Carrier"/> is <CarrierValue framework={props.framework} id="NotAvailable"/> when the carrier isn't reported or isn't in the list below. It's <CarrierValue framework={props.framework} id="Other"/> only when the engine reports "Other" as the carrier.
+- <Field framework={props.framework} name="carrier" anchor="Carrier"/> is <CarrierValue framework={props.framework} id="Other"/> when a carrier is printed on the label but isn't in the list below. It's <CarrierValue framework={props.framework} id="NotAvailable"/> when no carrier can be identified on the label.
 
 ### Carriers
 
-<ApiLink framework={props.framework} page={carrierPage} anchor="enum-scandit.datacapture.label.Carrier">Carrier</ApiLink> has the following values:
+<ApiLink framework={props.framework} page={carrierPage} anchor="enum-scandit.datacapture.label.Carrier">Carrier</ApiLink> has the following values. The engine classifies the carrier printed on the label into one of these values. The list can grow in future SDK versions.
 
 | Carrier | Value |
 |---------|-------|
@@ -513,8 +512,8 @@ onRecognized: async (result: AdaptiveRecognitionResult) => {
 | Correos | <CarrierValue framework={props.framework} id="Correos"/> |
 | SEUR | <CarrierValue framework={props.framework} id="Seur"/> |
 | InPost | <CarrierValue framework={props.framework} id="Inpost"/> |
-| Reported by the engine as "Other" | <CarrierValue framework={props.framework} id="Other"/> |
-| Not reported, or not in this list | <CarrierValue framework={props.framework} id="NotAvailable"/> |
+| Printed on the label, but not in this list | <CarrierValue framework={props.framework} id="Other"/> |
+| No carrier can be identified on the label | <CarrierValue framework={props.framework} id="NotAvailable"/> |
 
 ## Verify it works
 
