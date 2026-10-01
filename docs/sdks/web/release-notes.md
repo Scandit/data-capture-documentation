@@ -10,6 +10,44 @@ keywords:
   - web
 ---
 
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed SparkScan selection highlight brushes not applying until the next selection cycle.
+* Fixed a bug that caused SparkScan to crash when using SmartScanSelection.
+* Fixed the SparkScan mini preview not being draggable.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+* Fixed MatrixScan AR info annotations so that replacing a header, footer, icon or body replaces it instead of adding a second one, and setting it to null removes it. BarcodeArPopoverAnnotationButton.text now returns the button's label instead of an empty string.
+* Fixed a placement problem with BarcodeArStatusIconAnnotation when the barcode rotates.
+* Fixed BarcodeArAnnotationAnchor not being available at runtime, which made a custom BarcodeAr annotation ignore its anchor. The default placement now also matches native, above the tracked barcode instead of below it.
+* Fixed BarcodeFind overwriting the zoom levels of the camera settings it was given: a BarcodeFindView created with custom CameraSettings now runs on the zoom levels it was configured with. BarcodeFind's recommended camera settings now report the .5x/1x levels, matching iOS and Android.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+
+#### Core
+
+* Fixed scanning silently stopping after the browser released the page's WebGL context, while the camera preview kept rendering.
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed ScanditIcon not rendering a background stroke by default when a background shape and stroke color were both configured, matching iOS and Android.
+
 ## 8.6.0
 
 **Released**: August 31, 2026
