@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-455/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-455/assets/css/styles.e45a1498.css">
-<script src="/data-capture-documentation/pr-preview/pr-455/assets/js/runtime~main.6e6aca65.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-455/assets/js/runtime~main.e997d1ce.js" defer="defer"></script>
 <script src="/data-capture-documentation/pr-preview/pr-455/assets/js/main.c3b9a41c.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -47,7 +47,7 @@
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="disconnect">Disconnect<a class="hash-link" aria-label="Direct link to Disconnect" title="Direct link to Disconnect" href="/data-capture-documentation/pr-preview/pr-455/sdks/web/agent-skills/scandit-mcp-installation-guide/#disconnect">​</a></h2>
 <p>Remove or disconnect the Scandit server in the client you used to connect. That drops the tokens the agent stored, so it can no longer call Scandit tools.</p>
 <ul>
-<li><strong>Claude Code:</strong> run <code>/mcp</code> and remove <code>scandit</code>, or run <code>claude mcp remove scandit</code>. If the server came with the plugin, disable or uninstall the <code>scandit-sdk</code> plugin in <code>/plugin</code> instead. This also removes the skills.</li>
+<li><strong>Claude Code:</strong> run <code>claude mcp remove scandit</code>. If the server came with the plugin, disable or uninstall the <code>scandit-sdk</code> plugin in <code>/plugin</code> instead. This also removes the skills.</li>
 <li><strong>Cursor:</strong> disconnect or remove <strong>scandit</strong> in Settings → Tools &amp; MCP.</li>
 <li><strong>VS Code:</strong> remove the <code>scandit</code> entry from your MCP user configuration.</li>
 </ul>
@@ -111,7 +111,7 @@
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="the-consent-screen-names-a-localhost-address">The consent screen names a localhost address.<a class="hash-link" aria-label="Direct link to The consent screen names a localhost address." title="Direct link to The consent screen names a localhost address." href="/data-capture-documentation/pr-preview/pr-455/sdks/web/agent-skills/scandit-mcp-installation-guide/#the-consent-screen-names-a-localhost-address">​</a></h3>
 <p>That is expected. After you approve, the authorization code is sent to a loopback listener the client started on your machine (<code>http://localhost:&lt;port&gt;/…</code>). If you just connected this server in Claude Code, Cursor, or VS Code, that address is yours. If you did not start a connect flow, do not continue.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="how-do-i-disconnect">How do I disconnect?<a class="hash-link" aria-label="Direct link to How do I disconnect?" title="Direct link to How do I disconnect?" href="/data-capture-documentation/pr-preview/pr-455/sdks/web/agent-skills/scandit-mcp-installation-guide/#how-do-i-disconnect">​</a></h3>
-<p>Remove the Scandit server in the client: in Claude Code, use <code>/mcp</code> or run <code>claude mcp remove scandit</code> (if the server came with the plugin, disable or uninstall the <code>scandit-sdk</code> plugin in <code>/plugin</code>); in Cursor, go to Settings → Tools &amp; MCP; in VS Code, remove it from your MCP configuration. Keys stay in the dashboard until you delete them.</p>
+<p>Remove the Scandit server in the client: in Claude Code, run <code>claude mcp remove scandit</code> (if the server came with the plugin, disable or uninstall the <code>scandit-sdk</code> plugin in <code>/plugin</code>); in Cursor, go to Settings → Tools &amp; MCP; in VS Code, remove it from your MCP configuration. Keys stay in the dashboard until you delete them.</p>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="learn-more">Learn more<a class="hash-link" aria-label="Direct link to Learn more" title="Direct link to Learn more" href="/data-capture-documentation/pr-preview/pr-455/sdks/web/agent-skills/scandit-mcp-installation-guide/#learn-more">​</a></h2>
 <ul>
 <li><a href="/data-capture-documentation/pr-preview/pr-455/sdks/web/agent-skills/">Agent Skills</a>: skills that write the SDK integration once a key is in place.</li>
