@@ -69,6 +69,14 @@ For a rejected document, a [RejectionReason](https://docs.scandit.com/data-captu
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
 
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
+
+<IdSideCaptureCallbacks framework="web"/>
+
+import IdVisaMrzFields from '../../../partials/advanced/_id-visa-mrz-fields.mdx';
+
+<IdVisaMrzFields framework="web"/>
+
 ## Detect Fake IDs
 
 *ID Validate* is a fake ID detection software. It currently supports documents that follow the Driver License/Identification Card specification by the American Association of Motor Vehicle Administrators (AAMVA).

@@ -1,0 +1,98 @@
+import Link from '@docusaurus/Link';
+
+export const apiTokens = {
+  'ios': 'ios',
+  'android': 'android',
+  'web': 'web',
+};
+
+export const symbolTokens = {
+  'ios': {
+    onCaptured: 'idCapture(_:didCapture:)',
+    since: '8.6.0',
+  },
+  'android': {
+    onCaptured: 'onIdCaptured',
+    since: '8.6.0',
+  },
+  'web': {
+    onCaptured: 'didCaptureId',
+    since: '7.5.0',
+  },
+};
+
+export const Only = ({when, children}) => (when ? <>{children}</> : null);
+
+export const ApiLink = ({framework, page, anchor, children}) => (
+  <Link to={`https://docs.scandit.com/data-capture-sdk/${apiTokens[framework]}/${page}#${anchor}`}><code>{children}</code></Link>
+);
+
+export const settingsPage = 'id-capture/api/id-capture-settings.html';
+export const settingsProperty = 'property-scandit.datacapture.id.IdCaptureSettings.';
+export const capturedIdPage = 'id-capture/api/captured-id.html';
+export const capturedIdProperty = 'property-scandit.datacapture.id.CapturedId.';
+export const listenerPage = 'id-capture/api/id-capture-listener.html';
+export const listenerMethod = 'method-scandit.datacapture.id.IIdCaptureListener.';
+
+### Receive a result after each side
+
+By default, when ID Capture scans a double-sided document, it calls <ApiLink framework={props.framework} page={listenerPage} anchor={`${listenerMethod}OnIdCaptured`}>{symbolTokens[props.framework].onCaptured}</ApiLink> only after document recognition is complete. To receive a result after the front side and another after the back side, set <ApiLink framework={props.framework} page={settingsPage} anchor={`${settingsProperty}NotifyOnSideCapture`}>IdCaptureSettings.notifyOnSideCapture</ApiLink> to `true`. Your app then gets partial results even if the back-side scan fails. The default is `false`.
+
+To tell a partial result from a complete one, read <ApiLink framework={props.framework} page={capturedIdPage} anchor={`${capturedIdProperty}IsCapturingComplete`}>CapturedId.isCapturingComplete</ApiLink>:
+
+- `true`: ID Capture has captured all sides of a multi-sided document, or the document has a single side.
+- `false`: Only partial data is available, for example, the front side of a two-sided document.
+
+Both properties are available from SDK version {symbolTokens[props.framework].since}.
+
+<Only when={props.framework === 'android'}>
+
+```kotlin
+settings.notifyOnSideCapture = true
+
+override fun onIdCaptured(idCapture: IdCapture, capturedId: CapturedId) {
+    if (capturedId.isCapturingComplete) {
+        // All sides are captured, or the document has a single side.
+    } else {
+        // Partial result, for example, the front side of a two-sided document.
+    }
+}
+```
+
+</Only>
+
+<Only when={props.framework === 'ios'}>
+
+```swift
+settings.notifyOnSideCapture = true
+
+func idCapture(_ idCapture: IdCapture, didCapture capturedId: CapturedId) {
+    if capturedId.isCapturingComplete {
+        // All sides are captured, or the document has a single side.
+    } else {
+        // Partial result, for example, the front side of a two-sided document.
+    }
+}
+```
+
+</Only>
+
+<Only when={props.framework === 'web'}>
+
+```ts
+import { type CapturedId } from "@scandit/web-datacapture-id";
+
+settings.notifyOnSideCapture = true;
+
+idCapture.addListener({
+  didCaptureId: (capturedId: CapturedId) => {
+    if (capturedId.isCapturingComplete) {
+      // All sides are captured, or the document has a single side.
+    } else {
+      // Partial result, for example, the front side of a two-sided document.
+    }
+  },
+});
+```
+
+</Only>
