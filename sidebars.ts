@@ -310,6 +310,7 @@ const sidebars: SidebarsConfig = {
         "sdks/ios/label-capture/get-started-with-swift-ui",
         "sdks/ios/label-capture/label-definitions",
         "sdks/ios/label-capture/advanced",
+        "sdks/ios/label-capture/shipping-label-scanning",
       ],
     },
     {
@@ -559,6 +560,7 @@ const sidebars: SidebarsConfig = {
         "sdks/android/label-capture/get-started",
         "sdks/android/label-capture/label-definitions",
         "sdks/android/label-capture/advanced",
+        "sdks/android/label-capture/shipping-label-scanning",
       ],
     },
     {
@@ -784,6 +786,7 @@ const sidebars: SidebarsConfig = {
         "sdks/web/label-capture/get-started",
         "sdks/web/label-capture/label-definitions",
         "sdks/web/label-capture/advanced",
+        "sdks/web/label-capture/shipping-label-scanning",
       ],
     },
     {

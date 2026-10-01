@@ -154,3 +154,5 @@ const retailItem = await new LabelDefinitionBuilder()
 See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
 
 <ReceiptScanning/>
+
+The Adaptive Recognition Engine can also read shipping labels. See [Scan shipping labels](shipping-label-scanning.md).
