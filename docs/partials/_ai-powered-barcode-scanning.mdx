@@ -99,7 +99,7 @@ export const dotnetTokens = {
   none: () => (<code>TimeSpan.Zero</code>),
   fixed: () => (<>a <code>TimeSpan</code> greater than zero, such as <code>TimeSpan.FromMilliseconds(500)</code></>),
   holdToScan: 'HoldToScanEnabled',
-  since71: ' since SDK 7.1',
+  since71: '; the constant is available since SDK 8.1',
   since85: 'Since SDK 8.5, ',
 };
 
@@ -122,7 +122,7 @@ export const frameworkTokens = {
     since71: ' since SDK 7.1',
     since85: 'Since SDK 8.5, ',
   },
-  'web': {...javaScriptTokens, smartFallback: ", or the device doesn't support Smart scan intention"},
+  'web': {...javaScriptTokens, smartFallback: ''},
   'react-native': javaScriptTokens,
   'flutter': {
     smart: () => (<code>Duration(milliseconds: -2)</code>),
