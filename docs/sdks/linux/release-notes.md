@@ -10,6 +10,19 @@ keywords:
   - linux
 ---
 
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+
 ## 8.6.0
 
 **Released**: August 31, 2026
