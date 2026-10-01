@@ -184,7 +184,7 @@ const docsVersions: Record<
   }
 > = {
   current: {
-    label: "8.6.0",
+    label: "8.6.1",
     banner: "none",
     badge: false,
   },
