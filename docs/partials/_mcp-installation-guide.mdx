@@ -75,7 +75,7 @@ Signing in does not create a subscription or a license key. The agent still has 
 
 Remove or disconnect the Scandit server in the client you used to connect. That drops the tokens the agent stored, so it can no longer call Scandit tools.
 
-- **Claude Code:** run `/mcp` and remove `scandit`, or run `claude mcp remove scandit`. If the server came with the plugin, disable or uninstall the `scandit-sdk` plugin in `/plugin` instead. This also removes the skills.
+- **Claude Code:** run `claude mcp remove scandit`. If the server came with the plugin, disable or uninstall the `scandit-sdk` plugin in `/plugin` instead. This also removes the skills.
 - **Cursor:** disconnect or remove **scandit** in Settings → Tools & MCP.
 - **VS Code:** remove the `scandit` entry from your MCP user configuration.
 
@@ -188,7 +188,7 @@ That is expected. After you approve, the authorization code is sent to a loopbac
 
 ### How do I disconnect?
 
-Remove the Scandit server in the client: in Claude Code, use `/mcp` or run `claude mcp remove scandit` (if the server came with the plugin, disable or uninstall the `scandit-sdk` plugin in `/plugin`); in Cursor, go to Settings → Tools & MCP; in VS Code, remove it from your MCP configuration. Keys stay in the dashboard until you delete them.
+Remove the Scandit server in the client: in Claude Code, run `claude mcp remove scandit` (if the server came with the plugin, disable or uninstall the `scandit-sdk` plugin in `/plugin`); in Cursor, go to Settings → Tools & MCP; in VS Code, remove it from your MCP configuration. Keys stay in the dashboard until you delete them.
 
 ## Learn more
 
