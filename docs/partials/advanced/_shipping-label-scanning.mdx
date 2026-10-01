@@ -250,7 +250,11 @@ When you pass your `DataCaptureView`, the overlay adds itself to the view. {symb
 
 <Only when={props.framework === 'android'}>
 
+Keep the overlay in a property of your Activity or Fragment, and create it when the view is created, for example in a Fragment's `onViewCreated` method. Then forward the lifecycle to the overlay. Call <ApiLink framework={props.framework} page={overlayPage} anchor={`method-${overlayAnchor}.OnResume`}>onResume()</ApiLink> in your `onResume` method to start or restore scanning. Call <ApiLink framework={props.framework} page={overlayPage} anchor={`method-${overlayAnchor}.OnPause`}>onPause()</ApiLink> in your `onPause` method to pause it.
+
 ```kotlin
+# import android.os.Bundle
+# import android.view.View
 # import com.scandit.datacapture.label.capture.LabelCapture
 # import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.LabelCaptureAdaptiveRecognitionOverlay
 # import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.LabelCaptureAdaptiveRecognitionSettings
@@ -259,14 +263,25 @@ When you pass your `DataCaptureView`, the overlay adds itself to the view. {symb
 # object : androidx.fragment.app.Fragment() {
 private lateinit var overlay: LabelCaptureAdaptiveRecognitionOverlay
 
-# fun setUpOverlay() {
-overlay = LabelCaptureAdaptiveRecognitionOverlay.newInstance(
-    requireContext(),
-    labelCapture,
-    dataCaptureView,
-)
-overlay.applySettings(settings)
-# }
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    overlay = LabelCaptureAdaptiveRecognitionOverlay.newInstance(
+        requireContext(),
+        labelCapture,
+        dataCaptureView,
+    )
+    overlay.applySettings(settings)
+}
+
+override fun onResume() {
+    super.onResume()
+    overlay.onResume()
+}
+
+override fun onPause() {
+    overlay.onPause()
+    super.onPause()
+}
 # }
 ```
 
@@ -430,30 +445,6 @@ onRecognized: async (result: AdaptiveRecognitionResult) => {
 
 </Only>
 
-<Only when={props.framework === 'android'}>
-
-<h3 id="5-forward-the-lifecycle">5. Forward the lifecycle</h3>
-
-Forward your Activity or Fragment lifecycle to the overlay. Call <ApiLink framework={props.framework} page={overlayPage} anchor={`method-${overlayAnchor}.OnResume`}>onResume()</ApiLink> in your `onResume` method to start or restore scanning. Call <ApiLink framework={props.framework} page={overlayPage} anchor={`method-${overlayAnchor}.OnPause`}>onPause()</ApiLink> in your `onPause` method to pause it.
-
-```kotlin
-# import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.LabelCaptureAdaptiveRecognitionOverlay
-# lateinit var overlay: LabelCaptureAdaptiveRecognitionOverlay
-# object : androidx.fragment.app.Fragment() {
-override fun onResume() {
-    super.onResume()
-    overlay.onResume()
-}
-
-override fun onPause() {
-    overlay.onPause()
-    super.onPause()
-}
-# }
-```
-
-</Only>
-
 ### Shipping label fields
 
 <ApiLink framework={props.framework} page={resultPage} anchor="class-scandit.datacapture.label.ShippingLabelScanningResult">ShippingLabelScanningResult</ApiLink> has the following fields:
@@ -469,7 +460,7 @@ override fun onPause() {
 | <Field framework={props.framework} name="receiverPostalCode" anchor="ReceiverPostalCode"/> | <code>{symbolTokens[props.framework].stringType}</code> | The postal code of the receiver's address. |
 | <Field framework={props.framework} name="receiverCountry" anchor="ReceiverCountry"/> | <code>{symbolTokens[props.framework].optionalStringType}</code> | The country of the receiver's address. <code>{symbolTokens[props.framework].unset}</code> if the label doesn't show one. |
 | <Field framework={props.framework} name="carrier" anchor="Carrier"/> | <ApiLink framework={props.framework} page={carrierPage} anchor="enum-scandit.datacapture.label.Carrier">Carrier</ApiLink> | The postal provider of the label. See [Carriers](#carriers). |
-| <Field framework={props.framework} name="barcodes" anchor="Barcodes"/> | <code>{symbolTokens[props.framework].barcodesType}</code> | The tracking barcodes that the SDK decoded on the label. The `trackingId` comes from this barcode. |
+| <Field framework={props.framework} name="barcodes" anchor="Barcodes"/> | <code>{symbolTokens[props.framework].barcodesType}</code> | The tracking barcode or barcodes that the SDK decoded on the label. `trackingId` is read from the tracking barcode. |
 
 <Only when={props.framework === 'ios'}>
 
@@ -531,11 +522,11 @@ You're done when:
 
 - The overlay shows its processing hint after you point the camera at a shipping label.
 - Your <ApiLink framework={props.framework} page={listenerPage} anchor={`method-${listenerAnchor}.OnRecognized`}>{symbolTokens[props.framework].onRecognized}</ApiLink> callback receives a `ShippingLabelScanningResult`, and you can read its `trackingId` and `carrier`.
-- The camera switches back on after each result, so you can scan the next label.
+- Your <code>{symbolTokens[props.framework].onRecognized}</code> code switches the camera back on after each result, so you can scan the next label.
 
 Processing starts only after the SDK decodes a tracking barcode on the label. The tracking barcode must be Code 128, Code 39, ITF, Data Matrix, or PDF417. Processing also requires a license key that includes Adaptive Recognition. If the overlay never shows its processing hint, check that the label has one of these barcodes and that your license key includes Adaptive Recognition.
 
-If <ApiLink framework={props.framework} page={listenerPage} anchor={`method-${listenerAnchor}.OnFailure`}>{symbolTokens[props.framework].onFailure}</ApiLink> runs instead, recognition failed. Check the device's network connection, then scan the label again.
+If <ApiLink framework={props.framework} page={listenerPage} anchor={`method-${listenerAnchor}.OnFailure`}>{symbolTokens[props.framework].onFailure}</ApiLink> runs instead, recognition failed, for example because of a network problem or a label the engine can't read. Check the network connection, then scan the label again.
 
 ## Related
 
