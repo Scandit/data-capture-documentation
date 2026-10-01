@@ -1,0 +1,143 @@
+import Link from '@docusaurus/Link';
+
+export const apiTokens = {
+  'ios': 'ios',
+  'android': 'android',
+  'web': 'web',
+};
+
+export const symbolTokens = {
+  'ios': {
+    mrz: 'mrzResult',
+    mrzClass: 'MrzResult',
+    vizClass: 'VizResult',
+    string: 'String?',
+    int: 'Int?',
+    bool: 'Bool?',
+    visaDetailsSince: '8.4.0',
+    none: 'nil',
+  },
+  'android': {
+    mrz: 'mrz',
+    mrzClass: 'MrzResult',
+    vizClass: 'VizResult',
+    string: 'String?',
+    int: 'Int?',
+    bool: 'Boolean?',
+    visaDetailsSince: '8.4.0',
+    none: 'null',
+  },
+  'web': {
+    mrz: 'mrzResult',
+    mrzClass: 'MRZResult',
+    vizClass: 'VIZResult',
+    string: 'string | null',
+    int: 'number | null',
+    bool: 'boolean | null',
+    visaDetailsSince: '8.3.0',
+    none: 'null',
+  },
+};
+
+export const Only = ({when, children}) => (when ? <>{children}</> : null);
+
+export const ApiLink = ({framework, page, anchor, children}) => (
+  <Link to={`https://docs.scandit.com/data-capture-sdk/${apiTokens[framework]}/${page}#${anchor}`}><code>{children}</code></Link>
+);
+
+export const capturedIdPage = 'id-capture/api/captured-id.html';
+export const capturedIdProperty = 'property-scandit.datacapture.id.CapturedId.';
+export const mrzPage = 'id-capture/api/mrz-result.html';
+export const mrzProperty = 'property-scandit.datacapture.id.MrzResult.';
+export const vizPage = 'id-capture/api/viz-result.html';
+export const vizProperty = 'property-scandit.datacapture.id.VizResult.';
+export const documentPage = 'id-capture/api/id-capture-document.html';
+export const settingsPage = 'id-capture/api/id-capture-settings.html';
+export const settingsProperty = 'property-scandit.datacapture.id.IdCaptureSettings.';
+
+## Read visa data from the MRZ
+
+When ID Capture reads the machine-readable zone (MRZ) of a machine-readable visa, it returns visa data parsed from the MRZ in <ApiLink framework={props.framework} page={capturedIdPage} anchor={`${capturedIdProperty}Mrz`}>{`CapturedId.${symbolTokens[props.framework].mrz}`}</ApiLink>. To scan visas, add <ApiLink framework={props.framework} page={documentPage} anchor="class-scandit.datacapture.id.VisaIcao">VisaIcao</ApiLink> to <ApiLink framework={props.framework} page={settingsPage} anchor={`${settingsProperty}AcceptedDocuments`}>IdCaptureSettings.acceptedDocuments</ApiLink> and use a scanner that reads the MRZ. For the scanners and documents that support the MRZ, see <Link to={`/sdks/${props.framework}/id-capture/supported-documents`}>Supported Documents</Link>.
+
+The following table lists the visa-related fields.
+
+| Field | Type | When populated |
+|---|---|---|
+| <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}VisaNumber`}>{`${symbolTokens[props.framework].mrzClass}.visaNumber`}</ApiLink> | <code>{symbolTokens[props.framework].string}</code> | When a per-country rule maps the visa number from the MRZ. |
+| <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}VisaNumberOfEntries`}>{`${symbolTokens[props.framework].mrzClass}.visaNumberOfEntries`}</ApiLink> | <code>{symbolTokens[props.framework].int}</code> | Parsed, when possible, from the optional data in MRZ line 2. |
+| <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}VisaMultipleEntries`}>{`${symbolTokens[props.framework].mrzClass}.visaMultipleEntries`}</ApiLink> | <code>{symbolTokens[props.framework].bool}</code> | Parsed, when possible, from the optional data in MRZ line 2. |
+| <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}VisaDurationInDays`}>{`${symbolTokens[props.framework].mrzClass}.visaDurationInDays`}</ApiLink> | <code>{symbolTokens[props.framework].int}</code> | Parsed, when possible, from the optional data in MRZ line 2. The value is the duration of stay in days. |
+| <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}PassportNumber`}>{`${symbolTokens[props.framework].mrzClass}.passportNumber`}</ApiLink> | <code>{symbolTokens[props.framework].string}</code> | When the MRZ encodes the passport number of the document holder. |
+| <ApiLink framework={props.framework} page={capturedIdPage} anchor={`${capturedIdProperty}VisaNumber`}>CapturedId.visaNumber</ApiLink> | <code>{symbolTokens[props.framework].string}</code> | When any captured zone contains the visa number. ID Capture prefers the MRZ value over the value from the visual inspection zone (VIZ). |
+| <ApiLink framework={props.framework} page={capturedIdPage} anchor={`${capturedIdProperty}PassportNumber`}>CapturedId.passportNumber</ApiLink> | <code>{symbolTokens[props.framework].string}</code> | When any captured zone contains the passport number. ID Capture prefers the MRZ value over the VIZ value. If anonymization applies to field results, the value can be <code>{symbolTokens[props.framework].none}</code> for certain documents. |
+
+<code>{`${symbolTokens[props.framework].mrzClass}.passportNumber`}</code> is available from SDK version 7.0.0. All other fields in the table are available from SDK version 8.6.0. A field is <code>{symbolTokens[props.framework].none}</code> when the data isn't available.
+
+For visa data read from the VIZ, use <ApiLink framework={props.framework} page={vizPage} anchor={`${vizProperty}VisaDetails`}>{`${symbolTokens[props.framework].vizClass}.visaDetails`}</ApiLink>, available from SDK version {symbolTokens[props.framework].visaDetailsSince}.
+
+<Only when={props.framework === 'android'}>
+
+```kotlin
+# import com.scandit.datacapture.id.capture.IdCapture
+# import com.scandit.datacapture.id.capture.IdCaptureListener
+# import com.scandit.datacapture.id.data.CapturedId
+# object : IdCaptureListener {
+override fun onIdCaptured(idCapture: IdCapture, capturedId: CapturedId) {
+    // Resolved across the captured zones, MRZ preferred over VIZ:
+    val visaNumber = capturedId.visaNumber
+    val passportNumber = capturedId.passportNumber
+
+    // Parsed from the MRZ only:
+    capturedId.mrz?.let { mrz ->
+        val numberOfEntries = mrz.visaNumberOfEntries
+        val multipleEntries = mrz.visaMultipleEntries
+        val durationInDays = mrz.visaDurationInDays
+    }
+}
+# }
+```
+
+</Only>
+
+<Only when={props.framework === 'ios'}>
+
+```swift
+func idCapture(_ idCapture: IdCapture, didCapture capturedId: CapturedId) {
+    // Resolved across the captured zones, MRZ preferred over VIZ:
+    let visaNumber = capturedId.visaNumber
+    let passportNumber = capturedId.passportNumber
+
+    // Parsed from the MRZ only:
+    if let mrz = capturedId.mrzResult {
+        let numberOfEntries = mrz.visaNumberOfEntries
+        let multipleEntries = mrz.visaMultipleEntries
+        let durationInDays = mrz.visaDurationInDays
+    }
+}
+```
+
+</Only>
+
+<Only when={props.framework === 'web'}>
+
+```ts
+import { type CapturedId } from "@scandit/web-datacapture-id";
+
+idCapture.addListener({
+  didCaptureId: (capturedId: CapturedId) => {
+    // Resolved across the captured zones, MRZ preferred over VIZ:
+    const visaNumber = capturedId.visaNumber;
+    const passportNumber = capturedId.passportNumber;
+
+    // Parsed from the MRZ only:
+    const mrz = capturedId.mrzResult;
+    if (mrz) {
+      const numberOfEntries = mrz.visaNumberOfEntries;
+      const multipleEntries = mrz.visaMultipleEntries;
+      const durationInDays = mrz.visaDurationInDays;
+    }
+  },
+});
+```
+
+</Only>
