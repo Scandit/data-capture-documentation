@@ -151,8 +151,6 @@ The scan intention property controls intent anticipation: <ApiLink framework={pr
 
 On Web, the default is <code>{symbolTokens[props.framework].manual}</code> for both SparkScan and Barcode Capture. To enable intent anticipation, set the scan intention to <code>{symbolTokens[props.framework].smart}</code>.
 
-In SparkScan on Web, if you don't set the scan intention yourself, setting the selection mode to <code>{symbolTokens[props.framework].auto}</code> also changes the scan intention to <code>{symbolTokens[props.framework].smart}</code>. Barcode Capture doesn't do this. Set both the scan intention and the selection mode explicitly to get predictable behavior.
-
 </Only>
 
 <ReactPlayer controls width='1200' url="/img/ai-powered-scanning/intention.mp4" />
