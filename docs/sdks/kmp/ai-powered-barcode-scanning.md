@@ -10,4 +10,4 @@ keywords:
 
 import AIPoweredBarcodeScanning from '../../partials/_ai-powered-barcode-scanning.mdx';
 
-<AIPoweredBarcodeScanning/>
+<AIPoweredBarcodeScanning framework="kmp"/>
