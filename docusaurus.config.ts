@@ -377,12 +377,26 @@ function buildApiReferenceTags(
  * /8.5/data-capture-sdk/... 404s, and the page moves the reader to the same
  * path under their major's live tree.
  */
-function buildApiReferencePrefixByMajor(
-  versions: Record<string, { label?: string }>,
-): Record<string, string> {
+function buildApiReferencePrefixByMajor(): Record<string, string> {
+  // versions.json, not docsVersions, for the reason crawlableApiLines gives: a
+  // frozen version can build with no override entry. `current` goes FIRST so a
+  // frozen version of the same major overwrites it: during a beta, the served
+  // 8.6.x tree is the better target for an old /8.5/ link than the unreleased
+  // current one.
+  let frozen: string[] = [];
+  try {
+    frozen = JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), "versions.json"), "utf8"),
+    ) as string[];
+  } catch {
+    frozen = Object.keys(docsVersions).filter((v) => v !== "current");
+  }
+  const entries: [name: string, number: string][] = [
+    ["current", docsVersions.current?.label || ""],
+    ...frozen.map((v): [string, string] => [v, v]),
+  ];
   const out: Record<string, string> = {};
-  for (const [name, cfg] of Object.entries(versions)) {
-    const number = name === "current" ? cfg.label || "" : name;
+  for (const [name, number] of entries) {
     const [major, minor] = number.split(".");
     if (!major || !minor) continue;
     out[major] = linksToOwnApiLine(name, number) ? `/${major}.${minor}` : "";
@@ -904,7 +918,7 @@ const config: Config = {
     apiReferenceTagsByVersionTag: buildApiReferenceTags(docsVersions),
     // Major -> prefix of the API reference that major's docs link to. Used by
     // the 404 page to recover versioned API-reference links.
-    apiReferencePrefixByMajor: buildApiReferencePrefixByMajor(docsVersions),
+    apiReferencePrefixByMajor: buildApiReferencePrefixByMajor(),
     versionNumberByTag: buildVersionNumberByTag(docsVersions),
   },
 
