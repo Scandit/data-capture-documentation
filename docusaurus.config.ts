@@ -377,23 +377,31 @@ function buildApiReferenceTags(
  * /8.5/data-capture-sdk/... 404s, and the page moves the reader to the same
  * path under their major's live tree.
  */
-function buildApiReferencePrefixByMajor(): Record<string, string> {
-  // versions.json, not docsVersions, for the reason crawlableApiLines gives: a
-  // frozen version can build with no override entry. `current` goes FIRST so a
-  // frozen version of the same major overwrites it: during a beta, the served
-  // 8.6.x tree is the better target for an old /8.5/ link than the unreleased
-  // current one.
-  let frozen: string[] = [];
+/**
+ * The frozen versions this build contains: versions.json, not docsVersions,
+ * for the reason crawlableApiLines spells out (a frozen version can build with
+ * no override entry). Falls back to the override map if versions.json cannot
+ * be read, since emitting nothing is worse than an approximate list. Shared by
+ * crawlableApiLines and buildApiReferencePrefixByMajor so the robots Allow
+ * lines and the 404 page's API redirect targets cannot disagree.
+ */
+function frozenVersionNames(): string[] {
   try {
-    frozen = JSON.parse(
+    return JSON.parse(
       fs.readFileSync(path.join(process.cwd(), "versions.json"), "utf8"),
     ) as string[];
   } catch {
-    frozen = Object.keys(docsVersions).filter((v) => v !== "current");
+    return Object.keys(docsVersions).filter((v) => v !== "current");
   }
+}
+
+function buildApiReferencePrefixByMajor(): Record<string, string> {
+  // `current` goes FIRST so a frozen version of the same major overwrites it:
+  // during a beta, the served 8.6.x tree is the better target for an old /8.5/
+  // link than the unreleased current one.
   const entries: [name: string, number: string][] = [
     ["current", docsVersions.current?.label || ""],
-    ...frozen.map((v): [string, string] => [v, v]),
+    ...frozenVersionNames().map((v): [string, string] => [v, v]),
   ];
   const out: Record<string, string> = {};
   for (const [name, number] of entries) {
@@ -508,16 +516,7 @@ function crawlableApiLines(): string[] {
   // `current` is not in versions.json by construction - it is the unfrozen
   // tree - so it is added explicitly, and it is the one entry whose version
   // NUMBER only docsVersions knows (its label).
-  let frozen: string[] = [];
-  try {
-    frozen = JSON.parse(
-      fs.readFileSync(path.join(process.cwd(), "versions.json"), "utf8"),
-    ) as string[];
-  } catch {
-    // Unreadable versions.json: fall back to the override map rather than
-    // emitting nothing, since emitting nothing is the failure this prevents.
-    frozen = Object.keys(docsVersions).filter((v) => v !== "current");
-  }
+  const frozen = frozenVersionNames();
   const entries: Array<[string, { label?: string }]> = [
     ["current", docsVersions.current ?? {}],
     ...frozen.map((v) => [v, docsVersions[v] ?? {}] as [string, { label?: string }]),
