@@ -397,6 +397,12 @@ overlay.listener = {
 
 When the overlay starts to process a label, it switches the camera to standby. It doesn't switch the camera back on after a result. To scan the next label, call the camera's <ApiLink framework={props.framework} page={cameraPage} anchor={symbolTokens[props.framework].cameraOnAnchor}>{symbolTokens[props.framework].cameraOn}</ApiLink> in <ApiLink framework={props.framework} page={listenerPage} anchor={`method-${listenerAnchor}.OnRecognized`}>{symbolTokens[props.framework].onRecognized}</ApiLink> after you handle the result.
 
+<Only when={props.framework !== 'web'}>
+
+The overlay doesn't switch the camera back on after a failure either. Call <code>{symbolTokens[props.framework].cameraOn}</code> in <ApiLink framework={props.framework} page={listenerPage} anchor={`method-${listenerAnchor}.OnFailure`}>{symbolTokens[props.framework].onFailure}</ApiLink> too, so that you can scan the label again.
+
+</Only>
+
 <Only when={props.framework === 'web'}>
 
 If recognition fails, the overlay shows an error notification and switches the camera back on.
@@ -414,7 +420,11 @@ override fun onRecognized(result: AdaptiveRecognitionResult) {
     // Handle the result, then get ready for the next label.
     camera.switchToDesiredState(FrameSourceState.ON)
 }
-#     override fun onFailure() {}
+
+override fun onFailure() {
+    // Get ready to scan the label again.
+    camera.switchToDesiredState(FrameSourceState.ON)
+}
 # }
 ```
 
@@ -426,6 +436,11 @@ override fun onRecognized(result: AdaptiveRecognitionResult) {
 func labelCaptureAdaptiveRecognitionOverlay(_ overlay: LabelCaptureAdaptiveRecognitionOverlay,
                                             didRecognizeWith result: AdaptiveRecognitionResult) {
     // Handle the result, then get ready for the next label.
+    camera?.switch(toDesiredState: .on)
+}
+
+func labelCaptureAdaptiveRecognitionOverlayDidFail(_ overlay: LabelCaptureAdaptiveRecognitionOverlay) {
+    // Get ready to scan the label again.
     camera?.switch(toDesiredState: .on)
 }
 ```
@@ -476,11 +491,11 @@ onRecognized: async (result: AdaptiveRecognitionResult) => {
 ### Handle missing values
 
 - <Field framework={props.framework} name="receiverCompany" anchor="ReceiverCompany"/>, <Field framework={props.framework} name="receiverState" anchor="ReceiverState"/>, and <Field framework={props.framework} name="receiverCountry" anchor="ReceiverCountry"/> are <code>{symbolTokens[props.framework].unset}</code> when the label doesn't show them. Check for <code>{symbolTokens[props.framework].unset}</code> before you use them.
-- <Field framework={props.framework} name="carrier" anchor="Carrier"/> is <CarrierValue framework={props.framework} id="Other"/> when a carrier is printed on the label but isn't in the list below. It's <CarrierValue framework={props.framework} id="NotAvailable"/> when no carrier can be identified on the label.
+- <Field framework={props.framework} name="carrier" anchor="Carrier"/> is <CarrierValue framework={props.framework} id="NotAvailable"/> when no carrier is identified on the label, or when the identified carrier isn't in the list below. It's <CarrierValue framework={props.framework} id="Other"/> only when the engine classifies the carrier as other.
 
 ### Carriers
 
-<ApiLink framework={props.framework} page={carrierPage} anchor="enum-scandit.datacapture.label.Carrier">Carrier</ApiLink> has the following values. The engine classifies the carrier printed on the label into one of these values. The list can grow in future SDK versions.
+<ApiLink framework={props.framework} page={carrierPage} anchor="enum-scandit.datacapture.label.Carrier">Carrier</ApiLink> has the following values. The SDK maps the carrier that the engine identifies on the label to one of these values. The list can grow in future SDK versions.
 
 | Carrier | Value |
 |---------|-------|
@@ -512,8 +527,8 @@ onRecognized: async (result: AdaptiveRecognitionResult) => {
 | Correos | <CarrierValue framework={props.framework} id="Correos"/> |
 | SEUR | <CarrierValue framework={props.framework} id="Seur"/> |
 | InPost | <CarrierValue framework={props.framework} id="Inpost"/> |
-| Printed on the label, but not in this list | <CarrierValue framework={props.framework} id="Other"/> |
-| No carrier can be identified on the label | <CarrierValue framework={props.framework} id="NotAvailable"/> |
+| Classified by the engine as other | <CarrierValue framework={props.framework} id="Other"/> |
+| Not identified, or not in this list | <CarrierValue framework={props.framework} id="NotAvailable"/> |
 
 ## Verify it works
 
@@ -522,6 +537,12 @@ You're done when:
 - The overlay shows its processing hint after you point the camera at a shipping label.
 - Your <ApiLink framework={props.framework} page={listenerPage} anchor={`method-${listenerAnchor}.OnRecognized`}>{symbolTokens[props.framework].onRecognized}</ApiLink> callback receives a `ShippingLabelScanningResult`, and you can read its `trackingId` and `carrier`.
 - Your <code>{symbolTokens[props.framework].onRecognized}</code> code switches the camera back on after each result, so you can scan the next label.
+
+<Only when={props.framework !== 'web'}>
+
+- Your <code>{symbolTokens[props.framework].onFailure}</code> code also switches the camera back on, so you can scan the label again.
+
+</Only>
 
 Processing starts only after the SDK decodes a tracking barcode on the label. The tracking barcode must be Code 128, Code 39, ITF, Data Matrix, or PDF417. Processing also requires a license key that includes Adaptive Recognition. If the overlay never shows its processing hint, check that the label has one of these barcodes and that your license key includes Adaptive Recognition.
 
