@@ -5,7 +5,7 @@ import { frameworkCards } from "../data/frameworkCardsArr";
 import { FrameworksName } from "../../constants/frameworksName";
 import { ArrowDown } from "../../IconComponents";
 import { emitFrameworkChange } from "../../utils/frameworks";
-import { resolveHomepageFramework } from "../data/resolveHomepageFramework";
+import { pushHomepageFramework, resolveHomepageFramework } from "../data/resolveHomepageFramework";
 
 interface FrameworksMobileProps {
   handleFrameworkClick: () => void;
@@ -45,7 +45,7 @@ export default function FrameworksMobile({
   }, []);
 
   function selectFramework(framework: string) {
-    window.history.pushState({}, "", `?framework=${framework}`);
+    pushHomepageFramework(framework);
     emitFrameworkChange(framework);
     setSelectedFramework(framework);
     framework !== "net" && framework !== "xamarin" && handleFrameworkClick();

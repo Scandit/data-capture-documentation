@@ -6,7 +6,7 @@ import { FrameworkCardType } from "../../constants/types";
 import { FRAMEWORK_STORAGE_KEY, emitFrameworkChange } from "../../utils/frameworks";
 import { useEffect, useState } from "react";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
-import { resolveHomepageFramework } from "../data/resolveHomepageFramework";
+import { pushHomepageFramework, resolveHomepageFramework } from "../data/resolveHomepageFramework";
 
 interface FrameworksProps {
   handleFrameworkClick: () => void;
@@ -17,7 +17,7 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
 
   function clickedFramework(framework: FrameworkCardType) {
     if (ExecutionEnvironment.canUseDOM) {
-      window.history.pushState({}, "", `?framework=${framework.framework}`);
+      pushHomepageFramework(framework.framework);
       localStorage.setItem(FRAMEWORK_STORAGE_KEY, framework.framework);
       emitFrameworkChange(framework.framework);
     }
@@ -28,8 +28,12 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
   }
 
   useEffect(() => {
+    // The page this listener belongs to. popstate also fires when Back or
+    // Forward LEAVES the home page, before it unmounts, and rewriting the URL
+    // then would put ?framework= on the destination and drop its #hash.
+    const homePath = ExecutionEnvironment.canUseDOM ? location.pathname : "";
     const updateSelectedFramework = () => {
-      if (ExecutionEnvironment.canUseDOM) {
+      if (ExecutionEnvironment.canUseDOM && location.pathname === homePath) {
         const paramsURL = Object.fromEntries(
           new URLSearchParams(location.search)
         );
@@ -39,7 +43,11 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
         // replaceState, not pushState: this runs on mount and on every
         // popstate, so pushing here added a history entry each time and Back
         // could never leave the page.
-        window.history.replaceState({}, "", `?framework=${frameworkFromURL}`);
+        window.history.replaceState(
+          window.history.state,
+          "",
+          `${location.pathname}?framework=${frameworkFromURL}${location.hash}`,
+        );
         setSelectedFramework(frameworkFromURL);
         emitFrameworkChange(frameworkFromURL);
       }

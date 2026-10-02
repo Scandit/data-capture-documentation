@@ -3,6 +3,7 @@ import { FrameworkCardType } from "../../constants/types";
 import { FRAMEWORK_STORAGE_KEY, emitFrameworkChange } from "../../utils/frameworks";
 import style from "./CardAdditional.module.css";
 import BrowserOnly from "@docusaurus/BrowserOnly";
+import { pushHomepageFramework } from "../data/resolveHomepageFramework";
 
 interface CardAdditionalProps {
   framework: FrameworkCardType;
@@ -19,11 +20,7 @@ export default function CardAdditional({
 }: CardAdditionalProps) {
   function clickedFramework(e, framework: FrameworkCardType) {
     e.stopPropagation();
-    window.history.pushState(
-      {},
-      "",
-      `${window.location.pathname}?framework=${framework.framework.toString()}`
-    );
+    pushHomepageFramework(framework.framework.toString());
     setSelectedFramework();
     handleFrameworkClick();
     localStorage.setItem(FRAMEWORK_STORAGE_KEY, framework.framework);

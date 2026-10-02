@@ -38,3 +38,19 @@ export function resolveHomepageFramework(raw: string | null | undefined): string
   }
   return DEFAULT_FRAMEWORK;
 }
+
+/**
+ * Puts a framework into `?framework=` as one new history entry, keeping the
+ * path and hash. A no-op when it is already there: one card click reaches
+ * several handlers (the card wrapper, its radio input, the .NET/Xamarin
+ * children), and each used to push, so Back appeared to do nothing.
+ */
+export function pushHomepageFramework(framework: string): void {
+  const current = new URLSearchParams(window.location.search).get("framework");
+  if (current === framework) return;
+  window.history.pushState(
+    {},
+    "",
+    `${window.location.pathname}?framework=${framework}${window.location.hash}`,
+  );
+}

@@ -3,7 +3,7 @@ import { FrameworksName } from "../../constants/frameworksName";
 import { FRAMEWORK_STORAGE_KEY, emitFrameworkChange } from "../../utils/frameworks";
 import style from "./FrameworkCard.module.css";
 import BrowserOnly from "@docusaurus/BrowserOnly";
-import { resolveHomepageFramework } from "../data/resolveHomepageFramework";
+import { pushHomepageFramework, resolveHomepageFramework } from "../data/resolveHomepageFramework";
 
 export function FrameworkCard({
   framework,
@@ -13,11 +13,7 @@ export function FrameworkCard({
   function selectFramework(e: React.ChangeEvent<HTMLInputElement>) {
     const formData = new FormData(e.target.form);
     const frameworkValue = formData.get("framework");
-    window.history.pushState(
-      {},
-      "",
-      `${window.location.pathname}?framework=${frameworkValue.toString()}`
-    );
+    pushHomepageFramework(frameworkValue.toString());
     emitFrameworkChange(frameworkValue.toString());
     !hasAdditional && handleFrameworkClick();
   }
