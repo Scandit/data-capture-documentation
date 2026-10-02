@@ -367,6 +367,56 @@ function buildApiReferenceTags(
 }
 
 /**
+ * The path prefix of the API reference each major line's docs link to, keyed
+ * by major: `{ "6": "/6.28", "7": "/7.6", "8": "" }`, where "" is the
+ * unversioned /data-capture-sdk/ tree. Read from the same content scan as the
+ * search tags (`linksToOwnApiLine`), so it follows the docs rather than a list.
+ *
+ * Consumed by the 404 page: the reference is published only under these
+ * prefixes, so a link to /7.6.6/data-capture-sdk/..., /7.4/... or
+ * /8.5/data-capture-sdk/... 404s, and the page moves the reader to the same
+ * path under their major's live tree.
+ */
+/**
+ * The frozen versions this build contains: versions.json, not docsVersions,
+ * for the reason crawlableApiLines spells out (a frozen version can build with
+ * no override entry). Falls back to the override map if versions.json cannot
+ * be read, since emitting nothing is worse than an approximate list. Shared by
+ * crawlableApiLines and buildApiReferencePrefixByMajor so the robots Allow
+ * lines and the 404 page's API redirect targets cannot disagree.
+ */
+let frozenVersionNamesCache: string[] | undefined;
+function frozenVersionNames(): string[] {
+  // Cached: the redirect plugin asks once per route.
+  if (frozenVersionNamesCache) return frozenVersionNamesCache;
+  try {
+    frozenVersionNamesCache = JSON.parse(
+      fs.readFileSync(path.join(process.cwd(), "versions.json"), "utf8"),
+    ) as string[];
+  } catch {
+    frozenVersionNamesCache = Object.keys(docsVersions).filter((v) => v !== "current");
+  }
+  return frozenVersionNamesCache;
+}
+
+function buildApiReferencePrefixByMajor(): Record<string, string> {
+  // `current` goes FIRST so a frozen version of the same major overwrites it:
+  // during a beta, the served 8.6.x tree is the better target for an old /8.5/
+  // link than the unreleased current one.
+  const entries: [name: string, number: string][] = [
+    ["current", docsVersions.current?.label || ""],
+    ...frozenVersionNames().map((v): [string, string] => [v, v]),
+  ];
+  const out: Record<string, string> = {};
+  for (const [name, number] of entries) {
+    const [major, minor] = number.split(".");
+    if (!major || !minor) continue;
+    out[major] = linksToOwnApiLine(name, number) ? `/${major}.${minor}` : "";
+  }
+  return out;
+}
+
+/**
  * Map a major version typed in a query ("v7", "sdk 6") to the tag of the version
  * a reader on that line is actually served.
  *
@@ -470,16 +520,7 @@ function crawlableApiLines(): string[] {
   // `current` is not in versions.json by construction - it is the unfrozen
   // tree - so it is added explicitly, and it is the one entry whose version
   // NUMBER only docsVersions knows (its label).
-  let frozen: string[] = [];
-  try {
-    frozen = JSON.parse(
-      fs.readFileSync(path.join(process.cwd(), "versions.json"), "utf8"),
-    ) as string[];
-  } catch {
-    // Unreadable versions.json: fall back to the override map rather than
-    // emitting nothing, since emitting nothing is the failure this prevents.
-    frozen = Object.keys(docsVersions).filter((v) => v !== "current");
-  }
+  const frozen = frozenVersionNames();
   const entries: Array<[string, { label?: string }]> = [
     ["current", docsVersions.current ?? {}],
     ...frozen.map((v) => [v, docsVersions[v] ?? {}] as [string, { label?: string }]),
@@ -559,6 +600,13 @@ function crawlableApiLines(): string[] {
  * why this file does NOT enumerate those trees - if the cleanup lands, the
  * enumeration was never needed, and if it stalls, adding it here would still be
  * the wrong fix.
+ *
+ * Update 2026-10-02: the cleanup landed, as plain 404s rather than 410s, and
+ * the 7.6.15 release added /7.6.14/ to them. Readers still arrive on those URLs
+ * from search engines and AI assistants, so retiredPatchTreeRedirectsPlugin
+ * (below) now serves each one as a redirect to its
+ * same-path twin in the live patch. A redirect page carries a canonical to its
+ * target, so this resolves the duplicate content without stranding anyone.
  */
 function robotsTxtPlugin() {
   return {
@@ -768,6 +816,100 @@ function searchTagsManifestPlugin() {
   };
 }
 
+// Patch trees that a later patch of the same major replaced. Each frozen
+// version is served under its full number (/7.6.15/...), so a release that
+// moves 7.6.14 -> 7.6.15 turns every /7.6.14/... URL into a 404 - and those
+// URLs live on in search indexes, bookmarks and AI-assistant answers. Every
+// page under a retired tree has a twin at the same path under the patch that
+// replaced it, so redirect path-for-path instead of letting it 404.
+//
+// The value is the oldest patch that was ever published as its own tree; the
+// newest retired patch is derived from docsVersions, so the next patch release
+// of a frozen major redirects the tree it replaces without editing this map.
+const FIRST_PUBLISHED_PATCH_BY_MINOR: Record<string, number> = {
+  "7.6": 3,
+  "6.28": 1,
+};
+
+// The retired-tree paths that should redirect to `routePath`, one per retired
+// patch of its minor. Empty for anything that is not under a frozen version.
+function retiredPatchTreeRedirects(routePath: string): string[] {
+  const match = routePath.match(/^\/(\d+\.\d+)\.(\d+)(\/.+)$/);
+  if (!match) return [];
+  const [, minor, patch, rest] = match;
+  const firstPatch = FIRST_PUBLISHED_PATCH_BY_MINOR[minor];
+  // frozenVersionNames, not docsVersions: a frozen version can build with no
+  // override entry, and it would then get no redirects while robots.txt and
+  // the 404 page's API prefixes still picked it up.
+  if (
+    firstPatch === undefined ||
+    !frozenVersionNames().includes(`${minor}.${patch}`)
+  ) {
+    return [];
+  }
+  const redirects: string[] = [];
+  for (let retired = firstPatch; retired < Number(patch); retired++) {
+    redirects.push(`/${minor}.${retired}${rest}`);
+  }
+  return redirects;
+}
+
+// Writes the retired-tree redirects as static pages, in the same format as
+// @docusaurus/plugin-client-redirects. They are not handed to that plugin
+// because it writes every file at once: ~10,000 parallel writes made it fail
+// on Windows with a spurious EEXIST, on a different file each run. Writing
+// them one after another here is a few seconds and deterministic.
+function retiredPatchTreeRedirectsPlugin() {
+  return {
+    name: "retired-patch-tree-redirects",
+    async postBuild({
+      outDir,
+      routesPaths,
+    }: {
+      outDir: string;
+      routesPaths: string[];
+    }) {
+      const { mkdir, writeFile, access } = await import("fs/promises");
+      const { join } = await import("path");
+      const exists = (file: string) =>
+        access(file).then(
+          () => true,
+          () => false,
+        );
+
+      const written = new Set<string>();
+      for (const routePath of routesPaths) {
+        const target = routePath.endsWith("/") ? routePath : `${routePath}/`;
+        for (const from of retiredPatchTreeRedirects(routePath)) {
+          const dir = join(outDir, from);
+          const file = join(dir, "index.html");
+          // A route can be listed with and without its trailing slash, and a
+          // real page always wins over a redirect.
+          if (written.has(file) || (await exists(file))) continue;
+          await mkdir(dir, { recursive: true });
+          await writeFile(file, redirectPageHtml(target), "utf8");
+          written.add(file);
+        }
+      }
+    },
+  };
+}
+
+function redirectPageHtml(toUrl: string): string {
+  return `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=${toUrl}">
+    <link rel="canonical" href="${productionUrl}${toUrl}" />
+  </head>
+  <script>
+    window.location.href = '${toUrl}' + window.location.search + window.location.hash;
+  </script>
+</html>
+`;
+}
+
 const config: Config = {
   title: "Scandit Developer Documentation",
   tagline:
@@ -783,6 +925,9 @@ const config: Config = {
     // A docs version's tag -> the API-reference tag(s) that document it, so a
     // reader on 6.28.11 finds the 6.28 API and never the 8.x one.
     apiReferenceTagsByVersionTag: buildApiReferenceTags(docsVersions),
+    // Major -> prefix of the API reference that major's docs link to. Used by
+    // the 404 page to recover versioned API-reference links.
+    apiReferencePrefixByMajor: buildApiReferencePrefixByMajor(),
     versionNumberByTag: buildVersionNumberByTag(docsVersions),
   },
 
@@ -1113,6 +1258,9 @@ const config: Config = {
   // Emitted rather than copied from static/, so the per-major Allow lines track
   // the versions this build contains and a preview deploy can exclude itself.
   robotsTxtPlugin,
+  // Path-for-path redirects from retired patch trees (/7.6.14/...) to the
+  // live patch of the same minor. See retiredPatchTreeRedirects.
+  retiredPatchTreeRedirectsPlugin,
 ],
 
   presets: [

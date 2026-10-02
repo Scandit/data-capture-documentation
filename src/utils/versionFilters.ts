@@ -1,9 +1,14 @@
 import { UNRELEASED_FRAMEWORK_SLUGS } from "@site/src/constants/unreleasedFrameworks";
 
-// Versions that still carry Xamarin docs. Xamarin was removed in 8.0, so a
-// reader on a Xamarin page must not be offered a version where the page
-// doesn't exist.
-const XAMARIN_VERSIONS = ["7.6.14", "6.28.11"];
+// Xamarin was removed in 8.0, so a reader on a Xamarin page must only be
+// offered the frozen versions before it. Decided by major rather than listed:
+// the list said "7.6.14" and went stale the day 7.6.15 replaced it, dropping
+// the reader's own version from the dropdown.
+const LAST_MAJOR_WITH_XAMARIN = 7;
+function carriesXamarin(versionName: string): boolean {
+  const major = Number(versionName.split(".")[0]);
+  return Number.isInteger(major) && major <= LAST_MAJOR_WITH_XAMARIN;
+}
 
 /** Minimal shape of the version objects returned by `useVersions()`. */
 interface DocsVersionLike {
@@ -14,7 +19,7 @@ interface DocsVersionLike {
  * Narrows the SDK version list to the versions that actually document the
  * framework the reader is currently on. Two mirror-image rules:
  *
- *   - Xamarin exists only in the legacy versions -> keep 7.6.14 / 6.28.11.
+ *   - Xamarin exists only in the legacy versions -> keep 7.x / 6.x.
  *   - An unreleased framework (see UNRELEASED_FRAMEWORK_SLUGS, e.g. Kotlin
  *     Multiplatform) exists only in the current version -> keep `current`.
  *
@@ -28,7 +33,7 @@ export function filterVersionsForPath<T extends DocsVersionLike>(
   if (!pathname) return versions;
 
   if (pathname.includes("/xamarin/")) {
-    return versions.filter((version) => XAMARIN_VERSIONS.includes(version.name));
+    return versions.filter((version) => carriesXamarin(version.name));
   }
 
   const onUnreleasedFramework = UNRELEASED_FRAMEWORK_SLUGS.some((slug) =>
