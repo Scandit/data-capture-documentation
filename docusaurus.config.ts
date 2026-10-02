@@ -995,6 +995,24 @@ const config: Config = {
               '/data-capture-sdk/dotnet.android/id-capture/supported-documents.html'
             ],
           },
+          // Pre-v7 guide URLs that the READMEs in Scandit's sample repos
+          // (datacapture-{android,ios,flutter,capacitor,dotnet,xamarin}-samples)
+          // still link to, 46 times as of 2026-10-02. Readers reach them from
+          // GitHub, often right after creating a project in the dashboard.
+          ...['android', 'ios', 'react-native'].map((framework) => ({
+            to: `/sdks/${framework}/sparkscan/intro`,
+            from: `/data-capture-sdk/${framework}/high-speed-single-scanning.html`,
+          })),
+          ...['android', 'ios'].flatMap((framework) => [
+            {
+              to: `/sdks/${framework}/matrixscan/get-started`,
+              from: `/data-capture-sdk/${framework}/get-started-matrixscan.html`,
+            },
+            {
+              to: `/sdks/${framework}/id-capture/intro`,
+              from: `/data-capture-sdk/${framework}/id-capture/intro.html`,
+            },
+          ]),
           {
             to: 'system-requirements',
             from: [
