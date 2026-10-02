@@ -23,9 +23,11 @@ const DEFAULT_FRAMEWORK = "web";
  */
 export function resolveHomepageFramework(raw: string | null | undefined): string {
   if (!raw) return DEFAULT_FRAMEWORK;
-  if (CARD_KEYS.includes(raw)) return raw;
-
   const lower = raw.toLowerCase();
+  // Case-insensitive, so ?framework=NET or Xamarin still finds its card.
+  const exact = CARD_KEYS.find((key) => key.toLowerCase() === lower);
+  if (exact) return exact;
+
   const def = FRAMEWORKS.find(
     (f) => f.slug === lower || (f.aliases || []).includes(lower),
   );

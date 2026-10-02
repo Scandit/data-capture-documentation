@@ -36,7 +36,10 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
         const frameworkFromURL = resolveHomepageFramework(
           paramsURL.framework || localStorage.getItem(FRAMEWORK_STORAGE_KEY),
         );
-        window.history.pushState({}, "", `?framework=${frameworkFromURL}`);
+        // replaceState, not pushState: this runs on mount and on every
+        // popstate, so pushing here added a history entry each time and Back
+        // could never leave the page.
+        window.history.replaceState({}, "", `?framework=${frameworkFromURL}`);
         setSelectedFramework(frameworkFromURL);
         emitFrameworkChange(frameworkFromURL);
       }
