@@ -262,6 +262,12 @@ No updates for this framework in this release.
 
 * Improved EAN8 false positive filtering in strict mode
 
+### Behavioral Changes
+
+#### Core
+
+* Building for iOS now requires Xcode 16.3 or later.
+
 ### Bug Fixes
 
 #### Core

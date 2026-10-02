@@ -21,7 +21,7 @@ This page describes how to integrate the Scandit Data Capture SDK into your iOS 
 
 Before you begin, make sure you have the following prerequisites in place:
 
-- Latest version of Xcode
+- Xcode 16.3 or later
 - iOS project with a deployment target of iOS 15.0+
 
   :::note
