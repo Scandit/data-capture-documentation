@@ -367,6 +367,30 @@ function buildApiReferenceTags(
 }
 
 /**
+ * The path prefix of the API reference each major line's docs link to, keyed
+ * by major: `{ "6": "/6.28", "7": "/7.6", "8": "" }`, where "" is the
+ * unversioned /data-capture-sdk/ tree. Read from the same content scan as the
+ * search tags (`linksToOwnApiLine`), so it follows the docs rather than a list.
+ *
+ * Consumed by the 404 page: the reference is published only under these
+ * prefixes, so a link to /7.6.6/data-capture-sdk/..., /7.4/... or
+ * /8.5/data-capture-sdk/... 404s, and the page moves the reader to the same
+ * path under their major's live tree.
+ */
+function buildApiReferencePrefixByMajor(
+  versions: Record<string, { label?: string }>,
+): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [name, cfg] of Object.entries(versions)) {
+    const number = name === "current" ? cfg.label || "" : name;
+    const [major, minor] = number.split(".");
+    if (!major || !minor) continue;
+    out[major] = linksToOwnApiLine(name, number) ? `/${major}.${minor}` : "";
+  }
+  return out;
+}
+
+/**
  * Map a major version typed in a query ("v7", "sdk 6") to the tag of the version
  * a reader on that line is actually served.
  *
@@ -878,6 +902,9 @@ const config: Config = {
     // A docs version's tag -> the API-reference tag(s) that document it, so a
     // reader on 6.28.11 finds the 6.28 API and never the 8.x one.
     apiReferenceTagsByVersionTag: buildApiReferenceTags(docsVersions),
+    // Major -> prefix of the API reference that major's docs link to. Used by
+    // the 404 page to recover versioned API-reference links.
+    apiReferencePrefixByMajor: buildApiReferencePrefixByMajor(docsVersions),
     versionNumberByTag: buildVersionNumberByTag(docsVersions),
   },
 
