@@ -1005,7 +1005,10 @@ const config: Config = {
           })),
           ...['android', 'ios'].flatMap((framework) => [
             {
-              to: `/sdks/${framework}/matrixscan/get-started`,
+              // Every link to this URL is in a MatrixScan Count sample README
+              // ("Get started with MatrixScan Count on iOS, Android"), so the
+              // reader wants Count, whatever the old page was called.
+              to: `/sdks/${framework}/matrixscan-count/get-started`,
               from: `/data-capture-sdk/${framework}/get-started-matrixscan.html`,
             },
             {
