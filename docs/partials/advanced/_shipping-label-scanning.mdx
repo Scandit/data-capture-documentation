@@ -1,0 +1,555 @@
+import Link from '@docusaurus/Link';
+
+export const apiTokens = {
+  'ios': 'ios',
+  'android': 'android',
+  'web': 'web',
+};
+
+export const symbolTokens = {
+  'ios': {
+    unset: 'nil',
+    shippingLabel: 'AdaptiveRecognitionResultType.shippingLabel',
+    settingsCreate: 'LabelCaptureAdaptiveRecognitionSettings(resultType:)',
+    overlayCreate: 'LabelCaptureAdaptiveRecognitionOverlay(labelCapture:view:)',
+    applySettings: 'apply(_:)',
+    addOverlay: 'DataCaptureView.addOverlay(_:)',
+    noView: <>If you pass <code>nil</code> instead</>,
+    listener: 'LabelCaptureAdaptiveRecognitionDelegate',
+    listenerProperty: 'delegate',
+    onRecognized: 'labelCaptureAdaptiveRecognitionOverlay(_:didRecognizeWith:)',
+    onFailure: 'labelCaptureAdaptiveRecognitionOverlayDidFail(_:)',
+    processingHint: 'processingHintText',
+    processingHintAnchor: 'property-scandit.datacapture.label.ui.LabelCaptureAdaptiveRecognitionSettings.ProcessingHintText',
+    stringType: 'String',
+    optionalStringType: 'String?',
+    barcodesType: 'Array<Barcode>',
+    carrierPrefix: 'Carrier.',
+    cameraOn: 'switch(toDesiredState: .on)',
+    cameraOnAnchor: 'method-scandit.datacapture.core.Camera.SwitchToDesiredState',
+  },
+  'android': {
+    unset: 'null',
+    shippingLabel: 'AdaptiveRecognitionResultType.SHIPPING_LABEL',
+    settingsCreate: 'LabelCaptureAdaptiveRecognitionSettings.newInstance(resultType)',
+    overlayCreate: 'LabelCaptureAdaptiveRecognitionOverlay.newInstance(context, mode, view)',
+    applySettings: 'applySettings(settings)',
+    addOverlay: 'DataCaptureView.addOverlay()',
+    noView: <>If you pass <code>null</code> instead</>,
+    listener: 'LabelCaptureAdaptiveRecognitionListener',
+    listenerProperty: 'listener',
+    onRecognized: 'onRecognized(result)',
+    onFailure: 'onFailure()',
+    processingHint: 'processingHintText',
+    processingHintAnchor: 'property-scandit.datacapture.label.ui.LabelCaptureAdaptiveRecognitionSettings.ProcessingHintText',
+    stringType: 'String',
+    optionalStringType: 'String?',
+    barcodesType: 'ArrayList<Barcode>',
+    carrierPrefix: 'Carrier.',
+    cameraOn: 'switchToDesiredState(FrameSourceState.ON)',
+    cameraOnAnchor: 'method-scandit.datacapture.core.Camera.SwitchToDesiredState',
+  },
+  'web': {
+    unset: 'null',
+    shippingLabel: 'AdaptiveRecognitionResultType.ShippingLabel',
+    settingsCreate: 'LabelCaptureAdaptiveRecognitionSettings.create(resultType)',
+    overlayCreate: 'LabelCaptureAdaptiveRecognitionOverlay.withLabelCaptureForView(labelCapture, view)',
+    applySettings: 'applySettings(settings)',
+    addOverlay: 'DataCaptureView.addOverlay()',
+    noView: <>If you leave out the view</>,
+    listener: 'LabelCaptureAdaptiveRecognitionListener',
+    listenerProperty: 'listener',
+    onRecognized: 'onRecognized(result)',
+    onFailure: 'onFailure()',
+    processingHint: 'setProcessingHintText(text)',
+    processingHintAnchor: 'method-scandit.datacapture.label.ui.LabelCaptureAdaptiveRecognitionSettings.SetProcessingHintText',
+    stringType: 'string',
+    optionalStringType: 'string | null',
+    barcodesType: 'Barcode[]',
+    carrierPrefix: 'Carrier.',
+    cameraOn: 'switchToDesiredState(FrameSourceState.On)',
+    cameraOnAnchor: 'method-scandit.datacapture.core.Camera.SwitchToDesiredStateAsync',
+  },
+};
+
+export const carrierValues = {
+  'ios': {
+    Fedex: 'fedEx', Ups: 'ups', Usps: 'usps', Dhl: 'dhl', Dpd: 'dpd', Gls: 'gls', Tnt: 'tnt',
+    AmazonLogistics: 'amazonLogistics', Ontrac: 'onTrac', RoyalMail: 'royalMail',
+    Parcelforce: 'parcelforce', Evri: 'evri', Yodel: 'yodel', Chronopost: 'chronopost',
+    Colissimo: 'colissimo', MondialRelay: 'mondialRelay', PosteItaliane: 'posteItaliane',
+    Brt: 'brt', Sda: 'sda', Hermes: 'hermes', AustrianPost: 'austrianPost', SwissPost: 'swissPost',
+    Postnl: 'postNL', Bpost: 'bpost', Postnord: 'postNord', Correos: 'correos', Seur: 'seur',
+    Inpost: 'inPost', Other: 'other', NotAvailable: 'notAvailable',
+  },
+  'android': {
+    Fedex: 'FEDEX', Ups: 'UPS', Usps: 'USPS', Dhl: 'DHL', Dpd: 'DPD', Gls: 'GLS', Tnt: 'TNT',
+    AmazonLogistics: 'AMAZON_LOGISTICS', Ontrac: 'ONTRAC', RoyalMail: 'ROYAL_MAIL',
+    Parcelforce: 'PARCELFORCE', Evri: 'EVRI', Yodel: 'YODEL', Chronopost: 'CHRONOPOST',
+    Colissimo: 'COLISSIMO', MondialRelay: 'MONDIAL_RELAY', PosteItaliane: 'POSTE_ITALIANE',
+    Brt: 'BRT', Sda: 'SDA', Hermes: 'HERMES', AustrianPost: 'AUSTRIAN_POST', SwissPost: 'SWISS_POST',
+    Postnl: 'POSTNL', Bpost: 'BPOST', Postnord: 'POSTNORD', Correos: 'CORREOS', Seur: 'SEUR',
+    Inpost: 'INPOST', Other: 'OTHER', NotAvailable: 'NOT_AVAILABLE',
+  },
+  'web': {
+    Fedex: 'Fedex', Ups: 'Ups', Usps: 'Usps', Dhl: 'Dhl', Dpd: 'Dpd', Gls: 'Gls', Tnt: 'Tnt',
+    AmazonLogistics: 'AmazonLogistics', Ontrac: 'Ontrac', RoyalMail: 'RoyalMail',
+    Parcelforce: 'Parcelforce', Evri: 'Evri', Yodel: 'Yodel', Chronopost: 'Chronopost',
+    Colissimo: 'Colissimo', MondialRelay: 'MondialRelay', PosteItaliane: 'PosteItaliane',
+    Brt: 'Brt', Sda: 'Sda', Hermes: 'Hermes', AustrianPost: 'AustrianPost', SwissPost: 'SwissPost',
+    Postnl: 'Postnl', Bpost: 'Bpost', Postnord: 'Postnord', Correos: 'Correos', Seur: 'Seur',
+    Inpost: 'Inpost', Other: 'Other', NotAvailable: 'NotAvailable',
+  },
+};
+
+export const Only = ({when, children}) => (when ? <>{children}</> : null);
+
+export const ApiLink = ({framework, page, anchor, children}) => (
+  <Link to={`https://docs.scandit.com/data-capture-sdk/${apiTokens[framework]}/${page}#${anchor}`}><code>{children}</code></Link>
+);
+
+export const DocLink = ({framework, page, children}) => (
+  <Link to={`/sdks/${framework}/label-capture/${page}`}>{children}</Link>
+);
+
+export const resultPage = 'label-capture/api/shipping-label-scanning-result.html';
+export const resultProperty = 'property-scandit.datacapture.label.ShippingLabelScanningResult.';
+export const carrierPage = 'label-capture/api/carrier.html';
+export const carrierValue = 'value-scandit.datacapture.label.Carrier.';
+export const resultTypePage = 'label-capture/api/adaptive-recognition-result-type.html';
+export const settingsPage = 'label-capture/api/ui/label-capture-adaptive-recognition-settings.html';
+export const settingsAnchor = 'scandit.datacapture.label.ui.LabelCaptureAdaptiveRecognitionSettings';
+export const overlayPage = 'label-capture/api/ui/label-capture-adaptive-recognition-overlay.html';
+export const overlayAnchor = 'scandit.datacapture.label.ui.LabelCaptureAdaptiveRecognitionOverlay';
+export const listenerPage = 'label-capture/api/ui/label-capture-adaptive-recognition-listener.html';
+export const labelSettingsPage = 'label-capture/api/label-capture-settings.html';
+export const cameraPage = 'core/api/camera.html';
+export const listenerAnchor = 'scandit.datacapture.label.ui.LabelCaptureAdaptiveRecognitionListener';
+
+export const Field = ({framework, name, anchor}) => (
+  <ApiLink framework={framework} page={resultPage} anchor={`${resultProperty}${anchor}`}>{name}</ApiLink>
+);
+
+export const CarrierValue = ({framework, id}) => (
+  <ApiLink framework={framework} page={carrierPage} anchor={`${carrierValue}${id}`}>{`${symbolTokens[framework].carrierPrefix}${carrierValues[framework][id]}`}</ApiLink>
+);
+
+Shipping Label Scanning reads a shipping label and returns its tracking ID, the receiver's name and address, and the carrier. Like receipt scanning, it uses the Adaptive Recognition Engine, which processes the label in the cloud.
+
+To read your own set of fields on the device instead, define a <DocLink framework={props.framework} page="label-definitions">custom label</DocLink>.
+
+:::warning Beta
+Shipping Label Scanning requires the Adaptive Recognition Engine, which is still in beta and may change in future versions of Scandit Data Capture SDK. To enable it on your subscription, contact [support@scandit.com](mailto:support@scandit.com).
+:::
+
+## Before you start
+
+- Use Scandit Data Capture SDK 8.6.0 or later. Shipping Label Scanning is available on iOS, Android, and Web. It isn't available on other frameworks yet.
+- Ask [support@scandit.com](mailto:support@scandit.com) to enable the Adaptive Recognition Engine on your subscription.
+- Make sure the device has a network connection. The Adaptive Recognition Engine processes the label in the cloud.
+- Set up a `LabelCapture` instance and a `DataCaptureView`. If you haven't done this yet, follow <DocLink framework={props.framework} page="get-started">Get started</DocLink>.
+
+Create the `LabelCapture` instance with <ApiLink framework={props.framework} page={labelSettingsPage} anchor="class-scandit.datacapture.label.LabelCaptureSettings">LabelCaptureSettings</ApiLink> that have no label definitions. The overlay adds its own definition for the tracking barcode. Label definitions that you add stay active alongside it, so a barcode that isn't the tracking barcode can end up as the `trackingId`.
+
+<Only when={props.framework === 'android'}>
+
+```kotlin
+import com.scandit.datacapture.label.capture.LabelCapture
+import com.scandit.datacapture.label.capture.LabelCaptureSettings
+
+val labelCaptureSettings = LabelCaptureSettings.builder().build()
+val labelCapture = LabelCapture.forDataCaptureContext(dataCaptureContext, labelCaptureSettings)
+```
+
+</Only>
+
+<Only when={props.framework === 'ios'}>
+
+```swift
+let labelCaptureSettings = try LabelCaptureSettings(labelDefinitions: [])
+let labelCapture = LabelCapture(context: context, settings: labelCaptureSettings)
+```
+
+</Only>
+
+<Only when={props.framework === 'web'}>
+
+```ts
+import { LabelCapture, LabelCaptureSettings } from "@scandit/web-datacapture-label";
+
+const labelCaptureSettings = await LabelCaptureSettings.fromLabelDefinitions([]);
+const labelCapture = await LabelCapture.forContext(dataCaptureContext, labelCaptureSettings);
+```
+
+</Only>
+
+## Steps
+
+### 1. Create the settings
+
+Create <ApiLink framework={props.framework} page={settingsPage} anchor={`class-${settingsAnchor}`}>LabelCaptureAdaptiveRecognitionSettings</ApiLink> with the result type <ApiLink framework={props.framework} page={resultTypePage} anchor="value-scandit.datacapture.label.AdaptiveRecognitionResultType.ShippingLabel">{symbolTokens[props.framework].shippingLabel}</ApiLink>. The result type sets the kind of document that the overlay looks for.
+
+<Only when={props.framework === 'web'}>
+
+`create()` is asynchronous. If you call it without a result type, it creates settings for receipts.
+
+</Only>
+
+To change the hint that the overlay shows while it processes a label, use <ApiLink framework={props.framework} page={settingsPage} anchor={symbolTokens[props.framework].processingHintAnchor}>{symbolTokens[props.framework].processingHint}</ApiLink>.
+
+<Only when={props.framework === 'android'}>
+
+```kotlin
+import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.AdaptiveRecognitionResult
+import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.AdaptiveRecognitionResultType
+import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.LabelCaptureAdaptiveRecognitionListener
+import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.LabelCaptureAdaptiveRecognitionOverlay
+import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.LabelCaptureAdaptiveRecognitionSettings
+import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.ShippingLabelScanningResult
+
+val settings = LabelCaptureAdaptiveRecognitionSettings.newInstance(
+    AdaptiveRecognitionResultType.SHIPPING_LABEL
+)
+```
+
+</Only>
+
+<Only when={props.framework === 'ios'}>
+
+```swift
+import ScanditLabelCapture
+
+let settings = LabelCaptureAdaptiveRecognitionSettings(resultType: .shippingLabel)
+```
+
+</Only>
+
+<Only when={props.framework === 'web'}>
+
+```ts
+import {
+  AdaptiveRecognitionResultType,
+  LabelCaptureAdaptiveRecognitionOverlay,
+  LabelCaptureAdaptiveRecognitionSettings,
+  ShippingLabelScanningResult,
+  type AdaptiveRecognitionResult,
+} from "@scandit/web-datacapture-label";
+
+const settings = await LabelCaptureAdaptiveRecognitionSettings.create(
+  AdaptiveRecognitionResultType.ShippingLabel
+);
+```
+
+</Only>
+
+### 2. Create the overlay
+
+Create the overlay with <ApiLink framework={props.framework} page={overlayPage} anchor={`method-${overlayAnchor}.NewInstance`}>{symbolTokens[props.framework].overlayCreate}</ApiLink>. Then apply the settings with <ApiLink framework={props.framework} page={overlayPage} anchor={`method-${overlayAnchor}.ApplySettings`}>{symbolTokens[props.framework].applySettings}</ApiLink>.
+
+When you pass your `DataCaptureView`, the overlay adds itself to the view. {symbolTokens[props.framework].noView}, add the overlay yourself with <code>{symbolTokens[props.framework].addOverlay}</code>.
+
+<Only when={props.framework === 'android'}>
+
+Keep the overlay in a property of your Activity or Fragment, and create it when the view is created, for example in a Fragment's `onViewCreated` method. Then forward the lifecycle to the overlay. Call <ApiLink framework={props.framework} page={overlayPage} anchor={`method-${overlayAnchor}.OnResume`}>onResume()</ApiLink> in your `onResume` method to start or restore scanning. Call <ApiLink framework={props.framework} page={overlayPage} anchor={`method-${overlayAnchor}.OnPause`}>onPause()</ApiLink> in your `onPause` method to pause it.
+
+```kotlin
+# import android.os.Bundle
+# import android.view.View
+# import com.scandit.datacapture.label.capture.LabelCapture
+# import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.LabelCaptureAdaptiveRecognitionOverlay
+# import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.LabelCaptureAdaptiveRecognitionSettings
+# lateinit var labelCapture: LabelCapture
+# lateinit var settings: LabelCaptureAdaptiveRecognitionSettings
+# object : androidx.fragment.app.Fragment() {
+private lateinit var overlay: LabelCaptureAdaptiveRecognitionOverlay
+
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    overlay = LabelCaptureAdaptiveRecognitionOverlay.newInstance(
+        requireContext(),
+        labelCapture,
+        dataCaptureView,
+    )
+    overlay.applySettings(settings)
+}
+
+override fun onResume() {
+    super.onResume()
+    overlay.onResume()
+}
+
+override fun onPause() {
+    overlay.onPause()
+    super.onPause()
+}
+# }
+```
+
+</Only>
+
+<Only when={props.framework === 'ios'}>
+
+```swift
+let overlay = LabelCaptureAdaptiveRecognitionOverlay(labelCapture: labelCapture, view: dataCaptureView)
+overlay.apply(settings)
+```
+
+</Only>
+
+<Only when={props.framework === 'web'}>
+
+```ts
+const overlay = await LabelCaptureAdaptiveRecognitionOverlay.withLabelCaptureForView(
+  labelCapture,
+  dataCaptureView
+);
+await overlay.applySettings(settings);
+```
+
+</Only>
+
+### 3. Listen for results
+
+Set a <ApiLink framework={props.framework} page={listenerPage} anchor={`interface-${listenerAnchor}`}>{symbolTokens[props.framework].listener}</ApiLink> as the overlay's <ApiLink framework={props.framework} page={overlayPage} anchor={`property-${overlayAnchor}.Listener`}>{symbolTokens[props.framework].listenerProperty}</ApiLink>. It receives two callbacks:
+
+- <ApiLink framework={props.framework} page={listenerPage} anchor={`method-${listenerAnchor}.OnRecognized`}>{symbolTokens[props.framework].onRecognized}</ApiLink> runs when the label is recognized. Check that the result is a <ApiLink framework={props.framework} page={resultPage} anchor="class-scandit.datacapture.label.ShippingLabelScanningResult">ShippingLabelScanningResult</ApiLink>, then read its fields.
+- <ApiLink framework={props.framework} page={listenerPage} anchor={`method-${listenerAnchor}.OnFailure`}>{symbolTokens[props.framework].onFailure}</ApiLink> runs when recognition fails, for example because of a connection error.
+
+<Only when={props.framework === 'ios'}>
+
+The overlay holds its delegate weakly, so keep a strong reference to the delegate object.
+
+</Only>
+
+<Only when={props.framework === 'android'}>
+
+```kotlin
+# import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.AdaptiveRecognitionResult
+# import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.LabelCaptureAdaptiveRecognitionListener
+# import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.LabelCaptureAdaptiveRecognitionOverlay
+# import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.ShippingLabelScanningResult
+# lateinit var overlay: LabelCaptureAdaptiveRecognitionOverlay
+overlay.listener = object : LabelCaptureAdaptiveRecognitionListener {
+    override fun onRecognized(result: AdaptiveRecognitionResult) {
+        val shippingLabel = result as? ShippingLabelScanningResult ?: return
+
+        val trackingId = shippingLabel.trackingId
+        val receiverName = shippingLabel.receiverFullName
+        val receiverCompany = shippingLabel.receiverCompany // null if the label doesn't show one
+        val carrier = shippingLabel.carrier
+    }
+
+    override fun onFailure() {
+        // Recognition failed, for example because of a connection error.
+    }
+}
+```
+
+</Only>
+
+<Only when={props.framework === 'ios'}>
+
+```swift
+overlay.delegate = self
+
+extension YourScanViewController: LabelCaptureAdaptiveRecognitionDelegate {
+    func labelCaptureAdaptiveRecognitionOverlay(_ overlay: LabelCaptureAdaptiveRecognitionOverlay,
+                                                didRecognizeWith result: AdaptiveRecognitionResult) {
+        guard let shippingLabel = result as? ShippingLabelScanningResult else { return }
+
+        let trackingId = shippingLabel.trackingId
+        let receiverName = shippingLabel.receiverFullName
+        let receiverCompany = shippingLabel.receiverCompany // nil if the label doesn't show one
+        let carrier = shippingLabel.carrier
+    }
+
+    func labelCaptureAdaptiveRecognitionOverlayDidFail(_ overlay: LabelCaptureAdaptiveRecognitionOverlay) {
+        // Recognition failed, for example because of a connection error.
+    }
+}
+```
+
+</Only>
+
+<Only when={props.framework === 'web'}>
+
+```ts
+overlay.listener = {
+  onRecognized: (result: AdaptiveRecognitionResult) => {
+    if (!(result instanceof ShippingLabelScanningResult)) {
+      return;
+    }
+
+    const trackingId = result.trackingId;
+    const receiverName = result.receiverFullName;
+    const receiverCompany = result.receiverCompany; // null if the label doesn't show one
+    const carrier = result.carrier;
+  },
+  onFailure: () => {
+    // Recognition failed, for example because of a connection error.
+  },
+};
+```
+
+</Only>
+
+### 4. Switch the camera back on
+
+When the overlay starts to process a label, it switches the camera to standby. It doesn't switch the camera back on after a result. To scan the next label, call the camera's <ApiLink framework={props.framework} page={cameraPage} anchor={symbolTokens[props.framework].cameraOnAnchor}>{symbolTokens[props.framework].cameraOn}</ApiLink> in <ApiLink framework={props.framework} page={listenerPage} anchor={`method-${listenerAnchor}.OnRecognized`}>{symbolTokens[props.framework].onRecognized}</ApiLink> after you handle the result.
+
+<Only when={props.framework !== 'web'}>
+
+The overlay doesn't switch the camera back on after a failure either. Call <code>{symbolTokens[props.framework].cameraOn}</code> in <ApiLink framework={props.framework} page={listenerPage} anchor={`method-${listenerAnchor}.OnFailure`}>{symbolTokens[props.framework].onFailure}</ApiLink> too, so that you can scan the label again.
+
+</Only>
+
+<Only when={props.framework === 'web'}>
+
+If recognition fails, the overlay shows an error notification and switches the camera back on.
+
+</Only>
+
+<Only when={props.framework === 'android'}>
+
+```kotlin
+# import com.scandit.datacapture.core.source.FrameSourceState
+# import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.AdaptiveRecognitionResult
+# import com.scandit.datacapture.label.ui.overlay.adaptiverecognition.LabelCaptureAdaptiveRecognitionListener
+# object : LabelCaptureAdaptiveRecognitionListener {
+override fun onRecognized(result: AdaptiveRecognitionResult) {
+    // Handle the result, then get ready for the next label.
+    camera.switchToDesiredState(FrameSourceState.ON)
+}
+
+override fun onFailure() {
+    // Get ready to scan the label again.
+    camera.switchToDesiredState(FrameSourceState.ON)
+}
+# }
+```
+
+</Only>
+
+<Only when={props.framework === 'ios'}>
+
+```swift
+func labelCaptureAdaptiveRecognitionOverlay(_ overlay: LabelCaptureAdaptiveRecognitionOverlay,
+                                            didRecognizeWith result: AdaptiveRecognitionResult) {
+    // Handle the result, then get ready for the next label.
+    camera?.switch(toDesiredState: .on)
+}
+
+func labelCaptureAdaptiveRecognitionOverlayDidFail(_ overlay: LabelCaptureAdaptiveRecognitionOverlay) {
+    // Get ready to scan the label again.
+    camera?.switch(toDesiredState: .on)
+}
+```
+
+</Only>
+
+<Only when={props.framework === 'web'}>
+
+`FrameSourceState` is in `@scandit/web-datacapture-core`.
+
+```ts
+onRecognized: async (result: AdaptiveRecognitionResult) => {
+  // Handle the result, then get ready for the next label.
+  await camera.switchToDesiredState(FrameSourceState.On);
+},
+```
+
+</Only>
+
+### Shipping label fields
+
+<ApiLink framework={props.framework} page={resultPage} anchor="class-scandit.datacapture.label.ShippingLabelScanningResult">ShippingLabelScanningResult</ApiLink> has the following fields:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| <Field framework={props.framework} name="trackingId" anchor="TrackingId"/> | <code>{symbolTokens[props.framework].stringType}</code> | The tracking identifier, read from the tracking barcode on the label. |
+| <Field framework={props.framework} name="receiverFullName" anchor="ReceiverFullName"/> | <code>{symbolTokens[props.framework].stringType}</code> | The receiver's full name. |
+| <Field framework={props.framework} name="receiverCompany" anchor="ReceiverCompany"/> | <code>{symbolTokens[props.framework].optionalStringType}</code> | The receiver's company. <code>{symbolTokens[props.framework].unset}</code> if the label doesn't show one. |
+| <Field framework={props.framework} name="receiverStreet" anchor="ReceiverStreet"/> | <code>{symbolTokens[props.framework].stringType}</code> | The street of the receiver's address. |
+| <Field framework={props.framework} name="receiverCity" anchor="ReceiverCity"/> | <code>{symbolTokens[props.framework].stringType}</code> | The city of the receiver's address. |
+| <Field framework={props.framework} name="receiverState" anchor="ReceiverState"/> | <code>{symbolTokens[props.framework].optionalStringType}</code> | The state of the receiver's address. <code>{symbolTokens[props.framework].unset}</code> if the label doesn't show one. |
+| <Field framework={props.framework} name="receiverPostalCode" anchor="ReceiverPostalCode"/> | <code>{symbolTokens[props.framework].stringType}</code> | The postal code of the receiver's address. |
+| <Field framework={props.framework} name="receiverCountry" anchor="ReceiverCountry"/> | <code>{symbolTokens[props.framework].optionalStringType}</code> | The country of the receiver's address. <code>{symbolTokens[props.framework].unset}</code> if the label doesn't show one. |
+| <Field framework={props.framework} name="carrier" anchor="Carrier"/> | <ApiLink framework={props.framework} page={carrierPage} anchor="enum-scandit.datacapture.label.Carrier">Carrier</ApiLink> | The postal provider of the label. See [Carriers](#carriers). |
+
+<Only when={props.framework === 'ios'}>
+
+<Field framework={props.framework} name="jsonString" anchor="jsonString"/> returns the result as a JSON string.
+
+</Only>
+
+<Only when={props.framework === 'web'}>
+
+<Field framework={props.framework} name="resultType" anchor="ResultType"/> is always <code>{symbolTokens[props.framework].shippingLabel}</code> for this result.
+
+</Only>
+
+### Handle missing values
+
+- <Field framework={props.framework} name="receiverCompany" anchor="ReceiverCompany"/>, <Field framework={props.framework} name="receiverState" anchor="ReceiverState"/>, and <Field framework={props.framework} name="receiverCountry" anchor="ReceiverCountry"/> are <code>{symbolTokens[props.framework].unset}</code> when the label doesn't show them. Check for <code>{symbolTokens[props.framework].unset}</code> before you use them.
+- <Field framework={props.framework} name="carrier" anchor="Carrier"/> is <CarrierValue framework={props.framework} id="NotAvailable"/> when no carrier is identified on the label, or when the identified carrier isn't in the list below. It's <CarrierValue framework={props.framework} id="Other"/> only when the engine classifies the carrier as other.
+
+### Carriers
+
+<ApiLink framework={props.framework} page={carrierPage} anchor="enum-scandit.datacapture.label.Carrier">Carrier</ApiLink> has the following values. The SDK maps the carrier that the engine identifies on the label to one of these values. The list can grow in future SDK versions.
+
+| Carrier | Value |
+|---------|-------|
+| FedEx | <CarrierValue framework={props.framework} id="Fedex"/> |
+| United Parcel Service (UPS) | <CarrierValue framework={props.framework} id="Ups"/> |
+| United States Postal Service (USPS) | <CarrierValue framework={props.framework} id="Usps"/> |
+| DHL | <CarrierValue framework={props.framework} id="Dhl"/> |
+| DPD | <CarrierValue framework={props.framework} id="Dpd"/> |
+| GLS | <CarrierValue framework={props.framework} id="Gls"/> |
+| TNT | <CarrierValue framework={props.framework} id="Tnt"/> |
+| Amazon Logistics | <CarrierValue framework={props.framework} id="AmazonLogistics"/> |
+| OnTrac | <CarrierValue framework={props.framework} id="Ontrac"/> |
+| Royal Mail | <CarrierValue framework={props.framework} id="RoyalMail"/> |
+| Parcelforce | <CarrierValue framework={props.framework} id="Parcelforce"/> |
+| Evri | <CarrierValue framework={props.framework} id="Evri"/> |
+| Yodel | <CarrierValue framework={props.framework} id="Yodel"/> |
+| Chronopost | <CarrierValue framework={props.framework} id="Chronopost"/> |
+| Colissimo | <CarrierValue framework={props.framework} id="Colissimo"/> |
+| Mondial Relay | <CarrierValue framework={props.framework} id="MondialRelay"/> |
+| Poste Italiane | <CarrierValue framework={props.framework} id="PosteItaliane"/> |
+| BRT | <CarrierValue framework={props.framework} id="Brt"/> |
+| SDA | <CarrierValue framework={props.framework} id="Sda"/> |
+| Hermes | <CarrierValue framework={props.framework} id="Hermes"/> |
+| Austrian Post | <CarrierValue framework={props.framework} id="AustrianPost"/> |
+| Swiss Post | <CarrierValue framework={props.framework} id="SwissPost"/> |
+| PostNL | <CarrierValue framework={props.framework} id="Postnl"/> |
+| bpost | <CarrierValue framework={props.framework} id="Bpost"/> |
+| PostNord | <CarrierValue framework={props.framework} id="Postnord"/> |
+| Correos | <CarrierValue framework={props.framework} id="Correos"/> |
+| SEUR | <CarrierValue framework={props.framework} id="Seur"/> |
+| InPost | <CarrierValue framework={props.framework} id="Inpost"/> |
+| Classified by the engine as other | <CarrierValue framework={props.framework} id="Other"/> |
+| Not identified, or not in this list | <CarrierValue framework={props.framework} id="NotAvailable"/> |
+
+## Verify it works
+
+You're done when:
+
+- The overlay shows its processing hint after you point the camera at a shipping label.
+- Your <ApiLink framework={props.framework} page={listenerPage} anchor={`method-${listenerAnchor}.OnRecognized`}>{symbolTokens[props.framework].onRecognized}</ApiLink> callback receives a `ShippingLabelScanningResult`, and you can read its `trackingId` and `carrier`.
+- Your <code>{symbolTokens[props.framework].onRecognized}</code> code switches the camera back on after each result, so you can scan the next label.
+
+<Only when={props.framework !== 'web'}>
+
+- Your <code>{symbolTokens[props.framework].onFailure}</code> code also switches the camera back on, so you can scan the label again.
+
+</Only>
+
+Processing starts only after the SDK decodes a tracking barcode on the label. The tracking barcode must be Code 128, Code 39, ITF, Data Matrix, or PDF417. Processing also requires a license key that includes Adaptive Recognition. If the overlay never shows its processing hint, check that the label has one of these barcodes and that your license key includes Adaptive Recognition.
+
+If <ApiLink framework={props.framework} page={listenerPage} anchor={`method-${listenerAnchor}.OnFailure`}>{symbolTokens[props.framework].onFailure}</ApiLink> runs instead, recognition failed, for example because of a network problem or a label the engine can't read. Check the network connection, then scan the label again.
+
+## Related
+
+- <DocLink framework={props.framework} page="advanced">Advanced configurations</DocLink>, including Receipt Scanning and Cloud Fallback
+- <DocLink framework={props.framework} page="label-definitions">Label definitions</DocLink>
+- API reference: <ApiLink framework={props.framework} page={resultPage} anchor="class-scandit.datacapture.label.ShippingLabelScanningResult">ShippingLabelScanningResult</ApiLink>, <ApiLink framework={props.framework} page={carrierPage} anchor="enum-scandit.datacapture.label.Carrier">Carrier</ApiLink>, <ApiLink framework={props.framework} page={settingsPage} anchor={`class-${settingsAnchor}`}>LabelCaptureAdaptiveRecognitionSettings</ApiLink>, <ApiLink framework={props.framework} page={overlayPage} anchor={`class-${overlayAnchor}`}>LabelCaptureAdaptiveRecognitionOverlay</ApiLink>, <ApiLink framework={props.framework} page={listenerPage} anchor={`interface-${listenerAnchor}`}>{symbolTokens[props.framework].listener}</ApiLink>
