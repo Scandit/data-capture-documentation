@@ -68,7 +68,14 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
         {frameworkCards.map((item) => {
           return (
             <div
-              onClick={(e) => clickedFramework(item)}
+              onClick={(e) => {
+                // A click on a .NET / Xamarin child option bubbles up here
+                // before the child's own onChange runs. Let the child handle
+                // it: selecting the parent first would push ?framework=net
+                // and then ?framework=netAndroid, two entries for one click.
+                if ((e.target as HTMLElement).closest("[data-additional-frameworks]")) return;
+                clickedFramework(item);
+              }}
               key={item.framework}
               className={style.frameworkCardWrapper}
               data-value={item.framework}
@@ -81,7 +88,7 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
               {item.additional &&
                 (selectedFramework === item.framework ||
                   selectedFramework.startsWith(item.framework)) && (
-                  <div className={style.additionalFrameworks}>
+                  <div className={style.additionalFrameworks} data-additional-frameworks>
                     {item.additional.map((unit) => {
                       return (
                         <CardAdditional
