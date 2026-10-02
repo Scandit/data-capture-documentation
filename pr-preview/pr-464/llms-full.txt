@@ -4845,6 +4845,10 @@ For a rejected document, a [RejectionReason](https://docs.scandit.com/data-captu
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
 
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
+
+import IdVisaMrzFields from '../../../partials/advanced/_id-visa-mrz-fields.mdx';
+
 ## Detect Fake IDs
 
 *ID Validate* is a fake ID detection software. It currently supports documents that follow the Driver License/Identification Card specification by the American Association of Motor Vehicle Administrators (AAMVA).
@@ -4984,7 +4988,9 @@ idCapture.addListener(object : IdCaptureListener {
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+
+If you scan both sides of a document with the [`FullDocumentScanner`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/physical-document-scanner.html#class-scandit.datacapture.id.FullDocumentScanner), ID Capture calls [`onIdCaptured`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-listener.html#method-scandit.datacapture.id.IIdCaptureListener.OnIdCaptured) only after it captures both sides, unless you set [`notifyOnSideCapture`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture) to `true` (see [Receive a result after each side](/sdks/android/id-capture/advanced.md#receive-a-result-after-each-side)).
 
 On a successful scan you may read the extracted data from `CapturedId`:
     
@@ -5062,6 +5068,14 @@ camera.switchToDesiredState(FrameSourceState.ON)
 ## About ID Capture
 
 import AboutIdCapture from '../../../partials/intro/_about-id-capture.mdx';
+
+## Samples
+
+The following sample app on GitHub shows ID Capture in a complete, runnable project.
+
+| Sample | What it demonstrates | Link |
+|---|---|---|
+| ID Capture from uploaded images | Scans identity documents from photos and PDF files picked on the device instead of the live camera, including single-sided and double-sided documents. | [ID Capture image upload sample](https://github.com/Scandit/datacapture-android-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample) |
 
 ---
 
@@ -5498,6 +5512,14 @@ import AboutLabelCapture from '../../../partials/intro/_about-smart-label-captur
 import ValidationFlow from '../../../partials/intro/_about_validation_flow.mdx';
 
 See [here](./advanced.md#validation-flow) for more details.
+
+## Samples
+
+The following sample app on GitHub shows Smart Label Capture in a complete, runnable project.
+
+| Sample | What it demonstrates | Link |
+|---|---|---|
+| Price Capture | Captures a product barcode and the printed price from a shelf price label in one scan, checks the pair against a reference database, and shows whether the price is correct, incorrect, or unknown. | [Price Capture sample](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/05_Smart_Label_Capture/PriceCaptureSample) |
 
 ---
 
@@ -6185,6 +6207,22 @@ See the [Expiry Management Sample](https://github.com/Scandit/datacapture-androi
 ## Clustering
 
 import Clustering from '../../../partials/count/_clustering.mdx'
+
+### Automatic clustering method
+
+import ClusteringAutomaticMethod from '../../../partials/count/_clustering-automatic-method.mdx'
+
+The following example enables automatic clustering and groups barcodes by label:
+
+```kotlin
+import com.scandit.datacapture.barcode.count.capture.BarcodeCountSettings
+import com.scandit.datacapture.core.data.AutomaticClusteringMethod
+import com.scandit.datacapture.core.data.ClusteringMode
+
+val settings = BarcodeCountSettings()
+settings.clusteringMode = ClusteringMode.AUTO
+settings.automaticClusteringMethod = AutomaticClusteringMethod.LABEL
+```
 
 ## Tote Mapping
 
@@ -6977,7 +7015,7 @@ import AboutMatrixScanPick from '../../../partials/intro/_about-matrixscan-pick.
 
 # Get Started
 
-The parser parses data strings, e.g. as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/android/parser/hibc.html), [GS1 Application Identifier system](https://docs.scandit.com/data-capture-sdk/android/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/android/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/android/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/android/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/android/parser/epc.html).
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/android/parser/hibc.html), [GS1 Application Identifier system](https://docs.scandit.com/data-capture-sdk/android/parser/gs1ai.html), [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/android/parser/gs1-digital-link.html), [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/android/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/android/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/android/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/android/parser/epc.html), and [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/android/parser/french2ddoc.html).
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -6991,6 +7029,7 @@ More data formats will be added in future releases. Please contact us if the dat
 - [VIN](https://docs.scandit.com/data-capture-sdk/android/parser/vin.html)
 - [IATA BCBP](https://docs.scandit.com/data-capture-sdk/android/parser/iata-bcbp.html)
 - [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/android/parser/epc.html)
+- [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/android/parser/french2ddoc.html)
 
 ## Prerequisites
 
@@ -7009,6 +7048,40 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Barcode
+
+* Added BarcodeSequenceScanAreaRestrictionSettings to restrict MatrixScan Sequence scanning to an adjustable horizontal band of the camera preview, so only barcodes inside the band are sequenced.
+* Added BarcodeSequenceView.highlightProvider to MatrixScan Sequence, letting you supply your own view for the highlight drawn over each sequenced barcode instead of the built-in circle.
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
 
 ## 8.6.0
 
@@ -11398,6 +11471,43 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+* Fixed pausing or stopping a Barcode AR view discarding the highlights and annotations that were already shown, so taps and position updates keep working and resuming no longer requires the app to supply them again.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
+
 ## 8.6.0
 
 **Released**: August 31, 2026
@@ -15017,6 +15127,43 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+* Fixed pausing or stopping a Barcode AR view discarding the highlights and annotations that were already shown, so taps and position updates keep working and resuming no longer requires the app to supply them again.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
 
 ## 8.6.0
 
@@ -18652,6 +18799,42 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+* Fixed pausing or stopping a Barcode AR view discarding the highlights and annotations that were already shown, so taps and position updates keep working and resuming no longer requires the app to supply them again.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
+
 ## 8.6.0
 
 **Released**: August 31, 2026
@@ -20841,6 +21024,10 @@ For a rejected document, a [SDCRejectionReason](https://docs.scandit.com/data-ca
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
 
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
+
+import IdVisaMrzFields from '../../../partials/advanced/_id-visa-mrz-fields.mdx';
+
 ## Detect Fake IDs
 
 *ID Validate* is a fake ID detection software. It currently supports documents that follow the Driver License/Identification Card specification by the American Association of Motor Vehicle Administrators (AAMVA).
@@ -21072,7 +21259,9 @@ idCapture.addListener(self)
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+
+If you scan both sides of a document with the [`FullDocumentScanner`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/physical-document-scanner.html#class-scandit.datacapture.id.FullDocumentScanner), ID Capture calls [`idCapture(_:didCapture:)`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-listener.html#method-scandit.datacapture.id.IIdCaptureListener.OnIdCaptured) only after it captures both sides, unless you set [`notifyOnSideCapture`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture) to `true` (see [Receive a result after each side](/sdks/ios/id-capture/advanced.md#receive-a-result-after-each-side)).
 
 On a successful scan you may read the extracted data from `CapturedId`:
 
@@ -21198,6 +21387,14 @@ camera?.switch(toDesiredState: .on)
 ## About ID Capture
 
 import AboutIdCapture from '../../../partials/intro/_about-id-capture.mdx';
+
+## Samples
+
+The following sample app on GitHub shows ID Capture in a complete, runnable project.
+
+| Sample | What it demonstrates | Link |
+|---|---|---|
+| ID Capture from uploaded images | Scans identity documents from photos and PDF files picked on the device instead of the live camera, including single-sided and double-sided documents. | [ID Capture image upload sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample) |
 
 ---
 
@@ -21895,6 +22092,14 @@ import AboutLabelCapture from '../../../partials/intro/_about-smart-label-captur
 import ValidationFlow from '../../../partials/intro/_about_validation_flow.mdx';
 
 See [here](./advanced.md#validation-flow) for more details.
+
+## Samples
+
+The following sample app on GitHub shows Smart Label Capture in a complete, runnable project.
+
+| Sample | What it demonstrates | Link |
+|---|---|---|
+| Price Capture | Captures a product barcode and the printed price from a shelf price label in one scan, checks the pair against a reference database, and shows whether the price is correct, incorrect, or unknown. | [Price Capture sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/05_Smart_Label_Capture/PriceCaptureSample) |
 
 ---
 
@@ -22957,6 +23162,21 @@ See the [Expiry Management Sample](https://github.com/Scandit/datacapture-ios-sa
 ## Clustering
 
 import Clustering from '../../../partials/count/_clustering.mdx'
+
+### Automatic clustering method
+
+import ClusteringAutomaticMethod from '../../../partials/count/_clustering-automatic-method.mdx'
+
+The following example enables automatic clustering and groups barcodes by label:
+
+```swift
+import ScanditBarcodeCapture
+import ScanditCaptureCore
+
+let barcodeCountSettings = BarcodeCountSettings()
+barcodeCountSettings.clusteringMode = .auto
+barcodeCountSettings.automaticClusteringMethod = .label
+```
 
 ## Tote Mapping
 
@@ -24470,7 +24690,7 @@ import AboutMatrixScanPick from '../../../partials/intro/_about-matrixscan-pick.
 
 # Get Started
 
-The parser parses data strings, e.g. as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/ios/parser/hibc.html), [GS1 Application Identifier system](https://docs.scandit.com/data-capture-sdk/ios/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/ios/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/ios/parser/epc.html).
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/ios/parser/hibc.html), [GS1 Application Identifier system](https://docs.scandit.com/data-capture-sdk/ios/parser/gs1ai.html), [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/ios/parser/gs1-digital-link.html), [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/ios/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/ios/parser/epc.html), and [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/ios/parser/french2ddoc.html).
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -24484,6 +24704,7 @@ More data formats will be added in future releases. Please contact us if the dat
 - [VIN](https://docs.scandit.com/data-capture-sdk/ios/parser/vin.html)
 - [IATA BCBP](https://docs.scandit.com/data-capture-sdk/ios/parser/iata-bcbp.html)
 - [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/ios/parser/epc.html)
+- [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/ios/parser/french2ddoc.html)
 
 ## Prerequisites
 
@@ -24502,6 +24723,45 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Barcode
+
+* Added BarcodeSequenceScanAreaRestrictionSettings to restrict MatrixScan Sequence scanning to an adjustable horizontal band of the camera preview, so only barcodes inside the band are sequenced.
+* Added BarcodeSequenceView.highlightProvider to MatrixScan Sequence, letting you supply your own view for the highlight drawn over each sequenced barcode instead of the built-in circle.
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
 
 ## 8.6.0
 
@@ -30454,7 +30714,7 @@ If you are not familiar with the symbologies that are relevant for your use case
 
 # Get Started
 
-The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: Health Industry Bar Code (HIBC), GS1 Application Identifier (AI) system, GS1 Digital Link, Swiss QR Codes, VIN Vehicle Identification Number, IATA Bar Coded Boarding Pass (BCBP), and Electronic Product Code (EPC).
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: Health Industry Bar Code (HIBC), GS1 Application Identifier (AI) system, GS1 Digital Link, Swiss QR Codes, VIN Vehicle Identification Number, IATA Bar Coded Boarding Pass (BCBP), Electronic Product Code (EPC), and French 2D-Doc (ANTS).
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -30492,6 +30752,7 @@ If your app already initialized a context (for example for a scanning mode), reu
 - `IATA_BCBP`
 - `GS1_DIGITAL_LINK`
 - `EPC`
+- `FRENCH_2D_DOC`
 
 ## Parse a String
 
@@ -30537,6 +30798,41 @@ Each `ParsedField` carries its `name`, its decoded `parsed` value, the `rawStrin
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
 
 ## 8.6.0
 
@@ -31649,6 +31945,19 @@ Dynamic threading is used internally to accelerate the execution if available. T
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
 
 ## 8.6.0
 
@@ -34869,7 +35178,7 @@ import AboutMatrixScanPick from '../../../../partials/intro/_about-matrixscan-pi
 
 # Get Started
 
-The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/hibc.html), [GS1 Application Identifier (https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/iata-bcbp.html)
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/hibc.html), [GS1 Application Identifier (AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/gs1ai.html), [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Gs1DigitalLink), [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Epc), and [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.French2dDoc).
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -34878,14 +35187,46 @@ More data formats will be added in future releases. Please contact us if the dat
 - [Supported Data Formats](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/formats.html)
 - [HIBC](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/hibc.html)
 - [GS1 AI](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/gs1ai.html)
-- [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/gs1-digital-link.html)
+- [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Gs1DigitalLink)
 - [Swiss QR](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/swissqr.html)
 - [VIN](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/vin.html)
 - [IATA BCBP](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/iata-bcbp.html)
+- [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Epc)
+- [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.French2dDoc)
 
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
 
 ## 8.6.0
 
@@ -38671,7 +39012,7 @@ import AboutMatrixScanPick from '../../../../partials/intro/_about-matrixscan-pi
 
 # Get Started
 
-The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/hibc.html), [GS1 Application Identifier (https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/iata-bcbp.html)
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/hibc.html), [GS1 Application Identifier (AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/gs1ai.html), [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Gs1DigitalLink), [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Epc), and [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.French2dDoc).
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -38680,14 +39021,51 @@ More data formats will be added in future releases. Please contact us if the dat
 - [Supported Data Formats](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/formats.html)
 - [HIBC](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/hibc.html)
 - [GS1 AI](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/gs1ai.html)
-- [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/gs1-digital-link.html)
+- [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Gs1DigitalLink)
 - [Swiss QR](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/swissqr.html)
 - [VIN](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/vin.html)
 - [IATA BCBP](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/iata-bcbp.html)
+- [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Epc)
+- [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.French2dDoc)
 
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
 
 ## 8.6.0
 
@@ -42552,6 +42930,43 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+* Fixed pausing or stopping a Barcode AR view discarding the highlights and annotations that were already shown, so taps and position updates keep working and resuming no longer requires the app to supply them again.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
+
 ## 8.6.0
 
 **Released**: August 31, 2026
@@ -44864,6 +45279,10 @@ For a rejected document, a [RejectionReason](https://docs.scandit.com/data-captu
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
 
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
+
+import IdVisaMrzFields from '../../../partials/advanced/_id-visa-mrz-fields.mdx';
+
 ## Detect Fake IDs
 
 *ID Validate* is a fake ID detection software. It currently supports documents that follow the Driver License/Identification Card specification by the American Association of Motor Vehicle Administrators (AAMVA).
@@ -45055,7 +45474,7 @@ Note that the camera is still running, you may want to switch it off at this poi
 
 Captured results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-Note that if you scan boths sides of a document using the [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-scanner.html#full-document-scanner), this callback will only be executed once both sides have been successfully captured. If the document is known to have only one side, the callback will execute immediately after a successful scan of the first side. This behaviour can be modified with the setting [notifyOnSideCapture](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture).
+Note that if you scan both sides of a document using the [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/physical-document-scanner.html#class-scandit.datacapture.id.FullDocumentScanner), this callback will only be executed once both sides have been successfully captured. If the document is known to have only one side, the callback will execute immediately after a successful scan of the first side. This behavior can be modified with the setting [notifyOnSideCapture](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture). To tell a partial result from a complete one, read [CapturedId.isCapturingComplete](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.IsCapturingComplete) (see [Receive a result after each side](/sdks/web/id-capture/advanced.md#receive-a-result-after-each-side)).
 
 On a successful scan you may read the extracted data from `capturedId`:
 
@@ -45745,6 +46164,14 @@ A more complete example can be found [here on StackBlitz](https://stackblitz.com
 ## About Smart Label Capture
 
 import AboutLabelCapture from '../../../partials/intro/_about-smart-label-capture.mdx';
+
+## Samples
+
+The following sample app on GitHub shows Smart Label Capture in a complete, runnable project.
+
+| Sample | What it demonstrates | Link |
+|---|---|---|
+| Price Capture | Captures a product barcode and the printed price from a shelf price label in one scan, checks the pair against a reference database, and shows whether the price is correct, incorrect, or unknown. | [Price Capture sample](https://github.com/Scandit/datacapture-web-samples/tree/master/03_Advanced_Batch_Scanning_Samples/05_Smart_Label_Capture/PriceCaptureSample) |
 
 ---
 
@@ -46939,6 +47366,7 @@ The Parser parses data strings (as found in barcodes) into a set of key-value ma
 - [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/web/parser/vin.html)
 - [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/web/parser/iata-bcbp.html)
 - [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/web/parser/epc.html)
+- [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/web/parser/french2ddoc.html)
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -47107,6 +47535,44 @@ For important information about CDN risks and recommendations for production env
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed SparkScan selection highlight brushes not applying until the next selection cycle.
+* Fixed a bug that caused SparkScan to crash when using SmartScanSelection.
+* Fixed the SparkScan mini preview not being draggable.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+* Fixed MatrixScan AR info annotations so that replacing a header, footer, icon or body replaces it instead of adding a second one, and setting it to null removes it. BarcodeArPopoverAnnotationButton.text now returns the button's label instead of an empty string.
+* Fixed a placement problem with BarcodeArStatusIconAnnotation when the barcode rotates.
+* Fixed BarcodeArAnnotationAnchor not being available at runtime, which made a custom BarcodeAr annotation ignore its anchor. The default placement now also matches native, above the tracked barcode instead of below it.
+* Fixed BarcodeFind overwriting the zoom levels of the camera settings it was given: a BarcodeFindView created with custom CameraSettings now runs on the zoom levels it was configured with. BarcodeFind's recommended camera settings now report the .5x/1x levels, matching iOS and Android.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+
+#### Core
+
+* Fixed scanning silently stopping after the browser released the page's WebGL context, while the camera preview kept rendering.
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed ScanditIcon not rendering a background stroke by default when a background shape and stroke color were both configured, matching iOS and Android.
 
 ## 8.6.0
 
