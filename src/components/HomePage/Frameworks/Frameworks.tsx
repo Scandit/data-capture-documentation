@@ -6,6 +6,7 @@ import { FrameworkCardType } from "../../constants/types";
 import { FRAMEWORK_STORAGE_KEY, emitFrameworkChange } from "../../utils/frameworks";
 import { useEffect, useState } from "react";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+import { pushHomepageFramework, resolveHomepageFramework } from "../data/resolveHomepageFramework";
 
 interface FrameworksProps {
   handleFrameworkClick: () => void;
@@ -16,7 +17,7 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
 
   function clickedFramework(framework: FrameworkCardType) {
     if (ExecutionEnvironment.canUseDOM) {
-      window.history.pushState({}, "", `?framework=${framework.framework}`);
+      pushHomepageFramework(framework.framework);
       localStorage.setItem(FRAMEWORK_STORAGE_KEY, framework.framework);
       emitFrameworkChange(framework.framework);
     }
@@ -27,21 +28,25 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
   }
 
   useEffect(() => {
+    // The page this listener belongs to. popstate also fires when Back or
+    // Forward LEAVES the home page, before it unmounts, and rewriting the URL
+    // then would put ?framework= on the destination and drop its #hash.
+    const homePath = ExecutionEnvironment.canUseDOM ? location.pathname : "";
     const updateSelectedFramework = () => {
-      if (ExecutionEnvironment.canUseDOM) {
+      if (ExecutionEnvironment.canUseDOM && location.pathname === homePath) {
         const paramsURL = Object.fromEntries(
           new URLSearchParams(location.search)
         );
-        const frameworkFromURL =
-          paramsURL.framework || localStorage.getItem(FRAMEWORK_STORAGE_KEY) || "web";
-        window.history.pushState(
-          {},
+        const frameworkFromURL = resolveHomepageFramework(
+          paramsURL.framework || localStorage.getItem(FRAMEWORK_STORAGE_KEY),
+        );
+        // replaceState, not pushState: this runs on mount and on every
+        // popstate, so pushing here added a history entry each time and Back
+        // could never leave the page.
+        window.history.replaceState(
+          window.history.state,
           "",
-          `?framework=${
-            new URLSearchParams(location.search).get("framework") ||
-            localStorage.getItem(FRAMEWORK_STORAGE_KEY) ||
-            "web"
-          }`
+          `${location.pathname}?framework=${frameworkFromURL}${location.hash}`,
         );
         setSelectedFramework(frameworkFromURL);
         emitFrameworkChange(frameworkFromURL);
@@ -63,7 +68,14 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
         {frameworkCards.map((item) => {
           return (
             <div
-              onClick={(e) => clickedFramework(item)}
+              onClick={(e) => {
+                // A click on a .NET / Xamarin child option bubbles up here
+                // before the child's own onChange runs. Let the child handle
+                // it: selecting the parent first would push ?framework=net
+                // and then ?framework=netAndroid, two entries for one click.
+                if ((e.target as HTMLElement).closest("[data-additional-frameworks]")) return;
+                clickedFramework(item);
+              }}
               key={item.framework}
               className={style.frameworkCardWrapper}
               data-value={item.framework}
@@ -76,7 +88,7 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
               {item.additional &&
                 (selectedFramework === item.framework ||
                   selectedFramework.startsWith(item.framework)) && (
-                  <div className={style.additionalFrameworks}>
+                  <div className={style.additionalFrameworks} data-additional-frameworks>
                     {item.additional.map((unit) => {
                       return (
                         <CardAdditional

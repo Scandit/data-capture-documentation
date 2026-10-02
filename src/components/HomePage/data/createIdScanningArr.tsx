@@ -39,7 +39,7 @@ export function createIdScanningArr(framework: string) {
       text: "Extract data from 2,500+ IDs and run authenticity checks",
       apis: "ID Capture",
       icon: <IDValidate />,
-      isActive: frameworkData.IDScanning.includes(
+      isActive: frameworkData?.IDScanning?.includes(
         IDScanning.IDCaptureValidation
       ),
       link: buildLink('/id-capture/intro'),

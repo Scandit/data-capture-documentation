@@ -2,6 +2,7 @@ import BrowserOnly from "@docusaurus/BrowserOnly";
 import style from "./DataCapture.module.css";
 import DataCaptureCard from "../DataCaptureCard/DataCaptureCard";
 import { createDataCaptureArr } from "./dataCaptureArr";
+import { resolveHomepageFramework } from "../data/resolveHomepageFramework";
 
 export default function DataCapture() {
   return (
@@ -12,7 +13,7 @@ export default function DataCapture() {
           const paramsURL = Object.fromEntries(
             new URLSearchParams(window.location.search)
           );
-          const selectedFramework = paramsURL.framework || "web";
+          const selectedFramework = resolveHomepageFramework(paramsURL.framework);
           const items = createDataCaptureArr(selectedFramework);
           return (
             <ul className={style.dataCaptureList}>
