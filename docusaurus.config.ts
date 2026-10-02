@@ -385,14 +385,18 @@ function buildApiReferenceTags(
  * crawlableApiLines and buildApiReferencePrefixByMajor so the robots Allow
  * lines and the 404 page's API redirect targets cannot disagree.
  */
+let frozenVersionNamesCache: string[] | undefined;
 function frozenVersionNames(): string[] {
+  // Cached: the redirect plugin asks once per route.
+  if (frozenVersionNamesCache) return frozenVersionNamesCache;
   try {
-    return JSON.parse(
+    frozenVersionNamesCache = JSON.parse(
       fs.readFileSync(path.join(process.cwd(), "versions.json"), "utf8"),
     ) as string[];
   } catch {
-    return Object.keys(docsVersions).filter((v) => v !== "current");
+    frozenVersionNamesCache = Object.keys(docsVersions).filter((v) => v !== "current");
   }
+  return frozenVersionNamesCache;
 }
 
 function buildApiReferencePrefixByMajor(): Record<string, string> {
@@ -834,7 +838,13 @@ function retiredPatchTreeRedirects(routePath: string): string[] {
   if (!match) return [];
   const [, minor, patch, rest] = match;
   const firstPatch = FIRST_PUBLISHED_PATCH_BY_MINOR[minor];
-  if (firstPatch === undefined || !(`${minor}.${patch}` in docsVersions)) {
+  // frozenVersionNames, not docsVersions: a frozen version can build with no
+  // override entry, and it would then get no redirects while robots.txt and
+  // the 404 page's API prefixes still picked it up.
+  if (
+    firstPatch === undefined ||
+    !frozenVersionNames().includes(`${minor}.${patch}`)
+  ) {
     return [];
   }
   const redirects: string[] = [];
