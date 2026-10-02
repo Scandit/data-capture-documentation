@@ -6,6 +6,7 @@ import { createIdScanningArr } from "../data/createIdScanningArr";
 import { createNoCodeArr } from "../data/createNoCodeArr";
 import { FrameworksName } from "../../constants/frameworksName";
 import BrowserOnly from "@docusaurus/BrowserOnly";
+import { resolveHomepageFramework } from "../data/resolveHomepageFramework";
 
 export default function CardsPart() {
   return (
@@ -14,7 +15,7 @@ export default function CardsPart() {
         const paramsURL = Object.fromEntries(
           new URLSearchParams(window.location.search)
         );
-        const selectedFramework = paramsURL.framework || "web";
+        const selectedFramework = resolveHomepageFramework(paramsURL.framework);
 
         const barcodeScanning = createBarcodeScanningArr(selectedFramework);
         const labelScanning = createLabelScanningArr(selectedFramework);

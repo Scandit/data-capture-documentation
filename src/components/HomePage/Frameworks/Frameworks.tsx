@@ -6,6 +6,7 @@ import { FrameworkCardType } from "../../constants/types";
 import { FRAMEWORK_STORAGE_KEY, emitFrameworkChange } from "../../utils/frameworks";
 import { useEffect, useState } from "react";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+import { resolveHomepageFramework } from "../data/resolveHomepageFramework";
 
 interface FrameworksProps {
   handleFrameworkClick: () => void;
@@ -32,17 +33,10 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
         const paramsURL = Object.fromEntries(
           new URLSearchParams(location.search)
         );
-        const frameworkFromURL =
-          paramsURL.framework || localStorage.getItem(FRAMEWORK_STORAGE_KEY) || "web";
-        window.history.pushState(
-          {},
-          "",
-          `?framework=${
-            new URLSearchParams(location.search).get("framework") ||
-            localStorage.getItem(FRAMEWORK_STORAGE_KEY) ||
-            "web"
-          }`
+        const frameworkFromURL = resolveHomepageFramework(
+          paramsURL.framework || localStorage.getItem(FRAMEWORK_STORAGE_KEY),
         );
+        window.history.pushState({}, "", `?framework=${frameworkFromURL}`);
         setSelectedFramework(frameworkFromURL);
         emitFrameworkChange(frameworkFromURL);
       }
