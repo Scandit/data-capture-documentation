@@ -461,6 +461,12 @@ keywords:
 * Improved EAN8 false positive filtering in strict mode
 * Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
 
+### Behavioral Changes
+
+#### Core
+
+* Building for iOS now requires Xcode 16.3 or later.
+
 ### Bug Fixes
 
 #### Barcode
