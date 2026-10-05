@@ -56,16 +56,20 @@ settings.setShouldPassImageTypeToResult(Scandit.IdImageType.Frame, true);
 
 ## Callbacks and Scanning Workflows
 
-The ID Capture Listener provides two callbacks: `onIdCaptured` and `onIdRejected`. The `onIdCaptured` callback is called when an acceptable document is successfully captured, while the `onIdRejected` callback is called when a document is captured but rejected.
+The ID Capture Listener provides two callbacks: `didCaptureId` and `didRejectId`. The `didCaptureId` callback is called when an acceptable document is successfully captured, while the `didRejectId` callback is called when a document is captured but rejected.
 
-For a successful capture, the `onIdCaptured` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
+For a successful capture, the `didCaptureId` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
 
-For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
+For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `didRejectId` callback to help you understand why the document was rejected and to take appropriate action. These are:
 
 * NOT_ACCEPTED_DOCUMENT_TYPE: The document is not in the list of accepted documents. In this scenario, you could direct the user to scan a different document.
 * INVALID_FORMAT: The document is in the list of accepted documents, but the format is invalid. In this scenario, you could direct the user to scan the document again.
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
+
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
+
+<IdSideCaptureCallbacks framework="cordova"/>
 
 ## Detect Fake IDs
 

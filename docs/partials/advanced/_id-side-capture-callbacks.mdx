@@ -4,7 +4,12 @@ export const apiTokens = {
   'ios': 'ios',
   'android': 'android',
   'web': 'web',
+  'react-native': 'react-native',
+  'capacitor': 'capacitor',
+  'cordova': 'cordova',
 };
+
+export const hybridFrameworks = ['react-native', 'capacitor', 'cordova'];
 
 export const symbolTokens = {
   'ios': {
@@ -21,6 +26,21 @@ export const symbolTokens = {
     onCaptured: 'didCaptureId',
     applySettings: 'applySettings',
     since: '7.5.0',
+  },
+  'react-native': {
+    onCaptured: 'didCaptureId',
+    applySettings: 'applySettings',
+    since: '8.6.1',
+  },
+  'capacitor': {
+    onCaptured: 'didCaptureId',
+    applySettings: 'applySettings',
+    since: '8.6.1',
+  },
+  'cordova': {
+    onCaptured: 'didCaptureId',
+    applySettings: 'applySettings',
+    since: '8.6.1',
   },
 };
 
@@ -104,6 +124,25 @@ await idCapture.applySettings(settings);
 
 idCapture.addListener({
   didCaptureId: (capturedId: CapturedId) => {
+    if (capturedId.isCapturingComplete) {
+      // All sides are captured, or the document has a single side.
+    } else {
+      // Partial result, for example, the front side of a two-sided document.
+    }
+  },
+});
+```
+
+</Only>
+
+<Only when={hybridFrameworks.includes(props.framework)}>
+
+```js
+settings.notifyOnSideCapture = true;
+await idCapture.applySettings(settings);
+
+idCapture.addListener({
+  didCaptureId: (idCapture, capturedId) => {
     if (capturedId.isCapturingComplete) {
       // All sides are captured, or the document has a single side.
     } else {
