@@ -59,14 +59,16 @@ export const settingsProperty = 'property-scandit.datacapture.id.IdCaptureSettin
 
 When ID Capture reads the machine-readable zone (MRZ) of a machine-readable visa, it returns visa data parsed from the MRZ in <ApiLink framework={props.framework} page={capturedIdPage} anchor={`${capturedIdProperty}Mrz`}>{`CapturedId.${symbolTokens[props.framework].mrz}`}</ApiLink>. To scan visas, add <ApiLink framework={props.framework} page={documentPage} anchor="class-scandit.datacapture.id.VisaIcao">VisaIcao</ApiLink> to <ApiLink framework={props.framework} page={settingsPage} anchor={`${settingsProperty}AcceptedDocuments`}>IdCaptureSettings.acceptedDocuments</ApiLink> and use a scanner that reads the MRZ. For the scanners and documents that support the MRZ, see <Link to={`/sdks/${props.framework}/id-capture/supported-documents`}>Supported Documents</Link>.
 
+ID Capture reads the MRZ of type A and type B machine-readable visas (MRV-A and MRV-B) from all issuing countries. The ICAO standard doesn't define whether the document number in a visa MRZ is the passport number or the visa number, so ID Capture maps it according to the issuing country. See [Per-country field mapping](#per-country-field-mapping).
+
 The following table lists the visa-related fields.
 
 | Field | Type | When populated |
 |---|---|---|
-| <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}VisaNumber`}>{`${symbolTokens[props.framework].mrzClass}.visaNumber`}</ApiLink> | <code>{symbolTokens[props.framework].string}</code> | When a per-country rule maps the visa number from the MRZ. |
-| <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}VisaNumberOfEntries`}>{`${symbolTokens[props.framework].mrzClass}.visaNumberOfEntries`}</ApiLink> | <code>{symbolTokens[props.framework].int}</code> | Parsed, when possible, from the optional data in MRZ line 2. |
+| <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}VisaNumber`}>{`${symbolTokens[props.framework].mrzClass}.visaNumber`}</ApiLink> | <code>{symbolTokens[props.framework].string}</code> | When a per-country rule maps the visa number from the MRZ. See [Per-country field mapping](#per-country-field-mapping). |
+| <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}VisaNumberOfEntries`}>{`${symbolTokens[props.framework].mrzClass}.visaNumberOfEntries`}</ApiLink> | <code>{symbolTokens[props.framework].int}</code> | Parsed, when possible, from the optional data in MRZ line 2. See [Per-country field mapping](#per-country-field-mapping). |
 | <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}VisaMultipleEntries`}>{`${symbolTokens[props.framework].mrzClass}.visaMultipleEntries`}</ApiLink> | <code>{symbolTokens[props.framework].bool}</code> | Parsed, when possible, from the optional data in MRZ line 2. |
-| <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}VisaDurationInDays`}>{`${symbolTokens[props.framework].mrzClass}.visaDurationInDays`}</ApiLink> | <code>{symbolTokens[props.framework].int}</code> | Parsed, when possible, from the optional data in MRZ line 2. The value is the duration of stay in days. |
+| <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}VisaDurationInDays`}>{`${symbolTokens[props.framework].mrzClass}.visaDurationInDays`}</ApiLink> | <code>{symbolTokens[props.framework].int}</code> | Parsed, when possible, from the optional data in MRZ line 2. The value is the duration of stay in days. See [Per-country field mapping](#per-country-field-mapping). |
 | <ApiLink framework={props.framework} page={mrzPage} anchor={`${mrzProperty}PassportNumber`}>{`${symbolTokens[props.framework].mrzClass}.passportNumber`}</ApiLink> | <code>{symbolTokens[props.framework].string}</code> | When the MRZ encodes the passport number of the document holder. |
 | <ApiLink framework={props.framework} page={capturedIdPage} anchor={`${capturedIdProperty}VisaNumber`}>CapturedId.visaNumber</ApiLink> | <code>{symbolTokens[props.framework].string}</code> | When any captured zone contains the visa number. ID Capture prefers the MRZ value over the value from the visual inspection zone (VIZ). |
 | <ApiLink framework={props.framework} page={capturedIdPage} anchor={`${capturedIdProperty}PassportNumber`}>CapturedId.passportNumber</ApiLink> | <code>{symbolTokens[props.framework].string}</code> | When any captured zone contains the passport number. ID Capture prefers the MRZ value over the VIZ value. If anonymization applies to field results, the value can be <code>{symbolTokens[props.framework].none}</code> for certain documents. |
@@ -141,3 +143,18 @@ idCapture.addListener({
 ```
 
 </Only>
+
+### Per-country field mapping
+
+From SDK version 8.6.0, ID Capture maps the document number in a visa MRZ according to the issuing country:
+
+| Issuing country | MRZ document number maps to | Also from the MRZ |
+|---|---|---|
+| United States, United Kingdom | <code>{`${symbolTokens[props.framework].mrzClass}.passportNumber`}</code> | No visa number. The MRZ doesn't contain it. |
+| Canada | <code>{`${symbolTokens[props.framework].mrzClass}.passportNumber`}</code> | <code>{`${symbolTokens[props.framework].mrzClass}.visaNumber`}</code>, from the optional data in MRZ line 2. The MRZ holds only 8 of the 10 characters of the visa number. |
+| 25 Schengen issuers, visa types A, C, and D | <code>{`${symbolTokens[props.framework].mrzClass}.visaNumber`}</code> | The number of entries, in <code>{`${symbolTokens[props.framework].mrzClass}.visaNumberOfEntries`}</code>. For type C visas, also the duration of stay, in <code>{`${symbolTokens[props.framework].mrzClass}.visaDurationInDays`}</code>. |
+| All other countries, for example, India | No country-specific mapping | ID Capture reads the MRZ as in earlier versions. |
+
+The Schengen mapping doesn't cover visas issued by Austria, Iceland, Liechtenstein, or Luxembourg.
+
+For Canadian visas, from SDK version 8.6.1, when your scanner also reads the visual inspection zone (VIZ) of the visa, ID Capture reads the full 10-character visa number and returns it in <ApiLink framework={props.framework} page={vizPage} anchor={`${vizProperty}VisaNumber`}>{`${symbolTokens[props.framework].vizClass}.visaNumber`}</ApiLink> and <ApiLink framework={props.framework} page={vizPage} anchor={`${vizProperty}DocumentNumber`}>{`${symbolTokens[props.framework].vizClass}.documentNumber`}</ApiLink>. <code>CapturedId.visaNumber</code> still returns the 8-character MRZ value, because ID Capture prefers the MRZ over the VIZ. To get the full visa number, read it from the VIZ result.
