@@ -87,7 +87,7 @@ settings.rejectedDocuments.push(
 
 ## Implement the Listener
 
-To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
+To receive scan results, implement an [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
@@ -95,15 +95,15 @@ For more specific information, use its non-null result properties (for example, 
 
 ```js
 const listener = {
-	didCaptureId: (idCapture, session) => {
-		if (session.newlyCapturedId.isPassport() === true) {
+	didCaptureId: (idCapture, capturedId) => {
+		if (capturedId.document?.isPassport) {
 			// Handle the information extracted.
-		} else if (session.newlyCapturedId.isDriverLicense() === true) {
+		} else if (capturedId.document?.isDriverLicense) {
 			// Handle the information extracted.
 		}
 	},
-	didFailWithError: (idCapture, error, session) => {
-		// Handle the error.
+	didRejectId: (idCapture, rejectedId, reason) => {
+		// Inspect the reason to determine the follow-up action.
 	},
 };
 ```

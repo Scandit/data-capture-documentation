@@ -112,16 +112,16 @@ DataCaptureContext.sharedInstance.addMode(idCapture);
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `onIdCaptured` and `onIdRejected`.
+To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `didCaptureId` and `didRejectId`.
 
 ```ts
 idCapture.addListener({
-	onIdCaptured: (data) => {
+	didCaptureId: (idCapture, capturedId) => {
 		// Success! Handle extracted data here.
 	},
-	onIdRejected: (data, reason) => {
+	didRejectId: (idCapture, rejectedId, reason) => {
 		// Something went wrong. Inspect the reason to determine the follow-up action.
-	}
+	},
 });
 ```
 
@@ -129,16 +129,16 @@ idCapture.addListener({
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 On a successful scan you may read the extracted data from `CapturedId`:
 
 ```ts
-onIdCaptured: (data) => {
-	const fullName = data.fullName;
-	const dateOfBirth = data.dateOfBirth;
-	const dateOfExpiry = data.dateOfExpiry;
-	const documentNumber = data.documentNumber;
+didCaptureId: (idCapture, capturedId) => {
+	const fullName = capturedId.fullName;
+	const dateOfBirth = capturedId.dateOfBirth;
+	const dateOfExpiry = capturedId.dateOfExpiry;
+	const documentNumber = capturedId.documentNumber;
 
 	// Process data:
 	processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
@@ -156,7 +156,7 @@ The ID scanning process may fail for various reasons. Start from inspecting [Rej
 You may wish to implement the follow-up action based on the reason of failure:
 
 ```ts
-onIdRejected: (data, reason) => {
+didRejectId: (idCapture, rejectedId, reason) => {
 	if (reason === Scandit.RejectionReason.Timeout) {
 		// Ask the user to retry, or offer alternative input method.
 	} else if (reason === Scandit.RejectionReason.DocumentExpired) {
