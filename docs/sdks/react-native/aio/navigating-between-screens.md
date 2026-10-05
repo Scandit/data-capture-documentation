@@ -3,7 +3,7 @@ description: "Navigate between Scandit AIO scanning screens in React Native: the
 sidebar_label: 'Navigating Between Screens'
 title: 'Navigating Between Screens'
 sidebar_position: 3
-framework: react
+framework: react-native
 keywords:
   - react
 ---

@@ -3,7 +3,7 @@ description: "Build a scanner in React Native with the Scandit AIO components: S
 sidebar_label: 'Get Started'
 title: 'Get Started'
 sidebar_position: 2
-framework: react
+framework: react-native
 keywords:
   - react
 ---
