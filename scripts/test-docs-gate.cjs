@@ -606,6 +606,43 @@ check("dataFileErrors reports a per-part miss and counts what it checked", () =>
   );
 });
 
+check("productCoverageErrors requires every SDK framework on every product", () => {
+  const sdk = ["iOS", "Linux"];
+  // An absent framework is an error even though every name present is valid -
+  // the hole the one-directional name check left, through which Linux went
+  // missing from every product.
+  const absent = verify.productCoverageErrors(
+    "p.json",
+    [{ key: "a", frameworks: { iOS: { version: "8.6" } } }],
+    sdk,
+  );
+  assert.strictEqual(absent.length, 1, JSON.stringify(absent));
+  assert.match(absent[0], /entry "a" does not state "Linux"/);
+
+  // An explicit n/a is a decision, not a gap.
+  assert.deepStrictEqual(
+    verify.productCoverageErrors(
+      "p.json",
+      [{ key: "a", frameworks: { iOS: { version: "8.6" }, Linux: { version: "n/a" } } }],
+      sdk,
+    ),
+    [],
+  );
+
+  // A placeholder version is caught, not rendered as "Linux vTBD".
+  const bad = verify.productCoverageErrors(
+    "p.json",
+    [{ key: "a", frameworks: { iOS: { version: "8.6.1" }, Linux: { version: "TBD" } } }],
+    sdk,
+  );
+  assert.strictEqual(bad.length, 1, JSON.stringify(bad));
+  assert.match(bad[0], /"Linux" has version "TBD"/);
+
+  // Unreadable inputs say the check is unperformed rather than passing.
+  assert.match(verify.productCoverageErrors("p.json", {}, sdk)[0], /coverage is unchecked/);
+  assert.match(verify.productCoverageErrors("p.json", [], [])[0], /coverage is unchecked/);
+});
+
 
 check("topLevelOnly blanks nested spans and topLevelPairs splits at depth 0", () => {
   // Asserted as properties, not as an exact padding width: the point is that
