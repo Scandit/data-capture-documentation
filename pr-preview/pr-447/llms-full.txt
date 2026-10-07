@@ -4845,6 +4845,10 @@ For a rejected document, a [RejectionReason](https://docs.scandit.com/data-captu
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
 
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
+
+import IdVisaMrzFields from '../../../partials/advanced/_id-visa-mrz-fields.mdx';
+
 ## Detect Fake IDs
 
 *ID Validate* is a fake ID detection software. It currently supports documents that follow the Driver License/Identification Card specification by the American Association of Motor Vehicle Administrators (AAMVA).
@@ -4984,7 +4988,9 @@ idCapture.addListener(object : IdCaptureListener {
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+
+If you scan both sides of a document with the [`FullDocumentScanner`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/physical-document-scanner.html#class-scandit.datacapture.id.FullDocumentScanner), ID Capture calls [`onIdCaptured`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-listener.html#method-scandit.datacapture.id.IIdCaptureListener.OnIdCaptured) only after it captures both sides, unless you set [`notifyOnSideCapture`](https://docs.scandit.com/data-capture-sdk/android/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture) to `true` (see [Receive a result after each side](/sdks/android/id-capture/advanced.md#receive-a-result-after-each-side)).
 
 On a successful scan you may read the extracted data from `CapturedId`:
     
@@ -5063,6 +5069,14 @@ camera.switchToDesiredState(FrameSourceState.ON)
 
 import AboutIdCapture from '../../../partials/intro/_about-id-capture.mdx';
 
+## Samples
+
+The following sample app on GitHub shows ID Capture in a complete, runnable project.
+
+| Sample | What it demonstrates | Link |
+|---|---|---|
+| ID Capture from uploaded images | Scans identity documents from photos and PDF files picked on the device instead of the live camera, including single-sided and double-sided documents. | [ID Capture image upload sample](https://github.com/Scandit/datacapture-android-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample) |
+
 ---
 
 ## Supported Documents
@@ -5098,7 +5112,7 @@ import ValidationFlowCustomField from '../../../partials/advanced/_validation-fl
 
 ### Basic Overlay
 
-To customize the appearance of an overlay you can implement a [LabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener) and/or [LabelCaptureAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-advanced-overlay-listener.html) interface, depending on the overlay(s) you are using.
+To customize the appearance of an overlay you can implement a [LabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener) and/or [LabelCaptureAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-advanced-overlay-listener.html) interface, depending on the overlays you use.
 
 The method [brushForLabel()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [brushForField()](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
@@ -5280,6 +5294,8 @@ val settings = labelCaptureSettings {
 ```
 
 See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/android/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
+
+The Adaptive Recognition Engine can also read shipping labels. See [Scan shipping labels](shipping-label-scanning.md).
 
 ---
 
@@ -5497,6 +5513,14 @@ import ValidationFlow from '../../../partials/intro/_about_validation_flow.mdx';
 
 See [here](./advanced.md#validation-flow) for more details.
 
+## Samples
+
+The following sample app on GitHub shows Smart Label Capture in a complete, runnable project.
+
+| Sample | What it demonstrates | Link |
+|---|---|---|
+| Price Capture | Captures a product barcode and the printed price from a shelf price label in one scan, checks the pair against a reference database, and shows whether the price is correct, incorrect, or unknown. | [Price Capture sample](https://github.com/Scandit/datacapture-android-samples/tree/master/03_Advanced_Batch_Scanning_Samples/05_Smart_Label_Capture/PriceCaptureSample) |
+
 ---
 
 ## Label Definitions
@@ -5606,6 +5630,12 @@ val settings = LabelCaptureSettings.builder()
     .buildFluent("hdd-label")
 .build()
 ```
+
+---
+
+## Scan shipping labels
+
+import ShippingLabelScanning from '../../../partials/advanced/_shipping-label-scanning.mdx';
 
 ---
 
@@ -6177,6 +6207,22 @@ See the [Expiry Management Sample](https://github.com/Scandit/datacapture-androi
 ## Clustering
 
 import Clustering from '../../../partials/count/_clustering.mdx'
+
+### Automatic clustering method
+
+import ClusteringAutomaticMethod from '../../../partials/count/_clustering-automatic-method.mdx'
+
+The following example enables automatic clustering and groups barcodes by label:
+
+```kotlin
+import com.scandit.datacapture.barcode.count.capture.BarcodeCountSettings
+import com.scandit.datacapture.core.data.AutomaticClusteringMethod
+import com.scandit.datacapture.core.data.ClusteringMode
+
+val settings = BarcodeCountSettings()
+settings.clusteringMode = ClusteringMode.AUTO
+settings.automaticClusteringMethod = AutomaticClusteringMethod.LABEL
+```
 
 ## Tote Mapping
 
@@ -6969,7 +7015,7 @@ import AboutMatrixScanPick from '../../../partials/intro/_about-matrixscan-pick.
 
 # Get Started
 
-The parser parses data strings, e.g. as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/android/parser/hibc.html), [GS1 Application Identifier system](https://docs.scandit.com/data-capture-sdk/android/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/android/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/android/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/android/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/android/parser/epc.html).
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/android/parser/hibc.html), [GS1 Application Identifier system](https://docs.scandit.com/data-capture-sdk/android/parser/gs1ai.html), [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/android/parser/gs1-digital-link.html), [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/android/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/android/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/android/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/android/parser/epc.html), and [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/android/parser/french2ddoc.html).
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -6983,6 +7029,7 @@ More data formats will be added in future releases. Please contact us if the dat
 - [VIN](https://docs.scandit.com/data-capture-sdk/android/parser/vin.html)
 - [IATA BCBP](https://docs.scandit.com/data-capture-sdk/android/parser/iata-bcbp.html)
 - [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/android/parser/epc.html)
+- [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/android/parser/french2ddoc.html)
 
 ## Prerequisites
 
@@ -7001,6 +7048,40 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Barcode
+
+* Added BarcodeSequenceScanAreaRestrictionSettings to restrict MatrixScan Sequence scanning to an adjustable horizontal band of the camera preview, so only barcodes inside the band are sequenced.
+* Added BarcodeSequenceView.highlightProvider to MatrixScan Sequence, letting you supply your own view for the highlight drawn over each sequenced barcode instead of the built-in circle.
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
 
 ## 8.6.0
 
@@ -7032,6 +7113,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
+* [BETA] Added shipping-label support (`AdaptiveRecognitionResultType.SHIPPING_LABEL`, `Carrier`, `ShippingLabelScanningResult`) to adaptive recognition.
 * Added a new sample to quickly test and integrate Smart Label Capture to read and validate price shelf labels against a database - showing live AR overlays based on the match and mismatch of the content.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
@@ -7268,6 +7350,18 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 * Deprecated the `BarcodeCountView.newInstance()` overloads that accept a `DataCaptureView` on Android (will be removed in 9.0); pass a `DataCaptureContext` instead.
 * Added `ScanditIcon` support for `BarcodeCount` status mode highlights, and deprecated the `SDCBarcodeCountStatus`-based highlight API.
+
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
 
 ## 8.4.1
 
@@ -7839,7 +7933,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/android/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/android/release-notes)
 
 ---
 
@@ -7888,19 +7982,20 @@ import Customization from '../../../partials/advanced/_sparkscan-customization.m
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode ([`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode)). This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.scanningBehavior`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.ScanningBehavior) and [`SparkScanViewSettings.previewBehavior`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.PreviewBehavior). This combination allows for flexible configurations to suit different scanning needs.
 
-### Scanning Mode
+### Selection Mode
 
-The scanning mode determines the programmatic presence of an aimer in the preview to help with precision scanning.
+The selection mode determines whether an aimer is shown in the preview to help with precision scanning.
 
 | Mode  | Description   |
 | ----------- | --------------------------------------------------- |
-| **Default** | Generally recommended. This mode will display a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. User can aim easily at the intended barcode.       |
-| **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
+| **Auto** | The SDK decides: it shows an aimer only when several barcodes are in view and the user shows no clear intention to scan one of them. This is the default. |
+| **Off** | No aimer. This mode displays a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. The user can aim easily at the intended barcode. |
+| **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
+*Auto* requires [`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -7923,7 +8018,7 @@ The preview behavior determines how the camera preview behaves when the scanner 
 | Behavior  | Description    |
 | -------------- | -------------------------- |
 | **Default**    | Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.                 |
-| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode. |
+| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the selection mode *On*. |
 
 ---
 
@@ -9535,16 +9630,18 @@ settings.setShouldPassImageTypeToResult(IdImageType.Frame, true);
 
 ## Callbacks and Scanning Workflows
 
-The ID Capture Listener provides two callbacks: `onIdCaptured` and `onIdRejected`. The `onIdCaptured` callback is called when an acceptable document is successfully captured, while the `onIdRejected` callback is called when a document is captured but rejected.
+The ID Capture Listener provides two callbacks: `didCaptureId` and `didRejectId`. The `didCaptureId` callback is called when an acceptable document is successfully captured, while the `didRejectId` callback is called when a document is captured but rejected.
 
-For a successful capture, the `onIdCaptured` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
+For a successful capture, the `didCaptureId` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
 
-For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
+For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `didRejectId` callback to help you understand why the document was rejected and to take appropriate action. These are:
 
 * NOT_ACCEPTED_DOCUMENT_TYPE: The document is not in the list of accepted documents. In this scenario, you could direct the user to scan a different document.
 * INVALID_FORMAT: The document is in the list of accepted documents, but the format is invalid. In this scenario, you could direct the user to scan the document again.
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
+
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
 
 ## Detect Fake IDs
 
@@ -9663,16 +9760,16 @@ DataCaptureContext.sharedInstance.addMode(idCapture);
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `onIdCaptured` and `onIdRejected`.
+To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `didCaptureId` and `didRejectId`.
 
 ```ts
 idCapture.addListener({
-	onIdCaptured: (data) => {
+	didCaptureId: (idCapture, capturedId) => {
 		// Success! Handle extracted data here.
 	},
-	onIdRejected: (data, reason) => {
+	didRejectId: (idCapture, rejectedId, reason) => {
 		// Something went wrong. Inspect the reason to determine the follow-up action.
-	}
+	},
 });
 ```
 
@@ -9680,16 +9777,16 @@ idCapture.addListener({
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 On a successful scan you may read the extracted data from `CapturedId`:
 
 ```ts
-onIdCaptured: (data) => {
-	const fullName = data.fullName;
-	const dateOfBirth = data.dateOfBirth;
-	const dateOfExpiry = data.dateOfExpiry;
-	const documentNumber = data.documentNumber;
+didCaptureId: (idCapture, capturedId) => {
+	const fullName = capturedId.fullName;
+	const dateOfBirth = capturedId.dateOfBirth;
+	const dateOfExpiry = capturedId.dateOfExpiry;
+	const documentNumber = capturedId.documentNumber;
 
 	// Process data:
 	processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
@@ -9707,7 +9804,7 @@ The ID scanning process may fail for various reasons. Start from inspecting [Rej
 You may wish to implement the follow-up action based on the reason of failure:
 
 ```ts
-onIdRejected: (data, reason) => {
+didRejectId: (idCapture, rejectedId, reason) => {
 	if (reason === RejectionReason.Timeout) {
 		// Ask the user to retry, or offer alternative input method.
 	} else if (reason === RejectionReason.DocumentExpired) {
@@ -11376,6 +11473,43 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+* Fixed pausing or stopping a Barcode AR view discarding the highlights and annotations that were already shown, so taps and position updates keep working and resuming no longer requires the app to supply them again.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
+
 ## 8.6.0
 
 **Released**: August 31, 2026
@@ -11402,7 +11536,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -11617,6 +11751,22 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+
 ## 8.4.1
 
 **Released**: June 23, 2026
@@ -11760,6 +11910,12 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Improved EAN8 false positive filtering in strict mode
 * Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
+
+### Behavioral Changes
+
+#### Core
+
+* Building for iOS now requires Xcode 16.3 or later.
 
 ### Bug Fixes
 
@@ -12125,7 +12281,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/capacitor/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/capacitor/release-notes)
 
 ---
 
@@ -12188,19 +12344,24 @@ import Customization from '../../../partials/advanced/_sparkscan-customization.m
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode (SDCSparkScanViewSettings.defaultScanningMode). This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
-### Scanning Mode
+:::note
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `defaultScanningMode`.
+:::
 
-The scanning mode determines the programmatic presence of an aimer in the preview to help with precision scanning.
+### Selection Mode
+
+The selection mode determines whether an aimer is shown in the preview to help with precision scanning.
 
 | Mode  | Description   |
 | ----------- | --------------------------------------------------- |
-| **Default** | Generally recommended. This mode will display a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. User can aim easily at the intended barcode.       |
-| **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
+| **Auto** | The SDK decides: it shows an aimer only when several barcodes are in view and the user shows no clear intention to scan one of them. This is the default. |
+| **Off** | No aimer. This mode displays a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. The user can aim easily at the intended barcode. |
+| **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
+*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -12223,24 +12384,22 @@ The preview behavior determines how the camera preview behaves when the scanner 
 | Behavior  | Description    |
 | -------------- | -------------------------- |
 | **Default**    | Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.                 |
-| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode. |
+| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the selection mode *On*. |
 
-### Configuring the default scanning mode
+### Configuring the workflow
 
-Combine a scanning mode, scanning behavior, and preview behavior and assign it to
-[`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-view-settings.html). For example, to start in continuous scanning with the preview always visible:
+Set the selection mode on the SparkScan settings, and the scanning and preview behaviors on the view settings. For example, to start in continuous scanning with the preview always visible:
 
 ```ts
+const settings = new SparkScanSettings();
+settings.selectionMode = SelectionMode.Off; // or .On to always show the aimer
+
 const viewSettings = new SparkScanViewSettings();
 viewSettings.defaultScanningMode = new SparkScanScanningModeDefault(
   SparkScanScanningBehavior.Continuous, // or .Single
-  SparkScanPreviewBehavior.Persistent,  // or .Default
+  SparkScanPreviewBehavior.Persistent, // or .Default
 );
 ```
-
-Pass both arguments—the single-argument constructor is deprecated. Use
-`SparkScanScanningModeTarget` instead of `SparkScanScanningModeDefault` to force the
-aimer (target mode).
 
 ---
 
@@ -13118,16 +13277,18 @@ settings.setShouldPassImageTypeToResult(Scandit.IdImageType.Frame, true);
 
 ## Callbacks and Scanning Workflows
 
-The ID Capture Listener provides two callbacks: `onIdCaptured` and `onIdRejected`. The `onIdCaptured` callback is called when an acceptable document is successfully captured, while the `onIdRejected` callback is called when a document is captured but rejected.
+The ID Capture Listener provides two callbacks: `didCaptureId` and `didRejectId`. The `didCaptureId` callback is called when an acceptable document is successfully captured, while the `didRejectId` callback is called when a document is captured but rejected.
 
-For a successful capture, the `onIdCaptured` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
+For a successful capture, the `didCaptureId` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
 
-For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
+For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `didRejectId` callback to help you understand why the document was rejected and to take appropriate action. These are:
 
 * NOT_ACCEPTED_DOCUMENT_TYPE: The document is not in the list of accepted documents. In this scenario, you could direct the user to scan a different document.
 * INVALID_FORMAT: The document is in the list of accepted documents, but the format is invalid. In this scenario, you could direct the user to scan the document again.
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
+
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
 
 ## Detect Fake IDs
 
@@ -13246,16 +13407,16 @@ DataCaptureContext.sharedInstance.addMode(idCapture);
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `onIdCaptured` and `onIdRejected`.
+To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `didCaptureId` and `didRejectId`.
 
 ```ts
 idCapture.addListener({
-	onIdCaptured: (data) => {
+	didCaptureId: (idCapture, capturedId) => {
 		// Success! Handle extracted data here.
 	},
-	onIdRejected: (data, reason) => {
+	didRejectId: (idCapture, rejectedId, reason) => {
 		// Something went wrong. Inspect the reason to determine the follow-up action.
-	}
+	},
 });
 ```
 
@@ -13263,16 +13424,16 @@ idCapture.addListener({
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 On a successful scan you may read the extracted data from `CapturedId`:
 
 ```ts
-onIdCaptured: (data) => {
-	const fullName = data.fullName;
-	const dateOfBirth = data.dateOfBirth;
-	const dateOfExpiry = data.dateOfExpiry;
-	const documentNumber = data.documentNumber;
+didCaptureId: (idCapture, capturedId) => {
+	const fullName = capturedId.fullName;
+	const dateOfBirth = capturedId.dateOfBirth;
+	const dateOfExpiry = capturedId.dateOfExpiry;
+	const documentNumber = capturedId.documentNumber;
 
 	// Process data:
 	processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
@@ -13290,7 +13451,7 @@ The ID scanning process may fail for various reasons. Start from inspecting [Rej
 You may wish to implement the follow-up action based on the reason of failure:
 
 ```ts
-onIdRejected: (data, reason) => {
+didRejectId: (idCapture, rejectedId, reason) => {
 	if (reason === Scandit.RejectionReason.Timeout) {
 		// Ask the user to retry, or offer alternative input method.
 	} else if (reason === Scandit.RejectionReason.DocumentExpired) {
@@ -14977,6 +15138,43 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+* Fixed pausing or stopping a Barcode AR view discarding the highlights and annotations that were already shown, so taps and position updates keep working and resuming no longer requires the app to supply them again.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
+
 ## 8.6.0
 
 **Released**: August 31, 2026
@@ -15003,7 +15201,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -15219,6 +15417,22 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+
 ## 8.4.1
 
 **Released**: June 23, 2026
@@ -15374,6 +15588,12 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Improved EAN8 false positive filtering in strict mode
 * Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
+
+### Behavioral Changes
+
+#### Core
+
+* Building for iOS now requires Xcode 16.3 or later.
 
 ### Bug Fixes
 
@@ -15710,7 +15930,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/cordova/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/cordova/release-notes)
 
 ---
 
@@ -15773,19 +15993,24 @@ import Customization from '../../../partials/advanced/_sparkscan-customization.m
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode ([`SDCSparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode)). This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
-### Scanning Mode
+:::note
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `defaultScanningMode`.
+:::
 
-The scanning mode determines the programmatic presence of an aimer in the preview to help with precision scanning.
+### Selection Mode
+
+The selection mode determines whether an aimer is shown in the preview to help with precision scanning.
 
 | Mode  | Description   |
 | ----------- | --------------------------------------------------- |
-| **Default** | Generally recommended. This mode will display a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. User can aim easily at the intended barcode.       |
-| **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
+| **Auto** | The SDK decides: it shows an aimer only when several barcodes are in view and the user shows no clear intention to scan one of them. This is the default. |
+| **Off** | No aimer. This mode displays a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. The user can aim easily at the intended barcode. |
+| **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
+*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -15808,25 +16033,22 @@ The preview behavior determines how the camera preview behaves when the scanner 
 | Behavior  | Description    |
 | -------------- | -------------------------- |
 | **Default**    | Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.                 |
-| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode. |
+| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the selection mode *On*. |
 
-### Configuring the default scanning mode
+### Configuring the workflow
 
-Combine a scanning mode, scanning behavior, and preview behavior and assign it to
-`SparkScanViewSettings.defaultScanningMode`. For example, to start in continuous
-scanning with the preview always visible:
+Set the selection mode on the SparkScan settings, and the scanning and preview behaviors on the view settings. For example, to start in continuous scanning with the preview always visible:
 
 ```js
-const sparkScanViewSettings = new Scandit.SparkScanViewSettings();
-sparkScanViewSettings.defaultScanningMode = new Scandit.SparkScanScanningModeDefault(
+const settings = new Scandit.SparkScanSettings();
+settings.selectionMode = Scandit.SelectionMode.Off; // or .On to always show the aimer
+
+const viewSettings = new Scandit.SparkScanViewSettings();
+viewSettings.defaultScanningMode = new Scandit.SparkScanScanningModeDefault(
   Scandit.SparkScanScanningBehavior.Continuous, // or .Single
-  Scandit.SparkScanPreviewBehavior.Persistent,  // or .Default
+  Scandit.SparkScanPreviewBehavior.Persistent, // or .Default
 );
 ```
-
-Pass both arguments—the single-argument constructor is deprecated. Use
-`Scandit.SparkScanScanningModeTarget` instead of `SparkScanScanningModeDefault` to force
-the aimer (target mode).
 
 ---
 
@@ -18593,6 +18815,42 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+* Fixed pausing or stopping a Barcode AR view discarding the highlights and annotations that were already shown, so taps and position updates keep working and resuming no longer requires the app to supply them again.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
+
 ## 8.6.0
 
 **Released**: August 31, 2026
@@ -18842,6 +19100,26 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
+#### Smart Label Capture
+
+* Fixed predefined Smart Label Capture barcode fields (IMEI1, IMEI2, serial number) not scanning without an explicit symbology list.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+
 ## 8.4.1
 
 **Released**: June 23, 2026
@@ -18986,6 +19264,12 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Improved EAN8 false positive filtering in strict mode
 * Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
+
+### Behavioral Changes
+
+#### Core
+
+* Building for iOS now requires Xcode 16.3 or later.
 
 ### Bug Fixes
 
@@ -19362,7 +19646,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/flutter/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/flutter/release-notes)
 
 ---
 
@@ -19411,19 +19695,24 @@ import Customization from '../../../partials/advanced/_sparkscan-customization.m
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode (SDCSparkScanViewSettings.defaultScanningMode). This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
-### Scanning Mode
+:::note
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `defaultScanningMode`.
+:::
 
-The scanning mode determines the programmatic presence of an aimer in the preview to help with precision scanning.
+### Selection Mode
+
+The selection mode determines whether an aimer is shown in the preview to help with precision scanning.
 
 | Mode  | Description   |
 | ----------- | --------------------------------------------------- |
-| **Default** | Generally recommended. This mode will display a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. User can aim easily at the intended barcode.       |
-| **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
+| **Auto** | The SDK decides: it shows an aimer only when several barcodes are in view and the user shows no clear intention to scan one of them. This is the default. |
+| **Off** | No aimer. This mode displays a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. The user can aim easily at the intended barcode. |
+| **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
+*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -19446,23 +19735,22 @@ The preview behavior determines how the camera preview behaves when the scanner 
 | Behavior  | Description    |
 | -------------- | -------------------------- |
 | **Default**    | Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.                 |
-| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode. |
+| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the selection mode *On*. |
 
-### Configuring the default scanning mode
+### Configuring the workflow
 
-Combine a scanning mode, scanning behavior, and preview behavior and assign it to
-[`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-view-settings.html). For example, to start in continuous scanning with the preview always visible:
+Set the selection mode on the SparkScan settings, and the scanning and preview behaviors on the view settings. For example, to start in continuous scanning with the preview always visible:
 
 ```dart
+final settings = SparkScanSettings();
+settings.selectionMode = SelectionMode.off; // or SelectionMode.on to always show the aimer
+
 final viewSettings = SparkScanViewSettings();
 viewSettings.defaultScanningMode = SparkScanScanningModeDefault.fromPreviewBehavior(
   SparkScanScanningBehavior.continuous, // or .single
-  SparkScanPreviewBehavior.persistent,  // or .defaultBehaviour
+  SparkScanPreviewBehavior.persistent, // or .defaultBehaviour
 );
 ```
-
-Use `SparkScanScanningModeTarget.fromPreviewBehavior(...)` instead of
-`SparkScanScanningModeDefault` to force the aimer (target mode).
 
 ---
 
@@ -19601,7 +19889,7 @@ This page describes how to integrate the Scandit Data Capture SDK into your iOS 
 
 Before you begin, make sure you have the following prerequisites in place:
 
-- Latest version of Xcode
+- Xcode 16.3 or later
 - iOS project with a deployment target of iOS 15.0+
 
   :::note
@@ -20758,6 +21046,10 @@ For a rejected document, a [SDCRejectionReason](https://docs.scandit.com/data-ca
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
 
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
+
+import IdVisaMrzFields from '../../../partials/advanced/_id-visa-mrz-fields.mdx';
+
 ## Detect Fake IDs
 
 *ID Validate* is a fake ID detection software. It currently supports documents that follow the Driver License/Identification Card specification by the American Association of Motor Vehicle Administrators (AAMVA).
@@ -20989,7 +21281,9 @@ idCapture.addListener(self)
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+
+If you scan both sides of a document with the [`FullDocumentScanner`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/physical-document-scanner.html#class-scandit.datacapture.id.FullDocumentScanner), ID Capture calls [`idCapture(_:didCapture:)`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-listener.html#method-scandit.datacapture.id.IIdCaptureListener.OnIdCaptured) only after it captures both sides, unless you set [`notifyOnSideCapture`](https://docs.scandit.com/data-capture-sdk/ios/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture) to `true` (see [Receive a result after each side](/sdks/ios/id-capture/advanced.md#receive-a-result-after-each-side)).
 
 On a successful scan you may read the extracted data from `CapturedId`:
 
@@ -21115,6 +21409,14 @@ camera?.switch(toDesiredState: .on)
 ## About ID Capture
 
 import AboutIdCapture from '../../../partials/intro/_about-id-capture.mdx';
+
+## Samples
+
+The following sample app on GitHub shows ID Capture in a complete, runnable project.
+
+| Sample | What it demonstrates | Link |
+|---|---|---|
+| ID Capture from uploaded images | Scans identity documents from photos and PDF files picked on the device instead of the live camera, including single-sided and double-sided documents. | [ID Capture image upload sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample) |
 
 ---
 
@@ -21339,6 +21641,8 @@ let labelCaptureSettings = try LabelCaptureSettings {
 ```
 
 See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/ios/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
+
+The Adaptive Recognition Engine can also read shipping labels. See [Scan shipping labels](shipping-label-scanning.md).
 
 ---
 
@@ -21811,6 +22115,14 @@ import ValidationFlow from '../../../partials/intro/_about_validation_flow.mdx';
 
 See [here](./advanced.md#validation-flow) for more details.
 
+## Samples
+
+The following sample app on GitHub shows Smart Label Capture in a complete, runnable project.
+
+| Sample | What it demonstrates | Link |
+|---|---|---|
+| Price Capture | Captures a product barcode and the printed price from a shelf price label in one scan, checks the pair against a reference database, and shows whether the price is correct, incorrect, or unknown. | [Price Capture sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/03_Advanced_Batch_Scanning_Samples/05_Smart_Label_Capture/PriceCaptureSample) |
+
 ---
 
 ## Label Definitions
@@ -21919,6 +22231,12 @@ let settings = try LabelCaptureSettings {
     }
 }
 ```
+
+---
+
+## Scan shipping labels
+
+import ShippingLabelScanning from '../../../partials/advanced/_shipping-label-scanning.mdx';
 
 ---
 
@@ -22866,6 +23184,21 @@ See the [Expiry Management Sample](https://github.com/Scandit/datacapture-ios-sa
 ## Clustering
 
 import Clustering from '../../../partials/count/_clustering.mdx'
+
+### Automatic clustering method
+
+import ClusteringAutomaticMethod from '../../../partials/count/_clustering-automatic-method.mdx'
+
+The following example enables automatic clustering and groups barcodes by label:
+
+```swift
+import ScanditBarcodeCapture
+import ScanditCaptureCore
+
+let barcodeCountSettings = BarcodeCountSettings()
+barcodeCountSettings.clusteringMode = .auto
+barcodeCountSettings.automaticClusteringMethod = .label
+```
 
 ## Tote Mapping
 
@@ -24379,7 +24712,7 @@ import AboutMatrixScanPick from '../../../partials/intro/_about-matrixscan-pick.
 
 # Get Started
 
-The parser parses data strings, e.g. as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/ios/parser/hibc.html), [GS1 Application Identifier system](https://docs.scandit.com/data-capture-sdk/ios/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/ios/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/ios/parser/epc.html).
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/ios/parser/hibc.html), [GS1 Application Identifier system](https://docs.scandit.com/data-capture-sdk/ios/parser/gs1ai.html), [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/ios/parser/gs1-digital-link.html), [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/ios/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/ios/parser/epc.html), and [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/ios/parser/french2ddoc.html).
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -24393,6 +24726,7 @@ More data formats will be added in future releases. Please contact us if the dat
 - [VIN](https://docs.scandit.com/data-capture-sdk/ios/parser/vin.html)
 - [IATA BCBP](https://docs.scandit.com/data-capture-sdk/ios/parser/iata-bcbp.html)
 - [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/ios/parser/epc.html)
+- [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/ios/parser/french2ddoc.html)
 
 ## Prerequisites
 
@@ -24411,6 +24745,45 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Barcode
+
+* Added BarcodeSequenceScanAreaRestrictionSettings to restrict MatrixScan Sequence scanning to an adjustable horizontal band of the camera preview, so only barcodes inside the band are sequenced.
+* Added BarcodeSequenceView.highlightProvider to MatrixScan Sequence, letting you supply your own view for the highlight drawn over each sequenced barcode instead of the built-in circle.
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
 
 ## 8.6.0
 
@@ -24446,6 +24819,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
+* [BETA] Added shipping-label support (`AdaptiveRecognitionResultType.shippingLabel`, `Carrier`, `ShippingLabelScanningResult`) to adaptive recognition.
 * Added a new sample to quickly test and integrate Smart Label Capture to read and validate price shelf labels against a database - showing live AR overlays based on the match and mismatch of the content.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
@@ -24672,6 +25046,21 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 * Added `ScanditIcon` support for `BarcodeCount` status mode highlights, and deprecated the `SDCBarcodeCountStatus`-based highlight API.
 
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+
 ## 8.4.1
 
 **Released**: June 23, 2026
@@ -24824,6 +25213,12 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Improved EAN8 false positive filtering in strict mode
 * Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
+
+### Behavioral Changes
+
+#### Core
+
+* Building for iOS now requires Xcode 16.3 or later.
 
 ### Bug Fixes
 
@@ -25203,7 +25598,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/ios/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/ios/release-notes)
 
 ---
 
@@ -25316,19 +25711,20 @@ In your button's action handler, use the tracked state to decide whether to star
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode ([SDCSparkScanViewSettings.defaultScanningMode](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode)). This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SDCSparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SDCSparkScanViewSettings.scanningBehavior`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.ScanningBehavior) and [`SDCSparkScanViewSettings.previewBehavior`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.PreviewBehavior). This combination allows for flexible configurations to suit different scanning needs.
 
-### Scanning Mode
+### Selection Mode
 
-The scanning mode determines the programmatic presence of an aimer in the preview to help with precision scanning.
+The selection mode determines whether an aimer is shown in the preview to help with precision scanning.
 
 | Mode  | Description   |
 | ----------- | --------------------------------------------------- |
-| **Default** | Generally recommended. This mode will display a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. User can aim easily at the intended barcode.       |
-| **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
+| **Auto** | The SDK decides: it shows an aimer only when several barcodes are in view and the user shows no clear intention to scan one of them. This is the default. |
+| **Off** | No aimer. This mode displays a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. The user can aim easily at the intended barcode. |
+| **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
+*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -25351,7 +25747,7 @@ The preview behavior determines how the camera preview behaves when the scanner 
 | Behavior  | Description    |
 | -------------- | -------------------------- |
 | **Default**    | Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.                 |
-| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode. |
+| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the selection mode *On*. |
 
 ---
 
@@ -26298,7 +26694,7 @@ This page describes how to integrate the Scandit Data Capture SDK into your Kotl
 
 - A Kotlin Multiplatform project built with **Kotlin 2.3.21 or higher** and Gradle 8.14 or higher, optionally using Compose Multiplatform 1.8.0 or higher (see [Compose Multiplatform support](#compose-multiplatform-support) below). Earlier Kotlin 2.x releases are not supported—see [System Requirements](./system-requirements.mdx) for why.
 - **Android**: minimum SDK version 24, compile and target SDK version 36, JVM target 17, and Android Gradle Plugin 8.10.1 or higher.
-- **iOS**: iOS 15.0 or higher, and Xcode with Swift 5.9 or higher.
+- **iOS**: iOS 15.0 or higher, and Xcode 16.3 or later.
 - A valid Scandit Data Capture SDK license key. You can sign up for a free [test account](https://ssl.scandit.com/dashboard/sign-up?p=test&utm%5Fsource=documentation).
 
 :::tip
@@ -30346,7 +30742,7 @@ If you are not familiar with the symbologies that are relevant for your use case
 
 # Get Started
 
-The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: Health Industry Bar Code (HIBC), GS1 Application Identifier (AI) system, GS1 Digital Link, Swiss QR Codes, VIN Vehicle Identification Number, IATA Bar Coded Boarding Pass (BCBP), and Electronic Product Code (EPC).
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: Health Industry Bar Code (HIBC), GS1 Application Identifier (AI) system, GS1 Digital Link, Swiss QR Codes, VIN Vehicle Identification Number, IATA Bar Coded Boarding Pass (BCBP), Electronic Product Code (EPC), and French 2D-Doc (ANTS).
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -30384,6 +30780,7 @@ If your app already initialized a context (for example for a scanning mode), reu
 - `IATA_BCBP`
 - `GS1_DIGITAL_LINK`
 - `EPC`
+- `FRENCH_2D_DOC`
 
 ## Parse a String
 
@@ -30429,6 +30826,41 @@ Each `ParsedField` carries its `name`, its decoded `parsed` value, the `rawStrin
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
 
 ## 8.6.0
 
@@ -31542,6 +31974,19 @@ Dynamic threading is used internally to accelerate the execution if available. T
 
 ## Release Notes
 
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+
 ## 8.6.0
 
 **Released**: August 31, 2026
@@ -31650,6 +32095,16 @@ No updates for this framework in this release.
 #### Core
 
 * Fixed camera initialization failure on devices where buffer allocation fails for the multi-planar capture interface; the camera now enumerates supported capture modes via VIDIOC_QUERYCAP and falls back to single-plane capture if multi-planar buffer allocation fails.
+
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
 
 ## 8.4.1
 
@@ -31867,7 +32322,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.5
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/linux/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/linux/release-notes)
 
 ---
 
@@ -32822,7 +33277,7 @@ import ValidationFlowCustomField from '../../../../partials/advanced/_validation
 
 ### Basic Overlay
 
-To customize the appearance of an overlay you can implement a [ILabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener) and/or [ILabelCaptureAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-advanced-overlay-listener.html) interface, depending on the overlay(s) you are using.
+To customize the appearance of an overlay you can implement a [ILabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener) and/or [ILabelCaptureAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-advanced-overlay-listener.html) interface, depending on the overlays you are using.
 
 The method [BrushForLabel()](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [BrushForField()](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
@@ -33067,7 +33522,7 @@ private LabelCaptureSettings BuildLabelCaptureSettings()
 }
 ```
 
-See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/net/android/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/dotnet.android/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
 
 ---
 
@@ -34751,7 +35206,7 @@ import AboutMatrixScanPick from '../../../../partials/intro/_about-matrixscan-pi
 
 # Get Started
 
-The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/hibc.html), [GS1 Application Identifier (https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/iata-bcbp.html)
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/hibc.html), [GS1 Application Identifier (AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/gs1ai.html), [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Gs1DigitalLink), [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Epc), and [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.French2dDoc).
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -34760,14 +35215,46 @@ More data formats will be added in future releases. Please contact us if the dat
 - [Supported Data Formats](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/formats.html)
 - [HIBC](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/hibc.html)
 - [GS1 AI](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/gs1ai.html)
-- [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/gs1-digital-link.html)
+- [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Gs1DigitalLink)
 - [Swiss QR](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/swissqr.html)
 - [VIN](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/vin.html)
 - [IATA BCBP](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/iata-bcbp.html)
+- [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Epc)
+- [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/dotnet.android/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.French2dDoc)
 
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
 
 ## 8.6.0
 
@@ -34786,7 +35273,7 @@ More data formats will be added in future releases. Please contact us if the dat
 * Unified the .NET BarcodeCount API with native Android/iOS: added BarcodeCountStatus.ExpiringSoon, BarcodeCountView.ShouldShowStatusIconsOnScan/LogoStyle/LogoAnchor, and a public BarcodeCountNotInListActionSettings() constructor.
 * Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus IBarcodeFindListener.OnSessionUpdated, the BarcodeFind.SessionUpdated event, BarcodeFindView.LogoAnchor/LogoStyle, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
 * Added missing BarcodeSelection .NET APIs: BarcodeSelectionSession.SelectUnselectedBarcodes(), BarcodeSelectionSettings.TapGestureForSelectionEnabled and SwipeGesturesEnabled, and the BarcodeSelectionSettings.Create(CapturePreset) factory.
-* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously-missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
+* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
 * Added BarcodeSequence support to .NET, with MAUI consumption.
 * Added BarcodeGenerator for .NET to generate barcode/2D-code images from text or byte[] at a configurable width, with foreground/background color customization. Supports Code 39, Code 128, EAN-13, UPC-A, Interleaved 2 of 5, QR Code, Data Matrix, Aztec, and PDF417.
 * Added various Barcode AR APIs:
@@ -35009,6 +35496,18 @@ More data formats will be added in future releases. Please contact us if the dat
 #### Barcode
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
+
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
 
 ## 8.4.1
 
@@ -35472,7 +35971,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/net/android/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/net/android/release-notes)
 
 ---
 
@@ -35529,19 +36028,24 @@ import Customization from '../../../../partials/advanced/_sparkscan-customizatio
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode (SDCSparkScanViewSettings.DefaultScanningMode). This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.SelectionMode`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.DefaultScanningMode`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
-### Scanning Mode
+:::note
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `DefaultScanningMode`.
+:::
 
-The scanning mode determines the programmatic presence of an aimer in the preview to help with precision scanning.
+### Selection Mode
+
+The selection mode determines whether an aimer is shown in the preview to help with precision scanning.
 
 | Mode  | Description   |
 | ----------- | --------------------------------------------------- |
-| **Default** | Generally recommended. This mode will display a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. User can aim easily at the intended barcode.       |
-| **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
+| **Auto** | The SDK decides: it shows an aimer only when several barcodes are in view and the user shows no clear intention to scan one of them. This is the default. |
+| **Off** | No aimer. This mode displays a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. The user can aim easily at the intended barcode. |
+| **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
+*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -35564,7 +36068,7 @@ The preview behavior determines how the camera preview behaves when the scanner 
 | Behavior  | Description    |
 | -------------- | -------------------------- |
 | **Default**    | Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.                 |
-| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode. |
+| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the selection mode *On*. |
 
 ---
 
@@ -36628,7 +37132,7 @@ import ValidationFlowCustomField from '../../../../partials/advanced/_validation
 
 ### Basic Overlay
 
-To customize the appearance of an overlay you can implement a [ILabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener) and/or [ILabelCaptureAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-advanced-overlay-listener.html) interface, depending on the overlay(s) you are using.
+To customize the appearance of an overlay you can implement a [ILabelCaptureBasicOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#interface-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener) and/or [ILabelCaptureAdvancedOverlayListener](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-advanced-overlay-listener.html) interface, depending on the overlays you are using.
 
 The method [BrushForLabel()](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForLabel) is called every time a label is captured, and [BrushForField()](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/ui/label-capture-basic-overlay-listener.html#method-scandit.datacapture.label.ui.ILabelCaptureBasicOverlayListener.BrushForField) is called for each of its fields to determine the brush for the label or field.
 
@@ -36852,7 +37356,7 @@ private LabelCaptureSettings BuildLabelCaptureSettings()
 }
 ```
 
-See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/net/ios/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
+See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/dotnet.ios/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
 
 ---
 
@@ -38536,7 +39040,7 @@ import AboutMatrixScanPick from '../../../../partials/intro/_about-matrixscan-pi
 
 # Get Started
 
-The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/hibc.html), [GS1 Application Identifier (https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/gs1ai.html) and [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/iata-bcbp.html)
+The parser parses data strings, for example, as found in barcodes, into a set of key-value mappings. In this guide, you will know briefly how to use a parser and what types of parser are currently supported by Scandit. These data formats are supported: [Health Industry Bar Code (HIBC)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/hibc.html), [GS1 Application Identifier (AI) system](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/gs1ai.html), [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Gs1DigitalLink), [Swiss QR Codes](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/swissqr.html), [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/vin.html), [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/iata-bcbp.html), [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Epc), and [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.French2dDoc).
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -38545,14 +39049,51 @@ More data formats will be added in future releases. Please contact us if the dat
 - [Supported Data Formats](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/formats.html)
 - [HIBC](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/hibc.html)
 - [GS1 AI](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/gs1ai.html)
-- [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/gs1-digital-link.html)
+- [GS1 Digital Link](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Gs1DigitalLink)
 - [Swiss QR](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/swissqr.html)
 - [VIN](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/vin.html)
 - [IATA BCBP](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/iata-bcbp.html)
+- [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.Epc)
+- [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/dotnet.ios/parser/api/parser-data-format.html#value-scandit.datacapture.parser.ParserDataFormat.French2dDoc)
 
 ---
 
 ## Release Notes
+
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
 
 ## 8.6.0
 
@@ -38571,7 +39112,7 @@ More data formats will be added in future releases. Please contact us if the dat
 * Unified the .NET BarcodeCount API with native Android/iOS: added BarcodeCountStatus.ExpiringSoon, BarcodeCountView.ShouldShowStatusIconsOnScan/LogoStyle/LogoAnchor, and a public BarcodeCountNotInListActionSettings() constructor.
 * Added the missing BarcodeFind .NET APIs: BarcodeFindSession plus IBarcodeFindListener.OnSessionUpdated, the BarcodeFind.SessionUpdated event, BarcodeFindView.LogoAnchor/LogoStyle, BarcodeFindItemSearchOptions raw-data and brush constructors/properties, and BarcodeFindViewSettings progress-bar color constructors and getters.
 * Added missing BarcodeSelection .NET APIs: BarcodeSelectionSession.SelectUnselectedBarcodes(), BarcodeSelectionSettings.TapGestureForSelectionEnabled and SwipeGesturesEnabled, and the BarcodeSelectionSettings.Create(CapturePreset) factory.
-* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously-missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
+* Added missing .NET BarcodeBatch and BarcodePick APIs: BarcodeBatchSettings.ExpectsOnlyUniqueBarcodes, BarcodeBatchSettings.SetArucoDictionary(ArucoDictionary), BarcodeBatchBasicOverlay.DotRadius, the previously missing TrackedObject class (Location, Identifier, Data), and BarcodePickSession.TrackedObjects/AddedObjects exposing the new TrackedObject.
 * Added BarcodeSequence support to .NET, with MAUI consumption.
 * Added BarcodeGenerator for .NET to generate barcode/2D-code images from text or byte[] at a configurable width, with foreground/background color customization. Supports Code 39, Code 128, EAN-13, UPC-A, Interleaved 2 of 5, QR Code, Data Matrix, Aztec, and PDF417.
 * Added various Barcode AR APIs:
@@ -38782,6 +39323,21 @@ More data formats will be added in future releases. Please contact us if the dat
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+
 ## 8.4.1
 
 **Released**: June 23, 2026
@@ -38922,6 +39478,12 @@ More data formats will be added in future releases. Please contact us if the dat
 
 * Improved EAN8 false positive filtering in strict mode
 * Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
+
+### Behavioral Changes
+
+#### Core
+
+* Building for iOS now requires Xcode 16.3 or later.
 
 ### Bug Fixes
 
@@ -39216,7 +39778,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/net/ios/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/net/ios/release-notes)
 
 ---
 
@@ -39273,19 +39835,24 @@ import Customization from '../../../../partials/advanced/_sparkscan-customizatio
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode (SDCSparkScanViewSettings.DefaultScanningMode). This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.SelectionMode`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.DefaultScanningMode`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
-### Scanning Mode
+:::note
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `DefaultScanningMode`.
+:::
 
-The scanning mode determines the programmatic presence of an aimer in the preview to help with precision scanning.
+### Selection Mode
+
+The selection mode determines whether an aimer is shown in the preview to help with precision scanning.
 
 | Mode  | Description   |
 | ----------- | --------------------------------------------------- |
-| **Default** | Generally recommended. This mode will display a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. User can aim easily at the intended barcode.       |
-| **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
+| **Auto** | The SDK decides: it shows an aimer only when several barcodes are in view and the user shows no clear intention to scan one of them. This is the default. |
+| **Off** | No aimer. This mode displays a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. The user can aim easily at the intended barcode. |
+| **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
+*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -39308,7 +39875,7 @@ The preview behavior determines how the camera preview behaves when the scanner 
 | Behavior  | Description    |
 | -------------- | -------------------------- |
 | **Default**    | Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.                 |
-| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode. |
+| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the selection mode *On*. |
 
 ---
 
@@ -40371,16 +40938,18 @@ For the full frame of the document, you can use [`setShouldPassImageTypeToResult
 
 ## Callbacks and Scanning Workflows
 
-The ID Capture Listener provides two callbacks: `onIdCaptured` and `onIdRejected`. The `onIdCaptured` callback is called when an acceptable document is successfully captured, while the `onIdRejected` callback is called when a document is captured but rejected.
+The ID Capture Listener provides two callbacks: `didCaptureId` and `didRejectId`. The `didCaptureId` callback is called when an acceptable document is successfully captured, while the `didRejectId` callback is called when a document is captured but rejected.
 
-For a successful capture, the `onIdCaptured` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
+For a successful capture, the `didCaptureId` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
 
-For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
+For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `didRejectId` callback to help you understand why the document was rejected and to take appropriate action. These are:
 
 * NOT_ACCEPTED_DOCUMENT_TYPE: The document is not in the list of accepted documents. In this scenario, you could direct the user to scan a different document.
 * INVALID_FORMAT: The document is in the list of accepted documents, but the format is invalid. In this scenario, you could direct the user to scan the document again.
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
+
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
 
 ## Detect Fake IDs
 
@@ -40473,7 +41042,7 @@ settings.rejectedDocuments.push(
 
 ## Implement the Listener
 
-To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
+To receive scan results, implement an [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
@@ -40481,15 +41050,15 @@ For more specific information, use its non-null result properties (for example, 
 
 ```js
 const listener = {
-	didCaptureId: (idCapture, session) => {
-		if (session.newlyCapturedId.isPassport() === true) {
+	didCaptureId: (idCapture, capturedId) => {
+		if (capturedId.document?.isPassport) {
 			// Handle the information extracted.
-		} else if (session.newlyCapturedId.isDriverLicense() === true) {
+		} else if (capturedId.document?.isDriverLicense) {
 			// Handle the information extracted.
 		}
 	},
-	didFailWithError: (idCapture, error, session) => {
-		// Handle the error.
+	didRejectId: (idCapture, rejectedId, reason) => {
+		// Inspect the reason to determine the follow-up action.
 	},
 };
 ```
@@ -42397,6 +42966,43 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 ## Release Notes
 
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+* Fixed pausing or stopping a Barcode AR view discarding the highlights and annotations that were already shown, so taps and position updates keep working and resuming no longer requires the app to supply them again.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Fixed a crash in the IdCapture overlay when it was tapped.
+
+#### Smart Label Capture
+
+* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
+
+#### Core
+
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed customer archives for Capacitor, Cordova and React Native shipping unresolvable `workspace:*` dependency specifiers, so `npm install` now succeeds in the bundled samples.
+
 ## 8.6.0
 
 **Released**: August 31, 2026
@@ -42423,7 +43029,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Smart Label Capture
 
-* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (e.g. back and front), with customizable button images and accessibility labels.
+* Added the CameraSwitchControl API. The control can be added to a DataCaptureView to let end users switch between a primary and a secondary camera (for example, back and front), with customizable button images and accessibility labels.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
 #### Core
@@ -42648,6 +43254,25 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
 
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+* Fixed an iOS build failure on React Native versions below 0.78.
+* Fixed DataCaptureView and other scanning views not rendering on Android release builds with React Native 0.78 New Architecture.
+* Fixed the Android build failing with "Unknown CMake command target_compile_reactnative_options" on projects using RN < 0.81 with the New Architecture enabled; the generated CMake now falls back to the equivalent compile flags on older React Native versions.
+
 ## 8.4.1
 
 **Released**: June 23, 2026
@@ -42800,6 +43425,12 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Improved EAN8 false positive filtering in strict mode
 * Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
+
+### Behavioral Changes
+
+#### Core
+
+* Building for iOS now requires Xcode 16.3 or later.
 
 ### Bug Fixes
 
@@ -43197,7 +43828,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/react-native/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/react-native/release-notes)
 
 ---
 
@@ -43289,19 +43920,24 @@ Some users have found that using the `TouchableOpacity` component from `react-na
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode (SparkScanViewSettings.defaultScanningMode). This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
-### Scanning Mode
+:::note
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `defaultScanningMode`.
+:::
 
-The scanning mode determines the programmatic presence of an aimer in the preview to help with precision scanning.
+### Selection Mode
+
+The selection mode determines whether an aimer is shown in the preview to help with precision scanning.
 
 | Mode  | Description   |
 | ----------- | --------------------------------------------------- |
-| **Default** | Generally recommended. This mode will display a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. User can aim easily at the intended barcode.       |
-| **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
+| **Auto** | The SDK decides: it shows an aimer only when several barcodes are in view and the user shows no clear intention to scan one of them. This is the default. |
+| **Off** | No aimer. This mode displays a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. The user can aim easily at the intended barcode. |
+| **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
+*Auto* requires [`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -43324,24 +43960,22 @@ The preview behavior determines how the camera preview behaves when the scanner 
 | Behavior  | Description    |
 | -------------- | -------------------------- |
 | **Default**    | Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.                 |
-| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode. |
+| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the selection mode *On*. |
 
-### Configuring the default scanning mode
+### Configuring the workflow
 
-Combine a scanning mode, scanning behavior, and preview behavior and assign it to
-[`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/spark-scan-view-settings.html). For example, to start in continuous scanning with the preview always visible:
+Set the selection mode on the SparkScan settings, and the scanning and preview behaviors on the view settings. For example, to start in continuous scanning with the preview always visible:
 
 ```ts
+const settings = new SparkScanSettings();
+settings.selectionMode = SelectionMode.Off; // or .On to always show the aimer
+
 const viewSettings = new SparkScanViewSettings();
 viewSettings.defaultScanningMode = new SparkScanScanningModeDefault(
   SparkScanScanningBehavior.Continuous, // or .Single
-  SparkScanPreviewBehavior.Persistent,  // or .Default
+  SparkScanPreviewBehavior.Persistent, // or .Default
 );
 ```
-
-Pass both arguments—the single-argument constructor is deprecated. Use
-`SparkScanScanningModeTarget` instead of `SparkScanScanningModeDefault` to force the
-aimer (target mode).
 
 ---
 
@@ -44687,6 +45321,10 @@ For a rejected document, a [RejectionReason](https://docs.scandit.com/data-captu
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
 
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
+
+import IdVisaMrzFields from '../../../partials/advanced/_id-visa-mrz-fields.mdx';
+
 ## Detect Fake IDs
 
 *ID Validate* is a fake ID detection software. It currently supports documents that follow the Driver License/Identification Card specification by the American Association of Motor Vehicle Administrators (AAMVA).
@@ -44878,7 +45516,7 @@ Note that the camera is still running, you may want to switch it off at this poi
 
 Captured results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-Note that if you scan boths sides of a document using the [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-scanner.html#full-document-scanner), this callback will only be executed once both sides have been successfully captured. If the document is known to have only one side, the callback will execute immediately after a successful scan of the first side. This behaviour can be modified with the setting [notifyOnSideCapture](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture).
+Note that if you scan both sides of a document using the [FullDocumentScanner](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/physical-document-scanner.html#class-scandit.datacapture.id.FullDocumentScanner), this callback will only be executed once both sides have been successfully captured. If the document is known to have only one side, the callback will execute immediately after a successful scan of the first side. This behavior can be modified with the setting [notifyOnSideCapture](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/id-capture-settings.html#property-scandit.datacapture.id.IdCaptureSettings.NotifyOnSideCapture). To tell a partial result from a complete one, read [CapturedId.isCapturingComplete](https://docs.scandit.com/data-capture-sdk/web/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.IsCapturingComplete) (see [Receive a result after each side](/sdks/web/id-capture/advanced.md#receive-a-result-after-each-side)).
 
 On a successful scan you may read the extracted data from `capturedId`:
 
@@ -45191,6 +45829,8 @@ const retailItem = await new LabelDefinitionBuilder()
 ```
 
 See [AdaptiveRecognitionMode](https://docs.scandit.com/data-capture-sdk/web/label-capture/api/label-definition.html#property-scandit.datacapture.label.LabelDefinition.AdaptiveRecognitionMode) for available options.
+
+The Adaptive Recognition Engine can also read shipping labels. See [Scan shipping labels](shipping-label-scanning.md).
 
 ---
 
@@ -45567,6 +46207,14 @@ A more complete example can be found [here on StackBlitz](https://stackblitz.com
 
 import AboutLabelCapture from '../../../partials/intro/_about-smart-label-capture.mdx';
 
+## Samples
+
+The following sample app on GitHub shows Smart Label Capture in a complete, runnable project.
+
+| Sample | What it demonstrates | Link |
+|---|---|---|
+| Price Capture | Captures a product barcode and the printed price from a shelf price label in one scan, checks the pair against a reference database, and shows whether the price is correct, incorrect, or unknown. | [Price Capture sample](https://github.com/Scandit/datacapture-web-samples/tree/master/03_Advanced_Batch_Scanning_Samples/05_Smart_Label_Capture/PriceCaptureSample) |
+
 ---
 
 ## Label Definitions
@@ -45676,6 +46324,12 @@ const settings = LabelCaptureSettings.builder()
         .buildFluent("hdd-label"))
     .build();
 ```
+
+---
+
+## Scan shipping labels
+
+import ShippingLabelScanning from '../../../partials/advanced/_shipping-label-scanning.mdx';
 
 ---
 
@@ -46754,6 +47408,7 @@ The Parser parses data strings (as found in barcodes) into a set of key-value ma
 - [VIN Vehicle Identification Number](https://docs.scandit.com/data-capture-sdk/web/parser/vin.html)
 - [IATA Bar Coded Boarding Pass (BCBP)](https://docs.scandit.com/data-capture-sdk/web/parser/iata-bcbp.html)
 - [Electronic Product Code (EPC)](https://docs.scandit.com/data-capture-sdk/web/parser/epc.html)
+- [French 2D-Doc (ANTS)](https://docs.scandit.com/data-capture-sdk/web/parser/french2ddoc.html)
 
 More data formats will be added in future releases. Please contact us if the data format you are using is not yet supported, or you want to use the parser on a currently unsupported platform.
 
@@ -46923,6 +47578,44 @@ For important information about CDN risks and recommendations for production env
 
 ## Release Notes
 
+## 8.6.1
+
+**Released**: October 1, 2026
+
+### New Features
+
+#### Id
+
+* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Rectangular Micro QR: Fixed a rare crash during detection of codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed Data Matrix codes not being read when their encoder ends the data with an Unlatch codeword followed by more than one pad codeword.
+* Fixed a 1D symbology scan regression from SDK 5.19 for codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed SparkScan selection highlight brushes not applying until the next selection cycle.
+* Fixed a bug that caused SparkScan to crash when using SmartScanSelection.
+* Fixed the SparkScan mini preview not being draggable.
+* Fixed the barcode duplicate filter explicitly set to -2 under SelectionMode On not being respected and being incorrectly relaxed to 0.
+* Fixed MatrixScan AR info annotations so that replacing a header, footer, icon or body replaces it instead of adding a second one, and setting it to null removes it. BarcodeArPopoverAnnotationButton.text now returns the button's label instead of an empty string.
+* Fixed a placement problem with BarcodeArStatusIconAnnotation when the barcode rotates.
+* Fixed BarcodeArAnnotationAnchor not being available at runtime, which made a custom BarcodeAr annotation ignore its anchor. The default placement now also matches native, above the tracked barcode instead of below it.
+* Fixed BarcodeFind overwriting the zoom levels of the camera settings it was given: a BarcodeFindView created with custom CameraSettings now runs on the zoom levels it was configured with. BarcodeFind's recommended camera settings now report the .5x/1x levels, matching iOS and Android.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+
+#### Core
+
+* Fixed scanning silently stopping after the browser released the page's WebGL context, while the camera preview kept rendering.
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead.
+* Fixed ScanditIcon not rendering a background stroke by default when a background shape and stroke color were both configured, matching iOS and Android.
+
 ## 8.6.0
 
 **Released**: August 31, 2026
@@ -46948,7 +47641,7 @@ For important information about CDN risks and recommendations for production env
 #### Smart Label Capture
 
 * Restored SIMD support in WebAssembly for iOS 26, recovering performance across all capture modes, most noticeably Label Capture.
-* Added shipping-label support (AdaptiveRecognitionResultType.ShippingLabel, Carrier, ShippingLabelScanningResult) to adaptive recognition, matching iOS and Android.
+* [BETA] Added shipping-label support (`AdaptiveRecognitionResultType.ShippingLabel`, `Carrier`, `ShippingLabelScanningResult`) to adaptive recognition.
 * Added a new sample to quickly test and integrate Smart Label Capture to read and validate price shelf labels against a database - showing live AR overlays based on the match and mismatch of the content.
 * Added support for label definitions that use the "semantics" feature on fields of both type "barcode" and "text" simultaneously; previously only one of the two types could use it at once.
 
@@ -47143,6 +47836,22 @@ For important information about CDN risks and recommendations for production env
 #### Barcode
 
 * The SparkScan target-mode APIs and `ScanIntention.smartSelection` are deprecated in favour of selectionMode.
+
+## 8.4.2
+
+**Released**: September 28, 2026
+
+### Performance Improvements
+
+#### Core
+
+* Re-enabled SIMD support in WebAssembly for iOS 26, restoring performance in all capture modes, most noticeably Label Capture.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
 
 ## 8.4.1
 
@@ -47666,7 +48375,7 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.14/sdks/web/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/web/release-notes)
 
 ---
 
@@ -47737,19 +48446,20 @@ import Customization from '../../../partials/advanced/_sparkscan-customization.m
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of scanning mode, scanning behavior and camera preview behavior - defining the initial state of the scanner. This can be done by setting the default scanning mode ([`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode)). This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.scanningBehavior`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.ScanningBehavior) and [`SparkScanViewSettings.previewBehavior`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.PreviewBehavior). This combination allows for flexible configurations to suit different scanning needs.
 
-### Scanning Mode
+### Selection Mode
 
-The scanning mode determines the programmatic presence of an aimer in the preview to help with precision scanning.
+The selection mode determines whether an aimer is shown in the preview to help with precision scanning.
 
 | Mode  | Description   |
 | ----------- | --------------------------------------------------- |
-| **Default** | Generally recommended. This mode will display a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. User can aim easily at the intended barcode.       |
-| **Target**  | This mode will always add an aimer to the camera preview to precisely select the barcode to scan. This is recommended only when selecting among many close barcodes is the common task. |
+| **Auto** | The SDK decides: it shows an aimer only when several barcodes are in view and the user shows no clear intention to scan one of them. |
+| **Off** | This is the default. No aimer. This mode displays a small camera preview to aid with aiming. The preview size and zoom level can be adjusted as needed. The user can aim easily at the intended barcode. |
+| **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-Even in the *Default* mode, SparkScan will automatically show an aimer when multiple barcodes are present in the view and no clear intention from the user to scan a single one is recorded ([`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention)). Enabling the *Target* mode forces this "precision selection" state to be on at all times.
+*Auto* requires [`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -47772,7 +48482,7 @@ The preview behavior determines how the camera preview behaves when the scanner 
 | Behavior  | Description    |
 | -------------- | -------------------------- |
 | **Default**    | Preview fades away when the scanner is off. This lets the user check important information displayed by the app and reduces battery consumption.                 |
-| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the target mode. |
+| **Persistent** | Preview remains visible, but darkened, even when the scanner is off. This is useful for scenarios where you want to select a barcode (among many) or need to look through the preview at all times (to ensure the right scan) - especially if used in conjunction with the selection mode *On*. |
 
 ---
 
