@@ -1,0 +1,67 @@
+/**
+ * The consent-free fallback for a comment PostHog refused.
+ *
+ * WHY THIS EXISTS. The widget's events go to PostHog, which GTM loads BEHIND
+ * the consent banner: until a reader accepts cookies, `window.posthog` does
+ * not exist and `capturePostHogEvent` returns false. So a reader who declines
+ * and then spends two minutes writing us a paragraph leaves no trace of it
+ * anywhere. We were asking for written feedback and discarding the half that
+ * came from the people most careful about being tracked.
+ *
+ * ONLY WHEN POSTHOG REFUSED. Called after a failed capture, never beside a
+ * successful one, so a consenting reader's comment is not recorded twice under
+ * two different timestamps.
+ *
+ * WHERE IT GOES. An Apps Script Web App deployed to accept anonymous requests,
+ * which appends the comment to a spreadsheet. The endpoint must accept
+ * requests from a reader's browser without any sign-in.
+ *
+ * WHAT IT SENDS. The four fields the widget already sends to PostHog and
+ * nothing else. No identifier, and nothing derived from the reader.
+ */
+
+type DirectFeedback = {
+  url: string;
+  title: string;
+  helpful: boolean | null;
+  comment: string;
+};
+
+/**
+ * `no-cors`, and what that costs.
+ *
+ * An Apps Script Web App does not answer a cross-origin preflight, so a normal
+ * JSON POST never leaves the browser. `text/plain` keeps the request "simple"
+ * and no-cors lets it through — at the price of an opaque response we cannot
+ * read. So this reports whether the request was DISPATCHED, not whether it
+ * arrived.
+ *
+ * That is the same promise `capturePostHogEvent` already makes and documents
+ * ("accepted, NOT that it reached the server"), and the widget's copy is
+ * written against it: the reader is told their note was sent, never that it
+ * was received.
+ */
+export async function sendDirectFeedback(
+  endpoint: string,
+  token: string,
+  payload: DirectFeedback,
+): Promise<boolean> {
+  if (!endpoint) return false;
+  try {
+    await fetch(endpoint, {
+      method: 'POST',
+      mode: 'no-cors',
+      // Deliberately text/plain: application/json would trigger a preflight
+      // the Web App cannot answer.
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      // `keepalive` so a reader who navigates away mid-send still delivers.
+      keepalive: true,
+      body: JSON.stringify({ ...payload, token }),
+    });
+    return true;
+  } catch {
+    // Offline, blocked, or refused. The caller tells the reader plainly and
+    // keeps their text in the box.
+    return false;
+  }
+}

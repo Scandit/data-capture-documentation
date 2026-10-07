@@ -920,6 +920,19 @@ const config: Config = {
   // The search widget's whole view of docusaurus_tag, derived above and passed
   // through so SearchBar never constructs one of these strings itself.
   customFields: {
+    // RULING DF. The Apps Script Web App that receives feedback from readers
+    // who declined cookies -- PostHog is loaded by GTM behind the banner, so
+    // their comments reached nothing at all. Empty disables the fallback and
+    // the widget behaves exactly as it did before.
+    //
+    // Set from the environment so a redeploy of the Web App (which changes the
+    // URL) needs no code change, and so a fork or a preview build does not
+    // silently post into the production sheet.
+    feedbackEndpoint: process.env.DOCS_FEEDBACK_ENDPOINT ?? "",
+    // Obfuscation only: it ships in the client bundle. It stops drive-by
+    // scanners; the caps and validation on the receiving end stop everything
+    // else.
+    feedbackToken: process.env.DOCS_FEEDBACK_TOKEN ?? "",
     // Major typed in a query -> tag of the version a reader is actually served.
     versionTagByMajor,
     // A docs version's tag -> the API-reference tag(s) that document it, so a
