@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-475/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-475/assets/css/styles.cb0ba1c2.css">
-<script src="/data-capture-documentation/pr-preview/pr-475/assets/js/runtime~main.5b853519.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-475/assets/js/runtime~main.76b4844d.js" defer="defer"></script>
 <script src="/data-capture-documentation/pr-preview/pr-475/assets/js/main.65a62d8a.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -42,6 +42,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-1">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-1">​</a></h4>
 <ul>
 <li>Fixed the 2026 Oklahoma driver&#x27;s license not returning the Jurisdiction and JurisdictionIso fields.</li>
+<li>Updated the bundled ID Validate model to <code>8.0.20260626</code>, which fixes valid Ohio driver&#x27;s licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#core">​</a></h4>
 <ul>
@@ -101,7 +102,6 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-3">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-3">​</a></h4>
 <ul>
 <li>Improved PDF417 scanning on Quebec, Alaska, and Oklahoma driver’s licenses.</li>
-
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="behavioral-changes">Behavioral Changes<a class="hash-link" aria-label="Direct link to Behavioral Changes" title="Direct link to Behavioral Changes" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#behavioral-changes">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-3">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#barcode-3">​</a></h4>
@@ -264,6 +264,10 @@
 <ul>
 <li>Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the <code>direct_part_marking_mode</code> symbology extension.</li>
 </ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-9">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-9">​</a></h4>
+<ul>
+<li>Updated the bundled ID Validate model to <code>8.0.20260626</code>, which fixes valid Ohio driver&#x27;s licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.</li>
+</ul>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="841">8.4.1<a class="hash-link" aria-label="Direct link to 8.4.1" title="Direct link to 8.4.1" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#841">​</a></h2>
 <p><strong>Released</strong>: June 23, 2026</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-5">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#bug-fixes-5">​</a></h3>
@@ -273,7 +277,7 @@
 <li>Fixed recommended BarcodeAR camera settings not being applied correctly.</li>
 <li>Fixed a memory leak in SparkScan when using the item-based API.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-9">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-9">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-10">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-10">​</a></h4>
 <ul>
 <li>Fixed an issue where cropped document images were rotated when they are recovered using the getFrame API.</li>
 </ul>
@@ -288,7 +292,7 @@
 <ul>
 <li>Added <code>dotRadius</code> property to <code>BarcodeBatchBasicOverlay</code> to allow customizing the size of dots when using the Dot overlay style.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-10">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-10">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-11">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-11">​</a></h4>
 <ul>
 <li>Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.</li>
 <li>Added support for new versions of USA, California–Driver&#x27;s License; USA, North Carolina–Driver&#x27;s License; USA, Texas–Driver&#x27;s License; and USA, Oklahoma–Driver&#x27;s License.</li>
@@ -341,7 +345,7 @@
 <li>Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.</li>
 <li>Fixed an issue where the Smart Scan Selection aimer would become too small when scan-area margins restricted the visible scan area; the aimer is now sized relative to the view, keeping a consistent on-screen size regardless of margins.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-11">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-11">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-12">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-12">​</a></h4>
 <ul>
 <li>Fixed an issue where the US Permanent Residence Card was not processed through the VizMrz flow.</li>
 <li>Fixed an issue with browsers that don&#x27;t support <code>createImageBitmap</code> in ID Capture.</li>
@@ -373,7 +377,7 @@
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="831">8.3.1<a class="hash-link" aria-label="Direct link to 8.3.1" title="Direct link to 8.3.1" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#831">​</a></h2>
 <p><strong>Released</strong>: April 14, 2026</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-7">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#bug-fixes-7">​</a></h3>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-12">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-12">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-13">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-13">​</a></h4>
 <ul>
 <li>Fixed an issue with browsers that don&#x27;t support <code>createImageBitmap</code> in ID Capture</li>
 </ul>
@@ -393,7 +397,7 @@
 <ul>
 <li>Added support for composite codes in SparkScan</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-13">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-13">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-14">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-14">​</a></h4>
 <ul>
 <li>Corrected Mexican Voter ID parent names to firstName and lastName</li>
 <li>Added support for OCR scanning of the 2026 version of Victoria mobile driver licenses</li>
@@ -417,7 +421,7 @@
 <li>Fixed an issue that caused the SparkScan camera to stop working when disposing the context and re-initializing it.</li>
 <li>Fixed an issue causing the SparkScan toolbar buttons to be aligned incorrectly.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-14">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-14">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-15">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-15">​</a></h4>
 <ul>
 <li>Fixed BarcodeDictionary anonymization setting for iOS and Web</li>
 <li>Fixed support for UAE Esaad card</li>
@@ -440,7 +444,7 @@
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="821">8.2.1<a class="hash-link" aria-label="Direct link to 8.2.1" title="Direct link to 8.2.1" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#821">​</a></h2>
 <p><strong>Released</strong>: March 5, 2026</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-9">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#bug-fixes-9">​</a></h3>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-15">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-15">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-16">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-16">​</a></h4>
 <ul>
 <li>Corrected Mexican Voter ID parent names to map to firstName and lastName</li>
 <li>Sanitized name fields on ACT DL. Splits FullName to populate first and last name properties</li>
@@ -461,7 +465,7 @@
 <ul>
 <li>Stopped emitting vibration feedbacks when the scanner is stopped without user interaction</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-16">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-16">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-17">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-17">​</a></h4>
 <ul>
 <li>Enabled scanning of MRZ on the backside of several EU residence permits</li>
 <li>Added extraction of a cropped document image from Passports and VISAs that do not support VIZ extraction</li>
@@ -488,7 +492,7 @@
 <li>Fixed an issue where SparkScan would select the wrong camera</li>
 <li>Fixed an issue where the SparkScanView was not being disposed correctly</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-17">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-17">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-18">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-18">​</a></h4>
 <ul>
 <li>Treated Puerto Rico driver licenses as AAMVA to enforce barcode capture with FullScanner</li>
 <li>Fixed a bug that would cause Canada Northwest Territories driver license scans to be incomplete</li>
@@ -524,7 +528,7 @@
 <li>Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.</li>
 <li>Fixed a crash that occurred when the <code>DataCaptureContext</code> singleton was initialized more than once.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-18">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-18">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-19">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-19">​</a></h4>
 <ul>
 <li>Fixed an issue with browsers that don&#x27;t support <code>createImageBitmap</code> in ID Capture.</li>
 </ul>
@@ -563,7 +567,7 @@
 <ul>
 <li>Fixed an issue where the SparkScanView was not being disposed correctly</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-19">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-19">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-20">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-20">​</a></h4>
 <ul>
 <li>Removed the Centaurus dependency from the ID Capture package which was accidentally added in 8.1.0 but never actually used</li>
 </ul>
@@ -579,7 +583,7 @@
 <li><a href="/data-capture-documentation/pr-preview/pr-475/sdks/web/sparkscan/intro/">SparkScan</a> now supports Smart Scan Selection. Scanning a single barcode is often difficult in environments where multiple barcodes are placed closely together, like on a densely packed warehouse shelf or on a package with various labels. This can lead to scanning the wrong item, causing errors and slowing down operations. Users might have to manually switch to a special, more precise scanning mode (Target Mode), which is inefficient. Smart Scan Selection solves this problem by automatically detecting when a user is trying to scan in a &quot;dense barcode&quot; environment. The interface then intelligently adapts, providing an aimer to help the user precisely select the desired barcode without needing to manually change any settings. This creates a more intuitive scanning experience that requires no manual configuration.</li>
 <li>Added <code>ScanditIconType.Delete</code> and <code>ScanditIconType.Slash</code> which can be used in <code>BarcodeArStatusIconAnnotationAnchor</code>.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-20">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-20">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-21">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-21">​</a></h4>
 <ul>
 <li>Added NationalityISO property that maps results from Nationality field to country ISO code</li>
 <li>Added RejectionDiagnosticJSON property to CapturedId to report debug info during Timeout rejections</li>
@@ -596,7 +600,7 @@
 <li>Improved MicroQR detector tolerance to quiet zone violations</li>
 <li>Improved suppression of incorrect Codabar recognitions when using the <a href="/data-capture-documentation/pr-preview/pr-475/sdks/web/symbology-properties/#symbology-extension-descriptions">“strict&quot; symbology extension</a></li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-21">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-21">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-22">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-22">​</a></h4>
 <ul>
 <li>Improved success rate when scanning using the ImageFrameSource or the SingleImageUploader as frame source</li>
 </ul>
@@ -671,7 +675,7 @@
 <ul>
 <li>We’re introducing an enhancement that makes Smart Label Capture more robust and scalable by complementing its on-device model with a larger, more capable model. When the on-device model can’t capture certain labels, the SDK automatically escalates to this enhancement to handle complex or unforeseen cases with high accuracy and reliability. This capability is currently available in <code>beta</code>. If you’re interested in trying it, please contact Scandit Support. For configuration details, see <code>labelDefinition.adaptiveRecognitionEngine</code>.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-22">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-22">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-23">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-23">​</a></h4>
 <ul>
 <li>Added <code>ElementsToRetain</code> to <code>MobileDocumentScanner</code>: The set of data elements that the application intends to retain from scanned mobile documents. This information is used to set the <code>IntentToRetain</code> flag in ISO 18013-5 mdoc requests, which is required for legal compliance with data protection standards. An empty set indicates no elements will be retained, and <code>IntentToRetain</code> will be set to <code>false</code> for all fields.</li>
 <li>ID Capture now supports full-frame anonymization.</li>
@@ -717,7 +721,7 @@
 </ul>
 </li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-23">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-23">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-24">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-24">​</a></h4>
 <ul>
 <li>The configuration for the following documents has been changed as detailed below:<!-- -->
 <ul>
@@ -729,7 +733,7 @@
 <li><code>fullName</code> now an optional field on all <code>IdCapture</code> result types and <code>capturedMrz</code> now an optional field on <code>MrzResult</code>.</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-18">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#bug-fixes-18">​</a></h3>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-24">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-24">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-25">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/web/release-notes/#id-25">​</a></h4>
 <ul>
 <li>Fixed a bug that could get the scanner stuck when scanning a US passport card.</li>
 <li>Fixed an issue where unavailable dates would not be properly set to <code>null</code> in an ID scan result.</li>

@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-475/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-475/assets/css/styles.cb0ba1c2.css">
-<script src="/data-capture-documentation/pr-preview/pr-475/assets/js/runtime~main.5b853519.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-475/assets/js/runtime~main.76b4844d.js" defer="defer"></script>
 <script src="/data-capture-documentation/pr-preview/pr-475/assets/js/main.65a62d8a.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -40,6 +40,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-1">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-1">​</a></h4>
 <ul>
 <li>Fixed the 2026 Oklahoma driver&#x27;s license not returning the Jurisdiction and JurisdictionIso fields.</li>
+<li>Updated the bundled ID Validate model to <code>8.0.20260626</code>, which fixes valid Ohio driver&#x27;s licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#core">​</a></h4>
 <ul>
@@ -99,7 +100,6 @@
 <ul>
 <li>Improved performance for the Irish Garda Age Card.</li>
 <li>Improved PDF417 scanning on Quebec, Alaska, and Oklahoma driver’s licenses.</li>
-
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="smart-label-capture-1">Smart Label Capture<a class="hash-link" aria-label="Direct link to Smart Label Capture" title="Direct link to Smart Label Capture" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#smart-label-capture-1">​</a></h4>
 <ul>
@@ -305,6 +305,10 @@
 <li>Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.</li>
 <li>Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.</li>
 </ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-9">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-9">​</a></h4>
+<ul>
+<li>Updated the bundled ID Validate model to <code>8.0.20260626</code>, which fixes valid Ohio driver&#x27;s licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.</li>
+</ul>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="841">8.4.1<a class="hash-link" aria-label="Direct link to 8.4.1" title="Direct link to 8.4.1" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#841">​</a></h2>
 <p><strong>Released</strong>: June 23, 2026</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-7">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#bug-fixes-7">​</a></h3>
@@ -312,7 +316,7 @@
 <ul>
 <li>Fixed a memory leak in SparkScan when using the item-based API.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-9">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-9">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-10">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-10">​</a></h4>
 <ul>
 <li>Fixed an issue where cropped document images were rotated when they are recovered using the getFrame API.</li>
 </ul>
@@ -325,7 +329,7 @@
 <li>Added <code>dotRadius</code> property to <code>BarcodeBatchBasicOverlay</code> to allow customizing the size of dots when using the Dot overlay style.</li>
 <li>Added <code>shouldShowShutterButton</code> flag in <code>BarcodeSequenceView</code> to hide the main shutter button and blinking indicator; added <code>BarcodeSequenceView::startSequencing()</code> and <code>BarcodeSequenceView::pauseSequencing()</code> (iOS) / <code>BarcodeSequenceView::stopSequencing()</code> (Android) to programmatically replicate the shutter button behavior; exposed <code>BarcodeSequenceState</code> enum and <code>BarcodeSequenceViewUIListener::onStateChanged</code> to be notified when a state change occurs; exposed <code>BarcodeSequenceView::state</code> to retrieve the current state; exposed <code>BarcodeSequenceView::sequencedShelfModule</code> to retrieve the scanned shelf module.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-10">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-10">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-11">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-11">​</a></h4>
 <ul>
 <li>Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.</li>
 <li>Added support for new versions of USA, California–Driver&#x27;s License; USA, North Carolina–Driver&#x27;s License; USA, Texas–Driver&#x27;s License; and USA, Oklahoma–Driver&#x27;s License.</li>
@@ -365,7 +369,7 @@
 <li>Fixed an issue where the Smart Scan Selection aimer would become too small when scan-area margins restricted the visible scan area; the aimer is now sized relative to the view, keeping a consistent on-screen size regardless of margins.</li>
 <li>Fixed an issue in BarcodeCount where the strap mode setting would not be saved in all cases.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-11">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-11">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-12">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-12">​</a></h4>
 <ul>
 <li>Fixed an issue where the US Permanent Residence Card was not processed through the VizMrz flow.</li>
 <li>Fixed an issue where AAMVA verification was being performed even when no AAMVA document types were enabled in the accepted documents.</li>
@@ -410,7 +414,7 @@
 <li>Added support for composite codes in SparkScan</li>
 <li>Added PDF417 barcode generation support with configurable options like error correction level, compaction mode, and dimensions through the new <code>Pdf417BarcodeGeneratorBuilder</code>.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-12">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-12">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-13">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-13">​</a></h4>
 <ul>
 <li>Added support for OCR scanning of the 2026 version of Victoria mobile driver licenses</li>
 <li>Added IdCaptureSettings.anonymizeDefaultFields setting that controls whether the SDK applies default anonymization rules for specific document types and regions</li>
@@ -445,7 +449,7 @@
 <li>Fixed an issue in BarcodeCount where the floating shutter button was not visible after setting shouldShowFloatingShutterButton to true.</li>
 <li>Fixed a bug that was causing BarcodeFind to render barcodes filtered out by the Transformer as if they were valid targets.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-13">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-13">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-14">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-14">​</a></h4>
 <ul>
 <li>Fixed support for UAE Esaad card</li>
 <li>Sanitized name fields on ACT driver license to split FullName and populate first and last name properties</li>
@@ -463,7 +467,7 @@
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="821">8.2.1<a class="hash-link" aria-label="Direct link to 8.2.1" title="Direct link to 8.2.1" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#821">​</a></h2>
 <p><strong>Released</strong>: March 5, 2026</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-11">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#bug-fixes-11">​</a></h3>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-14">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-14">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-15">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-15">​</a></h4>
 <ul>
 <li>Sanitized name fields on ACT DL. Splits FullName to populate first and last name properties</li>
 </ul>
@@ -480,7 +484,7 @@
 <ul>
 <li>Added new getFeedbackForScannedItem method to SparkScanFeedbackDelegate</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-15">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-15">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-16">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-16">​</a></h4>
 <ul>
 <li>Added a Jetpack compose settings sample for ID</li>
 <li>Enabled scanning of MRZ on the backside of several EU residence permits</li>
@@ -514,7 +518,7 @@
 <li>Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.</li>
 <li>Fixed an issue where the successful hint in BarcodeFind is not displayed</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-16">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-16">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-17">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-17">​</a></h4>
 <ul>
 <li>Fixed an issue affecting MRZ scanning performance when using the user facing camera in portrait mode on Android</li>
 <li>Fixed a memory issue leading to a persistent black screen during ID Capture startup</li>
@@ -603,7 +607,7 @@
 <li>Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-18">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#bug-fixes-18">​</a></h3>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-17">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-17">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-18">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-18">​</a></h4>
 <ul>
 <li>Fixed a memory issue leading to a persistent black screen during ID Capture startup</li>
 </ul>
@@ -624,7 +628,7 @@
 <li>Added <code>ScanditIconType.Slash</code> which can be used in <code>BarcodeArStatusIconAnnotationAnchor</code>.</li>
 <li>BarcodeCountView now supports cameras with different aspect ratios.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-18">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-18">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-19">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-19">​</a></h4>
 <ul>
 <li>Added NationalityISO property that maps results from Nationality field to country ISO code</li>
 <li>Added RejectionDiagnosticJSON property to CapturedId to report debug info during Timeout rejections</li>
@@ -672,7 +676,7 @@
 <li>Fixed the app becoming unresponsive after being in the background for extended periods</li>
 <li>Fixed an issue where the successful notification in BarcodeFind was not displayed</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-19">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-19">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-20">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-20">​</a></h4>
 <ul>
 <li>Fixed a bug concerning return complete instead of cropped images on the back of EU driving licenses</li>
 </ul>
@@ -728,7 +732,7 @@
 <ul>
 <li>We’re introducing an enhancement that makes Smart Label Capture more robust and scalable by complementing its on-device model with a larger, more capable model. When the on-device model can’t capture certain labels, the SDK automatically escalates to this enhancement to handle complex or unforeseen cases with high accuracy and reliability. This capability is currently available in <code>beta</code>. If you’re interested in trying it, please contact <a href="mailto:support@scandit.com" target="_blank" rel="noopener noreferrer">Scandit Support</a>. For configuration details, see <code>labelDefinition.adaptiveRecognitionEngine</code>.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-20">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-20">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-21">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-21">​</a></h4>
 <ul>
 <li>Added <code>ElementsToRetain</code> to <code>MobileDocumentScanner</code>: The set of data elements that the application intends to retain from scanned mobile documents. This information is used to set the <code>IntentToRetain</code> flag in ISO 18013-5 mdoc requests, which is required for legal compliance with data protection standards. An empty set indicates no elements will be retained, and <code>IntentToRetain</code> will be set to <code>false</code> for all fields.</li>
 <li>ID Capture now supports full-frame anonymization.</li>
@@ -774,7 +778,7 @@
 </ul>
 </li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-21">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-21">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-22">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-22">​</a></h4>
 <ul>
 <li>The configuration for the following documents has been changed as detailed below:<!-- -->
 <ul>
@@ -791,7 +795,7 @@
 <li>Fixed a class duplication build error caused by embedding <code>snapchat-djinni</code> sources.</li>
 <li>Fixed a flickering camera preview issue on some devices.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-22">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-22">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-23">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/android/release-notes/#id-23">​</a></h4>
 <ul>
 <li>Fixed a bug that could get the scanner stuck when scanning a US passport card.</li>
 </ul>

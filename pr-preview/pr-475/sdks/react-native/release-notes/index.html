@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-475/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-475/assets/css/styles.cb0ba1c2.css">
-<script src="/data-capture-documentation/pr-preview/pr-475/assets/js/runtime~main.5b853519.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-475/assets/js/runtime~main.76b4844d.js" defer="defer"></script>
 <script src="/data-capture-documentation/pr-preview/pr-475/assets/js/main.65a62d8a.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -38,6 +38,7 @@
 <ul>
 <li>Fixed the 2026 Oklahoma driver&#x27;s license not returning the Jurisdiction and JurisdictionIso fields.</li>
 <li>Fixed a crash in the IdCapture overlay when it was tapped.</li>
+<li>Updated the bundled ID Validate model to <code>8.0.20260626</code>, which fixes valid Ohio driver&#x27;s licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="smart-label-capture">Smart Label Capture<a class="hash-link" aria-label="Direct link to Smart Label Capture" title="Direct link to Smart Label Capture" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#smart-label-capture">​</a></h4>
 <ul>
@@ -93,7 +94,6 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-3">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-3">​</a></h4>
 <ul>
 <li>Improved PDF417 scanning on Quebec, Alaska, and Oklahoma driver’s licenses.</li>
-
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="behavioral-changes">Behavioral Changes<a class="hash-link" aria-label="Direct link to Behavioral Changes" title="Direct link to Behavioral Changes" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#behavioral-changes">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-3">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#barcode-3">​</a></h4>
@@ -287,6 +287,10 @@
 <li>Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.</li>
 <li>Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.</li>
 </ul>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-10">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-10">​</a></h4>
+<ul>
+<li>Updated the bundled ID Validate model to <code>8.0.20260626</code>, which fixes valid Ohio driver&#x27;s licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.</li>
+</ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core-6">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#core-6">​</a></h4>
 <ul>
 <li>Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.</li>
@@ -302,7 +306,7 @@
 <li>Fixed BarcodeAR not displaying an overlay for every scanned barcode when duplicate barcode values are present.</li>
 <li>Fixed a memory leak in SparkScan when using the item-based API.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-10">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-10">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-11">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-11">​</a></h4>
 <ul>
 <li>Fixed an issue where cropped document images were rotated when they are recovered using the getFrame API.</li>
 <li>Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.</li>
@@ -320,7 +324,7 @@
 <li>Added custom view support for barcode pick highlighting in JavaScript frameworks.</li>
 <li>Added support for PDF417 in the Barcode Generator.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-11">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-11">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-12">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-12">​</a></h4>
 <ul>
 <li>Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.</li>
 <li>Added support for new versions of USA, California–Driver&#x27;s License; USA, North Carolina–Driver&#x27;s License; USA, Texas–Driver&#x27;s License; and USA, Oklahoma–Driver&#x27;s License.</li>
@@ -362,7 +366,7 @@
 <li>Fixed an issue where the Smart Scan Selection aimer would become too small when scan-area margins restricted the visible scan area; the aimer is now sized relative to the view, keeping a consistent on-screen size regardless of margins.</li>
 <li>Fixed an issue in BarcodeCount where the strap mode setting would not be saved in all cases.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-12">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-12">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-13">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-13">​</a></h4>
 <ul>
 <li>Fixed an issue where the US Permanent Residence Card was not processed through the VizMrz flow.</li>
 <li>Fixed an issue where AAMVA verification was being performed even when no AAMVA document types were enabled in the accepted documents.</li>
@@ -403,7 +407,7 @@
 <ul>
 <li>Added support for composite codes in SparkScan</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-13">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-13">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-14">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-14">​</a></h4>
 <ul>
 <li>Added support for OCR scanning of the 2026 version of Victoria mobile driver licenses</li>
 <li>Added IdCaptureSettings.anonymizeDefaultFields setting that controls whether the SDK applies default anonymization rules for specific document types and regions</li>
@@ -443,7 +447,7 @@
 <li>Fixed a bug that was causing BarcodeFind to render barcodes filtered out by the Transformer as if they were valid targets.</li>
 <li>Fixed a stability issue that could cause a crash when tracked barcodes were removed or expired during a scanning session.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-14">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-14">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-15">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-15">​</a></h4>
 <ul>
 <li>Fixed BarcodeDictionary anonymization setting for iOS and Web</li>
 <li>Fixed support for UAE Esaad card</li>
@@ -467,7 +471,7 @@
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="821">8.2.1<a class="hash-link" aria-label="Direct link to 8.2.1" title="Direct link to 8.2.1" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#821">​</a></h2>
 <p><strong>Released</strong>: March 5, 2026</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-11">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#bug-fixes-11">​</a></h3>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-15">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-15">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-16">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-16">​</a></h4>
 <ul>
 <li>Sanitized name fields on ACT DL. Splits FullName to populate first and last name properties</li>
 </ul>
@@ -519,7 +523,7 @@
 <li>Fixed an issue where the successful hint in BarcodeFind is not displayed</li>
 <li>Fixed the missing found item icon in the MatrixScan Find carousel</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-16">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-16">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-17">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-17">​</a></h4>
 <ul>
 <li>Fixed an issue affecting MRZ scanning performance when using the user facing camera in portrait mode on Android</li>
 <li>Fixed a memory issue leading to a persistent black screen during ID Capture startup</li>
@@ -607,7 +611,7 @@
 <li>Reduced intermittent memory spikes while configuring the barcode scanner across all capture modes</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-18">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#bug-fixes-18">​</a></h3>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-17">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-17">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-18">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-18">​</a></h4>
 <ul>
 <li>Fixed a memory issue leading to a persistent black screen during ID Capture startup</li>
 </ul>
@@ -630,7 +634,7 @@
 <li>Added support for square DataMatrix codes with one-sided damage or occlusion. This feature is only enabled in Barcode Capture and SparkScan.</li>
 <li>Added, in <code>BarcodeAr</code>, new classes to create custom highlights (via <code>BarcodeArCustomHighlight</code>) and custom annotations (via <code>BarcodeArCustomAnnotation</code>).</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-18">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-18">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-19">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-19">​</a></h4>
 <ul>
 <li>Added NationalityISO property that maps results from Nationality field to country ISO code</li>
 <li>Added RejectionDiagnosticJSON property to CapturedId to report debug info during Timeout rejections</li>
@@ -673,7 +677,7 @@
 <li>Added the <code>cameraStateOnStop</code> property to BarcodeFindView to optimize camera transitions when switching between modes</li>
 <li>Fixed an issue where the successful notification in BarcodeFind was not displayed</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-19">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-19">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-20">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-20">​</a></h4>
 <ul>
 <li>Fixed an issue where front expiry date anonymization rectangle is erroneously drawn on front and back</li>
 <li>Fixed a bug that prevented VizResult anonymization of the following fields: additionalAddressInformation, bloodType, employer, fathersName, issuingAuthority, maritalStatus, mothersName, placeOfBirth, profession, race, residentialStatus</li>
@@ -734,7 +738,7 @@
 <ul>
 <li>We’re introducing an enhancement that makes Smart Label Capture more robust and scalable by complementing its on-device model with a larger, more capable model. When the on-device model can’t capture certain labels, the SDK automatically escalates to this enhancement to handle complex or unforeseen cases with high accuracy and reliability. This capability is currently available in <code>beta</code>. If you’re interested in trying it, please contact Scandit Support. For configuration details, see <code>labelDefinition.adaptiveRecognitionEngine</code>.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-20">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-20">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-21">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-21">​</a></h4>
 <ul>
 <li>Added <code>ElementsToRetain</code> to <code>MobileDocumentScanner</code>: The set of data elements that the application intends to retain from scanned mobile documents. This information is used to set the <code>IntentToRetain</code> flag in ISO 18013-5 mdoc requests, which is required for legal compliance with data protection standards. An empty set indicates no elements will be retained, and <code>IntentToRetain</code> will be set to <code>false</code> for all fields.</li>
 <li>ID Capture now supports full-frame anonymization.</li>
@@ -780,7 +784,7 @@
 </ul>
 </li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-21">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-21">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-22">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-22">​</a></h4>
 <ul>
 <li>The configuration for the following documents has been changed as detailed below:<!-- -->
 <ul>
@@ -796,7 +800,7 @@
 <ul>
 <li>Fixed handling of <code>ImageFrameSource</code> turn on and off calls.</li>
 </ul>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-22">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-22">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-23">ID<a class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" href="/data-capture-documentation/pr-preview/pr-475/sdks/react-native/release-notes/#id-23">​</a></h4>
 <ul>
 <li>Fixed a bug that could get the scanner stuck when scanning a US passport card.</li>
 </ul>
