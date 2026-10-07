@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-475/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-475/assets/css/styles.cb0ba1c2.css">
-<script src="/data-capture-documentation/pr-preview/pr-475/assets/js/runtime~main.76b4844d.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-475/assets/js/runtime~main.e02b98b6.js" defer="defer"></script>
 <script src="/data-capture-documentation/pr-preview/pr-475/assets/js/main.65a62d8a.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -20,7 +20,7 @@
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="new-features">New Features<a class="hash-link" aria-label="Direct link to New Features" title="Direct link to New Features" href="/data-capture-documentation/pr-preview/pr-475/sdks/capacitor/release-notes/#new-features">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/capacitor/release-notes/#id">​</a></h4>
 <ul>
-<li>Added VIZ capture support for the Canadian Visa. The full 10-character visa number is in <code>VizResult.visaNumber</code> and <code>VizResult.documentNumber</code>; <code>CapturedId.visaNumber</code> still returns the 8-character MRZ value.</li>
+<li>Visa VIZ results for Canadian visa stickers now report the full 10-character number in <code>VizResult.visaNumber</code> (the MRZ result remains truncated).</li>
 <li>Added <code>IdCaptureSettings.notifyOnSideCapture</code>. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan. Use <code>CapturedId.isCapturingComplete</code> to tell a partial result from a complete one.</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/capacitor/release-notes/#bug-fixes">​</a></h3>
@@ -310,7 +310,7 @@
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-12">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/capacitor/release-notes/#id-12">​</a></h4>
 <ul>
 <li>Added support for reading the vehicle table on the back of New Zealand driving licences, with the latest expiry date returned; supported vehicle classes are 1–6, including L=learner and R=restricted variants.</li>
-<li>Added support for new versions of USA, California–Driver&#x27;s License; USA, North Carolina–Driver&#x27;s License; USA, Texas–Driver&#x27;s License; and USA, Oklahoma–Driver&#x27;s License.</li>
+<li>Added support for new versions of USA, California–Driver&#x27;s License; USA, North Carolina  –Driver&#x27;s License; USA, Texas–Driver&#x27;s License; and USA, Oklahoma–Driver&#x27;s License.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="core-6">Core<a class="hash-link" aria-label="Direct link to Core" title="Direct link to Core" href="/data-capture-documentation/pr-preview/pr-475/sdks/capacitor/release-notes/#core-6">​</a></h4>
 <ul>

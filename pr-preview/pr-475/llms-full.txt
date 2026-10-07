@@ -7062,7 +7062,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa. The full 10-character visa number is in `VizResult.visaNumber` and `VizResult.documentNumber`; `CapturedId.visaNumber` still returns the 8-character MRZ value.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -7106,7 +7106,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* ICAO machine-readable visas (MRV-A and MRV-B) now map the MRZ document number per issuing country: to the passport number for US and UK visas, to the passport number plus a visa number from the optional data (truncated to 8 characters) for Canadian visas, and to the visa number, number of entries and, for type C, duration of stay for type A, C and D visas from 25 Schengen issuers. New fields: `CapturedId.visaNumber`, `CapturedId.passportNumber`, `MrzResult.visaNumber`, `MrzResult.visaNumberOfEntries`, `MrzResult.visaMultipleEntries`, `MrzResult.visaDurationInDays`.
+* Visa MRZ results now report country-specific additional details such as `MrzResult.visaNumber`, `MrzResult.visaNumberOfEntries`, `MrzResult.visaMultipleEntries` and `MrzResult.visaDurationInDays`.
 * Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
 * Added an [ID Capture image upload sample](https://github.com/Scandit/datacapture-android-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample) that demonstrates scanning ID documents from still images or PDF files on the device instead of using the live camera.
 * Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
@@ -11486,7 +11486,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa. The full 10-character visa number is in `VizResult.visaNumber` and `VizResult.documentNumber`; `CapturedId.visaNumber` still returns the 8-character MRZ value.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 * Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan. Use `CapturedId.isCapturingComplete` to tell a partial result from a complete one.
 
 ### Bug Fixes
@@ -15153,7 +15153,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa. The full 10-character visa number is in `VizResult.visaNumber` and `VizResult.documentNumber`; `CapturedId.visaNumber` still returns the 8-character MRZ value.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 * Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan. Use `CapturedId.isCapturingComplete` to tell a partial result from a complete one.
 
 ### Bug Fixes
@@ -18832,7 +18832,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa. The full 10-character visa number is in `VizResult.visaNumber` and `VizResult.documentNumber`; `CapturedId.visaNumber` still returns the 8-character MRZ value.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -24770,7 +24770,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa. The full 10-character visa number is in `VizResult.visaNumber` and `VizResult.documentNumber`; `CapturedId.visaNumber` still returns the 8-character MRZ value.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -24822,7 +24822,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* ICAO machine-readable visas (MRV-A and MRV-B) now map the MRZ document number per issuing country: to the passport number for US and UK visas, to the passport number plus a visa number from the optional data (truncated to 8 characters) for Canadian visas, and to the visa number, number of entries and, for type C, duration of stay for type A, C and D visas from 25 Schengen issuers. New fields: `CapturedId.visaNumber`, `CapturedId.passportNumber`, `MrzResult.visaNumber`, `MrzResult.visaNumberOfEntries`, `MrzResult.visaMultipleEntries`, `MrzResult.visaDurationInDays`.
+* Visa MRZ results now report country-specific additional details such as `MrzResult.visaNumber`, `MrzResult.visaNumberOfEntries`, `MrzResult.visaMultipleEntries` and `MrzResult.visaDurationInDays`.
 * Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
 * Added `setRepeatAsync` on `SDCImageFrameSource`. It determines whether the frame source keeps re-emitting its frames after all of them have been processed. Setting this to true makes a still image behave like a continuous camera feed, giving the recognizer the multiple passes over the image it generally needs.
 * Added an [ID Capture image upload sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample) that demonstrates scanning ID documents from still images or PDF files on the device instead of using the live camera.
@@ -30851,7 +30851,7 @@ Each `ParsedField` carries its `name`, its decoded `parsed` value, the `rawStrin
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa. The full 10-character visa number is in `VizResult.visaNumber` and `VizResult.documentNumber`; `CapturedId.visaNumber` still returns the 8-character MRZ value.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -35251,7 +35251,7 @@ More data formats will be added in future releases. Please contact us if the dat
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa. The full 10-character visa number is in `VizResult.visaNumber` and `VizResult.documentNumber`; `CapturedId.visaNumber` still returns the 8-character MRZ value.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -39088,7 +39088,7 @@ More data formats will be added in future releases. Please contact us if the dat
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa. The full 10-character visa number is in `VizResult.visaNumber` and `VizResult.documentNumber`; `CapturedId.visaNumber` still returns the 8-character MRZ value.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -42997,7 +42997,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa. The full 10-character visa number is in `VizResult.visaNumber` and `VizResult.documentNumber`; `CapturedId.visaNumber` still returns the 8-character MRZ value.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 * Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan. Use `CapturedId.isCapturingComplete` to tell a partial result from a complete one.
 
 ### Bug Fixes
@@ -47611,7 +47611,7 @@ For important information about CDN risks and recommendations for production env
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa. The full 10-character visa number is in `VIZResult.visaNumber` and `VIZResult.documentNumber`; `CapturedId.visaNumber` still returns the 8-character MRZ value.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VIZResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -47659,7 +47659,7 @@ For important information about CDN risks and recommendations for production env
 
 #### Id
 
-* ICAO machine-readable visas (MRV-A and MRV-B) now map the MRZ document number per issuing country: to the passport number for US and UK visas, to the passport number plus a visa number from the optional data (truncated to 8 characters) for Canadian visas, and to the visa number, number of entries and, for type C, duration of stay for type A, C and D visas from 25 Schengen issuers. New fields: `CapturedId.visaNumber`, `CapturedId.passportNumber`, `MRZResult.visaNumber`, `MRZResult.visaNumberOfEntries`, `MRZResult.visaMultipleEntries`, `MRZResult.visaDurationInDays`.
+* Visa MRZ results now report country-specific additional details such as `MRZResult.visaNumber`, `MRZResult.visaNumberOfEntries`, `MRZResult.visaMultipleEntries` and `MRZResult.visaDurationInDays`.
 * Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 

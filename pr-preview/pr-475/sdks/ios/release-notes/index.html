@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-475/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-475/assets/css/styles.cb0ba1c2.css">
-<script src="/data-capture-documentation/pr-preview/pr-475/assets/js/runtime~main.76b4844d.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-475/assets/js/runtime~main.e02b98b6.js" defer="defer"></script>
 <script src="/data-capture-documentation/pr-preview/pr-475/assets/js/main.65a62d8a.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -25,7 +25,7 @@
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/ios/release-notes/#id">​</a></h4>
 <ul>
-<li>Added VIZ capture support for the Canadian Visa. The full 10-character visa number is in <code>VizResult.visaNumber</code> and <code>VizResult.documentNumber</code>; <code>CapturedId.visaNumber</code> still returns the 8-character MRZ value.</li>
+<li>Visa VIZ results for Canadian visa stickers now report the full 10-character number in <code>VizResult.visaNumber</code> (the MRZ result remains truncated).</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/ios/release-notes/#bug-fixes">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode-1">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-475/sdks/ios/release-notes/#barcode-1">​</a></h4>
@@ -79,7 +79,7 @@
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-2">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/ios/release-notes/#id-2">​</a></h4>
 <ul>
-<li>ICAO machine-readable visas (MRV-A and MRV-B) now map the MRZ document number per issuing country: to the passport number for US and UK visas, to the passport number plus a visa number from the optional data (truncated to 8 characters) for Canadian visas, and to the visa number, number of entries and, for type C, duration of stay for type A, C and D visas from 25 Schengen issuers. New fields: <code>CapturedId.visaNumber</code>, <code>CapturedId.passportNumber</code>, <code>MrzResult.visaNumber</code>, <code>MrzResult.visaNumberOfEntries</code>, <code>MrzResult.visaMultipleEntries</code>, <code>MrzResult.visaDurationInDays</code>.</li>
+<li>Visa MRZ results now report country-specific additional details such as <code>MrzResult.visaNumber</code>, <code>MrzResult.visaNumberOfEntries</code>, <code>MrzResult.visaMultipleEntries</code> and <code>MrzResult.visaDurationInDays</code>.</li>
 <li>Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.</li>
 <li>Added <code>setRepeatAsync</code> on <code>SDCImageFrameSource</code>. It determines whether the frame source keeps re-emitting its frames after all of them have been processed. Setting this to true makes a still image behave like a continuous camera feed, giving the recognizer the multiple passes over the image it generally needs.</li>
 <li>Added an <a href="https://github.com/Scandit/datacapture-ios-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample" target="_blank" rel="noopener noreferrer">ID Capture image upload sample</a> that demonstrates scanning ID documents from still images or PDF files on the device instead of using the live camera.</li>
@@ -474,7 +474,7 @@
 </ul>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="821">8.2.1<a class="hash-link" aria-label="Direct link to 8.2.1" title="Direct link to 8.2.1" href="/data-capture-documentation/pr-preview/pr-475/sdks/ios/release-notes/#821">​</a></h2>
 <p><strong>Released</strong>: March 5, 2026</p>
-<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-10">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/ios/release-notes/#bug-fixes-10"> ​</a></h3>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes-10">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-475/sdks/ios/release-notes/#bug-fixes-10">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id-17">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-475/sdks/ios/release-notes/#id-17">​</a></h4>
 <ul>
 <li>Sanitized name fields on ACT DL. Splits FullName to populate first and last name properties</li>
