@@ -294,6 +294,97 @@ def update_cross_references(old_version: str, new_version: str) -> None:
         print(f"  Updated {total_changes} references in {files_changed} files")
 
 
+# The API-reference links a frozen version must own, as (source, target) pairs.
+# `{line}` is the version's <major.minor>, which is what publish_platform() in
+# data-capture-sdk publishes to.
+API_REFERENCE_LINK_REWRITES = (
+    ("docs.scandit.com/data-capture-sdk", "docs.scandit.com/{line}/data-capture-sdk"),
+    ("docs.scandit.com/stable/c_api", "docs.scandit.com/{line}/c_api"),
+)
+
+
+def api_reference_line(version: str) -> str:
+    """The <major.minor> line a version's API reference is published to."""
+    match = re.match(r"^(\d+\.\d+)\.\d+", version)
+    if not match:
+        raise ValueError(f"cannot derive an API-reference line from {version!r}")
+    return match.group(1)
+
+
+def rewrite_api_reference_links(version: str) -> None:
+    """Point a freshly frozen version's API-reference links at its own line.
+
+    `docusaurus docs:version` snapshots docs/ verbatim, so the new snapshot
+    inherits the CURRENT version's convention of linking the UNVERSIONED API
+    reference. It is not the current version any more.
+
+    That matters during a beta window: the frozen version is served at the site
+    root while the beta owns /next/, and both would link the same unversioned
+    tree. Whichever publish sets PUBLISH_DOCS_FOR_LATEST last owns that tree, so
+    readers of the released version silently get the beta's API reference.
+
+    version-8.5.3 shipped in exactly that state - docusaurus.config.ts records
+    it as "210 files link docs.scandit.com/data-capture-sdk, 0 versioned" -
+    while 7.6.14 and 6.28.11 link their own lines because someone corrected
+    them by hand afterwards.
+
+    NO CHECK THAT THE TARGET RESOLVES, deliberately. The bump runs well BEFORE
+    the release, so that people can review the snapshot and the release notes
+    while there is still time to change them. publish_platform() in
+    data-capture-sdk writes <major.minor>/data-capture-sdk/ and
+    <major.minor>/c_api/ from the release pipeline, which has not run yet, so
+    the links this writes are correct by construction and unresolvable by
+    definition at the moment they are written. Verifying them belongs after the
+    release publishes, not here.
+    """
+    line = api_reference_line(version)
+    docs_dir = Path(f"versioned_docs/version-{version}")
+    if not docs_dir.exists():
+        raise FileNotFoundError(f"{docs_dir} does not exist")
+
+    rewrites = [
+        (source, target.format(line=line))
+        for source, target in API_REFERENCE_LINK_REWRITES
+    ]
+
+    # encoding is explicit on both sides. read_text() with no encoding uses the
+    # locale default, and 57 of the ~676 files under docs/ are not decodable as
+    # cp1252 - so on a Windows checkout this raised mid-walk, AFTER
+    # `docs:version` had already written versioned_docs/, versioned_sidebars/
+    # and versions.json, and with files earlier in sorted() order already
+    # rewritten. The catch-all in main() printed "Unexpected error" and left a
+    # half-frozen repo that cannot simply be re-run.
+    total = 0
+    touched = 0
+    for file_path in sorted(set(docs_dir.rglob("*.md")) | set(docs_dir.rglob("*.mdx"))):
+        content = file_path.read_text(encoding="utf-8")
+        original = content
+        for source, target in rewrites:
+            total += content.count(source)
+            content = content.replace(source, target)
+        if content != original:
+            file_path.write_text(content, encoding="utf-8")
+            touched += 1
+
+    if total == 0:
+        # Stop rather than log and carry on. Every version so far carries
+        # hundreds of these links, so zero means the convention moved and these
+        # patterns no longer match - in which case the snapshot silently keeps
+        # linking the unversioned tree, which is exactly the 8.5.3 bug this
+        # exists to prevent. A version that genuinely has none needs this guard
+        # revisited, not bypassed.
+        raise RuntimeError(
+            f"{docs_dir} contains no API-reference links matching "
+            f"{[source for source, _ in rewrites]}. Either the snapshot is not "
+            f"what it should be, or the link convention changed and "
+            f"API_REFERENCE_LINK_REWRITES needs updating."
+        )
+
+    for _source, target in rewrites:
+        print(f"  -> {target}")
+    print(f"  Rewrote {total} API-reference links in {touched} files")
+
+
 def update_versioned_docs(old_version: str, new_version: str) -> None:
     print(f"Updating versioned docs from {old_version} to {new_version}...")
 
@@ -453,6 +544,9 @@ def main() -> int:
             current_version = str(registry['current'])
             print(f"Detected: new minor beta ({current_version} → {new_version_string})")
             subprocess.run(["npm", "run", "docusaurus", "docs:version", current_version], check=True)
+            # The snapshot is no longer the current version, so it must stop
+            # linking the unversioned API reference - see the docstring.
+            rewrite_api_reference_links(current_version)
             update_config_for_minor_beta(config_path, current_version, new_version_string)
             print(f"✓ Updated from {current_version} to {new_version_string} (beta)")
 
