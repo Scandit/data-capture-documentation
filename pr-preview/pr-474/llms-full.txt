@@ -9630,16 +9630,18 @@ settings.setShouldPassImageTypeToResult(IdImageType.Frame, true);
 
 ## Callbacks and Scanning Workflows
 
-The ID Capture Listener provides two callbacks: `onIdCaptured` and `onIdRejected`. The `onIdCaptured` callback is called when an acceptable document is successfully captured, while the `onIdRejected` callback is called when a document is captured but rejected.
+The ID Capture Listener provides two callbacks: `didCaptureId` and `didRejectId`. The `didCaptureId` callback is called when an acceptable document is successfully captured, while the `didRejectId` callback is called when a document is captured but rejected.
 
-For a successful capture, the `onIdCaptured` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
+For a successful capture, the `didCaptureId` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
 
-For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
+For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `didRejectId` callback to help you understand why the document was rejected and to take appropriate action. These are:
 
 * NOT_ACCEPTED_DOCUMENT_TYPE: The document is not in the list of accepted documents. In this scenario, you could direct the user to scan a different document.
 * INVALID_FORMAT: The document is in the list of accepted documents, but the format is invalid. In this scenario, you could direct the user to scan the document again.
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
+
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
 
 ## Detect Fake IDs
 
@@ -9758,16 +9760,16 @@ DataCaptureContext.sharedInstance.addMode(idCapture);
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `onIdCaptured` and `onIdRejected`.
+To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `didCaptureId` and `didRejectId`.
 
 ```ts
 idCapture.addListener({
-	onIdCaptured: (data) => {
+	didCaptureId: (idCapture, capturedId) => {
 		// Success! Handle extracted data here.
 	},
-	onIdRejected: (data, reason) => {
+	didRejectId: (idCapture, rejectedId, reason) => {
 		// Something went wrong. Inspect the reason to determine the follow-up action.
-	}
+	},
 });
 ```
 
@@ -9775,16 +9777,16 @@ idCapture.addListener({
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/capacitor/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 On a successful scan you may read the extracted data from `CapturedId`:
 
 ```ts
-onIdCaptured: (data) => {
-	const fullName = data.fullName;
-	const dateOfBirth = data.dateOfBirth;
-	const dateOfExpiry = data.dateOfExpiry;
-	const documentNumber = data.documentNumber;
+didCaptureId: (idCapture, capturedId) => {
+	const fullName = capturedId.fullName;
+	const dateOfBirth = capturedId.dateOfBirth;
+	const dateOfExpiry = capturedId.dateOfExpiry;
+	const documentNumber = capturedId.documentNumber;
 
 	// Process data:
 	processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
@@ -9802,7 +9804,7 @@ The ID scanning process may fail for various reasons. Start from inspecting [Rej
 You may wish to implement the follow-up action based on the reason of failure:
 
 ```ts
-onIdRejected: (data, reason) => {
+didRejectId: (idCapture, rejectedId, reason) => {
 	if (reason === RejectionReason.Timeout) {
 		// Ask the user to retry, or offer alternative input method.
 	} else if (reason === RejectionReason.DocumentExpired) {
@@ -13275,16 +13277,18 @@ settings.setShouldPassImageTypeToResult(Scandit.IdImageType.Frame, true);
 
 ## Callbacks and Scanning Workflows
 
-The ID Capture Listener provides two callbacks: `onIdCaptured` and `onIdRejected`. The `onIdCaptured` callback is called when an acceptable document is successfully captured, while the `onIdRejected` callback is called when a document is captured but rejected.
+The ID Capture Listener provides two callbacks: `didCaptureId` and `didRejectId`. The `didCaptureId` callback is called when an acceptable document is successfully captured, while the `didRejectId` callback is called when a document is captured but rejected.
 
-For a successful capture, the `onIdCaptured` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
+For a successful capture, the `didCaptureId` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
 
-For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
+For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `didRejectId` callback to help you understand why the document was rejected and to take appropriate action. These are:
 
 * NOT_ACCEPTED_DOCUMENT_TYPE: The document is not in the list of accepted documents. In this scenario, you could direct the user to scan a different document.
 * INVALID_FORMAT: The document is in the list of accepted documents, but the format is invalid. In this scenario, you could direct the user to scan the document again.
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
+
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
 
 ## Detect Fake IDs
 
@@ -13403,16 +13407,16 @@ DataCaptureContext.sharedInstance.addMode(idCapture);
 
 ## Implement the Listener
 
-To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `onIdCaptured` and `onIdRejected`.
+To receive scan results, implement [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener). The listener provides two callbacks: `didCaptureId` and `didRejectId`.
 
 ```ts
 idCapture.addListener({
-	onIdCaptured: (data) => {
+	didCaptureId: (idCapture, capturedId) => {
 		// Success! Handle extracted data here.
 	},
-	onIdRejected: (data, reason) => {
+	didRejectId: (idCapture, rejectedId, reason) => {
 		// Something went wrong. Inspect the reason to determine the follow-up action.
-	}
+	},
 });
 ```
 
@@ -13420,16 +13424,16 @@ idCapture.addListener({
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
-For more specific information, use its non-null result properties (e.g. [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
+For more specific information, use its non-null result properties (for example, [CapturedId.barcode](https://docs.scandit.com/data-capture-sdk/cordova/id-capture/api/captured-id.html#property-scandit.datacapture.id.CapturedId.Barcode)).
 
 On a successful scan you may read the extracted data from `CapturedId`:
 
 ```ts
-onIdCaptured: (data) => {
-	const fullName = data.fullName;
-	const dateOfBirth = data.dateOfBirth;
-	const dateOfExpiry = data.dateOfExpiry;
-	const documentNumber = data.documentNumber;
+didCaptureId: (idCapture, capturedId) => {
+	const fullName = capturedId.fullName;
+	const dateOfBirth = capturedId.dateOfBirth;
+	const dateOfExpiry = capturedId.dateOfExpiry;
+	const documentNumber = capturedId.documentNumber;
 
 	// Process data:
 	processData(fullName, dateOfBirth, dateOfExpiry, documentNumber);
@@ -13447,7 +13451,7 @@ The ID scanning process may fail for various reasons. Start from inspecting [Rej
 You may wish to implement the follow-up action based on the reason of failure:
 
 ```ts
-onIdRejected: (data, reason) => {
+didRejectId: (idCapture, rejectedId, reason) => {
 	if (reason === Scandit.RejectionReason.Timeout) {
 		// Ask the user to retry, or offer alternative input method.
 	} else if (reason === Scandit.RejectionReason.DocumentExpired) {
@@ -40934,16 +40938,18 @@ For the full frame of the document, you can use [`setShouldPassImageTypeToResult
 
 ## Callbacks and Scanning Workflows
 
-The ID Capture Listener provides two callbacks: `onIdCaptured` and `onIdRejected`. The `onIdCaptured` callback is called when an acceptable document is successfully captured, while the `onIdRejected` callback is called when a document is captured but rejected.
+The ID Capture Listener provides two callbacks: `didCaptureId` and `didRejectId`. The `didCaptureId` callback is called when an acceptable document is successfully captured, while the `didRejectId` callback is called when a document is captured but rejected.
 
-For a successful capture, the `onIdCaptured` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
+For a successful capture, the `didCaptureId` callback provides a `CapturedId` object that contains the extracted information from the document. This object is specific to the type of document scanned. For example, a `CapturedId` object for a US Driver License will contain different fields than a `CapturedId` object for a Passport.
 
-For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `onIdRejected` callback to help you understand why the document was rejected and to take appropriate action. These are:
+For a rejected document, a [RejectionReason](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/rejection-reason.html#enum-scandit.datacapture.id.RejectionReason) is provided in the `didRejectId` callback to help you understand why the document was rejected and to take appropriate action. These are:
 
 * NOT_ACCEPTED_DOCUMENT_TYPE: The document is not in the list of accepted documents. In this scenario, you could direct the user to scan a different document.
 * INVALID_FORMAT: The document is in the list of accepted documents, but the format is invalid. In this scenario, you could direct the user to scan the document again.
 * DOCUMENT_VOIDED: The document is in the list of accepted documents, but the document is voided. In this scenario, you could direct the user to scan a different document.
 * TIMEOUT: The document was not scanned within the specified time. In this scenario, you could direct the user to scan the document again.
+
+import IdSideCaptureCallbacks from '../../../partials/advanced/_id-side-capture-callbacks.mdx';
 
 ## Detect Fake IDs
 
@@ -41036,7 +41042,7 @@ settings.rejectedDocuments.push(
 
 ## Implement the Listener
 
-To receive scan results, implement and [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
+To receive scan results, implement an [IdCaptureListener](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/id-capture-listener.html#interface-scandit.datacapture.id.IIdCaptureListener).
 
 Capture results are delivered as a [CapturedId](https://docs.scandit.com/data-capture-sdk/react-native/id-capture/api/captured-id.html#class-scandit.datacapture.id.CapturedId). This class contains data common for all kinds of personal identification documents.
 
@@ -41044,15 +41050,15 @@ For more specific information, use its non-null result properties (for example, 
 
 ```js
 const listener = {
-	didCaptureId: (idCapture, session) => {
-		if (session.newlyCapturedId.isPassport() === true) {
+	didCaptureId: (idCapture, capturedId) => {
+		if (capturedId.document?.isPassport) {
 			// Handle the information extracted.
-		} else if (session.newlyCapturedId.isDriverLicense() === true) {
+		} else if (capturedId.document?.isDriverLicense) {
 			// Handle the information extracted.
 		}
 	},
-	didFailWithError: (idCapture, error, session) => {
-		// Handle the error.
+	didRejectId: (idCapture, rejectedId, reason) => {
+		// Inspect the reason to determine the follow-up action.
 	},
 };
 ```
