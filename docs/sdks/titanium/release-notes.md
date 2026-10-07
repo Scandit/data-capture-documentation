@@ -306,6 +306,16 @@ No updates for this framework in this release.
 * Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 
+## 8.1.7
+
+**Released**: October 7, 2026
+
+### Bug Fixes
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+
 ## 8.1.6
 
 **Released**: July 29, 2026

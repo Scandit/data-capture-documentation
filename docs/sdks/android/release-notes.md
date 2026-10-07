@@ -585,11 +585,28 @@ keywords:
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
 
+## 8.1.7
+
+**Released**: October 7, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Reverted the Matrix Scan Sequence stability and robustness improvements introduced in `8.1.6` because of issues when scanning one code at a time.
+
 ## 8.1.6
 
 **Released**: July 29, 2026
 
 ### Bug Fixes
+
+#### Barcode
+
+* Matrix Scan Sequence: Improved stability and robustness
+  - Improved the stability of tray detection and tray ordering in MS Sequence. Fewer false trays are created on barcodes on product facings. Trays with a single barcode are created more conservatively, which reduces detection and ordering errors.
+  - Improved barcode tracking robustness in MS Sequence. Barcode overlays drift less during fast device motion.
 
 #### Smart Label Capture
 
