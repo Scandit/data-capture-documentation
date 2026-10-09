@@ -226,16 +226,21 @@ const FeatureList: React.FC<FeatureListProps> = ({
                           <span
                             key={frameworkName}
                             className={`${styles.frameworkItem} ${styles.frameworkItemUnavailable}`}
-                            aria-disabled="true"
-                            title={`${frameworkName} v${frameworkInfo.version} - API reference not available`}
+                            /* Short on purpose: screen readers often read `title` after
+                               the content, so repeating the name and version here would
+                               announce them twice. No `aria-disabled` either: a plain
+                               <span> is not a control, and ARIA 1.2 does not allow the
+                               attribute on generic elements. */
+                            title="No API reference"
                           >
                             {frameworkName} v{frameworkInfo.version}
-                            {/* The dashed border and the dimmed token say "unavailable"
-                                to someone who can see them. Without this the chip
-                                announces exactly what an available one announces -
-                                "iOS v1.2.3" - so a screen-reader user gets no signal
-                                that this one is different and does not link anywhere. */}
-                            <span className={styles.visuallyHidden}> (not available)</span>
+                            {/* The dashed border and the dimmed token show sighted readers
+                                that this chip has no link. Without this text the chip
+                                announces exactly what a linked one announces - "iOS v1.2.3".
+                                It says "no API reference", not "not available": every chip in
+                                this column is a framework that DOES support the feature, so
+                                "not available" would read as "this feature isn't on iOS". */}
+                            <span className={styles.visuallyHidden}> (no API reference)</span>
                           </span>
                         )
                       ))}
