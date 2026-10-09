@@ -90,8 +90,11 @@ const REGISTRY_FILE = "src/constants/frameworks.ts";
 // Per-framework availability data. Keyed by display name because that is what
 // the tables render, so these files cannot be checked against the slug enum -
 // they are checked against the registry's `display` values instead.
+// The one data file that must state every SDK framework. See productCoverageErrors.
+const PRODUCTS_FILE = "src/data/products.json";
+
 const DATA_FILES = [
-  "src/data/products.json",
+  PRODUCTS_FILE,
   "src/data/features.json",
   "src/data/skills.json",
 ];
@@ -1040,6 +1043,51 @@ function dataFileErrors(rel, parsedData, registryDisplays) {
 }
 
 /**
+ * products.json must state EVERY SDK framework for EVERY product, available or
+ * not. The name check above is one-directional, so a framework that was simply
+ * absent passed as clean - which is how Linux went missing from all 13
+ * products, and Kotlin Multiplatform from barcode-sequence, with nothing to say
+ * so. An absent key renders exactly like `n/a`, so a forgotten framework and a
+ * deliberate "not available" were indistinguishable. Requiring the key makes
+ * every gap a decision someone wrote down.
+ *
+ * `sdkDisplays` = registry displays that have a routeSegment (Hosted has none
+ * and is not an SDK framework). A version must be "n/a" or a release number, so
+ * a placeholder cannot render as "Linux vTBD".
+ */
+function productCoverageErrors(rel, items, sdkDisplays) {
+  if (!sdkDisplays || !sdkDisplays.length)
+    return [`${rel}: no SDK frameworks read from the registry - coverage is unchecked`];
+  if (!Array.isArray(items))
+    return [`${rel}: not a list of products - coverage is unchecked`];
+  const errors = [];
+  items.forEach((item, i) => {
+    const label = `entry "${(item && (item.key || item.name)) || `#${i}`}"`;
+    const fw = item && item.frameworks;
+    // An absent or non-object map is already reported by dataFileErrors.
+    if (!fw || typeof fw !== "object" || Array.isArray(fw)) return;
+    for (const d of sdkDisplays) {
+      if (!Object.prototype.hasOwnProperty.call(fw, d)) {
+        errors.push(
+          `${rel}: ${label} does not state "${d}" - add {"version": "n/a"} if ` +
+            `it is not available, so a missing framework cannot pass as a decision`,
+        );
+      }
+    }
+    for (const [d, info] of Object.entries(fw)) {
+      const v = info && info.version;
+      if (typeof v !== "string" || !(v === "n/a" || /^\d+\.\d+(\.\d+)?$/.test(v))) {
+        errors.push(
+          `${rel}: ${label} "${d}" has version ${JSON.stringify(v)} - expected ` +
+            `"n/a" or a release number such as "8.6"`,
+        );
+      }
+    }
+  });
+  return errors;
+}
+
+/**
  * The registry invariants that do not fit the value checks: that the splitter
  * read every chunk of the literal, that every entry declares a slug, and that
  * `agentSkills: true` implies a `routeSegment` to build a URL from.
@@ -1260,9 +1308,25 @@ function main() {
       dataNamesChecked += read.namesChecked;
     }
   }
-  // Deliberately one-directional: a product or feature need not support every
-  // framework, so a registry display missing from a data file is not an error.
-  // Only a name the registry does not know is.
+  // The name check is one-directional: a feature need not list every
+  // framework, so a registry display missing from features.json or skills.json
+  // is not an error. products.json is the exception - see productCoverageErrors.
+  {
+    const sdkDisplays = [];
+    const read = registryEntries();
+    for (const entry of (read && read.entries) || []) {
+      if (entryField(entry, "routeSegment").length)
+        sdkDisplays.push(...entryField(entry, "display"));
+    }
+    let products = null;
+    try {
+      products = JSON.parse(fs.readFileSync(path.join(ROOT, PRODUCTS_FILE), "utf8"));
+    } catch {
+      // Missing or unparseable is already reported by dataFileFrameworkNames.
+    }
+    if (products !== null)
+      errors.push(...productCoverageErrors(PRODUCTS_FILE, products, sdkDisplays));
+  }
 
   if (registryDisplays && registryDisplays.length) {
     // FrameworksName: `ios = "iOS"` - the VALUE must be a registry display.
@@ -1368,6 +1432,7 @@ module.exports = {
   declaredFrameworks,
   dataFileFrameworkNames,
   dataFileErrors,
+  productCoverageErrors,
   declStart,
   enumSlugs,
   registryInvariantErrors,
