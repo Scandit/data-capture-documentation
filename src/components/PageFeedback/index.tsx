@@ -1,6 +1,8 @@
 import React from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
 import { capturePostHogEvent } from '@site/src/components/SkillsCallout/analytics';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import { sendDirectFeedback } from './direct';
 import styles from './styles.module.css';
 
 /**
@@ -75,6 +77,20 @@ export type PageFeedbackProps = {
 function Inner({ url, title }: PageFeedbackProps) {
   // Match `trailingSlash: true`, which is what $pathname carries.
   const path = url.endsWith('/') ? url : `${url}/`;
+
+  // CONFIGURED, NOT COMPILED IN. The Web App URL changes every time the Apps
+  // Script is redeployed, and an empty value simply disables the fallback --
+  // `sendDirectFeedback` returns false and the widget behaves exactly as it
+  // did before, telling the reader their note did not send.
+  const { siteConfig } = useDocusaurusContext();
+  const feedbackEndpoint = String(
+    (siteConfig.customFields as Record<string, unknown> | undefined)?.feedbackEndpoint ?? '',
+  );
+  // Obfuscation, and named as such. It ships in client JavaScript, so it stops
+  // scanners rather than people; the real limits are on the receiving end.
+  const feedbackToken = String(
+    (siteConfig.customFields as Record<string, unknown> | undefined)?.feedbackToken ?? '',
+  );
 
   const [helpful, setHelpful] = React.useState<boolean | null>(null);
   const [recorded, setRecorded] = React.useState(false);
@@ -189,7 +205,7 @@ function Inner({ url, title }: PageFeedbackProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voteAttempt, recorded]);
 
-  const submit = () => {
+  const submit = async () => {
     const text = comment.trim();
     if (!text) return;
     // Flush the held vote first, so the pair arrives in the right order.
@@ -256,11 +272,26 @@ function Inner({ url, title }: PageFeedbackProps) {
     // confirm the insight uses an exact-match filter before relying on any of
     // this.
     if (heldVote.current !== null) sendVote(heldVote.current);
-    const delivered = capturePostHogEvent('docs_page_feedback_comment', {
+    let delivered = capturePostHogEvent('docs_page_feedback_comment', {
       ...base(),
       helpful: helpful === true,
       comment: text,
     });
+    // ONLY WHEN POSTHOG REFUSED. GTM loads PostHog behind the consent banner,
+    // so a reader who declines cookies and then writes us a paragraph reached
+    // nothing at all. This second path takes only what the first dropped --
+    // never alongside a successful capture, or a consenting reader's comment
+    // would be recorded twice under two timestamps.
+    if (!delivered) {
+      delivered = await sendDirectFeedback(feedbackEndpoint, feedbackToken, {
+        ...base(),
+        // THREE-VALUED here, unlike the PostHog call above, which has always
+        // coerced. A reader can type before clicking either thumb, and a
+        // missing vote sent as `false` becomes a complaint they did not make.
+        helpful: helpful === null ? null : helpful,
+        comment: text,
+      });
+    }
     if (delivered) writeSession(COMMENT_KEY(path), 'sent');
     const next = delivered ? 'sent' : 'undelivered';
     // Exactly one channel, chosen by whether the message is new.
@@ -391,10 +422,15 @@ function Inner({ url, title }: PageFeedbackProps) {
                 }
               }}
               onKeyDown={(e) => {
-                if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') submit();
+                // `void`: submit is async now (the consent-free fallback
+                // awaits a dispatch), and an unhandled rejection from a key
+                // handler is invisible. It resolves rather than rejects --
+                // `sendDirectFeedback` catches its own -- so this marks the
+                // intent rather than hiding a risk.
+                if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') void submit();
               }}
             />
-            <button type="button" className={styles.send} onClick={submit} disabled={!comment.trim()}>
+            <button type="button" className={styles.send} onClick={() => void submit()} disabled={!comment.trim()}>
               Send
             </button>
           </div>
