@@ -644,6 +644,44 @@ check("productCoverageErrors requires every SDK framework on every product", () 
 });
 
 
+check("agentsMdErrors catches stale commands, scripts, paths and volatile facts", () => {
+  const agents = require("./verify-agents-md.cjs");
+  const ctx = { scripts: ["build", "docs:gate"], exists: (p) => p === "scripts/update-version.py" || p === "docs/" };
+  // Clean: real script, real path, a placeholder path and a URL path are fine.
+  assert.deepStrictEqual(
+    agents.agentsMdErrors(
+      [
+        "Run `npm run build`.",
+        "```bash",
+        "python scripts/update-version.py <v>  # release",
+        "```",
+        "See `docs/`, `versioned_docs/version-<X.Y.Z>/` and `/sdks/ios/`.",
+      ].join("\n"),
+      ctx,
+    ),
+    [],
+  );
+  // The defects AGENTS.md actually had.
+  const errs = agents.agentsMdErrors(
+    [
+      "```bash",
+      "python scripts/create_version.py 8.1.0",
+      "```",
+      "Run `npm run nope`.",
+      "See `src/missing.ts`.",
+      "1. **Docs** (lines 236-274):",
+      "*Last updated: 2025-12-11*",
+    ].join("\n"),
+    ctx,
+  );
+  assert.strictEqual(errs.length, 5, JSON.stringify(errs));
+  assert.ok(errs.some((e) => /create_version\.py`, which does not exist/.test(e)));
+  assert.ok(errs.some((e) => /`nope` is not a script/.test(e)));
+  assert.ok(errs.some((e) => /src\/missing\.ts` does not exist/.test(e)));
+  assert.ok(errs.some((e) => /cites file line numbers/.test(e)));
+  assert.ok(errs.some((e) => /Last updated/.test(e)));
+});
+
 check("topLevelOnly blanks nested spans and topLevelPairs splits at depth 0", () => {
   // Asserted as properties, not as an exact padding width: the point is that
   // nothing readable survives inside the nested span and the depth-0 text is

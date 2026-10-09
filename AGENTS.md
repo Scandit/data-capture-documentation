@@ -4,10 +4,10 @@ This document helps AI agents work effectively with the Scandit Data Capture doc
 
 ## Repository Overview
 
-This is a **Docusaurus 3.4.0** documentation site for Scandit's Smart Data Capture SDK. It supports multiple SDK platforms (iOS, Android, Web, React Native, Flutter, Cordova, Capacitor, Titanium, .NET) and hosted products (Scandit Express, ID Bolt).
+This is a **Docusaurus 3** documentation site for Scandit's Smart Data Capture SDK (the exact version is `@docusaurus/core` in `package.json`). It covers every SDK framework in the framework registry, `src/constants/frameworks.ts`, plus the hosted products (Scandit Express, ID Bolt). Read the platform list from the registry, not from this file.
 
 **Key Technologies:**
-- Docusaurus 3.4.0 (TypeScript configuration)
+- Docusaurus 3 (TypeScript configuration)
 - SASS/SCSS for styling
 - Algolia for search
 - Custom theme components in `src/theme/`
@@ -22,7 +22,7 @@ This is a **Docusaurus 3.4.0** documentation site for Scandit's Smart Data Captu
 - Reuse shared content via partials in `docs/partials/`
 
 ### 2. Managing Versions and Releases
-- **DO NOT manually edit `versioned_docs/` or `versions.json`** - use Python scripts in `scripts/`
+- **DO NOT manually edit `versioned_docs/` or `versions.json`** - use `scripts/update-version.py`
 - See "Version Management" section below for detailed workflows
 
 ### 3. Configuration Changes
@@ -46,8 +46,7 @@ docs/                          # Current version (next release)
 └── partials/                  # Shared content imported by multiple pages
 
 versioned_docs/                # Frozen snapshots of past versions
-├── version-7.6.5/
-└── version-6.28.7/
+└── version-<X.Y.Z>/           # One per entry in versions.json
 
 versioned_sidebars/            # Sidebar configs for past versions
 versions.json                  # List of available versions
@@ -148,61 +147,45 @@ Documentation versions are tightly coupled to SDK releases and can generally be 
 - Create/delete folders in `versioned_docs/`
 - Modify version configuration in `docusaurus.config.ts`
 
-**DO use Python scripts in `scripts/`:**
+**DO use `scripts/update-version.py`:**
 ```bash
-# Create a new version snapshot (when releasing)
-python scripts/create_version.py 8.1.0
-
-# Other version management tasks handled by scripts
-# (Refer to scripts in scripts/ directory for available operations)
+python scripts/update-version.py <new-version>
 ```
+One script handles every release type. It works out the type from the version you pass and the current config: a patch of the current version, a patch of a versioned snapshot, a minor beta, or a minor production release. Its docstring lists the cases with examples; read it before running it.
+
+Redirects for retired patch trees (for example, an old `/7.6.14/` path after a newer 7.6 patch ships) are generated at build time by `retiredPatchTreeRedirectsPlugin` in `docusaurus.config.ts` from the version list. A release adds no redirects by hand.
+
+## Sources of Truth for SDK Facts
+
+Guides, release notes, the features matrix and `src/data/products.json` restate facts that the SDK owns. When they disagree with the SDK, the SDK wins. Check the source before you write a fact, and again when you review one:
+
+| Fact | Source of truth | How to check |
+|---|---|---|
+| Whether a class, property or method exists on a framework, and since which version | The API reference, `https://docs.scandit.com/data-capture-sdk/<framework>/...` | Open the symbol's page for that framework and read "Added in version". A page with a title but no class is an empty stub: the symbol doesn't exist on that framework. |
+| What the Web, React Native, Capacitor and Cordova packages actually ship | The published npm package | `npm pack <package>@<version>`, extract the archive, and search its `.d.ts` files. |
+| Linux availability | The C API reference, `https://docs.scandit.com/stable/c_api/` | Read "Since" on each struct's page. |
+| Per-framework availability shown on product pages | `src/data/products.json`, filled from the rows above | `npm run verify:frameworks` fails if a product leaves out a framework or has a version that isn't `n/a` or a release number. |
+
+Rules that follow from this:
+- A release note, guide or matrix row may claim an API on a framework only if that framework's API reference or package has it. Verify each framework separately; a feature on iOS and Android isn't automatically on the hybrids.
+- Facts the API can't show (country coverage, defaults, behavior) come from the product owner. Name the source in the PR description.
+- When a source disagrees with the docs, fix the docs or flag the conflict in the PR. Don't pick a side silently.
 
 ## Configuration Files
 
 ### docusaurus.config.ts
 
-**Key configuration sections:**
+**Key configuration sections** (search for the name; line numbers move):
 
-1. **Docs plugin settings** (lines 236-274):
-   ```typescript
-   docs: {
-     routeBasePath: "/",           // Docs at root
-     sidebarPath: "./sidebars.ts",
-     showLastUpdateTime: false,    // Disabled
-     // NO editUrl - removed intentionally
-     lastVersion: "8.0.0",         // Default version shown
-     versions: {                    // Version-specific config
-       current: { label: '8.1.0', banner: 'unreleased' },
-       '8.0.0': { banner: 'none', badge: false },
-       // ...
-     }
-   }
-   ```
-
-2. **Redirects plugin** (lines 34-226):
-   - Extensive redirect configuration for legacy URLs
-   - Xamarin platform redirects to migration guide
-   - Old URL structure redirects to new structure
-
-3. **Navbar** (lines 307-415):
-   - SDK dropdown menu with all platforms
-   - Version dropdown
-   - External links (Log In, Sign Up, GitHub)
-
-4. **Search** (lines 295-300):
-   - Algolia search configuration
-   - App ID: RYKD97E6SH
-   - Index: scandit
+1. **Versions: `docsVersions` and `DOCS_LAST_VERSION`.** `docsVersions` holds the label and banner of every version, including `current`. `DOCS_LAST_VERSION` is the version served at the site root. Everything else is derived from these two, so never restate a version number anywhere else in the config. Read the current label and versions from the file, not from this guide. `scripts/update-version.py` edits them; don't edit them by hand.
+2. **Docs plugin options** (in the classic preset): `routeBasePath: "/"`, `showLastUpdateTime: false`, and no `editUrl`, all on purpose.
+3. **Redirects:** the `@docusaurus/plugin-client-redirects` entry for legacy URLs (including Xamarin to the migration guide), and `retiredPatchTreeRedirectsPlugin` for retired patch trees.
+4. **Navbar:** the SDK dropdown, the version dropdown and the external links.
+5. **Search:** the `algolia` block in `themeConfig`.
 
 ### sidebars.ts
 
-Multi-sidebar configuration for each platform:
-- `iosSidebar`
-- `androidSidebar`
-- `webSidebar`
-- etc.
-
-Each sidebar is independently organized but follows similar structure.
+One sidebar per SDK framework (`iosSidebar`, `androidSidebar` and so on), plus `sdcSidebar` for shared pages and one each for Express and ID Bolt. There's no global sidebar, so a page shared by every framework needs an entry in every framework sidebar.
 
 ## Redirects: Handle with Care
 
@@ -294,9 +277,8 @@ npm run docs:gate:setup  # syncs the Google style package into styles/Google/ (g
 
 ### Build Performance
 
-- Full build takes ~45-60 seconds
-- Generates ~489 documentation pages
-- Includes LLM-friendly documentation exports
+- A full build takes about a minute
+- Includes LLM-friendly documentation exports (`llms.txt`)
 - Creates static files in `build/`
 
 ## Important Gotchas
@@ -320,9 +302,7 @@ npm run docs:gate:setup  # syncs the Google style package into styles/Google/ (g
 
 - **"current"** = next unreleased version
 - **"lastVersion"** in config = default version shown to users
-- Version labels can differ from version IDs:
-  - ID: `current` → Label: `8.1.0`
-  - ID: `8.0.0` → Label: `8.0.0` (same)
+- Version labels can differ from version IDs: the ID `current` has the label of the release it documents (see `docsVersions` in `docusaurus.config.ts`), while a snapshot's ID and label are the same.
 
 ## Communication Style
 
@@ -334,11 +314,7 @@ When working on this repository:
 
 ## Platform Priority
 
-All SDK platforms are treated equally - no platform gets special priority over others:
-- Native: iOS, Android
-- Web: Web, JavaScript
-- Cross-platform: React Native, Flutter, Cordova, Capacitor, Titanium
-- .NET: .NET iOS, .NET Android
+All SDK platforms are treated equally - no platform gets special priority over others. The full list is the framework registry, `src/constants/frameworks.ts`; `npm run verify:frameworks` fails the build if the docs, the code or the data files use a framework name the registry doesn't know, or if `src/data/products.json` leaves a framework out.
 
 ## Quick Reference
 
@@ -361,21 +337,26 @@ All SDK platforms are treated equally - no platform gets special priority over o
 
 ### Commands
 ```bash
-npm start              # Local dev server
-npm run build          # Production build
-npm run serve          # Serve built site
-npm run clear          # Clear cache
+npm start                  # Local dev server
+npm run build              # Production build
+npm run serve              # Serve built site
+npm run clear              # Clear cache
+npm run docs:gate          # Docs quality gate on changed docs
+npm run verify:frameworks  # Framework names and availability data
+npm run verify:agents-md   # This file's commands, scripts and paths
 ```
+Every script is in `package.json`; check there rather than relying on this list.
 
 ## Questions or Issues?
 
 If you encounter something not covered in this guide:
 1. Check existing documentation patterns
 2. Look at recent commits for similar changes
-3. Review Python scripts in `scripts/` for version management
+3. Review `scripts/update-version.py` for version management
 4. Ask the maintainer for clarification
 
----
+## Keeping This File Accurate
 
-*Last updated: 2025-12-11*
-*Docusaurus version: 3.4.0*
+This file says where a fact lives, not what the fact is, so it can't go stale when the fact changes. Don't add version numbers, labels, line numbers, page counts or platform lists here; name the file or the symbol that holds them.
+
+`npm run verify:agents-md` runs in CI. It fails when this file names an `npm run` script that isn't in `package.json`, names a script or path that doesn't exist, cites line numbers, or carries a date stamp. If you rename or move a script or a path this file mentions, update it in the same PR.
