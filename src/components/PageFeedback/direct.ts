@@ -57,7 +57,8 @@ export async function sendDirectFeedback(
       // Deliberately text/plain: application/json would trigger a preflight
       // the Web App cannot answer.
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      // `keepalive` so a reader who navigates away mid-send still delivers.
+      // `keepalive` so the request is still dispatched if the reader navigates
+      // away mid-send (no-cors cannot confirm it arrived).
       keepalive: true,
       body: JSON.stringify({ ...payload, token }),
     });
