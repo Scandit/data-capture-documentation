@@ -57,8 +57,15 @@ jobs:
       - name: Test framework registry
         run: yarn test:frameworks
 
+      # The feedback widget's fallback endpoint is set for the main branch only.
+      # Pull-request builds (whose ref is refs/pull/...) get empty values, so
+      # nothing built from an unmerged branch can post into the live feedback
+      # sheet. Empty disables the fallback; the widget still works without it.
       - name: Build documentation
         run: yarn build
+        env:
+          DOCS_FEEDBACK_ENDPOINT: ${{ github.ref == 'refs/heads/main' && vars.DOCS_FEEDBACK_ENDPOINT || '' }}
+          DOCS_FEEDBACK_TOKEN: ${{ github.ref == 'refs/heads/main' && secrets.DOCS_FEEDBACK_TOKEN || '' }}
 
       # Asserts what the widget actually sends to Algolia: the API reference is
       # reachable on the served version and absent on frozen legacy versions.

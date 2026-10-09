@@ -1,6 +1,10 @@
 import React from 'react';
 import BrowserOnly from '@docusaurus/BrowserOnly';
-import { capturePostHogEvent } from '@site/src/components/SkillsCallout/analytics';
+import {
+  capturePostHogEvent,
+  capturePostHogEventWithResult,
+  postHogStatus,
+} from '@site/src/components/SkillsCallout/analytics';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import { sendDirectFeedback } from './direct';
 import styles from './styles.module.css';
@@ -31,6 +35,10 @@ import styles from './styles.module.css';
  *     of thanking them for something that was dropped, and every further
  *     attempt is announced as well as focused, because focusing an element that
  *     already has focus re-reads nothing;
+ *   - a COMMENT on a page where PostHog is NOT LOADED goes to the fallback
+ *     endpoint instead (see ./direct.ts), if one is configured, and the note
+ *     under the box says so before the reader sends. A reader who explicitly
+ *     opted out of PostHog never takes that path;
  *   - a VOTE that did not send is held and retried — when the comment is sent,
  *     on a short bounded poll, and once more as the page is being unloaded —
  *     so consenting mid-visit does not cost the KPI the votes of exactly the
@@ -43,6 +51,19 @@ import styles from './styles.module.css';
  * stay focusable and announced (`aria-disabled`) rather than `disabled`, which
  * would drop keyboard focus to <body>.
  */
+
+type Outcome =
+  | 'open'
+  // Accepted by PostHog.
+  | 'sent'
+  // Dispatched to the fallback endpoint. `no-cors` hides the response, so this
+  // is all that can be said - the copy for it never claims delivery.
+  | 'dispatched'
+  // PostHog refused (not loaded with no fallback configured, opted out, or
+  // threw). Nothing left the page.
+  | 'refused'
+  // The fallback request itself failed: offline, or blocked.
+  | 'unreachable';
 
 const VOTE_KEY = (path: string) => `docs-feedback:${path}`;
 const COMMENT_KEY = (path: string) => `docs-feedback-comment:${path}`;
@@ -79,9 +100,10 @@ function Inner({ url, title }: PageFeedbackProps) {
   const path = url.endsWith('/') ? url : `${url}/`;
 
   // CONFIGURED, NOT COMPILED IN. The Web App URL changes every time the Apps
-  // Script is redeployed, and an empty value simply disables the fallback --
-  // `sendDirectFeedback` returns false and the widget behaves exactly as it
-  // did before, telling the reader their note did not send.
+  // Script is redeployed, and an empty value disables the fallback: submit()
+  // never calls it, the note keeps its analytics wording, and the widget
+  // behaves exactly as it did before, telling the reader their note did not
+  // send.
   const { siteConfig } = useDocusaurusContext();
   const feedbackEndpoint = String(
     (siteConfig.customFields as Record<string, unknown> | undefined)?.feedbackEndpoint ?? '',
@@ -95,7 +117,29 @@ function Inner({ url, title }: PageFeedbackProps) {
   const [helpful, setHelpful] = React.useState<boolean | null>(null);
   const [recorded, setRecorded] = React.useState(false);
   const [comment, setComment] = React.useState('');
-  const [outcome, setOutcome] = React.useState<'open' | 'sent' | 'undelivered'>('open');
+  const [outcome, setOutcomeState] = React.useState<Outcome>('open');
+  // The current outcome, readable after an await. The `outcome` a pending
+  // submit() closed over is from the render that created it, and can be stale
+  // by the time the request settles.
+  const outcomeRef = React.useRef<Outcome>('open');
+  const setOutcome = (next: Outcome) => {
+    outcomeRef.current = next;
+    setOutcomeState(next);
+  };
+  // In-flight guard. The ref blocks a second submit synchronously (a
+  // double-click, or Cmd+Enter then a click, lands before any re-render); the
+  // state drives the button.
+  const sendingRef = React.useRef(false);
+  const [sending, setSending] = React.useState(false);
+  // A reader can follow an in-site link while the fallback request is in
+  // flight; nothing may set state on the unmounted widget after that.
+  const mounted = React.useRef(true);
+  React.useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const [attempts, setAttempts] = React.useState(0);
   // Bumped on every vote attempt, so the retry effect re-arms even when the
   // reader clicks the same button again and no other state changes.
@@ -127,7 +171,8 @@ function Inner({ url, title }: PageFeedbackProps) {
       setHelpful(prior === 'up');
       setRecorded(true);
     }
-    if (readSession(COMMENT_KEY(path)) === 'sent') setOutcome('sent');
+    const priorComment = readSession(COMMENT_KEY(path));
+    if (priorComment === 'sent' || priorComment === 'dispatched') setOutcome(priorComment);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -207,41 +252,56 @@ function Inner({ url, title }: PageFeedbackProps) {
 
   const submit = async () => {
     const text = comment.trim();
-    if (!text) return;
-    // Flush the held vote first, so the pair arrives in the right order.
-    if (heldVote.current !== null) sendVote(heldVote.current);
-    let delivered = capturePostHogEvent('docs_page_feedback_comment', {
-      ...base(),
-      helpful: helpful === true,
-      comment: text,
-    });
-    // ONLY WHEN POSTHOG REFUSED. GTM loads PostHog behind the consent banner,
-    // so a reader who declines cookies and then writes us a paragraph reached
-    // nothing at all. This second path takes only what the first dropped --
-    // never alongside a successful capture, or a consenting reader's comment
-    // would be recorded twice under two timestamps.
-    if (!delivered) {
-      delivered = await sendDirectFeedback(feedbackEndpoint, feedbackToken, {
+    if (!text || sendingRef.current) return;
+    sendingRef.current = true;
+    setSending(true);
+    let next: Outcome;
+    try {
+      // Flush the held vote first, so the pair arrives in the right order.
+      if (heldVote.current !== null) sendVote(heldVote.current);
+      const result = capturePostHogEventWithResult('docs_page_feedback_comment', {
         ...base(),
-        // THREE-VALUED here, unlike the PostHog call above, which has always
-        // coerced. A reader can type before clicking either thumb, and a
-        // missing vote sent as `false` becomes a complaint they did not make.
-        helpful: helpful === null ? null : helpful,
+        helpful: helpful === true,
         comment: text,
       });
+      if (result === 'captured') {
+        next = 'sent';
+      } else if (result === 'not-loaded' && feedbackEndpoint) {
+        // ONLY WHEN POSTHOG IS NOT LOADED. Never alongside a successful
+        // capture, or a consenting reader's comment would be recorded twice
+        // under two timestamps; and never for `opted-out` or `error`, where
+        // the reader said no (or may have) and the comment must go nowhere.
+        const dispatched = await sendDirectFeedback(feedbackEndpoint, feedbackToken, {
+          ...base(),
+          // THREE-VALUED here, unlike the PostHog call above, which has always
+          // coerced. A reader can type before clicking either thumb, and a
+          // missing vote sent as `false` becomes a complaint they did not make.
+          helpful: helpful === null ? null : helpful,
+          comment: text,
+        });
+        next = dispatched ? 'dispatched' : 'unreachable';
+      } else {
+        next = 'refused';
+      }
+    } finally {
+      sendingRef.current = false;
     }
-    if (delivered) writeSession(COMMENT_KEY(path), 'sent');
-    const next = delivered ? 'sent' : 'undelivered';
+    // Written even if the widget has gone, so a reload does not reopen a box
+    // whose comment already went out.
+    if (next === 'sent' || next === 'dispatched') writeSession(COMMENT_KEY(path), next);
+    if (!mounted.current) return;
+    setSending(false);
     // Exactly one channel, chosen by whether the message is new.
     //
-    // NEW outcome: the paragraph mounts and focus moves to it, which reads it in
-    // full. Announcing as well would say the same thing twice in two wordings.
+    // NEW outcome: the paragraph mounts and focus moves to it, which reads it
+    // in full. Announcing as well would say the same thing twice in two
+    // wordings.
     //
-    // REPEAT (a retry that failed again): nothing new mounts, so the region
-    // carries it - and focus must NOT move, because the reader is on the Send
-    // button they just pressed and moving focus would re-read the paragraph
-    // over the announcement.
-    if (next === outcome) {
+    // REPEAT (a retry that failed the same way again): nothing new mounts, so
+    // the region carries it - and focus must NOT move, because the reader is on
+    // the Send button they just pressed and moving focus would re-read the
+    // paragraph over the announcement.
+    if (next === outcomeRef.current) {
       say('That did not send. Your note is still in the box - press Send to try again.');
     } else {
       hush();
@@ -260,7 +320,12 @@ function Inner({ url, title }: PageFeedbackProps) {
     confirmation.current?.focus();
   }, [attempts]);
 
-  const showBox = helpful !== null && outcome !== 'sent';
+  const done = outcome === 'sent' || outcome === 'dispatched';
+  const showBox = helpful !== null && !done;
+  // Which path a comment sent NOW would take, so the note can say where it
+  // goes before the reader sends it. Re-evaluated on every render (each
+  // keystroke is one), so it follows a reader who accepts cookies mid-visit.
+  const usesFallback = Boolean(feedbackEndpoint) && postHogStatus() === 'not-loaded';
   const left = COMMENT_MAX - comment.length;
 
   return (
@@ -303,10 +368,17 @@ function Inner({ url, title }: PageFeedbackProps) {
           {/* Sits BEFORE the row on purpose. It tells the reader to press Send,
               and a message placed after the button would have them tab out of
               the widget to reach it. */}
-          {outcome === 'undelivered' && (
+          {outcome === 'refused' && (
             <p className={styles.failed} ref={confirmation} tabIndex={-1}>
               That did not send: analytics is turned off or blocked in this browser, so nothing left
               this page. Your note is still in the box — press Send to try again, or copy it
+              somewhere safe.
+            </p>
+          )}
+          {outcome === 'unreachable' && (
+            <p className={styles.failed} ref={confirmation} tabIndex={-1}>
+              That could not be sent: the connection failed or something in this browser blocked
+              the request. Your note is still in the box — press Send to try again, or copy it
               somewhere safe.
             </p>
           )}
@@ -368,13 +440,34 @@ function Inner({ url, title }: PageFeedbackProps) {
                 if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') void submit();
               }}
             />
-            <button type="button" className={styles.send} onClick={() => void submit()} disabled={!comment.trim()}>
-              Send
+            {/* While sending, `aria-disabled` rather than `disabled`: the reader
+                is usually focused on this button, and `disabled` would drop
+                focus to <body>. submit() refuses a second call either way. */}
+            <button
+              type="button"
+              className={styles.send}
+              onClick={() => void submit()}
+              disabled={!comment.trim()}
+              aria-disabled={sending}
+            >
+              {sending ? 'Sending…' : 'Send'}
             </button>
           </div>
           <p className={styles.note} id="page-feedback-note">
-            Up to {COMMENT_MAX} characters, sent to our analytics tool with this page&rsquo;s address.
-            Please leave out anything personal.
+            {usesFallback ? (
+              <>
+                Up to {COMMENT_MAX} characters. Analytics is not running in this browser, so your
+                comment is sent with this page&rsquo;s address and title to a Google Apps Script
+                form that adds it to a spreadsheet run by the docs team. Like any web request, it
+                also carries your browser&rsquo;s IP address and user agent. Please leave out
+                anything personal.
+              </>
+            ) : (
+              <>
+                Up to {COMMENT_MAX} characters, sent to our analytics tool with this page&rsquo;s
+                address. Please leave out anything personal.
+              </>
+            )}
             {comment.length >= COUNTER_FROM && (
               <span className={styles.count}>
                 {' '}
@@ -388,6 +481,13 @@ function Inner({ url, title }: PageFeedbackProps) {
       {outcome === 'sent' && (
         <p className={styles.thanks} ref={confirmation} tabIndex={-1}>
           Thanks for the detail — it goes straight to the docs team.
+        </p>
+      )}
+      {/* The fallback's `no-cors` response is opaque, so all that is known is
+          that the request went out - say exactly that. */}
+      {outcome === 'dispatched' && (
+        <p className={styles.thanks} ref={confirmation} tabIndex={-1}>
+          Thanks — your note was sent.
         </p>
       )}
     </aside>

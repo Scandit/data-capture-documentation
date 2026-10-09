@@ -1,23 +1,26 @@
 /**
- * The consent-free fallback for a comment PostHog refused.
+ * The fallback for a comment PostHog could not take because it is not loaded.
  *
- * WHY THIS EXISTS. The widget's events go to PostHog, which GTM loads BEHIND
+ * WHY THIS EXISTS. The widget's events go to PostHog, which is loaded BEHIND
  * the consent banner: until a reader accepts cookies, `window.posthog` does
- * not exist and `capturePostHogEvent` returns false. So a reader who declines
+ * not exist and the capture reports `not-loaded`. So a reader who declines
  * and then spends two minutes writing us a paragraph leaves no trace of it
- * anywhere. We were asking for written feedback and discarding the half that
- * came from the people most careful about being tracked.
+ * anywhere.
  *
- * ONLY WHEN POSTHOG REFUSED. Called after a failed capture, never beside a
- * successful one, so a consenting reader's comment is not recorded twice under
- * two different timestamps.
+ * ONLY WHEN POSTHOG IS NOT LOADED. Never beside a successful capture, so a
+ * consenting reader's comment is not recorded twice under two timestamps; and
+ * never when the reader has explicitly opted out of capturing in PostHog (or
+ * when PostHog threw and that cannot be ruled out). An opt-out is a refusal,
+ * not a delivery problem to route around.
  *
  * WHERE IT GOES. An Apps Script Web App deployed to accept anonymous requests,
  * which appends the comment to a spreadsheet. The endpoint must accept
- * requests from a reader's browser without any sign-in.
+ * requests from a reader's browser without any sign-in. The widget's note
+ * tells the reader this before they send, whenever this path applies.
  *
  * WHAT IT SENDS. The four fields the widget already sends to PostHog and
- * nothing else. No identifier, and nothing derived from the reader.
+ * nothing else in the body. Like any web request, it also carries the
+ * browser's IP address and user agent to the receiving server.
  */
 
 type DirectFeedback = {
@@ -36,10 +39,10 @@ type DirectFeedback = {
  * read. So this reports whether the request was DISPATCHED, not whether it
  * arrived.
  *
- * That is the same promise `capturePostHogEvent` already makes and documents
- * ("accepted, NOT that it reached the server"), and the widget's copy is
- * written against it: the reader is told their note was sent, never that it
- * was received.
+ * An Apps Script that answers with an error, or was redeployed to a new URL,
+ * still resolves here. So on this path the widget's copy says only that the
+ * note was sent ("Thanks — your note was sent."), never that it reached the
+ * team.
  */
 export async function sendDirectFeedback(
   endpoint: string,
