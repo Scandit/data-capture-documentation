@@ -23,7 +23,7 @@ keywords:
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -75,7 +75,7 @@ keywords:
 
 #### Id
 
-* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
+* Visa MRZ results now report country-specific additional details such as `MrzResult.visaNumber`, `MrzResult.visaNumberOfEntries`, `MrzResult.visaMultipleEntries` and `MrzResult.visaDurationInDays`.
 * Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
 * Added `setRepeatAsync` on `SDCImageFrameSource`. It determines whether the frame source keeps re-emitting its frames after all of them have been processed. Setting this to true makes a still image behave like a continuous camera feed, giving the recognizer the multiple passes over the image it generally needs.
 * Added an [ID Capture image upload sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample) that demonstrates scanning ID documents from still images or PDF files on the device instead of using the live camera.

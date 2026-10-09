@@ -18,7 +18,7 @@ keywords:
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 

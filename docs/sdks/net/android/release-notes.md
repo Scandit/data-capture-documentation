@@ -18,7 +18,7 @@ keywords:
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -74,8 +74,6 @@ keywords:
 
 #### Id
 
-* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
-* Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
 * Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
