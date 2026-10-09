@@ -280,6 +280,17 @@ function Inner({ url, title }: PageFeedbackProps) {
           comment: text,
         });
         next = dispatched ? 'dispatched' : 'unreachable';
+        if (dispatched) {
+          // The vote went out with the comment, so stop holding it. Otherwise
+          // the retry loop (or `pagehide`, or unmount) could still flush it to
+          // PostHog if the reader accepts cookies seconds later, and the same
+          // vote would be recorded in two places.
+          heldVote.current = null;
+          if (helpful !== null) {
+            writeSession(VOTE_KEY(path), helpful ? 'up' : 'down');
+            if (mounted.current) setRecorded(true);
+          }
+        }
       } else {
         next = 'refused';
       }
