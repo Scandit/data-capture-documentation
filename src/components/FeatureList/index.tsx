@@ -200,15 +200,49 @@ const FeatureList: React.FC<FeatureListProps> = ({
                     {Object.entries(feature.frameworks)
                       .filter(([, info]) => info.version !== 'n/a')
                       .map(([frameworkName, frameworkInfo]) => (
-                        <a
-                          key={frameworkName}
-                          href={withCurrentDocsPath(frameworkInfo.apiUrl)}
-                          className={styles.frameworkItem}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {frameworkName} v{frameworkInfo.version}
-                        </a>
+                        // The ELEMENT changes, not just the href. Guarding the
+                        // href alone rendered the same DOM - withCurrentDocsPath
+                        // returns undefined for undefined and React omits the
+                        // attribute - so the chip stayed an <a> with no href:
+                        // not keyboard-focusable, navigating nowhere, still
+                        // showing the link hover. 17 cells in features.json
+                        // carry no apiUrl, of which 16 reach this branch - the
+                        // 17th is Web / 7-Segment Display, filtered out earlier
+                        // by version === "n/a".
+                        // Latent only while every usage is compact mode, which
+                        // skips this column. Same shape as the feature-name cell
+                        // above, which swaps <a> for <h4>.
+                        frameworkInfo.apiUrl ? (
+                          <a
+                            key={frameworkName}
+                            href={withCurrentDocsPath(frameworkInfo.apiUrl)}
+                            className={styles.frameworkItem}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {frameworkName} v{frameworkInfo.version}
+                          </a>
+                        ) : (
+                          <span
+                            key={frameworkName}
+                            className={`${styles.frameworkItem} ${styles.frameworkItemUnavailable}`}
+                            /* Short on purpose: screen readers often read `title` after
+                               the content, so repeating the name and version here would
+                               announce them twice. No `aria-disabled` either: a plain
+                               <span> is not a control, and ARIA 1.2 does not allow the
+                               attribute on generic elements. */
+                            title="No API reference"
+                          >
+                            {frameworkName} v{frameworkInfo.version}
+                            {/* The dashed border and the dimmed token show sighted readers
+                                that this chip has no link. Without this text the chip
+                                announces exactly what a linked one announces - "iOS v1.2.3".
+                                It says "no API reference", not "not available": every chip in
+                                this column is a framework that DOES support the feature, so
+                                "not available" would read as "this feature isn't on iOS". */}
+                            <span className={styles.visuallyHidden}> (no API reference)</span>
+                          </span>
+                        )
                       ))}
                   </div>
                 </td>
