@@ -457,7 +457,7 @@ function Inner({ url, title }: PageFeedbackProps) {
             {usesFallback ? (
               <>
                 Up to {COMMENT_MAX} characters. Analytics is not running in this browser, so your
-                comment is sent with this page&rsquo;s address and title to a Google Apps Script
+                comment is sent with your vote, if you gave one, and this page&rsquo;s address and title to a Google Apps Script
                 form that adds it to a spreadsheet run by the docs team. Like any web request, it
                 also carries your browser&rsquo;s IP address and user agent. Please leave out
                 anything personal.
