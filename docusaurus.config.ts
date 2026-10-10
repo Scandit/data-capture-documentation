@@ -41,6 +41,9 @@ const llmsSharedPartialPageNames = [
   "migrate-5-to-6.mdx",
   "migrate-6-to-7.mdx",
   "migrate-7-to-8.mdx",
+  // The full text lives in the sdks/web copy itself (not in docs/partials/),
+  // so llms-full.txt keeps the guide's content rather than an import stub.
+  "agent-skills/scandit-mcp-installation-guide.mdx",
 ] as const;
 
 const llmsNonWebSdkRoots = [
