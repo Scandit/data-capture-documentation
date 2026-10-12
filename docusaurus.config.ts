@@ -9,6 +9,7 @@ import remarkHideComments from "./src/plugins/remark-hide-comments";
 import remarkOffloadPreviewMedia from "./src/plugins/remark-offload-preview-media";
 import stripPreviewMediaPlugin from "./src/plugins/plugin-strip-preview-media";
 import { UNRELEASED_FRAMEWORK_SLUGS } from "./src/constants/unreleasedFrameworks";
+import { ROUTED_FRAMEWORKS } from "./src/constants/frameworks";
 dotenv.config();  // Load environment variables from .env file
 
 const productionUrl = "https://docs.scandit.com";
@@ -1208,7 +1209,10 @@ const config: Config = {
             },
           ]),
           {
-            to: 'system-requirements',
+            // Absolute: a relative target resolved against the old URL, so
+            // /data-capture-sdk/ios/requirements.html/ went to
+            // .../requirements.html/system-requirements/, and on to a 404.
+            to: '/system-requirements',
             from: [
               '/data-capture-sdk/android/requirements.html',
               '/data-capture-sdk/ios/requirements.html',
@@ -1250,6 +1254,17 @@ const config: Config = {
           { to: '/sdks/capacitor/label-capture/intro', from: '/sdks/capacitor/label-scanning' },
           { to: '/sdks/net/ios/label-capture/intro', from: '/sdks/net/ios/label-scanning' },
           { to: '/sdks/net/android/label-capture/intro', from: '/sdks/net/android/label-scanning' },
+          // One-off legacy URLs.
+          ...ROUTED_FRAMEWORKS.map((f) => f.routeSegment as string)
+            .filter((segment) => ['.md', '.mdx'].some((ext) =>
+              fs.existsSync(path.join(process.cwd(), 'docs', 'sdks', segment, `migrate-7-to-8${ext}`))))
+            .map((segment) => ({
+              to: `/sdks/${segment}/migrate-7-to-8`,
+              from: `/sdks/${segment}/migration-guide`,
+            })),
+          { to: '/sdks/cordova/barcode-capture/get-started', from: '/data-capture-sdk/cordova/get-started-barcode.html' },
+          { to: '/sdks/web/barcode-symbologies', from: '/data-capture-sdk/web/barcode-symbologies.html' },
+          { to: '/sdks/web/release-notes', from: '/stable/web/CHANGELOG.md' },
       ],
     },
   ],
