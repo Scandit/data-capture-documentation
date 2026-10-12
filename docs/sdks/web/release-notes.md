@@ -67,7 +67,6 @@ keywords:
 #### Id
 
 * Visa MRZ results now report country-specific additional details such as `MRZResult.visaNumber`, `MRZResult.visaNumberOfEntries`, `MRZResult.visaMultipleEntries` and `MRZResult.visaDurationInDays`.
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
