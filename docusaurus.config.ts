@@ -1161,6 +1161,21 @@ const config: Config = {
               from: `/data-capture-sdk/${framework}/id-capture/intro.html`,
             },
           ]),
+          // The C API reference (still live under /stable/c_api/ and /7.6/c_api/)
+          // no longer has its examples index or sample pages. Old links to them
+          // still reach readers, in both spellings.
+          {
+            to: '/sdks/linux/samples',
+            from: ['/stable/c_api', '/7.6/c_api'].flatMap((reference) => [
+              `${reference}/examples.html`,
+              `${reference}/CommandLineBarcodeScannerCameraSample_8c-example.html`,
+              `${reference}/_command_line_barcode_scanner_camera_sample_8c-example.html`,
+              `${reference}/CommandLineBarcodeScannerImageProcessingSample_8c-example.html`,
+              `${reference}/_command_line_barcode_scanner_image_processing_sample_8c-example.html`,
+              `${reference}/CommandLineMatrixScanCameraSample_8c-example.html`,
+              `${reference}/_command_line_matrix_scan_camera_sample_8c-example.html`,
+            ]),
+          },
           {
             to: 'system-requirements',
             from: [
