@@ -316,6 +316,10 @@ When working on this repository:
 
 All SDK platforms are treated equally - no platform gets special priority over others. The full list is the framework registry, `src/constants/frameworks.ts`; `npm run verify:frameworks` fails the build if the docs, the code or the data files use a framework name the registry doesn't know, or if `src/data/products.json` leaves a framework out.
 
+## Products
+
+The full list of products is the product registry, `content/registry/products.yml`. Use its `key` in frontmatter `product`, in component props and in data files. Its `aliases` (`matrixscan`, `label-capture`) are folder names under `/sdks/<framework>/` that differ from the key, and are valid only there and in `URL_PRODUCT_MAPPING`. `npm run verify:registry` fails the build if `docs-schema.yml`, the data files, `URL_PRODUCT_MAPPING` or a page's `product` disagree with it. Product Chooser text ("Choose this if / Consider another product if") goes in a separate file next to the registry, product-chooser.yml, once a product owner approves it; the same command checks it.
+
 ## Quick Reference
 
 ### File Extensions
@@ -343,6 +347,7 @@ npm run serve              # Serve built site
 npm run clear              # Clear cache
 npm run docs:gate          # Docs quality gate on changed docs
 npm run verify:frameworks  # Framework names and availability data
+npm run verify:registry    # Product names against the product registry
 npm run verify:agents-md   # This file's commands, scripts and paths
 ```
 Every script is in `package.json`; check there rather than relying on this list.

@@ -4,7 +4,7 @@ description: "Read the tracking ID, receiver address, and carrier from shipping 
 sidebar_position: 4
 pagination_next: null
 framework: web
-product: label-capture
+product: smart-label-capture
 topic_type: how-to
 version_status: beta
 available_since: "8.6.0"
