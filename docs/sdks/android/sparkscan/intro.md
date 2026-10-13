@@ -6,6 +6,9 @@ pagination_prev: null
 framework: android
 keywords:
   - android
+product: sparkscan
+topic_type: product-overview
+canonical_id: scandit.sparkscan.intro
 ---
 
 # About SparkScan

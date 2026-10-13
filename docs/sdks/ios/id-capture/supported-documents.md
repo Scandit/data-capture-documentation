@@ -10,6 +10,9 @@ sidebar_position: 3
 framework: ios
 keywords:
   - ios
+product: id-capture
+topic_type: supported-values
+canonical_id: scandit.id-capture.supported-documents
 ---
 
 ## ID Scanning Supported Documents

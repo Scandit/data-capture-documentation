@@ -5,6 +5,9 @@ pagination_prev: null
 framework: react-native
 keywords:
   - react
+product: barcode-capture
+topic_type: get-started
+canonical_id: scandit.barcode-capture.get-started
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';

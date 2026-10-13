@@ -1,6 +1,11 @@
 ---
 description: "MatrixScan Count is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: matrixscan-count
+topic_type: get-started
+canonical_id: scandit.matrixscan-count.get-started
+framework: titanium
+availability: unavailable
 ---
 
 # MatrixScan Count is not available on Titanium

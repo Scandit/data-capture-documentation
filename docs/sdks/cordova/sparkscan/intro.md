@@ -6,6 +6,9 @@ pagination_prev: null
 framework: cordova
 keywords:
   - cordova
+product: sparkscan
+topic_type: product-overview
+canonical_id: scandit.sparkscan.intro
 ---
 
 # About SparkScan

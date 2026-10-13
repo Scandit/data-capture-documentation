@@ -9,6 +9,8 @@ framework: hosted
 product: id-bolt
 keywords:
   - bolt
+topic_type: api-overview
+canonical_id: scandit.id-bolt.api-overview
 ---
 
 # ID Bolt API Overview

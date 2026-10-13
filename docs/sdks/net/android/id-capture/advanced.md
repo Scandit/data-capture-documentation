@@ -5,6 +5,9 @@ pagination_next: null
 framework: net-android
 keywords:
   - netAndroid
+product: id-capture
+topic_type: how-to
+canonical_id: scandit.id-capture.advanced
 ---
 
 # Advanced Configurations

@@ -6,6 +6,9 @@ displayed_sidebar: linuxSidebar
 framework: linux
 keywords:
   - linux
+product: core
+topic_type: concept
+canonical_id: scandit.core.single-scanning
 ---
 
 # Single Barcode Scanning

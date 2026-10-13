@@ -6,6 +6,9 @@ pagination_next: null
 framework: react-native
 keywords:
   - react
+product: sparkscan
+topic_type: how-to
+canonical_id: scandit.sparkscan.advanced
 ---
 
 # Advanced Configurations

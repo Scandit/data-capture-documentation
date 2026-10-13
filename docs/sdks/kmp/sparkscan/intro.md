@@ -7,6 +7,9 @@ pagination_next: null
 framework: kmp
 keywords:
   - kmp
+product: sparkscan
+topic_type: product-overview
+canonical_id: scandit.sparkscan.intro
 ---
 
 # About SparkScan

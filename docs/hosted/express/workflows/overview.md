@@ -4,6 +4,10 @@ sidebar_label: 'Overview'
 displayed_sidebar: expressSidebar
 keywords:
   - express
+product: express
+topic_type: concept
+canonical_id: scandit.express.workflows.overview
+framework: hosted
 ---
 
 # Built-in Workflows

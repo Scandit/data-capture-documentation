@@ -5,6 +5,8 @@ product: express
 sidebar_label: Input Configuration
 keywords:
   - express
+topic_type: configuration-reference
+canonical_id: scandit.express.configuration.custom-data-transfer.input-configuration
 ---
 
 # Configuring Input Data

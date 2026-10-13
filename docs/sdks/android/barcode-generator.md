@@ -4,6 +4,10 @@ description: "Generate barcodes and QR codes in your Android app with the Scandi
 sidebar_label: Get Started
 pagination_prev: null
 pagination_next: null
+product: barcode-generator
+topic_type: get-started
+canonical_id: scandit.barcode-generator.get-started
+framework: android
 ---
 
 # Barcode Generator

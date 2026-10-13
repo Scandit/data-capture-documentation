@@ -7,6 +7,9 @@ pagination_next: null
 framework: web
 keywords:
   - web
+product: platform
+topic_type: installation
+canonical_id: scandit.platform.add-sdk
 ---
 
 # Installation

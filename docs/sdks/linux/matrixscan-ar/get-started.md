@@ -1,6 +1,11 @@
 ---
 description: "MatrixScan AR is not available on the Linux SDK."
 displayed_sidebar: linuxSidebar
+product: matrixscan-ar
+topic_type: get-started
+canonical_id: scandit.matrixscan-ar.get-started
+framework: linux
+availability: unavailable
 ---
 
 # MatrixScan AR is not available on Linux

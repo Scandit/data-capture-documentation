@@ -6,6 +6,9 @@ pagination_next: null
 framework: capacitor
 keywords:
   - capacitor
+product: platform
+topic_type: installation
+canonical_id: scandit.platform.add-sdk
 ---
 
 # Installation

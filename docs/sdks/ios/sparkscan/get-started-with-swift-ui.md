@@ -3,6 +3,9 @@ description: Get Started With SwiftUI and Scandit SparkScan.
 framework: ios
 keywords:
   - ios
+product: sparkscan
+topic_type: get-started
+canonical_id: scandit.sparkscan.get-started-with-swift-ui
 ---
 
 # Get Started With SwiftUI

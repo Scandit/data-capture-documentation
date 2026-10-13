@@ -10,6 +10,8 @@ product: id-bolt
 keywords:
   - bolt
   - document selection
+topic_type: how-to
+canonical_id: scandit.id-bolt.document-selection
 ---
 
 # Document Selection

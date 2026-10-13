@@ -5,6 +5,9 @@ pagination_next: null
 framework: react-native
 keywords:
   - react-native
+product: smart-label-capture
+topic_type: how-to
+canonical_id: scandit.smart-label-capture.advanced
 ---
 
 import ValidationFlowHowItWorks from '../../../partials/advanced/_validation-flow-how-it-works.mdx';

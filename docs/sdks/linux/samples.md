@@ -7,6 +7,9 @@ pagination_next: null
 framework: linux
 keywords:
   - linux
+product: platform
+topic_type: sample-catalog
+canonical_id: scandit.platform.samples
 ---
 
 # Sample Programs

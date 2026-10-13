@@ -8,6 +8,8 @@ framework: hosted
 product: express
 keywords:
   - express
+topic_type: deployment
+canonical_id: scandit.express.getting-started.rollout
 ---
 
 # Production Rollout

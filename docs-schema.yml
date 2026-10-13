@@ -5,10 +5,19 @@ description: "Validation schema for Scandit Docusaurus Markdown/MDX frontmatter.
 type: object
 additionalProperties: true
 
-# Only `description` is required today (incremental adoption); other Scandit fields are
-# validated when present. Tighten required fields as pages adopt them.
+# Every page under docs/ carries these. The docs gate checks the pages a change
+# touches, so a page that loses one, or a new page without one, fails review.
+# Redirect-only stub pages are exempt.
 required:
   - description
+  - topic_type
+  - product
+  - canonical_id
+
+# Required too, in either form: `framework` (one platform) or `frameworks`
+# (several). Not JSON Schema; scripts/docs-gate/frontmatter.cjs reads it.
+x-required-one-of:
+  - [framework, frameworks]
 
 properties:
   description:
@@ -81,6 +90,13 @@ properties:
   canonical_id:
     type: string
     pattern: "^scandit\\.[a-z0-9-]+(\\.[a-z0-9-]+)*$"
+
+  # Set on a "not available on this framework" stub page. Its other fields
+  # describe the page it stands in for, so tools must check this before
+  # treating the page as content.
+  availability:
+    type: string
+    enum: [unavailable]
 
   available_since:
     type: string

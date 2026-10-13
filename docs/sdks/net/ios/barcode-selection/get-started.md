@@ -5,6 +5,9 @@ pagination_next: null
 framework: net-ios
 keywords:
   - netIos
+product: barcode-selection
+topic_type: get-started
+canonical_id: scandit.barcode-selection.get-started
 ---
 
 # Get Started

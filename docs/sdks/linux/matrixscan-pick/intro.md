@@ -1,6 +1,11 @@
 ---
 description: "MatrixScan Pick is not available on the Linux SDK."
 displayed_sidebar: linuxSidebar
+product: matrixscan-pick
+topic_type: product-overview
+canonical_id: scandit.matrixscan-pick.intro
+framework: linux
+availability: unavailable
 ---
 
 # MatrixScan Pick is not available on Linux

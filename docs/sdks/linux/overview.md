@@ -7,6 +7,9 @@ keywords:
   - linux
   - debian
   - ubuntu
+product: platform
+topic_type: product-overview
+canonical_id: scandit.platform.overview
 ---
 
 # Overview

@@ -1,6 +1,11 @@
 ---
 description: "Barcode Generator is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: barcode-generator
+topic_type: get-started
+canonical_id: scandit.barcode-generator.get-started
+framework: titanium
+availability: unavailable
 ---
 
 # Barcode Generator is not available on Titanium

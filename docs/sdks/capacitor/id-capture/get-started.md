@@ -5,6 +5,9 @@ sidebar_position: 2
 framework: capacitor
 keywords:
   - capacitor
+product: id-capture
+topic_type: get-started
+canonical_id: scandit.id-capture.get-started
 ---
 
 # Get Started

@@ -11,6 +11,8 @@ keywords:
   - bolt
   - validators
   - verification
+topic_type: reference
+canonical_id: scandit.id-bolt.validators
 ---
 
 # Validators

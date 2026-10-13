@@ -6,6 +6,9 @@ pagination_prev: null
 framework: capacitor
 keywords:
   - capacitor
+product: core
+topic_type: concept
+canonical_id: scandit.core.single-scanning
 ---
 
 # Single Barcode Scanning

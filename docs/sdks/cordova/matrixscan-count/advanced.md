@@ -6,6 +6,9 @@ pagination_next: null
 framework: cordova
 keywords:
   - cordova
+product: matrixscan-count
+topic_type: how-to
+canonical_id: scandit.matrixscan-count.advanced
 ---
 
 # Advanced Configurations

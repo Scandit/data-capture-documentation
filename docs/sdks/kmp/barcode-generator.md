@@ -7,6 +7,9 @@ pagination_next: null
 framework: kmp
 keywords:
   - kmp
+product: barcode-generator
+topic_type: get-started
+canonical_id: scandit.barcode-generator.get-started
 ---
 
 # Barcode Generator

@@ -1,6 +1,11 @@
 ---
 description: "ID Capture is not available on the Linux SDK."
 displayed_sidebar: linuxSidebar
+product: id-capture
+topic_type: how-to
+canonical_id: scandit.id-capture.advanced
+framework: linux
+availability: unavailable
 ---
 
 # ID Capture is not available on Linux

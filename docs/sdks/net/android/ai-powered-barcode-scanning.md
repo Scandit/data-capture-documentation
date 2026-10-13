@@ -4,6 +4,9 @@ toc_max_heading_level: 4
 framework: net-android
 keywords:
   - netAndroid
+product: core
+topic_type: concept
+canonical_id: scandit.core.ai-powered-barcode-scanning
 ---
 
 # AI-Powered Barcode Scanning

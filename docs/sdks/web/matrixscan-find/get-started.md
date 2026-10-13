@@ -6,6 +6,9 @@ pagination_next: null
 framework: web
 keywords:
   - web
+product: matrixscan-find
+topic_type: get-started
+canonical_id: scandit.matrixscan-find.get-started
 ---
 
 # Get Started

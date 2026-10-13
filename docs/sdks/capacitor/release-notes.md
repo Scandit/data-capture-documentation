@@ -8,6 +8,9 @@ pagination_prev: null
 framework: capacitor
 keywords:
   - capacitor
+product: platform
+topic_type: release-notes
+canonical_id: scandit.platform.release-notes
 ---
 
 ## 8.6.1

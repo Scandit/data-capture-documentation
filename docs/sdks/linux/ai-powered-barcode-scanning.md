@@ -1,6 +1,11 @@
 ---
 description: "AI-Powered Barcode Scanning is not available on the Linux SDK."
 displayed_sidebar: linuxSidebar
+product: core
+topic_type: concept
+canonical_id: scandit.core.ai-powered-barcode-scanning
+framework: linux
+availability: unavailable
 ---
 
 # AI-Powered Barcode Scanning is not available on Linux

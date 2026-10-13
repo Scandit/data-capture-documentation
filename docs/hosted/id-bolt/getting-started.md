@@ -9,6 +9,8 @@ framework: hosted
 product: id-bolt
 keywords:
   - bolt
+topic_type: get-started
+canonical_id: scandit.id-bolt.getting-started
 ---
 
 ID Bolt can be integrated into your existing application or website with minimal time and effort, often ready to test in your staging environment in just one hour.

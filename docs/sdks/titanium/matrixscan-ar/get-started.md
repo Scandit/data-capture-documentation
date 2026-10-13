@@ -1,6 +1,11 @@
 ---
 description: "MatrixScan AR is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: matrixscan-ar
+topic_type: get-started
+canonical_id: scandit.matrixscan-ar.get-started
+framework: titanium
+availability: unavailable
 ---
 
 # MatrixScan AR is not available on Titanium

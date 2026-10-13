@@ -3,6 +3,9 @@ description: Get Started With SwiftUI and Scandit Label Capture.
 framework: ios
 keywords:
   - ios
+product: smart-label-capture
+topic_type: get-started
+canonical_id: scandit.smart-label-capture.get-started-with-swift-ui
 ---
 
 # Get Started With SwiftUI

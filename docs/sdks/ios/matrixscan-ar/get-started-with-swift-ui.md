@@ -3,6 +3,9 @@ description: Get Started With SwiftUI and Scandit MatrixScan AR.
 framework: ios
 keywords:
   - ios
+product: matrixscan-ar
+topic_type: get-started
+canonical_id: scandit.matrixscan-ar.get-started-with-swift-ui
 ---
 
 # Get Started With SwiftUI

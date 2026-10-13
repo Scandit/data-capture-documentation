@@ -6,6 +6,9 @@ pagination_next: null
 framework: capacitor
 keywords:
   - capacitor
+product: barcode-capture
+topic_type: how-to
+canonical_id: scandit.barcode-capture.configure-barcode-symbologies
 ---
 
 # Configure Barcode Symbologies

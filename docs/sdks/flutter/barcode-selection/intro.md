@@ -6,6 +6,9 @@ pagination_prev: null
 framework: flutter
 keywords:
   - flutter
+product: barcode-selection
+topic_type: product-overview
+canonical_id: scandit.barcode-selection.intro
 ---
 
 # About Barcode Selection

@@ -5,6 +5,9 @@ pagination_prev: null
 framework: net-ios
 keywords:
   - netIos
+product: barcode-selection
+topic_type: product-overview
+canonical_id: scandit.barcode-selection.intro
 ---
 
 # About Barcode Selection

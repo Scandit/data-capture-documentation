@@ -1,6 +1,11 @@
 ---
 description: "Barcode Selection is not available on the Web SDK."
 displayed_sidebar: webSidebar
+product: barcode-selection
+topic_type: product-overview
+canonical_id: scandit.barcode-selection.intro
+framework: web
+availability: unavailable
 ---
 
 # Barcode Selection is not available on Web

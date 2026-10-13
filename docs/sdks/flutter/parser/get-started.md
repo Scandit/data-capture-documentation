@@ -7,6 +7,9 @@ pagination_next: null
 framework: flutter
 keywords:
   - flutter
+product: parser
+topic_type: get-started
+canonical_id: scandit.parser.get-started
 ---
 
 # Get Started

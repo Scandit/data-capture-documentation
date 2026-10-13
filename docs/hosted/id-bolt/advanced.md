@@ -11,6 +11,8 @@ keywords:
   - bolt
   - advanced
   - options
+topic_type: how-to
+canonical_id: scandit.id-bolt.advanced
 ---
 
 # Advanced Options

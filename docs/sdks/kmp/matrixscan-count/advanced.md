@@ -6,6 +6,9 @@ pagination_next: null
 framework: kmp
 keywords:
   - kmp
+product: matrixscan-count
+topic_type: how-to
+canonical_id: scandit.matrixscan-count.advanced
 ---
 
 # Advanced Configurations

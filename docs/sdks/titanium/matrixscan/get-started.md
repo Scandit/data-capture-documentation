@@ -1,6 +1,11 @@
 ---
 description: "MatrixScan is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: matrixscan-batch
+topic_type: get-started
+canonical_id: scandit.matrixscan-batch.get-started
+framework: titanium
+availability: unavailable
 ---
 
 # MatrixScan is not available on Titanium

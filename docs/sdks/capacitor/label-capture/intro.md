@@ -7,6 +7,9 @@ pagination_prev: null
 framework: capacitor
 keywords:
   - capacitor
+product: smart-label-capture
+topic_type: product-overview
+canonical_id: scandit.smart-label-capture.intro
 ---
 
 import AboutLabelCapture from '../../../partials/intro/_about-smart-label-capture.mdx';

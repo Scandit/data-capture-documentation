@@ -1,6 +1,11 @@
 ---
 description: "Barcode Generator is not available on the Web SDK."
 displayed_sidebar: webSidebar
+product: barcode-generator
+topic_type: get-started
+canonical_id: scandit.barcode-generator.get-started
+framework: web
+availability: unavailable
 ---
 
 # Barcode Generator is not available on Web
