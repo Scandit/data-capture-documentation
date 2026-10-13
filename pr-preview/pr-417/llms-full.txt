@@ -26341,8 +26341,6 @@ extension ViewController: SparkScanListener {
 
 ## About SparkScan
 
-import ProductChooser from '@site/src/components/ProductChooser';
-
 # About SparkScan
 
 import AboutSparkScan from '../../../partials/intro/_about-sparkscan.mdx';
