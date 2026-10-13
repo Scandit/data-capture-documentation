@@ -206,7 +206,7 @@ export default function ComponentPreview(): JSX.Element {
           hand. It is BrowserOnly, so it appears in the browser rather than in the
           static HTML.
         */}
-        <PageFeedback />
+        <PageFeedback url="/component-preview" title="Component preview (design review)" />
       </main>
     </Layout>
   );
