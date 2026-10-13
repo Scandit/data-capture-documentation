@@ -1,25 +1,29 @@
 import React from 'react';
 import Link from '@docusaurus/Link';
+import { useLocation } from '@docusaurus/router';
+import { usePluginData } from '@docusaurus/useGlobalData';
+import routes from '@generated/routes';
 import productsData from '@site/src/data/products.json';
+import { frameworkToSlug, parseSdksRoute } from '@site/src/components/utils/frameworks';
+import type { ProductRegistryData, RegistryProduct } from '@site/src/plugins/plugin-product-registry';
 import styles from './styles.module.css';
 
 /**
- * ProductChooser — a "Choose this if / Consider another product if" decision
- * block plus a supported-frameworks matrix, for product-overview pages.
+ * ProductChooser: a "Choose this if / Consider another product if" block plus
+ * the frameworks the product is available on, for product overview pages.
  *
- * It is fed entirely from single sources of truth, so the visible block can
- * never drift from the machine-readable metadata:
- *   - `user_intents` and `not_for` come from the page's own frontmatter
- *     (the same fields that power GEO/AI routing).
- *   - the supported-frameworks matrix comes from `src/data/products.json`
- *     (the product registry the Agent Skills pages already use).
+ *   <ProductChooser />
  *
- * Drop it on any product-overview page and pass the page's frontmatter, which
- * Docusaurus makes available in MDX scope as `frontMatter`:
+ * Everything comes from single sources, so the block cannot drift:
+ *   - the page's product and framework come from its URL
+ *     (/sdks/<framework>/<product folder>/...), read the same way as the rest
+ *     of the site reads them (parseSdksRoute);
+ *   - the text comes from content/registry/product-chooser.yml, through the
+ *     product-registry plugin, which passes on APPROVED entries only;
+ *   - "Available on" comes from src/data/products.json.
  *
- *   <ProductChooser frontMatter={frontMatter} />
- *
- * Renders nothing if `product`, `user_intents`, and `not_for` are all unset.
+ * It renders nothing until the product has an approved entry, so it can sit in
+ * a shared intro partial before product owners have signed the text off.
  */
 
 interface FrameworkEntry {
@@ -30,116 +34,123 @@ interface FrameworkEntry {
 interface ProductEntry {
   key: string;
   name: string;
-  frameworks?: Record<string, FrameworkEntry> | string[];
+  frameworks?: Record<string, FrameworkEntry>;
 }
 
-// products.json marks a framework the product does NOT support with version "n/a"
-// (e.g. SparkScan on Titanium). Treat those as unsupported.
-function isSupported(entry: FrameworkEntry): boolean {
+// products.json marks a framework the product does NOT support with version "n/a".
+function isSupported(entry: FrameworkEntry | undefined): boolean {
   const v = String(entry?.version ?? '').trim().toLowerCase();
   return v !== '' && v !== 'n/a';
 }
 
-// Map the page's `framework` frontmatter value to the display key products.json uses.
-const FW_TO_PJ: Record<string, string> = {
-  web: 'Web', ios: 'iOS', android: 'Android', 'react-native': 'React Native',
-  flutter: 'Flutter', cordova: 'Cordova', capacitor: 'Capacitor', titanium: 'Titanium',
-  'net/ios': '.NET iOS', 'net/android': '.NET Android',
-};
+// Whether products.json lists `key` as available on a framework (display name).
+// A product products.json doesn't cover (hosted) is treated as available.
+function availableOnFramework(key: string, framework: string | undefined): boolean {
+  const json = (productsData as ProductEntry[]).find((p) => p.key === key);
+  if (!json?.frameworks || !framework) return true;
+  return isSupported(json.frameworks[framework]);
+}
 
-// Best doc URL for a product on the current framework: the framework's own page,
-// else Web, else any framework the product supports. All from products.json (SSOT).
-function apiUrlFor(product: ProductEntry, fw: string): string | null {
-  const fks = product.frameworks;
-  if (!fks || Array.isArray(fks)) return null;
-  for (const name of [FW_TO_PJ[fw], 'Web']) {
-    const e = name ? fks[name] : undefined;
-    if (e && isSupported(e) && e.apiUrl && e.apiUrl !== 'n/a') return e.apiUrl;
+type RouteNode = { path?: string; exact?: boolean; routes?: RouteNode[] };
+
+// The routes the app renders, normalised as the router matches them.
+let routeKeys: Set<string> | null = null;
+function isAppRoute(pathname: string): boolean {
+  if (!routeKeys) {
+    const keys = new Set<string>();
+    const collect = (list: RouteNode[]) =>
+      list.forEach((r) => {
+        if (r.routes) collect(r.routes);
+        else if (r.exact && r.path) keys.add(r.path.endsWith('/') ? r.path : `${r.path}/`);
+      });
+    collect(routes as unknown as RouteNode[]);
+    routeKeys = keys;
   }
-  const any = Object.values(fks).find((e) => isSupported(e) && e.apiUrl && e.apiUrl !== 'n/a');
-  return any ? (any.apiUrl as string) : null;
+  return routeKeys.has(pathname.endsWith('/') ? pathname : `${pathname}/`);
 }
 
-// If a `not_for` line names another product (e.g. "…— use MatrixScan Count"),
-// turn that product name into a framework-aware link to its About page. Matches
-// the LONGEST product name present so "MatrixScan Count" wins over "MatrixScan".
-// Falls back to plain text when there's no match or no resolvable URL.
-function renderNotFor(text: string, fw: string): React.ReactNode {
-  const match = (productsData as ProductEntry[])
-    .filter((p) => p.name && text.includes(p.name))
-    .sort((a, b) => b.name.length - a.name.length)[0];
-  if (!match) return text;
-  const url = apiUrlFor(match, fw);
-  if (!url) return text;
-  const i = text.indexOf(match.name);
-  return (
-    <>
-      {text.slice(0, i)}
-      <Link to={url}>{match.name}</Link>
-      {text.slice(i + match.name.length)}
-    </>
-  );
+// The other product's overview on the same framework and docs version: its
+// intro page, else its get-started page (Barcode Capture has no intro), else
+// nothing, and the name is shown as plain text. A hosted product has one
+// overview, under /hosted/.
+function overviewUrl(prefix: string, fwSlug: string, target: RegistryProduct): string | null {
+  const candidates =
+    target.kind === 'hosted'
+      ? [`${prefix}/hosted/${target.folder}/overview/`]
+      : ['intro', 'get-started'].map((page) => `${prefix}/sdks/${fwSlug}/${target.folder}/${page}/`);
+  return candidates.find(isAppRoute) ?? null;
 }
 
-interface ProductChooserProps {
-  frontMatter?: Record<string, unknown>;
+// A frozen docs version (/7.6.15/..., /6.28.11/...). Its pages are snapshots,
+// but the chooser text and products.json are not versioned, so the block would
+// show today's facts on an old release. The current docs (no prefix) and the
+// in-development ones (/next/) render it.
+function isFrozenVersion(prefix: string): boolean {
+  return /^\/\d+\.\d+\.\d+$/.test(prefix);
 }
 
-export default function ProductChooser({ frontMatter = {} }: ProductChooserProps): JSX.Element | null {
-  const fm = frontMatter;
-  const fw = (fm.framework as string) || 'web';
+export default function ProductChooser(): JSX.Element | null {
+  const { pathname } = useLocation();
+  const data = usePluginData('product-registry') as ProductRegistryData | undefined;
+  const { framework, product: productKey } = parseSdksRoute(pathname);
+  const entry = productKey ? data?.chooser[productKey] : undefined;
+  const fwSlug = frameworkToSlug(framework);
+  if (!data || !productKey || !entry || !fwSlug) return null;
 
-  const intents = (fm.user_intents as string[]) || [];
-  const notFor = (fm.not_for as string[]) || [];
-  const productKey = Array.isArray(fm.product)
-    ? (fm.product[0] as string)
-    : (fm.product as string | undefined);
-
-  const product = (productsData as ProductEntry[]).find((p) => p.key === productKey);
-  const name = product?.name || 'this product';
-  const frameworks = product?.frameworks
-    ? Array.isArray(product.frameworks)
-      ? product.frameworks
-      : Object.entries(product.frameworks)
-          .filter(([, entry]) => isSupported(entry))
-          .map(([name]) => name)
-    : [];
-
-  if (!intents.length && !notFor.length && !frameworks.length) return null;
+  const prefix = pathname.slice(0, pathname.indexOf('/sdks/'));
+  if (isFrozenVersion(prefix)) return null;
+  const byKey = new Map(data.products.map((p) => [p.key, p]));
+  const name = byKey.get(productKey)?.name ?? productKey;
+  const json = (productsData as ProductEntry[]).find((p) => p.key === productKey);
+  const availableOn = Object.entries(json?.frameworks ?? {})
+    .filter(([, e]) => isSupported(e))
+    .map(([display]) => display);
 
   return (
     <aside className={styles.chooser} aria-label={`Is ${name} the right product?`}>
-      {(intents.length > 0 || notFor.length > 0) && (
-        <div className={styles.decide}>
-          {intents.length > 0 && (
-            <div className={`${styles.col} ${styles.good}`}>
-              <h4 className={styles.colTitle}>Choose {name} if you want to</h4>
-              <ul>
-                {intents.map((t, i) => (
-                  <li key={i}>{t}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-          {notFor.length > 0 && (
-            <div className={`${styles.col} ${styles.bad}`}>
-              <h4 className={styles.colTitle}>Consider another product if you need to</h4>
-              <ul>
-                {notFor.map((t, i) => (
-                  <li key={i}>{renderNotFor(t, fw)}</li>
-                ))}
-              </ul>
-            </div>
-          )}
+      <div className={styles.decide}>
+        <div className={`${styles.col} ${styles.good}`}>
+          <p className={styles.colTitle}>Choose {name} if you want to</p>
+          <ul>
+            {entry.choose_if.map((text) => (
+              <li key={text}>{text}</li>
+            ))}
+          </ul>
         </div>
-      )}
-      {frameworks.length > 0 && (
+        {entry.not_for.length > 0 && (
+          <div className={`${styles.col} ${styles.bad}`}>
+            <p className={styles.colTitle}>Consider another product if</p>
+            <ul>
+              {entry.not_for.map(({ when, use }) => {
+                const target = byKey.get(use);
+                const label = target?.name ?? use;
+                // Not on this framework: name it, but don't link to a "not
+                // available" stub as if it were an answer.
+                if (!availableOnFramework(use, framework)) {
+                  return (
+                    <li key={use + when}>
+                      {when}: {label} (not available on {framework})
+                    </li>
+                  );
+                }
+                const url = target ? overviewUrl(prefix, fwSlug, target) : null;
+                return (
+                  <li key={use + when}>
+                    {when}: {url ? <Link to={url}>{label}</Link> : label}
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
+      </div>
+      {availableOn.length > 0 && (
         <div className={styles.matrix}>
           <span className={styles.matrixLabel}>Available on</span>
           <span className={styles.chips}>
-            {frameworks.map((f, i) => (
-              <span key={i} className={styles.chip}>
-                {f}
+            {availableOn.map((display) => (
+              <span key={display} className={styles.chip}>
+                {display}
               </span>
             ))}
           </span>

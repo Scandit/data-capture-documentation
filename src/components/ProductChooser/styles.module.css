@@ -100,3 +100,11 @@
   color: var(--ifm-color-emphasis-800);
   border: 1px solid var(--ifm-color-emphasis-200);
 }
+
+/* The -darker shades are too dark on the dark surface; use the lighter ones. */
+[data-theme='dark'] .good .colTitle {
+  color: var(--ifm-color-success-lighter);
+}
+[data-theme='dark'] .bad .colTitle {
+  color: var(--ifm-color-warning-lighter);
+}
