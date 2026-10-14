@@ -955,6 +955,8 @@ const config: Config = {
   },
   clientModules: [
     require.resolve('./src/clientModules/agentSkillsNavLink.ts'),
+    require.resolve('./src/clientModules/translationGuard.ts'),
+    require.resolve('./src/clientModules/chunkLoadRecovery.ts'),
   ],
   plugins: [
     [

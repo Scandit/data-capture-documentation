@@ -68,7 +68,9 @@ export default function FrameworksMobile({
       </h4>
       <BrowserOnly>
         {() => (
-          <div className={style.frameworksMobile}>
+          // Framework names are product names, and the labels change as the
+          // selection does: left to a page translator they can crash React.
+          <div className={style.frameworksMobile} translate="no">
             <div
               className={style.field}
               onClick={() => setOpenSelector(!openSelector)}
