@@ -49639,3 +49639,13 @@ if let path = Bundle.main.path(forResource: "index", ofType: "html") {
 :::note
 `loadFileURL` grants the web content a secure context on iOS, so `getUserMedia` works even for `file://` URLs when loaded this way.
 :::
+
+---
+
+## ShelfView
+
+# ShelfView
+
+[ShelfView](https://www.scandit.com/products/shelfview/) is integrated together with the Scandit team, so it has no public developer documentation.
+
+To integrate it, contact your Scandit account team or [support@scandit.com](mailto:support@scandit.com).
