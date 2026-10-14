@@ -104,7 +104,11 @@ test("a chooser for a product that does not exist", () => {
 });
 test("a chooser on a topic", () => {
   const c = chooser(); c.products.platform = { status: "draft", choose_if: ["x"] };
-  has(r.chooserErrors(base(), c), "platform: only sdk and hosted products can have a chooser");
+  has(r.chooserErrors(base(), c), "platform: only sdk products can have a chooser");
+});
+test("a chooser on a hosted product", () => {
+  const c = chooser(); c.products.express = { status: "approved", choose_if: ["x"] };
+  has(r.chooserErrors(base(), c), "express: only sdk products can have a chooser");
 });
 test("not_for pointing to a product that does not exist", () => {
   const c = chooser(); c.products.sparkscan.not_for[0].use = "matrixscan";
