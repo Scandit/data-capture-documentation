@@ -13,6 +13,11 @@
   background: var(--ifm-color-emphasis-200);
 }
 
+/* No "consider another product" column: don't leave half the box blank. */
+.decide.single {
+  grid-template-columns: 1fr;
+}
+
 @media (max-width: 700px) {
   .decide {
     grid-template-columns: 1fr;
@@ -43,16 +48,16 @@
   flex: none;
 }
 
-.good .colTitle {
-  color: var(--ifm-color-success-darker);
+/* The titles keep the body text colour: the green and amber shades fail WCAG AA
+   contrast for text this small. The coloured dot carries the good/bad cue. */
+.colTitle {
+  color: var(--ifm-font-color-base);
 }
+
 .good .colTitle::before {
   background: var(--ifm-color-success);
 }
 
-.bad .colTitle {
-  color: var(--ifm-color-warning-darker);
-}
 .bad .colTitle::before {
   background: var(--ifm-color-warning);
 }
@@ -82,16 +87,22 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ifm-color-emphasis-600);
+  /* emphasis-600 is about 3:1 on white, too faint for text this small. */
+  color: var(--ifm-color-emphasis-700);
 }
 
 .chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
 }
 
-.chip {
+.chips .chip {
+  /* Beats Infima's `.markdown li + li` top margin, which would stagger the row. */
+  margin: 0;
   font-size: 0.78rem;
   font-weight: 600;
   padding: 0.15rem 0.55rem;
@@ -99,12 +110,4 @@
   background: var(--ifm-color-emphasis-100);
   color: var(--ifm-color-emphasis-800);
   border: 1px solid var(--ifm-color-emphasis-200);
-}
-
-/* The -darker shades are too dark on the dark surface; use the lighter ones. */
-[data-theme='dark'] .good .colTitle {
-  color: var(--ifm-color-success-lighter);
-}
-[data-theme='dark'] .bad .colTitle {
-  color: var(--ifm-color-warning-lighter);
 }

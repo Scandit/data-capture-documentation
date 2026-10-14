@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import Link from '@docusaurus/Link';
 import { useLocation } from '@docusaurus/router';
 import { usePluginData } from '@docusaurus/useGlobalData';
@@ -85,12 +85,26 @@ function overviewUrl(prefix: string, fwSlug: string, target: RegistryProduct): s
 // but the chooser text and products.json are not versioned, so the block would
 // show today's facts on an old release. The current docs (no prefix) and the
 // in-development ones (/next/) render it.
+//
+// No snapshot that exists today imports these partials, so this does not fire
+// yet. It will: `scripts/update-version.py` snapshots docs/ verbatim, partials
+// included, so the next major-version snapshot carries <ProductChooser /> into
+// a frozen tree.
 function isFrozenVersion(prefix: string): boolean {
   return /^\/\d+\.\d+\.\d+$/.test(prefix);
 }
 
+// Backticked names (`BarcodeBatch`) in the chooser text render as inline code,
+// as FeatureList renders its descriptions. Everything else is plain text.
+function renderText(text: string): React.ReactNode {
+  return text.split(/(`[^`]+`)/g).map((part, i) =>
+    part.length > 2 && part.startsWith('`') && part.endsWith('`') ? <code key={i}>{part.slice(1, -1)}</code> : part,
+  );
+}
+
 export default function ProductChooser(): JSX.Element | null {
   const { pathname } = useLocation();
+  const matrixId = useId();
   const data = usePluginData('product-registry') as ProductRegistryData | undefined;
   const { framework, product: productKey } = parseSdksRoute(pathname);
   const entry = productKey ? data?.chooser[productKey] : undefined;
@@ -102,22 +116,24 @@ export default function ProductChooser(): JSX.Element | null {
   const byKey = new Map(data.products.map((p) => [p.key, p]));
   const name = byKey.get(productKey)?.name ?? productKey;
   const json = (productsData as ProductEntry[]).find((p) => p.key === productKey);
+  // With the version: "available since 6.8" answers a question "iOS" doesn't.
   const availableOn = Object.entries(json?.frameworks ?? {})
     .filter(([, e]) => isSupported(e))
-    .map(([display]) => display);
+    .map(([display, e]) => ({ display, version: String(e.version).trim() }));
+  const hasAlternatives = entry.not_for.length > 0;
 
   return (
     <aside className={styles.chooser} aria-label={`Is ${name} the right product?`}>
-      <div className={styles.decide}>
+      <div className={`${styles.decide} ${hasAlternatives ? '' : styles.single}`}>
         <div className={`${styles.col} ${styles.good}`}>
           <p className={styles.colTitle}>Choose {name} if you want to</p>
           <ul>
             {entry.choose_if.map((text) => (
-              <li key={text}>{text}</li>
+              <li key={text}>{renderText(text)}</li>
             ))}
           </ul>
         </div>
-        {entry.not_for.length > 0 && (
+        {hasAlternatives && (
           <div className={`${styles.col} ${styles.bad}`}>
             <p className={styles.colTitle}>Consider another product if</p>
             <ul>
@@ -129,14 +145,14 @@ export default function ProductChooser(): JSX.Element | null {
                 if (!availableOnFramework(use, framework)) {
                   return (
                     <li key={use + when}>
-                      {when}: {label} (not available on {framework})
+                      {renderText(when)}: {label} (not available on {framework})
                     </li>
                   );
                 }
                 const url = target ? overviewUrl(prefix, fwSlug, target) : null;
                 return (
                   <li key={use + when}>
-                    {when}: {url ? <Link to={url}>{label}</Link> : label}
+                    {renderText(when)}: {url ? <Link to={url}>{label}</Link> : label}
                   </li>
                 );
               })}
@@ -146,14 +162,17 @@ export default function ProductChooser(): JSX.Element | null {
       </div>
       {availableOn.length > 0 && (
         <div className={styles.matrix}>
-          <span className={styles.matrixLabel}>Available on</span>
-          <span className={styles.chips}>
-            {availableOn.map((display) => (
-              <span key={display} className={styles.chip}>
-                {display}
-              </span>
-            ))}
+          <span className={styles.matrixLabel} id={matrixId}>
+            Available on
           </span>
+          {/* A list, so a screen reader announces how many frameworks there are. */}
+          <ul className={styles.chips} aria-labelledby={matrixId}>
+            {availableOn.map(({ display, version }) => (
+              <li key={display} className={styles.chip}>
+                {display} v{version}
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </aside>
