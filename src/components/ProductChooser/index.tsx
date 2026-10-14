@@ -44,11 +44,11 @@ const withSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`);
 // intro), else its single page (Barcode Generator is one flat page), else
 // nothing, and the name is shown as plain text. A hosted product has one
 // overview, under /hosted/. `routeSegment` is the framework's URL path, which
-// is not its slug on .NET (`net/ios`, not `net-ios`). `docPaths` are the
-// active version's doc permalinks, base URL included, as the docs plugin
+// is not its slug on .NET (`net/ios`, not `net-ios`). `docs` are the active
+// version's docs, whose paths carry the base URL, as the docs plugin
 // publishes them.
 function overviewUrl(
-  docPaths: ReadonlySet<string>,
+  docs: readonly { path: string }[],
   prefix: string,
   routeSegment: string,
   target: RegistryProduct,
@@ -58,7 +58,7 @@ function overviewUrl(
     target.kind === 'hosted'
       ? [`${prefix}/hosted/${target.folder}/overview/`]
       : [`${base}intro/`, `${base}get-started/`, base];
-  return candidates.find((c) => docPaths.has(c)) ?? null;
+  return candidates.find((c) => docs.some((d) => withSlash(d.path) === c)) ?? null;
 }
 
 // "since 6.8", or "since C API 4.6" where the framework counts its own
@@ -74,10 +74,6 @@ export default function ProductChooser(): JSX.Element | null {
   const activeVersion = useActivePluginAndVersion()?.activeVersion;
   const data = usePluginData('product-registry') as ProductRegistryData | undefined;
   const byKey = useMemo(() => new Map((data?.products ?? []).map((p) => [p.key, p])), [data]);
-  const docPaths = useMemo(
-    () => new Set((activeVersion?.docs ?? []).map((d) => withSlash(d.path))),
-    [activeVersion],
-  );
   const { framework, product: productKey } = parseSdksRoute(pathname);
   const entry = productKey ? data?.chooser[productKey] : undefined;
   const routeSegment = FRAMEWORKS.find((f) => f.display === framework)?.routeSegment;
@@ -128,7 +124,7 @@ export default function ProductChooser(): JSX.Element | null {
                     </li>
                   );
                 }
-                const url = target ? overviewUrl(docPaths, prefix, routeSegment, target) : null;
+                const url = target ? overviewUrl(activeVersion.docs, prefix, routeSegment, target) : null;
                 return (
                   <li key={i}>
                     {renderInlineCode(when)}: {url ? <Link to={url}>{label}</Link> : label}

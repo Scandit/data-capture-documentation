@@ -8,11 +8,15 @@ keywords:
   - kmp
 ---
 
+import ProductChooser from '@site/src/components/ProductChooser';
+
 # About MatrixScan Pick
 
 MatrixScan Pick is a pre-built UI that uses augmented reality overlays to highlight specific items that need to be picked. Whereas MatrixScan AR is fully customizable, MatrixScan Pick is a pre-built solution that allows you to add a scan and pick experience with augmented reality to an existing app, with just a few lines of code.
 
 MatrixScan Pick is implemented through functionality provided by `BarcodePick`.
+
+<ProductChooser />
 
 ## UI Overview
 

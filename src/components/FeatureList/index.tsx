@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './styles.module.css';
-import { FeatureListProps, Feature, Product, FilteredFeature } from './types';
+import { FeatureListProps, Feature, FilteredFeature } from './types';
 
 // Import data files
-import productsData from '@site/src/data/products.json';
 import featuresData from '@site/src/data/features.json';
 import { frameworkFromPath } from '@site/src/constants/frameworks';
 import { withCurrentDocsPath } from '@site/src/constants/docsPaths';

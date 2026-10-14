@@ -8,6 +8,8 @@ keywords:
   - kmp
 ---
 
+import ProductChooser from '@site/src/components/ProductChooser';
+
 # About MatrixScan Find
 
 MatrixScan Find is our pre-built UI that uses augmented reality overlays to highlight items that match predefined criteria. It enables you to add a search-and-find experience with augmented reality to an existing Kotlin Multiplatform app with just a few lines of code.
@@ -17,6 +19,8 @@ MatrixScan Find is our pre-built UI that uses augmented reality overlays to high
 MatrixScan Find bundles multiple scanning features together and addresses many common challenges associated with scanning on smart devices. It is designed to be easily integrated into any application, and can be customized to fit your specific needs.
 
 On Kotlin Multiplatform, MatrixScan Find is exposed through the `BarcodeFind` data capture mode and the `BarcodeFindView` built-in UI, both of which are shared between Android and iOS.
+
+<ProductChooser />
 
 ## UI Overview
 

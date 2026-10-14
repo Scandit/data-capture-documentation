@@ -9,11 +9,15 @@ keywords:
   - kmp
 ---
 
+import ProductChooser from '@site/src/components/ProductChooser';
+
 # About SparkScan
 
 SparkScan is our pre-built smartphone scanning interface designed for high-performance barcode scanning. It fits on top of any smartphone application, providing an intuitive user interface for simple, fast and ergonomic scanning in scan-intensive workflows, such as inventory management in retail, or goods receiving in logistics.
 
 SparkScan bundles multiple scanning features together and addresses many common challenges associated with scanning on smart devices. It is designed to be easily integrated into any application, and can be customized to fit your specific needs.
+
+<ProductChooser />
 
 ## UI Overview
 
