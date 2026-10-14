@@ -1,10 +1,5 @@
 import Link from '@docusaurus/Link';
-
-export const apiTokens = {
-  'ios': 'ios',
-  'android': 'android',
-  'web': 'web',
-};
+import ApiLink from '@site/src/components/ApiLink';
 
 export const symbolTokens = {
   'ios': {
@@ -103,10 +98,6 @@ export const carrierValues = {
 };
 
 export const Only = ({when, children}) => (when ? <>{children}</> : null);
-
-export const ApiLink = ({framework, page, anchor, children}) => (
-  <Link to={`https://docs.scandit.com/data-capture-sdk/${apiTokens[framework]}/${page}#${anchor}`}><code>{children}</code></Link>
-);
 
 export const DocLink = ({framework, page, children}) => (
   <Link to={`/sdks/${framework}/label-capture/${page}`}>{children}</Link>

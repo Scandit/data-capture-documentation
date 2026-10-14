@@ -417,6 +417,32 @@ function buildApiReferencePrefixByMajor(): Record<string, string> {
 }
 
 /**
+ * The path prefix of the API reference each docs version links to, keyed by
+ * version name: `{ current: "", "7.6.15": "/7.6", "6.28.11": "/6.28" }`.
+ * Consumed by src/components/ApiLink, which builds API-reference URLs in code.
+ *
+ * Decided by the version's role, not by scanning its text: the current version
+ * links the unversioned tree, and a frozen version links its own
+ * <major>.<minor> line. That is the rule scripts/update-version.py applies to a
+ * snapshot's text at the freeze (API_REFERENCE_LINK_REWRITES), and it has to be
+ * restated here because ApiLink's URLs are not in the text the script rewrites.
+ * A text scan (`linksToOwnApiLine`) would be wrong for ApiLink twice over: it
+ * finds less as partials move to ApiLink, and one deliberately versioned link
+ * in docs/ would switch every ApiLink on the current version.
+ */
+function buildApiReferencePrefixByVersion(): Record<string, string> {
+  const out: Record<string, string> = { current: "" };
+  for (const name of frozenVersionNames()) {
+    const match = /^(\d+\.\d+)\.\d+/.exec(name);
+    // update-version.py raises on the same input; failing here keeps a
+    // misnamed snapshot from silently linking the current API reference.
+    if (!match) throw new Error(`Cannot derive an API-reference line from docs version "${name}".`);
+    out[name] = `/${match[1]}`;
+  }
+  return out;
+}
+
+/**
  * Map a major version typed in a query ("v7", "sdk 6") to the tag of the version
  * a reader on that line is actually served.
  *
@@ -928,6 +954,9 @@ const config: Config = {
     // Major -> prefix of the API reference that major's docs link to. Used by
     // the 404 page to recover versioned API-reference links.
     apiReferencePrefixByMajor: buildApiReferencePrefixByMajor(),
+    // Docs version name -> prefix of the API reference that version links to.
+    // Used by src/components/ApiLink.
+    apiReferencePrefixByVersion: buildApiReferencePrefixByVersion(),
     versionNumberByTag: buildVersionNumberByTag(docsVersions),
   },
 
