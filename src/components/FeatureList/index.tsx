@@ -8,18 +8,7 @@ import productsData from '@site/src/data/products.json';
 import featuresData from '@site/src/data/features.json';
 import { frameworkFromPath } from '@site/src/constants/frameworks';
 import { withCurrentDocsPath } from '@site/src/constants/docsPaths';
-
-// Function to render description with inline code formatting
-const renderDescription = (description: string) => {
-  // Convert backticks to inline code elements
-  const parts = description.split(/(`[^`]+`)/g);
-  return parts.map((part, index) => {
-    if (part.startsWith('`') && part.endsWith('`')) {
-      return <code key={index}>{part.slice(1, -1)}</code>;
-    }
-    return part;
-  });
-};
+import { renderInlineCode as renderDescription } from '@site/src/components/utils/inlineCode';
 
 const FeatureList: React.FC<FeatureListProps> = ({
   product,

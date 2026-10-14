@@ -38,6 +38,9 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  /* The body text colour: the green and amber shades fail WCAG AA contrast for
+     text this small. The title text carries the meaning; the dot repeats it. */
+  color: var(--ifm-font-color-base);
 }
 
 .colTitle::before {
@@ -48,17 +51,15 @@
   flex: none;
 }
 
-/* The titles keep the body text colour: the green and amber shades fail WCAG AA
-   contrast for text this small. The coloured dot carries the good/bad cue. */
-.colTitle {
-  color: var(--ifm-font-color-base);
-}
-
 .good .colTitle::before {
   background: var(--ifm-color-success);
 }
 
 .bad .colTitle::before {
+  /* The default amber is about 1.7:1 on white, under the 3:1 for graphics. */
+  background: var(--ifm-color-warning-darkest);
+}
+[data-theme='dark'] .bad .colTitle::before {
   background: var(--ifm-color-warning);
 }
 
@@ -67,7 +68,8 @@
   padding-left: 1.1rem;
 }
 
-.col li {
+/* `ul li`, not `li`: beats Infima's `.markdown li + li` margin. */
+.col ul li {
   margin: 0.35rem 0;
   font-size: 0.92rem;
   line-height: 1.45;
@@ -110,4 +112,9 @@
   background: var(--ifm-color-emphasis-100);
   color: var(--ifm-color-emphasis-800);
   border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.since {
+  font-weight: 400;
+  color: var(--ifm-color-emphasis-700);
 }

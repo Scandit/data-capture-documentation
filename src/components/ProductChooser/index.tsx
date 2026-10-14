@@ -1,10 +1,14 @@
 import React, { useId } from 'react';
+import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import { useLocation } from '@docusaurus/router';
 import { usePluginData } from '@docusaurus/useGlobalData';
+import { useActivePluginAndVersion } from '@docusaurus/plugin-content-docs/client';
 import routes from '@generated/routes';
 import productsData from '@site/src/data/products.json';
-import { frameworkToSlug, parseSdksRoute } from '@site/src/components/utils/frameworks';
+import { parseSdksRoute } from '@site/src/components/utils/frameworks';
+import { renderInlineCode } from '@site/src/components/utils/inlineCode';
+import { frameworkFromPath } from '@site/src/constants/frameworks';
 import type { ProductRegistryData, RegistryProduct } from '@site/src/plugins/plugin-product-registry';
 import styles from './styles.module.css';
 
@@ -71,52 +75,47 @@ function isAppRoute(pathname: string): boolean {
 
 // The other product's overview on the same framework and docs version: its
 // intro page, else its get-started page (Barcode Capture has no intro), else
-// nothing, and the name is shown as plain text. A hosted product has one
-// overview, under /hosted/.
-function overviewUrl(prefix: string, fwSlug: string, target: RegistryProduct): string | null {
+// its single page (Barcode Generator is one flat page), else nothing, and the
+// name is shown as plain text. A hosted product has one overview, under
+// /hosted/. `routeSegment` is the framework's URL path, which is not its slug
+// on .NET (`net/ios`, not `net-ios`).
+function overviewUrl(prefix: string, routeSegment: string, target: RegistryProduct): string | null {
+  const base = `${prefix}/sdks/${routeSegment}/${target.folder}/`;
   const candidates =
     target.kind === 'hosted'
       ? [`${prefix}/hosted/${target.folder}/overview/`]
-      : ['intro', 'get-started'].map((page) => `${prefix}/sdks/${fwSlug}/${target.folder}/${page}/`);
+      : [`${base}intro/`, `${base}get-started/`, base];
   return candidates.find(isAppRoute) ?? null;
 }
 
-// A frozen docs version (/7.6.15/..., /6.28.11/...). Its pages are snapshots,
-// but the chooser text and products.json are not versioned, so the block would
-// show today's facts on an old release. The current docs (no prefix) and the
-// in-development ones (/next/) render it.
-//
-// No snapshot that exists today imports these partials, so this does not fire
-// yet. It will: `scripts/update-version.py` snapshots docs/ verbatim, partials
-// included, so the next major-version snapshot carries <ProductChooser /> into
-// a frozen tree.
-function isFrozenVersion(prefix: string): boolean {
-  return /^\/\d+\.\d+\.\d+$/.test(prefix);
-}
-
-// Backticked names (`BarcodeBatch`) in the chooser text render as inline code,
-// as FeatureList renders its descriptions. Everything else is plain text.
-function renderText(text: string): React.ReactNode {
-  return text.split(/(`[^`]+`)/g).map((part, i) =>
-    part.length > 2 && part.startsWith('`') && part.endsWith('`') ? <code key={i}>{part.slice(1, -1)}</code> : part,
-  );
+// Linux versions are C API releases (4.x, 5.x), not SDK releases, so they say so.
+function sinceLabel(display: string, version: string): string {
+  return display === 'Linux' ? `since C API ${version}` : `since ${version}`;
 }
 
 export default function ProductChooser(): JSX.Element | null {
   const { pathname } = useLocation();
   const matrixId = useId();
+  const activeVersion = useActivePluginAndVersion()?.activeVersion;
   const data = usePluginData('product-registry') as ProductRegistryData | undefined;
   const { framework, product: productKey } = parseSdksRoute(pathname);
   const entry = productKey ? data?.chooser[productKey] : undefined;
-  const fwSlug = frameworkToSlug(framework);
-  if (!data || !productKey || !entry || !fwSlug) return null;
+  const routeSegment = frameworkFromPath(pathname)?.routeSegment;
+  if (!data || !productKey || !entry || !routeSegment) return null;
+
+  // Not on a frozen snapshot (/7.6.15/...): the chooser text and products.json
+  // are not versioned, so it would show today's facts on an old release. The
+  // in-development docs ('current') and the version served at the site root
+  // (isLast) render it. No snapshot imports these partials today, but
+  // scripts/update-version.py copies docs/ verbatim, partials included, so the
+  // next major-version snapshot will.
+  if (activeVersion && activeVersion.name !== 'current' && !activeVersion.isLast) return null;
 
   const prefix = pathname.slice(0, pathname.indexOf('/sdks/'));
-  if (isFrozenVersion(prefix)) return null;
   const byKey = new Map(data.products.map((p) => [p.key, p]));
   const name = byKey.get(productKey)?.name ?? productKey;
   const json = (productsData as ProductEntry[]).find((p) => p.key === productKey);
-  // With the version: "available since 6.8" answers a question "iOS" doesn't.
+  // With the version: "since 6.8" answers a question "iOS" alone doesn't.
   const availableOn = Object.entries(json?.frameworks ?? {})
     .filter(([, e]) => isSupported(e))
     .map(([display, e]) => ({ display, version: String(e.version).trim() }));
@@ -124,12 +123,12 @@ export default function ProductChooser(): JSX.Element | null {
 
   return (
     <aside className={styles.chooser} aria-label={`Is ${name} the right product?`}>
-      <div className={`${styles.decide} ${hasAlternatives ? '' : styles.single}`}>
+      <div className={clsx(styles.decide, !hasAlternatives && styles.single)}>
         <div className={`${styles.col} ${styles.good}`}>
           <p className={styles.colTitle}>Choose {name} if you want to</p>
           <ul>
             {entry.choose_if.map((text) => (
-              <li key={text}>{renderText(text)}</li>
+              <li key={text}>{renderInlineCode(text)}</li>
             ))}
           </ul>
         </div>
@@ -145,14 +144,14 @@ export default function ProductChooser(): JSX.Element | null {
                 if (!availableOnFramework(use, framework)) {
                   return (
                     <li key={use + when}>
-                      {renderText(when)}: {label} (not available on {framework})
+                      {renderInlineCode(when)}: {label} (not available on {framework})
                     </li>
                   );
                 }
-                const url = target ? overviewUrl(prefix, fwSlug, target) : null;
+                const url = target ? overviewUrl(prefix, routeSegment, target) : null;
                 return (
                   <li key={use + when}>
-                    {renderText(when)}: {url ? <Link to={url}>{label}</Link> : label}
+                    {renderInlineCode(when)}: {url ? <Link to={url}>{label}</Link> : label}
                   </li>
                 );
               })}
@@ -169,7 +168,7 @@ export default function ProductChooser(): JSX.Element | null {
           <ul className={styles.chips} aria-labelledby={matrixId}>
             {availableOn.map(({ display, version }) => (
               <li key={display} className={styles.chip}>
-                {display} v{version}
+                {display} <span className={styles.since}>{sinceLabel(display, version)}</span>
               </li>
             ))}
           </ul>
