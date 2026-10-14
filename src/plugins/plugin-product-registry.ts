@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
+import type { LoadContext, Plugin } from '@docusaurus/types';
 
 const REGISTRY_FILE = 'content/registry/products.yml';
 const CHOOSER_FILE = 'content/registry/product-chooser.yml';
@@ -32,7 +33,7 @@ export interface ProductRegistryData {
  * they are. The chooser file is optional, and only `status: approved` entries
  * are passed on, so draft text cannot appear on a page by accident.
  */
-export default function productRegistryPlugin(context: { siteDir: string }) {
+export default function productRegistryPlugin(context: LoadContext): Plugin<ProductRegistryData> {
   const registryPath = path.join(context.siteDir, REGISTRY_FILE);
   const chooserPath = path.join(context.siteDir, CHOOSER_FILE);
   return {
@@ -75,13 +76,7 @@ export default function productRegistryPlugin(context: { siteDir: string }) {
       }
       return { products, chooser };
     },
-    async contentLoaded({
-      content,
-      actions,
-    }: {
-      content: ProductRegistryData;
-      actions: { setGlobalData: (data: unknown) => void };
-    }) {
+    async contentLoaded({ content, actions }) {
       actions.setGlobalData(content);
     },
   };

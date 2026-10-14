@@ -9,6 +9,7 @@ import featuresData from '@site/src/data/features.json';
 import { frameworkFromPath } from '@site/src/constants/frameworks';
 import { withCurrentDocsPath } from '@site/src/constants/docsPaths';
 import { renderInlineCode as renderDescription } from '@site/src/components/utils/inlineCode';
+import { isSupportedVersion } from '@site/src/components/utils/products';
 
 const FeatureList: React.FC<FeatureListProps> = ({
   product,
@@ -57,7 +58,7 @@ const FeatureList: React.FC<FeatureListProps> = ({
         // Filter by framework availability if framework is specified
         if (currentFramework) {
           const frameworkInfo = feature.frameworks[currentFramework];
-          if (!frameworkInfo || frameworkInfo.version === 'n/a') {
+          if (!isSupportedVersion(frameworkInfo)) {
             return false; // Don't show features not available for this framework
           }
         }
@@ -66,7 +67,7 @@ const FeatureList: React.FC<FeatureListProps> = ({
       })
       .map((feature: Feature) => {
         const isAvailable = currentFramework 
-          ? feature.frameworks[currentFramework] && feature.frameworks[currentFramework].version !== 'n/a'
+          ? isSupportedVersion(feature.frameworks[currentFramework])
           : true;
         
         return {
@@ -187,7 +188,7 @@ const FeatureList: React.FC<FeatureListProps> = ({
                 <td>
                   <div className={styles.frameworkList}>
                     {Object.entries(feature.frameworks)
-                      .filter(([, info]) => info.version !== 'n/a')
+                      .filter(([, info]) => isSupportedVersion(info))
                       .map(([frameworkName, frameworkInfo]) => (
                         // The ELEMENT changes, not just the href. Guarding the
                         // href alone rendered the same DOM - withCurrentDocsPath

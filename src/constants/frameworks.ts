@@ -59,6 +59,12 @@ export interface FrameworkDef {
    * `null` means the framework is not an /sdks/ route at all.
    */
   routeSegment: string | null;
+  /**
+   * The release line this framework's products.json versions count in, when it
+   * is not the SDK's. Linux ships the C API, numbered 4.x/5.x, so a bare "4.6"
+   * next to iOS "6.0" would read as two majors earlier.
+   */
+  versionScheme?: string;
   /** An Agent Skills page exists at /sdks/<routeSegment>/agent-skills. */
   agentSkills: boolean;
   /** Documented only in the in-development docs version (no versioned snapshot). */
@@ -107,7 +113,7 @@ export const FRAMEWORKS: FrameworkDef[] = [
   },
   // Documented, but with no Agent Skills page to route a reader to.
   { slug: "titanium", display: "Titanium", routeSegment: "titanium", agentSkills: false },
-  { slug: "linux", display: "Linux", routeSegment: "linux", agentSkills: false },
+  { slug: "linux", display: "Linux", routeSegment: "linux", agentSkills: false, versionScheme: "C API" },
   // Not an /sdks/ route: the hosted products live under /hosted/<product>/.
   { slug: "hosted", display: "Hosted", routeSegment: null, agentSkills: false },
 ];
