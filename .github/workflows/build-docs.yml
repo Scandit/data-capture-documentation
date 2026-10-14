@@ -64,6 +64,10 @@ jobs:
       - name: Test framework registry
         run: yarn test:frameworks
 
+      # The URL builder behind the shared ApiLink component.
+      - name: Test ApiLink URLs
+        run: yarn test:api-link
+
       - name: Build documentation
         run: yarn build
 
