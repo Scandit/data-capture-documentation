@@ -73,6 +73,16 @@ jobs:
       - name: Verify product registry
         run: yarn verify:registry
 
+      # The chooser renders nothing until it has approved text, so a build
+      # never reaches its link code; this pins the links it will build.
+      - name: Test Product Chooser links
+        run: yarn test:product-chooser
+
+      # The build transpiles TypeScript without checking types, so a type
+      # error in a component or plugin only fails here.
+      - name: Typecheck
+        run: yarn typecheck
+
       - name: Build documentation
         run: yarn build
 

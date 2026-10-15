@@ -8,6 +8,8 @@ keywords:
   - kmp
 ---
 
+import ProductChooser from '@site/src/components/ProductChooser';
+
 # About MatrixScan Count
 
 MatrixScan Count is our pre-built scan and count solution for counting and receiving multiple items at once. It fits on top of any Kotlin Multiplatform application, providing an intuitive user interface for simple, fast and ergonomic scanning. MatrixScan Count enables the accurate scanning and counting of multiple items at once via smart devices, speeding up counting workflows considerably. The solution is designed to boost worker productivity, reduce human error and maintain accurate stock levels.
@@ -15,6 +17,8 @@ MatrixScan Count is our pre-built scan and count solution for counting and recei
 MatrixScan Count bundles multiple scanning features together and addresses many common challenges associated with scanning on smart devices. It is designed to be easily integrated into any application, and can be customized to fit your specific needs.
 
 On Kotlin Multiplatform, MatrixScan Count is exposed through the `BarcodeCount` data capture mode and the `BarcodeCountView` built-in UI, both of which are shared between Android and iOS.
+
+<ProductChooser />
 
 ## UI Overview
 
