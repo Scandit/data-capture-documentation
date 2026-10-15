@@ -79,9 +79,14 @@ const FOLDER_EXCEPTIONS = {
 // Frameworks whose folder holds further framework folders, not products.
 const NESTED_FRAMEWORKS = ["net"];
 
+// js-yaml 5 rejects a byte-order mark before a leading comment ("end of the
+// stream or a document separator is expected"), and both registry files open
+// with a comment. Some Windows editors save UTF-8 with one.
+const stripBom = (text) => text.replace(/^﻿/, "");
+
 /** Registry entries as written; `aliases` defaults to an empty list. */
 function readRegistry(text) {
-  const doc = yaml.load(text);
+  const doc = yaml.load(stripBom(text));
   if (!doc || !Array.isArray(doc.products)) {
     throw new Error(`${REGISTRY_FILE}: expected a top-level \`products\` list`);
   }
@@ -136,7 +141,7 @@ function registryErrors(products) {
  * build and this check read the file the same way.
  */
 function readChooser(text) {
-  const docs = yaml.loadAll(text);
+  const docs = yaml.loadAll(stripBom(text));
   if (docs.length > 1) throw new Error(`${CHOOSER_FILE}: expected one YAML document, found ${docs.length}`);
   return docs.length ? docs[0] : null;
 }
@@ -312,7 +317,7 @@ const UNPARSEABLE = Symbol("unparseable");
  * `product="..."` component prop.
  */
 function fileProducts(text) {
-  const body = text.replace(/^﻿/, "");
+  const body = stripBom(text);
   let product;
   const m = body.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (m) {

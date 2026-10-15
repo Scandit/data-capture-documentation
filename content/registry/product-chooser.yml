@@ -13,8 +13,10 @@
 #   not_for    Optional. A list of { when, use } pairs, shown under the
 #              heading "Consider another product if" as "<when>: <Product>",
 #              linked to that product's overview. `use` is another product's
-#              key (`sdk` or `hosted`), never a topic. Leave it out and the
-#              block shows one column.
+#              key (`sdk` or `hosted`), never a topic. A row whose product
+#              is not available on the reader's framework (per
+#              src/data/products.json) is not shown there. With no row to
+#              show, or no not_for at all, the block shows one column.
 #
 # Wrap API names in backticks (`BarcodeBatch`) to show them as inline code.
 # The frameworks the product is available on come from src/data/products.json,
