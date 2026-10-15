@@ -1,6 +1,5 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import yaml from 'js-yaml';
 import type { LoadContext, Plugin } from '@docusaurus/types';
 
 const REGISTRY_FILE = 'content/registry/products.yml';
@@ -52,12 +51,13 @@ export default function productRegistryPlugin(context: LoadContext): Plugin<Prod
       const check = require(path.join(context.siteDir, 'scripts/verify-registry.cjs')) as {
         readRegistry: (text: string) => { key: string; name: string; kind: RegistryProduct['kind']; aliases: string[] }[];
         registryErrors: (products: unknown[]) => string[];
+        readChooser: (text: string) => unknown;
         chooserErrors: (products: unknown[], doc: unknown) => string[];
       };
       const registry = check.readRegistry(await fs.readFile(registryPath, 'utf8'));
       let chooserDoc: { products?: Record<string, { status?: string } & ChooserEntry> } | null | undefined;
       try {
-        chooserDoc = yaml.load(await fs.readFile(chooserPath, 'utf8')) as typeof chooserDoc;
+        chooserDoc = check.readChooser(await fs.readFile(chooserPath, 'utf8')) as typeof chooserDoc;
       } catch (error) {
         if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
       }

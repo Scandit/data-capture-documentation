@@ -9,7 +9,7 @@ import { renderInlineCode } from '@site/src/components/utils/inlineCode';
 import { isSupportedVersion, PRODUCTS_BY_KEY } from '@site/src/components/utils/products';
 import { FRAMEWORKS } from '@site/src/constants/frameworks';
 import type { ProductRegistryData } from '@site/src/plugins/plugin-product-registry';
-import { docsPrefix, overviewUrl } from './links';
+import { docsPrefix, overviewUrl, visibleAlternatives } from './links';
 import styles from './styles.module.css';
 
 /**
@@ -71,10 +71,7 @@ export default function ProductChooser(): JSX.Element | null {
   const availableOn = Object.entries(PRODUCTS_BY_KEY.get(productKey)?.frameworks ?? {})
     .filter(([, e]) => isSupportedVersion(e))
     .map(([display, e]) => ({ display, version: String(e.version).trim() }));
-  // Only alternatives the reader can use on this framework: the column offers
-  // answers, and a product missing here is a dead end, not one. With none
-  // left, the block shows one column.
-  const alternatives = entry.not_for.filter(({ use }) => availableOnFramework(use, framework));
+  const alternatives = visibleAlternatives(entry.not_for, (use) => availableOnFramework(use, framework));
   const hasAlternatives = alternatives.length > 0;
 
   return (

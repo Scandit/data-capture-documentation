@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 "use strict";
 /**
- * Tests for the Product Chooser's links (src/components/ProductChooser/links.ts).
+ * Tests for the Product Chooser's links and the alternatives it shows
+ * (src/components/ProductChooser/links.ts).
  *
  * The chooser renders nothing until content/registry/product-chooser.yml has
  * an approved entry, so a build does not reach this code yet. These cases pin
@@ -18,6 +19,7 @@
 const assert = require("assert");
 const path = require("path");
 const fs = require("fs");
+const { createRequire } = require("module");
 const ts = require("typescript");
 
 function loadTs(file) {
@@ -26,7 +28,8 @@ function loadTs(file) {
     fileName: file,
   });
   const mod = { exports: {} };
-  new Function("module", "exports", "require", outputText)(mod, mod.exports, require);
+  // `require` relative to the loaded file, not to this script.
+  new Function("module", "exports", "require", outputText)(mod, mod.exports, createRequire(file));
   return mod.exports;
 }
 
@@ -41,7 +44,7 @@ function test(name, fn) {
   }
 }
 
-const { docsPrefix, overviewUrl } = loadTs(path.join(__dirname, "../src/components/ProductChooser/links.ts"));
+const { docsPrefix, overviewUrl, visibleAlternatives } = loadTs(path.join(__dirname, "../src/components/ProductChooser/links.ts"));
 
 const PREVIEW = "/data-capture-documentation/pr-preview/pr-1";
 // Doc paths as the docs plugin publishes them, base URL included. Some with a
@@ -99,5 +102,24 @@ for (const [label, base] of [["at the site root", ""], ["on a preview build", PR
     assert.strictEqual(overviewUrl(docs(base), prefix, "net-ios", sdk("matrixscan")), null);
   });
 }
+
+const notFor = [
+  { when: "count many", use: "matrixscan-count" },
+  { when: "hosted flow", use: "express" },
+];
+test("shows only the alternatives available on the framework, in order", () => {
+  const onWeb = (key) => key !== "matrixscan-count";
+  assert.deepStrictEqual(visibleAlternatives(notFor, onWeb), [notFor[1]]);
+  assert.deepStrictEqual(visibleAlternatives(notFor, () => true), notFor);
+});
+test("no available alternative leaves an empty list (one column)", () => {
+  assert.deepStrictEqual(visibleAlternatives(notFor, () => false), []);
+  assert.deepStrictEqual(visibleAlternatives([], () => true), []);
+});
+test("asks about each alternative's product key", () => {
+  const asked = [];
+  visibleAlternatives(notFor, (key) => (asked.push(key), true));
+  assert.deepStrictEqual(asked, ["matrixscan-count", "express"]);
+});
 
 console.log(`test-product-chooser: ${passed} passed${process.exitCode ? ", some FAILED" : ""}`);

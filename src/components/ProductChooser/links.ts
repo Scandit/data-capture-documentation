@@ -1,14 +1,16 @@
-import type { RegistryProduct } from '../../plugins/plugin-product-registry';
+import type { ChooserEntry, RegistryProduct } from '../../plugins/plugin-product-registry';
 
-// No `@site/` imports here: scripts/test-product-chooser.mjs loads this file
-// with plain Node, which does not know Docusaurus aliases.
+// Pure functions with type-only imports: scripts/test-product-chooser.cjs
+// transpiles this file with the repo's typescript and runs it in plain Node,
+// which knows neither Docusaurus aliases nor the site's modules.
 
 const withSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`);
 
 /**
  * Everything in a /sdks/ pathname before `/sdks/`: the base URL plus the docs
- * version path, if any (`/data-capture-documentation/pr-preview/pr-1/`,
- * `/next/`). The docs plugin's doc paths carry the same prefix.
+ * version path, if any, without a trailing slash
+ * (`/data-capture-documentation/pr-preview/pr-1`, `/next`). The docs plugin's
+ * doc paths carry the same prefix.
  */
 export function docsPrefix(pathname: string): string {
   const i = pathname.indexOf('/sdks/');
@@ -37,4 +39,17 @@ export function overviewUrl(
       ? [`${prefix}/hosted/${target.folder}/overview/`]
       : [`${base}intro/`, `${base}get-started/`, base];
   return candidates.find((c) => docs.some((d) => withSlash(d.path) === c)) ?? null;
+}
+
+/**
+ * The "Consider another product if" rows to show: only those whose product the
+ * reader can use on this framework. The column offers answers, and a product
+ * missing here is a dead end, not one. With none left, the block shows one
+ * column.
+ */
+export function visibleAlternatives(
+  notFor: ChooserEntry['not_for'],
+  isAvailable: (productKey: string) => boolean,
+): ChooserEntry['not_for'] {
+  return notFor.filter(({ use }) => isAvailable(use));
 }
