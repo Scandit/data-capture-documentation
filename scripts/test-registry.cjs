@@ -96,7 +96,12 @@ test("no chooser file is fine", () => assert.deepStrictEqual(r.chooserErrors(bas
 test("a valid chooser file has no errors", () => assert.deepStrictEqual(r.chooserErrors(base(), chooser()), []));
 test("a chooser file without a products map", () => {
   has(r.chooserErrors(base(), { products: [] }), "expected a top-level `products` map");
-  has(r.chooserErrors(base(), null), "expected a top-level `products` map");
+  has(r.chooserErrors(base(), { entries: {} }), "expected a top-level `products` map");
+  has(r.chooserErrors(base(), "products"), "expected a top-level `products` map");
+});
+test("an empty chooser file or a bare `products:` means no entries yet", () => {
+  assert.deepStrictEqual(r.chooserErrors(base(), null), []);
+  assert.deepStrictEqual(r.chooserErrors(base(), { products: null }), []);
 });
 test("a chooser for a product that does not exist", () => {
   const c = chooser(); c.products.barcodeview = c.products.sparkscan;
@@ -104,7 +109,11 @@ test("a chooser for a product that does not exist", () => {
 });
 test("a chooser on a topic", () => {
   const c = chooser(); c.products.platform = { status: "draft", choose_if: ["x"] };
-  has(r.chooserErrors(base(), c), "platform: only sdk and hosted products can have a chooser");
+  has(r.chooserErrors(base(), c), "platform: only sdk products can have a chooser");
+});
+test("a chooser on a hosted product", () => {
+  const c = chooser(); c.products.express = { status: "approved", choose_if: ["x"] };
+  has(r.chooserErrors(base(), c), "express: only sdk products can have a chooser");
 });
 test("not_for pointing to a product that does not exist", () => {
   const c = chooser(); c.products.sparkscan.not_for[0].use = "matrixscan";
@@ -309,6 +318,12 @@ const drifts = {
   "component prop": ["docs/sdks/ios/sparkscan/intro.md", (t) => t.replace("product=\"sparkscan\"", "product=\"label-capture\""), "component prop product=\"label-capture\""],
   folder: ["docs/sdks/ios/img/.keep", null, "docs/sdks/ios/barcode-ar/"],
 };
+test("main() passes with a comments-only chooser file", () => {
+  const tree = cleanTree();
+  tree["content/registry/product-chooser.yml"] = "# no entries yet\n";
+  const res = runMain(tree);
+  assert.strictEqual(res.code, 0, res.out);
+});
 for (const [name, [file, change, expected]] of Object.entries(drifts)) {
   test(`main() fails on drift in ${name}`, () => {
     const tree = cleanTree();

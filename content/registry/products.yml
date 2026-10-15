@@ -69,7 +69,7 @@ products:
     kind: sdk
 
   - key: barcode-sequence
-    name: Barcode Sequence
+    name: MatrixScan Sequence
     kind: sdk
 
   - key: express

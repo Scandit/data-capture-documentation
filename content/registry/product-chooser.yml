@@ -1,0 +1,34 @@
+# Product Chooser text: the "Choose this if / Consider another product if"
+# block at the top of a product's overview page, on every SDK framework.
+#
+# One entry per product, under `products`, keyed by the product's `key` in
+# products.yml. Only `sdk` products can have an entry. `yarn verify:registry`
+# checks every entry, draft or approved, and a docs build fails on an invalid
+# one, so keep drafts valid too.
+#
+#   status     `draft` or `approved`. Only approved entries appear on pages.
+#   choose_if  One or more lines, shown under the heading
+#              "Choose <Product> if you want to", so each line continues
+#              that sentence: "scan one barcode at a time", not "Scanning...".
+#   not_for    Optional. A list of { when, use } pairs, shown under the
+#              heading "Consider another product if" as "<when>: <Product>",
+#              linked to that product's overview. `use` is another product's
+#              key (`sdk` or `hosted`), never a topic. Leave it out and the
+#              block shows one column.
+#
+# Wrap API names in backticks (`BarcodeBatch`) to show them as inline code.
+# The frameworks the product is available on come from src/data/products.json,
+# not from this file.
+#
+# Example (an entry is the indented part only, under `products:`):
+#
+#   products:
+#     sparkscan:
+#       status: draft
+#       choose_if:
+#         - <what the reader wants to do, continuing "you want to">
+#       not_for:
+#         - when: <the reader's situation where another product fits better>
+#           use: matrixscan-batch
+
+products:

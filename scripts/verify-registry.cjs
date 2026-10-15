@@ -22,7 +22,8 @@
  *   1. REGISTRY   keys and aliases are slugs, unique and non-colliding; `kind`
  *                 is known.
  *   1b. CHOOSER   content/registry/product-chooser.yml, when it exists: each
- *                 entry is an sdk or hosted product, its texts are non-empty
+ *                 entry is an sdk product (the chooser renders on /sdks/
+ *                 pages only), its texts are non-empty
  *                 strings, its `status` is draft or approved, and each
  *                 `not_for` names another sdk or hosted product (never a
  *                 topic such as `platform`).
@@ -130,11 +131,15 @@ function registryErrors(products) {
 
 /**
  * Check 1b: content/registry/product-chooser.yml, when it exists. A map of
- * product key -> { status, choose_if, not_for }.
+ * product key -> { status, choose_if, not_for }; the file's header comment
+ * shows the shape.
  */
 function chooserErrors(products, chooserDoc) {
-  if (chooserDoc === undefined) return [];
-  const entries = chooserDoc && chooserDoc.products;
+  // No file, an empty or comments-only file (YAML null) and a bare `products:`
+  // all mean "no entries yet", so the file can exist before its first entry.
+  if (chooserDoc == null) return [];
+  const entries = chooserDoc.products;
+  if (entries === null) return [];
   if (!entries || typeof entries !== "object" || Array.isArray(entries)) {
     return [`${CHOOSER_FILE}: expected a top-level \`products\` map of product key to chooser`];
   }
@@ -145,7 +150,9 @@ function chooserErrors(products, chooserDoc) {
     const c = c0 || {};
     const at = `${CHOOSER_FILE}: ${key}`;
     if (!byKey.has(key)) errors.push(`${at}: not a product key`);
-    else if (!pointable(key)) errors.push(`${at}: only sdk and hosted products can have a chooser`);
+    // sdk only: the chooser reads its product from the /sdks/ route, so an
+    // entry for a hosted product would pass here and then never render.
+    else if (byKey.get(key).kind !== "sdk") errors.push(`${at}: only sdk products can have a chooser`);
     if (!CHOOSER_STATUSES.includes(c.status)) {
       errors.push(`${at}: status ${JSON.stringify(c.status)} is not draft or approved`);
     }
@@ -357,7 +364,7 @@ function main() {
   const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
   const products = readRegistry(read(REGISTRY_FILE));
   const chooserPath = path.join(ROOT, CHOOSER_FILE);
-  const chooserDoc = fs.existsSync(chooserPath) ? yaml.load(fs.readFileSync(chooserPath, "utf8")) || null : undefined;
+  const chooserDoc = fs.existsSync(chooserPath) ? yaml.load(fs.readFileSync(chooserPath, "utf8")) : undefined;
   const schema = yaml.load(read(SCHEMA_FILE));
   const schemaEnum = schema && schema.properties && schema.properties.product && schema.properties.product.enum;
   const files = docFiles(path.join(ROOT, "docs")).map((full) => ({
