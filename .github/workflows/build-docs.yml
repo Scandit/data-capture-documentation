@@ -64,6 +64,15 @@ jobs:
       - name: Test framework registry
         run: yarn test:frameworks
 
+      # One list of products: docs-schema.yml, products.json, features.json,
+      # skills.json, URL_PRODUCT_MAPPING and page frontmatter must all agree
+      # with content/registry/products.yml.
+      - name: Test product registry check
+        run: yarn test:registry
+
+      - name: Verify product registry
+        run: yarn verify:registry
+
       - name: Build documentation
         run: yarn build
 
