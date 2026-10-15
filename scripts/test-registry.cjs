@@ -105,6 +105,11 @@ test("readChooser reads an empty or comments-only file as null", () => {
   assert.deepStrictEqual(r.readChooser("products:\n"), { products: null });
   assert.throws(() => r.readChooser("products: {}\n---\nproducts: {}\n"), /one YAML document/);
 });
+test("a byte-order mark before a leading comment is ignored", () => {
+  assert.strictEqual(r.readChooser("﻿# no entries yet\n"), null);
+  assert.deepStrictEqual(r.readChooser("﻿# c\nproducts:\n"), { products: null });
+  assert.strictEqual(r.readRegistry("﻿# c\nproducts:\n  - key: a\n    name: A\n    kind: sdk\n")[0].key, "a");
+});
 test("an empty chooser file or a bare `products:` means no entries yet", () => {
   assert.deepStrictEqual(r.chooserErrors(base(), null), []);
   assert.deepStrictEqual(r.chooserErrors(base(), { products: null }), []);
