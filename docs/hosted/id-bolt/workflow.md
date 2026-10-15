@@ -11,6 +11,8 @@ keywords:
   - bolt
   - workflow
   - scanner
+topic_type: concept
+canonical_id: scandit.id-bolt.workflow
 ---
 
 # Workflow & Scanner Options

@@ -8,6 +8,9 @@ keywords:
   - testing
   - unit testing
   - mocking
+product: platform
+topic_type: how-to
+canonical_id: scandit.platform.testing
 ---
 
 # Testing

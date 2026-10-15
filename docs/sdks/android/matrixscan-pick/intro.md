@@ -6,6 +6,9 @@ pagination_prev: null
 framework: android
 keywords:
   - android
+product: matrixscan-pick
+topic_type: product-overview
+canonical_id: scandit.matrixscan-pick.intro
 ---
 
 # About MatrixScan Pick

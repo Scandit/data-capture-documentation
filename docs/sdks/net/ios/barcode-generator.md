@@ -1,6 +1,11 @@
 ---
 description: "Barcode Generator is not available on the .NET for iOS SDK."
 displayed_sidebar: netIosSidebar
+product: barcode-generator
+topic_type: get-started
+canonical_id: scandit.barcode-generator.get-started
+framework: net-ios
+availability: unavailable
 ---
 
 # Barcode Generator is not available on .NET for iOS

@@ -7,6 +7,8 @@ framework: hosted
 product: express
 keywords:
   - express
+topic_type: installation
+canonical_id: scandit.express.getting-started.installation
 ---
 
 # Installation

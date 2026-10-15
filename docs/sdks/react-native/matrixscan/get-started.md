@@ -4,7 +4,9 @@ description: "Add MatrixScan to your React Native app to detect, track, and high
 framework: react-native
 keywords:
   - react
-
+product: matrixscan-batch
+topic_type: get-started
+canonical_id: scandit.matrixscan-batch.get-started
 ---
 # Get Started
 

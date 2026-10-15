@@ -8,6 +8,9 @@ pagination_prev: null
 framework: kmp
 keywords:
   - kmp
+product: platform
+topic_type: release-notes
+canonical_id: scandit.platform.release-notes
 ---
 
 ## 8.6.1

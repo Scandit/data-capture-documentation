@@ -5,6 +5,9 @@ pagination_next: null
 framework: android
 keywords:
   - android
+product: barcode-capture
+topic_type: how-to
+canonical_id: scandit.barcode-capture.configure-barcode-symbologies
 ---
 
 # Configure Barcode Symbologies

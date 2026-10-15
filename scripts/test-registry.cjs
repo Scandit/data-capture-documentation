@@ -220,7 +220,7 @@ test("URL map not found", () => has(r.urlMapErrors(base(), null), "not found"));
 // --- 5. content ------------------------------------------------------------
 test("fileProducts reads frontmatter, a BOM, CRLF and props", () => {
   assert.strictEqual(r.fileProducts("---\nproduct: express\n---\n").product, "express");
-  assert.strictEqual(r.fileProducts("﻿---\r\nproduct: express\r\n---\r\n").product, "express");
+  assert.strictEqual(r.fileProducts("\uFEFF---\r\nproduct: express\r\n---\r\n").product, "express");
   assert.strictEqual(r.fileProducts("# no frontmatter\n").product, undefined);
   assert.strictEqual(r.fileProducts("---\nproduct: [unclosed\n---\n").product, r.UNPARSEABLE);
   assert.deepStrictEqual(r.fileProducts(`<A product="sparkscan"/> <B product='express'/> <C product={"x"}/>`).props, ["sparkscan", "express", "x"]);
@@ -253,6 +253,55 @@ test("an unknown product folder", () => {
   has(r.folderErrors(base(), [{ framework: "ios", folder: "barcode-ar" }]), "docs/sdks/ios/barcode-ar/ is not an sdk product key or alias");
 });
 
+// --- 7. canonical IDs ------------------------------------------------------
+test("fileProducts reads canonical_id and framework or frameworks", () => {
+  const one = r.fileProducts("---\ncanonical_id: scandit.sparkscan.intro\nframework: ios\n---\n");
+  assert.strictEqual(one.canonicalId, "scandit.sparkscan.intro");
+  assert.deepStrictEqual(one.frameworks, ["ios"]);
+  assert.deepStrictEqual(r.fileProducts("---\nframeworks: [ios, web]\n---\n").frameworks, ["ios", "web"]);
+});
+test("the same canonical_id on different frameworks passes", () => {
+  assert.deepStrictEqual(r.canonicalIdErrors([
+    { file: "a.md", canonicalId: "scandit.sparkscan.intro", frameworks: ["ios"] },
+    { file: "b.md", canonicalId: "scandit.sparkscan.intro", frameworks: ["android"] },
+  ]), []);
+});
+test("the same canonical_id twice on one framework", () => {
+  has(r.canonicalIdErrors([
+    { file: "a.md", canonicalId: "scandit.sparkscan.intro", frameworks: ["ios"] },
+    { file: "b.md", canonicalId: "scandit.sparkscan.intro", frameworks: ["web", "ios"] },
+  ]), "b.md: canonical_id scandit.sparkscan.intro is already used on ios by a.md");
+});
+
+test("a roll-up page may share an ID with the per-framework pages, but not with another roll-up", () => {
+  const page = { file: "ios.md", canonicalId: "scandit.id-capture.supported-documents", frameworks: ["ios"], rollUp: false };
+  const rollUp = { file: "id-documents.mdx", canonicalId: "scandit.id-capture.supported-documents", frameworks: ["ios", "web"], rollUp: true };
+  assert.deepStrictEqual(r.canonicalIdErrors([page, rollUp]), []);
+  has(r.canonicalIdErrors([page, rollUp, { ...rollUp, file: "copy.mdx" }]), "copy.mdx: canonical_id scandit.id-capture.supported-documents is already used on ios by id-documents.mdx");
+});
+
+// --- 8. roll-ups -----------------------------------------------------------
+const rollUpProducts = [{ key: "id-capture", frameworks: { iOS: { version: "6.0" }, Web: { version: "6.1" }, Titanium: { version: "n/a" } } }];
+const slugs = { iOS: "ios", Web: "web", Titanium: "titanium" };
+const rollUpPage = (frameworks) => [{ file: "id-documents.mdx", product: "id-capture", frameworks, rollUp: true }];
+test("a roll-up listing exactly the available frameworks passes", () => {
+  assert.deepStrictEqual(r.rollUpErrors(rollUpPage(["web", "ios"]), rollUpProducts, slugs), []);
+});
+test("a roll-up missing an available framework", () => {
+  has(r.rollUpErrors(rollUpPage(["ios"]), rollUpProducts, slugs), "frameworks is missing web");
+});
+test("a roll-up listing a framework the product is not on", () => {
+  has(r.rollUpErrors(rollUpPage(["ios", "web", "titanium"]), rollUpProducts, slugs), "frameworks lists titanium");
+});
+test("single-framework pages and products outside products.json are not roll-ups to check", () => {
+  assert.deepStrictEqual(r.rollUpErrors([{ file: "a.md", product: "id-capture", frameworks: ["ios"], rollUp: false }], rollUpProducts, slugs), []);
+  assert.deepStrictEqual(r.rollUpErrors([{ file: "b.md", product: "express", frameworks: ["hosted"], rollUp: true }], rollUpProducts, slugs), []);
+});
+test("readSlugByDisplay reads the framework registry", () => {
+  const src = 'export const FRAMEWORKS: FrameworkDef[] = [\n  { slug: "ios", display: "iOS", routeSegment: "ios", agentSkills: true },\n  { slug: "net-ios", display: ".NET iOS", routeSegment: "net/ios", agentSkills: true },\n];\n';
+  assert.deepStrictEqual(r.readSlugByDisplay(src), { iOS: "ios", ".NET iOS": "net-ios" });
+});
+
 // --- main() end to end -----------------------------------------------------
 const cleanTree = () => ({
   "content/registry/products.yml":
@@ -270,7 +319,7 @@ const cleanTree = () => ({
   "src/components/SkillsPage/index.tsx": "const SKILL_DESCRIPTIONS: Record<string, string> = {\n  sparkscan: 'SparkScan.',\n};\n",
   "src/components/utils/frameworks.ts": "export const URL_PRODUCT_MAPPING = {\n  'matrixscan': 'matrixscan-batch',\n};\n",
   "docs/hosted/express/a.md": "---\nproduct: express\ndescription: x\n---\n",
-  "docs/sdks/ios/sparkscan/intro.md": "---\nproduct: sparkscan\n---\n<FeatureList product=\"sparkscan\"/>\n",
+  "docs/sdks/ios/sparkscan/intro.md": "---\nproduct: sparkscan\ncanonical_id: scandit.sparkscan.intro\nframework: ios\n---\n<FeatureList product=\"sparkscan\"/>\n",
   "docs/sdks/ios/matrixscan/intro.md": "---\ndescription: x\n---\n",
   "docs/sdks/ios/img/.keep": "",
 });
@@ -312,6 +361,7 @@ const drifts = {
   frontmatter: ["docs/hosted/express/a.md", (t) => t.replace("product: express", "product: matrixscan"), "is an alias; use the key"],
   "component prop": ["docs/sdks/ios/sparkscan/intro.md", (t) => t.replace("product=\"sparkscan\"", "product=\"label-capture\""), "component prop product=\"label-capture\""],
   folder: ["docs/sdks/ios/img/.keep", null, "docs/sdks/ios/barcode-ar/"],
+  "canonical id": ["docs/sdks/ios/matrixscan/intro.md", (t) => t.replace("description: x", "description: x\ncanonical_id: scandit.sparkscan.intro\nframework: ios"), "canonical_id scandit.sparkscan.intro is already used on ios"],
 };
 for (const [name, [file, change, expected]] of Object.entries(drifts)) {
   test(`main() fails on drift in ${name}`, () => {

@@ -4,6 +4,8 @@ framework: hosted
 product: express
 keywords:
   - express
+topic_type: how-to
+canonical_id: scandit.express.configuration.device-pairing.online-connection
 ---
 
 # Device Pairing for Web Apps

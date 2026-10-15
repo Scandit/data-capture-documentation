@@ -6,6 +6,9 @@ pagination_next: null
 framework: cordova
 keywords:
   - cordova
+product: id-capture
+topic_type: get-started
+canonical_id: scandit.id-capture.get-started
 ---
 
 # Get Started

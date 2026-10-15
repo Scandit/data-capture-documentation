@@ -36,6 +36,10 @@
  *   5. CONTENT    under docs/, frontmatter `product` and component props
  *                 `product="..."` are keys (an alias is reported with its
  *                 key), and frontmatter that does not parse is reported.
+ *   7. IDS        no two pages on one framework share a `canonical_id`; a
+ *                 roll-up page (`frameworks:`) may share the ID it rolls up.
+ *   8. ROLL-UPS   a roll-up page of an sdk product lists exactly the
+ *                 frameworks products.json makes it available on.
  *   6. FOLDERS    every folder under docs/sdks/<framework>/ is a key, an
  *                 alias, or a listed exception.
  *
@@ -66,6 +70,7 @@ const FEATURES_FILE = "src/data/features.json";
 const SKILLS_FILE = "src/data/skills.json";
 const URL_MAP_FILE = "src/components/utils/frameworks.ts";
 const SKILLS_PAGE_FILE = "src/components/SkillsPage/index.tsx";
+const FRAMEWORKS_REGISTRY_FILE = "src/constants/frameworks.ts";
 
 const KINDS = ["sdk", "hosted", "topic"];
 const CHOOSER_STATUSES = ["draft", "approved"];
@@ -296,13 +301,25 @@ const UNPARSEABLE = Symbol("unparseable");
  * `product="..."` component prop.
  */
 function fileProducts(text) {
-  const body = text.replace(/^﻿/, "");
+  // An escape, not the raw character: an editor can strip an invisible BOM
+  // from the source and leave /^/ behind.
+  const body = text.replace(/^\uFEFF/, "");
   let product;
+  let canonicalId;
+  let frameworks = [];
+  let rollUp = false;
   const m = body.match(/^---\r?\n([\s\S]*?)\r?\n---/);
   if (m) {
     try {
       const fm = yaml.load(m[1]);
-      product = fm && typeof fm === "object" ? fm.product : undefined;
+      if (fm && typeof fm === "object") {
+        product = fm.product;
+        canonicalId = typeof fm.canonical_id === "string" ? fm.canonical_id : undefined;
+        frameworks = [].concat(fm.frameworks ?? fm.framework ?? []).filter((f) => typeof f === "string");
+        // A page shared by several frameworks (`frameworks:`), such as
+        // /id-documents, rolls up the per-framework pages of one concept.
+        rollUp = Array.isArray(fm.frameworks);
+      }
     } catch {
       product = UNPARSEABLE;
     }
@@ -311,7 +328,61 @@ function fileProducts(text) {
   const props = [...body.matchAll(/(?<![\w-])product=(?:"([^"]*)"|'([^']*)'|\{\s*["']([^"']*)["']\s*\})/g)].map(
     (x) => x[1] ?? x[2] ?? x[3],
   );
-  return { product, props };
+  return { product, props, canonicalId, frameworks, rollUp };
+}
+
+/**
+ * Check 7. One `canonical_id` per framework: two pages on the same framework
+ * with the same ID claim to be the same page. Roll-up pages (`frameworks:`)
+ * share the ID of the per-framework pages they roll up, so they are checked
+ * only against each other. Pages without an ID are the docs gate's business
+ * (it requires one on changed pages).
+ */
+function canonicalIdErrors(files) {
+  const seen = { page: new Map(), rollUp: new Map() };
+  const errors = [];
+  for (const { file, canonicalId, frameworks, rollUp } of files) {
+    if (!canonicalId) continue;
+    const map = rollUp ? seen.rollUp : seen.page;
+    for (const fw of frameworks || []) {
+      const key = `${canonicalId} @ ${fw}`;
+      if (map.has(key)) errors.push(`${file}: canonical_id ${canonicalId} is already used on ${fw} by ${map.get(key)}`);
+      else map.set(key, file);
+    }
+  }
+  return errors;
+}
+
+/**
+ * Check 8. A roll-up page of an sdk product lists exactly the frameworks the
+ * product is available on in products.json, so the two cannot drift.
+ * `slugByDisplay` maps products.json display names to framework slugs.
+ */
+function rollUpErrors(files, productsJson, slugByDisplay) {
+  const byKey = new Map(productsJson.map((p) => [p.key, p]));
+  const errors = [];
+  for (const { file, product, frameworks, rollUp } of files) {
+    if (!rollUp || !byKey.has(product)) continue;
+    const want = new Set(
+      Object.entries(byKey.get(product).frameworks || {})
+        .filter(([, e]) => e && e.version && String(e.version).toLowerCase() !== "n/a")
+        .map(([display]) => slugByDisplay[display] || display),
+    );
+    const have = new Set(frameworks);
+    const missing = setDiff(want, have);
+    const extra = setDiff(have, want);
+    if (missing.length) errors.push(`${file}: frameworks is missing ${missing.join(", ")}, where ${product} is available (${PRODUCTS_FILE})`);
+    if (extra.length) errors.push(`${file}: frameworks lists ${extra.join(", ")}, where ${product} is not available (${PRODUCTS_FILE})`);
+  }
+  return errors;
+}
+
+/** products.json display name -> framework slug, from the framework registry. */
+function readSlugByDisplay(source) {
+  const vf = require("./verify-frameworks.cjs");
+  const read = vf.registryEntries(source);
+  if (!read || !read.entries) return {};
+  return Object.fromEntries(read.entries.map((e) => [vf.entryField(e, "display")[0], vf.entryField(e, "slug")[0]]));
 }
 
 /** Check 5. `files` are { file, product, props } from fileProducts. */
@@ -383,6 +454,12 @@ function main() {
     ...urlMapErrors(products, readUrlMap(read(URL_MAP_FILE))),
     ...contentErrors(products, files),
     ...folderErrors(products, folders),
+    ...canonicalIdErrors(files),
+    ...rollUpErrors(
+      files,
+      JSON.parse(read(PRODUCTS_FILE)),
+      fs.existsSync(path.join(ROOT, FRAMEWORKS_REGISTRY_FILE)) ? readSlugByDisplay(read(FRAMEWORKS_REGISTRY_FILE)) : {},
+    ),
   ];
 
   if (errors.length) {
@@ -412,6 +489,9 @@ module.exports = {
   contentErrors,
   productFolders,
   folderErrors,
+  canonicalIdErrors,
+  rollUpErrors,
+  readSlugByDisplay,
   FOLDER_EXCEPTIONS,
   UNPARSEABLE,
 };

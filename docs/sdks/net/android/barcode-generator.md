@@ -1,6 +1,11 @@
 ---
 description: "Barcode Generator is not available on the .NET for Android SDK."
 displayed_sidebar: netAndroidSidebar
+product: barcode-generator
+topic_type: get-started
+canonical_id: scandit.barcode-generator.get-started
+framework: net-android
+availability: unavailable
 ---
 
 # Barcode Generator is not available on .NET for Android

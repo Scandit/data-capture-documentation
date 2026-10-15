@@ -3,6 +3,9 @@ description: Get Started With SwiftUI and Scandit MatrixScan Count.
 framework: ios
 keywords:
   - ios
+product: matrixscan-count
+topic_type: get-started
+canonical_id: scandit.matrixscan-count.get-started-with-swift-ui
 ---
 
 # Get Started With SwiftUI

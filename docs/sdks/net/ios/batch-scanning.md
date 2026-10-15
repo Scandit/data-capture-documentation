@@ -4,6 +4,9 @@ pagination_prev: null
 framework: net-ios
 keywords:
   - netIos
+product: core
+topic_type: concept
+canonical_id: scandit.core.batch-scanning
 ---
 
 # Multiple Barcode Scanning

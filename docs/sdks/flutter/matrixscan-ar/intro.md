@@ -6,6 +6,9 @@ pagination_prev: null
 framework: flutter
 keywords:
   - flutter
+product: matrixscan-ar
+topic_type: product-overview
+canonical_id: scandit.matrixscan-ar.intro
 ---
 
 # About MatrixScan AR

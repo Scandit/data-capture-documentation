@@ -6,6 +6,9 @@ pagination_prev: null
 framework: kmp
 keywords:
   - kmp
+product: matrixscan-pick
+topic_type: product-overview
+canonical_id: scandit.matrixscan-pick.intro
 ---
 
 # About MatrixScan Pick

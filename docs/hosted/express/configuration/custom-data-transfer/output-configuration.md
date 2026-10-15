@@ -5,6 +5,8 @@ product: express
 sidebar_label: Output Configuration
 keywords:
   - express
+topic_type: configuration-reference
+canonical_id: scandit.express.configuration.custom-data-transfer.output-configuration
 ---
 # Configuring Output Data
 

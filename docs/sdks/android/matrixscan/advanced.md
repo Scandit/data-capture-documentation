@@ -6,7 +6,9 @@ pagination_next: null
 framework: android
 keywords:
   - android
-
+product: matrixscan-batch
+topic_type: how-to
+canonical_id: scandit.matrixscan-batch.advanced
 ---
 
 # Adding AR Overlays

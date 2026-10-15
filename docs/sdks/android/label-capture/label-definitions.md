@@ -5,6 +5,9 @@ framework: android
 keywords:
   - android
 toc_max_heading_level: 4
+product: smart-label-capture
+topic_type: reference
+canonical_id: scandit.smart-label-capture.label-definitions
 ---
 
 # Label Definitions

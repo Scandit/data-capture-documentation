@@ -1,6 +1,11 @@
 ---
 description: "SparkScan is not available on the Linux SDK."
 displayed_sidebar: linuxSidebar
+product: sparkscan
+topic_type: get-started
+canonical_id: scandit.sparkscan.get-started
+framework: linux
+availability: unavailable
 ---
 
 # SparkScan is not available on Linux

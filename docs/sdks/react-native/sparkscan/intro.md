@@ -6,6 +6,9 @@ pagination_prev: null
 framework: react-native
 keywords:
   - react
+product: sparkscan
+topic_type: product-overview
+canonical_id: scandit.sparkscan.intro
 ---
 
 # About SparkScan

@@ -6,6 +6,9 @@ pagination_next: null
 framework: net-android
 keywords:
   - netAndroid
+product: platform
+topic_type: installation
+canonical_id: scandit.platform.add-sdk
 ---
 
 import Tabs from '@theme/Tabs';

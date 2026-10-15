@@ -1,6 +1,11 @@
 ---
 description: "Barcode Selection is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: barcode-selection
+topic_type: get-started
+canonical_id: scandit.barcode-selection.get-started
+framework: titanium
+availability: unavailable
 ---
 
 # Barcode Selection is not available on Titanium

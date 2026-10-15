@@ -4,6 +4,9 @@ sidebar_position: 2
 framework: capacitor
 keywords:
   - capacitor
+product: smart-label-capture
+topic_type: get-started
+canonical_id: scandit.smart-label-capture.get-started
 ---
 
 # Get Started

@@ -6,6 +6,9 @@ pagination_next: null
 framework: kmp
 keywords:
   - kmp
+product: barcode-capture
+topic_type: get-started
+canonical_id: scandit.barcode-capture.get-started
 ---
 
 # Get Started

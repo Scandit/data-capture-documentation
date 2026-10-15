@@ -8,6 +8,9 @@ pagination_prev: null
 framework: capacitor
 keywords:
   - capacitor
+product: id-capture
+topic_type: product-overview
+canonical_id: scandit.id-capture.intro
 ---
 
 import AboutIdCapture from '../../../partials/intro/_about-id-capture.mdx';

@@ -12,6 +12,8 @@ keywords:
   - customization
   - text
   - localization
+topic_type: reference
+canonical_id: scandit.id-bolt.text-overrides
 ---
 
 # Text Overrides

@@ -6,6 +6,9 @@ pagination_next: null
 framework: react-native
 keywords:
   - react
+product: platform
+topic_type: installation
+canonical_id: scandit.platform.add-sdk
 ---
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';

@@ -4,6 +4,10 @@ description: "Generate barcodes and QR codes in your iOS app with the Scandit Da
 sidebar_label: Get Started
 pagination_prev: null
 pagination_next: null
+product: barcode-generator
+topic_type: get-started
+canonical_id: scandit.barcode-generator.get-started
+framework: ios
 ---
 
 # Barcode Generator

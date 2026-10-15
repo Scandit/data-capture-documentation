@@ -6,6 +6,9 @@ pagination_prev: null
 framework: capacitor
 keywords:
   - capacitor
+product: matrixscan-count
+topic_type: product-overview
+canonical_id: scandit.matrixscan-count.intro
 ---
 
 # About MatrixScan Count

@@ -2,6 +2,10 @@
 description: "Generate barcodes and QR codes in your Linux app with the Scandit Data Capture SDK."
 displayed_sidebar: linuxSidebar
 sidebar_label: Configure barcode encoding
+product: barcode-generator
+topic_type: get-started
+canonical_id: scandit.barcode-generator.get-started
+framework: linux
 ---
 
 # Barcode Generator

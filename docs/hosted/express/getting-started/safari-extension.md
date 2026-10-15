@@ -4,6 +4,10 @@ sidebar_label: 'Safari Extension'
 displayed_sidebar: expressSidebar
 keywords:
   - express
+product: express
+topic_type: installation
+canonical_id: scandit.express.getting-started.safari-extension
+framework: hosted
 ---
 
 # Safari Browser Extension

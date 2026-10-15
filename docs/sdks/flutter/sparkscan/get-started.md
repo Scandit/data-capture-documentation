@@ -5,6 +5,9 @@ sidebar_position: 2
 framework: flutter
 keywords:
   - flutter
+product: sparkscan
+topic_type: get-started
+canonical_id: scandit.sparkscan.get-started
 ---
 
 # Get Started

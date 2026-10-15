@@ -6,6 +6,9 @@ pagination_prev: null
 framework: capacitor
 keywords:
   - capacitor
+product: matrixscan-find
+topic_type: product-overview
+canonical_id: scandit.matrixscan-find.intro
 ---
 
 # About MatrixScan Find

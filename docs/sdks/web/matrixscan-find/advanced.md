@@ -6,6 +6,9 @@ pagination_next: null
 framework: web
 keywords:
   - web
+product: matrixscan-find
+topic_type: how-to
+canonical_id: scandit.matrixscan-find.advanced
 ---
 
 # Advanced Configurations

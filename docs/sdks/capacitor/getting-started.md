@@ -7,6 +7,9 @@ displayed_sidebar: capacitorSidebar
 framework: capacitor
 keywords:
   - capacitor
+product: sparkscan
+topic_type: get-started
+canonical_id: scandit.sparkscan.getting-started
 ---
 
 # Get Started

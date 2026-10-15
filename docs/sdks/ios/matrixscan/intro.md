@@ -6,6 +6,9 @@ pagination_prev: null
 framework: ios
 keywords:
   - ios
+product: matrixscan-batch
+topic_type: product-overview
+canonical_id: scandit.matrixscan-batch.intro
 ---
 
 # About MatrixScan Batch

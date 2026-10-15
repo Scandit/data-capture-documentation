@@ -6,6 +6,9 @@ pagination_prev: null
 framework: android
 keywords:
   - android
+product: barcode-selection
+topic_type: product-overview
+canonical_id: scandit.barcode-selection.intro
 ---
 
 # About Barcode Selection

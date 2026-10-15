@@ -1,6 +1,9 @@
 ---
 description: "Agent guide to install and integrate the Scandit Data Capture SDK on Android (Kotlin/Java): SparkScan, MatrixScan, Label Capture, ID Capture."
 framework: android
+product: platform
+topic_type: how-to
+canonical_id: scandit.platform.agents-android
 ---
 
 # AGENTS.md — Scandit Data Capture SDK (Android: Java/Kotlin)

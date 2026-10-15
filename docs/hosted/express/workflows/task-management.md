@@ -4,6 +4,10 @@ sidebar_label: 'Task Management Configuration'
 displayed_sidebar: expressSidebar
 keywords:
   - express
+product: express
+topic_type: use-case
+canonical_id: scandit.express.workflows.task-management
+framework: hosted
 ---
 
 # Configuring the Task Management Workflow

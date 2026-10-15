@@ -1,6 +1,11 @@
 ---
 description: "AI-Powered Barcode Scanning is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: core
+topic_type: concept
+canonical_id: scandit.core.ai-powered-barcode-scanning
+framework: titanium
+availability: unavailable
 ---
 
 # AI-Powered Barcode Scanning is not available on Titanium

@@ -5,6 +5,9 @@ sidebar_position: 2
 framework: web
 keywords:
   - web
+product: id-capture
+topic_type: get-started
+canonical_id: scandit.id-capture.get-started
 ---
 
 # Get Started

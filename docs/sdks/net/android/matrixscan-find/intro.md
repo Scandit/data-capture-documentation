@@ -5,6 +5,9 @@ pagination_prev: null
 framework: net-android
 keywords:
   - netAndroid
+product: matrixscan-find
+topic_type: product-overview
+canonical_id: scandit.matrixscan-find.intro
 ---
 
 # About MatrixScan Find

@@ -1,6 +1,11 @@
 ---
 description: "SparkScan is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: sparkscan
+topic_type: get-started
+canonical_id: scandit.sparkscan.get-started
+framework: titanium
+availability: unavailable
 ---
 
 # SparkScan is not available on Titanium

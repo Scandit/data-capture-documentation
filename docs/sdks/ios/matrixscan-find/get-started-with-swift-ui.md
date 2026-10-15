@@ -3,6 +3,9 @@ description: Get Started With SwiftUI and Scandit MatrixScan Find.
 framework: ios
 keywords:
   - ios
+product: matrixscan-find
+topic_type: get-started
+canonical_id: scandit.matrixscan-find.get-started-with-swift-ui
 ---
 
 # Get Started With SwiftUI

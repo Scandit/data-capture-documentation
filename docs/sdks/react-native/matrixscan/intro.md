@@ -6,6 +6,9 @@ pagination_prev: null
 framework: react-native
 keywords:
   - react
+product: matrixscan-batch
+topic_type: product-overview
+canonical_id: scandit.matrixscan-batch.intro
 ---
 
 # About MatrixScan Batch

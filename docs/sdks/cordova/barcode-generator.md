@@ -5,6 +5,10 @@ displayed_sidebar: cordovaSidebar
 sidebar_label: Get Started
 pagination_prev: null
 pagination_next: null
+product: barcode-generator
+topic_type: get-started
+canonical_id: scandit.barcode-generator.get-started
+framework: cordova
 ---
 
 # Barcode Generator

@@ -1,6 +1,11 @@
 ---
 description: "ID Validate is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: id-capture
+topic_type: product-overview
+canonical_id: scandit.id-capture.id-validate.intro
+framework: titanium
+availability: unavailable
 ---
 
 # ID Validate is not available on Titanium

@@ -3,6 +3,9 @@ description: Get Started With SwiftUI and Scandit Barcode Selection.
 framework: ios
 keywords:
   - ios
+product: barcode-selection
+topic_type: get-started
+canonical_id: scandit.barcode-selection.get-started-with-swift-ui
 ---
 
 # Get Started With SwiftUI

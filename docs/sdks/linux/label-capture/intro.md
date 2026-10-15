@@ -1,6 +1,11 @@
 ---
 description: "Smart Label Capture is not available on the Linux SDK."
 displayed_sidebar: linuxSidebar
+product: smart-label-capture
+topic_type: product-overview
+canonical_id: scandit.smart-label-capture.intro
+framework: linux
+availability: unavailable
 ---
 
 # Smart Label Capture is not available on Linux

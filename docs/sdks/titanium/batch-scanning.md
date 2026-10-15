@@ -1,6 +1,11 @@
 ---
 description: "Batch Scanning is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: core
+topic_type: concept
+canonical_id: scandit.core.batch-scanning
+framework: titanium
+availability: unavailable
 ---
 
 # Batch Scanning is not available on Titanium

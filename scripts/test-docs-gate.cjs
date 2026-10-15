@@ -208,6 +208,59 @@ check("frontmatter.cjs reads the same fences as the cap does", () => {
   });
 });
 
+check("x-required-one-of accepts either field and reports when both are missing", () => {
+  withTempDir((dir) => {
+    const schema = { required: ["description"], "x-required-one-of": [["framework", "frameworks"]], properties: {} };
+    const file = path.join(dir, "page.md");
+    const run = (fm) => {
+      fs.writeFileSync(file, `---\ndescription: "Reads a document."\n${fm}---\n\nBody.\n`);
+      return frontmatter.validateFile(file, schema).map((e) => e.msg);
+    };
+    assert.deepStrictEqual(run("framework: ios\n"), []);
+    assert.deepStrictEqual(run("frameworks: [ios, web]\n"), []);
+    assert.deepStrictEqual(run(""), ["missing required field: one of 'framework' or 'frameworks'"]);
+  });
+});
+
+check("only a page whose whole body is a Redirect is exempt", () => {
+  const stub = "---\nid: x\ntitle: X\n---\n\nimport {Redirect} from '@docusaurus/router';\n\n<Redirect to=\"/sdks/web/x/\" />\n";
+  assert.strictEqual(frontmatter.isRedirectStub(stub), true);
+  assert.strictEqual(frontmatter.isRedirectStub(stub.replace(/\n/g, "\r\n")), true);
+  assert.strictEqual(frontmatter.isRedirectStub(stub + "\nSome prose.\n"), false);
+  assert.strictEqual(frontmatter.isRedirectStub("---\ndescription: x\n---\n\nUse `<Redirect to=\"/a/\" />` in MDX.\n"), false);
+});
+
+check("a mistyped x-required-one-of is reported, not thrown on", () => {
+  withTempDir((dir) => {
+    const file = path.join(dir, "page.md");
+    fs.writeFileSync(file, `---\ndescription: "Reads a document."\nframework: ios\n---\n\nBody.\n`);
+    const errs = frontmatter.validateFile(file, { required: [], "x-required-one-of": ["framework", "frameworks"], properties: {} });
+    assert.ok(errs.some((e) => /must be a list/.test(e.msg)), JSON.stringify(errs));
+  });
+});
+
+check("canonical_id must start with the page's own product", () => {
+  withTempDir((dir) => {
+    const file = path.join(dir, "page.md");
+    const run = (id) => {
+      fs.writeFileSync(file, `---\ndescription: "Reads a document."\nproduct: smart-label-capture\ncanonical_id: ${id}\n---\n\nBody.\n`);
+      return frontmatter.validateFile(file, { required: [], properties: {} }).map((e) => e.msg);
+    };
+    assert.deepStrictEqual(run("scandit.smart-label-capture.shipping-label-scanning"), []);
+    assert.deepStrictEqual(run("scandit.smart-label-capture"), []);
+    assert.ok(run("scandit.label-capture.shipping-label-scanning").some((m) => /must start with 'scandit\.smart-label-capture\.'/.test(m)));
+    assert.ok(run("scandit.smart-label-capturex.page").some((m) => /must start with/.test(m)));
+  });
+});
+
+check("the real schema requires the four page fields and a framework", () => {
+  const schema = frontmatter.loadSchema(path.join(__dirname, "..", "docs-schema.yml"));
+  for (const field of ["description", "topic_type", "product", "canonical_id"]) {
+    assert.ok((schema.required || []).includes(field), `docs-schema.yml no longer requires '${field}'`);
+  }
+  assert.deepStrictEqual(schema["x-required-one-of"], [["framework", "frameworks"]]);
+});
+
 check("frontmatterEndLine returns 0 rather than throwing on an unreadable path", () => {
   assert.strictEqual(gate.frontmatterEndLine("scripts/does-not-exist-xyz.md"), 0);
 });

@@ -6,6 +6,9 @@ pagination_prev: null
 framework: capacitor
 keywords:
   - capacitor
+product: parser
+topic_type: get-started
+canonical_id: scandit.parser.get-started
 ---
 
 # Get Started

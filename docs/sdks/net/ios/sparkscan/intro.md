@@ -5,6 +5,9 @@ pagination_prev: null
 framework: net-ios
 keywords:
   - netIos
+product: sparkscan
+topic_type: product-overview
+canonical_id: scandit.sparkscan.intro
 ---
 
 # About SparkScan

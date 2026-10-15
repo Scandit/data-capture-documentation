@@ -1,6 +1,11 @@
 ---
 description: "MatrixScan Find is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: matrixscan-find
+topic_type: product-overview
+canonical_id: scandit.matrixscan-find.intro
+framework: titanium
+availability: unavailable
 ---
 
 # MatrixScan Find is not available on Titanium

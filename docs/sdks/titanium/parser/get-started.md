@@ -1,6 +1,11 @@
 ---
 description: "Parser is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: parser
+topic_type: get-started
+canonical_id: scandit.parser.get-started
+framework: titanium
+availability: unavailable
 ---
 
 # Parser is not available on Titanium

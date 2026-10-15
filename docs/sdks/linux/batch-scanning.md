@@ -1,6 +1,11 @@
 ---
 description: "Batch Scanning is not available on the Linux SDK."
 displayed_sidebar: linuxSidebar
+product: core
+topic_type: concept
+canonical_id: scandit.core.batch-scanning
+framework: linux
+availability: unavailable
 ---
 
 # Batch Scanning is not available on Linux

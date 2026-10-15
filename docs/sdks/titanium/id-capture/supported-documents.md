@@ -1,6 +1,11 @@
 ---
 description: "ID Capture is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: id-capture
+topic_type: supported-values
+canonical_id: scandit.id-capture.supported-documents
+framework: titanium
+availability: unavailable
 ---
 
 # ID Capture is not available on Titanium
