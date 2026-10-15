@@ -8,7 +8,8 @@ import { parseSdksRoute } from '@site/src/components/utils/frameworks';
 import { renderInlineCode } from '@site/src/components/utils/inlineCode';
 import { isSupportedVersion, PRODUCTS_BY_KEY } from '@site/src/components/utils/products';
 import { FRAMEWORKS } from '@site/src/constants/frameworks';
-import type { ProductRegistryData, RegistryProduct } from '@site/src/plugins/plugin-product-registry';
+import type { ProductRegistryData } from '@site/src/plugins/plugin-product-registry';
+import { docsPrefix, overviewUrl } from './links';
 import styles from './styles.module.css';
 
 /**
@@ -35,30 +36,6 @@ function availableOnFramework(key: string, framework: string | undefined): boole
   const json = PRODUCTS_BY_KEY.get(key);
   if (!json?.frameworks || !framework) return true;
   return isSupportedVersion(json.frameworks[framework]);
-}
-
-const withSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`);
-
-// The other product's overview on the same framework, in the same docs
-// version: its intro page, else its get-started page (Barcode Capture has no
-// intro), else its single page (Barcode Generator is one flat page), else
-// nothing, and the name is shown as plain text. A hosted product has one
-// overview, under /hosted/. `routeSegment` is the framework's URL path, which
-// is not its slug on .NET (`net/ios`, not `net-ios`). `docs` are the active
-// version's docs, whose paths carry the base URL, as the docs plugin
-// publishes them.
-function overviewUrl(
-  docs: readonly { path: string }[],
-  prefix: string,
-  routeSegment: string,
-  target: RegistryProduct,
-): string | null {
-  const base = `${prefix}/sdks/${routeSegment}/${target.folder}/`;
-  const candidates =
-    target.kind === 'hosted'
-      ? [`${prefix}/hosted/${target.folder}/overview/`]
-      : [`${base}intro/`, `${base}get-started/`, base];
-  return candidates.find((c) => docs.some((d) => withSlash(d.path) === c)) ?? null;
 }
 
 // "since 6.8", or "since C API 4.6" where the framework counts its own
@@ -88,13 +65,17 @@ export default function ProductChooser(): JSX.Element | null {
   // partials included, so the next one will.
   if (activeVersion?.name !== 'current') return null;
 
-  const prefix = pathname.slice(0, pathname.indexOf('/sdks/'));
+  const prefix = docsPrefix(pathname);
   const name = byKey.get(productKey)?.name ?? productKey;
   // With the version: "since 6.8" answers a question "iOS" alone doesn't.
   const availableOn = Object.entries(PRODUCTS_BY_KEY.get(productKey)?.frameworks ?? {})
     .filter(([, e]) => isSupportedVersion(e))
     .map(([display, e]) => ({ display, version: String(e.version).trim() }));
-  const hasAlternatives = entry.not_for.length > 0;
+  // Only alternatives the reader can use on this framework: the column offers
+  // answers, and a product missing here is a dead end, not one. With none
+  // left, the block shows one column.
+  const alternatives = entry.not_for.filter(({ use }) => availableOnFramework(use, framework));
+  const hasAlternatives = alternatives.length > 0;
 
   return (
     <aside className={styles.chooser} aria-label={`Is ${name} the right product?`}>
@@ -112,18 +93,9 @@ export default function ProductChooser(): JSX.Element | null {
           <div className={`${styles.col} ${styles.bad}`}>
             <p className={styles.colTitle}>Consider another product if</p>
             <ul>
-              {entry.not_for.map(({ when, use }, i) => {
+              {alternatives.map(({ when, use }, i) => {
                 const target = byKey.get(use);
                 const label = target?.name ?? use;
-                // Not on this framework: name it, but don't link to a "not
-                // available" stub as if it were an answer.
-                if (!availableOnFramework(use, framework)) {
-                  return (
-                    <li key={i}>
-                      {renderInlineCode(when)}: {label} (not available on {framework})
-                    </li>
-                  );
-                }
                 const url = target ? overviewUrl(activeVersion.docs, prefix, routeSegment, target) : null;
                 return (
                   <li key={i}>

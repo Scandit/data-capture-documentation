@@ -44,7 +44,10 @@ export default function productRegistryPlugin(context: LoadContext): Plugin<Prod
     async loadContent(): Promise<ProductRegistryData> {
       // The same checks `yarn verify:registry` runs in CI, so a malformed
       // entry fails here with a readable message instead of breaking pages in
-      // a local or preview build that skipped CI.
+      // a local or preview build that skipped CI. That covers draft entries
+      // too: a draft with a typo in `use` fails every docs build, on purpose,
+      // so a broken entry is fixed when it is written, not when it is approved.
+      // An empty or comments-only file is not malformed: it has no entries yet.
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const check = require(path.join(context.siteDir, 'scripts/verify-registry.cjs')) as {
         readRegistry: (text: string) => { key: string; name: string; kind: RegistryProduct['kind']; aliases: string[] }[];
@@ -54,7 +57,7 @@ export default function productRegistryPlugin(context: LoadContext): Plugin<Prod
       const registry = check.readRegistry(await fs.readFile(registryPath, 'utf8'));
       let chooserDoc: { products?: Record<string, { status?: string } & ChooserEntry> } | null | undefined;
       try {
-        chooserDoc = (yaml.load(await fs.readFile(chooserPath, 'utf8')) as typeof chooserDoc) ?? null;
+        chooserDoc = yaml.load(await fs.readFile(chooserPath, 'utf8')) as typeof chooserDoc;
       } catch (error) {
         if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
       }
