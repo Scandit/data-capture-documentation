@@ -130,6 +130,18 @@ function registryErrors(products) {
 }
 
 /**
+ * Parses product-chooser.yml. An empty or comments-only file is null, not an
+ * error: js-yaml 5's load() throws on it where 4's returned undefined, and
+ * loadAll() returns no documents on both. Shared with the docs plugin, so the
+ * build and this check read the file the same way.
+ */
+function readChooser(text) {
+  const docs = yaml.loadAll(text);
+  if (docs.length > 1) throw new Error(`${CHOOSER_FILE}: expected one YAML document, found ${docs.length}`);
+  return docs.length ? docs[0] : null;
+}
+
+/**
  * Check 1b: content/registry/product-chooser.yml, when it exists. A map of
  * product key -> { status, choose_if, not_for }; the file's header comment
  * shows the shape.
@@ -364,7 +376,7 @@ function main() {
   const read = (f) => fs.readFileSync(path.join(ROOT, f), "utf8");
   const products = readRegistry(read(REGISTRY_FILE));
   const chooserPath = path.join(ROOT, CHOOSER_FILE);
-  const chooserDoc = fs.existsSync(chooserPath) ? yaml.load(fs.readFileSync(chooserPath, "utf8")) : undefined;
+  const chooserDoc = fs.existsSync(chooserPath) ? readChooser(fs.readFileSync(chooserPath, "utf8")) : undefined;
   const schema = yaml.load(read(SCHEMA_FILE));
   const schemaEnum = schema && schema.properties && schema.properties.product && schema.properties.product.enum;
   const files = docFiles(path.join(ROOT, "docs")).map((full) => ({
@@ -406,6 +418,7 @@ if (require.main === module) main();
 module.exports = {
   readRegistry,
   registryErrors,
+  readChooser,
   chooserErrors,
   schemaErrors,
   readObjectKeys,

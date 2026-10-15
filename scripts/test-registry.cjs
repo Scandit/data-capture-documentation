@@ -99,6 +99,12 @@ test("a chooser file without a products map", () => {
   has(r.chooserErrors(base(), { entries: {} }), "expected a top-level `products` map");
   has(r.chooserErrors(base(), "products"), "expected a top-level `products` map");
 });
+test("readChooser reads an empty or comments-only file as null", () => {
+  assert.strictEqual(r.readChooser(""), null);
+  assert.strictEqual(r.readChooser("# no entries yet\n"), null);
+  assert.deepStrictEqual(r.readChooser("products:\n"), { products: null });
+  assert.throws(() => r.readChooser("products: {}\n---\nproducts: {}\n"), /one YAML document/);
+});
 test("an empty chooser file or a bare `products:` means no entries yet", () => {
   assert.deepStrictEqual(r.chooserErrors(base(), null), []);
   assert.deepStrictEqual(r.chooserErrors(base(), { products: null }), []);
