@@ -17,7 +17,7 @@ SparkScan is optimized by default for efficiency, accuracy, and responsiveness. 
 
 Allowing the end user to control the scanner with hardware buttons can be useful if your users typically wear gloves. It can also improve ergonomics in some workflows.
 
-SparkScan offers a built-in API to let you do this via [scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
+SparkScan offers a built-in API to let you do this via [`SparkScanViewSettings.HardwareTriggerEnabled`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
 
 <!--
 ### Trigger Error State
@@ -37,13 +37,13 @@ You can customize:
 * The color of the highlight for the scanned barcode.
 * The feedback (sound, vibration).
 
-To emit an error, you have to implement a [ISparkScanFeedbackDelegate](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-feedback-delegate.html#interface-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate) and set it to the [SparkScanView](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.FeedbackDelegate):
+To emit an error, you have to implement a [SDCSparkScanFeedbackDelegate](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-feedback-delegate.html#interface-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate) and set it to the [SparkScanView](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.FeedbackDelegate):
 
 ```csharp
 
 ```
 
-In the [ISparkScanFeedbackDelegate.GetFeedbackForBarcode](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-feedback-delegate.html#method-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate.GetFeedbackForBarcode) you can then return an error or a success feedback:
+In the [SDCSparkScanFeedbackDelegate.feedbackForBarcode](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-feedback-delegate.html#method-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate.GetFeedbackForBarcode) you can then return an error or a success feedback:
 
 ```csharp
 const sparkScanFeedbackDelegate = {
@@ -123,7 +123,7 @@ The scanning behavior determines how barcodes are scanned - one at a time or con
 | **Continuous scan** | Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.  |
 
 :::tip
-Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled (`SparkScanViewSettings.HoldToScanEnabled`).
+Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SparkScanViewSettings.HoldToScanEnabled`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
 :::
 
 ### Preview Behavior
