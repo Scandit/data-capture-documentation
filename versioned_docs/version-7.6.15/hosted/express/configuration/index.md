@@ -62,7 +62,7 @@ To use Batch mode, you need a MatrixScan license and list building turned on.
 
 #### List Building
 
-List building collects your scans in a list. You check the list, and then Scandit Express types the barcodes into the field. List building works in Single and Batch mode.
+List building collects your scans in a list. You check the list, and then Scandit Express types the barcodes into the field. List building works in Single and Batch mode. It doesn't need a MatrixScan license, but Batch mode does.
 
 ### Activate via Hardware Button
 

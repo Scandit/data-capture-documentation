@@ -38,7 +38,7 @@ Scandit Express offers two scanning modes:
 * **Single**: Point the camera at a barcode to scan it. If several barcodes are close together, choose the one you want. Single mode, also called Smart Scan Selection, is available from Scandit Express 4.3.0 on iOS and 4.4.0 on Android. It replaces the earlier Accuracy and Speed modes.
 * **Batch**: Scan all visible barcodes at once. To use Batch mode, you need a MatrixScan license and list building turned on.
 
-With list building, your scans go into a list. You check the list, and then Scandit Express types the barcodes into the field. List building works in both modes.
+With list building, your scans go into a list. You check the list, and then Scandit Express types the barcodes into the field. List building works in both modes. It doesn't need a MatrixScan license, but Batch mode does.
 
 ## Security and Compliance
 
