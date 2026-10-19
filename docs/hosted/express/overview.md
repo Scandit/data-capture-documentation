@@ -29,15 +29,16 @@ The Scandit Express user interface (UI) is designed to resemble a smartphone cam
 
 ![Scandit Express](/img/express/express_ui.png)
 
-Depending on the mode selected, the user has a choice of scanning barcodes one by one or batch scanning many codes simultaneously. For batch scanning, users can scan as many barcodes as they want and verify them in a list, before inputting them into the desired field.
+You can scan barcodes one at a time or all at once, and collect your scans in a list to check them before they go into the field.
 
 ### Scanning Modes
 
-Scandit Express offers multiple scanning modes:
+Scandit Express offers two scanning modes:
 
-* **Accuracy**: Scans one barcode out of many in the camera’s field of view. It detects all barcodes available and provides an AR overlay to help the user select one target barcode.
-* **Speed**: Scans multiple barcodes in quick succession. It removes the need to tap the screen repeatedly.
-* **Batch**: Scans all visible barcodes and stores them in a list.
+* **Single**: Point the camera at a barcode to scan it. If several barcodes are close together, choose the one you want. Single mode, also called Smart Scan Selection, is available from Scandit Express 4.3.0 on iOS and 4.4.0 on Android. It replaces the earlier Accuracy and Speed modes.
+* **Batch**: Scan all visible barcodes at once. To use Batch mode, you need a MatrixScan license and list building turned on.
+
+With list building, your scans go into a list. You check the list, and then Scandit Express types the barcodes into the field. List building works in both modes.
 
 ## Security and Compliance
 

@@ -192,7 +192,7 @@
   {
     "key": "parser",
     "name": "Parser",
-    "description": "Extract structured data from encoded barcodes including GS1, AAMVA, HIBC, and other industry-standard formats. Automatically parse complex barcode data into easily usable fields without manual string manipulation.",
+    "description": "Extract structured data from encoded barcodes including GS1, HIBC, Swiss QR, VIN, and other industry-standard formats. Automatically parse complex barcode data into easily usable fields without manual string manipulation.",
     "frameworks": {
       "iOS": { "version": "6.1", "apiUrl": "/sdks/ios/parser/get-started" },
       "Android": { "version": "6.1", "apiUrl": "/sdks/android/parser/get-started" },
