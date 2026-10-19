@@ -89,6 +89,12 @@ keywords:
 * Fixed an IllegalStateException in analytics HTTPS requests when the app is instrumented by APM tools such as Dynatrace.
 * Fixed EventsResponse::getRetryTimeoutInSeconds to return a fallback instead of aborting on out-of-range header values.
 
+## 8.5.4
+
+**Released**: October 19, 2026
+
+No updates for this framework in this release.
+
 ## 8.5.3
 
 **Released**: August 18, 2026
