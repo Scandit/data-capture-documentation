@@ -96,7 +96,7 @@ This section explains all the available options to configure SparkScan to best f
 Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.SelectionMode`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.DefaultScanningMode`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
 :::note
-Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `DefaultScanningMode`.
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead.
 :::
 
 ### Selection Mode
