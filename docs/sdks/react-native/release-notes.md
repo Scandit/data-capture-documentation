@@ -56,7 +56,6 @@ keywords:
 
 #### Barcode
 
-* BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
 * Added the zoomControlOrientation property to BarcodeArView.
 * Added the BarcodeArCircleHighlight.isPulsing property to toggle the highlight's pulsing animation.
 * Extended BarcodeBatch on Android so that setting the overlay brush to null clears the highlights of tracked barcodes, matching iOS.
@@ -150,7 +149,6 @@ keywords:
 
 #### Barcode
 
-* Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
 * Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
 
 ## 8.5.3

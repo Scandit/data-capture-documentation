@@ -52,7 +52,6 @@ keywords:
 * MatrixScan Sequence: introduced several new configurations to adapt the sequencing flow.
   - `initialOrderOnShelf` and `initialOrderOnTray` resume scanning from a previous session.
   - `idleTimeout` sets the inactivity period in seconds before sequencing pauses automatically, defaulting to 10 seconds; 0 or less disables the automatic pause
-* BarcodeArResponsiveAnnotation now takes a map of distance thresholds to annotations, so a barcode can show a different annotation at any number of distances instead of only close-up and far-away. The previous two-state API is deprecated, see Deprecations below.
 * Added missing BarcodeAr .NET APIs: BarcodeArView.LogoAnchor and BarcodeArView.LogoOffset to position the Scandit logo (iOS + Android); BarcodeArView.LogoStyle for minimal/extended logo style (iOS); BarcodeArView.ZoomControlOrientation for the zoom control's orientation (iOS); BarcodeArStatusIconAnnotation.Anchor plus the new BarcodeArStatusIconAnnotationAnchor enum (Top/Bottom/Left/Right) to anchor a status icon annotation (iOS + Android); and BarcodeArResponsiveAnnotation.CloseUpAnnotation and BarcodeArResponsiveAnnotation.FarAwayAnnotation to read the close-up/far-away annotation variations (iOS + Android).
 * Added BarcodePickViewSettings.ZoomButtonPosition, ShowTorchButton, TorchButtonPosition, LogoAnchor, and LogoStyle (plus iOS TopLayoutAnchor and Android UiButtonsOffset); MinimumHighlightWidth and MinimumHighlightHeight on both Rectangular highlight styles; RectangularWithIcons.StatusIconSettings; and BarcodePickStatusIconStyle.WithIcon(ScanditIcon, string).
 * Unified the .NET BarcodeCount API with native Android/iOS: added BarcodeCountStatus.ExpiringSoon, BarcodeCountView.ShouldShowStatusIconsOnScan/LogoStyle/LogoAnchor, and a public BarcodeCountNotInListActionSettings() constructor.
@@ -150,7 +149,6 @@ keywords:
 #### Barcode
 
 * Removed the deprecated Barcode Sequence view settings API; configure the view's settings directly on the view.
-* Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
 
 ## 8.5.3
 

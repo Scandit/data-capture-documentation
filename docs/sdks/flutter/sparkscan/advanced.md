@@ -87,7 +87,7 @@ This section explains all the available options to configure SparkScan to best f
 Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
 :::note
-Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `defaultScanningMode`.
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead.
 :::
 
 ### Selection Mode
