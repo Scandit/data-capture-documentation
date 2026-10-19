@@ -144,25 +144,29 @@ Register the web component once, then use the `<spark-scan-view>` custom element
 ```typescript
 SparkScanView.register();
 
-// In your render/component:
+// In your component:
+const stopOnRemove = useCallback((view: SparkScanView | null) => {
+  return () => {
+    view?.stopScanning().catch(console.error);
+  };
+}, []);
+
+// In its render:
 (context && sparkScan) && <spark-scan-view
   dataCaptureContext={context}
   sparkScan={sparkScan}
   sparkScanViewSettings={viewSettings}
-  ref={(view) => {
-    // React 19 runs this cleanup when the element is removed
-    return () => {
-      view?.stopScanning().catch(console.error);
-    };
-  }}
+  ref={stopOnRemove}
 />
 ```
 
-This option needs React 19 or later: earlier versions pass `dataCaptureContext`, `sparkScan` and `sparkScanViewSettings` to custom elements as strings, so the view never gets them. The `ref` callback stops scanning when the view is removed. It returns a cleanup function, which React 19 calls on removal; `stopScanning` returns a promise, so its errors are caught instead of awaited.
+This option needs React 19 or later: earlier versions pass `dataCaptureContext`, `sparkScan` and `sparkScanViewSettings` to custom elements as strings, so the view never gets them. The `ref` callback returns a cleanup function that stops scanning. React 19 calls it when the element is removed, and also whenever the callback itself changes, so keep the callback stable with `useCallback`. `stopScanning` returns a promise, so its errors are caught instead of awaited.
 
 In TypeScript, declare the element's JSX type first, as in the React sample's [`spark-scan-view.d.ts`](https://github.com/Scandit/datacapture-web-samples/blob/master/05_Framework_Integration_Samples/SparkScanReactSample/src/spark-scan-view.d.ts). Without it, the compiler reports that `spark-scan-view` doesn't exist on `JSX.IntrinsicElements`.
 
 **Option 2 — `SparkScanView.forElement()` (without a framework):**
+
+Add an element for the view to your page, for example `<div id="spark-scan-ui"></div>`, then create the view in it:
 
 ```typescript
 const sparkScanView = SparkScanView.forElement(
@@ -186,8 +190,6 @@ For a complete React integration example, see the [SparkScan React Sample](https
 Lastly, you need to implement the listener to handle the scanned data. This is done by creating an instance of the [`SparkScanListener`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) class:
 
 ```typescript
-import type { SparkScanListener } from "@scandit/web-datacapture-barcode";
-
 const listener: SparkScanListener = {
 	didScan: (sparkScan, session, frameData) => {
 		// Gather the recognized barcode
@@ -202,7 +204,7 @@ const listener: SparkScanListener = {
 sparkScan.addListener(listener);
 ```
 
-Here, `didScan()` is called when a barcode is recognized. You can access the recognized barcode data from the `SparkScanSession` object.
+`SparkScanListener` is a type, so import it with `import type` from `@scandit/web-datacapture-barcode`. Here, `didScan()` is called when a barcode is recognized. You can access the recognized barcode data from the `SparkScanSession` object.
 
 ### 6. Next Steps
 
