@@ -148,14 +148,19 @@ Next, we create the `SparkScanView` instance, adding the scanning interface to t
 const sparkScanView = SparkScanView.forContext(DataCaptureContext.sharedInstance, sparkScan, viewSettings);
 ```
 
-You must also stop scanning when the scanner is no longer needed, for example when the app goes to the background or the user leaves the screen. When the user leaves the screen for good, also dispose of the view to release its native resources. Both methods return a promise, so call them from an async function:
+You must also stop scanning when the scanner is no longer needed, for example when the app goes to the background:
 
 ```js
-async function closeScanner() {
-  await sparkScanView.stopScanning();
-  await sparkScanView.dispose();
-}
+await sparkScanView.stopScanning();
 ```
+
+When the user leaves the scanning screen for good, also dispose of the view to release its native resources:
+
+```js
+await sparkScanView.dispose();
+```
+
+Both methods return a promise, so call them from an async function.
 
 ### 5. Implement the Listener
 

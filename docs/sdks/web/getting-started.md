@@ -103,7 +103,7 @@ settings.scanIntention = ScanIntention.Smart;
 settings.selectionMode = SelectionMode.Auto;
 ```
 
-`ScanIntention`, `SelectionMode`, `Symbology` and the SparkScan classes come from `@scandit/web-datacapture-barcode`. `DataCaptureContext` comes from `@scandit/web-datacapture-core`.
+`barcodeCaptureLoader`, `ScanIntention`, `SelectionMode`, `Symbology` and the SparkScan classes come from `@scandit/web-datacapture-barcode`. `DataCaptureContext` comes from `@scandit/web-datacapture-core`. The API reference lists `ScanIntention` and `SelectionMode` under core, but you import them from the barcode package.
 
 In this example, we're:
 
@@ -149,11 +149,17 @@ SparkScanView.register();
   dataCaptureContext={context}
   sparkScan={sparkScan}
   sparkScanViewSettings={viewSettings}
-  ref={sparkScanViewRef}
+  ref={(view) => {
+    // React 19 runs this cleanup when the element is removed
+    return () => {
+      view?.stopScanning().catch(console.error);
+    };
+  }}
 />
 ```
 
-This option needs React 19 or later: earlier versions pass `dataCaptureContext`, `sparkScan` and `sparkScanViewSettings` to custom elements as strings, so the view never gets them. Here `sparkScanViewRef` is a React ref (`useRef<SparkScanView | null>(null)`) that gives you the view for `stopScanning`.
+This option needs React 19 or later: earlier versions pass `dataCaptureContext`, `sparkScan` and `sparkScanViewSettings` to custom elements as strings, so the view never gets them. The `ref` callback stops scanning when the view is removed. It returns a cleanup function, which React 19 calls on removal; `stopScanning` returns a promise, so its errors are caught instead of awaited.
+
 In TypeScript, declare the element's JSX type first, as in the React sample's [`spark-scan-view.d.ts`](https://github.com/Scandit/datacapture-web-samples/blob/master/05_Framework_Integration_Samples/SparkScanReactSample/src/spark-scan-view.d.ts). Without it, the compiler reports that `spark-scan-view` doesn't exist on `JSX.IntrinsicElements`.
 
 **Option 2 — `SparkScanView.forElement()` (without a framework):**
@@ -167,20 +173,10 @@ const sparkScanView = SparkScanView.forElement(
 );
 ```
 
-You must also call the `stopScanning` method when the scanner is no longer needed, for example when the user leaves the page. With Option 2:
+With Option 2, you must also call the `stopScanning` method when the scanner is no longer needed, for example when the user leaves the page:
 
 ```typescript
 await sparkScanView.stopScanning();
-```
-
-With Option 1 in React, call it in the cleanup function of `useEffect`. The cleanup function can't be `async`, so handle the returned promise instead of awaiting it:
-
-```typescript
-useEffect(() => {
-  return () => {
-    sparkScanViewRef.current?.stopScanning().catch(console.error);
-  };
-}, []);
 ```
 
 For a complete React integration example, see the [SparkScan React Sample](https://github.com/Scandit/datacapture-web-samples/tree/master/05_Framework_Integration_Samples/SparkScanReactSample).
