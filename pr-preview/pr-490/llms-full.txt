@@ -981,23 +981,23 @@ You can configure Scandit Express to inject additional keystrokes after a barcod
 
 ### Scanning Options
 
-Scandit Express supports different scanning options to optimize the scanning experience for different use cases. There are two options available by default: Accuracy and Speed. Two additional options, Batch and List, are available if you have purchased MatrixScan.
+Scandit Express has two scanning modes: Single and Batch. You can also turn on list building to collect your scans in a list.
 
-#### Accuracy
+#### Single
 
-Use this mode to select one barcode out of many. This mode detects all barcodes available, then gives visual feedback on the screen (an augmented-reality overlay) so the user can select the target barcode. This mode scans one barcode at a time.
+Use Single mode to scan one barcode at a time. Point the camera at a barcode and Scandit Express scans it. If several barcodes are close together, choose the one you want.
 
-#### Speed
-
-Use this mode to scan barcodes consecutively at high speed. This mode scans successive items at high speed without the need to keep tapping on the screen.
+Single mode, also called Smart Scan Selection, is available from Scandit Express 4.3.0 on iOS and 4.4.0 on Android. It replaces the Accuracy and Speed modes of earlier versions.
 
 #### Batch
 
-Use this mode to scan a batch of barcodes all at once. This mode scans all visible barcodes instantly. It’s perfect when all barcodes are visible and the volume is high.
+Use Batch mode to scan all visible barcodes at once, for example when you have many barcodes in view.
 
-#### List
+To use Batch mode, you need a MatrixScan license and list building turned on.
 
-The list mode icon allows the user to see the list of barcodes that have been scanned. List mode, when activated, works for barcodes scanned in any mode (basic speed scanning, accuracy, and batch).
+#### List Building
+
+List building collects your scans in a list. You check the list, and then Scandit Express types the barcodes into the field. List building works in Single and Batch mode.
 
 ### Activate via Hardware Button
 
@@ -1097,11 +1097,11 @@ Label scanning can be enabled and configured in your [Scandit Dashboard](https:/
 
   
 
-Once enabled, you can select from a the following pre-defined label types, and the respective fields will be automatically detected when scanning:
+Once enabled, you can select from the following predefined label types, and the respective fields will be automatically detected when scanning:
 
-* **Smart Device**: Captures the UPC/EAN, IMEI1 and IMEI2, and Serial Number from mobile device labels.
-* **Price Weight**: This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `SKU` and `priceText` fields.
-* **VIN**: Captures the Vehicle Identification Number (VIN) from vehicle labels.
+* **Smart Device Label**: Captures the UPC/EAN, IMEI1 and IMEI2, and Serial Number from mobile device labels.
+* **Price Label**: Captures the product barcode and the printed price from price labels.
+* **VIN Label**: Captures the Vehicle Identification Number (VIN) from vehicle labels.
 
 :::tip
 If you need to customize the behavior of the Smart Label Capture feature, please contact [Scandit Support](mailto:support@scandit.com).
@@ -1314,15 +1314,16 @@ The Scandit Express user interface (UI) is designed to resemble a smartphone cam
 
 ![Scandit Express](/img/express/express_ui.png)
 
-Depending on the mode selected, the user has a choice of scanning barcodes one by one or batch scanning many codes simultaneously. For batch scanning, users can scan as many barcodes as they want and verify them in a list, before inputting them into the desired field.
+You can scan barcodes one at a time or all at once, and collect your scans in a list to check them before they go into the field.
 
 ### Scanning Modes
 
-Scandit Express offers multiple scanning modes:
+Scandit Express offers two scanning modes:
 
-* **Accuracy**: Scans one barcode out of many in the camera’s field of view. It detects all barcodes available and provides an AR overlay to help the user select one target barcode.
-* **Speed**: Scans multiple barcodes in quick succession. It removes the need to tap the screen repeatedly.
-* **Batch**: Scans all visible barcodes and stores them in a list.
+* **Single**: Point the camera at a barcode to scan it. If several barcodes are close together, choose the one you want. Single mode, also called Smart Scan Selection, is available from Scandit Express 4.3.0 on iOS and 4.4.0 on Android. It replaces the earlier Accuracy and Speed modes.
+* **Batch**: Scan all visible barcodes at once. To use Batch mode, you need a MatrixScan license and list building turned on.
+
+With list building, your scans go into a list. You check the list, and then Scandit Express types the barcodes into the field. List building works in both modes.
 
 ## Security and Compliance
 
