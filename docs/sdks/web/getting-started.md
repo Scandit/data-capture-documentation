@@ -188,6 +188,8 @@ For a complete React integration example, see the [SparkScan React Sample](https
 Lastly, you need to implement the listener to handle the scanned data. This is done by creating an instance of the [`SparkScanListener`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) class:
 
 ```typescript
+import type { SparkScanListener } from "@scandit/web-datacapture-barcode";
+
 const listener: SparkScanListener = {
 	didScan: (sparkScan, session, frameData) => {
 		// Gather the recognized barcode

@@ -86,6 +86,9 @@ npm install scandit-capacitor-datacapture-barcode
 
 # App state events, used to stop scanning in the background
 npm install @capacitor/app
+
+# Add the native parts of the plugins to your Android and iOS projects
+npx cap sync
 ```
 
 ### 2. Initialize the Data Capture Context
@@ -111,6 +114,8 @@ settings.codeDuplicateFilter = 0;
 settings.scanIntention = ScanIntention.Smart;
 settings.selectionMode = SelectionMode.Auto;
 ```
+
+`DataCaptureContext`, `ScanIntention` and `SelectionMode` come from `scandit-capacitor-datacapture-core`. `Symbology` and the SparkScan classes come from `scandit-capacitor-datacapture-barcode`.
 
 In this example, we're:
 
