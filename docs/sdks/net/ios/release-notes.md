@@ -79,7 +79,6 @@ keywords:
 
 #### Id
 
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
