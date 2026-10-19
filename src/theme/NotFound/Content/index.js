@@ -14,6 +14,19 @@ const DEFAULT_FALLBACK_PATH = "core-concepts/";
 // Older versioned docs (6.28.x and 7.6.x) don't have core-concepts within framework pages
 const OLD_VERSION_FALLBACK_PATH = "add-sdk/";
 const OLD_VERSION_PATTERN = /^(?:6\.28|7\.6)\./;
+// .NET's docs live only under a platform (/sdks/net/ios/, /sdks/net/android/),
+// so /sdks/net/<page>/ has no fallback page of its own. Send the reader to the
+// home page, which asks for the platform. Keep in step with the cards that have
+// `hasChildren` in src/components/HomePage/data/frameworkCardsArr.tsx.
+const PARENT_FRAMEWORKS = new Set(["net"]);
+// Xamarin is gone from the current docs; its URLs go to the Xamarin section of
+// the 7-to-8 migration guide. Straight to a .NET copy of the guide: the root
+// /migrate-7-to-8 page redirects to the Web copy and drops the #anchor.
+// Xamarin.Forms has no .NET counterpart of its own, so it shares Android's.
+function xamarinMigrationPath(framework) {
+  const platform = framework === "xamarin/ios" ? "ios" : "android";
+  return `/sdks/net/${platform}/migrate-7-to-8/#xamarin-sdk-changes`;
+}
 
 // The generated API reference is published only under one prefix per major line
 // (/6.28/, /7.6/, and unversioned for the current major; see
@@ -43,6 +56,18 @@ function getFallbackUrl(pathname) {
   const versionPrefix = match[1];
   const framework = match[2];
   const version = versionPrefix.replace(/^\//, "");
+
+  // The 8.x docs: the root (current or, during a beta, the latest stable) and
+  // the current docs at /next/. Neither has a .NET group page or Xamarin.
+  const isLiveDocs = versionPrefix === "" || versionPrefix === CURRENT_DOCS_PATH;
+  const frameworkKey = framework.toLowerCase();
+  if (frameworkKey.split("/")[0] === "xamarin" && isLiveDocs) {
+    return xamarinMigrationPath(frameworkKey);
+  }
+  if (PARENT_FRAMEWORKS.has(frameworkKey)) {
+    // A frozen version has no group page either; show its 404.
+    return isLiveDocs ? `/?framework=${frameworkKey}` : null;
+  }
 
   // A framework documented only in the current version (e.g. Kotlin
   // Multiplatform) 404s under every released version. Move the reader up to the
