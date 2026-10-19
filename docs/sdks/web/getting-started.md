@@ -103,6 +103,8 @@ settings.scanIntention = ScanIntention.Smart;
 settings.selectionMode = SelectionMode.Auto;
 ```
 
+`ScanIntention`, `SelectionMode`, `Symbology` and the SparkScan classes come from `@scandit/web-datacapture-barcode`. `DataCaptureContext` comes from `@scandit/web-datacapture-core`.
+
 In this example, we're:
 
 - Enabling both EAN-13 and Code 128 symbologies
@@ -151,7 +153,7 @@ SparkScanView.register();
 />
 ```
 
-Here `sparkScanViewRef` is a React ref (`useRef<SparkScanView | null>(null)`) that gives you the view for `stopScanning`.
+This option needs React 19 or later: earlier versions pass `dataCaptureContext`, `sparkScan` and `sparkScanViewSettings` to custom elements as strings, so the view never gets them. Here `sparkScanViewRef` is a React ref (`useRef<SparkScanView | null>(null)`) that gives you the view for `stopScanning`.
 In TypeScript, declare the element's JSX type first, as in the React sample's [`spark-scan-view.d.ts`](https://github.com/Scandit/datacapture-web-samples/blob/master/05_Framework_Integration_Samples/SparkScanReactSample/src/spark-scan-view.d.ts). Without it, the compiler reports that `spark-scan-view` doesn't exist on `JSX.IntrinsicElements`.
 
 **Option 2 — `SparkScanView.forElement()` (without a framework):**

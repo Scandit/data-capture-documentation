@@ -84,9 +84,6 @@ npm install scandit-capacitor-datacapture-core
 # Barcode scanning functionality
 npm install scandit-capacitor-datacapture-barcode
 
-# App state events, used to stop scanning in the background
-npm install @capacitor/app
-
 # Add the native parts of the plugins to your Android and iOS projects
 npx cap sync
 ```
@@ -151,23 +148,13 @@ Next, we create the `SparkScanView` instance, adding the scanning interface to t
 const sparkScanView = SparkScanView.forContext(DataCaptureContext.sharedInstance, sparkScan, viewSettings);
 ```
 
-You must also call the `stopScanning` method when the scanner is no longer needed, for example when the app goes to the background. This example uses the [Capacitor App plugin](https://capacitorjs.com/docs/apis/app) (`@capacitor/app`) to listen for app state changes:
+You must also stop scanning when the scanner is no longer needed, for example when the app goes to the background or the user leaves the screen. When the user leaves the screen for good, also dispose of the view to release its native resources. Both methods return a promise, so call them from an async function:
 
 ```js
-import { App } from '@capacitor/app';
-
-const appStateListener = await App.addListener('appStateChange', ({ isActive }) => {
-  if (!isActive) {
-    sparkScanView.stopScanning();
-  }
-});
-```
-
-When the user leaves the scanning screen, stop scanning and remove the listener:
-
-```js
-await sparkScanView.stopScanning();
-await appStateListener.remove();
+async function closeScanner() {
+  await sparkScanView.stopScanning();
+  await sparkScanView.dispose();
+}
 ```
 
 ### 5. Implement the Listener
