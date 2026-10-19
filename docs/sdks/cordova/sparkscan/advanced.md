@@ -103,7 +103,7 @@ The selection mode determines whether an aimer is shown in the preview to help w
 | **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
+*Auto* requires [`SparkScanSettings.scanIntention`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -116,7 +116,7 @@ The scanning behavior determines how barcodes are scanned - one at a time or con
 | **Continuous scan** | Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.  |
 
 :::tip
-Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SDCSparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
+Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
 :::
 
 ### Preview Behavior
