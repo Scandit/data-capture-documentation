@@ -49,3 +49,10 @@
 .reversIcon {
   transform: rotateZ(180deg);
 }
+
+.choosePlatform {
+  margin: 0;
+  padding: 24px 0;
+  font-size: 18px;
+  text-align: center;
+}
