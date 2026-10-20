@@ -8,9 +8,9 @@
 <script>!function(e,t,a,n,g){e[n]=e[n]||[],e[n].push({"gtm.start":(new Date).getTime(),event:"gtm.js"});var m=t.getElementsByTagName(a)[0],r=t.createElement(a);r.async=!0,r.src="https://www.googletagmanager.com/gtm.js?id=GTM-THQQFD7",m.parentNode.insertBefore(r,m)}(window,document,"script","dataLayer")</script>
 
 
-<link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-447/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-447/assets/css/styles.34a7ffeb.css">
-<script src="/data-capture-documentation/pr-preview/pr-447/assets/js/runtime~main.3273d5cc.js" defer="defer"></script>
-<script src="/data-capture-documentation/pr-preview/pr-447/assets/js/main.03c42dd1.js" defer="defer"></script>
+<link rel="search" type="application/opensearchdescription+xml" title="Scandit Developer Documentation" href="/data-capture-documentation/pr-preview/pr-447/opensearch.xml"><link rel="stylesheet" href="/data-capture-documentation/pr-preview/pr-447/assets/css/styles.a6357fd2.css">
+<script src="/data-capture-documentation/pr-preview/pr-447/assets/js/runtime~main.a0421d5e.js" defer="defer"></script>
+<script src="/data-capture-documentation/pr-preview/pr-447/assets/js/main.547e5871.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-THQQFD7" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -20,7 +20,7 @@
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="new-features">New Features<a class="hash-link" aria-label="Direct link to New Features" title="Direct link to New Features" href="/data-capture-documentation/pr-preview/pr-447/sdks/kmp/release-notes/#new-features">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="id">Id<a class="hash-link" aria-label="Direct link to Id" title="Direct link to Id" href="/data-capture-documentation/pr-preview/pr-447/sdks/kmp/release-notes/#id">​</a></h4>
 <ul>
-<li>Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.</li>
+<li>Visa VIZ results for Canadian visa stickers now report the full 10-character number in <code>VizResult.visaNumber</code> (the MRZ result remains truncated).</li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="bug-fixes">Bug Fixes<a class="hash-link" aria-label="Direct link to Bug Fixes" title="Direct link to Bug Fixes" href="/data-capture-documentation/pr-preview/pr-447/sdks/kmp/release-notes/#bug-fixes">​</a></h3>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="barcode">Barcode<a class="hash-link" aria-label="Direct link to Barcode" title="Direct link to Barcode" href="/data-capture-documentation/pr-preview/pr-447/sdks/kmp/release-notes/#barcode">​</a></h4>
@@ -36,6 +36,7 @@
 <ul>
 <li>Fixed the 2026 Oklahoma driver&#x27;s license not returning the Jurisdiction and JurisdictionIso fields.</li>
 <li>Fixed a crash in the IdCapture overlay when it was tapped.</li>
+<li>Updated the bundled ID Validate model to <code>8.0.20260626</code>, which fixes valid Ohio driver&#x27;s licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="smart-label-capture">Smart Label Capture<a class="hash-link" aria-label="Direct link to Smart Label Capture" title="Direct link to Smart Label Capture" href="/data-capture-documentation/pr-preview/pr-447/sdks/kmp/release-notes/#smart-label-capture">​</a></h4>
 <ul>

@@ -6981,7 +6981,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-pick-view.html#interface-scandit.datacapture.barcode.pick.ui.IBarcodePickViewUiListener) to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```kotlin
 barcodePickView.uiListener = object : BarcodePickViewUiListener {
@@ -7062,7 +7062,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -7078,6 +7078,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Id
 
 * Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Core
 
@@ -7105,7 +7106,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
+* Visa MRZ results now report country-specific additional details such as `MrzResult.visaNumber`, `MrzResult.visaNumberOfEntries`, `MrzResult.visaMultipleEntries` and `MrzResult.visaDurationInDays`.
 * Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
 * Added an [ID Capture image upload sample](https://github.com/Scandit/datacapture-android-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample) that demonstrates scanning ID documents from still images or PDF files on the device instead of using the live camera.
 * Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
@@ -7196,6 +7197,16 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Removed the deprecated Barcode Sequence view settings API; configure the view's settings directly on the view.
 * Deprecated the alternative (accessible) color scheme for Barcode Count; it will be removed in a future release. The default color scheme now provides an accessible appearance, so you can remove the explicit setting.
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -7362,6 +7373,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
 * Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
 * Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.4.1
 
@@ -7619,11 +7634,28 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
 
+## 8.1.7
+
+**Released**: October 7, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Reverted the Matrix Scan Sequence stability and robustness improvements introduced in `8.1.6` because of issues when scanning one code at a time.
+
 ## 8.1.6
 
 **Released**: July 29, 2026
 
 ### Bug Fixes
+
+#### Barcode
+
+* Matrix Scan Sequence: Improved stability and robustness
+  - Improved the stability of tray detection and tray ordering in MS Sequence. Fewer false trays are created on barcodes on product facings. Trays with a single barcode are created more conservatively, which reduces detection and ordering errors.
+  - Improved barcode tracking robustness in MS Sequence. Barcode overlays drift less during fast device motion.
 
 #### Smart Label Capture
 
@@ -11405,7 +11437,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-pick-view.html#interface-scandit.datacapture.barcode.pick.ui.IBarcodePickViewUiListener) to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```js
 barcodePickView.uiListener = {
@@ -11481,8 +11513,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
-* Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
+* Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan. Use `CapturedId.isCapturingComplete` to tell a partial result from a complete one.
 
 ### Bug Fixes
 
@@ -11500,6 +11532,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
 * Fixed a crash in the IdCapture overlay when it was tapped.
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Smart Label Capture
 
@@ -11529,9 +11562,6 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
-* Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -11542,7 +11572,6 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Core
 
 * Added support in the GS1 parser for the telecom Application Identifiers 8040 (IMEI), 8041 (IMEI2), 8042 (eSIM/EID), and 8043 (pSIM), so GS1 codes carrying them parse instead of being rejected as unrecognized.
-* Added support for parsing the 2D-DOC (French 2D-Doc / ANTS) data format.
 * Added more detailed error reporting when required resources are missing.
 * Added iOS support for multiple DataCaptureView instances to render the camera preview simultaneously, so navigating between screens that each show a DataCaptureView no longer causes black or frozen previews, including during interactive edge-swipe transitions. DataCaptureView also now renders a preview when the frame source is an ImageFrameSource or SequenceFrameSource.
 * Added LicenseInfo.allowedModes, exposing the set of capture modes a license key permits via the new CaptureMode enum.
@@ -11616,6 +11645,16 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
 * Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -11762,6 +11801,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
 * Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
 * Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Core
 
@@ -12021,6 +12064,20 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Smart Label Capture
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
+
+## 8.1.7
+
+**Released**: October 7, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
 
 ## 8.1.6
 
@@ -15070,7 +15127,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-pick-view.html#interface-scandit.datacapture.barcode.pick.ui.IBarcodePickViewUiListener) to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```js
 barcodePickView.uiListener = {
@@ -15146,8 +15203,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
-* Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
+* Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan. Use `CapturedId.isCapturingComplete` to tell a partial result from a complete one.
 
 ### Bug Fixes
 
@@ -15165,6 +15222,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
 * Fixed a crash in the IdCapture overlay when it was tapped.
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Smart Label Capture
 
@@ -15194,9 +15252,6 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
-* Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -15207,7 +15262,6 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Core
 
 * Added support in the GS1 parser for the telecom Application Identifiers 8040 (IMEI), 8041 (IMEI2), 8042 (eSIM/EID), and 8043 (pSIM), so GS1 codes carrying them parse instead of being rejected as unrecognized.
-* Added support for parsing the 2D-DOC (French 2D-Doc / ANTS) data format.
 * Added more detailed error reporting when required resources are missing.
 * Added iOS support for multiple DataCaptureView instances to render the camera preview simultaneously, so navigating between screens that each show a DataCaptureView no longer causes black or frozen previews, including during interactive edge-swipe transitions. DataCaptureView also now renders a preview when the frame source is an ImageFrameSource or SequenceFrameSource.
 * Added LicenseInfo.allowedModes, exposing the set of capture modes a license key permits via the new CaptureMode enum.
@@ -15281,6 +15335,16 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
 * Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -15428,6 +15492,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
 * Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
 * Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Core
 
@@ -15694,6 +15762,20 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 * Fixed a crash in the DataCaptureView overlay management that could occur during rapid view updates.
 * Fixed a Cordova iOS compilation error due to missing header files
+
+## 8.1.7
+
+**Released**: October 7, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
 
 ## 8.1.6
 
@@ -18727,12 +18809,12 @@ Connect the `BarcodePickView` to the Widget lifecycle. The widget is dependent o
 @override
 void didChangeAppLifecycleState(AppLifecycleState state) {
   if (state == AppLifecycleState.resumed) {
-    // Resume finding by calling the BarcodePickView widgetResumed function.
+    // Resume scanning by calling the BarcodePickView widgetResumed function.
     // Under the hood, it re-enables the BarcodePick mode and makes sure the view is properly
     // setup.
     barcodePickView.widgetResumed();
   } else {
-    // Pause finding by calling the BarcodePickView widgetPaused function.
+    // Pause scanning by calling the BarcodePickView widgetPaused function.
     // Under the hood, it will disable the mode and free resources that are not needed in a
     // paused state.
     barcodePickView.widgetPaused();
@@ -18823,7 +18905,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -18841,6 +18923,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
 * Fixed a crash in the IdCapture overlay when it was tapped.
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Smart Label Capture
 
@@ -18869,9 +18952,6 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
-* Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -18881,7 +18961,6 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Core
 
 * Added support in the GS1 parser for the telecom Application Identifiers 8040 (IMEI), 8041 (IMEI2), 8042 (eSIM/EID), and 8043 (pSIM), so GS1 codes carrying them parse instead of being rejected as unrecognized.
-* Added support for parsing the 2D-DOC (French 2D-Doc / ANTS) data format.
 * Added more detailed error reporting when required resources are missing.
 * Added iOS support for multiple DataCaptureView instances to render the camera preview simultaneously, so navigating between screens that each show a DataCaptureView no longer causes black or frozen previews, including during interactive edge-swipe transitions. DataCaptureView also now renders a preview when the frame source is an ImageFrameSource or SequenceFrameSource.
 * Added LicenseInfo.allowedModes, exposing the set of capture modes a license key permits via the new CaptureMode enum.
@@ -18960,6 +19039,16 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -19111,6 +19200,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
 * Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
 * Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Smart Label Capture
 
@@ -19385,6 +19478,20 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Smart Label Capture
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
+
+## 8.1.7
+
+**Released**: October 7, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
 
 ## 8.1.6
 
@@ -19698,7 +19805,7 @@ This section explains all the available options to configure SparkScan to best f
 Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
 :::note
-Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `defaultScanningMode`.
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead.
 :::
 
 ### Selection Mode
@@ -24759,7 +24866,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -24776,6 +24883,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
 * Fixed a crash in the IdCapture overlay when it was tapped.
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Smart Label Capture
 
@@ -24810,7 +24918,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
+* Visa MRZ results now report country-specific additional details such as `MrzResult.visaNumber`, `MrzResult.visaNumberOfEntries`, `MrzResult.visaMultipleEntries` and `MrzResult.visaDurationInDays`.
 * Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
 * Added `setRepeatAsync` on `SDCImageFrameSource`. It determines whether the frame source keeps re-emitting its frames after all of them have been processed. Setting this to true makes a still image behave like a continuous camera feed, giving the recognizer the multiple passes over the image it generally needs.
 * Added an [ID Capture image upload sample](https://github.com/Scandit/datacapture-ios-samples/tree/master/02_ID_Scanning_Samples/IdCaptureImageUploadSample) that demonstrates scanning ID documents from still images or PDF files on the device instead of using the live camera.
@@ -24898,6 +25006,16 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Removed the deprecated Barcode Sequence view settings API; configure the view's settings directly on the view.
 * Deprecated the alternative (accessible) color scheme for Barcode Count; it will be removed in a future release. The default color scheme now provides an accessible appearance, so you can remove the explicit setting.
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -25056,6 +25174,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
 * Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Core
 
@@ -25312,11 +25434,32 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
 
+## 8.1.7
+
+**Released**: October 7, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Reverted the Matrix Scan Sequence stability and robustness improvements introduced in `8.1.6` because of issues when scanning one code at a time.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+
 ## 8.1.6
 
 **Released**: July 29, 2026
 
 ### Bug Fixes
+
+#### Barcode
+
+* Matrix Scan Sequence: Improved stability and robustness
+  - Improved the stability of tray detection and tray ordering in MS Sequence. Fewer false trays are created on barcodes on product facings. Trays with a single barcode are created more conservatively, which reduces detection and ordering errors.
+  - Improved barcode tracking robustness in MS Sequence. Barcode overlays drift less during fast device motion.
 
 #### Id
 
@@ -30835,7 +30978,7 @@ Each `ParsedField` carries its `name`, its decoded `parsed` value, the `rawStrin
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -30852,6 +30995,7 @@ Each `ParsedField` carries its `name`, its decoded `parsed` value, the `rawStrin
 
 * Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
 * Fixed a crash in the IdCapture overlay when it was tapped.
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Smart Label Capture
 
@@ -32036,6 +32180,12 @@ Dynamic threading is used internally to accelerate the execution if available. T
 * Fixed `sc_camera_get_frame` hanging indefinitely when the camera is disconnected while streaming. It now returns promptly instead of blocking.
 * Fixed the Python camera sample (`CommandLineBarcodeScannerCameraSample.py`) crashing at startup.
 
+## 8.5.4
+
+**Released**: October 19, 2026
+
+No updates for this framework in this release.
+
 ## 8.5.3
 
 **Released**: August 18, 2026
@@ -32185,6 +32335,12 @@ No updates for this framework in this release.
 #### Barcode
 
 * Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
+
+## 8.1.7
+
+**Released**: October 7, 2026
+
+No updates for this framework in this release.
 
 ## 8.1.6
 
@@ -35083,9 +35239,9 @@ You can use a `BarcodePickView` from XAML in your MAUI application.
 You can configure your view in the code behind class. For example:
 
 ```csharp
-public partial class MyFindBarcodePage : ContentPage
+public partial class PickBarcodePage : ContentPage
 {
-    public MyFindBarcodePage()
+    public PickBarcodePage()
     {
         this.InitializeComponent();
 
@@ -35120,12 +35276,12 @@ public override void OnPause()
 }
 ```
 
-If your are developing on MAUI then connect the BarcodePickView to the MAUI page lifecycle.
+If you are developing on MAUI then connect the BarcodePickView to the MAUI page lifecycle.
 
 In particular, make sure to call `BarcodePickView.OnResume` on your [`Element.HandlerChanged`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.element.handlerchanged) event and `BarcodePickView.OnPause` on your [`Page.OnDisappearing`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.page.ondisappearing).
 
 ```csharp
-public FindBarcodePage()
+public PickBarcodePage()
 {
     this.BarcodePickView.HandlerChanged += SetupBarcodePickView;
 }
@@ -35151,7 +35307,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Subscribe to a `BarcodePickView.onFinishButtonTapped` event to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```csharp
 BarcodePickView.FinishButtonTapped += (object? sender, FinishButtonTappedEventArgs e) =>
@@ -35160,9 +35316,9 @@ BarcodePickView.FinishButtonTapped += (object? sender, FinishButtonTappedEventAr
 };
 ```
 
-However, this convenient “finish” button is not supported with MAUI development. You can create the button manually and invoke `BarcodePickView.StopSearching` to achieve the same functionality. The following code snippet demonstrates how to do this:
+However, this convenient “finish” button is not supported with MAUI development. You can create the button manually and invoke `BarcodePickView.Stop()` to achieve the same functionality. The following code snippet demonstrates how to do this:
 
-`FindBarcodePage.xaml`:
+`PickBarcodePage.xaml`:
 ```csharp
 
     (...)
@@ -35170,7 +35326,7 @@ However, this convenient “finish” button is not supported with MAUI developm
 
 ```
 
-`FindBarcodePage.xaml.cs`:
+`PickBarcodePage.xaml.cs`:
 ```csharp
 private void FinishButtonClicked(object? sender, EventArgs args)
 {
@@ -35234,7 +35390,7 @@ More data formats will be added in future releases. Please contact us if the dat
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -35250,6 +35406,7 @@ More data formats will be added in future releases. Please contact us if the dat
 #### Id
 
 * Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Core
 
@@ -35289,9 +35446,6 @@ More data formats will be added in future releases. Please contact us if the dat
 
 #### Id
 
-* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
-* Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -35368,6 +35522,16 @@ More data formats will be added in future releases. Please contact us if the dat
 
 * Removed the deprecated Barcode Sequence view settings API; configure the view's settings directly on the view.
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -35508,6 +35672,10 @@ More data formats will be added in future releases. Please contact us if the dat
 * Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
 * Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
 * Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.4.1
 
@@ -35732,11 +35900,28 @@ More data formats will be added in future releases. Please contact us if the dat
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
 
+## 8.1.7
+
+**Released**: October 7, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Reverted the Matrix Scan Sequence stability and robustness improvements introduced in `8.1.6` because of issues when scanning one code at a time.
+
 ## 8.1.6
 
 **Released**: July 29, 2026
 
 ### Bug Fixes
+
+#### Barcode
+
+* Matrix Scan Sequence: Improved stability and robustness
+  - Improved the stability of tray detection and tray ordering in MS Sequence. Fewer false trays are created on barcodes on product facings. Trays with a single barcode are created more conservatively, which reduces detection and ordering errors.
+  - Improved barcode tracking robustness in MS Sequence. Barcode overlays drift less during fast device motion.
 
 #### Smart Label Capture
 
@@ -36031,7 +36216,7 @@ This section explains all the available options to configure SparkScan to best f
 Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.SelectionMode`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.DefaultScanningMode`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
 :::note
-Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `DefaultScanningMode`.
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead.
 :::
 
 ### Selection Mode
@@ -38918,9 +39103,9 @@ You can use a `BarcodePickView` from XAML in your MAUI application.
 You can configure your view in the code behind class. For example:
 
 ```csharp
-public partial class MyFindBarcodePage : ContentPage
+public partial class PickBarcodePage : ContentPage
 {
-    public MyFindBarcodePage()
+    public PickBarcodePage()
     {
         this.InitializeComponent();
 
@@ -38939,28 +39124,28 @@ public partial class MyFindBarcodePage : ContentPage
 For MAUI development add the [`Scandit.DataCapture.Barcode.Maui`](https://www.nuget.org/packages/Scandit.DataCapture.Barcode.Maui) NuGet package into your project.
 :::
 
-Connect the `BarcodePickView` to the iOS view controller lifecycle. In particular, make sure to call `BarcodePickView.prepareSearching()` on your UIViewController’s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) method to make sure that start up time is optimal.
+Connect the `BarcodePickView` to the iOS view controller lifecycle: call `BarcodePickView.Start()` in your UIViewController’s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) method and `BarcodePickView.Stop()` in [`viewWillDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/viewwilldisappear(_:)).
 
 ```csharp
 public override void ViewWillAppear(bool animated)
 {
     base.ViewWillAppear(animated);
-    BarcodePickView.PrepareSearching();
+    BarcodePickView.Start();
 }
 
 public override void ViewWillDisappear(bool animated)
 {
     base.ViewWillDisappear(animated);
-    BarcodePickView.StopSearching();
+    BarcodePickView.Stop();
 }
 ```
 
-If your are developing on MAUI then connect the BarcodePickView to the MAUI page lifecycle.
+If you are developing on MAUI then connect the BarcodePickView to the MAUI page lifecycle.
 
-In particular, make sure to call `BarcodePickView.OnResume` on your [`Element.HandlerChanged`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.element.handlerchanged) event and `BarcodePickView.OnPause` on your [`Page.OnDisappearing`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.page.ondisappearing).
+In particular, make sure to call `BarcodePickView.Start()` on your [`Element.HandlerChanged`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.element.handlerchanged) event and `BarcodePickView.Stop()` on your [`Page.OnDisappearing`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.page.ondisappearing).
 
 ```csharp
-public FindBarcodePage()
+public PickBarcodePage()
 {
     this.BarcodePickView.HandlerChanged += SetupBarcodePickView;
 }
@@ -38968,14 +39153,14 @@ public FindBarcodePage()
 private void SetupBarcodePickView(object? sender, EventArgs args)
 {
     #if __IOS__
-    this.BarcodePickView.PrepareSearching();
+    this.BarcodePickView.Start();
     #endif
 }
 
 protected override void OnDisappearing()
 {
     base.OnDisappearing();
-    this.BarcodePickView.StopSearching();
+    this.BarcodePickView.Stop();
 }
 ```
 
@@ -38985,7 +39170,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Subscribe to a `BarcodePickView.onFinishButtonTapped` event to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```csharp
 BarcodePickView.FinishButtonTapped += (object? sender, FinishButtonTappedEventArgs e) =>
@@ -38994,9 +39179,9 @@ BarcodePickView.FinishButtonTapped += (object? sender, FinishButtonTappedEventAr
 };
 ```
 
-However, this convenient “finish” button is not supported with MAUI development. You can create the button manually and invoke `BarcodePickView.StopSearching` to achieve the same functionality. The following code snippet demonstrates how to do this:
+However, this convenient “finish” button is not supported with MAUI development. You can create the button manually and invoke `BarcodePickView.Stop()` to achieve the same functionality. The following code snippet demonstrates how to do this:
 
-`FindBarcodePage.xaml`:
+`PickBarcodePage.xaml`:
 ```csharp
 
     (...)
@@ -39004,13 +39189,13 @@ However, this convenient “finish” button is not supported with MAUI developm
 
 ```
 
-`FindBarcodePage.xaml.cs`:
+`PickBarcodePage.xaml.cs`:
 ```csharp
 private void FinishButtonClicked(object? sender, EventArgs args)
 {
     if (Application.Current?.MainPage is NavigationPage navigation)
     {
-        BarcodePickView.StopSearching();
+        BarcodePickView.Stop();
         navigation.PopToRootAsync(animated: true);
     }
 }
@@ -39018,7 +39203,7 @@ private void FinishButtonClicked(object? sender, EventArgs args)
 
 ## Start Searching
 
-With everything configured, you can now start searching for items. This is done by calling `BarcodePickView.start()`.
+With everything configured, you can now start searching for items. This is done by calling `BarcodePickView.Start()`.
 
 ```csharp
 barcodePickView.Start();
@@ -39068,7 +39253,7 @@ More data formats will be added in future releases. Please contact us if the dat
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -39085,6 +39270,7 @@ More data formats will be added in future releases. Please contact us if the dat
 
 * Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
 * Fixed a crash in the IdCapture overlay when it was tapped.
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Smart Label Capture
 
@@ -39128,9 +39314,6 @@ More data formats will be added in future releases. Please contact us if the dat
 
 #### Id
 
-* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
-* Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -39206,6 +39389,16 @@ More data formats will be added in future releases. Please contact us if the dat
 
 * Removed the deprecated Barcode Sequence view settings API; configure the view's settings directly on the view.
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -39333,6 +39526,10 @@ More data formats will be added in future releases. Please contact us if the dat
 
 * Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
 * Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Core
 
@@ -39557,11 +39754,32 @@ More data formats will be added in future releases. Please contact us if the dat
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
 * Fixed `BarcodeBatchBasicOverlayStyle.Frame` such that it now correctly displays as a frame on iOS and MAUI iOS platforms, where previously setting the style to `Frame` would incorrectly render as a dot due to an enum value mismatch in the iOS binding layer
 
+## 8.1.7
+
+**Released**: October 7, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Reverted the Matrix Scan Sequence stability and robustness improvements introduced in `8.1.6` because of issues when scanning one code at a time.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
+
 ## 8.1.6
 
 **Released**: July 29, 2026
 
-No updates for this framework in this release.
+### Bug Fixes
+
+#### Barcode
+
+* Matrix Scan Sequence: Improved stability and robustness
+  - Improved the stability of tray detection and tray ordering in MS Sequence. Fewer false trays are created on barcodes on product facings. Trays with a single barcode are created more conservatively, which reduces detection and ordering errors.
+  - Improved barcode tracking robustness in MS Sequence. Barcode overlays drift less during fast device motion.
 
 ## 8.1.5
 
@@ -39838,7 +40056,7 @@ This section explains all the available options to configure SparkScan to best f
 Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.SelectionMode`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.DefaultScanningMode`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
 :::note
-Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `DefaultScanningMode`.
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead.
 :::
 
 ### Selection Mode
@@ -42898,7 +43116,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-pick-view.html#interface-scandit.datacapture.barcode.pick.ui.IBarcodePickViewUiListener) to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```js
 barcodePickView.uiListener = {
@@ -42974,8 +43192,8 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
-* Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VizResult.visaNumber` (the MRZ result remains truncated).
+* Added `IdCaptureSettings.notifyOnSideCapture`. When enabled, the capture callback fires for both the front and the back side of a double-sided document, so your app gets a partial result independent of the back side scan. Use `CapturedId.isCapturingComplete` to tell a partial result from a complete one.
 
 ### Bug Fixes
 
@@ -42993,6 +43211,7 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
 * Fixed a crash in the IdCapture overlay when it was tapped.
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Smart Label Capture
 
@@ -43022,9 +43241,6 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
-* Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -43035,7 +43251,6 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Core
 
 * Added support in the GS1 parser for the telecom Application Identifiers 8040 (IMEI), 8041 (IMEI2), 8042 (eSIM/EID), and 8043 (pSIM), so GS1 codes carrying them parse instead of being rejected as unrecognized.
-* Added support for parsing the 2D-DOC (French 2D-Doc / ANTS) data format.
 * Added more detailed error reporting when required resources are missing.
 * Added iOS support for multiple DataCaptureView instances to render the camera preview simultaneously, so navigating between screens that each show a DataCaptureView no longer causes black or frozen previews, including during interactive edge-swipe transitions. DataCaptureView also now renders a preview when the frame source is an ImageFrameSource or SequenceFrameSource.
 * Added LicenseInfo.allowedModes, exposing the set of capture modes a license key permits via the new CaptureMode enum.
@@ -43110,6 +43325,16 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
 * Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -43265,6 +43490,10 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
 * Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
 * Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Core
 
@@ -43546,6 +43775,20 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Smart Label Capture
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
+
+## 8.1.7
+
+**Released**: October 7, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+
+#### Core
+
+* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
 
 ## 8.1.6
 
@@ -47586,7 +47829,7 @@ For important information about CDN risks and recommendations for production env
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VIZResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -47609,6 +47852,7 @@ For important information about CDN risks and recommendations for production env
 #### Id
 
 * Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Core
 
@@ -47633,9 +47877,7 @@ For important information about CDN risks and recommendations for production env
 
 #### Id
 
-* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
-* Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
+* Visa MRZ results now report country-specific additional details such as `MRZResult.visaNumber`, `MRZResult.visaNumberOfEntries`, `MRZResult.visaMultipleEntries` and `MRZResult.visaDurationInDays`.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -47712,6 +47954,16 @@ For important information about CDN risks and recommendations for production env
 #### Barcode
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -47852,6 +48104,10 @@ For important information about CDN risks and recommendations for production env
 #### Barcode
 
 * Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.4.1
 
@@ -48117,6 +48373,12 @@ For important information about CDN risks and recommendations for production env
 #### Smart Label Capture
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
+
+## 8.1.7
+
+**Released**: October 7, 2026
+
+No updates for this framework in this release.
 
 ## 8.1.6
 
@@ -49466,3 +49728,13 @@ if let path = Bundle.main.path(forResource: "index", ofType: "html") {
 :::note
 `loadFileURL` grants the web content a secure context on iOS, so `getUserMedia` works even for `file://` URLs when loaded this way.
 :::
+
+---
+
+## ShelfView
+
+# ShelfView
+
+[ShelfView](https://www.scandit.com/products/shelfview/) is integrated together with the Scandit team, so it has no public developer documentation.
+
+To integrate it, contact your Scandit account team or [support@scandit.com](mailto:support@scandit.com).
