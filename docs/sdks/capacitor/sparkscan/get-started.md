@@ -58,7 +58,7 @@ const sparkScan = new SparkScan(settings);
 
 The SparkScan built-in user interface includes the camera preview and scanning UI elements. These guide the user through the scanning process.
 
-The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings).
+The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings).
 
 ```js
 const viewSettings = new SparkScanViewSettings();
@@ -75,20 +75,20 @@ Add a `SparkScanView` to your view hierarchy. Construct a new SparkScan view. Th
 const sparkScanView = SparkScanView.forContext(DataCaptureContext.sharedInstance, sparkScan, viewSettings);
 ```
 
-Additionally, make sure to call [SparkScanView.stopScanning()](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your app state handling logic. You have to call this for the correct functioning of the
+Additionally, call [SparkScanView.stopScanning()](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your app state handling logic, for example when the app goes to the background. You have to call this for the correct functioning of the
 [SparkScanView](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView).
 
 ```js
-componentWillUnmount() {
-sparkScanView.stopScanning();
-}
-
-handleAppStateChange = async (nextAppState) => {
-if (nextAppState.match(/inactive|background/)) {
-sparkScanView.stopScanning();
-}
-}
+await sparkScanView.stopScanning();
 ```
+
+When the user leaves the scanning screen for good, also call [SparkScanView.dispose()](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.Dispose) to release the view's native resources:
+
+```js
+await sparkScanView.dispose();
+```
+
+Both methods return a promise, so call them from an async function.
 
 ## Register the Listener
 
@@ -99,19 +99,21 @@ To keep track of the barcodes that have been scanned, implement the
 // Register a listener object to monitor the spark scan session.
 
 const listener = {
-	didScan: (sparkScan, session, getFrameData) => {
+	didScan: async (sparkScan, session, getFrameData) => {
 		// Gather the recognized barcode
-		const barcode = session.newlyRecognizedBarcode[0];
+		const barcode = session.newlyRecognizedBarcode;
 
-		// Handle the barcode
+		if (barcode) {
+			// Handle the barcode
+		}
 	},
 };
 
 sparkScan.addListener(listener);
 ```
 
-[SparkScanListener.didScan()](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list:
-[SparkScanSession.newlyRecognizedBarcode](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode). Please note that this list only contains one barcode entry.
+[SparkScanListener.didScan()](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. It returns a promise, so the listener is `async`. Read the scanned barcode from
+[SparkScanSession.newlyRecognizedBarcode](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode), which holds a single `Barcode`, or `null` when no new barcode was recognized.
 
 ## Scan Some Barcodes
 
