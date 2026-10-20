@@ -21,6 +21,7 @@
     "test:search-facets": "node scripts/test-search-facets.cjs",
     "test:robots": "node scripts/test-robots.cjs",
     "verify:frameworks": "node scripts/verify-frameworks.cjs",
+    "verify:agents-md": "node scripts/verify-agents-md.cjs",
     "test:frameworks": "node scripts/test-frameworks.cjs",
     "test:docs-gate": "node scripts/test-docs-gate.cjs",
     "verify:api-reference-seo": "node scripts/verify-api-reference-seo.cjs",

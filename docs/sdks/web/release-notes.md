@@ -18,7 +18,7 @@ keywords:
 
 #### Id
 
-* Added VIZ capture support for the Canadian Visa, including extraction of the full-length visa number.
+* Visa VIZ results for Canadian visa stickers now report the full 10-character number in `VIZResult.visaNumber` (the MRZ result remains truncated).
 
 ### Bug Fixes
 
@@ -41,6 +41,7 @@ keywords:
 #### Id
 
 * Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 #### Core
 
@@ -65,9 +66,7 @@ keywords:
 
 #### Id
 
-* ICAO Machine Readable Visas now return passport number, visa number as well as number of stays and durations from the MRZ of supported documents.
-* Added IdCaptureSettings.notifyOnSideCapture, which fires the capture callback after each side of a multi-sided document, and CapturedId.isCapturingComplete, which distinguishes a partial (single-side) result from a complete one.
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
+* Visa MRZ results now report country-specific additional details such as `MRZResult.visaNumber`, `MRZResult.visaNumberOfEntries`, `MRZResult.visaMultipleEntries` and `MRZResult.visaDurationInDays`.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -144,6 +143,16 @@ keywords:
 #### Barcode
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -284,6 +293,10 @@ keywords:
 #### Barcode
 
 * Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.4.1
 
@@ -549,6 +562,12 @@ keywords:
 #### Smart Label Capture
 
 * Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
+
+## 8.1.7
+
+**Released**: October 7, 2026
+
+No updates for this framework in this release.
 
 ## 8.1.6
 

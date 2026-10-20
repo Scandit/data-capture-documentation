@@ -72,6 +72,12 @@ keywords:
 * Fixed `sc_camera_get_frame` hanging indefinitely when the camera is disconnected while streaming. It now returns promptly instead of blocking.
 * Fixed the Python camera sample (`CommandLineBarcodeScannerCameraSample.py`) crashing at startup.
 
+## 8.5.4
+
+**Released**: October 19, 2026
+
+No updates for this framework in this release.
+
 ## 8.5.3
 
 **Released**: August 18, 2026
@@ -221,6 +227,12 @@ No updates for this framework in this release.
 #### Barcode
 
 * Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
+
+## 8.1.7
+
+**Released**: October 7, 2026
+
+No updates for this framework in this release.
 
 ## 8.1.6
 

@@ -606,6 +606,81 @@ check("dataFileErrors reports a per-part miss and counts what it checked", () =>
   );
 });
 
+check("productCoverageErrors requires every SDK framework on every product", () => {
+  const sdk = ["iOS", "Linux"];
+  // An absent framework is an error even though every name present is valid -
+  // the hole the one-directional name check left, through which Linux went
+  // missing from every product.
+  const absent = verify.productCoverageErrors(
+    "p.json",
+    [{ key: "a", frameworks: { iOS: { version: "8.6" } } }],
+    sdk,
+  );
+  assert.strictEqual(absent.length, 1, JSON.stringify(absent));
+  assert.match(absent[0], /entry "a" does not state "Linux"/);
+
+  // An explicit n/a is a decision, not a gap.
+  assert.deepStrictEqual(
+    verify.productCoverageErrors(
+      "p.json",
+      [{ key: "a", frameworks: { iOS: { version: "8.6" }, Linux: { version: "n/a" } } }],
+      sdk,
+    ),
+    [],
+  );
+
+  // A placeholder version is caught, not rendered as "Linux vTBD".
+  const bad = verify.productCoverageErrors(
+    "p.json",
+    [{ key: "a", frameworks: { iOS: { version: "8.6.1" }, Linux: { version: "TBD" } } }],
+    sdk,
+  );
+  assert.strictEqual(bad.length, 1, JSON.stringify(bad));
+  assert.match(bad[0], /"Linux" has version "TBD"/);
+
+  // Unreadable inputs say the check is unperformed rather than passing.
+  assert.match(verify.productCoverageErrors("p.json", {}, sdk)[0], /coverage is unchecked/);
+  assert.match(verify.productCoverageErrors("p.json", [], [])[0], /coverage is unchecked/);
+});
+
+
+check("agentsMdErrors catches stale commands, scripts, paths and volatile facts", () => {
+  const agents = require("./verify-agents-md.cjs");
+  const ctx = { scripts: ["build", "docs:gate"], exists: (p) => p === "scripts/update-version.py" || p === "docs/" };
+  // Clean: real script, real path, a placeholder path and a URL path are fine.
+  assert.deepStrictEqual(
+    agents.agentsMdErrors(
+      [
+        "Run `npm run build`.",
+        "```bash",
+        "python scripts/update-version.py <v>  # release",
+        "```",
+        "See `docs/`, `versioned_docs/version-<X.Y.Z>/` and `/sdks/ios/`.",
+      ].join("\n"),
+      ctx,
+    ),
+    [],
+  );
+  // The defects AGENTS.md actually had.
+  const errs = agents.agentsMdErrors(
+    [
+      "```bash",
+      "python scripts/create_version.py 8.1.0",
+      "```",
+      "Run `npm run nope`.",
+      "See `src/missing.ts`.",
+      "1. **Docs** (lines 236-274):",
+      "*Last updated: 2025-12-11*",
+    ].join("\n"),
+    ctx,
+  );
+  assert.strictEqual(errs.length, 5, JSON.stringify(errs));
+  assert.ok(errs.some((e) => /create_version\.py`, which does not exist/.test(e)));
+  assert.ok(errs.some((e) => /`nope` is not a script/.test(e)));
+  assert.ok(errs.some((e) => /src\/missing\.ts` does not exist/.test(e)));
+  assert.ok(errs.some((e) => /cites file line numbers/.test(e)));
+  assert.ok(errs.some((e) => /Last updated/.test(e)));
+});
 
 check("topLevelOnly blanks nested spans and topLevelPairs splits at depth 0", () => {
   // Asserted as properties, not as an exact padding width: the point is that

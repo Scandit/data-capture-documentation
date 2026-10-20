@@ -14,7 +14,8 @@
       "Titanium": { "version": "6.8", "apiUrl": "/sdks/titanium/barcode-capture/get-started" },
       "Web": { "version": "6.13", "apiUrl": "/sdks/web/barcode-capture/get-started" },
       ".NET iOS": { "version": "6.16", "apiUrl": "/sdks/net/ios/barcode-capture/get-started" },
-      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/barcode-capture/get-started" }
+      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/barcode-capture/get-started" },
+      "Linux": { "version": "4.6", "apiUrl": "/sdks/linux/barcode-capture/configure-with-json" }
     }
   },
   {
@@ -32,7 +33,8 @@
       "Titanium": { "version": "n/a" },
       "Web": { "version": "6.24", "apiUrl": "/sdks/web/sparkscan/intro" },
       ".NET iOS": { "version": "6.22", "apiUrl": "/sdks/net/ios/sparkscan/intro" },
-      ".NET Android": { "version": "6.22", "apiUrl": "/sdks/net/android/sparkscan/intro" }
+      ".NET Android": { "version": "6.22", "apiUrl": "/sdks/net/android/sparkscan/intro" },
+      "Linux": { "version": "n/a" }
     }
   },
   {
@@ -50,7 +52,8 @@
       "Titanium": { "version": "n/a" },
       "Web": { "version": "6.19", "apiUrl": "/sdks/web/matrixscan/intro" },
       ".NET iOS": { "version": "6.16", "apiUrl": "/sdks/net/ios/matrixscan/intro" },
-      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/matrixscan/intro" }
+      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/matrixscan/intro" },
+      "Linux": { "version": "n/a" }
     }
   },
   {
@@ -68,7 +71,8 @@
       "Titanium": { "version": "n/a" },
       "Web": { "version": "7.1", "apiUrl": "/sdks/web/matrixscan-ar/intro" },
       ".NET iOS": { "version": "7.2", "apiUrl": "/sdks/net/ios/matrixscan-ar/intro" },
-      ".NET Android": { "version": "7.2", "apiUrl": "/sdks/net/android/matrixscan-ar/intro" }
+      ".NET Android": { "version": "7.2", "apiUrl": "/sdks/net/android/matrixscan-ar/intro" },
+      "Linux": { "version": "n/a" }
     }
   },
   {
@@ -86,7 +90,8 @@
       "Titanium": { "version": "n/a" },
       "Web": { "version": "n/a" },
       ".NET iOS": { "version": "6.19", "apiUrl": "/sdks/net/ios/matrixscan-count/intro" },
-      ".NET Android": { "version": "6.19", "apiUrl": "/sdks/net/android/matrixscan-count/intro" }
+      ".NET Android": { "version": "6.19", "apiUrl": "/sdks/net/android/matrixscan-count/intro" },
+      "Linux": { "version": "n/a" }
     }
   },
   {
@@ -104,7 +109,8 @@
       "Titanium": { "version": "n/a" },
       "Web": { "version": "6.28", "apiUrl": "/sdks/web/matrixscan-find/intro" },
       ".NET iOS": { "version": "6.22", "apiUrl": "/sdks/net/ios/matrixscan-find/intro" },
-      ".NET Android": { "version": "6.21", "apiUrl": "/sdks/net/android/matrixscan-find/intro" }
+      ".NET Android": { "version": "6.21", "apiUrl": "/sdks/net/android/matrixscan-find/intro" },
+      "Linux": { "version": "n/a" }
     }
   },
   {
@@ -122,7 +128,8 @@
       "Titanium": { "version": "n/a" },
       "Web": { "version": "n/a" },
       ".NET iOS": { "version": "6.26", "apiUrl": "/sdks/net/ios/matrixscan-pick/intro" },
-      ".NET Android": { "version": "6.24", "apiUrl": "/sdks/net/android/matrixscan-pick/intro" }
+      ".NET Android": { "version": "6.24", "apiUrl": "/sdks/net/android/matrixscan-pick/intro" },
+      "Linux": { "version": "n/a" }
     }
   },
   {
@@ -140,7 +147,8 @@
       "Titanium": { "version": "n/a" },
       "Web": { "version": "n/a" },
       ".NET iOS": { "version": "6.16", "apiUrl": "/sdks/net/ios/barcode-selection/intro" },
-      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/barcode-selection/intro" }
+      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/barcode-selection/intro" },
+      "Linux": { "version": "n/a" }
     }
   },
   {
@@ -158,7 +166,8 @@
       "Titanium": { "version": "n/a" },
       "Web": { "version": "7.2", "apiUrl": "/sdks/web/label-capture/intro" },
       ".NET iOS": { "version": "8.2", "apiUrl": "/sdks/net/ios/label-capture/intro"  },
-      ".NET Android": { "version": "8.1", "apiUrl": "/sdks/net/android/label-capture/intro"  }
+      ".NET Android": { "version": "8.1", "apiUrl": "/sdks/net/android/label-capture/intro"  },
+      "Linux": { "version": "n/a" }
     }
   },
   {
@@ -176,7 +185,8 @@
       "Titanium": { "version": "n/a" },
       "Web": { "version": "6.13", "apiUrl": "/sdks/web/id-capture/intro" },
       ".NET iOS": { "version": "6.16", "apiUrl": "/sdks/net/ios/id-capture/intro" },
-      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/id-capture/intro" }
+      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/id-capture/intro" },
+      "Linux": { "version": "n/a" }
     }
   },
   {
@@ -194,7 +204,8 @@
       "Titanium": { "version": "n/a" },
       "Web": { "version": "6.25", "apiUrl": "/sdks/web/parser/get-started" },
       ".NET iOS": { "version": "6.16", "apiUrl": "/sdks/net/ios/parser/get-started" },
-      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/parser/get-started" }
+      ".NET Android": { "version": "6.16", "apiUrl": "/sdks/net/android/parser/get-started" },
+      "Linux": { "version": "n/a" }
     }
   },
   {
@@ -212,7 +223,8 @@
       "Titanium": { "version": "n/a" },
       "Web": { "version": "n/a" },
       ".NET iOS": { "version": "8.6", "apiUrl": "/sdks/net/ios/barcode-generator/" },
-      ".NET Android": { "version": "8.6", "apiUrl": "/sdks/net/android/barcode-generator/" }
+      ".NET Android": { "version": "8.6", "apiUrl": "/sdks/net/android/barcode-generator/" },
+      "Linux": { "version": "5.8", "apiUrl": "/sdks/linux/barcode-generator" }
     }
   },
   {
@@ -225,11 +237,13 @@
       "Cordova": { "version": "n/a" },
       "React Native": { "version": "n/a" },
       "Flutter": { "version": "n/a" },
+      "Kotlin Multiplatform": { "version": "n/a" },
       "Capacitor": { "version": "n/a" },
       "Titanium": { "version": "n/a" },
       "Web": { "version": "n/a" },
       ".NET iOS": { "version": "8.6", "apiUrl": "n/a" },
-      ".NET Android": { "version": "8.6", "apiUrl": "n/a" }
+      ".NET Android": { "version": "8.6", "apiUrl": "n/a" },
+      "Linux": { "version": "n/a" }
     }
   }
 ]

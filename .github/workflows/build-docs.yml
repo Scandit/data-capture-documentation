@@ -52,6 +52,13 @@ jobs:
       - name: Verify framework identifiers
         run: yarn verify:frameworks
 
+      # AGENTS.md is the guide every AI agent here follows. It once told agents
+      # to run a script that never existed and cited config line numbers that
+      # had moved; nothing failed. This fails on a script, path or command it
+      # names that does not exist, and on line-number references or date stamps.
+      - name: Verify AGENTS.md references
+        run: yarn verify:agents-md
+
       # Pins the membership of every derived framework map. The refactor risk
       # here is not a crash, it is a map quietly gaining or losing an entry.
       - name: Test framework registry

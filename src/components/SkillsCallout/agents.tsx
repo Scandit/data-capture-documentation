@@ -60,23 +60,20 @@ export const AGENT_INSTALLS: AgentInstall[] = [
   {
     key: 'claude-code',
     label: 'Claude Code',
-    where: 'Paste these in Claude Code, one at a time.',
+    where: 'Paste this in Claude Code.',
     commands: [
       {
-        command: `/plugin marketplace add ${repoSlug}`,
-        trackingId: 'claude-code-marketplace',
-      },
-      {
-        command: '/plugin install scandit-sdk@scandit-plugins',
+        command: '/plugin install scandit-sdk@claude-plugins-official',
         trackingId: 'claude-code-plugin',
       },
     ],
-    update: (
+    note: (
       <>
-        Run <code>/plugin</code> → <strong>Marketplaces</strong> →{' '}
-        <code>scandit-plugins</code> → <strong>Enable auto-update</strong>.
+        Or run <code>/plugin</code> → <strong>Discover</strong> and search for{' '}
+        <strong>Scandit SDK</strong>.
       </>
     ),
+    update: 'Automatic.',
   },
   {
     key: 'codex',
