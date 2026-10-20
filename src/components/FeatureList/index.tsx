@@ -7,7 +7,9 @@ import { FeatureListProps, Feature, Product, FilteredFeature } from './types';
 import productsData from '@site/src/data/products.json';
 import featuresData from '@site/src/data/features.json';
 import { frameworkFromPath } from '@site/src/constants/frameworks';
-import { withCurrentDocsPath } from '@site/src/constants/docsPaths';
+import { apiReferenceUrl } from '@site/src/constants/docsPaths';
+import { featureExistsIn } from './availability';
+import { useActiveDocContext } from '@docusaurus/plugin-content-docs/client';
 
 // Function to render description with inline code formatting
 const renderDescription = (description: string) => {
@@ -31,6 +33,9 @@ const FeatureList: React.FC<FeatureListProps> = ({
   className = ''
 }) => {
   const { siteConfig } = useDocusaurusContext();
+  // Which docs version the reader is on, so API links point at that version's
+  // API-reference line rather than at whatever released most recently.
+  const activeVersionName = useActiveDocContext(undefined)?.activeVersion?.name;
   const [filteredFeatures, setFilteredFeatures] = useState<FilteredFeature[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -65,19 +70,25 @@ const FeatureList: React.FC<FeatureListProps> = ({
         // Filter by tag
         if (tag && feature.tag !== tag) return false;
         
-        // Filter by framework availability if framework is specified
+        // Filter by framework availability if framework is specified.
+        // Availability is version-aware: a feature added in 8.2 does not exist
+        // on a 7.6 page, and now that its API link resolves against 7.6 rather
+        // than the unversioned reference, showing it would give a 404.
         if (currentFramework) {
           const frameworkInfo = feature.frameworks[currentFramework];
-          if (!frameworkInfo || frameworkInfo.version === 'n/a') {
-            return false; // Don't show features not available for this framework
+          if (!featureExistsIn(frameworkInfo?.version, activeVersionName)) {
+            return false;
           }
         }
         
         return true;
       })
       .map((feature: Feature) => {
-        const isAvailable = currentFramework 
-          ? feature.frameworks[currentFramework] && feature.frameworks[currentFramework].version !== 'n/a'
+        const isAvailable = currentFramework
+          ? featureExistsIn(
+              feature.frameworks[currentFramework]?.version,
+              activeVersionName,
+            )
           : true;
         
         return {
@@ -127,10 +138,12 @@ const FeatureList: React.FC<FeatureListProps> = ({
     
     if (currentFramework && feature.frameworks[currentFramework]) {
       const frameworkInfo = feature.frameworks[currentFramework];
-      // products.json stores version-agnostic /sdks/<framework>/... paths;
-      // frameworks that only exist in the unreleased docs need the current
-      // version prefix or they resolve into the released tree and 404.
-      return frameworkInfo.apiUrl ? withCurrentDocsPath(frameworkInfo.apiUrl) : null;
+      // features.json stores the path WITHIN the API reference; the version is
+      // applied here, because one shared data file serves every docs version
+      // and there is no single correct prefix to bake into it.
+      return frameworkInfo.apiUrl
+        ? apiReferenceUrl(frameworkInfo.apiUrl, activeVersionName)
+        : null;
     }
     return null;
   };
@@ -198,24 +211,26 @@ const FeatureList: React.FC<FeatureListProps> = ({
                 <td>
                   <div className={styles.frameworkList}>
                     {Object.entries(feature.frameworks)
-                      .filter(([, info]) => info.version !== 'n/a')
+                      .filter(([, info]) =>
+                        featureExistsIn(info.version, activeVersionName),
+                      )
                       .map(([frameworkName, frameworkInfo]) => (
                         // The ELEMENT changes, not just the href. Guarding the
-                        // href alone rendered the same DOM - withCurrentDocsPath
-                        // returns undefined for undefined and React omits the
+                        // href alone rendered the same DOM - the URL helper
+                        // returned undefined for undefined and React omits the
                         // attribute - so the chip stayed an <a> with no href:
                         // not keyboard-focusable, navigating nowhere, still
                         // showing the link hover. 17 cells in features.json
                         // carry no apiUrl, of which 16 reach this branch - the
                         // 17th is Web / 7-Segment Display, filtered out earlier
-                        // by version === "n/a".
+                        // by featureExistsIn (version "n/a").
                         // Latent only while every usage is compact mode, which
                         // skips this column. Same shape as the feature-name cell
                         // above, which swaps <a> for <h4>.
                         frameworkInfo.apiUrl ? (
                           <a
                             key={frameworkName}
-                            href={withCurrentDocsPath(frameworkInfo.apiUrl)}
+                            href={apiReferenceUrl(frameworkInfo.apiUrl, activeVersionName)}
                             className={styles.frameworkItem}
                             target="_blank"
                             rel="noopener noreferrer"
