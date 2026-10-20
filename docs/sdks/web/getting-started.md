@@ -100,15 +100,23 @@ const settings = new SparkScanSettings();
 settings.enableSymbologies([Symbology.EAN13UPCA, Symbology.Code128]);
 settings.codeDuplicateFilter = 0;
 settings.scanIntention = ScanIntention.Smart;
+settings.selectionMode = SelectionMode.Auto;
 ```
+
+`barcodeCaptureLoader`, `ScanIntention`, `SelectionMode`, `Symbology` and the SparkScan classes come from `@scandit/web-datacapture-barcode`. `DataCaptureContext` comes from `@scandit/web-datacapture-core`. The API reference lists `ScanIntention` and `SelectionMode` under core, but you import them from the barcode package.
 
 In this example, we're:
 
 - Enabling both EAN-13 and Code 128 symbologies
 - Setting the code duplicate filter to 0, meaning the same code can be reported multiple times
 - Using the Smart [scan intention](https://docs.scandit.com/data-capture-sdk/web/core/api/scan-intention.html#enum-scandit.datacapture.core.ScanIntention) algorithm, to reduce the likelihood of unintended scans
+- Setting the [selection mode](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode) to *Auto*, so the SDK decides when users need to confirm the barcode they aim at. *Auto* works only with the Smart scan intention
 
-Lastly, we apply the settings to the SparkScan instance.
+Then create the SparkScan mode with these settings:
+
+```typescript
+const sparkScan = SparkScan.forSettings(settings);
+```
 
 ### 4. Setup the SparkScanView
 
@@ -116,77 +124,54 @@ Now we'll create and configure the scanner view and it's settings. This is done 
 
 ```typescript
 const viewSettings = new SparkScanViewSettings();
-viewSettings.defaultScanningMode = new SparkScanScanningModeTarget();
 viewSettings.soundEnabled = true;
 viewSettings.hapticEnabled = false;
 ```
 
 In this example, we're:
 
-- Setting the default scanning mode to `SparkScanScanningModeTarget` for precision scanning
 - Enabling sound feedback
 - Disabling haptic feedback
 
 Next, we create the `SparkScanView` instance, adding the scanning interface to the application.
 
-There are two valid ways to instantiate the `SparkScanView`:
-
-**Option 1 — Web Component (recommended for React and other frameworks):**
-
-Register the web component once, then use the `<spark-scan-view>` custom element:
-
-```typescript
-SparkScanView.register();
-
-// In your render/component:
-(context && sparkScan) && <spark-scan-view
-  dataCaptureContext={context}
-  sparkScan={sparkScan}
-  sparkScanViewSettings={viewSettings}
-/>
-```
-
-**Option 2 — `SparkScanView.forElement()` (vanilla JS):**
+Add an element for the view to your page, for example `<div id="spark-scan-ui"></div>`, then create the view in it with `SparkScanView.forElement()`:
 
 ```typescript
 const sparkScanView = SparkScanView.forElement(
-  document.getElementById("spark-scan-ui"),
+  document.getElementById("spark-scan-ui")!,
   context,
   sparkScan,
   viewSettings
 );
 ```
 
-In your application's state handling logic, you must also call the `stopScanning` method when the scanner is no longer needed:
+You must also call the `stopScanning` method when the scanner is no longer needed, for example when the user navigates away from the scanning screen:
 
 ```typescript
-useEffect(() => {
-  return () => {
-    sparkScanViewRef.current?.stopScanning().catch(console.error);
-  };
-}, []);
+await sparkScanView.stopScanning();
 ```
-
-For a complete React integration example, see the [SparkScan React Sample](https://github.com/Scandit/datacapture-web-samples/tree/master/05_Framework_Integration_Samples/SparkScanReactSample).
 
 ### 5. Implement the Listener
 
 Lastly, you need to implement the listener to handle the scanned data. This is done by creating an instance of the [`SparkScanListener`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) class:
 
 ```typescript
-const listener = {
-	didScan: (sparkScan, session, getFrameData) => {
+const listener: SparkScanListener = {
+	didScan: (sparkScan, session, frameData) => {
 		// Gather the recognized barcode
 		const barcode = session.newlyRecognizedBarcode;
 
-		// Handle the barcode
+		if (barcode) {
+			// Handle the barcode
+		}
 	},
 };
 
 sparkScan.addListener(listener);
 ```
 
-Here, `didScan()` is called when a barcode is recognized. You can access the recognized barcode data from the `SparkScanSession` object.
+`SparkScanListener` is a type, so import it with `import type` from `@scandit/web-datacapture-barcode`. Here, `didScan()` is called when a barcode is recognized. You can access the recognized barcode data from the `SparkScanSession` object.
 
 ### 6. Next Steps
 
