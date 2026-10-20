@@ -1,4 +1,6 @@
 import React from 'react';
+import Link from '@docusaurus/Link';
+import { useLocation } from '@docusaurus/router';
 
 import skillsData from '@site/src/data/skills.json';
 import productsData from '@site/src/data/products.json';
@@ -41,6 +43,7 @@ interface FrameworkSkillEntry {
 }
 
 const REPO_URL = 'https://github.com/scandit/skills';
+const MCP_GUIDE_SLUG = 'scandit-mcp-installation-guide';
 
 const SKILL_DESCRIPTIONS: Record<string, string> = {
   sparkscan: 'SparkScan integration & migration.',
@@ -59,6 +62,11 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
   const products = productsData as ProductEntry[];
   const productsByKey = Object.fromEntries(products.map((p) => [p.key, p]));
   const frameworkSlug = frameworkToSlug(framework);
+  // The MCP guide is a child of this page in every SDK sidebar. Resolving it
+  // from the current path keeps the link inside whichever docs version and
+  // SDK the reader is on, instead of hard-coding /sdks/<segment>/.
+  const { pathname } = useLocation();
+  const mcpGuideUrl = `${pathname.replace(/\/$/, '')}/${MCP_GUIDE_SLUG}/`;
 
   // Example prompts name real skills for the framework being read, so every
   // snippet on the page is copy-pasteable as-is.
@@ -233,6 +241,17 @@ const SkillsPage: React.FC<SkillsPageProps> = ({ framework }) => {
         trackingId="cli-single-skill"
         framework={frameworkSlug}
       />
+
+      <h2 id="scandit-mcp-installation">Scandit MCP installation</h2>
+      <p>
+        Installing the plugin with <code>npx plugins add</code>, or from the
+        Claude Code, Cursor, Codex CLI, or Copilot CLI marketplace, also
+        installs the Scandit MCP server automatically. The server provisions a
+        trial license key and writes it into your project. The ChatGPT and
+        Codex plugin directory ships the skills only. To install the MCP server
+        on its own, without the skills, follow the{' '}
+        <Link to={mcpGuideUrl}>MCP Installation Guide</Link>.
+      </p>
 
       <h2>Learn more</h2>
       <ul className={styles.learnMore}>
