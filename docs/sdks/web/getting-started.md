@@ -135,38 +135,7 @@ In this example, we're:
 
 Next, we create the `SparkScanView` instance, adding the scanning interface to the application.
 
-There are two valid ways to instantiate the `SparkScanView`:
-
-**Option 1 — Web Component (recommended for React and other frameworks):**
-
-Register the web component once, then use the `<spark-scan-view>` custom element:
-
-```typescript
-SparkScanView.register();
-
-// In your component:
-const stopOnRemove = useCallback((view: SparkScanView | null) => {
-  return () => {
-    view?.stopScanning().catch(console.error);
-  };
-}, []);
-
-// In its render:
-(context && sparkScan) && <spark-scan-view
-  dataCaptureContext={context}
-  sparkScan={sparkScan}
-  sparkScanViewSettings={viewSettings}
-  ref={stopOnRemove}
-/>
-```
-
-This option needs React 19 or later: earlier versions pass `dataCaptureContext`, `sparkScan` and `sparkScanViewSettings` to custom elements as strings, so the view never gets them. The `ref` callback returns a cleanup function that stops scanning. React 19 calls it when the element is removed, and also whenever the callback itself changes, so keep the callback stable with `useCallback`. `stopScanning` returns a promise, so its errors are caught instead of awaited.
-
-In TypeScript, declare the element's JSX type first, as in the React sample's [`spark-scan-view.d.ts`](https://github.com/Scandit/datacapture-web-samples/blob/master/05_Framework_Integration_Samples/SparkScanReactSample/src/spark-scan-view.d.ts). Without it, the compiler reports that `spark-scan-view` doesn't exist on `JSX.IntrinsicElements`.
-
-**Option 2 — `SparkScanView.forElement()` (without a framework):**
-
-Add an element for the view to your page, for example `<div id="spark-scan-ui"></div>`, then create the view in it:
+Add an element for the view to your page, for example `<div id="spark-scan-ui"></div>`, then create the view in it with `SparkScanView.forElement()`:
 
 ```typescript
 const sparkScanView = SparkScanView.forElement(
@@ -177,13 +146,11 @@ const sparkScanView = SparkScanView.forElement(
 );
 ```
 
-With Option 2, you must also call the `stopScanning` method when the scanner is no longer needed, for example when the user leaves the page:
+You must also call the `stopScanning` method when the scanner is no longer needed, for example when the user navigates away from the scanning screen:
 
 ```typescript
 await sparkScanView.stopScanning();
 ```
-
-For a complete React integration example, see the [SparkScan React Sample](https://github.com/Scandit/datacapture-web-samples/tree/master/05_Framework_Integration_Samples/SparkScanReactSample).
 
 ### 5. Implement the Listener
 
