@@ -6981,7 +6981,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-pick-view.html#interface-scandit.datacapture.barcode.pick.ui.IBarcodePickViewUiListener) to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```kotlin
 barcodePickView.uiListener = object : BarcodePickViewUiListener {
@@ -7197,6 +7197,16 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Removed the deprecated Barcode Sequence view settings API; configure the view's settings directly on the view.
 * Deprecated the alternative (accessible) color scheme for Barcode Count; it will be removed in a future release. The default color scheme now provides an accessible appearance, so you can remove the explicit setting.
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -8017,7 +8027,7 @@ The selection mode determines whether an aimer is shown in the preview to help w
 | **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-*Auto* requires [`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
+*Auto* requires [`SparkScanSettings.scanIntention`](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -9507,6 +9517,9 @@ npm install scandit-capacitor-datacapture-core
 
 # Barcode scanning functionality
 npm install scandit-capacitor-datacapture-barcode
+
+# Add the native parts of the plugins to your Android and iOS projects
+npx cap sync
 ```
 
 ### 2. Initialize the Data Capture Context
@@ -9530,13 +9543,23 @@ const settings = new SparkScanSettings();
 settings.enableSymbologies([Symbology.EAN13UPCA, Symbology.Code128]);
 settings.codeDuplicateFilter = 0;
 settings.scanIntention = ScanIntention.Smart;
+settings.selectionMode = SelectionMode.Auto;
 ```
+
+`DataCaptureContext`, `ScanIntention` and `SelectionMode` come from `scandit-capacitor-datacapture-core`. `Symbology` and the SparkScan classes come from `scandit-capacitor-datacapture-barcode`.
 
 In this example, we're:
 
 - Enabling both EAN-13 and Code 128 symbologies
 - Setting the code duplicate filter to 0, meaning the same code can be reported multiple times
 - Using the Smart [scan intention](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/scan-intention.html#enum-scandit.datacapture.core.ScanIntention) algorithm, to reduce the likelihood of unintended scans
+- Setting the [selection mode](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode) to *Auto*, so the SDK decides when users need to confirm the barcode they aim at. *Auto* works only with the Smart scan intention
+
+Then create the SparkScan mode with these settings:
+
+```js
+const sparkScan = new SparkScan(settings);
+```
 
 ### 4. Setup the SparkScanView
 
@@ -9544,14 +9567,12 @@ Now we'll create and configure the scanner view and it's settings. This is done 
 
 ```js
 const viewSettings = new SparkScanViewSettings();
-viewSettings.defaultScanningMode = new SparkScanScanningModeTarget(SparkScanScanningBehavior.Single);
 viewSettings.soundEnabled = true;
 viewSettings.hapticEnabled = false;
 ```
 
 In this example, we're:
 
-- Setting the default scanning mode to `SparkScanScanningModeTarget` for precision scanning
 - Enabling sound feedback
 - Disabling haptic feedback
 
@@ -9561,19 +9582,19 @@ Next, we create the `SparkScanView` instance, adding the scanning interface to t
 const sparkScanView = SparkScanView.forContext(DataCaptureContext.sharedInstance, sparkScan, viewSettings);
 ```
 
-In your application's state handling logic, you must also call the `stopScanning` method when the scanner is no longer needed:
+You must also stop scanning when the scanner is no longer needed, for example when the app goes to the background:
 
 ```js
-componentWillUnmount() {
-sparkScanView.stopScanning();
-}
-
-handleAppStateChange = async (nextAppState) => {
-if (nextAppState.match(/inactive|background/)) {
-sparkScanView.stopScanning();
-}
-};
+await sparkScanView.stopScanning();
 ```
+
+When the user leaves the scanning screen for good, also dispose of the view to release its native resources:
+
+```js
+await sparkScanView.dispose();
+```
+
+Both methods return a promise, so call them from an async function.
 
 ### 5. Implement the Listener
 
@@ -9581,11 +9602,13 @@ Lastly, you need to implement the listener to handle the scanned data. This is d
 
 ```js
 const listener = {
-	didScan: (sparkScan, session, getFrameData) => {
+	didScan: async (sparkScan, session, getFrameData) => {
 		// Gather the recognized barcode
-		const barcode = session.newlyRecognizedBarcode[0];
+		const barcode = session.newlyRecognizedBarcode;
 
-		// Handle the barcode
+		if (barcode) {
+			// Handle the barcode
+		}
 	},
 };
 
@@ -11427,7 +11450,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/barcode-pick-view.html#interface-scandit.datacapture.barcode.pick.ui.IBarcodePickViewUiListener) to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```js
 barcodePickView.uiListener = {
@@ -11552,7 +11575,6 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -11636,6 +11658,16 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
 * Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -12399,7 +12431,7 @@ The selection mode determines whether an aimer is shown in the preview to help w
 | **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
+*Auto* requires [`SparkScanSettings.scanIntention`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -12412,7 +12444,7 @@ The scanning behavior determines how barcodes are scanned - one at a time or con
 | **Continuous scan** | Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.  |
 
 :::tip
-Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled (`SDCSparkScanViewSettings.holdToScanEnabled`).
+Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
 :::
 
 ### Preview Behavior
@@ -12495,7 +12527,7 @@ const sparkScan = new SparkScan(settings);
 
 The SparkScan built-in user interface includes the camera preview and scanning UI elements. These guide the user through the scanning process.
 
-The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings).
+The [`SparkScanView`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView) appearance can be customized through [`SparkScanViewSettings`](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view-settings.html#class-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings).
 
 ```js
 const viewSettings = new SparkScanViewSettings();
@@ -12512,20 +12544,20 @@ Add a `SparkScanView` to your view hierarchy. Construct a new SparkScan view. Th
 const sparkScanView = SparkScanView.forContext(DataCaptureContext.sharedInstance, sparkScan, viewSettings);
 ```
 
-Additionally, make sure to call [SparkScanView.stopScanning()](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your app state handling logic. You have to call this for the correct functioning of the
+Additionally, call [SparkScanView.stopScanning()](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.StopScanning) in your app state handling logic, for example when the app goes to the background. You have to call this for the correct functioning of the
 [SparkScanView](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#class-scandit.datacapture.barcode.spark.ui.SparkScanView).
 
 ```js
-componentWillUnmount() {
-sparkScanView.stopScanning();
-}
-
-handleAppStateChange = async (nextAppState) => {
-if (nextAppState.match(/inactive|background/)) {
-sparkScanView.stopScanning();
-}
-}
+await sparkScanView.stopScanning();
 ```
+
+When the user leaves the scanning screen for good, also call [SparkScanView.dispose()](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/ui/spark-scan-view.html#method-scandit.datacapture.barcode.spark.ui.SparkScanView.Dispose) to release the view's native resources:
+
+```js
+await sparkScanView.dispose();
+```
+
+Both methods return a promise, so call them from an async function.
 
 ## Register the Listener
 
@@ -12536,19 +12568,21 @@ To keep track of the barcodes that have been scanned, implement the
 // Register a listener object to monitor the spark scan session.
 
 const listener = {
-	didScan: (sparkScan, session, getFrameData) => {
+	didScan: async (sparkScan, session, getFrameData) => {
 		// Gather the recognized barcode
-		const barcode = session.newlyRecognizedBarcode[0];
+		const barcode = session.newlyRecognizedBarcode;
 
-		// Handle the barcode
+		if (barcode) {
+			// Handle the barcode
+		}
 	},
 };
 
 sparkScan.addListener(listener);
 ```
 
-[SparkScanListener.didScan()](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. This result can be retrieved from the first object in the provided barcodes list:
-[SparkScanSession.newlyRecognizedBarcode](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode). Please note that this list only contains one barcode entry.
+[SparkScanListener.didScan()](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-listener.html#method-scandit.datacapture.barcode.spark.ISparkScanListener.OnBarcodeScanned) is called when a new barcode has been scanned. It returns a promise, so the listener is `async`. Read the scanned barcode from
+[SparkScanSession.newlyRecognizedBarcode](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-session.html#property-scandit.datacapture.barcode.spark.SparkScanSession.NewlyRecognizedBarcode), which holds a single `Barcode`, or `null` when no new barcode was recognized.
 
 ## Scan Some Barcodes
 
@@ -15108,7 +15142,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/barcode-pick-view.html#interface-scandit.datacapture.barcode.pick.ui.IBarcodePickViewUiListener) to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```js
 barcodePickView.uiListener = {
@@ -15233,7 +15267,6 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -15317,6 +15350,16 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
 * Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -16064,7 +16107,7 @@ The selection mode determines whether an aimer is shown in the preview to help w
 | **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
+*Auto* requires [`SparkScanSettings.scanIntention`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -16077,7 +16120,7 @@ The scanning behavior determines how barcodes are scanned - one at a time or con
 | **Continuous scan** | Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.  |
 
 :::tip
-Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SDCSparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
+Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/data-capture-sdk/cordova/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
 :::
 
 ### Preview Behavior
@@ -18781,12 +18824,12 @@ Connect the `BarcodePickView` to the Widget lifecycle. The widget is dependent o
 @override
 void didChangeAppLifecycleState(AppLifecycleState state) {
   if (state == AppLifecycleState.resumed) {
-    // Resume finding by calling the BarcodePickView widgetResumed function.
+    // Resume scanning by calling the BarcodePickView widgetResumed function.
     // Under the hood, it re-enables the BarcodePick mode and makes sure the view is properly
     // setup.
     barcodePickView.widgetResumed();
   } else {
-    // Pause finding by calling the BarcodePickView widgetPaused function.
+    // Pause scanning by calling the BarcodePickView widgetPaused function.
     // Under the hood, it will disable the mode and free resources that are not needed in a
     // paused state.
     barcodePickView.widgetPaused();
@@ -18924,7 +18967,6 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -19012,6 +19054,16 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 #### Barcode
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -19751,7 +19803,7 @@ You can customize:
 
 ### Reject Barcodes
 
-To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan's built-in error state. Setting the `scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay` parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
+To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan's built-in error state. Setting the [`SparkScanBarcodeErrorFeedback.resumeCapturingDelay`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
 
 ## UI Customization
 
@@ -19768,7 +19820,7 @@ This section explains all the available options to configure SparkScan to best f
 Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
 :::note
-Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `defaultScanningMode`.
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead.
 :::
 
 ### Selection Mode
@@ -19782,7 +19834,7 @@ The selection mode determines whether an aimer is shown in the preview to help w
 | **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
+*Auto* requires [`SparkScanSettings.scanIntention`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -19795,7 +19847,7 @@ The scanning behavior determines how barcodes are scanned - one at a time or con
 | **Continuous scan** | Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.  |
 
 :::tip
-Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled (`SDCSparkScanViewSettings.holdToScanEnabled`).
+Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
 :::
 
 ### Preview Behavior
@@ -24969,6 +25021,16 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 * Removed the deprecated Barcode Sequence view settings API; configure the view's settings directly on the view.
 * Deprecated the alternative (accessible) color scheme for Barcode Count; it will be removed in a future release. The default color scheme now provides an accessible appearance, so you can remove the explicit setting.
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -32133,6 +32195,12 @@ Dynamic threading is used internally to accelerate the execution if available. T
 * Fixed `sc_camera_get_frame` hanging indefinitely when the camera is disconnected while streaming. It now returns promptly instead of blocking.
 * Fixed the Python camera sample (`CommandLineBarcodeScannerCameraSample.py`) crashing at startup.
 
+## 8.5.4
+
+**Released**: October 19, 2026
+
+No updates for this framework in this release.
+
 ## 8.5.3
 
 **Released**: August 18, 2026
@@ -35186,9 +35254,9 @@ You can use a `BarcodePickView` from XAML in your MAUI application.
 You can configure your view in the code behind class. For example:
 
 ```csharp
-public partial class MyFindBarcodePage : ContentPage
+public partial class PickBarcodePage : ContentPage
 {
-    public MyFindBarcodePage()
+    public PickBarcodePage()
     {
         this.InitializeComponent();
 
@@ -35223,12 +35291,12 @@ public override void OnPause()
 }
 ```
 
-If your are developing on MAUI then connect the BarcodePickView to the MAUI page lifecycle.
+If you are developing on MAUI then connect the BarcodePickView to the MAUI page lifecycle.
 
 In particular, make sure to call `BarcodePickView.OnResume` on your [`Element.HandlerChanged`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.element.handlerchanged) event and `BarcodePickView.OnPause` on your [`Page.OnDisappearing`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.page.ondisappearing).
 
 ```csharp
-public FindBarcodePage()
+public PickBarcodePage()
 {
     this.BarcodePickView.HandlerChanged += SetupBarcodePickView;
 }
@@ -35254,7 +35322,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Subscribe to a `BarcodePickView.onFinishButtonTapped` event to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```csharp
 BarcodePickView.FinishButtonTapped += (object? sender, FinishButtonTappedEventArgs e) =>
@@ -35263,9 +35331,9 @@ BarcodePickView.FinishButtonTapped += (object? sender, FinishButtonTappedEventAr
 };
 ```
 
-However, this convenient “finish” button is not supported with MAUI development. You can create the button manually and invoke `BarcodePickView.StopSearching` to achieve the same functionality. The following code snippet demonstrates how to do this:
+However, this convenient “finish” button is not supported with MAUI development. You can create the button manually and invoke `BarcodePickView.Stop()` to achieve the same functionality. The following code snippet demonstrates how to do this:
 
-`FindBarcodePage.xaml`:
+`PickBarcodePage.xaml`:
 ```csharp
 
     (...)
@@ -35273,7 +35341,7 @@ However, this convenient “finish” button is not supported with MAUI developm
 
 ```
 
-`FindBarcodePage.xaml.cs`:
+`PickBarcodePage.xaml.cs`:
 ```csharp
 private void FinishButtonClicked(object? sender, EventArgs args)
 {
@@ -35393,7 +35461,6 @@ More data formats will be added in future releases. Please contact us if the dat
 
 #### Id
 
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -35470,6 +35537,16 @@ More data formats will be added in future releases. Please contact us if the dat
 
 * Removed the deprecated Barcode Sequence view settings API; configure the view's settings directly on the view.
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -36110,7 +36187,7 @@ SparkScan is optimized by default for efficiency, accuracy, and responsiveness. 
 
 Allowing the end user to control the scanner with hardware buttons can be useful if your users typically wear gloves. It can also improve ergonomics in some workflows.
 
-SparkScan offers a built-in API to let you do this via [scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
+SparkScan offers a built-in API to let you do this via [`SparkScanViewSettings.HardwareTriggerEnabled`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
 
 10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
           if (isValidBarcode(barcode)) {
@@ -36137,7 +36214,7 @@ You can have different error states triggered by different logic conditions. For
 
 ### Reject Barcodes
 
-To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan’s built-in error state. Setting the [SDCSparkScanBarcodeErrorFeedback.resumeCapturingDelay](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
+To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan’s built-in error state. Setting the [SparkScanBarcodeErrorFeedback.ResumeCapturingDelay](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
 
 ## UI Customization
 
@@ -36154,7 +36231,7 @@ This section explains all the available options to configure SparkScan to best f
 Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.SelectionMode`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.DefaultScanningMode`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
 :::note
-Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `DefaultScanningMode`.
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead.
 :::
 
 ### Selection Mode
@@ -36168,7 +36245,7 @@ The selection mode determines whether an aimer is shown in the preview to help w
 | **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
+*Auto* requires [`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -36181,7 +36258,7 @@ The scanning behavior determines how barcodes are scanned - one at a time or con
 | **Continuous scan** | Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.  |
 
 :::tip
-Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled (`SDCSparkScanViewSettings.HoldToScanEnabled`).
+Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SparkScanViewSettings.HoldToScanEnabled`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
 :::
 
 ### Preview Behavior
@@ -39041,9 +39118,9 @@ You can use a `BarcodePickView` from XAML in your MAUI application.
 You can configure your view in the code behind class. For example:
 
 ```csharp
-public partial class MyFindBarcodePage : ContentPage
+public partial class PickBarcodePage : ContentPage
 {
-    public MyFindBarcodePage()
+    public PickBarcodePage()
     {
         this.InitializeComponent();
 
@@ -39062,28 +39139,28 @@ public partial class MyFindBarcodePage : ContentPage
 For MAUI development add the [`Scandit.DataCapture.Barcode.Maui`](https://www.nuget.org/packages/Scandit.DataCapture.Barcode.Maui) NuGet package into your project.
 :::
 
-Connect the `BarcodePickView` to the iOS view controller lifecycle. In particular, make sure to call `BarcodePickView.prepareSearching()` on your UIViewController’s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) method to make sure that start up time is optimal.
+Connect the `BarcodePickView` to the iOS view controller lifecycle: call `BarcodePickView.Start()` in your UIViewController’s [`viewWillAppear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621510-viewwillappear) method and `BarcodePickView.Stop()` in [`viewWillDisappear`](https://developer.apple.com/documentation/uikit/uiviewcontroller/viewwilldisappear(_:)).
 
 ```csharp
 public override void ViewWillAppear(bool animated)
 {
     base.ViewWillAppear(animated);
-    BarcodePickView.PrepareSearching();
+    BarcodePickView.Start();
 }
 
 public override void ViewWillDisappear(bool animated)
 {
     base.ViewWillDisappear(animated);
-    BarcodePickView.StopSearching();
+    BarcodePickView.Stop();
 }
 ```
 
-If your are developing on MAUI then connect the BarcodePickView to the MAUI page lifecycle.
+If you are developing on MAUI then connect the BarcodePickView to the MAUI page lifecycle.
 
-In particular, make sure to call `BarcodePickView.OnResume` on your [`Element.HandlerChanged`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.element.handlerchanged) event and `BarcodePickView.OnPause` on your [`Page.OnDisappearing`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.page.ondisappearing).
+In particular, make sure to call `BarcodePickView.Start()` on your [`Element.HandlerChanged`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.element.handlerchanged) event and `BarcodePickView.Stop()` on your [`Page.OnDisappearing`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.page.ondisappearing).
 
 ```csharp
-public FindBarcodePage()
+public PickBarcodePage()
 {
     this.BarcodePickView.HandlerChanged += SetupBarcodePickView;
 }
@@ -39091,14 +39168,14 @@ public FindBarcodePage()
 private void SetupBarcodePickView(object? sender, EventArgs args)
 {
     #if __IOS__
-    this.BarcodePickView.PrepareSearching();
+    this.BarcodePickView.Start();
     #endif
 }
 
 protected override void OnDisappearing()
 {
     base.OnDisappearing();
-    this.BarcodePickView.StopSearching();
+    this.BarcodePickView.Stop();
 }
 ```
 
@@ -39108,7 +39185,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Subscribe to a `BarcodePickView.onFinishButtonTapped` event to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```csharp
 BarcodePickView.FinishButtonTapped += (object? sender, FinishButtonTappedEventArgs e) =>
@@ -39117,9 +39194,9 @@ BarcodePickView.FinishButtonTapped += (object? sender, FinishButtonTappedEventAr
 };
 ```
 
-However, this convenient “finish” button is not supported with MAUI development. You can create the button manually and invoke `BarcodePickView.StopSearching` to achieve the same functionality. The following code snippet demonstrates how to do this:
+However, this convenient “finish” button is not supported with MAUI development. You can create the button manually and invoke `BarcodePickView.Stop()` to achieve the same functionality. The following code snippet demonstrates how to do this:
 
-`FindBarcodePage.xaml`:
+`PickBarcodePage.xaml`:
 ```csharp
 
     (...)
@@ -39127,13 +39204,13 @@ However, this convenient “finish” button is not supported with MAUI developm
 
 ```
 
-`FindBarcodePage.xaml.cs`:
+`PickBarcodePage.xaml.cs`:
 ```csharp
 private void FinishButtonClicked(object? sender, EventArgs args)
 {
     if (Application.Current?.MainPage is NavigationPage navigation)
     {
-        BarcodePickView.StopSearching();
+        BarcodePickView.Stop();
         navigation.PopToRootAsync(animated: true);
     }
 }
@@ -39141,7 +39218,7 @@ private void FinishButtonClicked(object? sender, EventArgs args)
 
 ## Start Searching
 
-With everything configured, you can now start searching for items. This is done by calling `BarcodePickView.start()`.
+With everything configured, you can now start searching for items. This is done by calling `BarcodePickView.Start()`.
 
 ```csharp
 barcodePickView.Start();
@@ -39252,7 +39329,6 @@ More data formats will be added in future releases. Please contact us if the dat
 
 #### Id
 
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -39328,6 +39404,16 @@ More data formats will be added in future releases. Please contact us if the dat
 
 * Removed the deprecated Barcode Sequence view settings API; configure the view's settings directly on the view.
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -39941,7 +40027,7 @@ SparkScan is optimized by default for efficiency, accuracy, and responsiveness. 
 
 Allowing the end user to control the scanner with hardware buttons can be useful if your users typically wear gloves. It can also improve ergonomics in some workflows.
 
-SparkScan offers a built-in API to let you do this via [scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
+SparkScan offers a built-in API to let you do this via [`SparkScanViewSettings.HardwareTriggerEnabled`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
 
 10s) typically requires the users to interact with the UI to start scanning again. This is a good choice when you want to interrupt the scanning workflow (for example, because a wrong barcode is scanned and some actions need to be performed). A small timeout (\ {
           if (isValidBarcode(barcode)) {
@@ -39968,7 +40054,7 @@ You can have different error states triggered by different logic conditions. For
 
 ### Reject Barcodes
 
-To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan’s built-in error state. Setting the [SDCSparkScanBarcodeErrorFeedback.resumeCapturingDelay](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
+To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan’s built-in error state. Setting the [SparkScanBarcodeErrorFeedback.ResumeCapturingDelay](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
 
 ## UI Customization
 
@@ -39985,7 +40071,7 @@ This section explains all the available options to configure SparkScan to best f
 Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.SelectionMode`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.DefaultScanningMode`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
 
 :::note
-Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `DefaultScanningMode`.
+Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead.
 :::
 
 ### Selection Mode
@@ -39999,7 +40085,7 @@ The selection mode determines whether an aimer is shown in the preview to help w
 | **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
+*Auto* requires [`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -40012,7 +40098,7 @@ The scanning behavior determines how barcodes are scanned - one at a time or con
 | **Continuous scan** | Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.  |
 
 :::tip
-Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled (`SDCSparkScanViewSettings.HoldToScanEnabled`).
+Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SparkScanViewSettings.HoldToScanEnabled`](https://docs.scandit.com/data-capture-sdk/dotnet.ios/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
 :::
 
 ### Preview Behavior
@@ -43045,7 +43131,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/barcode-pick-view.html#interface-scandit.datacapture.barcode.pick.ui.IBarcodePickViewUiListener) to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```js
 barcodePickView.uiListener = {
@@ -43170,7 +43256,6 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 #### Id
 
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -43255,6 +43340,16 @@ import InternalDependencies from '../../../partials/get-started/_internal-deps.m
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
 * Deprecated the SparkScan target-mode APIs and ScanIntention.SmartSelection in favor of the new SelectionMode API: set selectionMode (off/on/auto) on BarcodeCaptureSettings and SparkScanSettings to control whether an aimed-at barcode is scanned automatically or requires explicit selection.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -44042,7 +44137,7 @@ You can have different error states triggered by different logic conditions. For
 
 ### Reject Barcodes
 
-To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan’s built-in error state. Setting the [SDCSparkScanBarcodeErrorFeedback.resumeCapturingDelay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
+To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan’s built-in error state. Setting the [SparkScanBarcodeErrorFeedback.resumeCapturingDelay](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
 
 ## UI Customization
 
@@ -44100,7 +44195,7 @@ The selection mode determines whether an aimer is shown in the preview to help w
 | **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-*Auto* requires [`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
+*Auto* requires [`SparkScanSettings.scanIntention`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -44858,6 +44953,212 @@ import OSSLicense from '../../partials/\_third-party-licenses-js.mdx';
 
 ---
 
+## Scandit MCP Installation Guide
+
+import FrameworkName from '@site/src/components/FrameworkName';
+
+Connect the Scandit MCP server to your AI coding agent and go from an idea to a working scanner in one conversation. You only need to authenticate in the browser. You do not hunt through the dashboard or paste a key by hand: the server picks the product, provisions a trial key, and fetches it into your project.
+
+It works with MCP-compatible clients that support streamable HTTP and browser OAuth, including Claude Code, Cursor, and VS Code.
+
+Connecting is free, and so are the keys it creates. The server provisions **trial** license keys and can read the ones you already have. It never creates, revokes, or modifies production licenses.
+
+## Server URL
+
+```
+https://ssl.scandit.com/mcp
+```
+
+The URL must be configured exactly as shown, ending in `/mcp`.
+
+## Install
+
+:::tip[Installed the Scandit plugin?]
+The Scandit plugin already includes this server when you install it with `npx plugins add scandit/skills` or from the Claude Code, Cursor, Codex CLI, or Copilot CLI marketplace. Skip this section and go to [Authentication](#authentication). Adding the server here as well gives you two Scandit servers, and each one needs its own sign-in.
+:::
+
+### Claude Code
+
+```bash
+claude mcp add --transport http scandit https://ssl.scandit.com/mcp
+```
+
+Then start a fresh `claude` session in your project directory.
+
+### Cursor
+
+Add the server to `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "scandit": { "url": "https://ssl.scandit.com/mcp" }
+  }
+}
+```
+
+### VS Code
+
+Add the server to your MCP user configuration (Command Palette → *MCP: Open User Configuration*):
+
+```json
+{
+  "servers": {
+    "scandit": {
+      "type": "http",
+      "url": "https://ssl.scandit.com/mcp"
+    }
+  }
+}
+```
+
+### Any other client
+
+Point your client at `https://ssl.scandit.com/mcp` over streamable HTTP (for example, Codex or Zed). No API key or local process is required. The client must be able to open a browser and complete OAuth with an HTTP loopback redirect (`http://localhost` or `http://127.0.0.1`).
+
+## Authentication
+
+Authentication is browser-based (OAuth 2.1 with PKCE), and you start it yourself. If a Scandit tool is called before you have authenticated, the agent asks you to authenticate rather than opening a browser.
+
+- **Claude Code:** run `/mcp`, select `scandit` (`plugin:scandit-sdk:scandit` if the server came with the plugin), and authenticate.
+- **Cursor:** go to Settings → Tools & MCP → **scandit** → Connect / Authenticate.
+- **Other clients:** use the client’s own connect or authenticate control for the server.
+
+The tab lands on **sign-up**; if you already have a Scandit account, use the *Sign in* link on that page. After you approve access, tell the agent to continue.
+
+Signing in does not create a subscription or a license key. The agent still has to provision one, which it does on its next step.
+
+**Limitation:** Headless and CI authentication is not supported yet.
+
+## Disconnect
+
+Remove or disconnect the Scandit server in the client you used to connect. That drops the tokens the agent stored, so it can no longer call Scandit tools.
+
+- **Claude Code:** run `claude mcp remove scandit`. If the server came with the plugin, disable or uninstall the `scandit-sdk` plugin in `/plugin` instead. This also removes the skills.
+- **Cursor:** disconnect or remove **scandit** in Settings → Tools & MCP.
+- **VS Code:** remove the `scandit` entry from your MCP user configuration.
+
+Signing out of the dashboard does not disconnect the agent. License keys and the trial stay in the [dashboard](https://ssl.scandit.com/dashboard); delete them there if you no longer want them. There is no dashboard page yet to revoke MCP access on the server.
+
+## Get started
+
+Install the server and connect it, then in an empty project directory prompt your agent:
+
+> Build me a barcode scanner Web app with Scandit.
+
+1. The agent works out which Scandit product fits your use case and which framework you are building with, asking you if either is unclear.
+2. It calls `ensure_scanner_setup`, which creates or reuses a matching trial subscription, project, and license key for your platform.
+3. It writes the key into your project’s `.env` file. For native project configuration that a `.env` file cannot hold, it retrieves the key with `get_license_key`.
+4. It follows the matching [Agent Skill](../) to scaffold and run the app.
+
+The MCP server handles the account and license key; the Agent Skills handle the SDK integration itself. For the best result, install the Scandit plugin, which includes both the skills and this server:
+
+```bash
+npx plugins add scandit/skills
+```
+
+If you already added the server with the [Install](#install) steps, remove that copy first (in Claude Code, `claude mcp remove scandit`) so you do not end up with two Scandit servers.
+
+## What you can do
+
+- Create your account and a trial through the browser, with no forms to fill in the chat.
+- Provision a trial license key for the product and platform you are building for, and write it to `.env`.
+- List the license keys you already have, across every subscription your account can access.
+- Add another key to an existing trial for a second app identifier, another platform, or an extra web domain.
+- Retrieve a key to paste into native project configuration.
+
+Keys created this way appear in the [Scandit dashboard](https://ssl.scandit.com/dashboard) under **License Keys**, labeled *Created via MCP*, alongside keys you create yourself.
+
+## Tools reference
+
+| Tool | What it does |
+| --- | --- |
+| `ensure_scanner_setup` | Creates or reuses the trial subscription, project, and license key for the chosen product and platforms, and returns a command that writes the key to `.env`. Idempotent: safe to call again. |
+| `create_trial_license_key` | Adds or reuses an additional key on an existing trial, for another app identifier, platform, or web domain. |
+| `list_license_keys` | Lists keys across all accessible subscriptions as masked previews. Never returns a usable key. |
+| `get_license_key` | Returns one full license key by ID, for configuration a `.env` file cannot hold. |
+| `get_license_env_command` | Returns a one-line command that writes a key into a `.env` file without exposing it in the chat. |
+| `whoami` | Returns the signed-in account’s email, account ID, and default subscription. |
+
+Claude Code users can also run `/mcp__scandit__get-started` for an orientation prompt, or `/mcp__plugin_scandit-sdk_scandit__get-started` if the server came with the plugin.
+
+## Products and platforms
+
+`ensure_scanner_setup` takes the product your agent selected (`sdk`, `native`, `express`, `id-bolt`, `enterprise-browser`, or `wedge`) plus the license platforms for your framework.
+
+| Framework | License platforms |
+| --- | --- |
+| Web | `webassembly` |
+| iOS | `ios` |
+| Android | `android` |
+| .NET iOS | `ios` |
+| .NET Android | `android` |
+| Kotlin Multiplatform | `ios`, `android` |
+| React Native, Flutter, Capacitor, Cordova, .NET MAUI | `ios`, `android` |
+
+If you already have an active trial, it is reused rather than replaced. You will not end up with duplicate trials for `sdk`, `native`, `express`, or `id-bolt`.
+
+## Web domains
+
+For web keys, pass your production domain (for example, `example.com`). WebSDK trial keys already work on `localhost`, so there is no need to list it. One key can cover several domains. Where applicable, `www.` is added automatically.
+
+## Security
+
+- **License keys are secrets.** The agent is instructed to show only a masked preview (for example, `ATI3Bz…`) in chat and to write the full key to `.env` using the returned command rather than pasting it into a file editor.
+- `list_license_keys` never returns a usable key. Retrieving a full key is always an explicit, separate step.
+- Keys your dashboard hides are never exposed in full, previewed, or reused for provisioning.
+- **Trials only.** The server can create trial keys and read existing ones. It cannot create, revoke, or modify production licenses.
+- **`.env` writes stay inside your project.** Only project-relative `.env` paths are accepted. Absolute paths, `~`, and `..` are rejected.
+- **Review tool calls.** As with any MCP server, an agent can be steered by untrusted content in your project or on the web. Review what it does before approving.
+
+## FAQ
+
+### Do I need a Scandit account first?
+
+No. The sign-in tab lets you create one, and the agent provisions a trial from there.
+
+### Does this cost anything?
+
+You can try all Scandit products free for 30 days, no credit card required. Using Scandit beyond the trial in a production environment requires a commercial license.
+
+### Can I use it in CI or on a headless machine?
+
+Not yet. Authentication currently requires a browser.
+
+### Can it touch my production license keys?
+
+It can list them (masked) and, if you (or the agent) pick one, copy the full key into the project the same way the dashboard copy button would. It cannot create, revoke, or change those licenses. Keys the dashboard hides or marks non-copyable are never returned.
+
+### Where do the keys it creates show up?
+
+In the [dashboard](https://ssl.scandit.com/dashboard) under **License Keys**, with a *Created via MCP* label. New trial key projects created this way are named *MCP Trial Keys*.
+
+### My agent does not seem to know about Scandit.
+
+In Claude Code, run `/mcp__scandit__get-started`, or `/mcp__plugin_scandit-sdk_scandit__get-started` if the server came with the plugin. If you have not installed the Agent Skills yet, install the Scandit plugin with `npx plugins add scandit/skills`.
+
+### No browser tab opened when the agent tried to use a tool.
+
+Expected. You connect the server yourself. In Claude Code run `/mcp`; in Cursor use Settings → Tools & MCP → **Connect**. Then ask the agent to continue.
+
+### The consent screen names a localhost address.
+
+That is expected. After you approve, the authorization code is sent to a loopback listener the client started on your machine (`http://localhost:/…`). If you just connected this server in Claude Code, Cursor, or VS Code, that address is yours. If you did not start a connect flow, do not continue.
+
+### How do I disconnect?
+
+Remove the Scandit server in the client: in Claude Code, run `claude mcp remove scandit` (if the server came with the plugin, disable or uninstall the `scandit-sdk` plugin in `/plugin`); in Cursor, go to Settings → Tools & MCP; in VS Code, remove it from your MCP configuration. Keys stay in the dashboard until you delete them.
+
+## Learn more
+
+- [Agent Skills](../): skills that write the SDK integration once a key is in place.
+- [scandit/skills repository](https://github.com/scandit/skills): full catalog of Scandit skills.
+- [Model Context Protocol](https://modelcontextprotocol.io): the open spec behind MCP.
+
+Need help? Contact support@scandit.com.
+
+---
+
 ## Agent Skills
 
 import SkillsPage from '@site/src/components/SkillsPage';
@@ -45329,15 +45630,23 @@ const settings = new SparkScanSettings();
 settings.enableSymbologies([Symbology.EAN13UPCA, Symbology.Code128]);
 settings.codeDuplicateFilter = 0;
 settings.scanIntention = ScanIntention.Smart;
+settings.selectionMode = SelectionMode.Auto;
 ```
+
+`barcodeCaptureLoader`, `ScanIntention`, `SelectionMode`, `Symbology` and the SparkScan classes come from `@scandit/web-datacapture-barcode`. `DataCaptureContext` comes from `@scandit/web-datacapture-core`. The API reference lists `ScanIntention` and `SelectionMode` under core, but you import them from the barcode package.
 
 In this example, we're:
 
 - Enabling both EAN-13 and Code 128 symbologies
 - Setting the code duplicate filter to 0, meaning the same code can be reported multiple times
 - Using the Smart [scan intention](https://docs.scandit.com/data-capture-sdk/web/core/api/scan-intention.html#enum-scandit.datacapture.core.ScanIntention) algorithm, to reduce the likelihood of unintended scans
+- Setting the [selection mode](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode) to *Auto*, so the SDK decides when users need to confirm the barcode they aim at. *Auto* works only with the Smart scan intention
 
-Lastly, we apply the settings to the SparkScan instance.
+Then create the SparkScan mode with these settings:
+
+```typescript
+const sparkScan = SparkScan.forSettings(settings);
+```
 
 ### 4. Setup the SparkScanView
 
@@ -45345,73 +45654,54 @@ Now we'll create and configure the scanner view and it's settings. This is done 
 
 ```typescript
 const viewSettings = new SparkScanViewSettings();
-viewSettings.defaultScanningMode = new SparkScanScanningModeTarget();
 viewSettings.soundEnabled = true;
 viewSettings.hapticEnabled = false;
 ```
 
 In this example, we're:
 
-- Setting the default scanning mode to `SparkScanScanningModeTarget` for precision scanning
 - Enabling sound feedback
 - Disabling haptic feedback
 
 Next, we create the `SparkScanView` instance, adding the scanning interface to the application.
 
-There are two valid ways to instantiate the `SparkScanView`:
-
-**Option 1 — Web Component (recommended for React and other frameworks):**
-
-Register the web component once, then use the `` custom element:
-
-```typescript
-SparkScanView.register();
-
-// In your render/component:
-(context && sparkScan) && 
-```
-
-**Option 2 — `SparkScanView.forElement()` (vanilla JS):**
+Add an element for the view to your page, for example ``, then create the view in it with `SparkScanView.forElement()`:
 
 ```typescript
 const sparkScanView = SparkScanView.forElement(
-  document.getElementById("spark-scan-ui"),
+  document.getElementById("spark-scan-ui")!,
   context,
   sparkScan,
   viewSettings
 );
 ```
 
-In your application's state handling logic, you must also call the `stopScanning` method when the scanner is no longer needed:
+You must also call the `stopScanning` method when the scanner is no longer needed, for example when the user navigates away from the scanning screen:
 
 ```typescript
-useEffect(() => {
-  return () => {
-    sparkScanViewRef.current?.stopScanning().catch(console.error);
-  };
-}, []);
+await sparkScanView.stopScanning();
 ```
-
-For a complete React integration example, see the [SparkScan React Sample](https://github.com/Scandit/datacapture-web-samples/tree/master/05_Framework_Integration_Samples/SparkScanReactSample).
 
 ### 5. Implement the Listener
 
 Lastly, you need to implement the listener to handle the scanned data. This is done by creating an instance of the [`SparkScanListener`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-listener.html#interface-scandit.datacapture.barcode.spark.ISparkScanListener) class:
 
 ```typescript
-const listener = {
-	didScan: (sparkScan, session, getFrameData) => {
+const listener: SparkScanListener = {
+	didScan: (sparkScan, session, frameData) => {
 		// Gather the recognized barcode
 		const barcode = session.newlyRecognizedBarcode;
 
-		// Handle the barcode
+		if (barcode) {
+			// Handle the barcode
+		}
 	},
 };
 
 sparkScan.addListener(listener);
 ```
 
-Here, `didScan()` is called when a barcode is recognized. You can access the recognized barcode data from the `SparkScanSession` object.
+`SparkScanListener` is a type, so import it with `import type` from `@scandit/web-datacapture-barcode`. Here, `didScan()` is called when a barcode is recognized. You can access the recognized barcode data from the `SparkScanSession` object.
 
 ### 6. Next Steps
 
@@ -47798,7 +48088,6 @@ For important information about CDN risks and recommendations for production env
 #### Id
 
 * Visa MRZ results now report country-specific additional details such as `MRZResult.visaNumber`, `MRZResult.visaNumberOfEntries`, `MRZResult.visaMultipleEntries` and `MRZResult.visaDurationInDays`.
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -47875,6 +48164,16 @@ For important information about CDN risks and recommendations for production env
 #### Barcode
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
@@ -48632,7 +48931,7 @@ The selection mode determines whether an aimer is shown in the preview to help w
 | **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-*Auto* requires [`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
+*Auto* requires [`SparkScanSettings.scanIntention`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -49639,3 +49938,13 @@ if let path = Bundle.main.path(forResource: "index", ofType: "html") {
 :::note
 `loadFileURL` grants the web content a secure context on iOS, so `getUserMedia` works even for `file://` URLs when loaded this way.
 :::
+
+---
+
+## ShelfView
+
+# ShelfView
+
+[ShelfView](https://www.scandit.com/products/shelfview/) is integrated together with the Scandit team, so it has no public developer documentation.
+
+To integrate it, contact your Scandit account team or [support@scandit.com](mailto:support@scandit.com).
