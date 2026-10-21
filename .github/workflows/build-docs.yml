@@ -80,8 +80,8 @@ jobs:
       - name: Build documentation
         run: yarn build
         env:
-          DOCS_FEEDBACK_ENDPOINT: ${{ github.ref == 'refs/heads/main' && vars.DOCS_FEEDBACK_ENDPOINT || '' }}
-          DOCS_FEEDBACK_TOKEN: ${{ github.ref == 'refs/heads/main' && secrets.DOCS_FEEDBACK_TOKEN || '' }}
+          DOCS_FEEDBACK_ENDPOINT_PROD: ${{ github.ref == 'refs/heads/main' && vars.DOCS_FEEDBACK_ENDPOINT_PROD || '' }}
+          DOCS_FEEDBACK_TOKEN_PROD: ${{ github.ref == 'refs/heads/main' && secrets.DOCS_FEEDBACK_TOKEN_PROD || '' }}
 
       # Asserts what the widget actually sends to Algolia: the API reference is
       # reachable on the served version and absent on frozen legacy versions.

@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      # DOCS_FEEDBACK_ENDPOINT / DOCS_FEEDBACK_TOKEN are deliberately NOT set
+      # DOCS_FEEDBACK_ENDPOINT_PROD / DOCS_FEEDBACK_TOKEN_PROD are deliberately NOT set
       # here: a preview must not post reader feedback into the production
       # feedback sheet. preview_build also forces them off in the config.
       - name: Build documentation
