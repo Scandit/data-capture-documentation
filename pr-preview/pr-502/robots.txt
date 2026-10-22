@@ -1,7 +1,0 @@
-# Preview build - not the production site.
-#
-# A preview deploy is a complete copy of the documentation. Indexed,
-# it competes with docs.scandit.com for that content.
-
-User-agent: *
-Disallow: /
