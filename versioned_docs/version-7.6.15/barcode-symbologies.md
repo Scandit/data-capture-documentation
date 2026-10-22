@@ -73,7 +73,7 @@ Used in a wide range of applications.
 * A mandatory checksum is verified.
 * It has been standardized under ISO/IEC 15417.
 * Includes support for EAN-128 and GS1-128.
-* Uses a leading FNC1 character (ASCII 21) to signal GS1 data. The FNC1 character is encoded but will not be returned in the barcode result.
+* Uses a leading FNC1 character (GS, ASCII 29) to signal GS1 data. The FNC1 character is encoded but will not be returned in the barcode result.
 * Relevant enum value: `SDCSymbologyCode128`.
 
 #### Code 32
@@ -149,7 +149,8 @@ Used in a wide range of applications.
 * Primarily used for labelling telecommunication equipment. Also known as USD-8.
 * The barcode data can be encode numerical data, the dash and dot character.
 * Supports variable length data content.
-* For up to 10 data digits a single check digit is used, otherwise two check digits are used.
+* A mod11 checksum is verified.
+* For fewer than 10 data digits a single check digit is used, for 10 or more two check digits are used.
 * Relevant enum value: `SDCSymbologyCode11`.
 
 #### Code 25
@@ -495,7 +496,7 @@ The same data parsed into its application identifiers by the Scandit parser:
 
 ## Symbology Specific Notes
 
-* **Code128** uses a leading FNC1 character (ASCII 21) to signal GS1 data. The FNC1 character is encoded but will not be returned in the barcode result.
+* **Code128** uses a leading FNC1 character (GS, ASCII 29) to signal GS1 data. The FNC1 character is encoded but will not be returned in the barcode result.
 * **GS1 DataBar** always contains GS1 data.
 * **DataMatrix** and **QR Code** use an internal symbology specific FNC1 symbol to signal GS1 data carrier mode. The internal symbol is not returned as part of the result. The common mistake of adding a leading group separator character in raw byte mode does not turn the code into a GS1 data carrier.
 
