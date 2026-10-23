@@ -9,6 +9,7 @@ import remarkHideComments from "./src/plugins/remark-hide-comments";
 import remarkOffloadPreviewMedia from "./src/plugins/remark-offload-preview-media";
 import stripPreviewMediaPlugin from "./src/plugins/plugin-strip-preview-media";
 import { UNRELEASED_FRAMEWORK_SLUGS } from "./src/constants/unreleasedFrameworks";
+import { ROUTED_FRAMEWORKS } from "./src/constants/frameworks";
 dotenv.config();  // Load environment variables from .env file
 
 const productionUrl = "https://docs.scandit.com";
@@ -169,6 +170,14 @@ const DOCS_LAST_VERSION = "8.6.1";
 // build `current`, so routing a major at a frozen tag would point at pages the
 // build does not contain. Declared once: it was restated at four call sites.
 const effectiveLastVersion = isPreviewBuild ? "current" : DOCS_LAST_VERSION;
+
+// The source tree of the version served at the site root: a root-level
+// redirect can only point at a page that tree has.
+function rootDocsDir(): string {
+  return effectiveLastVersion === "current"
+    ? path.join(process.cwd(), "docs")
+    : path.join(process.cwd(), "versioned_docs", `version-${effectiveLastVersion}`);
+}
 
 // `current.label` is load-bearing, not decoration: it is the only source of the
 // served major once lastVersion becomes "current", and buildApiReferenceTags
@@ -1252,7 +1261,10 @@ const config: Config = {
             },
           ]),
           {
-            to: 'system-requirements',
+            // Absolute: a relative target resolved against the old URL, so
+            // /data-capture-sdk/ios/requirements.html/ went to
+            // .../requirements.html/system-requirements/, and on to a 404.
+            to: '/system-requirements',
             from: [
               '/data-capture-sdk/android/requirements.html',
               '/data-capture-sdk/ios/requirements.html',
@@ -1294,6 +1306,17 @@ const config: Config = {
           { to: '/sdks/capacitor/label-capture/intro', from: '/sdks/capacitor/label-scanning' },
           { to: '/sdks/net/ios/label-capture/intro', from: '/sdks/net/ios/label-scanning' },
           { to: '/sdks/net/android/label-capture/intro', from: '/sdks/net/android/label-scanning' },
+          // One-off legacy URLs.
+          ...ROUTED_FRAMEWORKS.map((f) => f.routeSegment as string)
+            .filter((segment) => ['.md', '.mdx'].some((ext) =>
+              fs.existsSync(path.join(rootDocsDir(), 'sdks', segment, `migrate-7-to-8${ext}`))))
+            .map((segment) => ({
+              to: `/sdks/${segment}/migrate-7-to-8`,
+              from: `/sdks/${segment}/migration-guide`,
+            })),
+          { to: '/sdks/cordova/barcode-capture/get-started', from: '/data-capture-sdk/cordova/get-started-barcode.html' },
+          { to: '/sdks/web/barcode-symbologies', from: '/data-capture-sdk/web/barcode-symbologies.html' },
+          { to: '/sdks/web/release-notes', from: '/stable/web/CHANGELOG.md' },
       ],
     },
   ],
