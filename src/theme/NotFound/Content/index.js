@@ -49,10 +49,10 @@ export function getApiReferenceFallbackUrl(pathname, prefixByMajor) {
   return target === pathname ? null : target;
 }
 
-// A path as the router matches it: no anchor, no trailing .html or
+// A path as the router matches it: no query or anchor, no trailing .html or
 // /index.html (the router strips both), and one trailing slash.
 function routeKey(path) {
-  const bare = path.split("#")[0].replace(/(?:\/index)?\.html$/, "");
+  const bare = path.split(/[?#]/)[0].replace(/(?:\/index)?\.html$/, "");
   return bare.endsWith("/") ? bare : `${bare}/`;
 }
 
@@ -136,10 +136,10 @@ const V5_PLATFORM_TARGETS = {
   "react-native": "/sdks/react-native/migrate-5-to-6/",
   titanium: "/sdks/titanium/migrate-5-to-6/",
   c_api: "/sdks/linux/overview/",
-  xamarin: "/sdks/web/migrate-7-to-8/#xamarin-sdk-changes",
-  "xamarin.ios": "/sdks/web/migrate-7-to-8/#xamarin-sdk-changes",
-  "xamarin.android": "/sdks/web/migrate-7-to-8/#xamarin-sdk-changes",
-  "xamarin.forms": "/sdks/web/migrate-7-to-8/#xamarin-sdk-changes",
+  xamarin: xamarinMigrationPath("xamarin/android"),
+  "xamarin.ios": xamarinMigrationPath("xamarin/ios"),
+  "xamarin.android": xamarinMigrationPath("xamarin/android"),
+  "xamarin.forms": xamarinMigrationPath("xamarin/forms"),
 };
 // Only the platform names above: any other segment (system-requirements/,
 // data-capture-sdk/, sdks/, ...) is a current path, left to the version rules.
@@ -175,15 +175,18 @@ const API_REFERENCE_PATH = /^(?:\/\d+\.\d+(?:\.\d+)?)?\/data-capture-sdk\//;
 // A target the app does not render is loaded in full, because some are
 // API-reference pages (static HTML outside this app).
 export function getLegacyFallbackUrl(pathname, isRoute = isAppRoute) {
+  // Matched on the lower-case path, so a mixed-case link (/data-capture-sdk/
+  // React/...) takes one step rather than two.
+  const lowered = lowerCasePath(pathname);
   // There was never a react/ tree: the React Native reference lives under
   // react-native/, but links still arrive with the short name. The version
   // prefix is the live one: getApiReferenceFallbackUrl has already moved a
   // retired one.
-  const react = pathname.match(/^((?:\/\d+\.\d+)?\/data-capture-sdk\/)react(\/.*)?$/);
+  const react = lowered.match(/^((?:\/\d+\.\d+)?\/data-capture-sdk\/)react(\/.*)?$/);
   if (react) return `${react[1]}react-native${react[2] ?? "/"}`;
   // The DLID format was dropped from every framework's parser reference; the
   // formats page lists what the parser supports now.
-  const dlid = pathname.match(
+  const dlid = lowered.match(
     /^((?:\/\d+\.\d+)?\/data-capture-sdk\/[^/]+\/parser\/)dlid\.html$/,
   );
   if (dlid) return `${dlid[1]}formats.html`;
@@ -192,9 +195,25 @@ export function getLegacyFallbackUrl(pathname, isRoute = isAppRoute) {
   // would cost a full page load just to 404 again, so it is left to
   // getFallbackUrl, which the component hands the lower-case path.
   // Loop-safe: a lower-case path never matches this again.
-  const lower = lowerCasePath(pathname);
-  if (lower === pathname) return null;
-  return isRoute(lower) || API_REFERENCE_PATH.test(lower) ? lower : null;
+  if (lowered === pathname) return null;
+  return isRoute(lowered) || API_REFERENCE_PATH.test(lowered) ? lowered : null;
+}
+
+// The unserved-version rule moves a reader into a served tree, which may not
+// have the page either. Inside a served version's tree (/7.6.15/..., /next/...)
+// no static redirect page can be waiting: they are generated at the root and
+// in retired trees only. So a target there that the app does not render is
+// answered here, by the rules that would run after the 404 it would get, and
+// costs no page load. At the root a redirect page may exist (/sdks/web/
+// migration-guide), so that target is still loaded from the server.
+export function settleInServedTree(target, versions, isRoute = isAppRoute) {
+  if (!target || !versions || isRoute(target)) return target;
+  const inServedTree = versions.some((v) => {
+    const prefix = v.path.replace(/\/$/, "");
+    return prefix !== "" && target.startsWith(`${prefix}/`);
+  });
+  if (!inServedTree) return target;
+  return getLegacyFallbackUrl(target, isRoute) ?? getFallbackUrl(lowerCasePath(target)) ?? target;
 }
 
 function getFallbackUrl(pathname) {
@@ -244,8 +263,13 @@ function getFallbackUrl(pathname) {
 // (the query still goes before it).
 function withSearchAndHash(url, location) {
   const hashAt = url.indexOf("#");
-  if (hashAt === -1) return url + location.search + location.hash;
-  return url.slice(0, hashAt) + location.search + url.slice(hashAt);
+  const base = hashAt === -1 ? url : url.slice(0, hashAt);
+  const hash = hashAt === -1 ? location.hash : url.slice(hashAt);
+  // A target with its own query (/?framework=net) keeps it, and the reader's
+  // is added to it rather than starting a second "?".
+  const search =
+    location.search && base.includes("?") ? `&${location.search.slice(1)}` : location.search;
+  return base + search + hash;
 }
 
 // The target that means "load this URL from the server".
@@ -287,7 +311,7 @@ export default function NotFoundContent(props) {
         siteConfig.customFields?.apiReferencePrefixByMajor,
       ) ??
       getV5FallbackUrl(requestedPath) ??
-      getUnservedVersionFallbackUrl(requestedPath, versions) ??
+      settleInServedTree(getUnservedVersionFallbackUrl(requestedPath, versions), versions) ??
       getLegacyFallbackUrl(requestedPath) ??
       getFallbackUrl(lowerCasePath(location.pathname)));
 

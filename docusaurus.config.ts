@@ -171,6 +171,14 @@ const DOCS_LAST_VERSION = "8.6.1";
 // build does not contain. Declared once: it was restated at four call sites.
 const effectiveLastVersion = isPreviewBuild ? "current" : DOCS_LAST_VERSION;
 
+// The source tree of the version served at the site root: a root-level
+// redirect can only point at a page that tree has.
+function rootDocsDir(): string {
+  return effectiveLastVersion === "current"
+    ? path.join(process.cwd(), "docs")
+    : path.join(process.cwd(), "versioned_docs", `version-${effectiveLastVersion}`);
+}
+
 // `current.label` is load-bearing, not decoration: it is the only source of the
 // served major once lastVersion becomes "current", and buildApiReferenceTags
 // skips any version whose number it cannot resolve. An empty label would drop
@@ -1270,7 +1278,7 @@ const config: Config = {
           // One-off legacy URLs.
           ...ROUTED_FRAMEWORKS.map((f) => f.routeSegment as string)
             .filter((segment) => ['.md', '.mdx'].some((ext) =>
-              fs.existsSync(path.join(process.cwd(), 'docs', 'sdks', segment, `migrate-7-to-8${ext}`))))
+              fs.existsSync(path.join(rootDocsDir(), 'sdks', segment, `migrate-7-to-8${ext}`))))
             .map((segment) => ({
               to: `/sdks/${segment}/migrate-7-to-8`,
               from: `/sdks/${segment}/migration-guide`,
