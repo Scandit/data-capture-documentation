@@ -159,10 +159,22 @@ export function getV5FallbackUrl(pathname) {
   return V5_PLATFORM_TARGETS[platform.toLowerCase()];
 }
 
+// Every path on the site is lower-case; /data-capture-sdk/iOS is a typo.
+// Percent-escapes (%C3) are left as they are: case means nothing in them.
+export function lowerCasePath(pathname) {
+  return pathname.replace(/(%[0-9a-f]{2})|[A-Z]/gi, (m, escape) =>
+    escape ?? m.toLowerCase(),
+  );
+}
+
+// The API reference, with or without a version prefix: static HTML outside
+// this app, so isAppRoute cannot vouch for it and only the server knows.
+const API_REFERENCE_PATH = /^(?:\/\d+\.\d+(?:\.\d+)?)?\/data-capture-sdk\//;
+
 // Old URLs that no docs tree or redirect page covers, recognised by shape.
 // A target the app does not render is loaded in full, because some are
 // API-reference pages (static HTML outside this app).
-export function getLegacyFallbackUrl(pathname) {
+export function getLegacyFallbackUrl(pathname, isRoute = isAppRoute) {
   // There was never a react/ tree: the React Native reference lives under
   // react-native/, but links still arrive with the short name. The version
   // prefix is the live one: getApiReferenceFallbackUrl has already moved a
@@ -175,13 +187,14 @@ export function getLegacyFallbackUrl(pathname) {
     /^((?:\/\d+\.\d+)?\/data-capture-sdk\/[^/]+\/parser\/)dlid\.html$/,
   );
   if (dlid) return `${dlid[1]}formats.html`;
-  // Every path on the site is lower-case; /data-capture-sdk/iOS is a typo.
+  // A mixed-case path: the lower-case one, but only where it can exist. An
+  // app route is known to; the API reference has to be asked. Anything else
+  // would cost a full page load just to 404 again, so it is left to
+  // getFallbackUrl, which the component hands the lower-case path.
   // Loop-safe: a lower-case path never matches this again.
-  // Percent-escapes (%C3) are left as they are: case means nothing in them.
-  const lower = pathname.replace(/(%[0-9a-f]{2})|[A-Z]/gi, (m, escape) =>
-    escape ?? m.toLowerCase(),
-  );
-  return lower === pathname ? null : lower;
+  const lower = lowerCasePath(pathname);
+  if (lower === pathname) return null;
+  return isRoute(lower) || API_REFERENCE_PATH.test(lower) ? lower : null;
 }
 
 function getFallbackUrl(pathname) {
@@ -276,7 +289,7 @@ export default function NotFoundContent(props) {
       getV5FallbackUrl(requestedPath) ??
       getUnservedVersionFallbackUrl(requestedPath, versions) ??
       getLegacyFallbackUrl(requestedPath) ??
-      getFallbackUrl(location.pathname));
+      getFallbackUrl(lowerCasePath(location.pathname)));
 
   useEffect(() => {
     if (!target) {
