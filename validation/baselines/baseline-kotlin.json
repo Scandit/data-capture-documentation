@@ -1,40 +1,5 @@
 [
   {
-    "hash": "0f44203557870d33daf3c7cf6ac179960aaf4441f3d8079fd05705ce5627021a",
-    "file": "docs/sdks/android/agents-android.md",
-    "snippet": 0
-  },
-  {
-    "hash": "3cd47a52bb6d0f2bca3be23fad107f49c01d68f5119a2808e809e14138f94ffd",
-    "file": "docs/sdks/android/agents-android.md",
-    "snippet": 1
-  },
-  {
-    "hash": "b0ed2a28e222486e229476689c4ddb45c9c99e191f7cdd0166915b8cafb2ef8b",
-    "file": "docs/sdks/android/agents-android.md",
-    "snippet": 2
-  },
-  {
-    "hash": "f756fdf21978c2258f17f65d4b39458e542c91945a458d7a54bf273ce6b0a7bf",
-    "file": "docs/sdks/android/agents-android.md",
-    "snippet": 3
-  },
-  {
-    "hash": "9de4ec087ee429f4c17e27bb32152eea0fd580e853b6c83a1332bb17af3c4187",
-    "file": "docs/sdks/android/agents-android.md",
-    "snippet": 4
-  },
-  {
-    "hash": "261a67173ae73e2f638b517dcbf64e33cd86ad6e32f011bc449688a73190145f",
-    "file": "docs/sdks/android/agents-android.md",
-    "snippet": 5
-  },
-  {
-    "hash": "e828a61a5054d138a4ef40db37bffb621789df3dec988afe98f0df1f7900eb98",
-    "file": "docs/sdks/android/agents-android.md",
-    "snippet": 6
-  },
-  {
     "hash": "ec027539d9ea1182209c18281dae2c78ba32507f094f43d8dd59d1045df01c64",
     "file": "docs/sdks/android/id-capture/advanced.md",
     "snippet": 0

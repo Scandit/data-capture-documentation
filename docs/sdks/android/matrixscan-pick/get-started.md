@@ -188,7 +188,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Register a [BarcodePickViewUiListener](https://docs.scandit.com/data-capture-sdk/android/barcode-capture/api/ui/barcode-pick-view.html#interface-scandit.datacapture.barcode.pick.ui.IBarcodePickViewUiListener) to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```kotlin
 barcodePickView.uiListener = object : BarcodePickViewUiListener {

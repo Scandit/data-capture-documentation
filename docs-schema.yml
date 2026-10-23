@@ -5,7 +5,8 @@ description: "Validation schema for Scandit Docusaurus Markdown/MDX frontmatter.
 type: object
 additionalProperties: true
 
-# Every page under docs/ carries these. The docs gate checks the pages a change
+# Every content page under docs/ carries these, except docs/shelfview.mdx,
+# which still needs its product and framework decided. The docs gate checks the pages a change
 # touches, so a page that loses one, or a new page without one, fails review.
 # Redirect-only stub pages are exempt.
 required:

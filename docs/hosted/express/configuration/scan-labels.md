@@ -30,11 +30,11 @@ Label scanning can be enabled and configured in your [Scandit Dashboard](https:/
   <img src="/img/express/label-scanning.png" alt="Label Scanning" width="800px" />
 </p>
 
-Once enabled, you can select from a the following pre-defined label types, and the respective fields will be automatically detected when scanning:
+Once enabled, you can select from the following predefined label types, and the respective fields will be automatically detected when scanning:
 
-* **Smart Device**: Captures the UPC/EAN, IMEI1 and IMEI2, and Serial Number from mobile device labels.
-* **Price Weight**: This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `SKU` and `priceText` fields.
-* **VIN**: Captures the Vehicle Identification Number (VIN) from vehicle labels.
+* **Smart Device Label**: Captures the UPC/EAN, IMEI1 and IMEI2, and Serial Number from mobile device labels.
+* **Price Label**: Captures the product barcode and the printed price from price labels.
+* **VIN Label**: Captures the Vehicle Identification Number (VIN) from vehicle labels.
 
 :::tip
 If you need to customize the behavior of the Smart Label Capture feature, please contact [Scandit Support](mailto:support@scandit.com).

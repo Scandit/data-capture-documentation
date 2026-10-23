@@ -18,7 +18,7 @@ In this guide you will learn step-by-step how to add MatrixScan Find to your app
 - A Barcode Find View: The pre-built UI elements used to highlight found items.
 
 :::note
-MatrixScan Count is implemented via [`SDCBarcodeFind`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind).
+MatrixScan Find is implemented via [`SDCBarcodeFind`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind).
 :::
 
 The general steps are:
@@ -42,7 +42,7 @@ import DataCaptureContextIos from '../../../partials/get-started/_create-data-ca
 
 <DataCaptureContextIos/>
 
-## Configure the Barcode Count Mode
+## Configure the Barcode Find Mode
 
 The main entry point for the Barcode Find Mode is the [`SDCBarcodeFind`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [`SDCBarcodeFindSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight.
 

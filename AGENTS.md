@@ -331,7 +331,7 @@ All SDK platforms are treated equally - no platform gets special priority over o
 
 ## Products
 
-The full list of products is the product registry, `content/registry/products.yml`. Use its `key` in frontmatter `product`, in component props and in data files. Its `aliases` (`matrixscan`, `label-capture`) are folder names under `/sdks/<framework>/` that differ from the key, and are valid only there and in `URL_PRODUCT_MAPPING`. `npm run verify:registry` fails the build if `docs-schema.yml`, the data files, `URL_PRODUCT_MAPPING` or a page's `product` disagree with it. Product Chooser text ("Choose this if / Consider another product if") goes in a separate file next to the registry, product-chooser.yml, once a product owner approves it; the same command checks it.
+The full list of products is the product registry, `content/registry/products.yml`. Use its `key` in frontmatter `product`, in component props and in data files. Its `aliases` (`matrixscan`, `label-capture`) are folder names under `/sdks/<framework>/` that differ from the key, and are valid only there and in `URL_PRODUCT_MAPPING`. `npm run verify:registry` fails the build if `docs-schema.yml`, the data files, `URL_PRODUCT_MAPPING` or a page's `product` disagree with it. Product Chooser text ("Choose this if / Consider another product if") goes in a separate file next to the registry, `content/registry/product-chooser.yml`, whose header comment shows the fields and how each one is displayed. Only entries with `status: approved` appear on pages; the same command checks every entry.
 
 ## Quick Reference
 

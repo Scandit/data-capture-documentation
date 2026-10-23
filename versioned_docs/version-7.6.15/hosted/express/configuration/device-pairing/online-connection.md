@@ -30,17 +30,18 @@ npm install @scandit/web-barcode-link
 import {
   BarcodeLink,
   BarcodeLinkMode,
+  BarcodeLinkSymbology,
   BarcodeLinkUiFlow
 } from '@scandit/web-barcode-link';
 ```
 
-2. Initialize BarcodeLink
+2. Create a BarcodeLink Instance
 
 ```javascript
 const barcodeLink = BarcodeLink.forLicenseKey('YOUR_SCANDIT_LICENSE_KEY');
 ```
 
-3. Set the Scanning Mode
+3. Set the Barcode Link Mode
 
 ```javascript
 barcodeLink.setBarcodeLinkMode(BarcodeLinkMode.ContinuousScanning);
@@ -50,9 +51,9 @@ barcodeLink.setBarcodeLinkMode(BarcodeLinkMode.ContinuousScanning);
 
 ```javascript
 barcodeLink.setSymbologies({
-  ean13Upca: { enabled: true },
-  code128: { enabled: true },
-  qr: { enabled: true }
+  [BarcodeLinkSymbology.EAN13UPCA]: { enabled: true },
+  [BarcodeLinkSymbology.Code128]: { enabled: true },
+  [BarcodeLinkSymbology.QR]: { enabled: true }
 });
 ```
 
@@ -60,11 +61,14 @@ barcodeLink.setSymbologies({
 
 ```javascript
 barcodeLink.addListener({
-  onCapture: (barcodes) => {
+  onCapture: (barcodes, finished) => {
     barcodes.forEach((barcode) => {
       console.log('Scanned:', barcode.data);
       // Handle the scanned data here
     });
+    if (finished) {
+      // The scanning session has ended
+    }
   }
 });
 ```
@@ -78,7 +82,7 @@ await barcodeLink.initialize(new BarcodeLinkUiFlow());
 ## Terminate the Session
 
 ```javascript
-await barcodeLink.dispose();
+barcodeLink.dispose();
 ```
 
 ## API Reference
@@ -101,7 +105,7 @@ Use `forLicenseKey(licenseKey: string): BarcodeLink` to create a new `BarcodeLin
 barcodeLink.setBarcodeLinkMode(BarcodeLinkMode.ContinuousListBuilding);
 ```
 
-Sets the scanning mode.
+Sets the Barcode Link mode.
 
 **Available values:**
 
@@ -131,6 +135,18 @@ Sets the behavior for how barcodes are listed.
 Only used in `SingleListBuilding` and `ContinuousListBuilding` modes.
 :::
 
+#### `setDisconnectionTimeout(disconnectionTimeout: number): BarcodeLink`
+
+```ts
+barcodeLink.setDisconnectionTimeout(30 * 60 * 1000);
+```
+
+Sets how long Barcode Link keeps trying to reconnect after the desktop and the smartphone lose their connection to each other. If the connection is not restored within this window, the session is aborted on both devices.
+
+Added in `@scandit/web-barcode-link` 1.2.0.
+
+The value is in milliseconds. It defaults to 15 minutes (`900000`) and is clamped between 1 minute (`60000`) and 60 minutes (`3600000`).
+
 #### `setPlatform(platform: BarcodeLinkPlatform): BarcodeLink`
 
 ```ts
@@ -155,6 +171,10 @@ barcodeLink.setBarcodeRegexValidation(/\d+/);
 Defines a regex to validate barcodes. Only matching barcodes are processed.
 By default no validation is applied.
 
+:::warning
+Don't add flags such as `i`, `g` or `u` to the regex. Barcode Link removes only the first and last character of the regex, so `/abc/i` becomes the pattern `abc/` and valid barcodes no longer match. For case-insensitive matching, list both cases in the pattern, for example `/^[A-Za-z0-9]+$/`. Patterns that need the `u` flag, such as `\p{L}`, don't work.
+:::
+
 #### `setBarcodeTransformations(barcodeTransformations: unknown): BarcodeLink`
 
 ```ts
@@ -167,13 +187,13 @@ Sets barcode transformation logic. Only used when `platform` is `BarcodeLinkPlat
 
 ```ts
 barcodeLink.setSymbologies({
-  ean13upca: {
+  [BarcodeLinkSymbology.EAN13UPCA]: {
     enabled: true,
   },
 });
 ```
 
-Enables specific symbologies for scanning.
+Enables specific symbologies for scanning. Use the `BarcodeLinkSymbology` constants as keys. They hold the exact key strings Barcode Link expects, such as `ean13Upca`.
 
 **[See all supported symbologies](https://docs.scandit.com/barcode-symbologies/)**
 
@@ -216,7 +236,7 @@ barcodeLink.addListener({
 ```
 
 Called when the remote device sends barcodes.  
-- `finished`: Indicates if scanning has finished (used in continuous modes).
+- `finished`: `true` when the scanning session on the remote device has ended. Check it in every mode to know when to clean up.
 
 ##### `onConnectionStateChanged`
 
@@ -230,7 +250,7 @@ barcodeLink.addListener({
 });
 ```
 
-Tracks connection state changes. Only available in `BarcodeLinkUilessFlow`.
+Tracks connection state changes. Only available in `BarcodeLinkHeadlessFlow`.
 
 **Available connection states:**
 
@@ -252,7 +272,7 @@ Removes a previously added listener.
 
 ### Initialization
 
-#### `initialize(flow: BarcodeLinkFlow): Promise`
+#### `initialize<T>(flow: BarcodeLinkFlow<T>): Promise<T>`
 
 ```ts
 await barcodeLink.initialize(new BarcodeLinkUiFlow());
@@ -267,7 +287,7 @@ Initializes Barcode Link using a specific flow.
 - Initializes with a pre-built UI.
 - Shows a QR code for smartphone connection.
 
-##### `BarcodeLinkUilessFlow`
+##### `BarcodeLinkHeadlessFlow`
 
 - Initializes a headless session.
 - Requires custom UI.
@@ -276,7 +296,9 @@ Initializes Barcode Link using a specific flow.
 Example:
 
 ```ts
-const qrcode = await barcodeLink.initialize(new BarcodeLinkUilessFlow());
+import { BarcodeLinkHeadlessFlow } from "@scandit/web-barcode-link";
+
+const qrcode = await barcodeLink.initialize(new BarcodeLinkHeadlessFlow());
 
 const img = document.createElement("img");
 img.src = qrcode.src;
@@ -293,7 +315,7 @@ document.body.append(a);
 #### `dispose(): void`
 
 ```ts
-await barcodeLink.dispose();
+barcodeLink.dispose();
 ```
 
 Closes the Barcode Link session, useful when unmounting components or ending a session manually.

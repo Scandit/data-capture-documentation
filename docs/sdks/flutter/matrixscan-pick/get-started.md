@@ -104,12 +104,12 @@ Connect the `BarcodePickView` to the Widget lifecycle. The widget is dependent o
 @override
 void didChangeAppLifecycleState(AppLifecycleState state) {
   if (state == AppLifecycleState.resumed) {
-    // Resume finding by calling the BarcodePickView widgetResumed function.
+    // Resume scanning by calling the BarcodePickView widgetResumed function.
     // Under the hood, it re-enables the BarcodePick mode and makes sure the view is properly
     // setup.
     barcodePickView.widgetResumed();
   } else {
-    // Pause finding by calling the BarcodePickView widgetPaused function.
+    // Pause scanning by calling the BarcodePickView widgetPaused function.
     // Under the hood, it will disable the mode and free resources that are not needed in a
     // paused state.
     barcodePickView.widgetPaused();

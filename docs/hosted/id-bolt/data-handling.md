@@ -67,6 +67,10 @@ const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
 | `AnonymizationMode.ImagesOnly`      | Only images are anonymized            | 1.3   |
 | `AnonymizationMode.FieldsAndImages` | Both fields and images are anonymized | 1.3   |
 
+:::note
+ID Bolt's default differs from the ID Capture SDK's. ID Bolt applies `AnonymizationMode.None` unless you set another mode, while the ID Capture SDK defaults to `FieldsOnly`. To get the SDK's behavior, set `anonymizationMode: AnonymizationMode.FieldsOnly`.
+:::
+
 ### Effects of Anonymization
 
 - **Fields Anonymization**: Sensitive fields are not extracted from documents

@@ -102,7 +102,7 @@ You can use a `BarcodePickView` from XAML in your MAUI application.
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
         xmlns:scandit="clr-namespace:Scandit.DataCapture.Barcode.Pick.UI.Maui;assembly=ScanditBarcodeCaptureMaui"
-        x:Class="MyFindBarcodePage">
+        x:Class="PickBarcodePage">
     <ContentPage.Content>
         <AbsoluteLayout>
             <scandit:BarcodePickView
@@ -121,9 +121,9 @@ You can use a `BarcodePickView` from XAML in your MAUI application.
 You can configure your view in the code behind class. For example:
 
 ```csharp
-public partial class MyFindBarcodePage : ContentPage
+public partial class PickBarcodePage : ContentPage
 {
-    public MyFindBarcodePage()
+    public PickBarcodePage()
     {
         this.InitializeComponent();
 
@@ -158,12 +158,12 @@ public override void OnPause()
 }
 ```
 
-If your are developing on MAUI then connect the BarcodePickView to the MAUI page lifecycle.
+If you are developing on MAUI then connect the BarcodePickView to the MAUI page lifecycle.
 
 In particular, make sure to call `BarcodePickView.OnResume` on your [`Element.HandlerChanged`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.element.handlerchanged) event and `BarcodePickView.OnPause` on your [`Page.OnDisappearing`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.maui.controls.page.ondisappearing).
 
 ```csharp
-public FindBarcodePage()
+public PickBarcodePage()
 {
     this.BarcodePickView.HandlerChanged += SetupBarcodePickView;
 }
@@ -189,7 +189,7 @@ The `BarcodePickView` displays a **Finish** button next to its shutter button.
 
 Subscribe to a `BarcodePickView.onFinishButtonTapped` event to be notified what items have been found once the finish button is pressed.
 
-In this tutorial, we will then navigate back to the previous screen to finish the find session.
+In this tutorial, we will then navigate back to the previous screen to finish the pick session.
 
 ```csharp
 BarcodePickView.FinishButtonTapped += (object? sender, FinishButtonTappedEventArgs e) =>
@@ -198,9 +198,9 @@ BarcodePickView.FinishButtonTapped += (object? sender, FinishButtonTappedEventAr
 };
 ```
 
-However, this convenient “finish” button is not supported with MAUI development. You can create the button manually and invoke `BarcodePickView.StopSearching` to achieve the same functionality. The following code snippet demonstrates how to do this:
+However, this convenient “finish” button is not supported with MAUI development. You can create the button manually and invoke `BarcodePickView.Stop()` to achieve the same functionality. The following code snippet demonstrates how to do this:
 
-`FindBarcodePage.xaml`:
+`PickBarcodePage.xaml`:
 ```csharp
 <AbsoluteLayout>
     (...)
@@ -211,7 +211,7 @@ However, this convenient “finish” button is not supported with MAUI developm
 </AbsoluteLayout>
 ```
 
-`FindBarcodePage.xaml.cs`:
+`PickBarcodePage.xaml.cs`:
 ```csharp
 private void FinishButtonClicked(object? sender, EventArgs args)
 {

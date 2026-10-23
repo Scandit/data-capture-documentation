@@ -106,7 +106,7 @@ The selection mode determines whether an aimer is shown in the preview to help w
 | **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-*Auto* requires [`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
+*Auto* requires [`SparkScanSettings.scanIntention`](https://docs.scandit.com/data-capture-sdk/web/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
