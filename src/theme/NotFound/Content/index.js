@@ -50,10 +50,10 @@ export function getApiReferenceFallbackUrl(pathname, prefixByMajor) {
   return target === pathname ? null : target;
 }
 
-// A path as the router matches it: no anchor, no trailing .html or
+// A path as the router matches it: no query or anchor, no trailing .html or
 // /index.html (the router strips both), and one trailing slash.
 function routeKey(path) {
-  const bare = path.split("#")[0].replace(/(?:\/index)?\.html$/, "");
+  const bare = path.split(/[?#]/)[0].replace(/(?:\/index)?\.html$/, "");
   return bare.endsWith("/") ? bare : `${bare}/`;
 }
 
@@ -124,6 +124,103 @@ export function getUnservedVersionFallbackUrl(
   return target === pathname ? null : target;
 }
 
+// Version 5 docs were published per platform, under /5.<minor>/<platform>/
+// and /stable/<platform>/. None of their pages has a current twin, so the
+// bridge for a reader on 5.x is that platform's 5-to-6 migration guide.
+const V5_PLATFORM_TARGETS = {
+  ios: "/sdks/ios/migrate-5-to-6/",
+  android: "/sdks/android/migrate-5-to-6/",
+  web: "/sdks/web/migrate-5-to-6/",
+  cordova: "/sdks/cordova/migrate-5-to-6/",
+  phonegap: "/sdks/cordova/migrate-5-to-6/",
+  react_native: "/sdks/react-native/migrate-5-to-6/",
+  "react-native": "/sdks/react-native/migrate-5-to-6/",
+  titanium: "/sdks/titanium/migrate-5-to-6/",
+  c_api: "/sdks/linux/overview/",
+  xamarin: xamarinMigrationPath("xamarin/android"),
+  "xamarin.ios": xamarinMigrationPath("xamarin/ios"),
+  "xamarin.android": xamarinMigrationPath("xamarin/android"),
+  "xamarin.forms": xamarinMigrationPath("xamarin/forms"),
+};
+// Only the platform names above: any other segment (system-requirements/,
+// data-capture-sdk/, sdks/, ...) is a current path, left to the version rules.
+const V5_PATTERN =
+  /^\/(5\.\d+(?:\.\d+)?|stable)\/(ios|android|web|cordova|phonegap|react_native|react-native|titanium|c_api|xamarin(?:\.ios|\.android|\.forms)?)(?:\/|$)/i;
+
+// The bridge for a 5.x URL.
+export function getV5FallbackUrl(pathname) {
+  const v5 = pathname.match(V5_PATTERN);
+  if (!v5) return null;
+  const [, prefix, platform] = v5;
+  // /stable/c_api/ is still the live C API reference: a page missing there is
+  // a 404, not a 5.x page.
+  if (prefix.toLowerCase() === "stable" && platform.toLowerCase() === "c_api") {
+    return null;
+  }
+  return V5_PLATFORM_TARGETS[platform.toLowerCase()];
+}
+
+// Every path on the site is lower-case; /data-capture-sdk/iOS is a typo.
+// Percent-escapes (%C3) are left as they are: case means nothing in them.
+export function lowerCasePath(pathname) {
+  return pathname.replace(/(%[0-9a-f]{2})|[A-Z]/gi, (m, escape) =>
+    escape ?? m.toLowerCase(),
+  );
+}
+
+// The API reference, with or without a version prefix: static HTML outside
+// this app, so isAppRoute cannot vouch for it and only the server knows.
+const API_REFERENCE_PATH = /^(?:\/\d+\.\d+(?:\.\d+)?)?\/data-capture-sdk\//;
+
+// Old URLs that no docs tree or redirect page covers, recognised by shape.
+// A target the app does not render is loaded in full, because some are
+// API-reference pages (static HTML outside this app).
+export function getLegacyFallbackUrl(pathname, isRoute = isAppRoute) {
+  // Matched on the lower-case path, so a mixed-case link (/data-capture-sdk/
+  // React/...) takes one step rather than two.
+  const lowered = lowerCasePath(pathname);
+  // There was never a react/ tree: the React Native reference lives under
+  // react-native/, but links still arrive with the short name. The version
+  // prefix is the live one: getApiReferenceFallbackUrl has already moved a
+  // retired one.
+  const react = lowered.match(/^((?:\/\d+\.\d+)?\/data-capture-sdk\/)react(\/.*)?$/);
+  if (react) return `${react[1]}react-native${react[2] ?? "/"}`;
+  // The DLID format was dropped from every framework's parser reference; the
+  // formats page lists what the parser supports now.
+  const dlid = lowered.match(
+    /^((?:\/\d+\.\d+)?\/data-capture-sdk\/[^/]+\/parser\/)dlid\.html$/,
+  );
+  if (dlid) return `${dlid[1]}formats.html`;
+  // A mixed-case path: the lower-case one, but only where it can exist. An
+  // app route is known to; the API reference has to be asked. Anything else
+  // would cost a full page load just to 404 again, so it is left to
+  // getFallbackUrl, which the component hands the lower-case path.
+  // Loop-safe: a lower-case path never matches this again.
+  if (lowered === pathname) return null;
+  return isRoute(lowered) || API_REFERENCE_PATH.test(lowered) ? lowered : null;
+}
+
+// The unserved-version rule moves a reader into a served tree, which may not
+// have the page either. Inside a served version's tree (/7.6.15/..., /next/...)
+// the only static redirect pages are for ".html" paths (fromExtensions) and
+// for hosted/ pages (rootRouteRedirects), and that rule never hands this one
+// either: UNSERVED_VERSION_PATTERN rejects a path with a dot, and its hosted
+// branch returns only app routes, which come back unchanged. Change either
+// guard and this assumption has to be checked again. So a target there that
+// the app does not render is answered here, by the rules that would run after
+// the 404 it would get, and usually costs no page load. At the root a redirect page
+// may exist (/sdks/web/migration-guide), so that target is still loaded from
+// the server.
+export function settleInServedTree(target, versions, isRoute = isAppRoute) {
+  if (!target || !versions || isRoute(target)) return target;
+  const inServedTree = versions.some((v) => {
+    const prefix = v.path.replace(/\/$/, "");
+    return prefix !== "" && target.startsWith(`${prefix}/`);
+  });
+  if (!inServedTree) return target;
+  return getLegacyFallbackUrl(target, isRoute) ?? getFallbackUrl(lowerCasePath(target)) ?? target;
+}
+
 function getFallbackUrl(pathname) {
   // Matches optional version prefix + /sdks/ + framework (including compound like net/ios, xamarin/ios)
   const match = pathname.match(
@@ -167,6 +264,25 @@ function getFallbackUrl(pathname) {
   return `${versionPrefix}/sdks/${framework}/${fallbackPath}`;
 }
 
+// Keep the reader's query and anchor, unless the target names its own anchor
+// (the query still goes before it).
+function withSearchAndHash(url, location) {
+  const hashAt = url.indexOf("#");
+  const base = hashAt === -1 ? url : url.slice(0, hashAt);
+  const hash = hashAt === -1 ? location.hash : url.slice(hashAt);
+  // A target with its own query (/?framework=net) keeps it, and the reader's
+  // is added to it rather than starting a second "?".
+  const search =
+    location.search && base.includes("?") ? `&${location.search.slice(1)}` : location.search;
+  return base + search + hash;
+}
+
+// The target that means "load this URL from the server".
+const ASK_SERVER = "ask-server";
+// The last path whose 404 was shown, so a later in-app link to the same path
+// (an anchor on it) does not reload.
+let lastServedNotFound = null;
+
 export default function NotFoundContent(props) {
   const location = useLocation();
   const history = useHistory();
@@ -177,38 +293,65 @@ export default function NotFoundContent(props) {
   const requestedPath = ExecutionEnvironment.canUseDOM
     ? window.location.pathname
     : location.pathname;
-  const apiReferenceUrl = getApiReferenceFallbackUrl(
-    requestedPath,
-    siteConfig.customFields?.apiReferencePrefixByMajor,
-  );
   const versions = useVersions(undefined);
-  const cApi = apiReferenceUrl ? null : getCApiFallbackUrl(requestedPath, versions);
-  // The C API reference owns its paths: when its rule names no target, no
+  // An in-app link to a page the app does not have. The server may still
+  // serve one (a static redirect page: /stable/web/CHANGELOG.md,
+  // /sdks/web/migration-guide, a retired version tree), and client-side
+  // routing never asks it. Once per path: a page the server does not have
+  // either comes back as a first load (POP), and a hash link clicked on a 404
+  // that is already showing is not a new path.
+  const askServer =
+    ExecutionEnvironment.canUseDOM &&
+    history.action === "PUSH" &&
+    requestedPath !== lastServedNotFound;
+  // 5.x pages first, C API included: /5.<minor>/c_api/ has no live tree, and
+  // its readers go to the Linux overview. Every later C API line has its own
+  // rule (cApiFallback.ts), which owns its paths: when it names no target, no
   // docs-tree rule applies either (/6.28/c_api/ is not a 6.28 docs page).
-  const fallbackUrl =
-    apiReferenceUrl || cApi || isCApiReferencePath(requestedPath)
-      ? null
-      : (getUnservedVersionFallbackUrl(requestedPath, versions) ??
-        getFallbackUrl(location.pathname));
+  const v5Url = askServer ? null : getV5FallbackUrl(requestedPath);
+  const cApi = askServer || v5Url ? null : getCApiFallbackUrl(requestedPath, versions);
+  // The server first, for an in-app link: its answer (a static page) beats
+  // any guess from the URL's shape. Then the first rule that names a target
+  // wins, in this order: API reference, 5.x platform pages, the C API
+  // reference, other unserved versions (a /5.0/sdks/... path is a current
+  // page), the legacy shapes, the framework fallback.
+  const target = askServer
+    ? ASK_SERVER
+    : (getApiReferenceFallbackUrl(
+        requestedPath,
+        siteConfig.customFields?.apiReferencePrefixByMajor,
+      ) ??
+      v5Url ??
+      (isCApiReferencePath(requestedPath)
+        ? (cApi?.url ?? null)
+        : (settleInServedTree(getUnservedVersionFallbackUrl(requestedPath, versions), versions) ??
+          getLegacyFallbackUrl(requestedPath) ??
+          getFallbackUrl(lowerCasePath(location.pathname)))));
 
   useEffect(() => {
-    if (apiReferenceUrl) {
-      // A full page load, not history.replace: the API reference is static
-      // HTML outside this app, so client-side routing would only render this
-      // 404 again.
-      window.location.replace(apiReferenceUrl + location.search + location.hash);
-    } else if (cApi) {
+    if (!target) {
+      lastServedNotFound = requestedPath;
+    } else if (target === ASK_SERVER) {
+      // reload(), not location.replace() with the same URL: with an anchor,
+      // that is a same-document navigation and fetches nothing.
+      window.location.reload();
+    } else if (cApi && target === cApi.url) {
       // Neither C API target carries the query or anchor over: a Doxygen
       // anchor means nothing on the samples page or the index. The index is
       // static HTML too, so it is a full page load.
       if (cApi.appRoute) history.replace(cApi.url);
       else window.location.replace(cApi.url);
-    } else if (fallbackUrl) {
-      history.replace(fallbackUrl + location.search + location.hash);
+    } else if (isAppRoute(target)) {
+      history.replace(withSearchAndHash(target, location));
+    } else {
+      // A full page load: the API reference and the redirect pages are
+      // static HTML outside this app, so client-side routing would only
+      // render this 404 again.
+      window.location.replace(withSearchAndHash(target, location));
     }
-  }, [apiReferenceUrl, cApi?.url, fallbackUrl]);
+  }, [target, requestedPath]);
 
-  if (apiReferenceUrl || cApi || fallbackUrl) {
+  if (target) {
     return null;
   }
 
