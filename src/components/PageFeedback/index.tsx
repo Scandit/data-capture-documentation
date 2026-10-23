@@ -208,7 +208,10 @@ function Inner({ url, title }: PageFeedbackProps) {
   };
 
   const vote = (isHelpful: boolean) => {
-    if (recorded) return;
+    // Not while a comment is being sent: it already carries the current vote,
+    // and a different one cast meanwhile would be recorded in two places with
+    // two values.
+    if (recorded || sendingRef.current) return;
     votesCast.current += 1;
     setHelpful(isHelpful);
     setVoteAttempt((n) => n + 1);
@@ -355,10 +358,18 @@ function Inner({ url, title }: PageFeedbackProps) {
         });
         next = dispatched ? 'dispatched' : 'unreachable';
         if (!dispatched && held !== null && votesCast.current === votesBefore) {
-          heldVote.current = held;
-          // The retry poll stops for good once it sees no held vote, which it
-          // may have while the request was in flight. Start it again.
-          if (mounted.current) setVoteAttempt((n) => n + 1);
+          if (mounted.current) {
+            heldVote.current = held;
+            // The retry poll stops for good once it sees no held vote, which
+            // it may have while the request was in flight. Start it again.
+            setVoteAttempt((n) => n + 1);
+          } else {
+            // Unmounted during the request: its last chance to flush already
+            // ran, with nothing held. One try now, or the vote is lost.
+            if (capturePostHogEvent('docs_page_feedback', { ...base(), helpful: held })) {
+              writeSession(VOTE_KEY(path), held ? 'up' : 'down');
+            }
+          }
         }
         if (dispatched) {
           if (helpful !== null) {
@@ -429,7 +440,7 @@ function Inner({ url, title }: PageFeedbackProps) {
             type="button"
             className={`${styles.vote} ${helpful === true ? styles.on : ''}`}
             aria-pressed={helpful === true}
-            aria-disabled={recorded}
+            aria-disabled={recorded || sending}
             onClick={() => vote(true)}
           >
             <span aria-hidden="true">👍</span> Helpful
@@ -438,7 +449,7 @@ function Inner({ url, title }: PageFeedbackProps) {
             type="button"
             className={`${styles.vote} ${helpful === false ? styles.bad : ''}`}
             aria-pressed={helpful === false}
-            aria-disabled={recorded}
+            aria-disabled={recorded || sending}
             onClick={() => vote(false)}
           >
             <span aria-hidden="true">👎</span> Could be better
