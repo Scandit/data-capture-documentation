@@ -52,3 +52,40 @@ export function withCurrentDocsPath(path: string): string {
   if (!match || !isUnreleasedFramework(match[1])) return path;
   return `${CURRENT_DOCS_PATH}${path}`;
 }
+
+/** Where the API reference is served from. */
+const DOCS_HOST = "https://docs.scandit.com";
+
+/**
+ * Builds an API-reference URL for the docs version the reader is on.
+ *
+ * publish_platform() in data-capture-sdk publishes the API reference per
+ * major.minor LINE — /7.6/data-capture-sdk/… — plus one unversioned copy at
+ * /data-capture-sdk/… that tracks whatever shipped most recently.
+ *
+ * So the version matters. A frozen version linking the unversioned copy
+ * documents whatever released last rather than itself: during a beta window the
+ * released version sits at the site root while the beta owns the unversioned
+ * tree, and the reader on the release gets the beta's API. The current version
+ * links the unversioned copy, which is the convention its Markdown uses too.
+ *
+ * Data files therefore store the path WITHIN the API reference, and the version
+ * is applied here at render time. They cannot store the full URL: one shared
+ * file serves every version, so there is no single correct prefix to bake in.
+ *
+ *   ("ios/…", "current")   -> https://docs.scandit.com/data-capture-sdk/ios/…
+ *   ("ios/…", "7.6.14")    -> https://docs.scandit.com/7.6/data-capture-sdk/ios/…
+ *   ("https://…", …)       -> unchanged, for any entry still holding a full URL
+ */
+export function apiReferenceUrl(path: string, versionName?: string): string {
+  if (!path) return path;
+  if (/^https?:\/\//.test(path)) return path;
+  const withinReference = path.replace(/^\//, "");
+  const line =
+    versionName && versionName !== "current"
+      ? versionName.match(/^(\d+\.\d+)\./)?.[1]
+      : undefined;
+  return line
+    ? `${DOCS_HOST}/${line}/data-capture-sdk/${withinReference}`
+    : `${DOCS_HOST}/data-capture-sdk/${withinReference}`;
+}

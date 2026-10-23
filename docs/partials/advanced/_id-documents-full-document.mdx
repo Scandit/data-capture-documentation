@@ -331,8 +331,12 @@ This scanner combines data extraction from all supported parts of the document a
 
 #### Anonymized Documents
 
-Some countries have specific requirements for the anonymization of documents. By default, ID Capture will omit sensitive fields from countries with such restrictions. To control this behavior, you can set the `IdAnonymizationMode` parameter.
-Depending on the anonymization mode, certain sensitive fields are not extracted from documents (their values are returned as nil) or they are blacked out on the returned document images.
+Some countries have specific requirements for the anonymization of documents. By default, ID Capture omits sensitive fields from documents of those countries: `IdCaptureSettings.anonymizationMode` defaults to `IdAnonymizationMode.FieldsOnly`. To turn anonymization off and receive all fields, set it to `IdAnonymizationMode.None`. Value names follow each platform's conventions, for example `fieldsOnly` on iOS and `FIELDS_ONLY` on Android.
+Depending on the anonymization mode, certain sensitive fields are not extracted from documents (their values are returned empty: `nil` or `null`, depending on the platform) or they are blacked out on the returned document images.
+
+Because of this default, the fields listed in the table below come back empty, for example the document number of German ID cards and passports. That's the result of anonymization, not a scanning error.
+
+ID Bolt uses a different default, `AnonymizationMode.None`. See [ID Bolt data handling](/hosted/id-bolt/data-handling.md#anonymization-mode).
 
 Documents and fields that are subject to anonymization are listed below:
 

@@ -37,13 +37,13 @@ You can customize:
 - The color of the highlight for the scanned barcode.
 - The feedback (sound, vibration).
 
-To emit an error, you have to implement a `barcode.spark.feedback.ISparkScanFeedbackDelegate` and set it to the `barcode.spark.ui.SparkScanView.FeedbackDelegate`:
+To emit an error, you have to implement a [`SparkScanFeedbackDelegate`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-feedback-delegate.html#interface-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate) and set it to [`SparkScanView.feedbackDelegate`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view.html#property-scandit.datacapture.barcode.spark.ui.SparkScanView.FeedbackDelegate):
 
 ```dart
 sparkScanView.feedbackDelegate = this;
 ```
 
-In the `scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate.GetFeedbackForBarcode` method you can then return an error or a success feedback:
+In the [`SparkScanFeedbackDelegate.feedbackForBarcode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-feedback-delegate.html#method-scandit.datacapture.barcode.spark.feedback.ISparkScanFeedbackDelegate.GetFeedbackForBarcode) method you can then return an error or a success feedback:
 
 ```dart
 @override
@@ -68,7 +68,7 @@ You can have different error states triggered by different logic conditions. For
 
 ### Reject Barcodes
 
-To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan's built-in error state. Setting the `scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay` parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
+To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan's built-in error state. Setting the [`SparkScanBarcodeErrorFeedback.resumeCapturingDelay`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
 
 ## UI Customization
 
@@ -84,10 +84,10 @@ import Customization from '../../../partials/advanced/_sparkscan-customization.m
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.scanningBehavior`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.ScanningBehavior) and [`SparkScanViewSettings.previewBehavior`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.PreviewBehavior). This combination allows for flexible configurations to suit different scanning needs.
 
 :::note
-Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `defaultScanningMode`.
+`SparkScanViewSettings.scanningBehavior` and `SparkScanViewSettings.previewBehavior` require SDK version 8.7 or later.
 :::
 
 ### Selection Mode
@@ -101,7 +101,7 @@ The selection mode determines whether an aimer is shown in the preview to help w
 | **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
+*Auto* requires [`SparkScanSettings.scanIntention`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -114,7 +114,7 @@ The scanning behavior determines how barcodes are scanned - one at a time or con
 | **Continuous scan** | Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.  |
 
 :::tip
-Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled (`SDCSparkScanViewSettings.holdToScanEnabled`).
+Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SparkScanViewSettings.holdToScanEnabled`](https://docs.scandit.com/data-capture-sdk/flutter/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
 :::
 
 ### Preview Behavior
@@ -135,9 +135,7 @@ final settings = SparkScanSettings();
 settings.selectionMode = SelectionMode.off; // or SelectionMode.on to always show the aimer
 
 final viewSettings = SparkScanViewSettings();
-viewSettings.defaultScanningMode = SparkScanScanningModeDefault.fromPreviewBehavior(
-  SparkScanScanningBehavior.continuous, // or .single
-  SparkScanPreviewBehavior.persistent, // or .defaultBehaviour
-);
+viewSettings.scanningBehavior = SparkScanScanningBehavior.continuous; // or .single
+viewSettings.previewBehavior = SparkScanPreviewBehavior.persistent; // or .defaultBehaviour
 ```
 

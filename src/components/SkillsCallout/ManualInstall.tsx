@@ -57,6 +57,8 @@ const ManualInstall: React.FC<ManualInstallProps> = ({ framework }) => {
         <select
           id="skills-agent-picker"
           className={styles.manualSelect}
+          // Agent and platform names are product names.
+          translate="no"
           value={agent.key}
           onChange={handleChange}
         >

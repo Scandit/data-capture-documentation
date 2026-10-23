@@ -83,6 +83,9 @@ npm install scandit-capacitor-datacapture-core
 
 # Barcode scanning functionality
 npm install scandit-capacitor-datacapture-barcode
+
+# Add the native parts of the plugins to your Android and iOS projects
+npx cap sync
 ```
 
 ### 2. Initialize the Data Capture Context
@@ -106,13 +109,23 @@ const settings = new SparkScanSettings();
 settings.enableSymbologies([Symbology.EAN13UPCA, Symbology.Code128]);
 settings.codeDuplicateFilter = 0;
 settings.scanIntention = ScanIntention.Smart;
+settings.selectionMode = SelectionMode.Auto;
 ```
+
+`DataCaptureContext`, `ScanIntention` and `SelectionMode` come from `scandit-capacitor-datacapture-core`. `Symbology` and the SparkScan classes come from `scandit-capacitor-datacapture-barcode`.
 
 In this example, we're:
 
 - Enabling both EAN-13 and Code 128 symbologies
 - Setting the code duplicate filter to 0, meaning the same code can be reported multiple times
 - Using the Smart [scan intention](https://docs.scandit.com/data-capture-sdk/capacitor/core/api/scan-intention.html#enum-scandit.datacapture.core.ScanIntention) algorithm, to reduce the likelihood of unintended scans
+- Setting the [selection mode](https://docs.scandit.com/data-capture-sdk/capacitor/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode) to *Auto*, so the SDK decides when users need to confirm the barcode they aim at. *Auto* works only with the Smart scan intention
+
+Then create the SparkScan mode with these settings:
+
+```js
+const sparkScan = new SparkScan(settings);
+```
 
 ### 4. Setup the SparkScanView
 
@@ -120,14 +133,12 @@ Now we'll create and configure the scanner view and it's settings. This is done 
 
 ```js
 const viewSettings = new SparkScanViewSettings();
-viewSettings.defaultScanningMode = new SparkScanScanningModeTarget(SparkScanScanningBehavior.Single);
 viewSettings.soundEnabled = true;
 viewSettings.hapticEnabled = false;
 ```
 
 In this example, we're:
 
-- Setting the default scanning mode to `SparkScanScanningModeTarget` for precision scanning
 - Enabling sound feedback
 - Disabling haptic feedback
 
@@ -137,19 +148,19 @@ Next, we create the `SparkScanView` instance, adding the scanning interface to t
 const sparkScanView = SparkScanView.forContext(DataCaptureContext.sharedInstance, sparkScan, viewSettings);
 ```
 
-In your application's state handling logic, you must also call the `stopScanning` method when the scanner is no longer needed:
+You must also stop scanning when the scanner is no longer needed, for example when the app goes to the background:
 
 ```js
-componentWillUnmount() {
-sparkScanView.stopScanning();
-}
-
-handleAppStateChange = async (nextAppState) => {
-if (nextAppState.match(/inactive|background/)) {
-sparkScanView.stopScanning();
-}
-};
+await sparkScanView.stopScanning();
 ```
+
+When the user leaves the scanning screen for good, also dispose of the view to release its native resources:
+
+```js
+await sparkScanView.dispose();
+```
+
+Both methods return a promise, so call them from an async function.
 
 ### 5. Implement the Listener
 
@@ -157,11 +168,13 @@ Lastly, you need to implement the listener to handle the scanned data. This is d
 
 ```js
 const listener = {
-	didScan: (sparkScan, session, getFrameData) => {
+	didScan: async (sparkScan, session, getFrameData) => {
 		// Gather the recognized barcode
-		const barcode = session.newlyRecognizedBarcode[0];
+		const barcode = session.newlyRecognizedBarcode;
 
-		// Handle the barcode
+		if (barcode) {
+			// Handle the barcode
+		}
 	},
 };
 

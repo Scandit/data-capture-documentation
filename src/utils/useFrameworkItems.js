@@ -15,12 +15,6 @@ const FRAMEWORKS = [
   { label: "Cordova", sidebarId: "cordovaSidebar", slug: "cordova", activeBasePath: "sdks/cordova/" },
   { label: "React Native", sidebarId: "reactnativeSidebar", slug: "react-native", activeBasePath: "sdks/react-native/" },
   { label: "Flutter", sidebarId: "flutterSidebar", slug: "flutter", activeBasePath: "sdks/flutter/" },
-  // KMP docs exist only in the "current" doc version (see
-  // UNRELEASED_FRAMEWORK_SLUGS): there is no versioned_docs snapshot for it
-  // yet, so the generic `${linkVersion}/${slug}${link}` formula below (which
-  // targets whatever version the visitor is on) would 404 for anyone browsing
-  // a released version. Pin it to CURRENT_DOCS_PATH until it ships, so
-  // switching to it from an older version moves the reader up to 8.6.
   { label: "Kotlin Multiplatform", sidebarId: "kmpSidebar", slug: "kmp", activeBasePath: "sdks/kmp/" },
   { label: "Capacitor", sidebarId: "capacitorSidebar", slug: "capacitor", activeBasePath: "sdks/capacitor/" },
   { label: "Titanium", sidebarId: "titaniumSidebar", slug: "titanium", activeBasePath: "sdks/titanium/" },

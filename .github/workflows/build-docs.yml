@@ -83,6 +83,10 @@ jobs:
       - name: Typecheck
         run: yarn typecheck
 
+      # Pins where the 404 page sends a broken link into the C API reference.
+      - name: Test C API 404 fallback
+        run: yarn test:not-found
+
       - name: Build documentation
         run: yarn build
 

@@ -150,7 +150,18 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/ios/add-sdk',
-        'sdks/ios/agent-skills',
+        {
+          type: 'category',
+          label: 'Agent Skills',
+          link: {
+            type: 'doc',
+            id: 'sdks/ios/agent-skills',
+          },
+          collapsed: true,
+          items: [
+            'sdks/ios/agent-skills/scandit-mcp-installation-guide',
+          ],
+        },
         'sdks/ios/testing',
         {
           type: "link",
@@ -408,7 +419,18 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/android/add-sdk',
-        'sdks/android/agent-skills',
+        {
+          type: 'category',
+          label: 'Agent Skills',
+          link: {
+            type: 'doc',
+            id: 'sdks/android/agent-skills',
+          },
+          collapsed: true,
+          items: [
+            'sdks/android/agent-skills/scandit-mcp-installation-guide',
+          ],
+        },
         {
           type: "link",
           label: "GitHub Samples",
@@ -659,7 +681,18 @@ const sidebars: SidebarsConfig = {
         },
         'sdks/web/add-sdk',
         'sdks/web/webview',
-        'sdks/web/agent-skills',
+        {
+          type: 'category',
+          label: 'Agent Skills',
+          link: {
+            type: 'doc',
+            id: 'sdks/web/agent-skills',
+          },
+          collapsed: true,
+          items: [
+            'sdks/web/agent-skills/scandit-mcp-installation-guide',
+          ],
+        },
         'sdks/web/testing',
         {
           type: "link",
@@ -884,7 +917,18 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/cordova/add-sdk',
-        'sdks/cordova/agent-skills',
+        {
+          type: 'category',
+          label: 'Agent Skills',
+          link: {
+            type: 'doc',
+            id: 'sdks/cordova/agent-skills',
+          },
+          collapsed: true,
+          items: [
+            'sdks/cordova/agent-skills/scandit-mcp-installation-guide',
+          ],
+        },
         {
           type: "link",
           label: "GitHub Samples",
@@ -1117,6 +1161,15 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'sdks/react-native/core-concepts',
+        {
+          type: 'category',
+          label: 'AIO Components',
+          collapsed: true,
+          items: [
+            'sdks/react-native/aio/get-started',
+            'sdks/react-native/aio/navigating-between-screens',
+          ],
+        },
         'sdks/react-native/system-requirements',
         {
           type: "link",
@@ -1124,7 +1177,18 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/react-native/add-sdk',
-        'sdks/react-native/agent-skills',
+        {
+          type: 'category',
+          label: 'Agent Skills',
+          link: {
+            type: 'doc',
+            id: 'sdks/react-native/agent-skills',
+          },
+          collapsed: true,
+          items: [
+            'sdks/react-native/agent-skills/scandit-mcp-installation-guide',
+          ],
+        },
         {
           type: "link",
           label: "GitHub Samples",
@@ -1372,7 +1436,18 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/flutter/add-sdk',
-        'sdks/flutter/agent-skills',
+        {
+          type: 'category',
+          label: 'Agent Skills',
+          link: {
+            type: 'doc',
+            id: 'sdks/flutter/agent-skills',
+          },
+          collapsed: true,
+          items: [
+            'sdks/flutter/agent-skills/scandit-mcp-installation-guide',
+          ],
+        },
         {
           type: "link",
           label: "GitHub Samples",
@@ -1613,7 +1688,18 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/kmp/add-sdk',
-        'sdks/kmp/agent-skills',
+        {
+          type: 'category',
+          label: 'Agent Skills',
+          link: {
+            type: 'doc',
+            id: 'sdks/kmp/agent-skills',
+          },
+          collapsed: true,
+          items: [
+            'sdks/kmp/agent-skills/scandit-mcp-installation-guide',
+          ],
+        },
       ],
     },
     {
@@ -1839,7 +1925,18 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/capacitor/add-sdk',
-        'sdks/capacitor/agent-skills',
+        {
+          type: 'category',
+          label: 'Agent Skills',
+          link: {
+            type: 'doc',
+            id: 'sdks/capacitor/agent-skills',
+          },
+          collapsed: true,
+          items: [
+            'sdks/capacitor/agent-skills/scandit-mcp-installation-guide',
+          ],
+        },
         {
           type: "link",
           label: "GitHub Samples",
@@ -2180,7 +2277,18 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/net/ios/add-sdk',
-        'sdks/net/ios/agent-skills',
+        {
+          type: 'category',
+          label: 'Agent Skills',
+          link: {
+            type: 'doc',
+            id: 'sdks/net/ios/agent-skills',
+          },
+          collapsed: true,
+          items: [
+            'sdks/net/ios/agent-skills/scandit-mcp-installation-guide',
+          ],
+        },
         {
           type: "link",
           label: "GitHub Samples",
@@ -2421,7 +2529,18 @@ const sidebars: SidebarsConfig = {
           href: "https://support.scandit.com/hc/en-us",
         },
         'sdks/net/android/add-sdk',
-        'sdks/net/android/agent-skills',
+        {
+          type: 'category',
+          label: 'Agent Skills',
+          link: {
+            type: 'doc',
+            id: 'sdks/net/android/agent-skills',
+          },
+          collapsed: true,
+          items: [
+            'sdks/net/android/agent-skills/scandit-mcp-installation-guide',
+          ],
+        },
         {
           type: "link",
           label: "GitHub Samples",
