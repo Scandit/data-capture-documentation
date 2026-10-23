@@ -17,7 +17,7 @@ SparkScan is optimized by default for efficiency, accuracy, and responsiveness. 
 
 Allowing the end user to control the scanner with hardware buttons can be useful if your users typically wear gloves. It can also improve ergonomics in some workflows.
 
-SparkScan offers a built-in API to let you do this via [scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
+SparkScan offers a built-in API to let you do this via [`SparkScanViewSettings.HardwareTriggerEnabled`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HardwareTriggerEnabled).
 
 <!--
 ### Trigger Error State
@@ -77,7 +77,7 @@ You can have different error states triggered by different logic conditions. For
 
 ### Reject Barcodes
 
-To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan’s built-in error state. Setting the [SDCSparkScanBarcodeErrorFeedback.resumeCapturingDelay](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
+To prevent scanning unwanted barcodes (like those already listed or from incorrect lots), use SparkScan’s built-in error state. Setting the [SparkScanBarcodeErrorFeedback.ResumeCapturingDelay](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-barcode-feedback.html#property-scandit.datacapture.barcode.spark.feedback.Error.ResumeCapturingDelay) parameter to `0` allows the user to continue scanning immediately without pausing on rejected codes.
 
 ## UI Customization
 
@@ -93,10 +93,10 @@ import Customization from '../../../../partials/advanced/_sparkscan-customizatio
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.SelectionMode`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.DefaultScanningMode`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.SelectionMode`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.ScanningBehavior`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.ScanningBehavior) and [`SparkScanViewSettings.PreviewBehavior`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.PreviewBehavior). This combination allows for flexible configurations to suit different scanning needs.
 
 :::note
-Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `DefaultScanningMode`.
+`SparkScanViewSettings.ScanningBehavior` and `SparkScanViewSettings.PreviewBehavior` require SDK version 8.7 or later.
 :::
 
 ### Selection Mode
@@ -110,7 +110,7 @@ The selection mode determines whether an aimer is shown in the preview to help w
 | **On**  | This mode always adds an aimer to the camera preview, and the user confirms the aimed barcode with the trigger button. This is recommended only when selecting among many close barcodes is the common task. |
 
 :::tip
-*Auto* requires [`SDCSparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
+*Auto* requires [`SparkScanSettings.ScanIntention`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.ScanIntention) to be set to *Smart*. With *Manual*, it behaves like *Off*. Setting the selection mode to *On* forces the aimer to be shown at all times.
 :::
 
 ### Scanning Behavior
@@ -123,7 +123,7 @@ The scanning behavior determines how barcodes are scanned - one at a time or con
 | **Continuous scan** | Scan barcodes consecutively. The user needs to trigger the scanner once and barcodes will be scanned without any further interaction before each scan. This allows for a smoother experience when multiple barcodes need to be scanned consecutively.  |
 
 :::tip
-Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled (`SDCSparkScanViewSettings.HoldToScanEnabled`).
+Users can enable continuous scanning by holding down the trigger button. This gesture can be disabled ([`SparkScanViewSettings.HoldToScanEnabled`](https://docs.scandit.com/data-capture-sdk/dotnet.android/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.HoldToScanEnabled)).
 :::
 
 ### Preview Behavior

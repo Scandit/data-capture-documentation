@@ -98,7 +98,6 @@ export const FRAMEWORKS: FrameworkDef[] = [
     routeSegment: "kmp",
     agentSkills: true,
     apiReferenceSegment: "kmp",
-    unreleased: true,
   },
   {
     slug: "net-ios",

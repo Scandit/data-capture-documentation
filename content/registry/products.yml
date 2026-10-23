@@ -1,0 +1,89 @@
+# The product registry: one entry per product.
+#
+# Every product identifier in the docs, the components, the docs gate and the
+# Agent Skills data is checked against this file by `yarn verify:registry`:
+#
+#   - `key` is the identifier to use everywhere: frontmatter `product`,
+#     component props, products.json, features.json and skills.json.
+#   - `aliases` are folder names under /sdks/<framework>/ that differ from the
+#     key (`matrixscan/` is MatrixScan Batch). They are valid only as folder
+#     names and in URL_PRODUCT_MAPPING (src/components/utils/frameworks.ts),
+#     which must map every alias to its key.
+#   - `kind`: `sdk` (documented per framework under /sdks/), `hosted` (under
+#     /hosted/), or `topic` (cross-product pages, not a product you install).
+#
+# The "Choose this if / Consider another product if" text for overview pages
+# lives in content/registry/product-chooser.yml, keyed by these product keys,
+# once a product owner has approved it. Per-framework availability and versions
+# still live in src/data/products.json until they are generated from SDK data.
+
+products:
+  - key: sparkscan
+    name: SparkScan
+    kind: sdk
+
+  - key: barcode-capture
+    name: Barcode Capture
+    kind: sdk
+
+  - key: matrixscan-batch
+    name: MatrixScan Batch
+    kind: sdk
+    aliases: [matrixscan]
+
+  - key: matrixscan-ar
+    name: MatrixScan AR
+    kind: sdk
+
+  - key: matrixscan-count
+    name: MatrixScan Count
+    kind: sdk
+
+  - key: matrixscan-find
+    name: MatrixScan Find
+    kind: sdk
+
+  - key: matrixscan-pick
+    name: MatrixScan Pick
+    kind: sdk
+
+  - key: barcode-selection
+    name: Barcode Selection
+    kind: sdk
+
+  - key: smart-label-capture
+    name: Smart Label Capture
+    kind: sdk
+    aliases: [label-capture]
+
+  - key: id-capture
+    name: ID Capture
+    kind: sdk
+
+  - key: parser
+    name: Parser
+    kind: sdk
+
+  - key: barcode-generator
+    name: Barcode Generator
+    kind: sdk
+
+  - key: barcode-sequence
+    name: MatrixScan Sequence
+    kind: sdk
+
+  - key: express
+    name: Scandit Express
+    kind: hosted
+
+  - key: id-bolt
+    name: ID Bolt
+    kind: hosted
+
+  - key: core
+    name: Core concepts
+    kind: topic
+
+  - key: platform
+    name: Platform
+    kind: topic

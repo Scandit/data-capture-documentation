@@ -193,8 +193,19 @@ function check(label, fn) {
 
 console.log("\nsearch facet filters\n");
 
-check("served version gets the unversioned tree the site links to", () => {
+// The served version gets the tree its own pages link to. That is the
+// unversioned tree outside a beta, but during a beta the served version is a
+// frozen snapshot whose links update-version.py rewrote to its own line (for
+// example, /8.6/data-capture-sdk), while the beta at /next/ owns the
+// unversioned tree.
+check("served version gets the tree its pages link to", () => {
   const out = withApiReferenceTags(["language:en", [DEFAULT, SERVED]], MAP);
+  assert.ok(tagsOf(out).includes(tag(MAP[servedTag][0])));
+});
+
+check("the current docs get the unversioned tree", () => {
+  const CURRENT = tag("docs-default-current");
+  const out = withApiReferenceTags(["language:en", [DEFAULT, CURRENT]], MAP);
   assert.ok(tagsOf(out).includes(APILATEST));
 });
 

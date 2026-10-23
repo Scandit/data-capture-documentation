@@ -87,6 +87,9 @@ const CommandBlock: React.FC<CommandBlockProps> = ({
     <div className={styles.commandBlock}>
       <pre
         className={`${styles.command} ${prose ? styles.commandProse : ''}`}
+        // A translated command no longer runs, and translation of a node React
+        // owns can crash the page (see clientModules/translationGuard).
+        translate="no"
         onCopy={handleTextCopy}
       ><code>{command}</code></pre>
       <button

@@ -68,6 +68,19 @@ jobs:
       - name: Test ApiLink URLs
         run: yarn test:api-link
 
+      # One list of products: docs-schema.yml, products.json, features.json,
+      # skills.json, URL_PRODUCT_MAPPING and page frontmatter must all agree
+      # with content/registry/products.yml.
+      - name: Test product registry check
+        run: yarn test:registry
+
+      - name: Verify product registry
+        run: yarn verify:registry
+
+      # Pins where the 404 page sends a broken link into the C API reference.
+      - name: Test C API 404 fallback
+        run: yarn test:not-found
+
       - name: Build documentation
         run: yarn build
 

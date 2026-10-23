@@ -10,6 +10,143 @@ keywords:
   - web
 ---
 
+## 8.7.0-beta.1
+
+**Released**: October 22, 2026
+
+### New Features
+
+#### Barcode
+
+* Added structured append support to MaxiCode. The "m of n" sequencing metadata is now no longer part of the barcode data.
+* Changed SparkScan so that button taps no longer vibrate when haptic feedback is disabled in SparkScanViewSettings
+* Added an AdaptiveRecognitionServiceListener that can be attached to the BarcodeCapture mode to be notified of adaptive recognition responses and errors. Each callback carries the originating frame's AdaptiveRecognitionFrameMetadata (frame ID and recognized barcodes), so an asynchronously delivered outcome can be correlated back to its frame.
+* Extended BarcodeArResponsiveAnnotation to accept any BarcodeArAnnotation (info, popover, status icon, or custom) per distance state, not just BarcodeArInfoAnnotation
+* Added the expectsOnlyUniqueBarcodes property to BarcodeArSettings, matching other platforms
+
+#### Id
+
+* Extended the ID rejection API to reject documents based on passport type with rejectPassportTypes, and added a new PassportType, EmergencyTravelDocument
+* Added PassportType.EmergencyTravelDocument and split PU-prefixed passport MRZs out of Emergency. The same change is now exposed on the frameworks
+* Added VIZ support for the front of the 2026 Alberta driver's license and of the 2026 Nebraska driver's license and ID card, including the versions for minors.
+* Added VIZ support for the front of the 2026 Hawaii driver's license and ID card, including the under-21 driver's license.
+* Added a convenience conversion from IdCaptureRegion to ISO code as public API
+* ID Validate now verifies the digital signature in the barcode of California driver's licenses and ID cards issued since October 2025. A valid signature confirms the barcode as authentic; a missing or invalid signature is reported as forged.
+
+#### Smart Label Capture
+
+* Added LabelCaptureSettings languages and the LabelCaptureLanguage enum (English, Spanish) to restrict prebuilt field recognition to the labels' languages. Spanish labels now also recognize full month names such as "15 de enero de 2026"
+* Changed date fields to report the month text as it was read from the label, in its original language and letter case, instead of a normalized English abbreviation
+* Added LabelCaptureSettings.settingsForSymbology(), so Smart Label Capture symbology settings (extensions, active symbol counts, OCR fallback regex) can be configured directly via the public API
+* Added the LabelFieldLocationType enum to the public exports, so it can now be imported from @scandit/web-datacapture-label
+
+#### Core
+
+* Optimized rendering so that idle viewfinders (target aimer and laserline) no longer force a continuous render loop when nothing is animating
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved MaxiCode detection robustness for digitally generated and screen-displayed codes.
+* Improved PDF417 recognition of codes at low resolution and with poor print quality.
+* Improved the error correction capacity available to QR Model 1 codes. Damaged Model 1 codes now read more reliably.
+* Improved decoding accuracy on blurry and otherwise hard-to-read EAN-13 and UPC-A codes.
+
+#### Id
+
+* Improved VIZ scanning of the Swiss passport (2022 design).
+* Improved VIZ scanning of ID cards and driver's licenses, so that more card designs are read correctly. Passports and visas are unchanged.
+
+#### Core
+
+* Improved the speed of camera frame downscaling by a factor of 4/3 on ARM CPUs, most noticeably on low-end Android devices.
+
+### Behavioral Changes
+
+#### Barcode
+
+* Changed 1D symbology decoding to reduce false scans, at the cost of a lower scan rate on hard-to-read codes:
+  - Reduced false scans of EAN-13/UPC-A and Code 93, and of EAN-8 and UPC-E reads inside an EAN-13/UPC-A code, in normal and strict mode.
+  - Reduced false scans in strict mode, which now requires at least 0.75 pixels per module and decodes EAN-13/UPC-A more conservatively.
+  - Lowered the scan rate of hard-to-read UPC-E and Code 93 codes in normal and strict mode, and of EAN-13/UPC-A, Code 128, ITF and Codabar codes in strict mode, as a cost of the false-scan reductions.
+* Changed GS1 decoding to reject codes that previously produced unreliable data:
+  - Changed the GS1 DataBar Expanded reader to reject codes whose compressed item identification, weight, date or currency field holds a value the specification does not define, or whose AI 392x or 393x price has no digits, as damaged instead of producing malformed element strings.
+  - Changed GS1 Composite decoding to reject composite codes with a damaged 2D component instead of producing a GS1 barcode with empty or malformed data.
+* Data Matrix: Malformed codes with invalid shift values or unhandled Upper Shift sequences are now correctly rejected as damaged rather than decoding incorrectly.
+* Improved QR code validation to reject improperly formatted or non-standard codes, reducing false positives and unreliable data.
+* Changed the Aztec reader to no longer accept a structured append header whose sequencing field is not two upper-case letters. Such symbols previously reported an invented segment index and count, for example a negative index or the third of three segments, and could be grouped into a sequence they do not belong to; their content is now decoded as ordinary message data.
+* Aligned which Data Matrix symbols are reported as GS1 with the Data Matrix specification: an FNC1 in any other position is a field separator and no longer sets the flag, so a symbol carrying GS1 Application Identifier data without a leading FNC1 is no longer reported as GS1; with leading-FNC1 stripping enabled the data follows the flag in both directions, so such a symbol now keeps its first FNC1 while a Structured Append symbol with an FNC1 in the fifth position now loses it.
+
+#### Id
+
+* Spanish residence permits now return the NIE in both `VizResult.personalIdNumber` and `VizResult.documentAdditionalNumber`. Previously only one of the two carried it.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed several MaxiCode decoding and character encoding defects:
+  - Fixed the reading of symbols where the relative size of finder pattern and module rows is slightly off relative to the specification.
+  - Fixed corrupted characters in the data of damaged symbols that end in a truncated Numeric Shift or ECI sequence.
+  - Fixed a crash on mode 2 and 3 symbols whose secondary message is cut off inside the `[)>RS01GS` format header. Such symbols now decode to the postal code, country code and service class followed by the truncated message.
+  - Fixed character encoding reporting issues in `sc_barcode_get_data_encoding` for ECI and MaxiCode mode 2 and 3 symbols.
+* Fixed several Data Matrix decoding and character encoding defects:
+  - Fixed the GS1 flag reported by `sc_barcode_is_gs1_data_carrier`, which is now set by an FNC1 in the first symbol character position, or the fifth of a Structured Append symbol, as the specification defines.
+  - Fixed the decoded value of a backtick encoded in the Text encodation scheme, which was read as an apostrophe.
+  - Fixed several Data Matrix decoding defects related to character encoding, end-of-data handling, and shift formatting.
+  - Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
+* Fixed several QR decoding defects:
+  - Fixed the reading of Model 1 codes that use data mask pattern 111. The reader accepted only seven of the eight mask patterns the standard defines for Model 1, so such codes went unrecognized.
+  - Fixed false Structured Append results from damaged codes: a Structured Append header that is not at the start of the code, or a second one, now makes the code fail to decode instead of reporting arbitrary sequence and parity information.
+  - Fixed decoding and flag reporting for QR codes carrying AIM Application Indicators and GS1 headers.
+  - Fixed a QR scanning accuracy regression introduced in 8.6 for codes with degraded finder patterns (round, dotted, curved, bent, damaged) in single-barcode scanning.
+* Fixed several Micro QR and rectangular Micro QR (rMQR) defects:
+  - MicroQR: Fixed an issue that prevented improvements for rotated codes and codes with cluttered backgrounds from being available in production builds.
+  - Fixed decoding and truncation issues in Micro QR codes with invalid character counts or fully filled codewords.
+  - Fixed the AIM Application Indicator (FNC1 in second position) of rectangular Micro QR (rMQR) codes, which is now transmitted as the two digits or the letter the specification defines instead of three digits. Codes with a reserved Application Indicator, or with an FNC1 mode indicator that is not placed right before the first data mode indicator, are now rejected, and FNC1 mode now stays in effect across later ECI headers.
+  - Fixed a rare crash during detection of rectangular Micro QR codes whose finder pattern covers a large part of the frame, such as when scanning at very close range.
+* Fixed several GS1 Composite and GS1 DataBar Expanded decoding defects:
+  - Fixed decoding errors in GS1 composite codes, such as misread lot number flag bits and dropped digits when fields are followed by additional element strings.
+  - Removed extraneous group separators and trailing characters incorrectly appended to the decoded data of composite codes.
+  - Fixed decoding errors in GS1 DataBar Expanded codes with AI 392x or 393x prices followed by additional element strings, such as dropped element strings or lost digits.
+* Fixed a false ArUco result where the inner shape of a marker was read as a second, color-inverted marker.
+* Fixed several Aztec decoding defects:
+  - Fixed the file ID of an Aztec structured append symbol whose optional message ID field is absent. `sc_barcode_get_file_id` returned the placeholder `DEFAULT` and merged unrelated sequences; it now returns an empty string, and such segments are no longer automatically grouped.
+  - Fixed the character encoding reported for Aztec byte shift data that follows an ECI.
+* Fixed a scan regression from SDK 5.19 for 1D codes with colored backgrounds, such as dark print on a saturated label.
+* Fixed a rare out-of-bounds image read while detecting a code that touches the right or bottom image border.
+* Fixed the missing error report when a symbology's `ocr_fallback` extension is enabled without the ScanditLabelCaptureText module: the data capture context now reports a Missing Resource error naming the resources that could not be loaded, and barcode scanning continues without OCR fallback.
+* Fixed a bug that caused SparkScan to crash when using SmartScanSelection.
+* Fixed the SparkScan mini preview not being draggable.
+* Fixed a UI glitch when switching Selection Mode from On to Auto in BarcodeCapture.
+* Fixed a placement problem with BarcodeArStatusIconAnnotation when the barcode rotates.
+* Fixed BarcodeFind overwriting the zoom levels of the camera settings it was given: a BarcodeFindView created with custom CameraSettings now runs on the zoom levels it was configured with. BarcodeFind's recommended camera settings now report the .5x/1x levels, matching iOS and Android.
+
+#### Id
+
+* Fixed the 2026 Oklahoma driver's license not returning `issuingJurisdiction` and `issuingJurisdictionIso`
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
+* Fixed a crash when tapping the view after the ID Capture mode was removed from the data capture context.
+* Fixed South African driving licenses failing to scan when the barcode contains a vehicle restriction issue date without a day.
+* Fixed FullDocumentScanner returning no MRZ result for the US Border Crossing Card. The result now combines the VIZ and the MRZ.
+* Fixed IdCapture.externalTransactionId being cleared when new settings were applied. Scans after the settings change were reported without the ID.
+
+#### Smart Label Capture
+
+* Fixed expiry and packing date fields accepting a numeric date that does not exist, such as `BEST BEFORE 32/13/2027`. Such a date is now rejected instead of being returned as the field value.
+* Changed the month of a captured date field to be reported with the month name as it was read from the label, in its original language and letter case, rather than a normalized lowercase English abbreviation. `10 Ene 2026` yields the month text `Ene` instead of `jan`, and the field text `10.Ene.2026` instead of `10.jan.2026`. A zero read in place of the letter `o` is still corrected, so `N0V` yields `NOV`. The numeric month is unaffected—compare against it instead of the text to branch on a month.
+* Fixed label capture with Data Matrix enabled stalling on the multithreaded build with the default settings.
+* Fixed a crash that could occur when the adaptive recognition result type was changed while a scan was still being processed
+* Fixed the built-in hint/notification banner (for example, the 'scanning paused' message) spanning edge-to-edge instead of staying centered when the device is in landscape orientation
+
+#### Core
+
+* Fixed the camera preview appearing shrunk with a large margin on Safari for iOS 27, caused by a WebKit regression
+* Fixed a crash that terminated the app when a camera frame used a pixel layout the SDK cannot convert, for example frames produced by the camera image-injection features of automated testing services. Such frames are now skipped with a warning instead
+* Fixed an issue where on iOS the sound was sometimes not correctly reproduced at the first scan
+* Updated Emscripten from 5.0.3 to 5.0.7
+
 ## 8.6.1
 
 **Released**: October 1, 2026
@@ -67,7 +204,6 @@ keywords:
 #### Id
 
 * Visa MRZ results now report country-specific additional details such as `MRZResult.visaNumber`, `MRZResult.visaNumberOfEntries`, `MRZResult.visaMultipleEntries` and `MRZResult.visaDurationInDays`.
-* Added MobileDocumentDataElement::SignatureUsualMark and MobileDocumentResult.signature to allow capture of signature images from ISO mDL documents.
 * Extended the VizDocumentScanner sanitizer restriction to run all sanitizers for front-and-back captures and only reject on front-only captures, so front-side VIZ field corrections are no longer lost in double-sided captures.
 
 #### Smart Label Capture
@@ -144,6 +280,16 @@ keywords:
 #### Barcode
 
 * Deprecated the two-state BarcodeArResponsiveAnnotation API in favor of a new configurable annotationsByThreshold map that supports more than two distance states; the previous two-state API remains available.
+
+## 8.5.4
+
+**Released**: October 19, 2026
+
+### Bug Fixes
+
+#### Id
+
+* Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by IdValidate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
 
 ## 8.5.3
 
