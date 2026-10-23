@@ -9,6 +9,7 @@ import remarkHideComments from "./src/plugins/remark-hide-comments";
 import remarkOffloadPreviewMedia from "./src/plugins/remark-offload-preview-media";
 import stripPreviewMediaPlugin from "./src/plugins/plugin-strip-preview-media";
 import { UNRELEASED_FRAMEWORK_SLUGS } from "./src/constants/unreleasedFrameworks";
+import { ROUTED_FRAMEWORKS } from "./src/constants/frameworks";
 dotenv.config();  // Load environment variables from .env file
 
 const productionUrl = "https://docs.scandit.com";
@@ -169,6 +170,14 @@ const DOCS_LAST_VERSION = "8.6.1";
 // build `current`, so routing a major at a frozen tag would point at pages the
 // build does not contain. Declared once: it was restated at four call sites.
 const effectiveLastVersion = isPreviewBuild ? "current" : DOCS_LAST_VERSION;
+
+// The source tree of the version served at the site root: a root-level
+// redirect can only point at a page that tree has.
+function rootDocsDir(): string {
+  return effectiveLastVersion === "current"
+    ? path.join(process.cwd(), "docs")
+    : path.join(process.cwd(), "versioned_docs", `version-${effectiveLastVersion}`);
+}
 
 // `current.label` is load-bearing, not decoration: it is the only source of the
 // served major once lastVersion becomes "current", and buildApiReferenceTags
@@ -419,6 +428,32 @@ function buildApiReferencePrefixByMajor(): Record<string, string> {
     const [major, minor] = number.split(".");
     if (!major || !minor) continue;
     out[major] = linksToOwnApiLine(name, number) ? `/${major}.${minor}` : "";
+  }
+  return out;
+}
+
+/**
+ * The path prefix of the API reference each docs version links to, keyed by
+ * version name: `{ current: "", "8.6.1": "/8.6", "7.6.15": "/7.6", "6.28.11": "/6.28" }`.
+ * Consumed by src/components/ApiLink, which builds API-reference URLs in code.
+ *
+ * Decided by the version's role, not by scanning its text: the current version
+ * links the unversioned tree, and a frozen version links its own
+ * <major>.<minor> line. That is the rule scripts/update-version.py applies to a
+ * snapshot's text at the freeze (API_REFERENCE_LINK_REWRITES), and it has to be
+ * restated here because ApiLink's URLs are not in the text the script rewrites.
+ * A text scan (`linksToOwnApiLine`) would be wrong for ApiLink twice over: it
+ * finds less as partials move to ApiLink, and one deliberately versioned link
+ * in docs/ would switch every ApiLink on the current version.
+ */
+function buildApiReferencePrefixByVersion(): Record<string, string> {
+  const out: Record<string, string> = { current: "" };
+  for (const name of frozenVersionNames()) {
+    const match = /^(\d+\.\d+)\.\d+/.exec(name);
+    // update-version.py raises on the same input; failing here keeps a
+    // misnamed snapshot from silently linking the current API reference.
+    if (!match) throw new Error(`Cannot derive an API-reference line from docs version "${name}".`);
+    out[name] = `/${match[1]}`;
   }
   return out;
 }
@@ -997,6 +1032,9 @@ const config: Config = {
     // Major -> prefix of the API reference that major's docs link to. Used by
     // the 404 page to recover versioned API-reference links.
     apiReferencePrefixByMajor: buildApiReferencePrefixByMajor(),
+    // Docs version name -> prefix of the API reference that version links to.
+    // Used by src/components/ApiLink.
+    apiReferencePrefixByVersion: buildApiReferencePrefixByVersion(),
     versionNumberByTag: buildVersionNumberByTag(docsVersions),
   },
 
@@ -1024,6 +1062,8 @@ const config: Config = {
   },
   clientModules: [
     require.resolve('./src/clientModules/agentSkillsNavLink.ts'),
+    require.resolve('./src/clientModules/translationGuard.ts'),
+    require.resolve('./src/clientModules/chunkLoadRecovery.ts'),
   ],
   plugins: [
     [
@@ -1237,7 +1277,10 @@ const config: Config = {
             },
           ]),
           {
-            to: 'system-requirements',
+            // Absolute: a relative target resolved against the old URL, so
+            // /data-capture-sdk/ios/requirements.html/ went to
+            // .../requirements.html/system-requirements/, and on to a 404.
+            to: '/system-requirements',
             from: [
               '/data-capture-sdk/android/requirements.html',
               '/data-capture-sdk/ios/requirements.html',
@@ -1279,6 +1322,17 @@ const config: Config = {
           { to: '/sdks/capacitor/label-capture/intro', from: '/sdks/capacitor/label-scanning' },
           { to: '/sdks/net/ios/label-capture/intro', from: '/sdks/net/ios/label-scanning' },
           { to: '/sdks/net/android/label-capture/intro', from: '/sdks/net/android/label-scanning' },
+          // One-off legacy URLs.
+          ...ROUTED_FRAMEWORKS.map((f) => f.routeSegment as string)
+            .filter((segment) => ['.md', '.mdx'].some((ext) =>
+              fs.existsSync(path.join(rootDocsDir(), 'sdks', segment, `migrate-7-to-8${ext}`))))
+            .map((segment) => ({
+              to: `/sdks/${segment}/migrate-7-to-8`,
+              from: `/sdks/${segment}/migration-guide`,
+            })),
+          { to: '/sdks/cordova/barcode-capture/get-started', from: '/data-capture-sdk/cordova/get-started-barcode.html' },
+          { to: '/sdks/web/barcode-symbologies', from: '/data-capture-sdk/web/barcode-symbologies.html' },
+          { to: '/sdks/web/release-notes', from: '/stable/web/CHANGELOG.md' },
       ],
     },
   ],

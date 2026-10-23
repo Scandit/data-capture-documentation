@@ -64,7 +64,9 @@ export default function Frameworks({ handleFrameworkClick }: FrameworksProps) {
       <h4 className={style.text}>
         Select Your Framework to View Supported Products and Features
       </h4>
-      <form className={style.iconList}>
+      {/* Framework names are product names, and the labels change as the
+          selection does: left to a page translator they can crash React. */}
+      <form className={style.iconList} translate="no">
         {frameworkCards.map((item) => {
           return (
             <div

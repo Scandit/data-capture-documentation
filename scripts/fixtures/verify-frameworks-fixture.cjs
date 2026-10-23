@@ -45,6 +45,7 @@ export type FrameworkDef = {
   display: string;
   routeSegment: string | null;
   agentSkills: boolean;
+  apiReferenceSegment: string | null;
 };
 
 export const FRAMEWORKS: FrameworkDef[] = [
@@ -53,7 +54,7 @@ ${entries
     (e) =>
       `  { slug: "${e.slug}", display: "${e.display}", routeSegment: ` +
       `${e.routeSegment === null ? "null" : `"${e.routeSegment}"`}, ` +
-      `agentSkills: ${e.agentSkills} },`,
+      `agentSkills: ${e.agentSkills}, apiReferenceSegment: "${e.slug}" },`,
   )
   .join("\n")}
 ];
@@ -174,7 +175,7 @@ Body.
   // entryPairs reported it.
   if (mutate === "registry-spread-inside-entry") {
     registry = registry.replace(
-      `  { slug: "hosted", display: "Hosted", routeSegment: null, agentSkills: false },`,
+      `  { slug: "hosted", display: "Hosted", routeSegment: null, agentSkills: false, apiReferenceSegment: "hosted" },`,
       `  { slug: "hosted", display: "Hosted", routeSegment: null, ...HOSTED_EXTRAS },`,
     );
   }
@@ -194,8 +195,8 @@ Body.
   if (mutate === "registry-nested-routesegment") {
     registry = registry
       .replace(
-        `  { slug: "hosted", display: "Hosted", routeSegment: null, agentSkills: false },`,
-        `  { slug: "hosted", display: "Hosted", routeSegment: null, agentSkills: true, meta: { routeSegment: "id-bolt" } },`,
+        `  { slug: "hosted", display: "Hosted", routeSegment: null, agentSkills: false, apiReferenceSegment: "hosted" },`,
+        `  { slug: "hosted", display: "Hosted", routeSegment: null, agentSkills: true, apiReferenceSegment: "hosted", meta: { routeSegment: "id-bolt" } },`,
       );
   }
   if (mutate === "registry-missing-union-member") {

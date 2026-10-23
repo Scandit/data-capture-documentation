@@ -1,9 +1,4 @@
-type PostHogCapture = (event: string, props?: Record<string, unknown>) => void;
-
-type PostHogLike = {
-  capture?: PostHogCapture;
-  has_opted_out_capturing?: () => boolean;
-};
+import { type PostHogCallResult, type PostHogLike, callPostHog } from '@site/src/utils/posthog';
 
 /**
  * Why a capture did or did not happen.
@@ -21,19 +16,23 @@ type PostHogLike = {
  */
 export type PostHogCaptureResult = 'captured' | 'not-loaded' | 'opted-out' | 'error';
 
-function getPostHog(): PostHogLike | undefined {
-  if (typeof window === 'undefined') return undefined;
-  const ph = (window as unknown as { posthog?: PostHogLike }).posthog;
-  return typeof ph?.capture === 'function' ? ph : undefined;
-}
+/** callPostHog's outcome, in the words this module's callers use. */
+const CAPTURE_RESULT: Record<PostHogCallResult, PostHogCaptureResult> = {
+  sent: 'captured',
+  unavailable: 'not-loaded',
+  'opted-out': 'opted-out',
+  failed: 'error',
+};
 
 /**
  * The state PostHog is in right now, without capturing anything. Lets a caller
- * decide what to tell the reader before they act.
+ * decide what to tell the reader before they act. The same checks, in the same
+ * order, as callPostHog.
  */
 export function postHogStatus(): Exclude<PostHogCaptureResult, 'captured'> | 'ready' {
-  const ph = getPostHog();
-  if (!ph) return 'not-loaded';
+  if (typeof window === 'undefined') return 'not-loaded';
+  const ph = (window as unknown as { posthog?: PostHogLike }).posthog;
+  if (typeof ph?.capture !== 'function') return 'not-loaded';
   try {
     return ph.has_opted_out_capturing?.() === true ? 'opted-out' : 'ready';
   } catch {
@@ -51,23 +50,12 @@ export function postHogStatus(): Exclude<PostHogCaptureResult, 'captured'> | 're
  * opt-out IS detected and reported separately from "not loaded", since that is
  * the case a reader can create themselves: it must neither be reported as sent
  * nor routed around.
- *
- * A throwing capture is caught rather than propagated: this runs inside click
- * handlers, and an exception escaping one leaves the UI inert.
  */
 export function capturePostHogEventWithResult(
   event: string,
   props?: Record<string, unknown>,
 ): PostHogCaptureResult {
-  const ph = getPostHog();
-  if (!ph) return 'not-loaded';
-  try {
-    if (ph.has_opted_out_capturing?.() === true) return 'opted-out';
-    ph.capture?.(event, props);
-    return 'captured';
-  } catch {
-    return 'error';
-  }
+  return CAPTURE_RESULT[callPostHog('capture', (ph) => ph.capture(event, props))];
 }
 
 /**

@@ -64,6 +64,10 @@ jobs:
       - name: Test framework registry
         run: yarn test:frameworks
 
+      # The URL builder behind the shared ApiLink component.
+      - name: Test ApiLink URLs
+        run: yarn test:api-link
+
       # One list of products: docs-schema.yml, products.json, features.json,
       # skills.json, URL_PRODUCT_MAPPING and page frontmatter must all agree
       # with content/registry/products.yml.
@@ -72,6 +76,10 @@ jobs:
 
       - name: Verify product registry
         run: yarn verify:registry
+
+      # Pins where the 404 page sends a broken link into the C API reference.
+      - name: Test C API 404 fallback
+        run: yarn test:not-found
 
       # This build checks the site; it does not publish it. On the main branch
       # it gets the feedback widget's fallback endpoint so the check covers the
