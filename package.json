@@ -25,6 +25,7 @@
     "test:frameworks": "node scripts/test-frameworks.cjs",
     "verify:registry": "node scripts/verify-registry.cjs",
     "test:registry": "node scripts/test-registry.cjs",
+    "test:not-found": "node scripts/test-not-found.cjs",
     "test:docs-gate": "node scripts/test-docs-gate.cjs",
     "verify:api-reference-seo": "node scripts/verify-api-reference-seo.cjs",
     "test:api-reference-seo": "node scripts/test-api-reference-seo.cjs",

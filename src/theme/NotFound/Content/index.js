@@ -5,6 +5,7 @@ import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { useVersions } from "@docusaurus/plugin-content-docs/client";
 import routes from "@generated/routes";
 import OriginalNotFoundContent from "@theme-original/NotFound/Content";
+import { getCApiFallbackUrl, isCApiReferencePath } from "./cApiFallback";
 import {
   CURRENT_DOCS_PATH,
   isUnreleasedFramework,
@@ -303,21 +304,29 @@ export default function NotFoundContent(props) {
     ExecutionEnvironment.canUseDOM &&
     history.action === "PUSH" &&
     requestedPath !== lastServedNotFound;
+  // 5.x pages first, C API included: /5.<minor>/c_api/ has no live tree, and
+  // its readers go to the Linux overview. Every later C API line has its own
+  // rule (cApiFallback.ts), which owns its paths: when it names no target, no
+  // docs-tree rule applies either (/6.28/c_api/ is not a 6.28 docs page).
+  const v5Url = askServer ? null : getV5FallbackUrl(requestedPath);
+  const cApi = askServer || v5Url ? null : getCApiFallbackUrl(requestedPath, versions);
   // The server first, for an in-app link: its answer (a static page) beats
   // any guess from the URL's shape. Then the first rule that names a target
-  // wins, in this order: API reference, 5.x platform pages, other unserved
-  // versions (a /5.0/sdks/... path is a current page), the legacy shapes,
-  // the framework fallback.
+  // wins, in this order: API reference, 5.x platform pages, the C API
+  // reference, other unserved versions (a /5.0/sdks/... path is a current
+  // page), the legacy shapes, the framework fallback.
   const target = askServer
     ? ASK_SERVER
     : (getApiReferenceFallbackUrl(
         requestedPath,
         siteConfig.customFields?.apiReferencePrefixByMajor,
       ) ??
-      getV5FallbackUrl(requestedPath) ??
-      settleInServedTree(getUnservedVersionFallbackUrl(requestedPath, versions), versions) ??
-      getLegacyFallbackUrl(requestedPath) ??
-      getFallbackUrl(lowerCasePath(location.pathname)));
+      v5Url ??
+      (isCApiReferencePath(requestedPath)
+        ? (cApi?.url ?? null)
+        : (settleInServedTree(getUnservedVersionFallbackUrl(requestedPath, versions), versions) ??
+          getLegacyFallbackUrl(requestedPath) ??
+          getFallbackUrl(lowerCasePath(location.pathname)))));
 
   useEffect(() => {
     if (!target) {
@@ -326,6 +335,12 @@ export default function NotFoundContent(props) {
       // reload(), not location.replace() with the same URL: with an anchor,
       // that is a same-document navigation and fetches nothing.
       window.location.reload();
+    } else if (cApi && target === cApi.url) {
+      // Neither C API target carries the query or anchor over: a Doxygen
+      // anchor means nothing on the samples page or the index. The index is
+      // static HTML too, so it is a full page load.
+      if (cApi.appRoute) history.replace(cApi.url);
+      else window.location.replace(cApi.url);
     } else if (isAppRoute(target)) {
       history.replace(withSearchAndHash(target, location));
     } else {
