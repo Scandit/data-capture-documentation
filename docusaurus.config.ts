@@ -980,13 +980,14 @@ const config: Config = {
     //
     // Set from the environment so a redeploy of the Web App (which changes the
     // URL) needs no code change, and so a fork or a preview build does not
-    // silently post into the production sheet. Only the build of the main
-    // branch sets it (see build-docs.yml); a preview build forces it off even
-    // if the variable leaks into its environment.
+    // silently post into the production sheet. The job that publishes the
+    // production site sets it; every other build leaves it unset, and a
+    // preview build forces it off even if the variable leaks into its
+    // environment.
     feedbackEndpoint: isPreviewBuild ? "" : process.env.DOCS_FEEDBACK_ENDPOINT ?? "",
-    // Obfuscation only: it ships in the client bundle. It stops drive-by
-    // scanners; the caps and validation on the receiving end stop everything
-    // else.
+    // Not a secret: it ships in the client bundle. It only filters untargeted
+    // requests; any limit on abuse has to be enforced by the receiving
+    // endpoint.
     feedbackToken: isPreviewBuild ? "" : process.env.DOCS_FEEDBACK_TOKEN ?? "",
     // Major typed in a query -> tag of the version a reader is actually served.
     versionTagByMajor,

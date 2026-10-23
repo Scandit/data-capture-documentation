@@ -18,8 +18,8 @@
  * requests from a reader's browser without any sign-in. The widget's note
  * tells the reader this before they send, whenever this path applies.
  *
- * WHAT IT SENDS. The four fields the widget already sends to PostHog and
- * nothing else in the body. Like any web request, it also carries the
+ * WHAT IT SENDS. The four fields the widget already sends to PostHog, plus
+ * the token, and nothing else in the body. Like any web request, it also carries the
  * browser's IP address and user agent to the receiving server.
  */
 

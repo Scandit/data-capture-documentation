@@ -333,21 +333,24 @@ function Inner({ url, title }: PageFeedbackProps) {
         // capture, or a consenting reader's comment would be recorded twice
         // under two timestamps; and never for `opted-out` or `error`, where
         // the reader said no (or may have) and the comment must go nowhere.
+        // The vote goes out with the comment, so stop holding it BEFORE the
+        // request: otherwise the retry loop (or `pagehide`, or unmount) could
+        // flush it to PostHog if the reader accepts cookies while the request
+        // is in flight, and the same vote would be recorded in two places.
+        // Restored if the request fails, unless the reader voted again.
+        const held = heldVote.current;
+        heldVote.current = null;
         const dispatched = await sendDirectFeedback(feedbackEndpoint, feedbackToken, {
           ...base(),
           // THREE-VALUED here, unlike the PostHog call above, which has always
           // coerced. A reader can type before clicking either thumb, and a
           // missing vote sent as `false` becomes a complaint they did not make.
-          helpful: helpful === null ? null : helpful,
+          helpful,
           comment: text,
         });
         next = dispatched ? 'dispatched' : 'unreachable';
+        if (!dispatched && heldVote.current === null) heldVote.current = held;
         if (dispatched) {
-          // The vote went out with the comment, so stop holding it. Otherwise
-          // the retry loop (or `pagehide`, or unmount) could still flush it to
-          // PostHog if the reader accepts cookies seconds later, and the same
-          // vote would be recorded in two places.
-          heldVote.current = null;
           if (helpful !== null) {
             writeSession(VOTE_KEY(path), helpful ? 'up' : 'down');
             if (mounted.current) setRecorded(true);
@@ -530,10 +533,10 @@ function Inner({ url, title }: PageFeedbackProps) {
             {usesFallback ? (
               <>
                 Up to {COMMENT_MAX} characters. Analytics is not running in this browser, so your
-                comment is sent with your vote, if you gave one, and this page&rsquo;s address and title to a Google Apps Script
-                form that adds it to a spreadsheet run by the docs team. Like any web request, it
-                also carries your browser&rsquo;s IP address and user agent. Please leave out
-                anything personal.
+                comment is sent with your vote, if you gave one, and this page&rsquo;s address and
+                title to a Google Apps Script form that adds it to a spreadsheet run by the docs
+                team. Like any web request, it also carries your browser&rsquo;s IP address and user
+                agent. Please leave out anything personal.
               </>
             ) : (
               <>
