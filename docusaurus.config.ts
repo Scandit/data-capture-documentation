@@ -983,11 +983,11 @@ const config: Config = {
     // silently post into the production sheet. Only the build of the main
     // branch sets it (see build-docs.yml); a preview build forces it off even
     // if the variable leaks into its environment.
-    feedbackEndpoint: isPreviewBuild ? "" : process.env.DOCS_FEEDBACK_ENDPOINT_PROD ?? "",
+    feedbackEndpoint: isPreviewBuild ? "" : process.env.DOCS_FEEDBACK_ENDPOINT ?? "",
     // Obfuscation only: it ships in the client bundle. It stops drive-by
     // scanners; the caps and validation on the receiving end stop everything
     // else.
-    feedbackToken: isPreviewBuild ? "" : process.env.DOCS_FEEDBACK_TOKEN_PROD ?? "",
+    feedbackToken: isPreviewBuild ? "" : process.env.DOCS_FEEDBACK_TOKEN ?? "",
     // Major typed in a query -> tag of the version a reader is actually served.
     versionTagByMajor,
     // A docs version's tag -> the API-reference tag(s) that document it, so a
