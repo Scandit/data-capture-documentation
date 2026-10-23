@@ -8,6 +8,7 @@ import { version } from "react";
 import remarkHideComments from "./src/plugins/remark-hide-comments";
 import remarkOffloadPreviewMedia from "./src/plugins/remark-offload-preview-media";
 import stripPreviewMediaPlugin from "./src/plugins/plugin-strip-preview-media";
+import productRegistryPlugin from "./src/plugins/plugin-product-registry";
 import { UNRELEASED_FRAMEWORK_SLUGS } from "./src/constants/unreleasedFrameworks";
 import { ROUTED_FRAMEWORKS } from "./src/constants/frameworks";
 dotenv.config();  // Load environment variables from .env file
@@ -1364,6 +1365,9 @@ const config: Config = {
     },
   ],
   ...(isPreviewBuild ? [stripPreviewMediaPlugin] : []),
+  // The product registry and approved Product Chooser text, as global data
+  // for components (usePluginData("product-registry")).
+  productRegistryPlugin,
   // Publish the exact tag set the built widget filters on, so the search-tag
   // gate can check a real build artifact instead of re-deriving the same
   // assumption from this file and agreeing with itself.

@@ -8,6 +8,8 @@ keywords:
   - kmp
 ---
 
+import ProductChooser from '@site/src/components/ProductChooser';
+
 # About MatrixScan Batch
 
 MatrixScan Batch is Scandit's low-level API for scanning and tracking multiple barcodes at once, without augmented-reality overlays. It is implemented through the `BarcodeBatch` data capture mode, in the `com.kmp.datacapture.barcode.batch` package of the `barcode` module.
@@ -19,6 +21,8 @@ Typical use cases include:
 - Inventory counts and stocktaking
 - Receiving and put-away workflows
 - Any scenario where you need to recognize and track several barcodes in the camera's field of view at the same time, without guiding the user through a check-off flow
+
+<ProductChooser />
 
 ## How It Works
 

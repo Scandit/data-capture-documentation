@@ -1,27 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import styles from './styles.module.css';
-import { FeatureListProps, Feature, Product, FilteredFeature } from './types';
+import { FeatureListProps, Feature, FilteredFeature } from './types';
 
 // Import data files
-import productsData from '@site/src/data/products.json';
 import featuresData from '@site/src/data/features.json';
 import { frameworkFromPath } from '@site/src/constants/frameworks';
 import { apiReferenceUrl } from '@site/src/constants/docsPaths';
 import { featureExistsIn } from './availability';
 import { useActiveDocContext } from '@docusaurus/plugin-content-docs/client';
-
-// Function to render description with inline code formatting
-const renderDescription = (description: string) => {
-  // Convert backticks to inline code elements
-  const parts = description.split(/(`[^`]+`)/g);
-  return parts.map((part, index) => {
-    if (part.startsWith('`') && part.endsWith('`')) {
-      return <code key={index}>{part.slice(1, -1)}</code>;
-    }
-    return part;
-  });
-};
+import { renderInlineCode as renderDescription } from '@site/src/components/utils/inlineCode';
 
 const FeatureList: React.FC<FeatureListProps> = ({
   product,

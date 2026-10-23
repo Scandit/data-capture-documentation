@@ -1,0 +1,120 @@
+.chooser {
+  margin: 1.5rem 0 2rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--ifm-background-surface-color);
+}
+
+.decide {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--ifm-color-emphasis-200);
+}
+
+/* No "consider another product" column: don't leave half the box blank. */
+.decide.single {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 700px) {
+  .decide {
+    grid-template-columns: 1fr;
+  }
+}
+
+.col {
+  background: var(--ifm-background-surface-color);
+  padding: 1rem 1.25rem 1.1rem;
+}
+
+.colTitle {
+  margin: 0 0 0.6rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  /* The body text colour: the green and amber shades fail WCAG AA contrast for
+     text this small. The title text carries the meaning; the dot repeats it. */
+  color: var(--ifm-font-color-base);
+}
+
+.colTitle::before {
+  content: '';
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  flex: none;
+}
+
+.good .colTitle::before {
+  background: var(--ifm-color-success);
+}
+
+.bad .colTitle::before {
+  /* The default amber is about 1.7:1 on white, under the 3:1 for graphics. */
+  background: var(--ifm-color-warning-darkest);
+}
+[data-theme='dark'] .bad .colTitle::before {
+  background: var(--ifm-color-warning);
+}
+
+.col ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+/* (0,2,1) beats Infima's `.markdown li + li` (0,1,2) whatever the load order. */
+.chooser .col li {
+  margin: 0.35rem 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.matrix {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.6rem;
+  padding: 0.8rem 1.25rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.matrixLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  /* emphasis-600 is about 3:1 on white, too faint for text this small. */
+  color: var(--ifm-color-emphasis-700);
+}
+
+.chips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chips .chip {
+  /* Beats Infima's `.markdown li + li` top margin, which would stagger the row. */
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-emphasis-800);
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.since {
+  font-weight: 400;
+  color: var(--ifm-color-emphasis-700);
+}

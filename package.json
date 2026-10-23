@@ -26,6 +26,7 @@
     "test:api-link": "node scripts/test-api-link.cjs",
     "verify:registry": "node scripts/verify-registry.cjs",
     "test:registry": "node scripts/test-registry.cjs",
+    "test:product-chooser": "node scripts/test-product-chooser.cjs",
     "test:not-found": "node scripts/test-not-found.cjs",
     "test:docs-gate": "node scripts/test-docs-gate.cjs",
     "verify:api-reference-seo": "node scripts/verify-api-reference-seo.cjs",
