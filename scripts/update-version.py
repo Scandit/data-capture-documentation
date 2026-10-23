@@ -241,6 +241,12 @@ def update_config_version_entry(config_path: Path, old_version: str, new_version
     config_path.write_text(content)
 
 
+# Lines that record the release a feature shipped in: feature-matrix table
+# rows and `since:` entries. A newer patch doesn't change that fact, so these
+# lines keep their bare version numbers.
+SINCE_FACT_LINE = re.compile(r'^\s*(\||since\s*:)')
+
+
 def update_file_cross_references(file_path: Path, old_version: str, new_version: str) -> int:
     content = file_path.read_text()
     lines = content.split('\n')
@@ -252,11 +258,12 @@ def update_file_cross_references(file_path: Path, old_version: str, new_version:
         if not re.match(r'^\s*##\s+\d+\.\d+\.\d+', line):
             line = line.replace(f'/{old_version}/', f'/{new_version}/')
             line = line.replace(f'version-{old_version}', f'version-{new_version}')
-            line = re.sub(
-                rf'(?<![.\d]){re.escape(old_version)}(?![.\d])',
-                new_version,
-                line,
-            )
+            if not SINCE_FACT_LINE.match(line):
+                line = re.sub(
+                    rf'(?<![.\d]){re.escape(old_version)}(?![.\d])',
+                    new_version,
+                    line,
+                )
         if line != original_line:
             changes += 1
         updated_lines.append(line)
