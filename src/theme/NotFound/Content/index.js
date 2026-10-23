@@ -5,6 +5,7 @@ import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { useVersions } from "@docusaurus/plugin-content-docs/client";
 import routes from "@generated/routes";
 import OriginalNotFoundContent from "@theme-original/NotFound/Content";
+import { getCApiFallbackUrl, isCApiReferencePath } from "./cApiFallback";
 import {
   CURRENT_DOCS_PATH,
   isUnreleasedFramework,
@@ -181,10 +182,14 @@ export default function NotFoundContent(props) {
     siteConfig.customFields?.apiReferencePrefixByMajor,
   );
   const versions = useVersions(undefined);
-  const fallbackUrl = apiReferenceUrl
-    ? null
-    : (getUnservedVersionFallbackUrl(requestedPath, versions) ??
-      getFallbackUrl(location.pathname));
+  const cApi = apiReferenceUrl ? null : getCApiFallbackUrl(requestedPath, versions);
+  // The C API reference owns its paths: when its rule names no target, no
+  // docs-tree rule applies either (/6.28/c_api/ is not a 6.28 docs page).
+  const fallbackUrl =
+    apiReferenceUrl || cApi || isCApiReferencePath(requestedPath)
+      ? null
+      : (getUnservedVersionFallbackUrl(requestedPath, versions) ??
+        getFallbackUrl(location.pathname));
 
   useEffect(() => {
     if (apiReferenceUrl) {
@@ -192,12 +197,18 @@ export default function NotFoundContent(props) {
       // HTML outside this app, so client-side routing would only render this
       // 404 again.
       window.location.replace(apiReferenceUrl + location.search + location.hash);
+    } else if (cApi) {
+      // Neither C API target carries the query or anchor over: a Doxygen
+      // anchor means nothing on the samples page or the index. The index is
+      // static HTML too, so it is a full page load.
+      if (cApi.appRoute) history.replace(cApi.url);
+      else window.location.replace(cApi.url);
     } else if (fallbackUrl) {
       history.replace(fallbackUrl + location.search + location.hash);
     }
-  }, [apiReferenceUrl, fallbackUrl]);
+  }, [apiReferenceUrl, cApi?.url, fallbackUrl]);
 
-  if (apiReferenceUrl || fallbackUrl) {
+  if (apiReferenceUrl || cApi || fallbackUrl) {
     return null;
   }
 
