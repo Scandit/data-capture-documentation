@@ -121,10 +121,10 @@ Some users have found that using the `TouchableOpacity` component from `react-na
 
 This section explains all the available options to configure SparkScan to best fit your case, in case you found something that didn't work well in the default configuration (that remains our recommended option).
 
-Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.defaultScanningMode`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.DefaultScanningMode), passing a `SparkScanScanningModeDefault`. This combination allows for flexible configurations to suit different scanning needs.
+Developers can set a combination of selection mode, scanning behavior and camera preview behavior, defining the initial state of the scanner. Set the selection mode with [`SparkScanSettings.selectionMode`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/spark-scan-settings.html#property-scandit.datacapture.barcode.spark.SparkScanSettings.SelectionMode), and the two behaviors with [`SparkScanViewSettings.scanningBehavior`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.ScanningBehavior) and [`SparkScanViewSettings.previewBehavior`](https://docs.scandit.com/data-capture-sdk/react-native/barcode-capture/api/ui/spark-scan-view-settings.html#property-scandit.datacapture.barcode.spark.ui.SparkScanViewSettings.PreviewBehavior). This combination allows for flexible configurations to suit different scanning needs.
 
 :::note
-Don't use `SparkScanScanningModeTarget`. Set the selection mode to *On* instead. From SDK 8.7, the `scanningBehavior` and `previewBehavior` view settings replace `defaultScanningMode`.
+`SparkScanViewSettings.scanningBehavior` and `SparkScanViewSettings.previewBehavior` require SDK version 8.7 or later.
 :::
 
 ### Selection Mode
@@ -172,8 +172,6 @@ const settings = new SparkScanSettings();
 settings.selectionMode = SelectionMode.Off; // or .On to always show the aimer
 
 const viewSettings = new SparkScanViewSettings();
-viewSettings.defaultScanningMode = new SparkScanScanningModeDefault(
-  SparkScanScanningBehavior.Continuous, // or .Single
-  SparkScanPreviewBehavior.Persistent, // or .Default
-);
+viewSettings.scanningBehavior = SparkScanScanningBehavior.Continuous; // or .Single
+viewSettings.previewBehavior = SparkScanPreviewBehavior.Persistent; // or .Default
 ```

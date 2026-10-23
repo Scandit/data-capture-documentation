@@ -84,13 +84,7 @@ export const FRAMEWORKS: FrameworkDef[] = [
   { slug: "flutter", display: "Flutter", routeSegment: "flutter", agentSkills: true },
   { slug: "cordova", display: "Cordova", routeSegment: "cordova", agentSkills: true },
   { slug: "capacitor", display: "Capacitor", routeSegment: "capacitor", agentSkills: true },
-  {
-    slug: "kmp",
-    display: "Kotlin Multiplatform",
-    routeSegment: "kmp",
-    agentSkills: true,
-    unreleased: true,
-  },
+  { slug: "kmp", display: "Kotlin Multiplatform", routeSegment: "kmp", agentSkills: true },
   {
     slug: "net-ios",
     display: ".NET iOS",

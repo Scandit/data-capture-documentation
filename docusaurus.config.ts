@@ -163,7 +163,7 @@ const llmsIgnoreFiles: string[] = [
 // The version served at the site root. Must be a key of `docsVersions`.
 // Preview builds restrict `onlyIncludeVersions` to ["current"], and Docusaurus
 // requires lastVersion to be one of the included versions, so previews follow it.
-const DOCS_LAST_VERSION = "current";
+const DOCS_LAST_VERSION = "8.6.1";
 
 // The version actually served at the root of THIS build. Preview builds only
 // build `current`, so routing a major at a frozen tag would point at pages the
@@ -187,7 +187,11 @@ const docsVersions: Record<
   }
 > = {
   current: {
-    label: "8.6.1",
+    label: "8.7.0",
+    banner: "unreleased",
+    badge: false,
+  },
+  "8.6.1": {
     banner: "none",
     badge: false,
   },
@@ -1400,9 +1404,6 @@ const config: Config = {
               // whenever any item here has type "docsVersion"; this array only
               // supplies the label set + triggers that swap. The real
               // (page-preserving) href lives in src/utils/useFrameworkItems.js.
-              // kmpSidebar exists only in the current docs version, so
-              // Docusaurus resolves this item to the right version on its own —
-              // no hand-written version prefix needed.
               type: "docsVersion",
               label: "Kotlin Multiplatform",
               sidebarId: "kmpSidebar",
