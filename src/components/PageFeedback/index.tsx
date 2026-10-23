@@ -161,6 +161,9 @@ function Inner({ url, title }: PageFeedbackProps) {
   const confirmation = React.useRef<HTMLParagraphElement>(null);
   // A vote whose capture was dropped, waiting for PostHog to turn up.
   const heldVote = React.useRef<boolean | null>(null);
+  // Counts thumb clicks, so code that waited on a request can tell whether the
+  // reader voted again meanwhile. A ref, not state: read after an await.
+  const votesCast = React.useRef(0);
   // Set when the confirmation is about to appear for the first time, i.e. when
   // the outcome actually changes. A repeat announces instead - see submit().
   const focusConfirmation = React.useRef(false);
@@ -206,6 +209,7 @@ function Inner({ url, title }: PageFeedbackProps) {
 
   const vote = (isHelpful: boolean) => {
     if (recorded) return;
+    votesCast.current += 1;
     setHelpful(isHelpful);
     setVoteAttempt((n) => n + 1);
     say(
@@ -339,6 +343,7 @@ function Inner({ url, title }: PageFeedbackProps) {
         // is in flight, and the same vote would be recorded in two places.
         // Restored if the request fails, unless the reader voted again.
         const held = heldVote.current;
+        const votesBefore = votesCast.current;
         heldVote.current = null;
         const dispatched = await sendDirectFeedback(feedbackEndpoint, feedbackToken, {
           ...base(),
@@ -349,7 +354,12 @@ function Inner({ url, title }: PageFeedbackProps) {
           comment: text,
         });
         next = dispatched ? 'dispatched' : 'unreachable';
-        if (!dispatched && heldVote.current === null) heldVote.current = held;
+        if (!dispatched && held !== null && votesCast.current === votesBefore) {
+          heldVote.current = held;
+          // The retry poll stops for good once it sees no held vote, which it
+          // may have while the request was in flight. Start it again.
+          if (mounted.current) setVoteAttempt((n) => n + 1);
+        }
         if (dispatched) {
           if (helpful !== null) {
             writeSession(VOTE_KEY(path), helpful ? 'up' : 'down');

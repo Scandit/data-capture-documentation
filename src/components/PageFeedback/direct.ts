@@ -19,8 +19,8 @@
  * tells the reader this before they send, whenever this path applies.
  *
  * WHAT IT SENDS. The four fields the widget already sends to PostHog, plus
- * the token, and nothing else in the body. Like any web request, it also carries the
- * browser's IP address and user agent to the receiving server.
+ * the token, and nothing else in the body. Like any web request, it also
+ * carries the browser's IP address and user agent to the receiving server.
  */
 
 type DirectFeedback = {
