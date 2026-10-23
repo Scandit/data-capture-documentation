@@ -425,7 +425,7 @@ function buildApiReferencePrefixByMajor(): Record<string, string> {
 
 /**
  * The path prefix of the API reference each docs version links to, keyed by
- * version name: `{ current: "", "7.6.15": "/7.6", "6.28.11": "/6.28" }`.
+ * version name: `{ current: "", "8.6.1": "/8.6", "7.6.15": "/7.6", "6.28.11": "/6.28" }`.
  * Consumed by src/components/ApiLink, which builds API-reference URLs in code.
  *
  * Decided by the version's role, not by scanning its text: the current version

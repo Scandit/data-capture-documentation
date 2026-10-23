@@ -92,13 +92,7 @@ export const FRAMEWORKS: FrameworkDef[] = [
   { slug: "flutter", display: "Flutter", routeSegment: "flutter", agentSkills: true, apiReferenceSegment: "flutter" },
   { slug: "cordova", display: "Cordova", routeSegment: "cordova", agentSkills: true, apiReferenceSegment: "cordova" },
   { slug: "capacitor", display: "Capacitor", routeSegment: "capacitor", agentSkills: true, apiReferenceSegment: "capacitor" },
-  {
-    slug: "kmp",
-    display: "Kotlin Multiplatform",
-    routeSegment: "kmp",
-    agentSkills: true,
-    apiReferenceSegment: "kmp",
-  },
+  { slug: "kmp", display: "Kotlin Multiplatform", routeSegment: "kmp", agentSkills: true, apiReferenceSegment: "kmp" },
   {
     slug: "net-ios",
     display: ".NET iOS",
