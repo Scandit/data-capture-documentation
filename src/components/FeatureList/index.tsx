@@ -11,7 +11,6 @@ import { featureExistsIn } from './availability';
 import { useActiveDocContext } from '@docusaurus/plugin-content-docs/client';
 import { renderInlineCode as renderDescription } from '@site/src/components/utils/inlineCode';
 
-
 const FeatureList: React.FC<FeatureListProps> = ({
   product,
   framework,
