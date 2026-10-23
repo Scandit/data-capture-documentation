@@ -243,8 +243,10 @@ check("frameworks without Agent Skills are still hidden", () => {
   }
 });
 
-check("UNRELEASED_FRAMEWORK_SLUGS still derives to kmp", () => {
-  assert.deepStrictEqual(unreleased.UNRELEASED_FRAMEWORK_SLUGS, ["kmp"]);
+// Kotlin Multiplatform shipped in 8.6 and has a versioned snapshot, so no
+// framework is current-only today. Update this when a new one is added.
+check("UNRELEASED_FRAMEWORK_SLUGS is empty", () => {
+  assert.deepStrictEqual(unreleased.UNRELEASED_FRAMEWORK_SLUGS, []);
 });
 
 check("every registry slug is unique", () => {

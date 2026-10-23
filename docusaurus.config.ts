@@ -1398,9 +1398,6 @@ const config: Config = {
               // whenever any item here has type "docsVersion"; this array only
               // supplies the label set + triggers that swap. The real
               // (page-preserving) href lives in src/utils/useFrameworkItems.js.
-              // kmpSidebar exists only in the current docs version, so
-              // Docusaurus resolves this item to the right version on its own —
-              // no hand-written version prefix needed.
               type: "docsVersion",
               label: "Kotlin Multiplatform",
               sidebarId: "kmpSidebar",
