@@ -3,6 +3,9 @@ description: Get Started With SwiftUI and Scandit Barcode Capture.
 framework: ios
 keywords:
   - ios
+product: barcode-capture
+topic_type: get-started
+canonical_id: scandit.barcode-capture.get-started-with-swift-ui
 ---
 
 # Get Started With SwiftUI

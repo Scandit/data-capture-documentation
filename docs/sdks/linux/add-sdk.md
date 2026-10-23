@@ -5,6 +5,9 @@ pagination_next: null
 framework: linux
 keywords:
   - linux
+product: platform
+topic_type: installation
+canonical_id: scandit.platform.add-sdk
 ---
 
 # Installation

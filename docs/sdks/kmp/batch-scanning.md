@@ -7,6 +7,9 @@ pagination_prev: null
 framework: kmp
 keywords:
   - kmp
+product: core
+topic_type: concept
+canonical_id: scandit.core.batch-scanning
 ---
 
 # Multiple Barcode Scanning

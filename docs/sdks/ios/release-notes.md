@@ -8,6 +8,9 @@ pagination_prev: null
 framework: ios
 keywords:
   - ios
+product: platform
+topic_type: release-notes
+canonical_id: scandit.platform.release-notes
 ---
 
 ## 8.7.0-beta.1

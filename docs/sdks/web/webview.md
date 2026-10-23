@@ -11,6 +11,9 @@ keywords:
   - permissions
 displayed_sidebar: webSidebar
 toc_max_heading_level: 3
+product: platform
+topic_type: how-to
+canonical_id: scandit.platform.webview
 ---
 
 # WebView Integration

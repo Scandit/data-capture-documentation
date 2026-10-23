@@ -9,6 +9,8 @@ framework: hosted
 product: id-bolt
 keywords:
   - bolt
+topic_type: product-overview
+canonical_id: scandit.id-bolt.overview
 ---
 
 ID Bolt is a hosted identity scanning solution that enables you to provide customers a fast, foolproof ID scanning in just 1 second, leading to an improved customer experience as well as compliance. Scandit hosts the scanning UI and keeps it up to date. The scanning itself runs on the user's device, in the browser, on desktop and mobile alike. Scandit's servers never see identity data in readable form, and on-device scanning reduces latency for quick scanning performance.

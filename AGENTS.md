@@ -54,12 +54,26 @@ versions.json                  # List of available versions
 
 ### Frontmatter Conventions
 
-**Required fields:**
+**Required fields** (every page except redirect-only stubs; the docs gate fails a changed page that lacks one):
 ```yaml
 ---
 description: "Brief description for SEO and previews"
+topic_type: get-started                 # One value of the topic_type enum in docs-schema.yml
+product: sparkscan                      # A key from content/registry/products.yml
+canonical_id: scandit.sparkscan.get-started  # The same concept gets the same ID on every framework
+framework: ios                          # Or `frameworks: [ios, android]` for a page shared by several
 ---
 ```
+
+`canonical_id` is `scandit.<product>.<page path inside the product folder>`, without the framework: the iOS and Android get-started pages both use `scandit.sparkscan.get-started`. The gate checks that it starts with `scandit.<product>.`. Pages that are the same concept under different file names share one ID (iOS `testing.md` and Android `unit-testing.mdx` are both `scandit.platform.testing`). A roll-up page shared by several frameworks lists them with `frameworks:` and takes the ID of the per-framework pages it rolls up: `docs/id-documents.mdx` is `scandit.id-capture.supported-documents`, like each framework's `supported-documents.md`. `npm run verify:registry` fails if two pages on one framework share an ID, or if a roll-up's `frameworks` differs from where its product is available in `src/data/products.json`.
+
+Pages outside a product folder:
+- A product documented on one page, or a framework-level page about one product, takes that product: `barcode-generator.md` is `product: barcode-generator` with `canonical_id: scandit.barcode-generator.get-started`; the Web and Capacitor `getting-started.md` SparkScan tutorials are `product: sparkscan`.
+- Anything else is `product: core` (cross-product concepts such as symbologies) or `product: platform` (installation, release notes, migration, testing).
+
+A module documented in its own folder keeps the folder in its ID under its product: Titanium's `id-validate/intro.md` is `scandit.id-capture.id-validate.intro`.
+
+A "not available on this framework" stub carries the fields of the page it stands in for, plus `availability: unavailable`. Anything that reads frontmatter must check that field before treating the page as content.
 
 **Common optional fields:**
 ```yaml
@@ -70,7 +84,6 @@ pagination_prev: null          # Disable previous page link
 pagination_next: null          # Disable next page link
 toc_max_heading_level: 4       # Max heading depth in TOC
 displayed_sidebar: iosSidebar  # Force specific sidebar
-framework: ios                 # Platform identifier
 keywords:                      # SEO keywords
   - ios
   - barcode

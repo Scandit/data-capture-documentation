@@ -4,6 +4,10 @@ sidebar_label: 'Markdown Configuration'
 displayed_sidebar: expressSidebar
 keywords:
   - express
+product: express
+topic_type: reference
+canonical_id: scandit.express.workflows.markdown
+framework: hosted
 ---
 
 # Configuring the Markdown Workflow

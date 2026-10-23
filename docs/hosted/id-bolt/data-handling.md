@@ -12,6 +12,8 @@ keywords:
   - data handling
   - anonymization
   - privacy
+topic_type: concept
+canonical_id: scandit.id-bolt.data-handling
 ---
 
 # Data Handling

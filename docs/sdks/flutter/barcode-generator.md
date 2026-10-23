@@ -4,6 +4,10 @@ description: "Generate barcodes and QR codes in your Flutter app with the Scandi
 displayed_sidebar: flutterSidebar
 pagination_prev: null
 pagination_next: null
+product: barcode-generator
+topic_type: get-started
+canonical_id: scandit.barcode-generator.get-started
+framework: flutter
 ---
 
 # Barcode Generator

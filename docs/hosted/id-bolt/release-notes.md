@@ -8,6 +8,8 @@ keywords:
   - bolt
 hide_title: true
 title: Release Notes
+topic_type: release-notes
+canonical_id: scandit.id-bolt.release-notes
 ---
 
 ## 2.6.0

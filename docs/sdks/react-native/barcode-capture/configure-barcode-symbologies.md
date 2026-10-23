@@ -6,6 +6,9 @@ pagination_next: null
 framework: react-native
 keywords:
   - react
+product: barcode-capture
+topic_type: how-to
+canonical_id: scandit.barcode-capture.configure-barcode-symbologies
 ---
 
 # Configure Barcode Symbologies

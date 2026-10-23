@@ -5,6 +5,9 @@ pagination_next: null
 framework: linux
 keywords:
   - linux
+product: barcode-capture
+topic_type: how-to
+canonical_id: scandit.barcode-capture.add-on-codes
 ---
 
 # Scan add-on / extension codes

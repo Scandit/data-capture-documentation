@@ -4,6 +4,8 @@ framework: hosted
 product: express
 keywords:
   - express
+topic_type: use-case
+canonical_id: scandit.express.configuration.scan-labels
 ---
 
 # Scan Labels

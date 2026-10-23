@@ -7,6 +7,9 @@ displayed_sidebar: webSidebar
 framework: web
 keywords:
   - web
+product: sparkscan
+topic_type: get-started
+canonical_id: scandit.sparkscan.getting-started
 ---
 
 # Get Started

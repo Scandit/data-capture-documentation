@@ -40,6 +40,20 @@ function validateValue(val, sch, loc, errs) {
   }
 }
 
+/**
+ * A page whose whole body is a `<Redirect .../>`, after its frontmatter and
+ * import lines: not content, so exempt from the required fields. A content
+ * page that merely mentions `<Redirect` (a code sample, a conditional) is not
+ * exempt.
+ */
+function isRedirectStub(text) {
+  const body = text
+    .replace(/^---[ \t]*\r?\n[\s\S]*?\r?\n---[ \t]*(\r?\n|$)/, "")
+    .replace(/^[ \t]*import\s.*$/gm, "")
+    .trim();
+  return /^<Redirect\b[^>]*\/>$/.test(body);
+}
+
 function validateFile(file, schema) {
   // BOM stripped, as in docs-gate's bodyOf/frontmatterEndLine and
   // verify-frameworks' declaredFrameworks. Without it a BOM'd page with
@@ -52,7 +66,7 @@ function validateFile(file, schema) {
   // guards this carried a raw BOM in its input too, so the same normalisation
   // would have stripped the fixture and kept the test green.
   const text = fs.readFileSync(file, "utf8").replace(/^\uFEFF/, "");
-  if (text.includes("<Redirect")) return []; // redirect-only stub: exempt
+  if (isRedirectStub(text)) return []; // redirect-only stub: exempt
   // `[ \t]*` on the opening fence, matching declaredFrameworks and what
   // gray-matter itself accepts: `--- ` opened valid frontmatter for Docusaurus
   // while this reported the page as having none.
@@ -64,6 +78,24 @@ function validateFile(file, schema) {
 
   const errs = [];
   for (const req of schema.required || []) if (!(req in fm)) errs.push(`missing required field '${req}'`);
+  // Either form satisfies the requirement, e.g. `framework` or `frameworks`.
+  for (const group of schema["x-required-one-of"] || []) {
+    // A mistyped schema (a flat list or a string) is reported, not thrown on.
+    if (!Array.isArray(group)) {
+      errs.push(`docs-schema.yml: each x-required-one-of entry must be a list, found ${JSON.stringify(group)}`);
+      continue;
+    }
+    if (!group.some((k) => k in fm)) errs.push(`missing required field: one of ${group.map((k) => `'${k}'`).join(" or ")}`);
+  }
+  // `scandit.<product>.<page>`: an ID under another product's prefix (for
+  // example a folder alias such as `label-capture`) splits one product's pages
+  // across two namespaces.
+  if (typeof fm.canonical_id === "string" && typeof fm.product === "string") {
+    const prefix = `scandit.${fm.product}`;
+    if (fm.canonical_id !== prefix && !fm.canonical_id.startsWith(`${prefix}.`)) {
+      errs.push(`canonical_id: '${fm.canonical_id}' must start with '${prefix}.' (the page's product)`);
+    }
+  }
   if ("tags" in fm) errs.push("'tags' is banned repo-wide (see AGENTS.md)");
   for (const [k, sch] of Object.entries(schema.properties || {})) if (k in fm) validateValue(fm[k], sch, k, errs);
 
@@ -75,4 +107,4 @@ function validateFile(file, schema) {
   return errs.map((msg) => ({ file, level: "error", check: "frontmatter", msg }));
 }
 
-module.exports = { loadSchema, validateFile };
+module.exports = { loadSchema, validateFile, isRedirectStub };

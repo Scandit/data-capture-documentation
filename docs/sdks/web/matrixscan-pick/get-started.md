@@ -1,6 +1,11 @@
 ---
 description: "MatrixScan Pick is not available on the Web SDK."
 displayed_sidebar: webSidebar
+product: matrixscan-pick
+topic_type: get-started
+canonical_id: scandit.matrixscan-pick.get-started
+framework: web
+availability: unavailable
 ---
 
 # MatrixScan Pick is not available on Web

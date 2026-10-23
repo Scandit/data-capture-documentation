@@ -5,6 +5,8 @@ product: express
 sidebar_label: Overview
 keywords:
   - express
+topic_type: concept
+canonical_id: scandit.express.configuration.device-pairing.device-pairing
 ---
 
 # Device Pairing

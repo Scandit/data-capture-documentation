@@ -8,6 +8,9 @@ pagination_prev: null
 framework: android
 keywords:
   - android
+product: platform
+topic_type: release-notes
+canonical_id: scandit.platform.release-notes
 ---
 
 ## 8.7.0-beta.1

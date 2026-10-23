@@ -6,6 +6,9 @@ pagination_next: null
 framework: ios
 keywords:
   - ios
+product: barcode-selection
+topic_type: get-started
+canonical_id: scandit.barcode-selection.get-started
 ---
 
 # Get Started

@@ -270,9 +270,9 @@ function frontmatterEndLine(file) {
  *   pre-existing Vale error elsewhere in the same frontmatter. That is a
  *   deliberate trade: line-level attribution needs the diff hunks, and the
  *   alternative - skipping the file - is what disabled the check in the first
- *   place. Corpus-wide there is exactly one such page today
- *   (docs/sdks/android/unit-testing.mdx:4), and it is already blocked by a
- *   schema error.
+ *   place. Corpus-wide there is no such page today: the frontmatter backfill
+ *   that added `product`, `topic_type` and `canonical_id` to every page ran
+ *   this gate over all of them and fixed the one it found.
  */
 function runVale(files, bin, frontmatterOnly = new Map()) {
   const out = [];

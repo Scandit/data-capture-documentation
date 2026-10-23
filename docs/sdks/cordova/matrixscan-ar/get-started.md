@@ -6,6 +6,9 @@ sidebar_position: 2
 framework: cordova
 keywords:
   - cordova
+product: matrixscan-ar
+topic_type: get-started
+canonical_id: scandit.matrixscan-ar.get-started
 ---
 
 # Get Started

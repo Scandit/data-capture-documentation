@@ -8,7 +8,7 @@ product: smart-label-capture
 topic_type: how-to
 version_status: beta
 available_since: "8.6.0"
-canonical_id: scandit.label-capture.shipping-label-scanning
+canonical_id: scandit.smart-label-capture.shipping-label-scanning
 keywords:
   - web
   - shipping label

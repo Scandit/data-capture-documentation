@@ -11,6 +11,8 @@ keywords:
   - bolt
   - callbacks
   - events
+topic_type: reference
+canonical_id: scandit.id-bolt.callbacks
 ---
 
 # Callbacks

@@ -5,6 +5,9 @@ pagination_prev: null
 framework: linux
 keywords:
   - linux
+product: barcode-capture
+topic_type: how-to
+canonical_id: scandit.barcode-capture.configure-with-json
 ---
 
 # Configure with JSON

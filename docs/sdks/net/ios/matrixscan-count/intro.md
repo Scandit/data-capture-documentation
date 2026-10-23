@@ -5,6 +5,9 @@ pagination_prev: null
 framework: net-ios
 keywords:
   - netIos
+product: matrixscan-count
+topic_type: product-overview
+canonical_id: scandit.matrixscan-count.intro
 ---
 
 # About MatrixScan Count

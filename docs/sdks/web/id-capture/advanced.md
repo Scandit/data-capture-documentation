@@ -6,6 +6,9 @@ pagination_next: null
 framework: web
 keywords:
   - web
+product: id-capture
+topic_type: how-to
+canonical_id: scandit.id-capture.advanced
 ---
 
 # Advanced Configurations

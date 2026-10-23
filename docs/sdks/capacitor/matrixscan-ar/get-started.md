@@ -6,6 +6,9 @@ sidebar_position: 2
 framework: capacitor
 keywords:
   - capacitor
+product: matrixscan-ar
+topic_type: get-started
+canonical_id: scandit.matrixscan-ar.get-started
 ---
 
 # Get Started

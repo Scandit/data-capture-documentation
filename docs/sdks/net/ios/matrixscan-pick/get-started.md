@@ -4,6 +4,9 @@ sidebar_position: 2
 framework: net-ios
 keywords:
   - netIos
+product: matrixscan-pick
+topic_type: get-started
+canonical_id: scandit.matrixscan-pick.get-started
 ---
 
 # Get Started

@@ -4,6 +4,9 @@ sidebar_label: 'Navigating Between Screens'
 title: 'Navigating Between Screens'
 sidebar_position: 3
 framework: react-native
+product: core
+topic_type: how-to
+canonical_id: scandit.core.aio.navigating-between-screens
 keywords:
   - react
 ---

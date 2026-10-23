@@ -1,6 +1,11 @@
 ---
 description: "Smart Label Capture is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: smart-label-capture
+topic_type: product-overview
+canonical_id: scandit.smart-label-capture.intro
+framework: titanium
+availability: unavailable
 ---
 
 # Smart Label Capture is not available on Titanium

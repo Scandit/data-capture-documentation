@@ -4,6 +4,9 @@ framework: web
 toc_max_heading_level: 4
 keywords:
   - web
+product: smart-label-capture
+topic_type: reference
+canonical_id: scandit.smart-label-capture.label-definitions
 ---
 
 # Label Definitions

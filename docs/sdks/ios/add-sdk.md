@@ -6,6 +6,9 @@ toc_max_heading_level: 4
 framework: ios
 keywords:
   - ios
+product: platform
+topic_type: installation
+canonical_id: scandit.platform.add-sdk
 ---
 
 # Installation

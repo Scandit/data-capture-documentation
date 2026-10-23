@@ -1,6 +1,11 @@
 ---
 description: "Parser is not available on the Linux SDK."
 displayed_sidebar: linuxSidebar
+product: parser
+topic_type: get-started
+canonical_id: scandit.parser.get-started
+framework: linux
+availability: unavailable
 ---
 
 # Parser is not available on Linux

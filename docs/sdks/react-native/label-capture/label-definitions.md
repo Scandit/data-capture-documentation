@@ -5,6 +5,9 @@ framework: react-native
 toc_max_heading_level: 4
 keywords:
   - react
+product: smart-label-capture
+topic_type: reference
+canonical_id: scandit.smart-label-capture.label-definitions
 ---
 
 # Label Definitions

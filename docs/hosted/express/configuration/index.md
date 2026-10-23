@@ -6,6 +6,8 @@ framework: hosted
 product: express
 keywords:
   - express
+topic_type: concept
+canonical_id: scandit.express.configuration.index
 ---
 
 # Available Configurations

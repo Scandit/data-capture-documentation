@@ -7,6 +7,9 @@ pagination_prev: null
 framework: ios
 keywords:
   - ios
+product: sparkscan
+topic_type: product-overview
+canonical_id: scandit.sparkscan.intro
 ---
 
 # About SparkScan

@@ -5,6 +5,9 @@ pagination_prev: null
 framework: net-ios
 keywords:
   - netIos
+product: barcode-capture
+topic_type: get-started
+canonical_id: scandit.barcode-capture.get-started
 ---
 
 # Get Started

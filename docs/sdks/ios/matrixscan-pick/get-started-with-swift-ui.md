@@ -4,6 +4,9 @@ pagination_prev: null
 framework: ios
 keywords:
   - ios
+product: matrixscan-pick
+topic_type: get-started
+canonical_id: scandit.matrixscan-pick.get-started-with-swift-ui
 ---
 
 # Get Started With SwiftUI

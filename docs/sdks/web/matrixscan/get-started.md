@@ -6,6 +6,9 @@ pagination_next: null
 framework: web
 keywords:
   - web
+product: matrixscan-batch
+topic_type: get-started
+canonical_id: scandit.matrixscan-batch.get-started
 ---
 
 # Get Started

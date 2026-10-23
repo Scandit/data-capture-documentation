@@ -1,6 +1,11 @@
 ---
 description: "Barcode Selection is not available on the Linux SDK."
 displayed_sidebar: linuxSidebar
+product: barcode-selection
+topic_type: get-started
+canonical_id: scandit.barcode-selection.get-started
+framework: linux
+availability: unavailable
 ---
 
 # Barcode Selection is not available on Linux

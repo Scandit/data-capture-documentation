@@ -11,6 +11,8 @@ keywords:
   - bolt
   - theming
   - customization
+topic_type: how-to
+canonical_id: scandit.id-bolt.theming
 ---
 
 # Theming

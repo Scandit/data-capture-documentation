@@ -7,6 +7,9 @@ pagination_next: null
 framework: titanium
 keywords:
   - titanium
+product: platform
+topic_type: installation
+canonical_id: scandit.platform.add-sdk
 ---
 
 import Tabs from '@theme/Tabs';

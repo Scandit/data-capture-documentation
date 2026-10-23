@@ -1,6 +1,11 @@
 ---
 description: "MatrixScan Count is not available on the Web SDK."
 displayed_sidebar: webSidebar
+product: matrixscan-count
+topic_type: how-to
+canonical_id: scandit.matrixscan-count.advanced
+framework: web
+availability: unavailable
 ---
 
 # MatrixScan Count is not available on Web

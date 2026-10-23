@@ -5,6 +5,9 @@ pagination_prev: null
 framework: net-ios
 keywords:
   - netIos
+product: core
+topic_type: concept
+canonical_id: scandit.core.single-scanning
 ---
 
 # Single Barcode Scanning

@@ -1,6 +1,11 @@
 ---
 description: "MatrixScan Pick is not available on the Titanium SDK."
 displayed_sidebar: titaniumSidebar
+product: matrixscan-pick
+topic_type: get-started
+canonical_id: scandit.matrixscan-pick.get-started
+framework: titanium
+availability: unavailable
 ---
 
 # MatrixScan Pick is not available on Titanium

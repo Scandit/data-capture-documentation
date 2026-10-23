@@ -6,6 +6,9 @@ pagination_prev: null
 framework: web
 keywords:
   - web
+product: core
+topic_type: concept
+canonical_id: scandit.core.single-scanning
 ---
 
 # Single Barcode Scanning

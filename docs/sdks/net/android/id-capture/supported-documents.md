@@ -9,6 +9,9 @@ sidebar_position: 3
 framework: net-android
 keywords:
   - netAndroid
+product: id-capture
+topic_type: supported-values
+canonical_id: scandit.id-capture.supported-documents
 ---
 
 

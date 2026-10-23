@@ -1,6 +1,11 @@
 ---
 description: "MatrixScan Count is not available on the Linux SDK."
 displayed_sidebar: linuxSidebar
+product: matrixscan-count
+topic_type: get-started
+canonical_id: scandit.matrixscan-count.get-started
+framework: linux
+availability: unavailable
 ---
 
 # MatrixScan Count is not available on Linux

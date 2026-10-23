@@ -5,6 +5,9 @@ sidebar_position: 2
 framework: flutter
 keywords:
   - flutter
+product: matrixscan-batch
+topic_type: get-started
+canonical_id: scandit.matrixscan-batch.get-started
 ---
 
 # Get Started

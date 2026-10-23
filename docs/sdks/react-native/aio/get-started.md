@@ -4,6 +4,9 @@ sidebar_label: 'Get Started'
 title: 'Get Started'
 sidebar_position: 2
 framework: react-native
+product: core
+topic_type: get-started
+canonical_id: scandit.core.aio.get-started
 keywords:
   - react
 ---

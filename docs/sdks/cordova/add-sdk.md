@@ -7,6 +7,9 @@ pagination_next: null
 framework: cordova
 keywords:
   - cordova
+product: platform
+topic_type: installation
+canonical_id: scandit.platform.add-sdk
 ---
 
 # Installation
