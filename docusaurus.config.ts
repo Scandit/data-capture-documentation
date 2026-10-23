@@ -861,6 +861,48 @@ function retiredPatchTreeRedirects(routePath: string): string[] {
   return redirects;
 }
 
+// The paths that should redirect to `routePath` when it is a page at the site
+// root, for URLs the path-for-path pass cannot cover because the page has no
+// twin in a frozen tree:
+//   - /stable/... and /<root version>/... (for example /8.6.1/...). The root
+//     docs carry no version prefix, but old links use /stable/ and readers try
+//     the version number they see in the navbar.
+//   - Hosted pages under every published patch of a frozen minor
+//     (/7.6.5/hosted/..., /6.28.2/hosted/...). Hosted products are not
+//     versioned with the SDK: 6.28 has no hosted tree and 7.6.15 lacks the
+//     newer pages, so these go to the current page. A page that does have a
+//     7.6.15 twin keeps the path-for-path redirect, which is written first.
+// Empty for anything under a version prefix.
+function rootRouteRedirects(routePath: string): string[] {
+  // Route paths carry the base URL, and a preview build's is not the root.
+  if (process.env.base_url && process.env.base_url !== "/") return [];
+  if (/^\/(?:next|\d+\.\d+\.\d+)(?:\/|$)/.test(routePath)) return [];
+  if (routePath.endsWith(".html")) return [];
+  const rootVersion =
+    effectiveLastVersion === "current"
+      ? docsVersions.current?.label
+      : effectiveLastVersion;
+  const redirects = [`/stable${routePath}`];
+  if (rootVersion) redirects.push(`/${rootVersion}${routePath}`);
+  if (routePath.startsWith("/hosted/")) {
+    for (const [minor, firstPatch] of Object.entries(
+      FIRST_PUBLISHED_PATCH_BY_MINOR,
+    )) {
+      // The newest frozen patch of the minor, should a transition ever list
+      // two. No frozen patch: -Infinity, and no redirects.
+      const livePatch = Math.max(
+        ...frozenVersionNames()
+          .filter((v) => v.startsWith(`${minor}.`))
+          .map((v) => Number(v.slice(minor.length + 1))),
+      );
+      for (let p = firstPatch; p <= livePatch; p++) {
+        redirects.push(`/${minor}.${p}${routePath}`);
+      }
+    }
+  }
+  return redirects;
+}
+
 // Writes the retired-tree redirects as static pages, in the same format as
 // @docusaurus/plugin-client-redirects. They are not handed to that plugin
 // because it writes every file at once: ~10,000 parallel writes made it fail
@@ -885,17 +927,21 @@ function retiredPatchTreeRedirectsPlugin() {
         );
 
       const written = new Set<string>();
-      for (const routePath of routesPaths) {
-        const target = routePath.endsWith("/") ? routePath : `${routePath}/`;
-        for (const from of retiredPatchTreeRedirects(routePath)) {
-          const dir = join(outDir, from);
-          const file = join(dir, "index.html");
-          // A route can be listed with and without its trailing slash, and a
-          // real page always wins over a redirect.
-          if (written.has(file) || (await exists(file))) continue;
-          await mkdir(dir, { recursive: true });
-          await writeFile(file, redirectPageHtml(target), "utf8");
-          written.add(file);
+      // Path-for-path first, so a retired page with a twin in its own frozen
+      // tree goes there rather than to the root fallback of the second pass.
+      for (const redirectsFor of [retiredPatchTreeRedirects, rootRouteRedirects]) {
+        for (const routePath of routesPaths) {
+          const target = routePath.endsWith("/") ? routePath : `${routePath}/`;
+          for (const from of redirectsFor(routePath)) {
+            const dir = join(outDir, from);
+            const file = join(dir, "index.html");
+            // A route can be listed with and without its trailing slash, and a
+            // real page always wins over a redirect.
+            if (written.has(file) || (await exists(file))) continue;
+            await mkdir(dir, { recursive: true });
+            await writeFile(file, redirectPageHtml(target), "utf8");
+            written.add(file);
+          }
         }
       }
     },
@@ -1272,7 +1318,9 @@ const config: Config = {
   // the versions this build contains and a preview deploy can exclude itself.
   robotsTxtPlugin,
   // Path-for-path redirects from retired patch trees (/7.6.14/...) to the
-  // live patch of the same minor. See retiredPatchTreeRedirects.
+  // live patch of the same minor, then /stable/, /<root version>/ and retired
+  // hosted URLs to the root. See retiredPatchTreeRedirects and
+  // rootRouteRedirects.
   retiredPatchTreeRedirectsPlugin,
 ],
 
