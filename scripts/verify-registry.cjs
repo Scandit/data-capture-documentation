@@ -75,6 +75,8 @@ const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 const FOLDER_EXCEPTIONS = {
   img: "images",
   "id-validate": "a 'not available' stub for the ID Validate module (Titanium)",
+  "agent-skills": "Agent Skills setup guides (MCP installation), one per framework",
+  aio: "React Native all-in-one (AIO) component guides, which span several products",
 };
 // Frameworks whose folder holds further framework folders, not products.
 const NESTED_FRAMEWORKS = ["net"];
