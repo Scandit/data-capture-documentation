@@ -486,17 +486,18 @@ npm install @scandit/web-barcode-link
 import {
   BarcodeLink,
   BarcodeLinkMode,
+  BarcodeLinkSymbology,
   BarcodeLinkUiFlow
 } from '@scandit/web-barcode-link';
 ```
 
-2. Initialize BarcodeLink
+2. Create a BarcodeLink Instance
 
 ```javascript
 const barcodeLink = BarcodeLink.forLicenseKey('YOUR_SCANDIT_LICENSE_KEY');
 ```
 
-3. Set the Scanning Mode
+3. Set the Barcode Link Mode
 
 ```javascript
 barcodeLink.setBarcodeLinkMode(BarcodeLinkMode.ContinuousScanning);
@@ -506,9 +507,9 @@ barcodeLink.setBarcodeLinkMode(BarcodeLinkMode.ContinuousScanning);
 
 ```javascript
 barcodeLink.setSymbologies({
-  ean13Upca: { enabled: true },
-  code128: { enabled: true },
-  qr: { enabled: true }
+  [BarcodeLinkSymbology.EAN13UPCA]: { enabled: true },
+  [BarcodeLinkSymbology.Code128]: { enabled: true },
+  [BarcodeLinkSymbology.QR]: { enabled: true }
 });
 ```
 
@@ -516,11 +517,14 @@ barcodeLink.setSymbologies({
 
 ```javascript
 barcodeLink.addListener({
-  onCapture: (barcodes) => {
+  onCapture: (barcodes, finished) => {
     barcodes.forEach((barcode) => {
       console.log('Scanned:', barcode.data);
       // Handle the scanned data here
     });
+    if (finished) {
+      // The scanning session has ended
+    }
   }
 });
 ```
@@ -534,7 +538,7 @@ await barcodeLink.initialize(new BarcodeLinkUiFlow());
 ## Terminate the Session
 
 ```javascript
-await barcodeLink.dispose();
+barcodeLink.dispose();
 ```
 
 ## API Reference
@@ -557,7 +561,7 @@ Use `forLicenseKey(licenseKey: string): BarcodeLink` to create a new `BarcodeLin
 barcodeLink.setBarcodeLinkMode(BarcodeLinkMode.ContinuousListBuilding);
 ```
 
-Sets the scanning mode.
+Sets the Barcode Link mode.
 
 **Available values:**
 
@@ -595,6 +599,8 @@ barcodeLink.setDisconnectionTimeout(30 * 60 * 1000);
 
 Sets how long Barcode Link keeps trying to reconnect after the desktop and the smartphone lose their connection to each other. If the connection is not restored within this window, the session is aborted on both devices.
 
+Added in `@scandit/web-barcode-link` 1.2.0.
+
 The value is in milliseconds. It defaults to 15 minutes (`900000`) and is clamped between 1 minute (`60000`) and 60 minutes (`3600000`).
 
 #### `setPlatform(platform: BarcodeLinkPlatform): BarcodeLink`
@@ -621,6 +627,10 @@ barcodeLink.setBarcodeRegexValidation(/\d+/);
 Defines a regex to validate barcodes. Only matching barcodes are processed.
 By default no validation is applied.
 
+:::warning
+Don't add flags such as `i`, `g` or `u` to the regex. Barcode Link removes only the first and last character of the regex, so `/abc/i` becomes the pattern `abc/` and valid barcodes no longer match. For case-insensitive matching, list both cases in the pattern, for example `/^[A-Za-z0-9]+$/`. Patterns that need the `u` flag, such as `\p{L}`, don't work.
+:::
+
 #### `setBarcodeTransformations(barcodeTransformations: unknown): BarcodeLink`
 
 ```ts
@@ -633,13 +643,13 @@ Sets barcode transformation logic. Only used when `platform` is `BarcodeLinkPlat
 
 ```ts
 barcodeLink.setSymbologies({
-  ean13upca: {
+  [BarcodeLinkSymbology.EAN13UPCA]: {
     enabled: true,
   },
 });
 ```
 
-Enables specific symbologies for scanning.
+Enables specific symbologies for scanning. Use the `BarcodeLinkSymbology` constants as keys. They hold the exact key strings Barcode Link expects, such as `ean13Upca`.
 
 **[See all supported symbologies](https://docs.scandit.com/barcode-symbologies/)**
 
@@ -682,7 +692,7 @@ barcodeLink.addListener({
 ```
 
 Called when the remote device sends barcodes.  
-- `finished`: Indicates if scanning has finished (used in continuous modes).
+- `finished`: `true` when the scanning session on the remote device has ended. Check it in every mode to know when to clean up.
 
 ##### `onConnectionStateChanged`
 
@@ -742,6 +752,8 @@ Initializes Barcode Link using a specific flow.
 Example:
 
 ```ts
+import { BarcodeLinkHeadlessFlow } from "@scandit/web-barcode-link";
+
 const qrcode = await barcodeLink.initialize(new BarcodeLinkHeadlessFlow());
 
 const img = document.createElement("img");
@@ -759,7 +771,7 @@ document.body.append(a);
 #### `dispose(): void`
 
 ```ts
-await barcodeLink.dispose();
+barcodeLink.dispose();
 ```
 
 Closes the Barcode Link session, useful when unmounting components or ending a session manually.
@@ -981,23 +993,23 @@ You can configure Scandit Express to inject additional keystrokes after a barcod
 
 ### Scanning Options
 
-Scandit Express supports different scanning options to optimize the scanning experience for different use cases. There are two options available by default: Accuracy and Speed. Two additional options, Batch and List, are available if you have purchased MatrixScan.
+Scandit Express has two scanning modes: Single and Batch. You can also turn on list building to collect your scans in a list.
 
-#### Accuracy
+#### Single
 
-Use this mode to select one barcode out of many. This mode detects all barcodes available, then gives visual feedback on the screen (an augmented-reality overlay) so the user can select the target barcode. This mode scans one barcode at a time.
+Use Single mode to scan one barcode at a time. Point the camera at a barcode and Scandit Express scans it. If several barcodes are close together, choose the one you want.
 
-#### Speed
-
-Use this mode to scan barcodes consecutively at high speed. This mode scans successive items at high speed without the need to keep tapping on the screen.
+Single mode, also called Smart Scan Selection, is available from Scandit Express 4.3.0 on iOS and 4.4.0 on Android. It replaces the Accuracy and Speed modes of earlier versions.
 
 #### Batch
 
-Use this mode to scan a batch of barcodes all at once. This mode scans all visible barcodes instantly. It’s perfect when all barcodes are visible and the volume is high.
+Use Batch mode to scan all visible barcodes at once, for example when you have many barcodes in view.
 
-#### List
+To use Batch mode, you need a MatrixScan license and list building turned on.
 
-The list mode icon allows the user to see the list of barcodes that have been scanned. List mode, when activated, works for barcodes scanned in any mode (basic speed scanning, accuracy, and batch).
+#### List Building
+
+List building collects your scans in a list. You check the list, and then Scandit Express types the barcodes into the field. List building works in Single and Batch mode. It doesn't need a MatrixScan license, but Batch mode does.
 
 ### Activate via Hardware Button
 
@@ -1097,11 +1109,11 @@ Label scanning can be enabled and configured in your [Scandit Dashboard](https:/
 
   
 
-Once enabled, you can select from a the following pre-defined label types, and the respective fields will be automatically detected when scanning:
+Once enabled, you can select from the following predefined label types, and the respective fields will be automatically detected when scanning:
 
-* **Smart Device**: Captures the UPC/EAN, IMEI1 and IMEI2, and Serial Number from mobile device labels.
-* **Price Weight**: This factory method is designed for price checking scenarios where both barcode and price text need to be captured from product labels. Returns `SKU` and `priceText` fields.
-* **VIN**: Captures the Vehicle Identification Number (VIN) from vehicle labels.
+* **Smart Device Label**: Captures the UPC/EAN, IMEI1 and IMEI2, and Serial Number from mobile device labels.
+* **Price Label**: Captures the product barcode and the printed price from price labels.
+* **VIN Label**: Captures the Vehicle Identification Number (VIN) from vehicle labels.
 
 :::tip
 If you need to customize the behavior of the Smart Label Capture feature, please contact [Scandit Support](mailto:support@scandit.com).
@@ -1314,15 +1326,16 @@ The Scandit Express user interface (UI) is designed to resemble a smartphone cam
 
 ![Scandit Express](/img/express/express_ui.png)
 
-Depending on the mode selected, the user has a choice of scanning barcodes one by one or batch scanning many codes simultaneously. For batch scanning, users can scan as many barcodes as they want and verify them in a list, before inputting them into the desired field.
+You can scan barcodes one at a time or all at once, and collect your scans in a list to check them before they go into the field.
 
 ### Scanning Modes
 
-Scandit Express offers multiple scanning modes:
+Scandit Express offers two scanning modes:
 
-* **Accuracy**: Scans one barcode out of many in the camera’s field of view. It detects all barcodes available and provides an AR overlay to help the user select one target barcode.
-* **Speed**: Scans multiple barcodes in quick succession. It removes the need to tap the screen repeatedly.
-* **Batch**: Scans all visible barcodes and stores them in a list.
+* **Single**: Point the camera at a barcode to scan it. If several barcodes are close together, choose the one you want. Single mode, also called Smart Scan Selection, is available from Scandit Express 4.3.0 on iOS and 4.4.0 on Android. It replaces the earlier Accuracy and Speed modes.
+* **Batch**: Scan all visible barcodes at once. To use Batch mode, you need a MatrixScan license and list building turned on.
+
+With list building, your scans go into a list. You check the list, and then Scandit Express types the barcodes into the field. List building works in both modes. It doesn't need a MatrixScan license, but Batch mode does.
 
 ## Security and Compliance
 
@@ -2257,6 +2270,10 @@ const idBoltSession = IdBoltSession.create(ID_BOLT_URL, {
 | `AnonymizationMode.ImagesOnly`      | Only images are anonymized            | 1.3   |
 | `AnonymizationMode.FieldsAndImages` | Both fields and images are anonymized | 1.3   |
 
+:::note
+ID Bolt's default differs from the ID Capture SDK's. ID Bolt applies `AnonymizationMode.None` unless you set another mode, while the ID Capture SDK defaults to `FieldsOnly`. To get the SDK's behavior, set `anonymizationMode: AnonymizationMode.FieldsOnly`.
+:::
+
 ### Effects of Anonymization
 
 - **Fields Anonymization**: Sensitive fields are not extracted from documents
@@ -2636,7 +2653,7 @@ The above code snippet is a simple example of how to integrate ID Bolt into your
 
 ## ID Bolt
 
-ID Bolt is a cloud-based identity scanning solution that enables you to provide customers a fast, foolproof ID scanning in just 1 second, leading to an improved customer experience as well as compliance. It works on-device, via desktop and mobile in a unified solution, ensuring no identity information is collected by third-party servers and reduces latency for quick scanning performance.
+ID Bolt is a hosted identity scanning solution that enables you to provide customers a fast, foolproof ID scanning in just 1 second, leading to an improved customer experience as well as compliance. Scandit hosts the scanning UI and keeps it up to date. The scanning itself runs on the user's device, in the browser, on desktop and mobile alike. Scandit's servers never see identity data in readable form, and on-device scanning reduces latency for quick scanning performance.
 
 :::tip
 In addition to ID Bolt, Scandit provides an [ID Capture SDK for the Web](/sdks/web/id-capture/intro.md) that allows full flexibility around the user interface and user flow.
@@ -2647,10 +2664,10 @@ In addition to ID Bolt, Scandit provides an [ID Capture SDK for the Web](/sdks/w
 ID Bolt offers the following features:
 
 - **Fast Scanning**: ID Bolt scans an ID in just 1 second. Scans are performed from video streams for the fastest possible scanning.
-- **On-Device Scanning/Processing**: ID Bolt scans IDs on-device, ensuring no identity information is collected by third-party servers, and handling all processing on the device for improved performance.
-- **Device Handover**: ID Bolt works on both desktop and mobile devices, providing a unified solution. Desktop/laptop users can scan IDs using their mobile device camera.
+- **On-Device Scanning/Processing**: ID Bolt scans IDs on the user's device, in the browser. Scandit's servers never see identity data in readable form, and processing on the device improves performance.
+- **Device Handover**: ID Bolt works on both desktop and mobile devices, providing a unified solution. Desktop/laptop users can scan IDs using their mobile device camera. The handover goes through Scandit's relay, end-to-end encrypted.
 - **Industry Leading UX**: ID Bolt presents a simple, intuitive interface, designed based on the millions of scans performed by Scandit customers each year.
-- **Compliance**: ID Bolt ensures compliance with data protection regulations, such as GDPR, by processing all data on-device and not collecting any identity information on third-party servers.
+- **Compliance**: ID Bolt ensures compliance with data protection regulations, such as GDPR, by scanning on the device. Scandit's servers never see identity data in readable form, including during device handover.
 - **White-Label Solution**: ID Bolt can be placed behind your own domain, allowing you to maintain brand consistency and provide an integrated experience to your customers while leveraging Scandit's powerful ID scanning capabilities.
 
 ---
@@ -3855,303 +3872,6 @@ import OSSLicense from '../../partials/_third-party-licenses.mdx';
 import SkillsPage from '@site/src/components/SkillsPage';
 
 # Agent Skills for Android
-
----
-
-## AGENTS.md — Scandit Data Capture SDK (Android: Java/Kotlin)
-
-# AGENTS.md — Scandit Data Capture SDK (Android: Java/Kotlin)
-
-This file guides coding agents (and humans!) to install and integrate the **Scandit Smart Data Capture SDK** for Android using **Java/Kotlin**. It covers setup and how to add key Scandit products: **SparkScan**, **MatrixScan Find/Count**, **Smart Label Capture**, **Barcode Capture**, and **ID Capture**.
-
-> Target: **Android (SDK v7.x)** — Gradle/Maven project.  
-> Languages: **Kotlin** (primary) & **Java** (equivalents where helpful).
-
----
-
-## Setup Commands
-
-- **Install Android SDK deps**: use latest Android Studio and SDKs.  
-- **Min/Target**: target/compile SDK ≥ **23** (ID Capture needs **24+**).  
-- **Add Maven Central** to `settings.gradle`/`build.gradle`:
-  ```gradle
-  repositories { mavenCentral() }
-  ```
-- **Add Scandit modules** you need in `app/build.gradle` (choose from list below):
-  ```gradle
-  dependencies {
-    implementation "com.scandit.datacapture:ScanditCaptureCore:[latest]"
-    // Add feature modules as needed:
-    implementation "com.scandit.datacapture:ScanditBarcodeCapture:[latest]"
-    implementation "com.scandit.datacapture:ScanditLabelCapture:[latest]"
-    implementation "com.scandit.datacapture:ScanditIdCapture:[latest]"
-    // Optional extras depending on features:
-    implementation "com.scandit.datacapture:ScanditIdCaptureBackend:[latest]"
-    implementation "com.scandit.datacapture:ScanditIdEuropeDrivingLicense:[latest]"
-    implementation "com.scandit.datacapture:ScanditIdAamvaBarcodeVerification:[latest]"
-    implementation "com.scandit.datacapture:ScanditIdVoidedDetection:[latest]"
-  }
-  ```
-  > Find the **latest version** and exact artifacts on Maven Central (Sonatype).
-
-- **Android Manifest**:
-  ```xml
-  
-  
-  ```
-
-- **ProGuard/R8**: no special rules typically required beyond the SDK’s defaults. If you shrink/obfuscate aggressively, keep Scandit packages as needed.
-
-- **License key**: create in the Scandit Dashboard and inject via code or BuildConfig.
-
----
-
-## Project Structure Hints
-
-- `App.kt` / `MainActivity.kt`: create `DataCaptureContext` early (Application/Activity).  
-- Fragments/Activities owning a Scandit *View* must forward lifecycle events (`onResume/onPause`).  
-- Keep each product’s setup in its own class (e.g., `SparkScanManager`, `IdCaptureManager`, etc.).
-
----
-
-## Initialize the SDK (Core)
-
-```kotlin
-import com.scandit.datacapture.core.DataCaptureContext
-
-val dataCaptureContext = DataCaptureContext.forLicenseKey(BuildConfig.SCANDIT_LICENSE_KEY)
-```
-
-> Tip: The built‑in UI components (e.g., `SparkScanView`, `BarcodeFindView`) manage camera start/stop when you route lifecycle calls to them.
-
----
-
-## SparkScan (pre‑built single‑scan UI)
-
-**When to use**: fastest way to add ergonomic single‑item scanning with a floating trigger button.
-
-**Dependencies**: `ScanditCaptureCore`, `ScanditBarcodeCapture`.
-
-```kotlin
-import com.scandit.datacapture.barcode.spark.ui.SparkScanView
-import com.scandit.datacapture.barcode.spark.ui.SparkScanViewSettings
-import com.scandit.datacapture.barcode.spark.SparkScan
-import com.scandit.datacapture.barcode.spark.SparkScanSettings
-import com.scandit.datacapture.barcode.data.Symbology
-
-val settings = SparkScanSettings().apply {
-    enableSymbologies(setOf(Symbology.EAN13_UPCA)) // adjust for your use case
-}
-val sparkScan = SparkScan(settings)
-
-val viewSettings = SparkScanViewSettings() // customize as needed
-val sparkView = SparkScanView.newInstance(parentView, dataCaptureContext, sparkScan, viewSettings)
-
-override fun onResume() { super.onResume(); sparkView.onResume() }
-override fun onPause() { sparkView.onPause(); super.onPause() }
-
-// Listen for results
-sparkScan.addListener(object : SparkScanListener {
-    override fun onBarcodeScanned(spark: SparkScan, session: SparkScanSession, data: FrameData?) {
-        val barcode = session.newlyRecognizedBarcode
-        barcode?.let { /* handle on UI thread */ }
-    }
-})
-```
-
----
-
-## Barcode Capture (low‑level single scan)
-
-**When to use**: full control without SparkScan’s prebuilt UI.
-
-**Dependencies**: `ScanditCaptureCore`, `ScanditBarcodeCapture`.
-
-```kotlin
-val barcodeSettings = BarcodeCaptureSettings().apply {
-    enableSymbologies(setOf(Symbology.CODE128, Symbology.QR))
-}
-val barcodeCapture = BarcodeCapture.forDataCaptureContext(dataCaptureContext, barcodeSettings)
-
-// View + overlay
-val captureView = DataCaptureView.newInstance(context, dataCaptureContext)
-val overlay = BarcodeCaptureOverlay.newInstance(barcodeCapture, captureView)
-
-barcodeCapture.addListener(object : BarcodeCaptureListener {
-    override fun onBarcodeScanned(mode: BarcodeCapture, session: BarcodeCaptureSession, data: FrameData?) {
-        val code = session.newlyRecognizedBarcode?.data
-        // handle result
-    }
-})
-```
-
----
-
-## MatrixScan Find (search & find with AR UI) / MatrixScan Count
-
-**When to use**: highlight items that match a *list*; quickly search shelves/containers.  
-**Note**: MatrixScan Count/Find are powered by **BarcodeFind** + **BarcodeFindView**.
-
-```kotlin
-val findSettings = BarcodeFindSettings().apply {
-    setSymbologyEnabled(Symbology.EAN13_UPCA, true)
-}
-
-val items = hashSetOf(
-    BarcodeFindItem(BarcodeFindItemSearchOptions("9783598215438"),
-        BarcodeFindItemContent("Mini Screwdriver Set", "(6‑Piece)", null)),
-    BarcodeFindItem(BarcodeFindItemSearchOptions("9783598215414"), null)
-)
-
-val findMode = BarcodeFind(findSettings).apply { setItemList(items) }
-
-val findViewSettings = BarcodeFindViewSettings().apply {
-    // e.g., inListItemColor / notInListItemColor, soundEnabled, hapticEnabled
-}
-
-val findView = BarcodeFindView.newInstance(parentView, dataCaptureContext, findMode, findViewSettings)
-
-override fun onResume() { super.onResume(); findView.onResume() }
-override fun onPause() { findView.onPause(); super.onPause() }
-
-findView.setListener(object : BarcodeFindViewUiListener {
-    override fun onFinishButtonTapped(found: Set) { /* navigate or consume */ }
-})
-
-// Programmatic start (same as tapping Play):
-findView.startSearching()
-```
-
----
-
-## Smart Label Capture (barcodes + printed text in one shot)
-
-**When to use**: read **multiple barcodes + OCR** fields from a label (e.g., expiry date, weight, serial).  
-**Dependencies**: `ScanditCaptureCore`, `ScanditBarcodeCapture`, `ScanditLabelCapture` (+ optional `ScanditLabelCaptureText`, `ScanditPriceLabel` depending on your label definitions).
-
-Typical flow:
-1. Create `LabelCaptureSettings` and your **label definition** (fields layout + parsers).
-2. Create `LabelCapture` for the `dataCaptureContext`.
-3. Add a `LabelCaptureViewfinder/Overlay` (or **ValidationFlowOverlay** for guided steps).
-4. Register `LabelCaptureListener` to receive structured results.
-5. Start camera / provide user feedback.
-
-Kotlin sketch:
-```kotlin
-val labelSettings = LabelCaptureSettings.builder()/* configure with your label definition */.build()
-val labelCapture = LabelCapture.forDataCaptureContext(dataCaptureContext, labelSettings)
-
-val captureView = DataCaptureView.newInstance(context, dataCaptureContext)
-// Optional guided overlay for validation flows:
-val validationOverlay = LabelCaptureValidationFlowOverlay.newInstance(
-    requireContext(), labelCapture, captureView
-)
-
-labelCapture.addListener(object : LabelCaptureListener {
-    override fun onLabelCaptured(capture: LabelCapture, session: LabelCaptureSession, data: FrameData?) {
-        val fields = session.capturedLabels.firstOrNull()?.fields
-        // Extract required field values
-    }
-})
-```
-
-> Author your label definitions to match the physical layout and desired outputs. Use the samples to bootstrap.
-
----
-
-## ID Capture (ID scanning & data extraction)
-
-**When to use**: read MRZ, PDF417 on DL/IDs, and visual zones on supported IDs.  
-**Dependencies**: `ScanditCaptureCore`, `ScanditIdCapture` (+ optional backends per region/use case).  
-**Important**: **Do not enable** ID Capture at the same time as other modes (e.g., Barcode Capture, Text Capture). Switch modes cleanly.
-
-Kotlin outline:
-```kotlin
-val idSettings = IdCaptureSettings().apply {
-    acceptedDocuments = listOf(IdCard(IdCaptureRegion.ANY), DriverLicense(IdCaptureRegion.ANY))
-    // Configure sides/regions as required
-}
-val idCapture = IdCapture.forDataCaptureContext(dataCaptureContext, idSettings)
-
-val captureView = DataCaptureView.newInstance(context, dataCaptureContext)
-val overlay = IdCaptureOverlay.newInstance(idCapture, captureView)
-
-idCapture.addListener(object : IdCaptureListener {
-    override fun onIdCaptured(mode: IdCapture, id: CapturedId) {
-        // Consume fields (name, DOB, document number, etc.)
-    }
-})
-```
-
-> For validation workflows, add corresponding verifiers (e.g., AAMVA, EU DL) as optional dependencies.
-
----
-
-## Common Tasks for Agents
-
-- **Symbologies**: enable only what you need (EAN‑13, Code 128, QR, etc.) to maximize speed.  
-- **Lifecycle**: always forward `onResume/onPause` to Scandit *views* (SparkScanView, BarcodeFindView, DataCaptureView).  
-- **Threading**: listener callbacks may be on background threads—post results to the UI thread.  
-- **Performance**: keep overlays lean; disable unneeded features; use lists/sets for lookups (MatrixScan Find).  
-- **Testing**: keep printable test sheets handy; exercise low light, glare, and motion.
-
----
-
-## Samples & References
-
-- **Android Samples**: [https://github.com/Scandit/datacapture-android-samples](https://github.com/Scandit/datacapture-android-samples) — multiple ready‑to‑run apps.  
-- **Install guide** (Gradle, modules, requirements).  
-- **SparkScan get started** (prebuilt UI).  
-- **MatrixScan Find get started** (search & find).  
-- **Smart Label Capture get started** (labels & OCR).  
-- **ID Capture get started** (IDs & validation).
-
----
-
-## Troubleshooting
-
-- **Incompatible modes** error across fragments: ensure `androidx.fragment` **1.3.0+** and avoid having two incompatible modes active across fragment transitions.  
-- **Content provider order**: if your `ContentProvider` depends on Scandit, set a lower `initOrder` than 10 so Scandit initializes first.  
-- **GPU requirement**: devices must have a GPU for best performance.
-
----
-
-## Checklists
-
-**PR Checklist**
-- [ ] Gradle modules added as needed
-- [ ] License key wired via `BuildConfig`/secure source
-- [ ] Correct symbologies enabled
-- [ ] Lifecycles forwarded to Scandit views
-- [ ] Listeners return results on UI thread
-- [ ] Mode conflicts avoided (esp. with **IdCapture**)
-
-**Release Checklist**
-- [ ] Camera permission rationale & flows
-- [ ] Shrink/obfuscate release build verified
-- [ ] QA on device matrix (OEMs, lighting, cases)
-- [ ] Legal notices page shows OSS attributions via `DataCaptureContext.openSourceSoftwareLicenseInfo()`
-
----
-
-## Appendix — Typical Imports (Kotlin)
-
-```kotlin
-import com.scandit.datacapture.core.*
-import com.scandit.datacapture.core.ui.*
-import com.scandit.datacapture.core.ui.viewfinder.*
-import com.scandit.datacapture.barcode.*
-import com.scandit.datacapture.barcode.capture.*
-import com.scandit.datacapture.barcode.capture.ui.*
-import com.scandit.datacapture.barcode.spark.*
-import com.scandit.datacapture.barcode.spark.ui.*
-import com.scandit.datacapture.find.*
-import com.scandit.datacapture.find.ui.*
-import com.scandit.datacapture.label.*
-import com.scandit.datacapture.label.ui.*
-import com.scandit.datacapture.id.*
-import com.scandit.datacapture.id.ui.*
-```
 
 ---
 
@@ -24726,7 +24446,7 @@ In this guide you will learn step-by-step how to add MatrixScan Find to your app
 - A Barcode Find View: The pre-built UI elements used to highlight found items.
 
 :::note
-MatrixScan Count is implemented via [`SDCBarcodeFind`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind).
+MatrixScan Find is implemented via [`SDCBarcodeFind`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind).
 :::
 
 The general steps are:
@@ -24748,7 +24468,7 @@ You can retrieve your Scandit Data Capture SDK license key by signing in to your
 
 import DataCaptureContextIos from '../../../partials/get-started/_create-data-capture-context-ios.mdx';
 
-## Configure the Barcode Count Mode
+## Configure the Barcode Find Mode
 
 The main entry point for the Barcode Find Mode is the [`SDCBarcodeFind`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find.html#class-scandit.datacapture.barcode.find.BarcodeFind) object. You can configure the supported Symbologies through its [`SDCBarcodeFindSettings`](https://docs.scandit.com/data-capture-sdk/ios/barcode-capture/api/barcode-find-settings.html#class-scandit.datacapture.barcode.find.BarcodeFindSettings), and set up the list of items that you want MatrixScan Find to highlight.
 
