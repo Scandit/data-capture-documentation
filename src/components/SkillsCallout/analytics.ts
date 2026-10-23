@@ -5,9 +5,9 @@ import { type PostHogCallResult, type PostHogLike, callPostHog } from '@site/src
  *
  * - `captured`: PostHog accepted the event (see below for what that does NOT
  *   promise).
- * - `not-loaded`: there is no PostHog on the page at all. It is loaded behind
- *   the cookie banner, so this is the normal state before a reader consents,
- *   and also what a script blocker produces.
+ * - `not-loaded`: PostHog, or its `capture` method, is not on the page. It is
+ *   loaded behind the cookie banner, so this is the normal state before a
+ *   reader consents, and also what a script blocker produces.
  * - `opted-out`: PostHog is present and the reader has explicitly opted out of
  *   capturing. Callers must treat this as a refusal, never as a reason to send
  *   the same data somewhere else.
