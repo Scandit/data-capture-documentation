@@ -155,6 +155,24 @@ keywords:
 * Fixed an error thrown on iOS when passing an empty byte array to ArucoMarker.create() or Parser.parseRawData(), which now matches the existing Android behavior
 * Fixed the camera and torch switch controls not updating their accessibility labels on the main thread, so TalkBack announcements no longer misfire when the camera or torch state changes
 
+## 8.6.2
+
+**Released**: October 26, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue with MicroQR that prevented improvements for rotated codes and codes with cluttered backgrounds from being available in production builds.
+* Fixed an issue in SparkScan where, with hold-to-scan disabled, pressing and holding the collapsed trigger button and then releasing it started scanning.
+* Fixed an issue that could increase the time to scan when only QR or Data Matrix is enabled and there are more than 8 codes in the frame while using Barcode Tracking, Barcode AR, Barcode Pick, Barcode Find and Label Capture.
+* Fixed an issue where pausing or stopping a Barcode AR view discarded the highlights and annotations that were already shown. Taps and position updates now keep working, and resuming no longer requires the app to supply them again.
+
+#### Core
+
+* Fixed TypeScript compilation for projects that type-check declaration files (skipLibCheck: false) by declaring the eventemitter3 dependency in the core package.
+* Adjusted SDK views and the scan area for devices with horizontal safe-area insets, such as the iPhone Duo cover display. The scan area now excludes the left and right safe-area insets.
+
 ## 8.6.1
 
 **Released**: October 1, 2026

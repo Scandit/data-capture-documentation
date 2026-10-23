@@ -98,6 +98,17 @@ keywords:
 * Fixed a rare out-of-bounds image read while detecting a code that touches the right or bottom image border.
 * Fixed `sc_barcode_scanner_settings_new_from_json()` rejecting a `float`/`double`-typed setting whose value was written as a whole number (for example, `1` instead of `1.0`). Such values are now accepted.
 
+## 8.6.2
+
+**Released**: October 26, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue with MicroQR that prevented improvements for rotated codes and codes with cluttered backgrounds from being available in production builds.
+* Fixed an issue that could increase the time to scan when only QR or Data Matrix is enabled and there are more than 8 codes in the frame while using Barcode Tracking, Barcode AR, Barcode Pick, Barcode Find and Label Capture.
+
 ## 8.6.1
 
 **Released**: October 1, 2026

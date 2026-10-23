@@ -1,14 +1,32 @@
 ---
-description: "Release notes for the Scandit Data Capture SDK on .NET iOS: new features, changes, and fixes by version."
+description: "Release notes for the Scandit Data Capture SDK on .NET Android: new features, changes, and fixes by version."
 toc_max_heading_level: 3
-displayed_sidebar: netIosSidebar
+displayed_sidebar: netAndroidSidebar
 hide_title: true
 title: Release Notes
 pagination_prev: null
-framework: net-ios
+framework: net-android
 keywords:
-  - netIos
+  - netAndroid
 ---
+
+## 8.6.2
+
+**Released**: October 26, 2026
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved tracking for long trays in MatrixScan Sequence
+* Improved stability of tray ordering in MatrixScan Sequence
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue with MicroQR that prevented improvements for rotated codes and codes with cluttered backgrounds from being available in production builds.
+* Fixed an issue that could increase the time to scan when only QR or Data Matrix is enabled and there are more than 8 codes in the frame while using Barcode Tracking, Barcode AR, Barcode Pick, Barcode Find and Label Capture.
 
 ## 8.6.1
 
@@ -34,12 +52,7 @@ keywords:
 #### Id
 
 * Fixed the 2026 Oklahoma driver's license not returning the Jurisdiction and JurisdictionIso fields.
-* Fixed a crash in the IdCapture overlay when it was tapped.
 * Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
-
-#### Smart Label Capture
-
-* Fixed a bug where the camera preview could remain black or frozen when opening a scanning screen after leaving a LabelCapture validation flow screen.
 
 #### Core
 
@@ -90,7 +103,6 @@ keywords:
 * Added support in the GS1 parser for the telecom Application Identifiers 8040 (IMEI), 8041 (IMEI2), 8042 (eSIM/EID), and 8043 (pSIM), so GS1 codes carrying them parse instead of being rejected as unrecognized.
 * Added support for parsing the 2D-DOC (French 2D-Doc / ANTS) data format.
 * Added more detailed error reporting when required resources are missing.
-* Added support for multiple DataCaptureView instances to render the camera preview simultaneously, so navigating between screens that each show a DataCaptureView no longer causes black or frozen previews, including during interactive edge-swipe transitions. DataCaptureView also now renders a preview when the frame source is an ImageFrameSource or SequenceFrameSource.
 * Added LicenseInfo.allowedModes, exposing the set of capture modes a license key permits via the new CaptureMode enum.
 * Added support for reading camera frames directly into a SharedArrayBuffer in supported environments (currently Chrome or Firefox, when pthread is enabled), avoiding an extra copy.
 
@@ -122,18 +134,17 @@ keywords:
 #### Barcode
 
 * Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed a bug with the highlight colors of BarcodeCount clusters.
 * Fixed the MatrixScan Count not-in-list accept/reject popover not reflecting a custom accepted/rejected ScanditIcon when configured.
-* Fixed MatrixScan Sequence losing the scanned data when the app was restored from the background while the sequence was paused.
-* Fixed a visual artifact that could appear around the scan preview indicators in MatrixScan Count when using Scan Preview.
+* Fixed MatrixScan AR to adapt to the device UI scale.
 * Fixed rare cases where DotCode Code Set C symbols using the date/lot macro decoded to incorrect data due to a dropped leading zero in a digit pair.
 * Fixed a regression where short ITF codes with low wide/narrow ratio were not decoded.
 
 #### Id
 
-* Fixed a crash that could occur when navigating away from a screen while a hint was displayed.
 * Improved the DLID parser, fixing previously unparsable codes found in analytics.
+* Hardened dependency resolution for Android native samples.
 * Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
-* Fixed an issue where the VLM scanning screen remained permanently displayed if IdCaptureSettings were applied mid-scan.
 * Fixed a crash (NoClassDefFoundError: kotlinx/serialization/json/JsonKt) when starting ID Capture in apps targeting net10.0-android, caused by the kotlinx-serialization-json dependency not being packed into the app. ID Capture now scans correctly on net10.0-android.
 
 #### Smart Label Capture
@@ -144,8 +155,11 @@ keywords:
 #### Core
 
 * Fixed a SequenceFrameSource occasionally delivering the same frame to its listeners twice.
-* Fixed the camera preview appearing darker in single-scan modes after using a mode that applies its own exposure adjustment, such as SparkScan or MatrixScan Count.
+* Fixed Nokia G11 and Nokia 8.3 5G devices not correctly getting the Camera2 path when API2-only features were requested.
+* Fixed the Galaxy Note10 camera profile selection so the international Note10 family (SM-N970x/SM-N971x) gets its intended fixed-focus and Camera2 behaviors.
+* Fixed the Galaxy S9+ (SM-G965x) camera profile selection so Camera2-based capture is enabled on those devices as intended.
 * Fixed a race condition in SimplePropertyBehaviorSubject where mutating the subscriber list during a callback could cause crashes or missed notifications.
+* Fixed an IllegalStateException in analytics HTTPS requests when the app is instrumented by APM tools such as Dynatrace.
 * Fixed EventsResponse::getRetryTimeoutInSeconds to return a fallback instead of aborting on out-of-range header values.
 
 ### Deprecations
@@ -181,9 +195,9 @@ keywords:
 
 * Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
 
-#### Id
+#### Core
 
-* Fixed a crash that could occur when navigating away from a screen while a hint was displayed.
+* Fixed an IllegalStateException in analytics HTTPS requests when the app is instrumented by APM tools such as Dynatrace.
 
 ## 8.5.2
 
@@ -194,6 +208,16 @@ keywords:
 #### Id
 
 * Improved performance of Irish Garda Age Card
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed BarcodeCount clusters where the not-in-list cluster color incorrectly followed the matched/deviated customization.
+
+#### Smart Label Capture
+
+* Fixed a memory leak preventing the batch and label advanced overlay from being collected until the mode they're bound to is collectable.
 
 ## 8.5.1
 
@@ -254,9 +278,9 @@ keywords:
 
 #### Barcode
 
-* Fixed BarcodeAR not displaying an overlay for every scanned barcode when duplicate barcode values are present.
 * Fixed a crash in `BarcodeArView` on iOS (.NET MAUI) where an `ApplicationException` was thrown when no `CameraSettings` was supplied; `CameraSettings` is optional, so the view now falls back to default camera settings on iOS instead of throwing, matching Android behavior.
 * Fixed a memory leak in item-based scanning.
+* Fixed an issue in BarcodeCount where the strap mode setting would not be saved in all cases.
 * Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
 * Fixed rare cases of incorrect (tiny) PDF417 location outlines.
 
@@ -273,6 +297,8 @@ keywords:
 
 #### Core
 
+* Fixed a rare crash when starting camera capture while under memory pressure.
+* Fixed a rare crash when opening the camera.
 * Fixed a crash when the `DataCaptureContext` singleton was initialized more than once.
 
 ### Deprecations
@@ -291,14 +317,11 @@ keywords:
 
 * Fixed a Data Matrix scanning accuracy regression introduced in 8.4.0 for codes scanned with the `direct_part_marking_mode` symbology extension.
 * Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
+* Fixed a memory leak that prevented the Batch and Label advanced overlays from being collected until the mode they are bound to was collectable.
 
 #### Id
 
 * Updated the bundled ID Validate model to `8.0.20260626`, which fixes valid Ohio driver's licenses (OH0901DL format) being reported as forged by ID Validate. This model was previously delivered over the air; it is now included in the SDK, so new installs use it from the first scan.
-
-#### Core
-
-* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
 
 ## 8.4.1
 
@@ -308,13 +331,11 @@ keywords:
 
 #### Barcode
 
-* Fixed BarcodeAR not displaying an overlay for every scanned barcode when duplicate barcode values are present.
 * Fixed a memory leak in SparkScan when using the item-based API.
 
 #### Id
 
 * Fixed an issue where cropped document images were rotated when they are recovered using the getFrame API.
-* Resolved a duplicate Objective-C class registration that could trigger spurious casting failures or crashes when an app links both ScanditCaptureCore and ScanditIdCapture.
 
 ## 8.4.0
 
@@ -364,12 +385,12 @@ keywords:
 
 #### Barcode
 
-* Fixed a stability issue that could cause a crash when tracked barcodes were removed or expired during a scanning session.
-* Fixed an issue where `BarcodeCountView` would display incorrectly after rotating the device when a sibling view was present in the same parent view.
-* Fixed an unnecessary second scan callback that occurs after freezing barcode recognition.
+* Fixed an issue in `BarcodeCount` where the floating shutter button was not visible after setting `shouldShowFloatingShutterButton` to `true`.
+* Fixed an issue preventing `BarcodeFind` from finding binary barcodes.
 * Fixed PDF417 macro block file ID decoding to correctly handle numeric formatting according to the ISO/IEC 15438:2015 specification.
 * Fixed a crash that could occur when scanning barcodes with the k-out-of-n filter enabled, if some detected barcodes were not subject to filtering.
 * Fixed an issue where the Smart Scan Selection aimer would become too small when scan-area margins restricted the visible scan area; the aimer is now sized relative to the view, keeping a consistent on-screen size regardless of margins.
+* Fixed an issue in BarcodeCount where the strap mode setting would not be saved in all cases.
 
 #### Id
 
@@ -381,7 +402,6 @@ keywords:
 * Fixed a memory leak in LabelCapture
 * Fixed an issue where the validation flow viewfinder was not displayed.
 * Fixed a race condition in the validation flow.
-* Fixed a bug where the label capture validation flow overlay sometimes did not reflect label capture settings when reused.
 * Fixed a bug that caused error messages in `DataCaptureView` to be rendered partially out-of-view.
 * Fixed a rare race condition in Label Capture.
 * Added `.asDate()` support to `ExpiryDate` and `PackingDate` label fields when the text is provided as manual input or as an Adaptive-Recognition-Engine response.
@@ -390,7 +410,10 @@ keywords:
 #### Core
 
 * Fixed a crash that occurred when the `DataCaptureContext` singleton was initialized more than once.
-* Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
+* Fixed a rare crash when opening the camera.
+* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (for example, industrial barcode scanners like the Newland NLS-MT93).
+* Fixed custom sound not working in Barcode Find on Android.
+* Fixed a rare crash when starting camera capture while under memory pressure.
 
 ### Deprecations
 
@@ -441,31 +464,28 @@ keywords:
 * Improved EAN8 false positive filtering in strict mode
 * Improved speed of MatrixScan Count scanning phase for mid- and high-end devices
 
-### Behavioral Changes
-
-#### Core
-
-* Building for iOS now requires Xcode 16.3 or later.
-
 ### Bug Fixes
 
 #### Barcode
 
-* Fixed a stability issue that could cause a crash when tracked barcodes were removed or expired during a scanning session.
+* Fixed an issue in BarcodeCount where the floating shutter button was not visible after setting shouldShowFloatingShutterButton to true.
+* Fixed a bug that was causing BarcodeFind to render barcodes filtered out by the Transformer as if they were valid targets.
 
 #### Id
 
-* Fixed BarcodeDictionary anonymization setting for iOS and Web
 * Fixed support for UAE Esaad card
 * Sanitized name fields on ACT driver license to split FullName and populate first and last name properties
 * Added support for scanning MRZ from the back of Argentinian DN when using `FullDocumentScanner`
-* Fixed misplaced MRZ anonymization on FullFrame images.
+
+#### Smart Label Capture
+
+* Fixed an issue in the `LabelCaptureValidationFlowOverlay` when using it with Jetpack Compose that caused focus loss when opening the keyboard
+* Added `LabelCaptureValidationFlowOverlay.ShouldHandleKeyboardInsetsInternally` for cases when customers don't want to follow official Android edge-to-edge and inset guidelines
 
 #### Core
 
 * Fixed issue where Camera now always returns a valid instance (backed by NoOpCamera when no native camera is available)
 * Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled.
-* Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
 
 ## 8.2.1
 
@@ -479,6 +499,8 @@ keywords:
 
 #### Smart Label Capture
 
+* Fixed LabelCaptureValidationFlowOverlay possible issue with Jetpack Compose that caused focus loss when opening the keyboard
+* Added LabelCaptureValidationFlowOverlay::ShouldHandleKeyboardInsetsInternally in case customers don't want to follow official Android guidelines for edge-to-edge and insets
 * Fixed a rare race condition
 
 ## 8.2.0
@@ -489,7 +511,7 @@ keywords:
 
 #### Smart Label Capture
 
-* [Smart Label Capture](/sdks/net/ios/label-capture/intro.md) is now available on .NET for Android. It enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.
+* The Validation Flow, our ready‑to‑use workflow in Smart Label Capture for capturing and validating label data with minimal code, now features a completely redesigned user interface. The update improves ergonomics through a simplified API and highly requested customization options, making Smart Label Capture more intuitive and significantly reducing integration and customization effort across a wider range of use cases
 
 ### Performance Improvements
 
@@ -502,22 +524,27 @@ keywords:
 #### Barcode
 
 * Improved the Smart Scan Intention logic for detecting main codes + five-digit add on codes. This improves the rate of complete main + add-on code pairs.
-* Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
-* Fixed BarcodeCount Scan Preview issues including: fixed an issue where preview barcodes were used to populate the scanning list, the correct feedback is played when a barcode not in list is scanned, fixed an issue where scanning was not possible after the app was put in background, and corrected highlight orientation in landscape
-* Fixed an issue where MatrixScan AR circle highlights stopped pulsing when the app was restored from the background
-* Added cameraStateOnStop property to BarcodeFindView to optimize camera transitions when switching between modes
-* Fixed the missing found item icon in the MatrixScan Find carousel
+* Fixed an issue where the successful hint in BarcodeFind is not displayed
 
 #### Id
 
+* Fixed an issue affecting MRZ scanning performance when using the user facing camera in portrait mode on Android
+* Fixed a memory issue leading to a persistent black screen during ID Capture startup
 * Treated Puerto Rico driver licenses as AAMVA to enforce barcode capture with FullScanner
 * Fixed a bug that would cause Canada Northwest Territories driver license scans to be incomplete
 
 #### Core
 
-* Fixed an issue where the interface and video feed could have different visual orientations
+* Fixed SparkScanView crash on Android when hiding the trigger button or changing certain UI properties in specific layout configurations, where the view now correctly handles dimension calculations during layout changes
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed an issue where some LabelCapture fields were being returned incorrectly on TS frameworks
-* Fixed `BarcodeBatchBasicOverlayStyle.Frame` such that it now correctly displays as a frame on iOS and MAUI iOS platforms, where previously setting the style to `Frame` would incorrectly render as a dot due to an enum value mismatch in the iOS binding layer
+
+### Deprecations
+
+#### Smart Label Capture
+
+* Deprecated some LabelCaptureValidationFlowSetting APIs: requiredFieldErrorText, missingFieldsHintText, manualInputButtonText, as those don't make sense anymore with the redesign of Validation Flow in 8.2
 
 ## 8.1.7
 
@@ -530,10 +557,6 @@ keywords:
 * Fixed a crash when clearing highlights or changing the scanning state on a MatrixScan Count mode that had been removed from its data capture context.
 * Reverted the Matrix Scan Sequence stability and robustness improvements introduced in `8.1.6` because of issues when scanning one code at a time.
 
-#### Core
-
-* Fixed a rare crash during camera setup on iOS when the active camera format reported no supported frame-rate ranges.
-
 ## 8.1.6
 
 **Released**: July 29, 2026
@@ -545,6 +568,10 @@ keywords:
 * Matrix Scan Sequence: Improved stability and robustness
   - Improved the stability of tray detection and tray ordering in MS Sequence. Fewer false trays are created on barcodes on product facings. Trays with a single barcode are created more conservatively, which reduces detection and ordering errors.
   - Improved barcode tracking robustness in MS Sequence. Barcode overlays drift less during fast device motion.
+
+#### Smart Label Capture
+
+* Fixed a memory leak preventing the batch and label advanced overlay from being collected until the mode they're bound to is collectable.
 
 ## 8.1.5
 
@@ -560,12 +587,17 @@ keywords:
 
 #### Barcode
 
-* Fixed BarcodeAR not displaying an overlay for every scanned barcode when duplicate barcode values are present.
 * Fixed a memory leak in item-based scanning.
 
 #### Smart Label Capture
 
 * Fixed a memory leak in LabelCapture.
+
+#### Core
+
+* Fixed a rare crash when starting camera capture while under memory pressure.
+* Fixed a rare crash when opening the camera.
+* Fixed a rare native crash (SIGABRT in BitTube::recvObjects) that could occur on Android during camera preview rendering.
 
 ## 8.1.4
 
@@ -580,7 +612,8 @@ keywords:
 
 #### Core
 
-* Fixed a rare issue that was causing a crash when the app moved to the background.
+* Fixed a rare SIGABRT crash on camera initialization on devices whose HAL returns null from `Camera.Parameters.getSupportedFocusModes()` (for example, industrial barcode scanners like the Newland NLS-MT93).
+* Fixed crashes caused by RuntimeExceptions thrown by OEM camera code that are not part of the standard Android Camera API contract; these exceptions are now caught and logged instead of crashing.
 
 ## 8.1.3
 
@@ -591,17 +624,12 @@ keywords:
 #### Core
 
 * Fixed a potential app hang when the app transitions to the background for licenses without analytics enabled.
-* Fixed a potential deadlock on iOS when reading the camera torch state from the main thread while the camera was starting up.
 
 ## 8.1.2
 
 **Released**: March 9, 2026
 
 ### Bug Fixes
-
-#### Barcode
-
-* Fixed a stability issue that could cause a crash when tracked barcodes were removed or expired during a scanning session
 
 #### Smart Label Capture
 
@@ -619,10 +647,14 @@ keywords:
 
 ### Bug Fixes
 
+#### Id
+
+* Fixed a memory issue leading to a persistent black screen during ID Capture startup
+
 #### Core
 
-* Fixed an issue where the camera preview appeared rotated 90 degrees in landscape orientation
-* Fixed an issue where the interface and video feed could have different visual orientations
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
 
 ## 8.1.0
 
@@ -646,6 +678,10 @@ keywords:
   - All Mexican DLs
   - Mexican Voter Cards
 
+#### Smart Label Capture
+
+* [Smart Label Capture](/sdks/net/android/label-capture/intro.md) is now available on .NET for Android. It enables multi-modal data capture, extracting barcode and text data from labels simultaneously and making complex data entry up to 7 times faster. Ideal for labels containing serial numbers, weights, or expiry dates, it improves accuracy, reduces errors, and prevents revenue loss from incorrect information.
+
 ### Performance Improvements
 
 #### Barcode
@@ -668,18 +704,21 @@ keywords:
 #### Barcode
 
 * Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
-* Added the `cameraStateOnStop` property to BarcodeFindView to optimize camera transitions when switching between modes
+* Fixed a bug in the default color of BarcodeCapture highlights
+* Fixed an issue where popover annotations with HIGHLIGHT_TAP_AND_BARCODE_SCAN trigger could not be opened again
+* Fixed an issue in BarcodeSequence where camera would not be ON in portrait
+* Fixed an issue where SparkScan mini preview would sometimes stay in regular when entering target mode
+* Fixed the app becoming unresponsive after being in the background for extended periods
+* Fixed an issue where the successful notification in BarcodeFind was not displayed
 
 #### Id
 
-* Fixed an issue where front expiry date anonymization rectangle is erroneously drawn on front and back
-* Fixed a bug that prevented VizResult anonymization of the following fields: additionalAddressInformation, bloodType, employer, fathersName, issuingAuthority, maritalStatus, mothersName, placeOfBirth, profession, race, residentialStatus
 * Fixed a bug concerning return complete instead of cropped images on the back of EU driving licenses
 
 #### Core
 
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed a small memory leak that affected fresh install runs only
-* Fixed an issue where barcode scanning would permanently stop after the app returned from background, particularly when camera permission dialogs were shown during initialization
 
 ## 8.0.1
 
@@ -689,11 +728,13 @@ keywords:
 
 #### Barcode
 
+* Fixed an issue where the successful hint in BarcodeFind was not displayed
 * Fixed a rare out-of-bound memory access crash when scanning low-resolution or blurry `EAN13/UPCA` codes at a specific distance
 
 #### Core
 
-* Fixed an issue where the interface and video feed could have different visual orientations
+* Fixed an issue where the camera would not restart when opened from another app
+* Fixed a bug that could in rare cases produce a black screen when starting the camera
 * Fixed a small memory leak that affected fresh install runs only
 
 ## 8.0.0
@@ -762,4 +803,4 @@ With SDK 8.0 businesses can transform data capture from a basic function to a st
 
 ## 7.6.7
 
-Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/net/ios/release-notes)
+Find earlier versions in the [release notes section of version 7](/7.6.15/sdks/net/android/release-notes)

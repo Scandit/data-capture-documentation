@@ -158,6 +158,24 @@ keywords:
 * Fixed "UninitializedPropertyAccessException: lateinit property applicationContext has not been initialized" and "UnsatisfiedLinkError: No implementation found for xxxx xxxx$CppProxy.create()" crashes in scenarios where the context can be retrieved and the application is properly initialized
 * Fixed the camera and torch switch controls not updating their accessibility labels on the main thread, so TalkBack announcements no longer misfire when the camera or torch state changes
 
+## 8.6.2
+
+**Released**: October 26, 2026
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved tracking for long trays in MatrixScan Sequence
+* Improved stability of tray ordering in MatrixScan Sequence
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue with MicroQR that prevented improvements for rotated codes and codes with cluttered backgrounds from being available in production builds.
+* Fixed an issue that could increase the time to scan when only QR or Data Matrix is enabled and there are more than 8 codes in the frame while using Barcode Tracking, Barcode AR, Barcode Pick, Barcode Find and Label Capture.
+
 ## 8.6.1
 
 **Released**: October 1, 2026
