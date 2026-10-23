@@ -14,7 +14,7 @@ The main official Scandit documentation website is hosted at [docs.scandit.com](
 
 The following are required if you are submitting pull requests to the documentation:
 
-- NodeJS >=18.x.x
+- Node.js 22.23.4 or a later 22.x, or 24.22.1 or later
 - NPM >= 6.x
 - Yarn >= 1.22.x
 
