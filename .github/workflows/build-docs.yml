@@ -64,6 +64,10 @@ jobs:
       - name: Test framework registry
         run: yarn test:frameworks
 
+      # The URL builder behind the shared ApiLink component.
+      - name: Test ApiLink URLs
+        run: yarn test:api-link
+
       # One list of products: docs-schema.yml, products.json, features.json,
       # skills.json, URL_PRODUCT_MAPPING and page frontmatter must all agree
       # with content/registry/products.yml.

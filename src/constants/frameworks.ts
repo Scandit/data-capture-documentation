@@ -61,6 +61,13 @@ export interface FrameworkDef {
   routeSegment: string | null;
   /** An Agent Skills page exists at /sdks/<routeSegment>/agent-skills. */
   agentSkills: boolean;
+  /**
+   * The segment after /data-capture-sdk/ in this framework's API-reference URLs,
+   * or `null` when it has no API reference there. Linux is documented in the C
+   * API reference (/c_api/), which has a different URL scheme. Required, so a
+   * new framework cannot be added without deciding it.
+   */
+  apiReferenceSegment: string | null;
   /** Documented only in the in-development docs version (no versioned snapshot). */
   unreleased?: boolean;
   /**
@@ -71,25 +78,27 @@ export interface FrameworkDef {
 }
 
 export const FRAMEWORKS: FrameworkDef[] = [
-  { slug: "ios", display: "iOS", routeSegment: "ios", agentSkills: true },
-  { slug: "android", display: "Android", routeSegment: "android", agentSkills: true },
-  { slug: "web", display: "Web", routeSegment: "web", agentSkills: true },
+  { slug: "ios", display: "iOS", routeSegment: "ios", agentSkills: true, apiReferenceSegment: "ios" },
+  { slug: "android", display: "Android", routeSegment: "android", agentSkills: true, apiReferenceSegment: "android" },
+  { slug: "web", display: "Web", routeSegment: "web", agentSkills: true, apiReferenceSegment: "web" },
   {
     slug: "react-native",
     display: "React Native",
     routeSegment: "react-native",
     agentSkills: true,
+    apiReferenceSegment: "react-native",
     aliases: ["react"],
   },
-  { slug: "flutter", display: "Flutter", routeSegment: "flutter", agentSkills: true },
-  { slug: "cordova", display: "Cordova", routeSegment: "cordova", agentSkills: true },
-  { slug: "capacitor", display: "Capacitor", routeSegment: "capacitor", agentSkills: true },
-  { slug: "kmp", display: "Kotlin Multiplatform", routeSegment: "kmp", agentSkills: true },
+  { slug: "flutter", display: "Flutter", routeSegment: "flutter", agentSkills: true, apiReferenceSegment: "flutter" },
+  { slug: "cordova", display: "Cordova", routeSegment: "cordova", agentSkills: true, apiReferenceSegment: "cordova" },
+  { slug: "capacitor", display: "Capacitor", routeSegment: "capacitor", agentSkills: true, apiReferenceSegment: "capacitor" },
+  { slug: "kmp", display: "Kotlin Multiplatform", routeSegment: "kmp", agentSkills: true, apiReferenceSegment: "kmp" },
   {
     slug: "net-ios",
     display: ".NET iOS",
     routeSegment: "net/ios",
     agentSkills: true,
+    apiReferenceSegment: "dotnet.ios",
     aliases: ["netios"],
   },
   {
@@ -97,13 +106,14 @@ export const FRAMEWORKS: FrameworkDef[] = [
     display: ".NET Android",
     routeSegment: "net/android",
     agentSkills: true,
+    apiReferenceSegment: "dotnet.android",
     aliases: ["netandroid"],
   },
   // Documented, but with no Agent Skills page to route a reader to.
-  { slug: "titanium", display: "Titanium", routeSegment: "titanium", agentSkills: false },
-  { slug: "linux", display: "Linux", routeSegment: "linux", agentSkills: false },
+  { slug: "titanium", display: "Titanium", routeSegment: "titanium", agentSkills: false, apiReferenceSegment: null },
+  { slug: "linux", display: "Linux", routeSegment: "linux", agentSkills: false, apiReferenceSegment: null },
   // Not an /sdks/ route: the hosted products live under /hosted/<product>/.
-  { slug: "hosted", display: "Hosted", routeSegment: null, agentSkills: false },
+  { slug: "hosted", display: "Hosted", routeSegment: null, agentSkills: false, apiReferenceSegment: null },
 ];
 
 /** Canonical slugs, in registry order. */

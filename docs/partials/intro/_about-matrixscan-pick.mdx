@@ -1,19 +1,9 @@
 import Link from '@docusaurus/Link';
-
-export const apiTokens = {
-  'ios': 'ios',
-  'android': 'android',
-  'capacitor': 'capacitor',
-  'cordova': 'cordova',
-  'flutter': 'flutter',
-  'react-native': 'react-native',
-  'net/ios': 'dotnet.ios',
-  'net/android': 'dotnet.android',
-};
+import ApiLink from '@site/src/components/ApiLink';
 
 MatrixScan Pick is a pre-built UI that uses augmented reality overlays to highlight specific items that need to be picked. Whereas MatrixScan AR is fully customizable, MatrixScan Pick is a pre-built solution that allows you to add a scan and pick experience with augmented reality to an existing native app, with just a few lines of code.
 
-MatrixScan Pick is implemented through functionality provided by <Link to={`https://docs.scandit.com/data-capture-sdk/${apiTokens[props.framework]}/barcode-capture/api/barcode-pick.html`}><code>BarcodePick</code></Link>.
+MatrixScan Pick is implemented through functionality provided by <ApiLink framework={props.framework} page="barcode-capture/api/barcode-pick.html">BarcodePick</ApiLink>.
 
 ## UI Overview
 

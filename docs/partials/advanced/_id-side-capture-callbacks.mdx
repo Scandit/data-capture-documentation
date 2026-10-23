@@ -1,13 +1,4 @@
-import Link from '@docusaurus/Link';
-
-export const apiTokens = {
-  'ios': 'ios',
-  'android': 'android',
-  'web': 'web',
-  'react-native': 'react-native',
-  'capacitor': 'capacitor',
-  'cordova': 'cordova',
-};
+import ApiLink from '@site/src/components/ApiLink';
 
 export const hybridFrameworks = ['react-native', 'capacitor', 'cordova'];
 
@@ -45,10 +36,6 @@ export const symbolTokens = {
 };
 
 export const Only = ({when, children}) => (when ? <>{children}</> : null);
-
-export const ApiLink = ({framework, page, anchor, children}) => (
-  <Link to={`https://docs.scandit.com/data-capture-sdk/${apiTokens[framework]}/${page}#${anchor}`}><code>{children}</code></Link>
-);
 
 export const settingsPage = 'id-capture/api/id-capture-settings.html';
 export const settingsProperty = 'property-scandit.datacapture.id.IdCaptureSettings.';

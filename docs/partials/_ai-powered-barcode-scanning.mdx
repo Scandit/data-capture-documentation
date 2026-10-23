@@ -1,17 +1,4 @@
-import Link from '@docusaurus/Link';
-
-export const apiTokens = {
-  'ios': 'ios',
-  'android': 'android',
-  'web': 'web',
-  'react-native': 'react-native',
-  'flutter': 'flutter',
-  'capacitor': 'capacitor',
-  'cordova': 'cordova',
-  'kmp': 'kmp',
-  'net-ios': 'dotnet.ios',
-  'net-android': 'dotnet.android',
-};
+import ApiLink from '@site/src/components/ApiLink';
 
 export const upperCase = {
   scanIntention: 'scanIntention',
@@ -70,10 +57,6 @@ export const symbolTokens = {
 };
 
 export const Only = ({when, children}) => (when ? <>{children}</> : null);
-
-export const ApiLink = ({framework, page, anchor, children}) => (
-  <Link to={`https://docs.scandit.com/data-capture-sdk/${apiTokens[framework]}/${page}#${anchor}`}><code>{children}</code></Link>
-);
 
 export const sparkScanSettings = 'barcode-capture/api/spark-scan-settings.html';
 export const barcodeCaptureSettings = 'barcode-capture/api/barcode-capture-settings.html';
