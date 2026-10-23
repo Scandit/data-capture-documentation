@@ -34,8 +34,15 @@ const samples = (prefix) => ({ path: `${prefix}/sdks/linux/samples/` });
 const other = (prefix) => ({ path: `${prefix}/sdks/linux/overview/` });
 
 // current served at the root, 8.x, with frozen 7.6.15 and 6.28.11 (no Linux samples).
+// Doc paths as the docs plugin writes them, without a trailing slash, for current.
 const SERVED_CURRENT = [
-  { name: "current", label: "8.6.1", path: "/", isLast: true, docs: [samples(""), other("")] },
+  {
+    name: "current",
+    label: "8.6.1",
+    path: "/",
+    isLast: true,
+    docs: [{ path: "/sdks/linux/samples" }, other("")],
+  },
   { name: "7.6.15", label: "7.6.15", path: "/7.6.15", isLast: false, docs: [samples("/7.6.15")] },
   { name: "6.28.11", label: "6.28.11", path: "/6.28.11", isLast: false, docs: [other("/6.28.11")] },
 ];
@@ -94,7 +101,9 @@ const cases = [
 ];
 
 let failures = 0;
+let total = 0;
 for (const [versions, input, expected] of cases) {
+  total += 1;
   try {
     assert.deepStrictEqual(getCApiFallbackUrl(input, versions), expected);
   } catch (error) {
@@ -111,6 +120,7 @@ for (const [input, expected] of [
   ["/7.6.15/sdks/linux/samples/", false],
   ["/stable/web/CHANGELOG.md", false],
 ]) {
+  total += 1;
   try {
     assert.strictEqual(isCApiReferencePath(input), expected);
   } catch (error) {
@@ -120,7 +130,7 @@ for (const [input, expected] of [
 }
 
 if (failures > 0) {
-  console.error(`\n${failures} of ${cases.length} cases failed.`);
+  console.error(`\n${failures} of ${total} cases failed.`);
   process.exit(1);
 }
-console.log(`C API 404 fallback: ${cases.length} cases pass.`);
+console.log(`C API 404 fallback: ${total} cases pass.`);

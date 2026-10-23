@@ -3,11 +3,12 @@
  *
  * The C API reference is a separate Doxygen build, published once per release
  * line under /<major.minor>/c_api/ and under /stable/c_api/ (see
- * API_REFERENCE_LINK_REWRITES in scripts/update-version.py). A page missing
- * from one of those trees is answered by this site's 404 page, so the rule
- * lives here rather than as redirect pages: it covers every line, including
- * ones released after this was written, and writes nothing into a tree another
- * pipeline deploys.
+ * API_REFERENCE_LINK_REWRITES in scripts/update-version.py). This relies on
+ * the host serving this site's 404 page for a path missing from those trees;
+ * if it ever serves the reference's own 404 instead, none of this runs. The
+ * rule lives here rather than as redirect pages because it covers every line,
+ * including ones released after this was written, and writes nothing into a
+ * tree another pipeline deploys.
  *
  * Two cases:
  *
@@ -36,9 +37,8 @@ export type DocsVersionInfo = {
 export type CApiFallback = { url: string; appRoute: boolean };
 
 const C_API_PATTERN = /^\/(stable|\d+\.\d+)\/c_api(?:\/(.*))?$/;
-// ".html" optional, and a trailing slash allowed: the router drops the
-// extension from location.pathname, and a host with clean URLs and trailing
-// slashes rewrites examples.html to examples/ before this page sees it.
+// ".html" optional and a trailing slash allowed, so the match holds for
+// every spelling of the path the page can be handed.
 const EXAMPLE_PAGE_PATTERN = /^(?:examples|[^/]+-example)(?:\.html)?\/?$/;
 
 const withSlash = (p: string): string => (p.endsWith("/") ? p : `${p}/`);
@@ -52,6 +52,11 @@ function versionNumber(version: DocsVersionInfo): string {
  * The docs version a C API line belongs to: the served one for "stable", else
  * the served version if it has the line's major, else a frozen version of
  * that major, else current.
+ *
+ * The served version first, unlike getUnservedVersionFallbackUrl in index.js
+ * (frozen first): that rule rewrites a docs path into a tree, this one picks
+ * the samples page a reader of the line's SDK should read, and the served
+ * version's is the one current readers are on.
  */
 function versionForLine(line: string, versions: readonly DocsVersionInfo[]): DocsVersionInfo | undefined {
   if (line === "stable") return versions.find((v) => v.isLast);

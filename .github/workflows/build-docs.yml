@@ -74,7 +74,7 @@ jobs:
         run: yarn verify:registry
 
       # Pins where the 404 page sends a broken link into the C API reference.
-      - name: Test 404 fallbacks
+      - name: Test C API 404 fallback
         run: yarn test:not-found
 
       - name: Build documentation

@@ -197,11 +197,12 @@ export default function NotFoundContent(props) {
       // HTML outside this app, so client-side routing would only render this
       // 404 again.
       window.location.replace(apiReferenceUrl + location.search + location.hash);
-    } else if (cApi?.appRoute) {
-      history.replace(cApi.url);
     } else if (cApi) {
-      // The C API reference is static HTML too.
-      window.location.replace(cApi.url);
+      // Neither C API target carries the query or anchor over: a Doxygen
+      // anchor means nothing on the samples page or the index. The index is
+      // static HTML too, so it is a full page load.
+      if (cApi.appRoute) history.replace(cApi.url);
+      else window.location.replace(cApi.url);
     } else if (fallbackUrl) {
       history.replace(fallbackUrl + location.search + location.hash);
     }
