@@ -5,8 +5,7 @@ description: "Validation schema for Scandit Docusaurus Markdown/MDX frontmatter.
 type: object
 additionalProperties: true
 
-# Every content page under docs/ carries these, except docs/shelfview.mdx,
-# which still needs its product and framework decided. The docs gate checks the pages a change
+# Every page under docs/ carries these. The docs gate checks the pages a change
 # touches, so a page that loses one, or a new page without one, fails review.
 # Redirect-only stub pages are exempt.
 required:
@@ -48,7 +47,7 @@ properties:
     enum: [sparkscan, barcode-capture, matrixscan-batch, matrixscan-find,
            matrixscan-count, matrixscan-ar, matrixscan-pick, barcode-selection,
            barcode-generator, barcode-sequence, id-capture, id-bolt,
-           smart-label-capture, parser, express, core, platform]
+           smart-label-capture, parser, express, shelfview, core, platform]
 
   # Canonical framework slugs. These are the SSOT for every framework identifier
   # under docs/ and in code: they are exactly the `/sdks/<slug>/` URL segments

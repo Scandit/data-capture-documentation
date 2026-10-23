@@ -80,6 +80,10 @@ products:
     name: ID Bolt
     kind: hosted
 
+  - key: shelfview
+    name: ShelfView
+    kind: hosted
+
   - key: core
     name: Core concepts
     kind: topic
