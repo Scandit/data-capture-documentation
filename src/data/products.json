@@ -229,8 +229,8 @@
   },
   {
     "key": "barcode-sequence",
-    "name": "Barcode Sequence",
-    "description": "Capture mode for scanning a predefined sequence of barcodes in order. Validates that barcodes are scanned in the correct sequence, making it ideal for workflows that require ordered item processing, assembly verification, and guided sequential scanning tasks.",
+    "name": "MatrixScan Sequence",
+    "description": "Records and verifies the order of barcodes, for example items on a shelf or in a tray. The capture flow registers the order of barcodes as they are scanned. The verification flow checks that each barcode is in its correct position.",
     "frameworks": {
       "iOS": { "version": "8.1", "apiUrl": "n/a" },
       "Android": { "version": "8.0", "apiUrl": "n/a" },
