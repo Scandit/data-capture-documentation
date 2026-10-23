@@ -1048,6 +1048,12 @@ const config: Config = {
             from: ['/data-capture-sdk/android', '/data-capture-sdk/android/add-sdk.html'],
           },
           {
+            // The Android agent guide was removed: its requirements went stale,
+            // and the system requirements page is the single source for them.
+            to: '/sdks/android/system-requirements',
+            from: '/sdks/android/agents-android',
+          },
+          {
             to: 'https://github.com/Scandit/datacapture-android-samples',
             from: '/data-capture-sdk/android/samples/run-samples.html'
           },
