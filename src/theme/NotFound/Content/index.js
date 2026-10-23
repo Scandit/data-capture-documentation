@@ -201,11 +201,15 @@ export function getLegacyFallbackUrl(pathname, isRoute = isAppRoute) {
 
 // The unserved-version rule moves a reader into a served tree, which may not
 // have the page either. Inside a served version's tree (/7.6.15/..., /next/...)
-// no static redirect page can be waiting: they are generated at the root and
-// in retired trees only. So a target there that the app does not render is
-// answered here, by the rules that would run after the 404 it would get, and
-// costs no page load. At the root a redirect page may exist (/sdks/web/
-// migration-guide), so that target is still loaded from the server.
+// the only static redirect pages are for ".html" paths (fromExtensions) and
+// for hosted/ pages (rootRouteRedirects), and that rule never hands this one
+// either: UNSERVED_VERSION_PATTERN rejects a path with a dot, and its hosted
+// branch returns only app routes, which come back unchanged. Change either
+// guard and this assumption has to be checked again. So a target there that
+// the app does not render is answered here, by the rules that would run after
+// the 404 it would get, and usually costs no page load. At the root a redirect page
+// may exist (/sdks/web/migration-guide), so that target is still loaded from
+// the server.
 export function settleInServedTree(target, versions, isRoute = isAppRoute) {
   if (!target || !versions || isRoute(target)) return target;
   const inServedTree = versions.some((v) => {
