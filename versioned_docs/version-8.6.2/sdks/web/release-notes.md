@@ -10,6 +10,27 @@ keywords:
   - web
 ---
 
+## 8.6.2
+
+**Released**: October 26, 2026
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue with MicroQR that prevented improvements for rotated codes and codes with cluttered backgrounds from being available in production builds.
+* Fixed a visual bug where dragging the SparkScan trigger button or mini preview could leave stale shadow marks on screen in Safari on iOS.
+* Fixed an issue that could increase the time to scan when only QR or Data Matrix is enabled and there are more than 8 codes in the frame while using Barcode Tracking, Barcode AR, Barcode Pick, Barcode Find and Label Capture.
+
+#### Id
+
+* Fixed an issue on Safari for iOS 27 where the camera preview could appear shrunk, with a large margin around it, after the camera resumed (for example after closing a result screen). The issue was caused by a WebKit regression.
+
+#### Core
+
+* Fixed the viewfinder becoming misaligned with the camera preview after changing the browser zoom level or resizing the window.
+* Updated Emscripten from 5.0.3 to 5.0.7, which fixes a pthread syscall-proxying race that could cause crashes or hangs in threaded WebAssembly builds.
+
 ## 8.6.1
 
 **Released**: October 1, 2026

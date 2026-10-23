@@ -10,6 +10,35 @@ keywords:
   - ios
 ---
 
+## 8.6.2
+
+**Released**: October 26, 2026
+
+### Performance Improvements
+
+#### Barcode
+
+* Improved tracking for long trays in MatrixScan Sequence
+* Improved stability of tray ordering in MatrixScan Sequence
+
+### Behavioral Changes
+
+#### Barcode
+
+* Changed MatrixScan Sequence to dim the area outside the scan area restriction band with the dimming color instead of blurring it, so content outside the band stays visible.
+
+### Bug Fixes
+
+#### Barcode
+
+* Fixed an issue with MicroQR that prevented improvements for rotated codes and codes with cluttered backgrounds from being available in production builds.
+* Fixed an issue in SparkScan where, with hold-to-scan disabled, pressing and holding the collapsed trigger button and then releasing it started scanning.
+* Fixed an issue that could increase the time to scan when only QR or Data Matrix is enabled and there are more than 8 codes in the frame while using Barcode Tracking, Barcode AR, Barcode Pick, Barcode Find and Label Capture.
+
+#### Core
+
+* Adjusted SDK views and the scan area for devices with horizontal safe-area insets, such as the iPhone Duo cover display. The scan area now excludes the left and right safe-area insets.
+
 ## 8.6.1
 
 **Released**: October 1, 2026
