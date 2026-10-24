@@ -91,8 +91,17 @@ jobs:
       - name: Test C API 404 fallback
         run: yarn test:not-found
 
+      # This build checks the site; it does not publish it. On the main branch
+      # it gets the feedback widget's fallback endpoint so the check covers the
+      # configuration the published site runs with. Pull-request builds (whose
+      # ref is refs/pull/...) get empty values, which disable the fallback; the
+      # widget still works without it. The published site gets its values from
+      # the job that publishes it.
       - name: Build documentation
         run: yarn build
+        env:
+          DOCS_FEEDBACK_ENDPOINT: ${{ github.ref == 'refs/heads/main' && vars.DOCS_FEEDBACK_ENDPOINT || '' }}
+          DOCS_FEEDBACK_TOKEN: ${{ github.ref == 'refs/heads/main' && secrets.DOCS_FEEDBACK_TOKEN || '' }}
 
       # Asserts what the widget actually sends to Algolia: the API reference is
       # reachable on the served version and absent on frozen legacy versions.
